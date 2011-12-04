@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
@@ -118,7 +119,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetFormatFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag)));
+				GetFormatFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag), NumberFormatInfo.InvariantInfo));
 				SetControls();
 			}
 		}

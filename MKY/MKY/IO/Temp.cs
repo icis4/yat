@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 
 namespace MKY.IO
@@ -126,7 +127,7 @@ namespace MKY.IO
 				int i = 0;
 				for (i = 0; i <= Max; i++)
 				{
-					filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, i.ToString(), extension, false);
+					filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, i.ToString(NumberFormatInfo.InvariantInfo), extension, false);
 					if (!File.Exists(filePath))
 						break;
 				}

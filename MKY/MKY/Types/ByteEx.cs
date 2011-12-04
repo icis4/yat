@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
@@ -32,7 +33,8 @@ namespace MKY
 	/// <summary>
 	/// Byte/byte utility methods.
 	/// </summary>
-	public class ByteEx
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	public static class ByteEx
 	{
 		/// <summary>
 		/// Converts value into binary string (e.g. "00010100").

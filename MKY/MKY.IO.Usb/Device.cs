@@ -522,7 +522,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Device(Guid classGuid, string path)
+		protected Device(Guid classGuid, string path)
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
@@ -532,21 +532,21 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public Device(Guid classGuid, int vendorId, int productId)
+		protected Device(Guid classGuid, int vendorId, int productId)
 		{
 			this.deviceInfo = new DeviceInfo(vendorId, productId);
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(Guid classGuid, int vendorId, int productId, string serialNumber)
+		protected Device(Guid classGuid, int vendorId, int productId, string serialNumber)
 		{
 			this.deviceInfo = new DeviceInfo(vendorId, productId, serialNumber);
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(Guid classGuid, DeviceInfo deviceInfo)
+		protected Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
 			this.deviceInfo = new DeviceInfo(deviceInfo);
 			Initialize();

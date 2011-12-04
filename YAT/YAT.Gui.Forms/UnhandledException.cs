@@ -28,6 +28,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -53,6 +54,7 @@ namespace YAT.Gui.Forms
 		private string exceptionText;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public UnhandledException(Exception exception, string title, string originMessage)
 		{
 			InitializeComponent();
@@ -66,7 +68,7 @@ namespace YAT.Gui.Forms
 			Text = this.title;
 
 			// Compose exception text.
-			StringWriter text = new StringWriter();
+			StringWriter text = new StringWriter(CultureInfo.InvariantCulture);
 			try
 			{
 				text.WriteLine(this.originMessage);

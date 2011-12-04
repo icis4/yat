@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Guid for consistency with the Sytem.Guid class.
@@ -96,6 +97,7 @@ namespace MKY
 		/// Returns first item within the list that has the specified <see cref="Guid"/>,
 		/// <c>null</c> otherwise.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'guid' is the obvious name.")]
 		public virtual T GetGuidItem(Guid guid)
 		{
 			foreach (T item in this)
@@ -109,6 +111,7 @@ namespace MKY
 		/// <summary>
 		/// Removes all items that have the specified <see cref="Guid"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'guid' is the obvious name.")]
 		public virtual void RemoveGuid(Guid guid)
 		{
 			GuidList<T> obsoleteItems = new GuidList<T>();

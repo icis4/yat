@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -797,7 +798,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
 		{
-			RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+			RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -1331,7 +1332,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
 		{
-			SendPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+			SendPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo));
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
@@ -1346,7 +1347,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Click(object sender, EventArgs e)
 		{
-			predefined.SelectedPage = int.Parse((string)(((ToolStripMenuItem)sender).Tag));
+			predefined.SelectedPage = int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
@@ -2857,9 +2858,7 @@ namespace YAT.Gui.Forms
 
 			if (isSerialPort)
 			{
-				bool isStarted    = this.terminal.IsStarted;
-				bool isOpen       = this.terminal.IsOpen;
-				bool isConnected  = this.terminal.IsConnected;
+				bool isOpen = this.terminal.IsOpen;
 
 				foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 					sl.Enabled = isOpen;

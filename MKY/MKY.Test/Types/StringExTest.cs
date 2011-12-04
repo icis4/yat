@@ -114,7 +114,7 @@ namespace MKY.Test.Types
 		[Test, TestCaseSource(typeof(IndexOfOutsideDoubleQuotesTestData), "TestCases")]
 		public virtual void TestIndexOfOutsideDoubleQuotes(string testString, string outString, int outIndex, string inString, int inIndex)
 		{
-			int index = StringEx.IndexOfOutsideDoubleQuotes(testString, outString, StringComparison.InvariantCultureIgnoreCase);
+			int index = StringEx.IndexOfOutsideDoubleQuotes(testString, outString, StringComparison.Ordinal);
 			Assert.AreEqual(outIndex, index);
 		}
 

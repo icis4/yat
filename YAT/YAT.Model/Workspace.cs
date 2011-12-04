@@ -918,7 +918,7 @@ namespace YAT.Model
 				if ((dynamicTerminalIndexToReplace != Indices.InvalidDynamicIndex) &&
 					(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
 				{
-					if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, true))
+					if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window))
 						openedTerminalCount++;
 				}
 				else // In all other cases, 'normally' open the terminal from the given file.
@@ -974,11 +974,7 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening terminal file...");
 			if (OpenTerminalFile(filePath, out settings, out ex))
 			{
-				// Replace window settings with those saved in workspace.
-				if (windowSettings != null)
-					settings.Settings.Window = windowSettings;
-
-				return (OpenTerminalFromSettings(settings, guid));
+				return (OpenTerminalFromSettings(settings, guid, fixedIndex, windowSettings));
 			}
 			else
 			{
@@ -1007,15 +1003,15 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings)
 		{
-			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null, false));
+			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null));
 		}
 
 		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid)
 		{
-			return (OpenTerminalFromSettings(settings, guid, Indices.DefaultFixedIndex, null, false));
+			return (OpenTerminalFromSettings(settings, guid, Indices.DefaultFixedIndex, null));
 		}
 
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings)
 		{
 			AssertNotDisposed();
 
@@ -1024,6 +1020,10 @@ namespace YAT.Model
 				return (false);
 
 			OnFixedStatusTextRequest("Opening terminal...");
+
+			// Set window settings if there are.
+			if (windowSettings != null)
+				settings.Settings.Window = windowSettings;
 
 			// Create terminal.
 			Terminal terminal = new Terminal(settings, guid);
@@ -1219,7 +1219,7 @@ namespace YAT.Model
 				if (kvp.Value == terminal)
 					return (kvp.Key);
 			}
-			throw (new ArgumentOutOfRangeException("Terminal not found in index table"));
+			throw (new ArgumentOutOfRangeException("terminal", terminal, "Terminal not found in index table"));
 		}
 
 		/// <summary>

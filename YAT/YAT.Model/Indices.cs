@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
@@ -37,6 +38,7 @@ using MKY.IO;
 namespace YAT.Model
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 	public static class Indices
 	{
 		/// <remarks>

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -137,7 +138,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToString(string indent)
 		{
-			StringWriter to = new StringWriter();
+			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			foreach (RawElement re in ToElements())
 				to.Write(re.ToString(indent));
 
@@ -153,7 +154,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToDetailedString(string indent)
 		{
-			StringWriter to = new StringWriter();
+			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			int i = 1;
 			foreach (RawElement re in ToElements())
 			{

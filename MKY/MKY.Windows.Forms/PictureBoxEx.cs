@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -31,6 +32,7 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a picture box that extends <see cref="PictureBox"/>.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[DesignerCategory("Windows Forms")]
 	public partial class PictureBoxEx : PictureBox
 	{

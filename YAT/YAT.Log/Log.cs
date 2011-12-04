@@ -33,7 +33,7 @@ using MKY.IO;
 namespace YAT.Log
 {
 	/// <summary></summary>
-	public enum LogStreams
+	public enum LogStream
 	{
 		/// <summary></summary>
 		RawTx = 0,
@@ -105,13 +105,13 @@ namespace YAT.Log
 			//==========================================================================================
 
 			/// <summary></summary>
-			public Log(bool enabled, string file, LogFileWriteMode writeMode)
+			protected Log(bool enabled, string file, LogFileWriteMode writeMode)
 			{
 				Initialize(enabled, file, writeMode, new FileNameSeparator(""));
 			}
 
 			/// <summary></summary>
-			public Log(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
+			protected Log(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
 				Initialize(enabled, file, writeMode, separator);
 			}
@@ -628,31 +628,31 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual void WriteByte(byte value, LogStreams writeStream)
+		public virtual void WriteByte(byte value, LogStream writeStream)
 		{
 			((BinaryLog)GetLog(writeStream)).WriteByte(value);
 		}
 
 		/// <summary></summary>
-		public virtual void WriteBytes(byte[] array, LogStreams writeStream)
+		public virtual void WriteBytes(byte[] array, LogStream writeStream)
 		{
 			((BinaryLog)GetLog(writeStream)).WriteBytes(array);
 		}
 
 		/// <summary></summary>
-		public virtual void WriteString(string value, LogStreams writeStream)
+		public virtual void WriteString(string value, LogStream writeStream)
 		{
 			((TextLog)GetLog(writeStream)).WriteString(value);
 		}
 
 		/// <summary></summary>
-		public virtual void WriteEol(LogStreams writeStream)
+		public virtual void WriteEol(LogStream writeStream)
 		{
 			((TextLog)GetLog(writeStream)).WriteEol();
 		}
 
 		/// <summary></summary>
-		private Log GetLog(LogStreams stream)
+		private Log GetLog(LogStream stream)
 		{
 			return (this.logs[stream.GetHashCode()]);
 		}

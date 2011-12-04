@@ -143,7 +143,7 @@ namespace YAT.Gui.Forms
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			string link = e.Link.LinkData as string;
-			if ((link != null) && (link.StartsWith("http://")))
+			if ((link != null) && (link.StartsWith("http://", StringComparison.Ordinal)))
 				MKY.Net.Browser.BrowseUri(link);
 		}
 

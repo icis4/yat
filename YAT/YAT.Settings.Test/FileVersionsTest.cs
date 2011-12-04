@@ -117,7 +117,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -134,7 +134,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -151,7 +151,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -175,7 +175,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -192,7 +192,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -209,7 +209,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -226,7 +226,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -250,7 +250,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -267,7 +267,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -284,7 +284,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -301,7 +301,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -325,7 +325,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -342,7 +342,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -359,7 +359,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -376,7 +376,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -400,7 +400,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -417,7 +417,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -434,7 +434,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -451,7 +451,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_19.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_19.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -475,7 +475,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -492,7 +492,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -509,7 +509,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -526,7 +526,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_20.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_20.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -550,7 +550,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -567,7 +567,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -584,7 +584,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -601,7 +601,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_22.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_22.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -625,7 +625,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -642,7 +642,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -659,7 +659,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -676,7 +676,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_24.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_24.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -693,7 +693,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCases.T_05_COM1_Open_Recent]
+				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -717,7 +717,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -734,7 +734,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -751,7 +751,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -768,7 +768,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -785,7 +785,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_05_COM1_Open_Recent]
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -802,7 +802,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_06_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -819,7 +819,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -843,7 +843,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -860,7 +860,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -877,7 +877,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -894,7 +894,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -911,7 +911,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_05_COM1_Open_Recent]
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -928,7 +928,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_06_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -945,7 +945,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
 				);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -962,7 +962,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_08_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]
 				);
 
 			// Create workspace from settings and check whether settings are correctly set.
@@ -1172,7 +1172,7 @@ namespace YAT.Settings.Test
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 
 			Model.Terminal terminal1 = workspace.Terminals[0];
-			Model.Terminal terminal2 = workspace.Terminals[0];
+			Model.Terminal terminal2 = workspace.Terminals[1];
 
 			Assert.AreEqual(1, terminal1.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 1 page!");
 

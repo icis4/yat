@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY
 {
@@ -59,6 +60,7 @@ namespace MKY
 		/// <remarks>
 		/// Prevent FxCop "CA1801:ReviewUnusedParameters".
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventAnalysisWarning(object obj)
 		{
 			if (obj != null)
@@ -74,6 +76,7 @@ namespace MKY
 		/// <summary>
 		/// Utility method that can be applied to unused fields to prevent compiler warnings.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning<T>(out T obj)
 		{
 			obj = default(T);

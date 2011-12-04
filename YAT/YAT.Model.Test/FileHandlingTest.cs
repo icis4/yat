@@ -1032,10 +1032,10 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// This test verifies the 'FixedIndex' feature of a YAT workspace.
+		/// This test verifies the 'DynamicIndex', 'SequentialIndex' and 'FixedIndex' feature of a YAT workspace.
 		/// </summary>
 		[Test]
-		public virtual void TestFixedIndexFeatureOfWorkspace()
+		public virtual void TestIndicesFeatureOfWorkspace()
 		{
 			bool success = false;
 			string step = "";
@@ -1050,6 +1050,7 @@ namespace YAT.Model.Test
 			// - Save terminal as
 			// - Save workspace as
 			//   => Workspace must contain 1 terminal with fixed index 1
+			Terminal.ResetSequenciallIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
@@ -1077,12 +1078,11 @@ namespace YAT.Model.Test
 			#region Step 2
 			// - Subsequent start
 			//   => Workspace must contain 1 terminal with fixed index 1
-			//   => Attention: Sequencial index will be 2 since it is incremented application domain statically
 			// - Create 2 additional terminals
 			// - Save terminals as
 			// - Save workspace
 			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
-			//   => Sequencial index will be 2, 3 and 4
+			Terminal.ResetSequenciallIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 2: ";
@@ -1095,7 +1095,7 @@ namespace YAT.Model.Test
 
 				Assert.AreEqual(Indices.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + Indices.FirstFixedIndex + "!");
 				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 2!");
+				Assert.AreEqual(1, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
@@ -1121,10 +1121,10 @@ namespace YAT.Model.Test
 			#region Step 3
 			// - Subsequent start
 			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
-			//   => Attention: Sequencial index will be 5, 6 and 7 since it is incremented application domain statically
 			// - Close the second terminal
 			// - Save workspace
 			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
+			Terminal.ResetSequenciallIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 3: ";
@@ -1139,14 +1139,13 @@ namespace YAT.Model.Test
 				int last  = Indices.FirstSequencialIndex + workspace.TerminalCount - 1;
 				for (int i = first; i <= last; i++)
 				{
-					int k = 5 + i - 1;
-					workspace.ActivateTerminalBySequentialIndex(k);
+					workspace.ActivateTerminalBySequentialIndex(i);
 					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal " + i + " isn't " + i + "!");
 					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal " + i + " isn't " + i + "!");
-					Assert.AreEqual(k, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal " + i + " isn't " + k + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal " + i + " isn't " + i + "!");
 				}
 
-				workspace.ActivateTerminalBySequentialIndex(6);
+				workspace.ActivateTerminalBySequentialIndex(2);
 				success = workspace.CloseActiveTerminal();
 				Assert.IsTrue(success, step + "Terminal 2 could not be closed!");
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
@@ -1161,7 +1160,7 @@ namespace YAT.Model.Test
 			#region Step 4
 			// - Subsequent start
 			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
-			//   => Attention: Sequencial index will be 8 and 9 since it is incremented application domain statically
+			Terminal.ResetSequenciallIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 4: ";
@@ -1172,15 +1171,15 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
-				workspace.ActivateTerminalBySequentialIndex(8);
+				workspace.ActivateTerminalBySequentialIndex(1);
 				Assert.AreEqual(Indices.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + Indices.FirstFixedIndex + "!");
 				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.AreEqual(8, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 8!");
+				Assert.AreEqual(1, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
 
-				workspace.ActivateTerminalBySequentialIndex(9);
+				workspace.ActivateTerminalBySequentialIndex(2);
 				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 3 isn't 3!");
 				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 3 isn't 2!");
-				Assert.AreEqual(9, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 3 isn't 9!");
+				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 3 isn't 2!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited!");

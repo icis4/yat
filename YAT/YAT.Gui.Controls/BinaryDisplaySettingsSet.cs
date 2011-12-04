@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Event;
@@ -236,7 +237,7 @@ namespace YAT.Gui.Controls
 			enabled = this.settings.LengthLineBreak.Enabled;
 			checkBox_LengthLineBreak.Checked = enabled;
 			textBox_LengthLineBreak.Enabled = enabled;
-			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.LineLength.ToString();
+			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.LineLength.ToString(NumberFormatInfo.CurrentInfo);
 
 			enabled = this.settings.SequenceLineBreak.Enabled;
 			checkBox_SequenceLineBreak.Checked = enabled;
@@ -246,7 +247,7 @@ namespace YAT.Gui.Controls
 			enabled = this.settings.TimedLineBreak.Enabled;
 			checkBox_TimedLineBreak.Checked = enabled;
 			textBox_TimedLineBreakTimeout.Enabled = enabled;
-			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString();
+			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString(NumberFormatInfo.CurrentInfo);
 
 			this.isSettingControls.Leave();
 		}

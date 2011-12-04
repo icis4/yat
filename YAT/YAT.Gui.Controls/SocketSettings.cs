@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Event;
@@ -220,7 +221,7 @@ namespace YAT.Gui.Controls
 
 			string autoReconnectIntervalText;
 			if (enabledTcpClient)
-				autoReconnectIntervalText = this.tcpClientAutoReconnect.Interval.ToString();
+				autoReconnectIntervalText = this.tcpClientAutoReconnect.Interval.ToString(NumberFormatInfo.CurrentInfo);
 			else
 				autoReconnectIntervalText = "";
 

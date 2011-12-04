@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
@@ -32,7 +33,8 @@ namespace MKY
 	/// <summary>
 	/// UInt64/ulong utility methods.
 	/// </summary>
-	public class UInt64Ex
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	public static class UInt64Ex
 	{
 		/// <summary>
 		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
@@ -81,7 +83,7 @@ namespace MKY
 		[CLSCompliant(false)]
 		public static string ConvertToNumericBaseString(int numericBase, ulong value, ulong max)
 		{
-			StringWriter to = new StringWriter();
+			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 
 			ulong remainder = value; // Cast to double to prevent overflow on ulong.MaxValue.
 			double exactPower = Math.Log((double)max + 1, numericBase);

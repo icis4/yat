@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Globalization;
 using System.Text;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -90,10 +91,10 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected SubstitutionParser(ParserState parserState, Parser parser)
-			: base(parserState, parser)
+		protected SubstitutionParser(ParserState parserState, Parser parent)
+			: base(parserState, parent)
 		{
-			this.substitution = ((SubstitutionParser)parser).substitution;
+			this.substitution = ((SubstitutionParser)parent).substitution;
 		}
 
 		#region Disposal
@@ -121,11 +122,11 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected override Parser GetParser(ParserState parserState, Parser parser)
+		protected override Parser GetParser(ParserState parserState, Parser parent)
 		{
 			AssertNotDisposed();
 
-			SubstitutionParser p = new SubstitutionParser(parserState, parser);
+			SubstitutionParser p = new SubstitutionParser(parserState, parent);
 			return (p);
 		}
 
@@ -202,8 +203,8 @@ namespace YAT.Domain.Parser
 		{
 			switch (this.substitution)
 			{
-				case CharSubstitution.ToUpper: return (token.ToUpper());
-				case CharSubstitution.ToLower: return (token.ToLower());
+				case CharSubstitution.ToUpper: return (token.ToUpper(CultureInfo.CurrentCulture));
+				case CharSubstitution.ToLower: return (token.ToLower(CultureInfo.CurrentCulture));
 				default: return (token);
 			}
 		}

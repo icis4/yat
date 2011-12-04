@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
@@ -370,7 +371,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowCountAndRate.Checked = this.settings_Form.Terminal.Status.ShowCountAndRate;
 
 			checkBox_DirectionLineBreak.Checked = this.settings_Form.Terminal.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = this.settings_Form.Terminal.Display.TxMaxLineCount.ToString();
+			textBox_MaxLineCount.Text           = this.settings_Form.Terminal.Display.TxMaxLineCount.ToString(NumberFormatInfo.CurrentInfo);
 
 			// Char replace:
 			bool replaceControlChars                    = this.settings_Form.Terminal.CharReplace.ReplaceControlChars;

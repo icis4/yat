@@ -482,7 +482,7 @@ namespace YAT.Domain
 							else
 								text = "Received";
 							text += " ASCII control char";
-							text += " <" + b.ToString("X2", CultureInfo.InvariantCulture) + "h>";
+							text += " <" + b.ToString("X2", NumberFormatInfo.InvariantInfo) + "h>";
 							text += " cannot be displayed in current settings";
 						}
 					}
@@ -563,16 +563,16 @@ namespace YAT.Domain
 				case Radix.Dec:
 				{
 					if (this.terminalSettings.Display.ShowRadix)
-						return (b.ToString("D3", CultureInfo.InvariantCulture) + "d");
+						return (b.ToString("D3", NumberFormatInfo.InvariantInfo) + "d");
 					else
-						return (b.ToString("D3", CultureInfo.InvariantCulture));
+						return (b.ToString("D3", NumberFormatInfo.InvariantInfo));
 				}
 				case Radix.Hex:
 				{
 					if (this.terminalSettings.Display.ShowRadix)
-						return (b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+						return (b.ToString("X2", NumberFormatInfo.InvariantInfo) + "h");
 					else
-						return (b.ToString("X2", CultureInfo.InvariantCulture));
+						return (b.ToString("X2", NumberFormatInfo.InvariantInfo));
 				}
 				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
 			}

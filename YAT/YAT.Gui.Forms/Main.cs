@@ -30,7 +30,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
@@ -782,7 +784,7 @@ namespace YAT.Gui.Forms
 			// Hide all.
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 			{
-				string prefix = string.Format("{0}: ", i + 1);
+				string prefix = string.Format(NumberFormatInfo.InvariantInfo, "{0}: ", i + 1);
 				this.menuItems_recents[i].Text = "&" + prefix;
 				this.menuItems_recents[i].Visible = false;
 			}
@@ -790,7 +792,7 @@ namespace YAT.Gui.Forms
 			// Show valid.
 			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
 			{
-				string prefix = string.Format("{0}: ", i + 1);
+				string prefix = string.Format(NumberFormatInfo.InvariantInfo, "{0}: ", i + 1);
 				string file = PathEx.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
 				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths[i] != null)
 				{
@@ -841,7 +843,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
-			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -917,6 +919,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > PerformStartAction
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void timer_PerformStartAction_Tick(object sender, EventArgs e)
 		{
 			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;

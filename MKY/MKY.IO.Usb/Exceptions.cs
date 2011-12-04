@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Globalization;
 using System.Text;
 
 namespace MKY.IO.Usb
@@ -82,7 +83,7 @@ namespace MKY.IO.Usb
 			sb.AppendLine(Message);
 
 			sb.Append("  Error code: ");
-			sb.AppendLine(ErrorCode.ToString());
+			sb.AppendLine(ErrorCode.ToString(NumberFormatInfo.InvariantInfo));
 
 			sb.Append("  Native message: ");
 			sb.AppendLine(NativeMessage);

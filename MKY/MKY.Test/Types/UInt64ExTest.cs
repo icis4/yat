@@ -109,9 +109,9 @@ namespace MKY.Test.Types
 			string hexFormat = "X" + hexString.Length;
 
 			Assert.AreEqual(binString, UInt64Ex.ConvertToBinaryString(data, max));
-			Assert.AreEqual(octString, UInt64Ex.ConvertToOctalString(data, max));
-			Assert.AreEqual(decString, data.ToString(decFormat));
-			Assert.AreEqual(hexString, data.ToString(hexFormat));
+			Assert.AreEqual(octString, UInt64Ex.ConvertToOctalString (data, max));
+			Assert.AreEqual(decString, data.ToString(decFormat, NumberFormatInfo.InvariantInfo));
+			Assert.AreEqual(hexString, data.ToString(hexFormat, NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion

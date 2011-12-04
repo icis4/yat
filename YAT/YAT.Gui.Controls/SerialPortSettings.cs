@@ -28,6 +28,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Event;
@@ -398,7 +399,7 @@ namespace YAT.Gui.Controls
 			if (Enabled && (baudRate != MKY.IO.Ports.BaudRate.UserDefined))
 				comboBox_BaudRate.SelectedItem = baudRate;
 			else if (Enabled)
-				comboBox_BaudRate.Text = this.baudRate.ToString();
+				comboBox_BaudRate.Text = (MKY.IO.Ports.BaudRateEx)this.baudRate;
 			else
 				comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
 
@@ -422,7 +423,7 @@ namespace YAT.Gui.Controls
 				bool autoReopenEnabled = this.autoReopen.Enabled;
 				checkBox_AutoReopen.Checked = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
+				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString(NumberFormatInfo.CurrentInfo);
 			}
 			else
 			{

@@ -29,6 +29,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
 using System.Windows.Forms;
 
@@ -386,8 +387,8 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"Remote port is invalid, valid values are numbers from " +
-							System.Net.IPEndPoint.MinPort.ToString() + " to " +
-							System.Net.IPEndPoint.MaxPort.ToString() + ".",
+							System.Net.IPEndPoint.MinPort.ToString(NumberFormatInfo.InvariantInfo) + " to " +
+							System.Net.IPEndPoint.MaxPort.ToString(NumberFormatInfo.InvariantInfo) + ".",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -432,8 +433,8 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"Local port is invalid, valid values are numbers from " +
-							System.Net.IPEndPoint.MinPort.ToString() + " to " +
-							System.Net.IPEndPoint.MaxPort.ToString() + ".",
+							System.Net.IPEndPoint.MinPort.ToString(NumberFormatInfo.InvariantInfo) + " to " +
+							System.Net.IPEndPoint.MaxPort.ToString(NumberFormatInfo.InvariantInfo) + ".",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -510,6 +511,7 @@ namespace YAT.Gui.Controls
 			// Remote host address.
 			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
 			{
+				comboBox_RemoteHost.Enabled = true;
 				if (comboBox_RemoteHost.Items.Count > 0)
 				{
 					if (this.remoteHost != null)
@@ -528,6 +530,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
+				comboBox_RemoteHost.Enabled = false;
 				comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
 				comboBox_RemoteHost.Text = "";
 			}
@@ -542,7 +545,7 @@ namespace YAT.Gui.Controls
 			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remotePort.ToString();
+				textBox_RemotePort.Text = this.remotePort.ToString(NumberFormatInfo.CurrentInfo);
 			}
 			else
 			{
@@ -573,12 +576,12 @@ namespace YAT.Gui.Controls
 			if (Enabled && ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket)))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localTcpPort.ToString();
+				textBox_LocalPort.Text = this.localTcpPort.ToString(NumberFormatInfo.InvariantInfo);
 			}
 			else if (Enabled && (this.hostType == SocketHostType.Udp))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localUdpPort.ToString();
+				textBox_LocalPort.Text = this.localUdpPort.ToString(NumberFormatInfo.InvariantInfo);
 			}
 			else
 			{

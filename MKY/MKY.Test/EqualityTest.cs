@@ -37,7 +37,9 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 
 using NUnit.Framework;
 
@@ -79,7 +81,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return ("A = " + this.A.ToString());
+				return ("A = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary>
@@ -134,7 +136,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -224,7 +226,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return ("A = " + this.A.ToString());
+				return ("A = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary>
@@ -279,7 +281,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -293,6 +295,204 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		public class OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<T> : List<T>
+			where T : IEquatable<T>
+		{
+		}
+
+		/// <summary></summary>
+		public class OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>>
+			where T : IEquatable<T>
+		{
+			#region Object Members
+
+			/// <summary></summary>
+			public override string ToString()
+			{
+				return
+					(
+					Environment.NewLine + "      1:Base = " + base.ToString()
+					);
+			}
+
+			/// <summary></summary>
+			public override bool Equals(object obj)
+			{
+				return (Equals(obj as OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>));
+			}
+
+			/// <summary></summary>
+			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> other)
+			{
+			#if (OUTPUT_CALLING_SEQUENCE)
+
+				// Test implementation to get details about the calling sequence:
+
+				Trace.Indent();
+				Trace.WriteLine("OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>.Equals<OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>>()");
+
+				bool result = (base.Equals(other) && (this.B == other.B));
+
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
+				return (result);
+
+			#else
+
+				// Dedicated list implementation:
+
+				if (!Count.Equals(other.Count))
+					return (false);
+
+				for (int i = 0; i < Count; i++)
+				{
+					if (!this[i].Equals(other[i]))
+						return (false);
+				}
+
+				return (true);
+
+			#endif
+			}
+
+			/// <summary></summary>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode());
+			}
+
+			#endregion
+		}
+
+		/// <summary></summary>
+		public class OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>>
+			where T : IEquatable<T>
+		{
+			#region Object Members
+
+			/// <summary></summary>
+			public override string ToString()
+			{
+				return
+					(
+					Environment.NewLine + "      1:Base = " + base.ToString()
+					);
+			}
+
+			/// <summary></summary>
+			public override bool Equals(object obj)
+			{
+				return (Equals(obj as OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>));
+			}
+
+			/// <summary></summary>
+			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> other)
+			{
+			#if (OUTPUT_CALLING_SEQUENCE)
+
+				// Test implementation to get details about the calling sequence:
+
+				Trace.Indent();
+				Trace.WriteLine("OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>.Equals<OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>>()");
+
+				bool result = (base.Equals(other) && (this.B == other.B));
+
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
+				return (result);
+
+			#else
+
+				// Dedicated list implementation:
+
+				if (!Count.Equals(other.Count))
+					return (false);
+
+				for (int i = 0; i < Count; i++)
+				{
+					if (!this[i].Equals(other[i]))
+						return (false);
+				}
+
+				return (true);
+
+			#endif
+			}
+
+			/// <summary></summary>
+			public override int GetHashCode()
+			{
+				return (base.GetHashCode());
+			}
+
+			#endregion
+
+			#region Comparison Operators
+
+			/// <summary>
+			/// Determines whether the two specified objects have reference or value equality.
+			/// </summary>
+			public static bool operator ==(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> lhs, OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> rhs)
+			{
+			#if (OUTPUT_CALLING_SEQUENCE)
+
+				// Test implementation to get details about the calling sequence:
+
+				Trace.Indent();
+				Trace.WriteLine("OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>.operator ==()");
+
+				if (ReferenceEquals(lhs, rhs))
+				{
+					Trace.WriteLine("Results in True within ReferenceEquals()");
+					Trace.Unindent();
+					return (true);
+				}
+
+				if (ReferenceEquals(lhs, null))
+				{
+					Trace.WriteLine("Results in False since lhs is null");
+					Trace.Unindent();
+					return (false);
+				}
+
+				if (ReferenceEquals(rhs, null))
+				{
+					Trace.WriteLine("Results in False since rhs is null");
+					Trace.Unindent();
+					return (false);
+				}
+
+				bool result = lhs.Equals(rhs);
+
+				Trace.WriteLine("Results in " + result + " within Equals()");
+				Trace.Unindent();
+				return (result);
+
+			#else
+
+				// Normal implementation:
+
+				if (ReferenceEquals(lhs, rhs))  return (true);
+				if (ReferenceEquals(lhs, null)) return (false);
+				if (ReferenceEquals(rhs, null)) return (false);
+
+				return (lhs.Equals(rhs));
+
+			#endif
+			}
+
+			/// <summary>
+			/// Determines whether the two specified objects have reference and value inequality.
+			/// </summary>
+			public static bool operator !=(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> lhs, OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> rhs)
+			{
+				return (!(lhs == rhs));
+			}
+
+			#endregion
+		}
+
+		/// <summary></summary>
 		public class BaseReferenceTypeNotIEquatableWithoutOperators
 		{
 			/// <summary></summary>
@@ -301,7 +501,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public BaseReferenceTypeNotIEquatableWithoutOperators(int a)
 			{
-				A = a;
+				this.A = a;
 			}
 
 			#region Object Members
@@ -309,7 +509,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString());
+				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary></summary>
@@ -362,7 +562,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -378,7 +578,7 @@ namespace MKY.Test
 			public DerivedReferenceTypeNotIEquatableWithoutOperators(int a, int b)
 				: base(a)
 			{
-				B = b;
+				this.B = b;
 			}
 
 			#region Object Members
@@ -389,7 +589,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString()
+					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
@@ -433,7 +633,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ A.GetHashCode());
+				return (base.GetHashCode() ^ this.A.GetHashCode());
 			}
 
 			#endregion
@@ -448,7 +648,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public BaseReferenceTypeIEquatableWithoutOperators(int a)
 			{
-				A = a;
+				this.A = a;
 			}
 
 			#region Object Members
@@ -456,7 +656,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString());
+				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary></summary>
@@ -513,7 +713,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -529,7 +729,7 @@ namespace MKY.Test
 			public DerivedReferenceTypeIEquatableWithoutOperators(int a, int b)
 				: base(a)
 			{
-				B = b;
+				this.B = b;
 			}
 
 			#region Object Members
@@ -540,7 +740,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString()
+					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
@@ -578,7 +778,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ B.GetHashCode());
+				return (base.GetHashCode() ^ this.B.GetHashCode());
 			}
 
 			#endregion
@@ -593,7 +793,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public BaseReferenceTypeNotIEquatableWithOperators(int a)
 			{
-				A = a;
+				this.A = a;
 			}
 
 			#region Object Members
@@ -601,7 +801,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString());
+				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary></summary>
@@ -654,7 +854,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -705,7 +905,7 @@ namespace MKY.Test
 
 				// Normal implementation:
 
-				if (ReferenceEquals(lhs, rhs)) return (true);
+				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
@@ -735,7 +935,7 @@ namespace MKY.Test
 			public DerivedReferenceTypeNotIEquatableWithOperators(int a, int b)
 				: base(a)
 			{
-				B = b;
+				this.B = b;
 			}
 
 			#region Object Members
@@ -746,7 +946,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString()
+					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
@@ -790,7 +990,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ A.GetHashCode());
+				return (base.GetHashCode() ^ this.A.GetHashCode());
 			}
 
 			#endregion
@@ -840,7 +1040,7 @@ namespace MKY.Test
 
 				// Normal implementation:
 
-				if (ReferenceEquals(lhs, rhs)) return (true);
+				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
@@ -881,7 +1081,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "        2:Base = " + base.ToString() +
-					Environment.NewLine + "        2:C    = " + C.ToString()
+					Environment.NewLine + "        2:C    = " + this.C.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
@@ -925,7 +1125,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ A.GetHashCode());
+				return (base.GetHashCode() ^ this.A.GetHashCode());
 			}
 
 			#endregion
@@ -948,7 +1148,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString());
+				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary></summary>
@@ -1001,7 +1201,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -1056,7 +1256,7 @@ namespace MKY.Test
 				// Base reference type implementation of operator ==.
 				// See MKY.Test.EqualityTest for details.
 
-				if (ReferenceEquals(lhs, rhs)) return (true);
+				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
@@ -1100,7 +1300,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString()
+					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
@@ -1144,7 +1344,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ A.GetHashCode());
+				return (base.GetHashCode() ^ this.A.GetHashCode());
 			}
 
 			#endregion
@@ -1167,7 +1367,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString());
+				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary></summary>
@@ -1224,7 +1424,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode());
+				return (this.A.GetHashCode());
 			}
 
 			#endregion
@@ -1323,7 +1523,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString()
+					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
@@ -1377,7 +1577,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ A.GetHashCode());
+				return (base.GetHashCode() ^ this.A.GetHashCode());
 			}
 
 			#endregion
@@ -1607,6 +1807,69 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[Test]
+		public virtual void TestSystemCollectionReferenceTypeNotIEquatableWithoutOperators()
+		{
+			List<int> objToCompareAgainst = new List<int>();
+			List<int> objEqual            = new List<int>();
+			List<int> objNotEqual         = new List<int>();
+
+			objToCompareAgainst.AddRange(new int[] { 1, 1 });
+			objEqual           .AddRange(new int[] { 1, 1 });
+			objNotEqual        .AddRange(new int[] { 1, 2 });
+
+			// object.Equals() only evaluates reference equality.
+			// List<int>.Equals() doesn't exist, and object.Equals() only evaluates reference equality.
+
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
+			// object.operators ==/!= only evaluate reference equality.
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfList  (objToCompareAgainst, objEqual, objNotEqual);
+			// List<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestOwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators()
+		{
+			EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objToCompareAgainst = new EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
+			EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objEqual            = new EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
+			EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int> objNotEqual         = new EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>();
+
+			objToCompareAgainst.AddRange(new int[] { 1, 1 });
+			objEqual           .AddRange(new int[] { 1, 1 });
+			objNotEqual        .AddRange(new int[] { 1, 2 });
+
+			// object.Equals() only evaluates reference equality.
+			// EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>.Equals() doesn't exist, and List<int>.Equals() only evaluates reference equality.
+
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
+			// object.operators ==/!= only evaluate reference equality.
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfList  (objToCompareAgainst, objEqual, objNotEqual);
+			// EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestOwnDerivedCollectionReferenceTypeIEquatableWithoutOperators()
+		{
+			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objToCompareAgainst = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
+			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objEqual            = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
+			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int> objNotEqual         = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>();
+
+			objToCompareAgainst.AddRange(new int[] { 1, 1 });
+			objEqual           .AddRange(new int[] { 1, 1 });
+			objNotEqual        .AddRange(new int[] { 1, 2 });
+
+			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
+
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
+			// object.operators ==/!= only evaluate reference equality.
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfList  (objToCompareAgainst, objEqual, objNotEqual);
+			// EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
+		}
+
+		/// <summary></summary>
 		[Test, TestCaseSource(typeof(EqualityTestData), "TestCasesForBase")]
 		public virtual void TestOwnBaseReferenceTypeNotIEquatableWithoutOperators(int a1, int a2, int a3)
 		{
@@ -1701,6 +1964,28 @@ namespace MKY.Test
 			// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfVersion(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfVersion    (objToCompareAgainst, objEqual, objNotEqual);
+		}
+
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestOwnDerivedCollectionReferenceTypeIEquatableWithOperators()
+		{
+			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
+			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual            = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
+			EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual         = new EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>();
+
+			objToCompareAgainst.AddRange(new int[] { 1, 1 });
+			objEqual           .AddRange(new int[] { 1, 1 });
+			objNotEqual        .AddRange(new int[] { 1, 2 });
+
+			EqualityTestMethods.TestEquals<object>(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
+
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
+			// object.operators ==/!= only evaluate reference equality.
+			EqualityTestMethods.TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
 
 		/// <summary></summary>
@@ -1875,10 +2160,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -1889,9 +2174,9 @@ namespace MKY.Test
 
 		#endregion
 
-		#region Static Test Methods > Value Types
+		#region Static Test Methods > Operators for Value Types
 		//------------------------------------------------------------------------------------------
-		// Static Test Methods > Value Types
+		// Static Test Methods > Operators for Value Types
 		//------------------------------------------------------------------------------------------
 
 		public static void TestOperatorsForReferenceEqualityOfValueType(ValueType objToCompareAgainst, ValueType objEqual, ValueType objNotEqual)
@@ -1923,10 +2208,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -1966,10 +2251,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2020,10 +2305,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2061,10 +2346,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2115,10 +2400,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2129,9 +2414,9 @@ namespace MKY.Test
 
 		#endregion
 
-		#region Static Test Methods > Reference Types
+		#region Static Test Methods > Operators for Reference Types
 		//------------------------------------------------------------------------------------------
-		// Static Test Methods > Reference Types
+		// Static Test Methods > Operators for Reference Types
 		//------------------------------------------------------------------------------------------
 
 		public static void TestOperatorsForReferenceEqualityOfObject(object objToCompareAgainst, object objEqual, object objNotEqual)
@@ -2163,10 +2448,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2206,10 +2491,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2260,10 +2545,200 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
+			}
+			finally
+			{
+				Trace.Unindent();
+				Trace.Unindent();
+			}
+		}
+
+		public static void TestOperatorsForReferenceEqualityOfList(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
+		{
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfList");
+			Trace.Indent();
+
+			try
+			{
+				// Reference equal.
+
+				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
+
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst == objToCompareAgainst))
+					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
+
+				if (objToCompareAgainst != objToCompareAgainst)
+					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
+
+				Trace.Unindent();
+
+				#pragma warning restore 1718
+			}
+			catch (AssertionException)
+			{
+				Trace.Unindent();
+				throw; // Re-throw!
+			}
+			finally
+			{
+				Trace.Unindent();
+				Trace.Unindent();
+			}
+		}
+
+		public static void TestOperatorsForValueEqualityOfList(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
+		{
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfList");
+			Trace.Indent();
+
+			try
+			{
+				// Value equal.
+
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst == objEqual))
+					Assert.Fail("Value equal objects are not considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
+
+				if (objToCompareAgainst != objEqual)
+					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
+
+				Trace.Unindent();
+
+				// Value not equal.
+
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
+
+				if (objToCompareAgainst == objNotEqual)
+					Assert.Fail("Value not equal objects are considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst != objNotEqual))
+					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
+
+				Trace.Unindent();
+			}
+			catch (AssertionException)
+			{
+				Trace.Unindent();
+				throw; // Re-throw!
+			}
+			finally
+			{
+				Trace.Unindent();
+				Trace.Unindent();
+			}
+		}
+
+		public static void TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
+		{
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators");
+			Trace.Indent();
+
+			try
+			{
+				// Reference equal.
+
+				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
+
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst == objToCompareAgainst))
+					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
+
+				if (objToCompareAgainst != objToCompareAgainst)
+					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
+
+				Trace.Unindent();
+
+				#pragma warning restore 1718
+			}
+			catch (AssertionException)
+			{
+				Trace.Unindent();
+				throw; // Re-throw!
+			}
+			finally
+			{
+				Trace.Unindent();
+				Trace.Unindent();
+			}
+		}
+
+		public static void TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
+		{
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators");
+			Trace.Indent();
+
+			try
+			{
+				// Value equal.
+
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst == objEqual))
+					Assert.Fail("Value equal objects are not considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
+
+				if (objToCompareAgainst != objEqual)
+					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
+
+				Trace.Unindent();
+
+				// Value not equal.
+
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
+
+				if (objToCompareAgainst == objNotEqual)
+					Assert.Fail("Value not equal objects are considered equal using operator ==()");
+
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
+
+				if (!(objToCompareAgainst != objNotEqual))
+					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
+
+				Trace.Unindent();
+			}
+			catch (AssertionException)
+			{
+				Trace.Unindent();
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2301,10 +2776,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2355,10 +2830,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2396,10 +2871,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2450,10 +2925,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2491,10 +2966,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2545,10 +3020,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2586,10 +3061,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2640,10 +3115,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2681,10 +3156,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2735,10 +3210,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2776,10 +3251,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2830,10 +3305,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2871,10 +3346,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2925,10 +3400,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -2966,10 +3441,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3020,10 +3495,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3061,10 +3536,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3115,10 +3590,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3156,10 +3631,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3210,10 +3685,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3251,10 +3726,10 @@ namespace MKY.Test
 
 				#pragma warning restore 1718
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
@@ -3305,10 +3780,10 @@ namespace MKY.Test
 
 				Trace.Unindent();
 			}
-			catch (AssertionException ex)
+			catch (AssertionException)
 			{
 				Trace.Unindent();
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{

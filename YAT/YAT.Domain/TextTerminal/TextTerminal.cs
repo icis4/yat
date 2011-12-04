@@ -335,7 +335,7 @@ namespace YAT.Domain
 			{
 				foreach (string marker in TextTerminalSettings.EolCommentIndicators)
 				{
-					int index = StringEx.IndexOfOutsideDoubleQuotes(s, marker, StringComparison.InvariantCultureIgnoreCase);
+					int index = StringEx.IndexOfOutsideDoubleQuotes(s, marker, StringComparison.Ordinal);
 					if (index >= 0)
 						s = StringEx.Left(s, index);
 				}

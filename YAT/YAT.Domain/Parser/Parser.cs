@@ -172,7 +172,7 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			public DefaultState()
 			{
-				this.contiguousWriter = new StringWriter();
+				this.contiguousWriter = new StringWriter(CultureInfo.InvariantCulture);
 			}
 
 			#region Disposal
@@ -577,7 +577,7 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			public AsciiMnemonicState()
 			{
-				this.mnemonicWriter = new StringWriter();
+				this.mnemonicWriter = new StringWriter(CultureInfo.InvariantCulture);
 			}
 
 			#region Disposal
@@ -669,7 +669,7 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			public NumericState()
 			{
-				this.numericWriter = new StringWriter();
+				this.numericWriter = new StringWriter(CultureInfo.InvariantCulture);
 			}
 
 			/// <summary></summary>

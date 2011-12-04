@@ -370,7 +370,13 @@ namespace YAT.Model
 			// Always create start requests to ensure that object exists.
 			this.startArgs = new StartArgs();
 
-			// Prio 0 = None:
+			// Prio 0 = Invalid:
+			if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
+			{
+				return (false);
+			}
+
+			// Prio 1 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
 			{
 				this.startArgs.ShowNewTerminalDialog = true;
@@ -379,13 +385,9 @@ namespace YAT.Model
 
 				return (true);
 			}
-			else if (!this.commandLineArgs.IsValid)
-			{
-				return (false);
-			}
 
-			// Prio 1 = Empty:
-			if (this.commandLineArgs.NoArgs || this.commandLineArgs.Empty)
+			// Prio 2 = Empty:
+			if (this.commandLineArgs.Empty)
 			{
 				this.startArgs.ShowNewTerminalDialog = false;
 				this.startArgs.KeepOpen              = true;
@@ -394,7 +396,7 @@ namespace YAT.Model
 				return (true);
 			}
 
-			// Prio 2 = Recent:
+			// Prio 3 = Recent:
 			string requestedFilePath = null;
 			if (this.commandLineArgs.MostRecentIsRequested)
 			{
@@ -403,17 +405,17 @@ namespace YAT.Model
 				else
 					return (false);
 			}
-			// Prio 3 = New:
+			// Prio 4 = New:
 			else if (this.commandLineArgs.NewIsRequested)
 			{
 				// No file path to open.
 			}
-			// Prio 4 = Requested file path as option:
+			// Prio 5 = Requested file path as option:
 			else if (!string.IsNullOrEmpty(this.commandLineArgs.RequestedFilePath))
 			{
 				requestedFilePath = this.commandLineArgs.RequestedFilePath;
 			}
-			// Prio 5 = Value argument:
+			// Prio 6 = Value argument:
 			else if (this.commandLineArgs.ValueArgsCount > 0)
 			{
 				requestedFilePath = this.commandLineArgs.ValueArgs[0];
@@ -444,7 +446,7 @@ namespace YAT.Model
 				}
 			}
 
-			// Prio 6 = Retrieve the requested terminal and validate it:
+			// Prio 7 = Retrieve the requested terminal and validate it:
 			if (this.startArgs.WorkspaceSettings != null) // Applies to a terminal within a workspace.
 			{
 				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
@@ -492,11 +494,11 @@ namespace YAT.Model
 				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
-			// Prio 7 = If no settings loaded so far, create a new terminal anyway:
+			// Prio 8 = If no settings loaded so far, create a new terminal anyway:
 			if ((this.startArgs.WorkspaceSettings == null) && (this.startArgs.TerminalSettings == null))
 				 this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 
-			// Prio 8 = Override settings as desired:
+			// Prio 9 = Override settings as desired:
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
 			{
 				Domain.TerminalTypeEx terminalType;
@@ -677,14 +679,14 @@ namespace YAT.Model
 			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
 				this.startArgs.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
 
-			// Prio 9 = Perform actions:
+			// Prio 10 = Perform actions:
 			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 			{
 				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
 				this.startArgs.PerformActionOnRequestedTerminal = true;
 			}
 
-			// Prio 10 = Set behavior:
+			// Prio 11 = Set behavior:
 			if (this.startArgs.PerformActionOnRequestedTerminal)
 			{
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
@@ -696,7 +698,7 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError = true;
 			}
 
-			// Prio 11 = Tile:
+			// Prio 12 = Tile:
 			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
 			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 

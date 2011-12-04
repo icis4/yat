@@ -29,6 +29,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -465,7 +466,7 @@ namespace YAT.Gui.Forms
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private bool ValidateFilenameChars(string filenameChars, string title)
 		{
-			StringWriter invalid = new StringWriter();
+			StringWriter invalid = new StringWriter(CultureInfo.InvariantCulture);
 			invalid.Write(Path.GetInvalidPathChars());
 			invalid.Write(Path.VolumeSeparatorChar);
 			invalid.Write(Path.DirectorySeparatorChar);
@@ -474,7 +475,7 @@ namespace YAT.Gui.Forms
 
 			if (StringEx.ContainsAny(filenameChars, invalid.ToString().ToCharArray()))
 			{
-				StringWriter invalidPrintable = new StringWriter();
+				StringWriter invalidPrintable = new StringWriter(CultureInfo.InvariantCulture);
 				foreach (char c in invalid.ToString().ToCharArray())
 				{
 					if (!Char.IsControl(c))

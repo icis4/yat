@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace MKY.IO.Ports
 {
@@ -68,6 +70,7 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum BaudRateEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class BaudRateEx : EnumEx
 	{
 		private int userDefinedBaudRate = 0;
@@ -108,7 +111,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString());
+			return (UnderlyingEnum.GetHashCode().ToString(NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -150,7 +153,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static BaudRateEx Parse(string baudRate)
 		{
-			return ((BaudRateEx)int.Parse(baudRate));
+			return ((BaudRateEx)int.Parse(baudRate, NumberFormatInfo.InvariantInfo));
 		}
 
 		/// <summary></summary>

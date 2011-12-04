@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -63,6 +64,12 @@ namespace YAT.Model
 
 		private const string TerminalText = "Terminal";
 
+		/// <summary>
+		/// Static counter to number terminals. Counter is incremented before first use, first
+		/// terminal therefore is "Terminal1".
+		/// </summary>
+		private const int SequenciallIndexCounterDefault = (Indices.FirstSequencialIndex - 1);
+
 		#endregion
 
 		#region Static Fields
@@ -70,11 +77,22 @@ namespace YAT.Model
 		// Static Fields
 		//==========================================================================================
 
-		/// <summary>
-		/// Static counter to number terminals. Counter is incremented before first use, first
-		/// terminal therefore is "Terminal1".
-		/// </summary>
-		private static int staticSequenciallIndexCounter = Indices.FirstSequencialIndex - 1;
+		private static int staticSequenciallIndexCounter = SequenciallIndexCounterDefault;
+
+		#endregion
+
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
+		/// <remarks>
+		/// Needed to test the indices feature of terminals and workspace.
+		/// </remarks>
+		public static void ResetSequenciallIndexCounter()
+		{
+			staticSequenciallIndexCounter = SequenciallIndexCounterDefault;
+		}
 
 		#endregion
 
@@ -218,7 +236,7 @@ namespace YAT.Model
 			// Set ID and user name.
 			this.sequencialIndex = ++staticSequenciallIndexCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.autoName = TerminalText + this.sequencialIndex.ToString();
+				this.autoName = TerminalText + this.sequencialIndex.ToString(NumberFormatInfo.InvariantInfo);
 			else
 				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
@@ -481,9 +499,19 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
-							sb.Append(s.RemotePort.ToString());
+							sb.Append(s.RemotePort.ToString(NumberFormatInfo.InvariantInfo));
 							sb.Append(" - ");
-							sb.Append(IsConnected ? "Connected" : "Disconnected");
+							if (IsStarted)
+							{
+								if (IsConnected)
+									sb.Append("Connected");
+								else
+									sb.Append("Disconnected - Waiting for reconnect");
+							}
+							else
+							{
+								sb.Append("Disconnected");
+							}
 							break;
 						}
 
@@ -492,7 +520,7 @@ namespace YAT.Model
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
 							sb.Append("Server:");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(NumberFormatInfo.InvariantInfo));
 							sb.Append(" - ");
 							if (IsStarted)
 								sb.Append(IsConnected ? "Connected" : "Listening");
@@ -521,7 +549,7 @@ namespace YAT.Model
 									sb.Append(" - ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(":");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected");
 								}
@@ -529,7 +557,7 @@ namespace YAT.Model
 								{
 									sb.Append(" - ");
 									sb.Append("Server:");
-									sb.Append(s.LocalPort.ToString());
+									sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Listening");
 								}
@@ -537,14 +565,14 @@ namespace YAT.Model
 								{
 									sb.Append(" - ");
 									sb.Append("Starting on port ");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 								}
 							}
 							else
 							{
 								sb.Append(" - ");
 								sb.Append("AutoSocket:");
-								sb.Append(s.RemotePort.ToString());
+								sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 								sb.Append(" - ");
 								sb.Append("Disconnected");
 							}
@@ -557,10 +585,10 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
-							sb.Append(s.RemotePort.ToString());
+							sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 							sb.Append(" - ");
 							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
 							sb.Append(" - ");
 							sb.Append(IsOpen ? "Open" : "Closed");
 							break;
@@ -635,10 +663,20 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP client is ");
-							sb.Append(IsConnected ? "connected to " : "disconnected from ");
+							if (IsStarted)
+							{
+								if (IsConnected)
+									sb.Append("connected to ");
+								else
+									sb.Append("disconnected and waiting for reconnect to ");
+							}
+							else
+							{
+								sb.Append("disconnected from ");
+							}
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString());
+							sb.Append(s.RemotePort.ToString(NumberFormatInfo.InvariantInfo));
 							break;
 						}
 
@@ -658,11 +696,15 @@ namespace YAT.Model
 										count = server.ConnectedClientCount;
 
 									sb.Append("connected to ");
-									sb.Append(count.ToString());
 									if (count == 1)
-										sb.Append(" client");
+									{
+										sb.Append("a client");
+									}
 									else
+									{
+										sb.Append(count.ToString(NumberFormatInfo.CurrentInfo));
 										sb.Append(" clients");
+									}
 								}
 								else
 								{
@@ -674,7 +716,7 @@ namespace YAT.Model
 								sb.Append("closed");
 							}
 							sb.Append(" on local port ");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
 							break;
 						}
 
@@ -700,20 +742,20 @@ namespace YAT.Model
 									sb.Append("connected to ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 								}
 								else if (isServer)
 								{
 									sb.Append(IsConnected ? "connected" : "listening");
 									sb.Append(" on local port ");
-									sb.Append(s.LocalPort.ToString());
+									sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
 								}
 								else
 								{
 									sb.Append("starting to connect to ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 								}
 							}
 							else
@@ -721,7 +763,7 @@ namespace YAT.Model
 								sb.Append("disconnected from ");
 								sb.Append(s.ResolvedRemoteIPAddress.ToString());
 								sb.Append(" on remote port ");
-								sb.Append(s.RemotePort.ToString());
+								sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 							}
 							break;
 						}
@@ -734,9 +776,9 @@ namespace YAT.Model
 							sb.Append(" for sending to ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString());
+							sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
 							sb.Append(" and receiving on local port ");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
 							break;
 						}
 
@@ -1339,8 +1381,8 @@ namespace YAT.Model
 			// Log.
 			if (this.log.IsStarted)
 			{
-				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
-				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawTx);
+				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawBidir);
 			}
 		}
 
@@ -1357,8 +1399,8 @@ namespace YAT.Model
 			// Log.
 			if (this.log.IsStarted)
 			{
-				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
-				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
+				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawBidir);
+				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawRx);
 			}
 		}
 
@@ -1374,13 +1416,13 @@ namespace YAT.Model
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
-						this.log.WriteEol(Log.LogStreams.NeatTx);
-						this.log.WriteEol(Log.LogStreams.NeatBidir);
+						this.log.WriteEol(Log.LogStream.NeatTx);
+						this.log.WriteEol(Log.LogStream.NeatBidir);
 					}
 					else
 					{
-						this.log.WriteString(de.Text, Log.LogStreams.NeatTx);
-						this.log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+						this.log.WriteString(de.Text, Log.LogStream.NeatTx);
+						this.log.WriteString(de.Text, Log.LogStream.NeatBidir);
 					}
 				}
 			}
@@ -1398,13 +1440,13 @@ namespace YAT.Model
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
-						this.log.WriteEol(Log.LogStreams.NeatBidir);
-						this.log.WriteEol(Log.LogStreams.NeatRx);
+						this.log.WriteEol(Log.LogStream.NeatBidir);
+						this.log.WriteEol(Log.LogStream.NeatRx);
 					}
 					else
 					{
-						this.log.WriteString(de.Text, Log.LogStreams.NeatBidir);
-						this.log.WriteString(de.Text, Log.LogStreams.NeatRx);
+						this.log.WriteString(de.Text, Log.LogStream.NeatBidir);
+						this.log.WriteString(de.Text, Log.LogStream.NeatRx);
 					}
 				}
 			}

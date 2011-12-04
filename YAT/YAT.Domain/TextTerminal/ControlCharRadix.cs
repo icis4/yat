@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY;
 
@@ -64,7 +65,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary></summary>
-	[Serializable]
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class ControlCharRadixEx : RadixEx
 	{
 		#region String Definitions

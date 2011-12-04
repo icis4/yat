@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -100,7 +101,7 @@ namespace MKY.Test.Settings
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "        2:SimpleValue = " + this.SimpleValue.ToString());
+				return (Environment.NewLine + "        2:SimpleValue = " + this.SimpleValue.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary>
@@ -237,7 +238,7 @@ namespace MKY.Test.Settings
 			{
 				return
 					(
-					Environment.NewLine + "      1:SimpleValue = " + SimpleValue.ToString() +
+					Environment.NewLine + "      1:SimpleValue = "  + SimpleValue.ToString(NumberFormatInfo.InvariantInfo) +
 					Environment.NewLine + "      1:ChildLevel2A = " + ChildLevel2A.ToString() +
 					Environment.NewLine + "      1:ChildLevel2B = " + ChildLevel2B.ToString()
 					);
@@ -347,7 +348,7 @@ namespace MKY.Test.Settings
 			{
 				return
 					(
-					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString() +
+					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString(NumberFormatInfo.InvariantInfo) +
 					Environment.NewLine + "    0:ChildLevel1 = " + ChildLevel1.ToString()
 					);
 			}

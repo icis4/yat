@@ -24,6 +24,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -366,6 +367,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		[XmlAttribute("Origin")]
 		public virtual List<Pair<byte[], string>> Origin
 		{
@@ -566,7 +568,7 @@ namespace YAT.Domain
 			sb.Append(indent); sb.Append("- Direction: "); sb.AppendLine(this.direction.ToString());
 			sb.Append(indent); sb.Append("- Origin:    "); sb.AppendLine(this.origin.ToString());
 			sb.Append(indent); sb.Append("- Text:      "); sb.AppendLine(this.text);
-			sb.Append(indent); sb.Append("- DataCount: "); sb.AppendLine(this.dataCount.ToString());
+			sb.Append(indent); sb.Append("- DataCount: "); sb.AppendLine(this.dataCount.ToString(NumberFormatInfo.InvariantInfo));
 			sb.Append(indent); sb.Append("- IsData:    "); sb.AppendLine(this.isData.ToString());
 			sb.Append(indent); sb.Append("- IsEol:     "); sb.AppendLine(this.isEol.ToString());
 

@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace MKY.IO.Ports
 {
@@ -53,6 +54,7 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum DataBitsEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class DataBitsEx : EnumEx
 	{
 		/// <summary>Default is <see cref="DataBits.Eight"/>.</summary>
@@ -72,7 +74,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString());
+			return (UnderlyingEnum.GetHashCode().ToString(NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -98,7 +100,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static DataBitsEx Parse(string bits)
 		{
-			return ((DataBitsEx)int.Parse(bits));
+			return ((DataBitsEx)int.Parse(bits, NumberFormatInfo.InvariantInfo));
 		}
 
 		/// <summary></summary>

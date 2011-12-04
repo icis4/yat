@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -140,7 +141,7 @@ namespace MKY.IO
 			{
 				lock (this.writer)
 				{
-					this.writer.WriteLine(now.ToString("HH:mm:ss.") + string.Format("{0:000}", now.Millisecond) + "  " + line);
+					this.writer.WriteLine(now.ToString("HH:mm:ss.", DateTimeFormatInfo.InvariantInfo) + string.Format(DateTimeFormatInfo.InvariantInfo, "{0:000}", now.Millisecond) + "  " + line);
 					this.writer.Flush();
 				}
 			}
