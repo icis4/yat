@@ -29,6 +29,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
+using MKY.Diagnostics;
 using MKY.Xml;
 
 namespace MKY.Settings
@@ -74,6 +75,10 @@ namespace MKY.Settings
 		private TLocalUserSettings localUserSettings = default(TLocalUserSettings);
 		private TRoamingUserSettings roamingUserSettings = default(TRoamingUserSettings);
 
+		private AlternateXmlElement[] alternateCommonXmlElements = null;
+		private AlternateXmlElement[] alternateLocalUserXmlElements = null;
+		private AlternateXmlElement[] alternateRoamingUserXmlElements = null;
+
 		private bool commonSettingsSuccessfullyLoaded = false;
 		private bool localUserSettingsSuccessfullyLoaded = false;
 		private bool roamingUserSettingsSuccessfullyLoaded = false;
@@ -102,13 +107,31 @@ namespace MKY.Settings
 			ResetFilePaths();
 
 			if (this.hasCommonSettings)
+			{
 				this.commonSettings = CommonSettingsDefault;
 
+				IAlternateXmlElementProvider aep = this.commonSettings as IAlternateXmlElementProvider;
+				if (aep != null)
+					this.alternateCommonXmlElements = aep.AlternateXmlElements;
+			}
+
 			if (this.hasLocalUserSettings)
+			{
 				this.localUserSettings = LocalUserSettingsDefault;
 
+				IAlternateXmlElementProvider aep = this.localUserSettings as IAlternateXmlElementProvider;
+				if (aep != null)
+					this.alternateLocalUserXmlElements = aep.AlternateXmlElements;
+			}
+
 			if (this.hasRoamingUserSettings)
+			{
 				this.roamingUserSettings = RoamingUserSettingsDefault;
+
+				IAlternateXmlElementProvider aep = this.roamingUserSettings as IAlternateXmlElementProvider;
+				if (aep != null)
+					this.alternateRoamingUserXmlElements = aep.AlternateXmlElements;
+			}
 		}
 
 		#endregion
@@ -157,7 +180,7 @@ namespace MKY.Settings
 				if (HasCommonSettings)
 					this.commonSettingsFilePath = value;
 				else
-					throw (new NullReferenceException("This handler has no common settings!"));
+					throw (new InvalidOperationException("This handler has no common settings!"));
 			}
 		}
 
@@ -176,7 +199,7 @@ namespace MKY.Settings
 				if (HasLocalUserSettings)
 					this.localUserSettingsFilePath = value;
 				else
-					throw (new NullReferenceException("This handler has no local user settings!"));
+					throw (new InvalidOperationException("This handler has no local user settings!"));
 			}
 		}
 
@@ -195,7 +218,7 @@ namespace MKY.Settings
 				if (HasRoamingUserSettings)
 					this.roamingUserSettingsFilePath = value;
 				else
-					throw (new NullReferenceException("This handler has no roaming user settings!"));
+					throw (new InvalidOperationException("This handler has no roaming user settings!"));
 			}
 		}
 
@@ -378,7 +401,7 @@ namespace MKY.Settings
 			bool result = true;
 			if (HasCommonSettings)
 			{
-				object settings = LoadFromFile(typeof(TCommonSettings), this.commonSettingsFilePath);
+				object settings = LoadFromFile(typeof(TCommonSettings), this.commonSettingsFilePath, this.alternateCommonXmlElements);
 				this.commonSettingsSuccessfullyLoaded = (settings != null);
 				if (!this.commonSettingsSuccessfullyLoaded)
 				{
@@ -402,7 +425,7 @@ namespace MKY.Settings
 			bool result = true;
 			if (HasLocalUserSettings)
 			{
-				object settings = LoadFromFile(typeof(TLocalUserSettings), this.localUserSettingsFilePath);
+				object settings = LoadFromFile(typeof(TLocalUserSettings), this.localUserSettingsFilePath, this.alternateLocalUserXmlElements);
 				this.localUserSettingsSuccessfullyLoaded = (settings != null);
 				if (!this.localUserSettingsSuccessfullyLoaded)
 				{
@@ -426,7 +449,7 @@ namespace MKY.Settings
 			bool result = true;
 			if (HasRoamingUserSettings)
 			{
-				object settings = LoadFromFile(typeof(TRoamingUserSettings), this.roamingUserSettingsFilePath);
+				object settings = LoadFromFile(typeof(TRoamingUserSettings), this.roamingUserSettingsFilePath, this.alternateRoamingUserXmlElements);
 				this.roamingUserSettingsSuccessfullyLoaded = (settings != null);
 				if (!this.roamingUserSettingsSuccessfullyLoaded)
 				{
@@ -439,36 +462,60 @@ namespace MKY.Settings
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private object LoadFromFile(Type type, string filePath)
+		private object LoadFromFile(Type type, string filePath, AlternateXmlElement[] alternateXmlElements)
 		{
 			// Try to open existing file of current version.
 			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
 			{
-				// Try to open existing file with default deserialization.
-				try
+				if (alternateXmlElements == null)
 				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+					// Try to open existing file with default deserialization.
+					try
 					{
-						XmlSerializer serializer = new XmlSerializer(type);
-						settings = serializer.Deserialize(sr);
+						object settings = null;
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+						{
+							XmlSerializer serializer = new XmlSerializer(type);
+							settings = serializer.Deserialize(sr);
+						}
+						return (settings);
 					}
-					return (settings);
-				}
-				catch { }
+					catch { }
 
-				// Try to open existing file with tolerant deserialization.
-				try
-				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+					// Try to open existing file with tolerant deserialization.
+					try
 					{
-						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-						settings = serializer.Deserialize(sr);
+						object settings = null;
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+						{
+							TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+							settings = serializer.Deserialize(sr);
+						}
+						return (settings);
 					}
-					return (settings);
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(this.GetType(), ex);
+					}
 				}
-				catch { }
+				else
+				{
+					// Try to open existing file with tolerant & alternate-tolerant deserialization.
+					try
+					{
+						object settings = null;
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+						{
+							AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
+							settings = serializer.Deserialize(sr);
+						}
+						return (settings);
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(this.GetType(), ex);
+					}
+				}
 			}
 
 			// Find all valid directories of older versions.
@@ -492,11 +539,13 @@ namespace MKY.Settings
 			oldDirectories.Sort();
 			for (int i = oldDirectories.Count - 1; i >= 0; i--)
 			{
+				string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
+
 				// Try to open existing file with default deserialization.
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader((string)oldDirectories[i] + Path.DirectorySeparatorChar + fileName, Encoding.UTF8, true))
+					using (StreamReader sr = new StreamReader(oldFilePath, Encoding.UTF8, true))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -509,7 +558,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+					using (StreamReader sr = new StreamReader(oldFilePath, Encoding.UTF8, true))
 					{
 						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -631,7 +680,7 @@ namespace MKY.Settings
 					serializer.Serialize(sw, settings);
 				}
 			}
-			catch (Exception ex)
+			catch
 			{
 				try
 				{
@@ -640,7 +689,7 @@ namespace MKY.Settings
 				}
 				catch { }
 
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{

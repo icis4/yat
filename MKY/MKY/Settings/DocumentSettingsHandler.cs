@@ -79,7 +79,7 @@ namespace MKY.Settings
 		{
 			this.settings = settings;
 
-			IAlternateXmlElementProvider aep = settings	as IAlternateXmlElementProvider;
+			IAlternateXmlElementProvider aep = this.settings as IAlternateXmlElementProvider;
 			if (aep != null)
 				this.alternateXmlElements = aep.AlternateXmlElements;
 		}
@@ -188,7 +188,7 @@ namespace MKY.Settings
 			bool loadSuccess = true;
 			object settings = null;
 
-			settings = LoadFromFile(this.settings.GetType(), this.settingsFilePath);
+			settings = LoadFromFile(this.settings.GetType(), this.settingsFilePath, this.alternateXmlElements);
 			if (settings == null)
 			{
 				settings = SettingsDefault;
@@ -206,37 +206,58 @@ namespace MKY.Settings
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private object LoadFromFile(Type type, string filePath)
+		private object LoadFromFile(Type type, string filePath, AlternateXmlElement[] alternateXmlElements)
 		{
 			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
 			{
-				// Try to open existing file with default deserialization.
-				try
+				if (alternateXmlElements == null)
 				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+					// Try to open existing file with default deserialization.
+					try
 					{
-						XmlSerializer serializer = new XmlSerializer(type);
-						settings = serializer.Deserialize(sr);
+						object settings = null;
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+						{
+							XmlSerializer serializer = new XmlSerializer(type);
+							settings = serializer.Deserialize(sr);
+						}
+						return (settings);
 					}
-					return (settings);
-				}
-				catch { }
+					catch { }
 
-				// Try to open existing file with tolerant & alternate-tolerant deserialization.
-				try
-				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+					// Try to open existing file with tolerant deserialization.
+					try
 					{
-						AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, this.alternateXmlElements);
-						settings = serializer.Deserialize(sr);
+						object settings = null;
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+						{
+							TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+							settings = serializer.Deserialize(sr);
+						}
+						return (settings);
 					}
-					return (settings);
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(this.GetType(), ex);
+					}
 				}
-				catch (Exception ex)
+				else
 				{
-					DebugEx.WriteException(this.GetType(), ex);
+					// Try to open existing file with tolerant & alternate-tolerant deserialization.
+					try
+					{
+						object settings = null;
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+						{
+							AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
+							settings = serializer.Deserialize(sr);
+						}
+						return (settings);
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(this.GetType(), ex);
+					}
 				}
 			}
 
@@ -294,7 +315,7 @@ namespace MKY.Settings
 					serializer.Serialize(sw, settings);
 				}
 			}
-			catch (Exception ex)
+			catch
 			{
 				try
 				{
@@ -303,7 +324,7 @@ namespace MKY.Settings
 				}
 				catch { }
 
-				throw (ex);
+				throw; // Re-throw!
 			}
 			finally
 			{
