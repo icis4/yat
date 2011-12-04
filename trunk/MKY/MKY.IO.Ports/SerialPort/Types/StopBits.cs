@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO.Ports;
 
 namespace MKY.IO.Ports
@@ -30,6 +32,7 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum StopBitsEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class StopBitsEx : EnumEx
 	{
 		#region Double Definitions
@@ -60,10 +63,10 @@ namespace MKY.IO.Ports
 		{
 			switch ((StopBits)UnderlyingEnum)
 			{
-				case StopBits.None:         return (None_double.ToString());
-				case StopBits.One:          return (One_double.ToString());
-				case StopBits.OnePointFive: return (OnePointFive_double.ToString());
-				case StopBits.Two:          return (Two_double.ToString());
+				case StopBits.None:         return (None_double        .ToString(NumberFormatInfo.InvariantInfo));
+				case StopBits.One:          return (One_double         .ToString(NumberFormatInfo.InvariantInfo));
+				case StopBits.OnePointFive: return (OnePointFive_double.ToString(NumberFormatInfo.InvariantInfo));
+				case StopBits.Two:          return (Two_double         .ToString(NumberFormatInfo.InvariantInfo));
 			}
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
 		}
@@ -90,7 +93,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static StopBitsEx Parse(string bits)
 		{
-			return ((StopBitsEx)(double.Parse(bits)));
+			return ((StopBitsEx)(double.Parse(bits, NumberFormatInfo.InvariantInfo)));
 		}
 
 		/// <summary></summary>

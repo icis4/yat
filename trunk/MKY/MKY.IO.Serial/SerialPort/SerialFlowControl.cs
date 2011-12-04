@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
@@ -61,6 +62,7 @@ namespace MKY.IO.Serial
 	#endregion
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	[Serializable]
 	public class SerialFlowControlEx : MKY.IO.Ports.HandshakeEx
 	{

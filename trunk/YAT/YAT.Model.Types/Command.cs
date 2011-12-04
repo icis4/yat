@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -450,7 +451,7 @@ namespace YAT.Model.Types
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append("<");
-					sb.Append(MultiLineText.Length.ToString());
+					sb.Append(MultiLineText.Length.ToString(NumberFormatInfo.InvariantInfo));
 					sb.Append(" lines...>");
 					for (int i = 0; i < MultiLineText.Length; i++)
 					{
@@ -620,7 +621,7 @@ namespace YAT.Model.Types
 		{
 			Command other = obj as Command;
 			if (other != null)
-				return (this.description.CompareTo(other.description));
+				return (string.Compare(this.description, other.description, StringComparison.CurrentCulture));
 			else
 				throw (new ArgumentException("Object is not a Command entry"));
 		}

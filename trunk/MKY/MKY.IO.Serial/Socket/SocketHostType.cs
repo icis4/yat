@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
@@ -54,6 +55,7 @@ namespace MKY.IO.Serial
 	/// <summary>
 	/// Extended enum SocketHostTypeEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class SocketHostTypeEx : EnumEx
 	{
 		#region String Definitions

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Ports;
 
 namespace MKY.IO.Ports
@@ -30,6 +31,7 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum ParityEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class ParityEx : EnumEx
 	{
 		#region String Definitions

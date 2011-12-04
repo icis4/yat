@@ -54,11 +54,11 @@ namespace MKY.Text
 				default:
 				{
 					if      (code <= 0xFF)
-						return (@"\x" + code.ToString("X2", CultureInfo.InvariantCulture));
+						return (@"\x" + code.ToString("X2", NumberFormatInfo.InvariantInfo));
 					else if (code <= 0xFFFF)
-						return (@"\x" + code.ToString("X4", CultureInfo.InvariantCulture));
+						return (@"\x" + code.ToString("X4", NumberFormatInfo.InvariantInfo));
 					else
-						return (@"\x" + code.ToString("X8", CultureInfo.InvariantCulture));
+						return (@"\x" + code.ToString("X8", NumberFormatInfo.InvariantInfo));
 				}
 			}
 		}
@@ -81,7 +81,7 @@ namespace MKY.Text
 		/// </summary>
 		public static bool TryParse(string escape, out byte result)
 		{
-			switch (escape.ToUpper())
+			switch (escape.ToUpper(CultureInfo.InvariantCulture))
 			{
 				case @"\0": result = 0x00; return (true);
 				case @"\a": result = 0x07; return (true);

@@ -60,16 +60,16 @@ namespace MKY.IO.Usb
 		public const int LastProductId  = 0xFFFF;
 
 		/// <summary></summary>
-		public static readonly string FirstVendorIdString  = FirstVendorId .ToString("X4");
+		public static readonly string FirstVendorIdString  = FirstVendorId .ToString("X4", NumberFormatInfo.InvariantInfo);
 
 		/// <summary></summary>
-		public static readonly string LastVendorIdString   = LastVendorId  .ToString("X4");
+		public static readonly string LastVendorIdString   = LastVendorId  .ToString("X4", NumberFormatInfo.InvariantInfo);
 
 		/// <summary></summary>
-		public static readonly string FirstProductIdString = FirstProductId.ToString("X4");
+		public static readonly string FirstProductIdString = FirstProductId.ToString("X4", NumberFormatInfo.InvariantInfo);
 
 		/// <summary></summary>
-		public static readonly string LastProductIdString  = LastProductId .ToString("X4");
+		public static readonly string LastProductIdString  = LastProductId .ToString("X4", NumberFormatInfo.InvariantInfo);
 
 		/// <summary></summary>
 		public const int DefaultVendorId = 0;
@@ -217,7 +217,7 @@ namespace MKY.IO.Usb
 		[XmlIgnore]
 		public virtual string VendorIdString
 		{
-			get { return (VendorId.ToString("X4")); }
+			get { return (VendorId.ToString("X4", NumberFormatInfo.InvariantInfo)); }
 		}
 
 		/// <summary></summary>
@@ -232,7 +232,7 @@ namespace MKY.IO.Usb
 		[XmlIgnore]
 		public virtual string ProductIdString
 		{
-			get { return (ProductId.ToString("X4")); }
+			get { return (ProductId.ToString("X4", NumberFormatInfo.InvariantInfo)); }
 		}
 
 		/// <summary></summary>
@@ -482,7 +482,7 @@ namespace MKY.IO.Usb
 				else if (ProductId != other.ProductId)
 					return (ProductId.CompareTo(other.ProductId));
 				else
-					return (SerialNumber.CompareTo(other.SerialNumber));
+					return (StringEx.CompareOrdinalIgnoreCase(SerialNumber, other.SerialNumber));
 			}
 			else
 			{

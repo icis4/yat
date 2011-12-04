@@ -48,33 +48,33 @@ namespace MKY.Settings
 	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
-		private SettingsType settingsType = SettingsType.Explicit;
+		private SettingsType settingsType;
 
 		private List<SettingsItem> nodes;
-		private bool haveChanged = false;
-		private int changeEventSuspendedCount = 0;
+		private bool haveChanged;
+		private int changeEventSuspendedCount;
 
 		/// <summary></summary>
 		public event EventHandler<SettingsEventArgs> Changed;
 
 		/// <summary></summary>
-		public SettingsItem()
+		protected SettingsItem()
+			: this(SettingsType.Explicit)
 		{
-			this.nodes = new List<SettingsItem>();
 		}
 
 		/// <summary></summary>
-		public SettingsItem(SettingsType type)
+		protected SettingsItem(SettingsItem settings)
+			: this(settings.settingsType)
+		{
+			// Do not copy nodes.
+		}
+
+		/// <summary></summary>
+		protected SettingsItem(SettingsType type)
 		{
 			this.settingsType = type;
 			this.nodes = new List<SettingsItem>();
-		}
-
-		/// <summary></summary>
-		public SettingsItem(SettingsItem settings)
-		{
-			this.settingsType = settings.settingsType;
-			this.nodes = new List<SettingsItem>(); // Do not copy nodes.
 		}
 
 		#region Setup/Teardown Properties and Methods

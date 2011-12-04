@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -276,6 +277,7 @@ namespace YAT.Controller
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private MainResult RunWithView()
 		{
 			MainResult mainResult = MainResult.Success;
@@ -378,6 +380,7 @@ namespace YAT.Controller
 		/// <summary>
 		/// Non-view application for automated test usage.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private MainResult RunWithoutView()
 		{
 			MainResult mainResult = MainResult.Success;

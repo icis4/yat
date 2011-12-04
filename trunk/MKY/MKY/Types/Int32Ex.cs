@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the Sytem namespace.
 namespace MKY
@@ -32,7 +34,8 @@ namespace MKY
 	/// Possible extensions:
 	/// - ParseInside: get integer values inside strings (e.g. "COM5 (Device123B)" returns {5;123})
 	/// </remarks>
-	public class Int32Ex
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	public static class Int32Ex
 	{
 		/// <summary>
 		/// Limits "value" to the boundaries specified.

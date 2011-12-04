@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Event;
@@ -192,7 +193,7 @@ namespace YAT.Gui.Controls
 
 		private void button_Command_Click(object sender, EventArgs e)
 		{
-			CommandRequest(int.Parse((string)(((Button)sender).Tag)));
+			CommandRequest(int.Parse((string)(((Button)sender).Tag), NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion

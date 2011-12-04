@@ -45,7 +45,7 @@ namespace MKY.IO.Usb
 		/// Creates a report container and stores the reference to the device in use as well as
 		/// the length of a report.
 		/// </summary>
-		public HidReportContainer(HidDevice device, int reportLength)
+		protected HidReportContainer(HidDevice device, int reportLength)
 		{
 			this.device = device;
 			this.reportLength = reportLength;

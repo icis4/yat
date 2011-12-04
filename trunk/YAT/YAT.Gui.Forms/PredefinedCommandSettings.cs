@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -240,7 +241,7 @@ namespace YAT.Gui.Forms
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag)));
+				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag), NumberFormatInfo.InvariantInfo));
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)

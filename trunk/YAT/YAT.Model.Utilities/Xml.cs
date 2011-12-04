@@ -62,7 +62,7 @@ namespace YAT.Model.Utilities
 	/// <summary>
 	/// Static utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public class XmlWriter
+	public static class XmlWriter
 	{
 		/// <summary></summary>
 		public static void LinesToXmlFile(List<Domain.DisplayLine> lines, string xmlFilePath)

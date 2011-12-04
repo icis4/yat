@@ -33,6 +33,7 @@ namespace MKY
 	/// <summary>
 	/// DateTime utility methods.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class DateTimeEx
 	{
 		/// <summary>
@@ -42,11 +43,11 @@ namespace MKY
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(dateTime.Year.ToString("D4"));
+			sb.Append(dateTime.Year.ToString ("D4", NumberFormatInfo.InvariantInfo));
 			sb.Append("-");
-			sb.Append(dateTime.Month.ToString("D2"));
+			sb.Append(dateTime.Month.ToString("D2", NumberFormatInfo.InvariantInfo));
 			sb.Append("-");
-			sb.Append(dateTime.Day.ToString("D2"));
+			sb.Append(dateTime.Day.ToString  ("D2", NumberFormatInfo.InvariantInfo));
 
 			return (sb.ToString());
 		}
@@ -68,15 +69,15 @@ namespace MKY
 
 			if (hundredths)
 			{
-				sb.Insert(0, (dateTime.Millisecond / 10).ToString("D2"));
+				sb.Insert(0, (dateTime.Millisecond / 10).ToString("D2", NumberFormatInfo.InvariantInfo));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, dateTime.Second.ToString("D2"));
+			sb.Insert(0, dateTime.Second.ToString("D2", NumberFormatInfo.InvariantInfo));
 			sb.Insert(0, ":");
-			sb.Insert(0, dateTime.Minute.ToString("D2"));
+			sb.Insert(0, dateTime.Minute.ToString("D2", NumberFormatInfo.InvariantInfo));
 			sb.Insert(0, ":");
-			sb.Insert(0, dateTime.Hour.ToString("D2"));
+			sb.Insert(0, dateTime.Hour.ToString  ("D2", NumberFormatInfo.InvariantInfo));
 
 			return (sb.ToString());
 		}

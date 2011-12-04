@@ -40,7 +40,7 @@ namespace MKY.Data
 		public event EventHandler<DataEventArgs> Changed;
 
 		/// <summary></summary>
-		public DataItem()
+		protected DataItem()
 		{
 			this.nodes = new List<DataItem>();
 		}

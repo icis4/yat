@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Text;
@@ -467,14 +468,14 @@ namespace YAT.Gui.Forms
 			bool delayEnabled = this.settings_Form.LineSendDelay.Enabled;
 			checkBox_Delay.Checked = delayEnabled;
 			textBox_Delay.Enabled = delayEnabled;
-			textBox_Delay.Text = this.settings_Form.LineSendDelay.Delay.ToString();
+			textBox_Delay.Text = this.settings_Form.LineSendDelay.Delay.ToString(NumberFormatInfo.CurrentInfo);
 			textBox_DelayInterval.Enabled = delayEnabled;
-			textBox_DelayInterval.Text = this.settings_Form.LineSendDelay.LineInterval.ToString();
+			textBox_DelayInterval.Text = this.settings_Form.LineSendDelay.LineInterval.ToString(NumberFormatInfo.CurrentInfo);
 
 			bool waitEnabled = this.settings_Form.WaitForResponse.Enabled;
 			checkBox_WaitForResponse.Checked = waitEnabled;
 			textBox_WaitForResponse.Enabled = waitEnabled;
-			textBox_WaitForResponse.Text = this.settings_Form.WaitForResponse.Timeout.ToString();
+			textBox_WaitForResponse.Text = this.settings_Form.WaitForResponse.Timeout.ToString(NumberFormatInfo.CurrentInfo);
 
 			switch (this.settings_Form.CharSubstitution)
 			{

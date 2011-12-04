@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Windows.Forms
 {
@@ -56,6 +57,7 @@ namespace MKY.Windows.Forms
 		#region Conversion Operators
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates", Justification = "Special operator for much easier use of this helper class.")]
 		public static implicit operator bool(SettingControlsHelper isSettingControls)
 		{
 			return (isSettingControls.IsSettingsControls);

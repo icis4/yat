@@ -39,6 +39,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Text;
 using System.Threading;
 
@@ -51,7 +53,8 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Serial port component based on <see cref="System.IO.Ports.SerialPort"/>.
 	/// </summary>
-	[System.Drawing.ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
 	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort, IDisposableEx
 	{
@@ -176,6 +179,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// This dispose method fixes the deadlock issue described in MKY.IO.Serial.SerialPort.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void DisposeBaseStream_SerialPortBugFix()
 		{
 			try
@@ -623,7 +627,7 @@ namespace MKY.IO.Ports
 				{
 					DebugWrite("...exception!");
 					DebugWrite(ex.Message);
-					throw (ex);
+					throw; // Re-throw!
 				}
 #else
 				base.Open();
@@ -691,7 +695,7 @@ namespace MKY.IO.Ports
 				{
 					DebugWrite("...exception!");
 					DebugWrite(ex.Message);
-					throw (ex);
+					throw; // Re-throw!
 				}
 #else
 				base.Close();

@@ -577,7 +577,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static string StandardPortNumberToString(int standardPortNumber)
 		{
-			return (StandardPortNamePrefix + standardPortNumber.ToString());
+			return (StandardPortNamePrefix + standardPortNumber.ToString(NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -593,7 +593,7 @@ namespace MKY.IO.Ports
 				if (IsStandardPort && other.IsStandardPort)
 					return (StandardPortNumber.CompareTo(other.StandardPortNumber));
 				else
-					return (Name.CompareTo(other.Name));
+					return (StringEx.CompareOrdinalIgnoreCase(Name, other.Name));
 			}
 			else
 			{

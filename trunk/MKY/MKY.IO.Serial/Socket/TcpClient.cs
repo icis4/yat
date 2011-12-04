@@ -476,6 +476,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// try-catch needed because ALAZ doesn't seem to properly shut-down in certain cases.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void DisposeSocketAndSocketConnection()
 		{
 			if (this.socket != null)

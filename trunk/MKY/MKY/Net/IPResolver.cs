@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 using MKY.Diagnostics;
@@ -39,6 +40,7 @@ namespace MKY.Net
 	public static class IPResolver
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static IPAddress ResolveRemoteHost(string remoteHost)
 		{
 			IPHost ipHost;
@@ -69,7 +71,7 @@ namespace MKY.Net
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("value", (IPHostType)ipHost, "Unknown IP host type"));
+						throw (new ArgumentOutOfRangeException("remoteHost", (IPHostType)ipHost, "Unknown IP host type"));
 					}
 				}
 			}
@@ -80,6 +82,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static IPAddress ResolveLocalInterface(string localInterface)
 		{
 			IPNetworkInterface networkInterface;
@@ -112,7 +115,7 @@ namespace MKY.Net
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("value", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
+						throw (new ArgumentOutOfRangeException("localInterface", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
 					}
 				}
 			}

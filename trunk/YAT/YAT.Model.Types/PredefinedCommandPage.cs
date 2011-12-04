@@ -186,7 +186,7 @@ namespace YAT.Model.Types
 		{
 			PredefinedCommandPage other = obj as PredefinedCommandPage;
 			if (other != null)
-				return (this.pageName.CompareTo(other.pageName));
+				return (string.Compare(this.pageName, other.pageName, StringComparison.CurrentCulture));
 			else
 				throw (new ArgumentException("Object is not a PredefinedCommandPage"));
 		}

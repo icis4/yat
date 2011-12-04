@@ -33,6 +33,7 @@ namespace MKY
 	/// <summary>
 	/// DateTime utility methods.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class TimeSpanEx
 	{
 		/// <summary>
@@ -52,11 +53,11 @@ namespace MKY
 
 			if (hundredths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2"));
+				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2", NumberFormatInfo.InvariantInfo));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, timeSpan.Seconds.ToString("D2"));
+			sb.Insert(0, timeSpan.Seconds.ToString("D2", NumberFormatInfo.InvariantInfo));
 			sb.Insert(0, ":");
 			if (timeSpan.TotalHours < 1)
 			{
@@ -64,7 +65,7 @@ namespace MKY
 			}
 			else
 			{
-				sb.Insert(0, timeSpan.Minutes.ToString("D2"));
+				sb.Insert(0, timeSpan.Minutes.ToString("D2", NumberFormatInfo.InvariantInfo));
 				sb.Insert(0, ":");
 				if (timeSpan.TotalDays < 1)
 				{
@@ -72,7 +73,7 @@ namespace MKY
 				}
 				else
 				{
-					sb.Insert(0, timeSpan.Hours.ToString("D2"));
+					sb.Insert(0, timeSpan.Hours.ToString("D2", NumberFormatInfo.InvariantInfo));
 					sb.Insert(0, "days ");
 					sb.Insert(0, timeSpan.Days);
 				}

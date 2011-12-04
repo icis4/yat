@@ -47,8 +47,8 @@ namespace YAT.Controller.Test
 		//==========================================================================================
 
 		private readonly string[] EmptyArgs = new string[] { };
-		private readonly string[] TerminalArgs  = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined] };
-		private readonly string[] WorkspaceArgs = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias] };
+		private readonly string[] TerminalArgs  = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCase.T_03_COM1_Closed_Predefined] };
+		private readonly string[] WorkspaceArgs = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCase.W_04_Matthias] };
 
 		private readonly string[] SerialPortArgs = new string[] { "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" };
 
@@ -216,7 +216,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(SerialPortArgs))
 			{
-				RunAndVerifyApplication(main);
+				RunAndVerifyApplicationWithoutView(main);
 			}
 		}
 
@@ -228,8 +228,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
-		[InteractiveCategory]
+		[Test, InteractiveCategory]
 		public virtual void TestEmptyCommandLineRunInteractive()
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
@@ -246,8 +245,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
-		[InteractiveCategory]
+		[Test, InteractiveCategory]
 		public virtual void TestTerminalCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
@@ -264,8 +262,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
-		[InteractiveCategory]
+		[Test, InteractiveCategory]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
@@ -282,7 +279,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
+		[Test, InteractiveCategory]
 		public virtual void TestSerialPortCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(SerialPortArgs))

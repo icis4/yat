@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -215,8 +216,8 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "- ElementCount: " + Count.ToString("D") + Environment.NewLine +
-					indent + "- DataCount: " + this.dataCount.ToString("D") + Environment.NewLine +
+			return (indent + "- ElementCount: " +       Count.ToString("D", NumberFormatInfo.InvariantInfo) + Environment.NewLine +
+					indent + "- DataCount: " + this.dataCount.ToString("D", NumberFormatInfo.InvariantInfo) + Environment.NewLine +
 					indent + "- Elements: " + Environment.NewLine + ElementsToString(indent + "--"));
 		}
 

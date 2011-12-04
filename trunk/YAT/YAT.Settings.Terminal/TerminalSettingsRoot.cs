@@ -424,7 +424,7 @@ namespace YAT.Settings.Terminal
 				base.Equals(other) && // Compare all settings nodes.
 
 				(this.productVersion == other.productVersion)
-				// Do not compare AutoSaved.
+				//// Do not compare AutoSaved.
 			);
 		}
 

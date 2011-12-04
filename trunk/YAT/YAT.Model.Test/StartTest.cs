@@ -52,10 +52,10 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
-		private readonly string TerminalFilePath  = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCases.T_00_COM1_Closed_Default];
-		private readonly string Terminal1FilePath = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCases.T_00_COM1_Closed_Default];
-		private readonly string Terminal2FilePath = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCases.T_00_COM2_Closed_Default];
-		private readonly string WorkspaceFilePath = SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias];
+		private readonly string TerminalFilePath  = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCase.T_00_COM1_Closed_Default];
+		private readonly string Terminal1FilePath = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCase.T_00_COM1_Closed_Default];
+		private readonly string Terminal2FilePath = SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[TerminalSettingsTestCase.T_00_COM2_Closed_Default];
+		private readonly string WorkspaceFilePath = SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias];
 
 		#endregion
 

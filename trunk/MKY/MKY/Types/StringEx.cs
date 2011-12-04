@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the Sytem namespace.
@@ -31,19 +32,28 @@ namespace MKY
 	/// <summary>
 	/// String utility methods.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class StringEx
 	{
 		/// <summary>
 		/// An invalid index is represented by -1.
 		/// </summary>
 		public const int InvalidIndex = -1;
-	
+
+		/// <summary>
+		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
+		/// </summary>
+		public static int CompareOrdinalIgnoreCase(string strA, string strB)
+		{
+			return (string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase));
+		}
+
 		/// <summary>
 		/// Compares two specified <see cref="System.String"/> objects ignoring culture.
 		/// </summary>
 		public static bool EqualsOrdinal(string strA, string strB)
 		{
-			return (string.Compare(strA, strB, StringComparison.Ordinal) == 0);
+			return (string.CompareOrdinal(strA, strB) == 0);
 		}
 
 		/// <summary>
@@ -193,7 +203,7 @@ namespace MKY
 
 			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of seachString.
 			{
-				int index = l[i].Value.IndexOf(searchString);
+				int index = l[i].Value.IndexOf(searchString, comparisonType);
 				if (index >= 0)
 					return (startIndex + l[i].Key + index);
 			}

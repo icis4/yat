@@ -39,10 +39,18 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
-		public virtual void TestConnectDisconnect()
+		[Test, SerialHidDeviceAIsAvailableCategory]
+		public virtual void TestConnectDisconnectA()
 		{
 			if (!SettingsProvider.Settings.SerialHidDeviceAIsAvailable)
+				Assert.Fail();
+		}
+
+		/// <summary></summary>
+		[Test, SerialHidDeviceBIsAvailableCategory]
+		public virtual void TestConnectDisconnectB()
+		{
+			if (!SettingsProvider.Settings.SerialHidDeviceBIsAvailable)
 				Assert.Fail();
 		}
 

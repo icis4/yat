@@ -22,6 +22,8 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 
 namespace MKY.IO
@@ -29,6 +31,7 @@ namespace MKY.IO
 	/// <summary>
 	/// Utility methods for <see cref="System.IO.File"/>.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class FileEx
 	{
 		/// <summary>
@@ -60,7 +63,7 @@ namespace MKY.IO
 				do
 				{
 					index++;
-					unique = index.ToString();
+					unique = index.ToString(NumberFormatInfo.InvariantInfo);
 				}
 				while (File.Exists(dir + name + separator + unique + ext));
 				return (dir + name + separator + unique + ext);

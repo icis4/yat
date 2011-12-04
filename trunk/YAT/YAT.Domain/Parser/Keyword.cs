@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using MKY;
@@ -57,6 +58,7 @@ namespace YAT.Domain.Parser
 	/// <summary>
 	/// Extended enum KeywordEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class KeywordEx : MKY.EnumEx
 	{
 		#region String Definitions

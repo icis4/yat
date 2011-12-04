@@ -23,6 +23,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -328,6 +329,7 @@ namespace YAT.Gui.Controls
 		// Private Methods
 		//==========================================================================================
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void SetSerialPortList()
 		{
 			// Only scan for ports if control is enabled. This saves some time.

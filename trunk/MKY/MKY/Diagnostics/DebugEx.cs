@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
@@ -40,6 +41,7 @@ namespace MKY.Diagnostics
 	/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
 	/// output writers. Therefore, the two implementations use writer wrappers.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class DebugEx
 	{
 	#if (DEBUG)

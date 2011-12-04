@@ -425,7 +425,7 @@ namespace MKY.Win32
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(DeviceManagement), ex);
-				throw (ex);
+				throw; // Re-throw!
 			}
 		}
 

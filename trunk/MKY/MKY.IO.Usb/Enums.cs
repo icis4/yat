@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace MKY.IO.Usb
 {
@@ -239,6 +240,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extended enum HidUsagePageEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class HidUsagePageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Unknown"/>.</summary>
@@ -258,7 +260,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString());
+			return (UnderlyingEnum.GetHashCode().ToString(NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -268,7 +270,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static HidUsagePageEx Parse(string page)
 		{
-			return ((HidUsagePageEx)int.Parse(page));
+			return ((HidUsagePageEx)int.Parse(page, NumberFormatInfo.InvariantInfo));
 		}
 
 		/// <summary></summary>
@@ -357,6 +359,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extended enum HidUsageEx.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class HidUsageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsage.Unknown"/>.</summary>
@@ -376,7 +379,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString());
+			return (UnderlyingEnum.GetHashCode().ToString(NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion
@@ -386,7 +389,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static HidUsageEx Parse(string usage)
 		{
-			return ((HidUsageEx)int.Parse(usage));
+			return ((HidUsageEx)int.Parse(usage, NumberFormatInfo.InvariantInfo));
 		}
 
 		/// <summary></summary>

@@ -92,7 +92,7 @@ namespace MKY.Configuration
 	/// 3. 'Debug > Attach' Visual Studio to NUnit
 	/// 4. Set a breakpoint a the desired location below
 	/// 5. Reload the project in NUnit
-	///    => Breakpoint is hit
+	///    => Breakpoint is hit.
 	/// </remarks>
 	public static class Provider
 	{

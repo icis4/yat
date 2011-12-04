@@ -74,8 +74,8 @@ namespace MKY.Test.Types
 		{
 			Assert.AreEqual(binString, ByteEx.ConvertToBinaryString(data));
 			Assert.AreEqual(octString, ByteEx.ConvertToOctalString(data));
-			Assert.AreEqual(decString, data.ToString("D3", CultureInfo.InvariantCulture));
-			Assert.AreEqual(hexString, data.ToString("X2", CultureInfo.InvariantCulture));
+			Assert.AreEqual(decString, data.ToString("D3", NumberFormatInfo.InvariantInfo));
+			Assert.AreEqual(hexString, data.ToString("X2", NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion

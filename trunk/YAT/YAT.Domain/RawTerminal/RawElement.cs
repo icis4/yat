@@ -85,7 +85,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
-			StringWriter to = new StringWriter();
+			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			foreach (byte b in this.data)
 				to.Write(Convert.ToChar(b));
 
@@ -102,18 +102,18 @@ namespace YAT.Domain
 		public virtual string ToDetailedString(string indent)
 		{
 			bool begin = true;
-			StringWriter data = new StringWriter();
+			StringWriter data = new StringWriter(CultureInfo.InvariantCulture);
 			foreach (byte b in this.data)
 			{
 				if (!begin)
 					data.Write(" ");
 
 				begin = false;
-				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
+				data.Write(b.ToString("X2", NumberFormatInfo.InvariantInfo) + "h");
 			}
 			return (indent + "- Data: " + data + Environment.NewLine +
 					indent + "- Direction: " + this.direction + Environment.NewLine +
-					indent + "- TimeStamp: " + this.timestamp.ToLongTimeString() + "." + StringEx.Left(this.timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
+					indent + "- TimeStamp: " + this.timestamp.ToLongTimeString() + "." + StringEx.Left(this.timestamp.Millisecond.ToString("D3", NumberFormatInfo.InvariantInfo), 2) + Environment.NewLine);
 		}
 	}
 }

@@ -37,6 +37,7 @@ using MKY.CommandLine;
 namespace MKY.Test.CommandLine
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Name must be different than namespace.")]
 	public enum CommandLineEnum
 	{
 		/// <summary></summary>

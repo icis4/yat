@@ -154,7 +154,7 @@ namespace MKY
 	/// </code>
 	/// 
 	/// </example>
-	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Class actually implements an enum, but not using inheritance.")]
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[Serializable]
 	public abstract class EnumEx : IEquatable<EnumEx>, IComparable, ICloneable
 	{
@@ -506,6 +506,7 @@ namespace MKY
 		#region Comparison Methods
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static int Compare(object objA, object objB)
 		{
 			if (ReferenceEquals(objA, objB)) return (0);

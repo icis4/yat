@@ -28,6 +28,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -138,7 +140,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgsHandler"/> class.
 		/// </summary>
-		public ArgsHandler(string[] args)
+		protected ArgsHandler(string[] args)
 		{
 			Initialize(args);
 			Validate();
@@ -418,11 +420,11 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool IsOptionStart(string arg, out int pos)
 		{
-			if      (arg.StartsWith("--")) // Attention: "--" must be tested before "-" because
+			if      (arg.StartsWith("--", StringComparison.OrdinalIgnoreCase)) // Attention: "--" must be tested before "-" because
 				pos = 2;                   //            "--" also is "-"!
-			else if (arg.StartsWith("-"))
+			else if (arg.StartsWith("-",  StringComparison.OrdinalIgnoreCase))
 				pos = 1;
-			else if (arg.StartsWith("/") && AllowForwardSlash)
+			else if (arg.StartsWith("/",  StringComparison.OrdinalIgnoreCase) && AllowForwardSlash)
 				pos = 1;
 			else
 				pos = 0;
@@ -433,6 +435,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes an option argument.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		protected virtual bool InitializeOption(string optionArgWithoutIndicator, string nextArg, ref bool nextArgHasBeenConsumedToo)
 		{
 			try
@@ -491,7 +494,7 @@ namespace MKY.CommandLine
 							value = valueStr;
 					}
 
-					field.SetValue(this, Convert.ChangeType(value, field.FieldType));
+					field.SetValue(this, Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture));
 					this.optionFields.Add(field);
 					return (true);
 				}
@@ -546,6 +549,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes a value argument.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		protected virtual bool InitializeValue(string value, int index)
 		{
 			try
@@ -566,7 +570,7 @@ namespace MKY.CommandLine
 						{
 							if (index == valueArgIndex)
 							{
-								field.SetValue(this, Convert.ChangeType(value, field.FieldType));
+								field.SetValue(this, Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture));
 								return (true);
 							}
 							else
@@ -639,7 +643,7 @@ namespace MKY.CommandLine
 				}
 			}
 		#endif
-			return (true);
+			return (IsValid);
 		}
 
 		/// <summary>
@@ -656,7 +660,7 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool IsInvalidationStart(string arg)
 		{
-			return (arg.StartsWith("!"));
+			return (arg.StartsWith("!", StringComparison.OrdinalIgnoreCase));
 		}
 
 		#endregion

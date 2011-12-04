@@ -130,6 +130,7 @@ namespace MKY.Win32
 			/// <returns> If the function succeeds, the return value is nonzero.
 			/// If the function fails, the return value is zero.
 			/// To get extended error information, call GetLastError.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool DuplicateHandle(IntPtr hSourceProcessHandle, SafeFileHandle hSourceHandle, IntPtr hTargetProcessHandle, out SafeFileHandle lpTargetHandle, UInt32 dwDesiredAccess, Boolean bInheritHandle, NativeTypes.Options dwOptions);

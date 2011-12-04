@@ -185,7 +185,7 @@ namespace MKY.Event
 				WriteExceptionToDebugOutput(ex, sink);
 			}
 #else // NON-DEBUG: Discard exception.
-			catch ()
+			catch
 			{
 			}
 #endif // DEBUG
@@ -212,7 +212,7 @@ namespace MKY.Event
 				WriteExceptionToDebugOutput(ex, sink);
 			}
 #else // NON-DEBUG: Discard exception.
-			catch ()
+			catch
 			{
 			}
 #endif // DEBUG

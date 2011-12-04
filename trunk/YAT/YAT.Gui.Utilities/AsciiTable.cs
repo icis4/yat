@@ -40,6 +40,7 @@ namespace YAT.Gui.Utilities
 		public AsciiTable()
 		{
 			DataTable t = new DataTable("ASCII");
+			t.Locale = CultureInfo.InvariantCulture;
 
 			DataColumn c;
 			DataRow r;
@@ -84,8 +85,8 @@ namespace YAT.Gui.Utilities
 			for (byte i = 0; i <= 0x1F; i++)
 			{
 				r = t.NewRow();
-				r[Dec] = i.ToString();
-				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
+				r[Dec] = i.ToString("D",  NumberFormatInfo.InvariantInfo);
+				r[Hex] = i.ToString("X2", NumberFormatInfo.InvariantInfo);
 				r[Mnemonic]    = MKY.Text.Ascii.ConvertToMnemonic(i);
 				r[Escape]      = MKY.Text.Escape.ConvertToEscapeSequence(i);
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);
@@ -94,8 +95,8 @@ namespace YAT.Gui.Utilities
 			for (byte i = 0x7F; i <= 0x7F; i++)
 			{
 				r = t.NewRow();
-				r[Dec] = i.ToString();
-				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
+				r[Dec] = i.ToString("D",  NumberFormatInfo.InvariantInfo);
+				r[Hex] = i.ToString("X2", NumberFormatInfo.InvariantInfo);
 				r[Mnemonic]    = MKY.Text.Ascii.ConvertToMnemonic(i);
 				r[Escape]      = MKY.Text.Escape.ConvertToEscapeSequence(i);
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);

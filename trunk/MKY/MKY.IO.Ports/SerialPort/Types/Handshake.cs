@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Ports;
 
 namespace MKY.IO.Ports
@@ -33,6 +34,7 @@ namespace MKY.IO.Ports
 	/// <remarks>
 	/// I think flow control would be the better term, no clue why .NET uses handshake.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class HandshakeEx : EnumEx
 	{
 		#region String Definitions

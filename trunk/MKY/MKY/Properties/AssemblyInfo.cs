@@ -54,6 +54,9 @@ using System.Runtime.InteropServices;
 // Assembly-level FxCop suppressions.
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MKY", Justification = "MKY is a name.")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY", MessageId = "MKY", Justification = "MKY is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.Runtime.InteropServices", MessageId = "MKY", Justification = "MKY is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.Settings", MessageId = "MKY", Justification = "MKY is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.Xml", MessageId = "MKY", Justification = "MKY is a name.")]
 
 //==================================================================================================
 // End of
