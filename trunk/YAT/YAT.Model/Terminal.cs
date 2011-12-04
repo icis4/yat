@@ -339,7 +339,7 @@ namespace YAT.Model
 		{
 			set
 			{
-				this.autoName = Path.GetFileNameWithoutExtension(value);
+				this.autoName = Path.GetFileName(value);
 			}
 		}
 
@@ -428,12 +428,17 @@ namespace YAT.Model
 		{
 			get
 			{
-				StringBuilder sb = new StringBuilder(AutoName);
+				StringBuilder sb = new StringBuilder();
+
+				sb.Append("[");
+				sb.Append(AutoName);
 
 				if (this.settingsRoot != null)
 				{
 					if (this.settingsRoot.ExplicitHaveChanged)
-						sb.Append("*");
+						sb.Append(" *");
+
+					sb.Append("]");
 
 					string userName = this.settingsRoot.UserName;
 					if (!string.IsNullOrEmpty(userName))
@@ -2113,9 +2118,7 @@ namespace YAT.Model
 
 		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
-			// Ensure not to fire events during shutdown anymore.
-			if (!this.isDisposed)
-				OnIOConnectTimeChanged(e);
+			OnIOConnectTimeChanged(e);
 		}
 
 		#endregion

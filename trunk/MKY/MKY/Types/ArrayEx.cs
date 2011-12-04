@@ -58,8 +58,9 @@ namespace MKY
 		/// </returns>
 		public static bool ValuesEqual(Array objA, Array objB)
 		{
-			if (ReferenceEquals(objA, objB))
-				return (true);
+			if (ReferenceEquals(objA, objB)) return (true);
+			if (ReferenceEquals(objA, null)) return (false);
+			if (ReferenceEquals(objB, null)) return (false);
 
 			if (objA.Length != objB.Length)
 				return (false);

@@ -71,9 +71,9 @@ namespace MKY.IO.Serial
 			ClearChanged();
 		}
 
-		/// <summary></summary>
 		/// <remarks>
-		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public SerialCommunicationSettings(SerialCommunicationSettings rhs)
 			: base(rhs)

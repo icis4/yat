@@ -529,12 +529,12 @@ namespace MKY
 			// Base reference type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
 
-			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
 
-			// Ensure that object.Equals() is called.
-			// Thus, ensure that potential <Derived>.Equals() is called.
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
 			object obj = (object)lhs;
 			return (obj.Equals(rhs));
 		}

@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.splitContainer_Commands = new System.Windows.Forms.SplitContainer();
 			this.label_Shortcut = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
@@ -76,7 +75,7 @@
 			this.label_Shortcut.Name = "label_Shortcut";
 			this.label_Shortcut.Size = new System.Drawing.Size(144, 19);
 			this.label_Shortcut.TabIndex = 0;
-			this.label_Shortcut.Text = "Shift + F1..12";
+			this.label_Shortcut.Text = "Shift+F1..12";
 			this.label_Shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// splitContainer_Lower
@@ -122,8 +121,8 @@
 			this.pageButtons.Name = "pageButtons";
 			this.pageButtons.Size = new System.Drawing.Size(138, 263);
 			this.pageButtons.TabIndex = 2;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
+			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
 			// 
 			// label_Page
 			// 

@@ -20,6 +20,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +33,8 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace MKY.IO.Usb
 {
@@ -514,12 +521,12 @@ namespace MKY.IO.Usb
 			// Base reference type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
 
-			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
 			if (ReferenceEquals(rhs, null)) return (false);
 
-			// Ensure that object.Equals() is called.
-			// Thus, ensure that potential <Derived>.Equals() is called.
+			// Ensure that potiential <Derived>.Equals() is called.
+			// Thus, ensure that object.Equals() is called.
 			object obj = (object)lhs;
 			return (obj.Equals(rhs));
 		}

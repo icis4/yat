@@ -175,17 +175,18 @@ namespace MKY.Event
 		[OneWay]
 		private static void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
 		{
-#if (DEBUG)
 			try
 			{
-#endif // DEBUG
 				sinkTarget.Invoke(sink, args);
-#if (DEBUG)
 			}
+#if (DEBUG) // DEBUG: Output as much data as possible to help debugging.
 			catch (Exception ex)
 			{
 				WriteExceptionToDebugOutput(ex, sink);
-				throw (ex);
+			}
+#else // NON-DEBUG: Discard exception.
+			catch ()
+			{
 			}
 #endif // DEBUG
 		}
@@ -201,17 +202,18 @@ namespace MKY.Event
 		[OneWay]
 		private static void InvokeOnCurrentThread(Delegate sink, object[] args)
 		{
-#if (DEBUG)
 			try
 			{
-#endif // DEBUG
 				sink.DynamicInvoke(args);
-#if (DEBUG)
 			}
+#if (DEBUG) // DEBUG: Output as much data as possible to help debugging.
 			catch (Exception ex)
 			{
 				WriteExceptionToDebugOutput(ex, sink);
-				throw (ex);
+			}
+#else // NON-DEBUG: Discard exception.
+			catch ()
+			{
 			}
 #endif // DEBUG
 		}
