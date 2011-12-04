@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY;
 using MKY.Text;
 
 namespace YAT.Domain.Settings
@@ -48,7 +49,7 @@ namespace YAT.Domain.Settings
 		private WaitForResponse   waitForResponse;
 		private CharSubstitution  charSubstitution;
 		private bool              skipEolComments;
-		private string[]          eolCommentIndicators;
+		private List<string>      eolCommentIndicators;
 
 		/// <summary></summary>
 		public TextTerminalSettings()
@@ -65,9 +66,9 @@ namespace YAT.Domain.Settings
 			ClearChanged();
 		}
 
-		/// <summary></summary>
 		/// <remarks>
-		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
@@ -81,7 +82,7 @@ namespace YAT.Domain.Settings
 			WaitForResponse      = rhs.WaitForResponse;
 			CharSubstitution     = rhs.CharSubstitution;
 			SkipEolComments      = rhs.SkipEolComments;
-			EolCommentIndicators = rhs.EolCommentIndicators;
+			EolCommentIndicators = new List<string>(rhs.EolCommentIndicators);
 
 			ClearChanged();
 		}
@@ -106,7 +107,7 @@ namespace YAT.Domain.Settings
 			List<string> l = new List<string>();
 			l.Add("//");
 			l.Add("REM");
-			this.eolCommentIndicators = l.ToArray();
+			EolCommentIndicators = l;
 		}
 
 		#region Properties
@@ -257,14 +258,14 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("EolCommentIndicators")]
-		public string[] EolCommentIndicators
+		public List<string> EolCommentIndicators
 		{
 			get { return (this.eolCommentIndicators); }
 			set
 			{
 				if (value != this.eolCommentIndicators)
 				{
-					this.eolCommentIndicators = (string[])value.Clone();
+					this.eolCommentIndicators = value;
 					SetChanged();
 				}
 			}

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
-  <ProductVersion>1.99.26</ProductVersion>
+  <ProductVersion>1.99.28</ProductVersion>
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
   <Saved>
-    <TimeStamp>2011-04-25T12:02:00.1824177+02:00</TimeStamp>
+    <TimeStamp>2011-12-04T02:19:00.0464863+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -29,14 +29,9 @@
             <Enabled>true</Enabled>
             <Interval>2000</Interval>
           </AutoReopen>
-          <ReplaceParityErrors>false</ReplaceParityErrors>
-          <ParityErrorReplacement>0</ParityErrorReplacement>
-          <RtsEnabled>true</RtsEnabled>
-          <DtrEnabled>true</DtrEnabled>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
-        <SerialParityErrorReplacement>\h(00)</SerialParityErrorReplacement>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
           <RemoteHost>&lt;Localhost&gt;</RemoteHost>
@@ -53,7 +48,13 @@
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>
         <Endianess>BigEndian</Endianess>
+        <IndicateSerialPortBreakStates>false</IndicateSerialPortBreakStates>
+        <SerialPortOutputBreakIsModifiable>false</SerialPortOutputBreakIsModifiable>
       </IO>
+      <Status>
+        <ShowConnectTime>false</ShowConnectTime>
+        <ShowCountAndRate>false</ShowCountAndRate>
+      </Status>
       <Buffer>
         <TxBufferSize>65536</TxBufferSize>
         <RxBufferSize>65536</RxBufferSize>
@@ -65,8 +66,6 @@
         <ShowRadix>true</ShowRadix>
         <ShowTimeStamp>false</ShowTimeStamp>
         <ShowLength>false</ShowLength>
-        <ShowConnectTime>false</ShowConnectTime>
-        <ShowCounters>false</ShowCounters>
         <TxMaxLineCount>1000</TxMaxLineCount>
         <RxMaxLineCount>1000</RxMaxLineCount>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
@@ -98,6 +97,9 @@
           <Timeout>500</Timeout>
         </WaitForResponse>
         <CharSubstitution>None</CharSubstitution>
+        <SkipEolComments>false</SkipEolComments>
+        <EolCommentIndicators>//</EolCommentIndicators>
+        <EolCommentIndicators>REM</EolCommentIndicators>
       </TextTerminal>
       <BinaryTerminal>
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>

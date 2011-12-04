@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Workspace Settings</FileType>
-  <ProductVersion>1.99.26</ProductVersion>
+  <ProductVersion>1.99.28</ProductVersion>
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
   <Saved>
-    <TimeStamp>2011-04-25T12:26:20.4539404+02:00</TimeStamp>
+    <TimeStamp>2011-12-04T02:19:45.9031091+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>

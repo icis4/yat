@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -379,7 +380,7 @@ namespace YAT.Gui.Forms
 		private void stringListEdit_EolCommentIndicators_StringListChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.EolCommentIndicators = (string[])stringListEdit_EolCommentIndicators.StringList.Clone();
+				this.settings_Form.EolCommentIndicators = new List<string>(stringListEdit_EolCommentIndicators.StringList);
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -482,8 +483,8 @@ namespace YAT.Gui.Forms
 				default:                              radioButton_SubstituteNone.Checked    = true; break;
 			}
 
-			stringListEdit_EolCommentIndicators.Enabled = this.settings_Form.SkipEolComments;
-			stringListEdit_EolCommentIndicators.StringList = (string[])this.settings_Form.EolCommentIndicators.Clone();
+			stringListEdit_EolCommentIndicators.Enabled    = this.settings_Form.SkipEolComments;
+			stringListEdit_EolCommentIndicators.StringList = this.settings_Form.EolCommentIndicators.ToArray();
 
 			this.isSettingControls.Leave();
 		}

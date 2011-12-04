@@ -103,34 +103,35 @@ namespace YAT.Log.Settings
 		}
 
 		/// <remarks>
-		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public LogSettings(LogSettings rhs)
 			: base(rhs)
 		{
-			this.rootPath     = rhs.RootPath;
-			this.rootFileName = rhs.RootFileName;
+			RootPath     = rhs.RootPath;
+			RootFileName = rhs.RootFileName;
 
-			this.rawLogTx     = rhs.RawLogTx;
-			this.rawLogBidir  = rhs.RawLogBidir;
-			this.rawLogRx     = rhs.RawLogRx;
-			this.rawExtension = rhs.RawExtension;
+			RawLogTx     = rhs.RawLogTx;
+			RawLogBidir  = rhs.RawLogBidir;
+			RawLogRx     = rhs.RawLogRx;
+			RawExtension = rhs.RawExtension;
 
-			this.neatLogTx     = rhs.NeatLogTx;
-			this.neatLogBidir  = rhs.NeatLogBidir;
-			this.neatLogRx     = rhs.NeatLogRx;
-			this.neatExtension = rhs.NeatExtension;
+			NeatLogTx     = rhs.NeatLogTx;
+			NeatLogBidir  = rhs.NeatLogBidir;
+			NeatLogRx     = rhs.NeatLogRx;
+			NeatExtension = rhs.NeatExtension;
 
-			this.writeMode = rhs.WriteMode;
+			WriteMode = rhs.WriteMode;
 
-			this.subdirectoriesFormat  = rhs.SubdirectoriesFormat;
-			this.subdirectoriesChannel = rhs.SubdirectoriesChannel;
+			SubdirectoriesFormat  = rhs.SubdirectoriesFormat;
+			SubdirectoriesChannel = rhs.SubdirectoriesChannel;
 
-			this.nameFormat    = rhs.NameFormat;
-			this.nameChannel   = rhs.NameChannel;
-			this.nameDate      = rhs.NameDate;
-			this.nameTime      = rhs.NameTime;
-			this.nameSeparator = rhs.NameSeparator;
+			NameFormat    = rhs.NameFormat;
+			NameChannel   = rhs.NameChannel;
+			NameDate      = rhs.NameDate;
+			NameTime      = rhs.NameTime;
+			NameSeparator = rhs.NameSeparator;
 
 			ClearChanged();
 		}

@@ -187,7 +187,7 @@ namespace MKY.Test
 				// Value type implementation of operator ==.
 				// See MKY.Test.EqualityTest for details.
 
-				if (ReferenceEquals(lhs, rhs)) return (true);
+				if (ReferenceEquals(lhs, rhs))  return (true);
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
@@ -1041,8 +1041,8 @@ namespace MKY.Test
 					return (false);
 				}
 
-				// Ensure that object.Equals() is called.
-				// Thus, ensure that potential <Derived>.Equals() is called.
+				// Ensure that potiential <Derived>.Equals() is called.
+				// Thus, ensure that object.Equals() is called.
 				object obj = (object)lhs;
 				bool result = obj.Equals(rhs);
 				Trace.WriteLine("Results in " + result + " within Equals()");
@@ -1060,8 +1060,8 @@ namespace MKY.Test
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
-				// Ensure that object.Equals() is called.
-				// Thus, ensure that potential <Derived>.Equals() is called.
+				// Ensure that potiential <Derived>.Equals() is called.
+				// Thus, ensure that object.Equals() is called.
 				object obj = (object)lhs;
 				return (obj.Equals(rhs));
 
@@ -1264,8 +1264,8 @@ namespace MKY.Test
 					return (false);
 				}
 
-				// Ensure that object.Equals() is called.
-				// Thus, ensure that potential <Derived>.Equals() is called.
+				// Ensure that potiential <Derived>.Equals() is called.
+				// Thus, ensure that object.Equals() is called.
 				object obj = (object)lhs;
 				bool result = obj.Equals(rhs);
 				Trace.WriteLine("Results in " + result + " within Equals()");
@@ -1283,8 +1283,8 @@ namespace MKY.Test
 				if (ReferenceEquals(lhs, null)) return (false);
 				if (ReferenceEquals(rhs, null)) return (false);
 
-				// Ensure that object.Equals() is called.
-				// Thus, ensure that potential <Derived>.Equals() is called.
+				// Ensure that potiential <Derived>.Equals() is called.
+				// Thus, ensure that object.Equals() is called.
 				object obj = (object)lhs;
 				return (obj.Equals(rhs));
 

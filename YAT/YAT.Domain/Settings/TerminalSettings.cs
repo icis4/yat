@@ -65,20 +65,20 @@ namespace YAT.Domain.Settings
 
 		private void InitializeNodes()
 		{
-			IO = new IOSettings(SettingsType);
-			Status = new StatusSettings(SettingsType);
-			Buffer = new BufferSettings(SettingsType);
-			Display = new DisplaySettings(SettingsType);
+			IO          = new IOSettings(SettingsType);
+			Status      = new StatusSettings(SettingsType);
+			Buffer      = new BufferSettings(SettingsType);
+			Display     = new DisplaySettings(SettingsType);
 			CharReplace = new CharReplaceSettings(SettingsType);
-			Send = new SendSettings(SettingsType);
+			Send        = new SendSettings(SettingsType);
 
-			TextTerminal = new TextTerminalSettings(SettingsType);
+			TextTerminal   = new TextTerminalSettings(SettingsType);
 			BinaryTerminal = new BinaryTerminalSettings(SettingsType);
 		}
 
-		/// <summary></summary>
 		/// <remarks>
-		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// Set fields through properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		public TerminalSettings(TerminalSettings rhs)
 			: base(rhs)

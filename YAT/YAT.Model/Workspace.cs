@@ -1374,7 +1374,7 @@ namespace YAT.Model
 
 			bool success = true;
 
-			// Calling Close() on a terminal will modify the list, therefore clone it first
+			// Calling Close() on a terminal will modify the list, therefore clone it first.
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
