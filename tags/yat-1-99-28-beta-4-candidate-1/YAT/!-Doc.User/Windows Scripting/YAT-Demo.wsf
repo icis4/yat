@@ -1,0 +1,86 @@
+﻿<job id="YAT-Demo">
+<script language="VBScript">
+
+'-- History
+
+' 2008-04-02 sze Demoscript
+' 2008-04-16 mky
+
+'-- Remarks
+
+'<Key>			<Ident>
+'----------------------
+'SHIFT			+
+'ALT			%
+'CTRL/STRG		^
+'Return			{ENTER} or ~
+'Escape			{ESC}
+'F1...F12		{F1}...{F12}
+'Back space		{BACKSPACE}, {BS}, {BKSP}
+'Tab			{TAB}
+'Insert			{INSERT}, {INS}
+'Delete			{DELETE}, {DEL}
+'Home			{HOME}
+'End			{END}
+'Page up		{PGUP}
+'Page down		{PGDN}
+'Left arrow		{LEFT}
+'Right arrow	{RIGHT}
+'Up arrow		{UP}
+'Down arrow		{DOWN}
+'Start menu		^{ESC}
+'Help			{HELP}
+'Print screen	{PRTSC}
+'Caps lock		{CAPSLOCK}
+'Num lock		{NUMLOCK}
+'Scroll lock	{SCROLLOCK}
+'Break			{BREAK}
+
+'-- Global Variables
+
+
+'============================================================================
+
+Main
+
+Print("*** YAT-Demo OK! ***")
+
+
+'============================================================================
+Sub Main
+	Dim fileName, filePath, i
+	
+	fileName = "YAT.exe"
+	filePath = "C:\Programme\YAT\"
+	'filePath = "C:\Program Files\YAT\"
+
+	set ws = CreateObject("Wscript.shell")
+	ws.exec(filePath + fileName)
+	wscript.sleep 5000       '-- wait for YAT to start
+
+
+	for i = 1 to 10
+		ws.sendkeys "{ENTER}"
+		wscript.sleep 1000
+	next
+
+	ws.sendkeys "%{F4}"      '-- exit YAT
+
+	'Test                    '-- test sub
+End Sub
+
+
+'----------------------------------------------------------------------------
+Sub Test
+
+End Sub
+
+
+'----------------------------------------------------------------------------
+Sub Print(x)
+	WScript.Echo x
+End Sub
+
+
+</Script>
+</Job>

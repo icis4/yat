@@ -1,0 +1,94 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YAT.Controller.Test</RootNamespace>
+    <AssemblyName>YAT.Controller.Test</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\Debug\YAT.Controller.Test.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\Release\YAT.Controller.Test.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
+    <Compile Include="ControllerTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
+      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Name>MKY %28MKY\MKY%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
+      <Name>NUnit %28NUnit\NUnit%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
+      <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>
+      <Name>YAT.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
+      <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
+      <Name>YAT.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
+      <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
+      <Name>YAT.Settings.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Test\YAT.Settings.Test.csproj">
+      <Project>{306722B1-7554-46FD-A8BE-99185753CD51}</Project>
+      <Name>YAT.Settings.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings\YAT.Settings.csproj">
+      <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
+      <Name>YAT.Settings</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\YAT.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
