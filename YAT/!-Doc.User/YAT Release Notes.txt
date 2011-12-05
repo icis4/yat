@@ -653,17 +653,10 @@ XTerm232 1.0.0 :: 2003-10-14
 4. Roadmap
 ====================================================================================================
 
-YAT 2.1 Beta 1 :: Not planned yet
+YAT 2.1 :: Not planned yet
 ----------------------------------------------------------------------------------------------------
-- Logging refactoring including support for XML logging
-- Scripting/Plug-In Interface
-   > Inputs/requirements are highly appreciated
-- RS-232 AutoSense mode
-- Flexibilization of the GUI
-   > Dock/tabbed
-- Refactoring of settings
-   > Optional user settings (.yau)
-   > Settings grid
+The most often requested features will be added to future versions of YAT.
+For potential new features see the YAT feature request tracker.
 
 
 ====================================================================================================
