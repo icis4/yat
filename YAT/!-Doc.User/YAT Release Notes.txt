@@ -45,6 +45,40 @@ and install it manually.
 ====================================================================================================
 
 
+YAT 2.0 Beta 4 Candidate 2 Version 1.99.xx :: 2012-0x-xx
+----------------------------------------------------------------------------------------------------
+
+New:
+- <> (feature request #3044830)
+
+Important changes:
+- <> (feature request #3044830)
+
+Fixed bugs:
+- <> (bug #3044830)
+
+Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494, #2846917 and #3160095)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Response of multi-line commands or files is delayed (bug #3072919)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- Handling of serial COM port break states (feature #2932691) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
+- RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported on certain hardware,
+  e.g. certain USB/RS-232 converters (bug #3417097)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
+- Text terminals: Wait for answer line not yet implemented (feature request #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- System errors are output in local language, even though YAT is all-English (bug #1927786)
+
+
 YAT 2.0 Beta 4 Candidate 1 Version 1.99.28 :: 2011-12-05
 ----------------------------------------------------------------------------------------------------
 
