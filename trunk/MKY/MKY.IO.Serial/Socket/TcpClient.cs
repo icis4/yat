@@ -587,6 +587,10 @@ namespace MKY.IO.Serial
 					SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
 					StartReconnectTimer();
 				}
+				else
+				{
+					SetStateSynchronizedAndNotify(SocketState.Reset);
+				}
 			}
 		}
 

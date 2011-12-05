@@ -496,36 +496,37 @@ namespace YAT.Model
 						case Domain.IOType.TcpClient:
 						{
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
 							sb.Append(s.RemotePort.ToString(NumberFormatInfo.InvariantInfo));
 							sb.Append(" - ");
-							if (IsStarted)
-							{
-								if (IsConnected)
-									sb.Append("Connected");
-								else
-									sb.Append("Disconnected - Waiting for reconnect");
-							}
+
+							if (IsConnected)
+								sb.Append("Connected");
+							else if (IsStarted && s.TcpClientAutoReconnect.Enabled)
+								sb.Append("Disconnected - Waiting for reconnect");
 							else
-							{
 								sb.Append("Disconnected");
-							}
+
 							break;
 						}
 
 						case Domain.IOType.TcpServer:
 						{
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+
 							sb.Append(" - ");
 							sb.Append("Server:");
 							sb.Append(s.LocalPort.ToString(NumberFormatInfo.InvariantInfo));
 							sb.Append(" - ");
+
 							if (IsStarted)
 								sb.Append(IsConnected ? "Connected" : "Listening");
 							else
 								sb.Append("Closed");
+
 							break;
 						}
 
@@ -663,17 +664,14 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP client is ");
-							if (IsStarted)
-							{
-								if (IsConnected)
-									sb.Append("connected to ");
-								else
-									sb.Append("disconnected and waiting for reconnect to ");
-							}
+
+							if (IsConnected)
+								sb.Append("connected to ");
+							else if (IsStarted && s.TcpClientAutoReconnect.Enabled)
+								sb.Append("disconnected and waiting for reconnect to ");
 							else
-							{
 								sb.Append("disconnected from ");
-							}
+
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
 							sb.Append(s.RemotePort.ToString(NumberFormatInfo.InvariantInfo));
@@ -682,9 +680,8 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpServer:
 						{
-							sb.Append("TCP server is ");
-
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("TCP server is ");
 							if (IsStarted)
 							{
 								if (IsConnected)

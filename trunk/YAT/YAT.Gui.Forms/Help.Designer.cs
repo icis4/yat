@@ -33,8 +33,6 @@ namespace YAT.Gui.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Help));
 			this.groupBox_ParserHelp = new System.Windows.Forms.GroupBox();
 			this.textBox_ParserKeyword = new System.Windows.Forms.TextBox();
@@ -46,11 +44,11 @@ namespace YAT.Gui.Forms
 			this.groupBox_AsciiTable = new System.Windows.Forms.GroupBox();
 			this.dataGridView_AsciiTable = new System.Windows.Forms.DataGridView();
 			this.bindingSource_AsciiTable = new System.Windows.Forms.BindingSource(this.components);
-			this.D = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.H = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Mnemonic = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Esc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.decDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.hexDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.mnemonicDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.escDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBox_ParserHelp.SuspendLayout();
 			this.groupBox_AsciiTable.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_AsciiTable)).BeginInit();
@@ -59,9 +57,8 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_ParserHelp
 			// 
-			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_ParserHelp.Controls.Add(this.textBox_ParserKeyword);
 			this.groupBox_ParserHelp.Controls.Add(this.textBox_TextTerminalKeyword);
 			this.groupBox_ParserHelp.Controls.Add(this.textBox_ParserFormat);
@@ -128,7 +125,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(683, 516);
+			this.button_Close.Location = new System.Drawing.Point(699, 516);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -149,12 +146,13 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_AsciiTable
 			// 
-			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_AsciiTable.Controls.Add(this.dataGridView_AsciiTable);
 			this.groupBox_AsciiTable.Location = new System.Drawing.Point(473, 32);
 			this.groupBox_AsciiTable.Name = "groupBox_AsciiTable";
-			this.groupBox_AsciiTable.Size = new System.Drawing.Size(285, 470);
+			this.groupBox_AsciiTable.Size = new System.Drawing.Size(301, 470);
 			this.groupBox_AsciiTable.TabIndex = 3;
 			this.groupBox_AsciiTable.TabStop = false;
 			this.groupBox_AsciiTable.Text = "ASCII Table";
@@ -169,23 +167,23 @@ namespace YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView_AsciiTable.AutoGenerateColumns = false;
-			this.dataGridView_AsciiTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader;
-			this.dataGridView_AsciiTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-			this.dataGridView_AsciiTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+			this.dataGridView_AsciiTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+			this.dataGridView_AsciiTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+			this.dataGridView_AsciiTable.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
 			this.dataGridView_AsciiTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView_AsciiTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.D,
-            this.H,
-            this.Mnemonic,
-            this.Esc,
-            this.Description});
+            this.decDataGridViewTextBoxColumn,
+            this.hexDataGridViewTextBoxColumn,
+            this.mnemonicDataGridViewTextBoxColumn,
+            this.escDataGridViewTextBoxColumn,
+            this.descriptionDataGridViewTextBoxColumn});
 			this.dataGridView_AsciiTable.DataSource = this.bindingSource_AsciiTable;
 			this.dataGridView_AsciiTable.Location = new System.Drawing.Point(6, 19);
 			this.dataGridView_AsciiTable.Name = "dataGridView_AsciiTable";
 			this.dataGridView_AsciiTable.ReadOnly = true;
 			this.dataGridView_AsciiTable.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
 			this.dataGridView_AsciiTable.RowHeadersVisible = false;
-			this.dataGridView_AsciiTable.Size = new System.Drawing.Size(273, 445);
+			this.dataGridView_AsciiTable.Size = new System.Drawing.Size(289, 445);
 			this.dataGridView_AsciiTable.TabIndex = 0;
 			// 
 			// bindingSource_AsciiTable
@@ -194,54 +192,45 @@ namespace YAT.Gui.Forms
 			this.bindingSource_AsciiTable.DataSource = typeof(YAT.Gui.Utilities.AsciiTable);
 			this.bindingSource_AsciiTable.Position = 0;
 			// 
-			// D
+			// decDataGridViewTextBoxColumn
 			// 
-			this.D.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.D.DataPropertyName = "D";
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			this.D.DefaultCellStyle = dataGridViewCellStyle1;
-			this.D.HeaderText = "Dec";
-			this.D.Name = "D";
-			this.D.ReadOnly = true;
-			this.D.Width = 52;
+			this.decDataGridViewTextBoxColumn.DataPropertyName = "Dec";
+			this.decDataGridViewTextBoxColumn.HeaderText = "D";
+			this.decDataGridViewTextBoxColumn.Name = "decDataGridViewTextBoxColumn";
+			this.decDataGridViewTextBoxColumn.ReadOnly = true;
+			this.decDataGridViewTextBoxColumn.Width = 26;
 			// 
-			// H
+			// hexDataGridViewTextBoxColumn
 			// 
-			this.H.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.H.DataPropertyName = "H";
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			this.H.DefaultCellStyle = dataGridViewCellStyle2;
-			this.H.HeaderText = "Hex";
-			this.H.Name = "H";
-			this.H.ReadOnly = true;
-			this.H.Width = 51;
+			this.hexDataGridViewTextBoxColumn.DataPropertyName = "Hex";
+			this.hexDataGridViewTextBoxColumn.HeaderText = "H";
+			this.hexDataGridViewTextBoxColumn.Name = "hexDataGridViewTextBoxColumn";
+			this.hexDataGridViewTextBoxColumn.ReadOnly = true;
+			this.hexDataGridViewTextBoxColumn.Width = 22;
 			// 
-			// Mnemonic
+			// mnemonicDataGridViewTextBoxColumn
 			// 
-			this.Mnemonic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.Mnemonic.DataPropertyName = "Mnemonic";
-			this.Mnemonic.HeaderText = "Mnemonic";
-			this.Mnemonic.Name = "Mnemonic";
-			this.Mnemonic.ReadOnly = true;
-			this.Mnemonic.Width = 81;
+			this.mnemonicDataGridViewTextBoxColumn.DataPropertyName = "Mnemonic";
+			this.mnemonicDataGridViewTextBoxColumn.HeaderText = "Mnemonic";
+			this.mnemonicDataGridViewTextBoxColumn.Name = "mnemonicDataGridViewTextBoxColumn";
+			this.mnemonicDataGridViewTextBoxColumn.ReadOnly = true;
+			this.mnemonicDataGridViewTextBoxColumn.Width = 61;
 			// 
-			// Esc
+			// escDataGridViewTextBoxColumn
 			// 
-			this.Esc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.Esc.DataPropertyName = "Esc";
-			this.Esc.HeaderText = "Esc";
-			this.Esc.Name = "Esc";
-			this.Esc.ReadOnly = true;
-			this.Esc.Width = 50;
+			this.escDataGridViewTextBoxColumn.DataPropertyName = "Esc";
+			this.escDataGridViewTextBoxColumn.HeaderText = "Esc";
+			this.escDataGridViewTextBoxColumn.Name = "escDataGridViewTextBoxColumn";
+			this.escDataGridViewTextBoxColumn.ReadOnly = true;
+			this.escDataGridViewTextBoxColumn.Width = 32;
 			// 
-			// Description
+			// descriptionDataGridViewTextBoxColumn
 			// 
-			this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.Description.DataPropertyName = "Description";
-			this.Description.HeaderText = "Description";
-			this.Description.Name = "Description";
-			this.Description.ReadOnly = true;
-			this.Description.Width = 85;
+			this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+			this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+			this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+			this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+			this.descriptionDataGridViewTextBoxColumn.Width = 128;
 			// 
 			// Help
 			// 
@@ -249,7 +238,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(770, 551);
+			this.ClientSize = new System.Drawing.Size(786, 551);
 			this.Controls.Add(this.groupBox_AsciiTable);
 			this.Controls.Add(this.label_Explanations);
 			this.Controls.Add(this.button_Close);
@@ -282,10 +271,10 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_AsciiTable;
 		private System.Windows.Forms.DataGridView dataGridView_AsciiTable;
 		private System.Windows.Forms.BindingSource bindingSource_AsciiTable;
-		private System.Windows.Forms.DataGridViewTextBoxColumn D;
-		private System.Windows.Forms.DataGridViewTextBoxColumn H;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Mnemonic;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Esc;
-		private System.Windows.Forms.DataGridViewTextBoxColumn Description;
+		private System.Windows.Forms.DataGridViewTextBoxColumn decDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn hexDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn mnemonicDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn escDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
 	}
 }
