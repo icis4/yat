@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 1 Version 1.99.28
+// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -34,11 +34,11 @@ namespace YAT.Utilities
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Beta 4";
 
-		/// <summary>The product name postfix that describes the build.</summary>
-		public const string ProductBuildName = " Beta 4 Candidate 1";
-
 		/////// <summary>The product name postfix that describes the build.</summary>
-		////public const string ProductBuildName = " Beta 4 Candidate 1 Development";
+		////public const string ProductBuildName = " Beta 4 Candidate 1";
+
+		/// <summary>The product name postfix that describes the build.</summary>
+		public const string ProductBuildName = " Beta 4 Candidate 2 Development";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Beta 4 Preliminary";
