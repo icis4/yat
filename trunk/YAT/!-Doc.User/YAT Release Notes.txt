@@ -55,12 +55,16 @@ Important changes:
 - <> (feature request #3044830)
 
 Fixed bugs:
-- <> (bug #3044830)
+- 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
 
 Limitations and known issues:
-- MDI limitations of .NET
+- General imitations of .NET Windows.Forms
+   > If YAT is not the active application, two clicks are required to execute an action. Reason:
+     In .NET Windows.Forms the first click only activates the application but doesn't execute
+     anything. (bug #3454532)
+- MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #1808492 and #1808493)
-   > Issues with window list (bugs #1808494, #2846917 and #3160095)
+   > Issues with window list (bugs #1808494, #2846917, #3160095 and #3454550)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
 - Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
@@ -68,8 +72,10 @@ Limitations and known issues:
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported on certain hardware,
-  e.g. certain USB/RS-232 converters (bug #3417097)
+- Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
+  on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097)
+- Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
+  'Manual Combined' only but is always on for 'Software' and 'Combined' (bug #3456205)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
@@ -153,8 +159,10 @@ Limitations and known issues:
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
-- RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported on certain hardware,
-  e.g. certain USB/RS-232 converters (bug #3417097)
+- Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
+  on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097)
+- Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
+  'Manual Combined' only but is always on for 'Software' and 'Combined' (bug #3456205)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)

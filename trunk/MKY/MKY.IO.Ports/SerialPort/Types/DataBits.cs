@@ -40,7 +40,6 @@ namespace MKY.IO.Ports
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "There is no setting with 0 data bits.")]
 	public enum DataBits
 	{
-		Four  = 4,
 		Five  = 5,
 		Six   = 6,
 		Seven = 7,
@@ -85,7 +84,6 @@ namespace MKY.IO.Ports
 		public static DataBitsEx[] GetItems()
 		{
 			List<DataBitsEx> a = new List<DataBitsEx>();
-			a.Add(new DataBitsEx(DataBits.Four));
 			a.Add(new DataBitsEx(DataBits.Five));
 			a.Add(new DataBitsEx(DataBits.Six));
 			a.Add(new DataBitsEx(DataBits.Seven));
@@ -163,8 +161,7 @@ namespace MKY.IO.Ports
 			if      (bits >= (int)DataBits.Eight) return (new DataBitsEx(DataBits.Eight));
 			else if (bits >= (int)DataBits.Seven) return (new DataBitsEx(DataBits.Seven));
 			else if (bits >= (int)DataBits.Six)   return (new DataBitsEx(DataBits.Six));
-			else if (bits >= (int)DataBits.Five)  return (new DataBitsEx(DataBits.Five));
-			else                                  return (new DataBitsEx(DataBits.Four));
+			else                                  return (new DataBitsEx(DataBits.Five));
 		}
 
 		/// <summary></summary>
