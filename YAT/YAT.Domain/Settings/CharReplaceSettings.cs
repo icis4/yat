@@ -45,7 +45,7 @@ namespace YAT.Domain.Settings
 		public const bool ReplaceSpaceDefault = false;
 
 		/// <summary></summary>
-		public const string ReplaceSpaceString = "‣";
+		public const string SpaceReplaceChar = "␣";
 
 		private bool replaceControlChars;
 		private ControlCharRadix controlCharRadix;

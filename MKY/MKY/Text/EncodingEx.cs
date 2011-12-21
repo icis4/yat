@@ -534,7 +534,7 @@ namespace MKY.Text
 		static EncodingEx()
 		{
 			List<EncodingInfoEx> l = new List<EncodingInfoEx>();
-			l.Add(new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII",                     Encoding.ASCII));
+			l.Add(new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII (ISO646-US)",         Encoding.ASCII));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode));
@@ -649,10 +649,13 @@ namespace MKY.Text
 		/// </summary>
 		public override string ToString()
 		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append(DisplayName + " [" + CodePage + "]");
+
 			if (IsDefault)
-				return ("Default (" + DisplayName + ") [" + CodePage + "]");
-			else
-				return (DisplayName + " [" + CodePage + "]");
+				sb.Append(" (Default)");
+
+			return (sb.ToString());
 		}
 
 		/// <summary>
@@ -677,166 +680,166 @@ namespace MKY.Text
 			a.Add(new EncodingEx((SupportedEncoding)Encoding.Default.CodePage));
 
 			// ASCII and Unicode
-			a.Add(new EncodingEx(SupportedEncoding.ASCII));					// US-ASCII
-			a.Add(new EncodingEx(SupportedEncoding.UTF7));					// Unicode (UTF-7)
-			a.Add(new EncodingEx(SupportedEncoding.UTF8));					// Unicode (UTF-8)
-			a.Add(new EncodingEx(SupportedEncoding.UTF16));					// Unicode
-			a.Add(new EncodingEx(SupportedEncoding.UTF16BE));				// Unicode (Big-Endian)
-			a.Add(new EncodingEx(SupportedEncoding.UTF32));					// Unicode (UTF-32)
-			a.Add(new EncodingEx(SupportedEncoding.UTF32BE));				// Unicode (UTF-32 Big-Endian)
+			a.Add(new EncodingEx(SupportedEncoding.ASCII));				// US-ASCII
+			a.Add(new EncodingEx(SupportedEncoding.UTF7));				// Unicode (UTF-7)
+			a.Add(new EncodingEx(SupportedEncoding.UTF8));				// Unicode (UTF-8)
+			a.Add(new EncodingEx(SupportedEncoding.UTF16));				// Unicode
+			a.Add(new EncodingEx(SupportedEncoding.UTF16BE));			// Unicode (Big-Endian)
+			a.Add(new EncodingEx(SupportedEncoding.UTF32));				// Unicode (UTF-32)
+			a.Add(new EncodingEx(SupportedEncoding.UTF32BE));			// Unicode (UTF-32 Big-Endian)
 
 			// ISO
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_1));				// Western European (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_2));				// Central European (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_3));				// Latin 3 (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_4));				// Baltic (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_5));				// Cyrillic (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_6));				// Arabic (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_7));				// Greek (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_8));				// Hebrew (ISO-Visual)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_8I));				// Hebrew (ISO-Logical)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_9));				// Turkish (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_13));				// Estonian (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO8859_15));				// Latin 9 (ISO)
-			a.Add(new EncodingEx(SupportedEncoding.ISO2022JP));				// Japanese (JIS)
-			a.Add(new EncodingEx(SupportedEncoding.CSISO2022JP));			// Japanese (JIS-Allow 1 byte Kana)
-			a.Add(new EncodingEx(SupportedEncoding.ISO2022JP_A));			// Japanese (JIS-Allow 1 byte Kana - SO/SI)
-			a.Add(new EncodingEx(SupportedEncoding.ISO2022KR));				// Korean (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_1));			// Western European (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_2));			// Central European (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_3));			// Latin 3 (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_4));			// Baltic (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_5));			// Cyrillic (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_6));			// Arabic (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_7));			// Greek (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_8));			// Hebrew (ISO-Visual)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_8I));		// Hebrew (ISO-Logical)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_9));			// Turkish (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_13));		// Estonian (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO8859_15));		// Latin 9 (ISO)
+			a.Add(new EncodingEx(SupportedEncoding.ISO2022JP));			// Japanese (JIS)
+			a.Add(new EncodingEx(SupportedEncoding.CSISO2022JP));		// Japanese (JIS-Allow 1 byte Kana)
+			a.Add(new EncodingEx(SupportedEncoding.ISO2022JP_A));		// Japanese (JIS-Allow 1 byte Kana - SO/SI)
+			a.Add(new EncodingEx(SupportedEncoding.ISO2022KR));			// Korean (ISO)
 
 			// Windows
-			a.Add(new EncodingEx(SupportedEncoding.Windows1252));			// Western European (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1250));			// Central European (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1251));			// Cyrillic (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1253));			// Greek (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1254));			// Turkish (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1255));			// Hebrew (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1256));			// Arabic (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1257));			// Baltic (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows1258));			// Vietnamese (Windows)
-			a.Add(new EncodingEx(SupportedEncoding.Windows874));				// Thai (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1252));		// Western European (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1250));		// Central European (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1251));		// Cyrillic (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1253));		// Greek (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1254));		// Turkish (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1255));		// Hebrew (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1256));		// Arabic (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1257));		// Baltic (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1258));		// Vietnamese (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows874));		// Thai (Windows)
 
 			// Mac
-			a.Add(new EncodingEx(SupportedEncoding.Macintosh));				// Western European (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacCE));					// Central European (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacJapanese));			// Japanese (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacChineseTrad));		// Chinese Traditional (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacChineseSimp));		// Chinese Simplified (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacKorean));				// Korean (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacArabic));				// Arabic (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacHebrew));				// Hebrew (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacGreek));				// Greek (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacCyrillic));			// Cyrillic (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacRomanian));			// Romanian (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacUkrainian));			// Ukrainian (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacThai));				// Thai (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacIcelandic));			// Icelandic (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacTurkish));			// Turkish (Mac)
-			a.Add(new EncodingEx(SupportedEncoding.XMacCroatian));			// Croatian (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.Macintosh));			// Western European (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacCE));			// Central European (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacJapanese));		// Japanese (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacChineseTrad));	// Chinese Traditional (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacChineseSimp));	// Chinese Simplified (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacKorean));		// Korean (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacArabic));		// Arabic (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacHebrew));		// Hebrew (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacGreek));			// Greek (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacCyrillic));		// Cyrillic (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacRomanian));		// Romanian (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacUkrainian));		// Ukrainian (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacThai));			// Thai (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacIcelandic));		// Icelandic (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacTurkish));		// Turkish (Mac)
+			a.Add(new EncodingEx(SupportedEncoding.XMacCroatian));		// Croatian (Mac)
 
 			// Unix
-			a.Add(new EncodingEx(SupportedEncoding.EUC_JP));					// Japanese (JIS 0208-1990 and 0212-1990)
-			a.Add(new EncodingEx(SupportedEncoding.EUC_JP_A));				// Japanese (EUC)
-			a.Add(new EncodingEx(SupportedEncoding.EUC_CN));					// Chinese Simplified (EUC)
-			a.Add(new EncodingEx(SupportedEncoding.EUC_KR));					// Korean (EUC)
+			a.Add(new EncodingEx(SupportedEncoding.EUC_JP));			// Japanese (JIS 0208-1990 and 0212-1990)
+			a.Add(new EncodingEx(SupportedEncoding.EUC_JP_A));			// Japanese (EUC)
+			a.Add(new EncodingEx(SupportedEncoding.EUC_CN));			// Chinese Simplified (EUC)
+			a.Add(new EncodingEx(SupportedEncoding.EUC_KR));			// Korean (EUC)
 
 			// IBM EBCDIC
-			a.Add(new EncodingEx(SupportedEncoding.IBM1047));				// IBM Latin-1
-			a.Add(new EncodingEx(SupportedEncoding.IBM924));					// IBM Latin-1
-			a.Add(new EncodingEx(SupportedEncoding.IBM500));					// IBM EBCDIC (International)
-			a.Add(new EncodingEx(SupportedEncoding.IBM037));					// IBM EBCDIC (US-Canada)
-			a.Add(new EncodingEx(SupportedEncoding.IBM870));					// IBM EBCDIC (Multilingual Latin-2)
-			a.Add(new EncodingEx(SupportedEncoding.IBM423));					// IBM EBCDIC (Greek)
-			a.Add(new EncodingEx(SupportedEncoding.CP875));					// IBM EBCDIC (Greek Modern)
-			a.Add(new EncodingEx(SupportedEncoding.IBM880));					// IBM EBCDIC (Cyrillic Russian)
-			a.Add(new EncodingEx(SupportedEncoding.CP1025));					// IBM EBCDIC (Cyrillic Serbian-Bulgarian)
-			a.Add(new EncodingEx(SupportedEncoding.IBM905));					// IBM EBCDIC (Turkish)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1026));				// IBM EBCDIC (Turkish Latin-5)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1140));				// IBM EBCDIC (US-Canada-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1141));				// IBM EBCDIC (Germany-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1142));				// IBM EBCDIC (Denmark-Norway-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1143));				// IBM EBCDIC (Finland-Sweden-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1144));				// IBM EBCDIC (Italy-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1145));				// IBM EBCDIC (Spain-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1146));				// IBM EBCDIC (UK-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1147));				// IBM EBCDIC (France-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1148));				// IBM EBCDIC (International-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM1149));				// IBM EBCDIC (Icelandic-Euro)
-			a.Add(new EncodingEx(SupportedEncoding.IBM273));					// IBM EBCDIC (Germany)
-			a.Add(new EncodingEx(SupportedEncoding.IBM277));					// IBM EBCDIC (Denmark-Norway)
-			a.Add(new EncodingEx(SupportedEncoding.IBM278));					// IBM EBCDIC (Finland-Sweden)
-			a.Add(new EncodingEx(SupportedEncoding.IBM871));					// IBM EBCDIC (Icelandic)
-			a.Add(new EncodingEx(SupportedEncoding.IBM280));					// IBM EBCDIC (Italy)
-			a.Add(new EncodingEx(SupportedEncoding.IBM284));					// IBM EBCDIC (Spain)
-			a.Add(new EncodingEx(SupportedEncoding.IBM285));					// IBM EBCDIC (UK)
-			a.Add(new EncodingEx(SupportedEncoding.IBM297));					// IBM EBCDIC (France)
-			a.Add(new EncodingEx(SupportedEncoding.IBM420));					// IBM EBCDIC (Arabic)
-			a.Add(new EncodingEx(SupportedEncoding.IBM424));					// IBM EBCDIC (Hebrew)
-			a.Add(new EncodingEx(SupportedEncoding.IBM290));					// IBM EBCDIC (Japanese katakana)
-			a.Add(new EncodingEx(SupportedEncoding.IBMThai));				// IBM EBCDIC (Thai)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1047));			// IBM Latin-1
+			a.Add(new EncodingEx(SupportedEncoding.IBM924));			// IBM Latin-1
+			a.Add(new EncodingEx(SupportedEncoding.IBM500));			// IBM EBCDIC (International)
+			a.Add(new EncodingEx(SupportedEncoding.IBM037));			// IBM EBCDIC (US-Canada)
+			a.Add(new EncodingEx(SupportedEncoding.IBM870));			// IBM EBCDIC (Multilingual Latin-2)
+			a.Add(new EncodingEx(SupportedEncoding.IBM423));			// IBM EBCDIC (Greek)
+			a.Add(new EncodingEx(SupportedEncoding.CP875));				// IBM EBCDIC (Greek Modern)
+			a.Add(new EncodingEx(SupportedEncoding.IBM880));			// IBM EBCDIC (Cyrillic Russian)
+			a.Add(new EncodingEx(SupportedEncoding.CP1025));			// IBM EBCDIC (Cyrillic Serbian-Bulgarian)
+			a.Add(new EncodingEx(SupportedEncoding.IBM905));			// IBM EBCDIC (Turkish)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1026));			// IBM EBCDIC (Turkish Latin-5)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1140));			// IBM EBCDIC (US-Canada-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1141));			// IBM EBCDIC (Germany-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1142));			// IBM EBCDIC (Denmark-Norway-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1143));			// IBM EBCDIC (Finland-Sweden-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1144));			// IBM EBCDIC (Italy-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1145));			// IBM EBCDIC (Spain-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1146));			// IBM EBCDIC (UK-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1147));			// IBM EBCDIC (France-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1148));			// IBM EBCDIC (International-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM1149));			// IBM EBCDIC (Icelandic-Euro)
+			a.Add(new EncodingEx(SupportedEncoding.IBM273));			// IBM EBCDIC (Germany)
+			a.Add(new EncodingEx(SupportedEncoding.IBM277));			// IBM EBCDIC (Denmark-Norway)
+			a.Add(new EncodingEx(SupportedEncoding.IBM278));			// IBM EBCDIC (Finland-Sweden)
+			a.Add(new EncodingEx(SupportedEncoding.IBM871));			// IBM EBCDIC (Icelandic)
+			a.Add(new EncodingEx(SupportedEncoding.IBM280));			// IBM EBCDIC (Italy)
+			a.Add(new EncodingEx(SupportedEncoding.IBM284));			// IBM EBCDIC (Spain)
+			a.Add(new EncodingEx(SupportedEncoding.IBM285));			// IBM EBCDIC (UK)
+			a.Add(new EncodingEx(SupportedEncoding.IBM297));			// IBM EBCDIC (France)
+			a.Add(new EncodingEx(SupportedEncoding.IBM420));			// IBM EBCDIC (Arabic)
+			a.Add(new EncodingEx(SupportedEncoding.IBM424));			// IBM EBCDIC (Hebrew)
+			a.Add(new EncodingEx(SupportedEncoding.IBM290));			// IBM EBCDIC (Japanese katakana)
+			a.Add(new EncodingEx(SupportedEncoding.IBMThai));			// IBM EBCDIC (Thai)
 			a.Add(new EncodingEx(SupportedEncoding.X_EBCDIC_KoreanExtended)); // IBM EBCDIC (Korean Extended)
 
 			// IBM OEM
-			a.Add(new EncodingEx(SupportedEncoding.IBM437));					// OEM United States
-			a.Add(new EncodingEx(SupportedEncoding.IBM855));					// OEM Cyrillic
-			a.Add(new EncodingEx(SupportedEncoding.IBM858));					// OEM Multilingual Latin I
+			a.Add(new EncodingEx(SupportedEncoding.IBM437));			// OEM United States
+			a.Add(new EncodingEx(SupportedEncoding.IBM855));			// OEM Cyrillic
+			a.Add(new EncodingEx(SupportedEncoding.IBM858));			// OEM Multilingual Latin I
 
 			// DOS
-			a.Add(new EncodingEx(SupportedEncoding.IBM850));					// Western European (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM852));					// Central European (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM737));					// Greek (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM869));					// Greek, Modern (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM775));					// Baltic (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.CP866));					// Cyrillic (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM860));					// Portuguese (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM861));					// Icelandic (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM863));					// French Canadian (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM865));					// Nordic (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM857));					// Turkish (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.DOS720));					// Arabic (DOS)
-			a.Add(new EncodingEx(SupportedEncoding.IBM864));					// Arabic (864)
-			a.Add(new EncodingEx(SupportedEncoding.DOS862));					// Hebrew (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM850));			// Western European (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM852));			// Central European (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM737));			// Greek (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM869));			// Greek, Modern (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM775));			// Baltic (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.CP866));				// Cyrillic (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM860));			// Portuguese (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM861));			// Icelandic (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM863));			// French Canadian (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM865));			// Nordic (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM857));			// Turkish (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.DOS720));			// Arabic (DOS)
+			a.Add(new EncodingEx(SupportedEncoding.IBM864));			// Arabic (864)
+			a.Add(new EncodingEx(SupportedEncoding.DOS862));			// Hebrew (DOS)
 
 			// Misc
-			a.Add(new EncodingEx(SupportedEncoding.KOI8_R));					// Cyrillic (KOI8-R)
-			a.Add(new EncodingEx(SupportedEncoding.KOI8_U));					// Cyrillic (KOI8-U)
-			a.Add(new EncodingEx(SupportedEncoding.ASMO_708));				// Arabic (ASMO 708)
-			a.Add(new EncodingEx(SupportedEncoding.Shift_JIS));				// Japanese (Shift-JIS)
-			a.Add(new EncodingEx(SupportedEncoding.GB2312));					// Chinese Simplified (GB2312)
-			a.Add(new EncodingEx(SupportedEncoding.GB18030));				// Chinese Simplified (GB18030)
-			a.Add(new EncodingEx(SupportedEncoding.HZ_GB_2312));				// Chinese Simplified (HZ)
-			a.Add(new EncodingEx(SupportedEncoding.Big5));					// Chinese Traditional (Big5)
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20936));				// Chinese Simplified (GB2312-80)
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20949));				// Korean Wansung
-			a.Add(new EncodingEx(SupportedEncoding.KS_C_5601_1987));			// Korean
-			a.Add(new EncodingEx(SupportedEncoding.Johab));					// Korean (Johab)
+			a.Add(new EncodingEx(SupportedEncoding.KOI8_R));			// Cyrillic (KOI8-R)
+			a.Add(new EncodingEx(SupportedEncoding.KOI8_U));			// Cyrillic (KOI8-U)
+			a.Add(new EncodingEx(SupportedEncoding.ASMO_708));			// Arabic (ASMO 708)
+			a.Add(new EncodingEx(SupportedEncoding.Shift_JIS));			// Japanese (Shift-JIS)
+			a.Add(new EncodingEx(SupportedEncoding.GB2312));			// Chinese Simplified (GB2312)
+			a.Add(new EncodingEx(SupportedEncoding.GB18030));			// Chinese Simplified (GB18030)
+			a.Add(new EncodingEx(SupportedEncoding.HZ_GB_2312));		// Chinese Simplified (HZ)
+			a.Add(new EncodingEx(SupportedEncoding.Big5));				// Chinese Traditional (Big5)
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20936));			// Chinese Simplified (GB2312-80)
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20949));			// Korean Wansung
+			a.Add(new EncodingEx(SupportedEncoding.KS_C_5601_1987));	// Korean
+			a.Add(new EncodingEx(SupportedEncoding.Johab));				// Korean (Johab)
 
 			// X
-			a.Add(new EncodingEx(SupportedEncoding.X_Europa));				// Europa
-			a.Add(new EncodingEx(SupportedEncoding.X_ChineseCNS));			// Chinese Traditional (CNS)
-			a.Add(new EncodingEx(SupportedEncoding.X_ChineseEten));			// Chinese Traditional (Eten)
-			a.Add(new EncodingEx(SupportedEncoding.X_IA5));					// Western European (IA5)
-			a.Add(new EncodingEx(SupportedEncoding.X_IA5_German));			// German (IA5)
-			a.Add(new EncodingEx(SupportedEncoding.X_IA5_Swedish));			// Swedish (IA5)
-			a.Add(new EncodingEx(SupportedEncoding.X_IA5_Norwegian));		// Norwegian (IA5)
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20001));				// TCA Taiwan
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20003));				// IBM5550 Taiwan
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20004));				// TeleText Taiwan
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20005));				// Wang Taiwan
-			a.Add(new EncodingEx(SupportedEncoding.X_CP50227));				// Chinese Simplified (ISO-2022)
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20261));				// T.61
-			a.Add(new EncodingEx(SupportedEncoding.X_CP20269));				// ISO-6937
+			a.Add(new EncodingEx(SupportedEncoding.X_Europa));			// Europa
+			a.Add(new EncodingEx(SupportedEncoding.X_ChineseCNS));		// Chinese Traditional (CNS)
+			a.Add(new EncodingEx(SupportedEncoding.X_ChineseEten));		// Chinese Traditional (Eten)
+			a.Add(new EncodingEx(SupportedEncoding.X_IA5));				// Western European (IA5)
+			a.Add(new EncodingEx(SupportedEncoding.X_IA5_German));		// German (IA5)
+			a.Add(new EncodingEx(SupportedEncoding.X_IA5_Swedish));		// Swedish (IA5)
+			a.Add(new EncodingEx(SupportedEncoding.X_IA5_Norwegian));	// Norwegian (IA5)
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20001));			// TCA Taiwan
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20003));			// IBM5550 Taiwan
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20004));			// TeleText Taiwan
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20005));			// Wang Taiwan
+			a.Add(new EncodingEx(SupportedEncoding.X_CP50227));			// Chinese Simplified (ISO-2022)
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20261));			// T.61
+			a.Add(new EncodingEx(SupportedEncoding.X_CP20269));			// ISO-6937
 
 			// X-ISCII
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_DE));				// ISCII Devanagari
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_BE));				// ISCII Bengali
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_TA));				// ISCII Tamil
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_TE));				// ISCII Telugu
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_AS));				// ISCII Assamese
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_OR));				// ISCII Oriya
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_KA));				// ISCII Kannada
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_MA));				// ISCII Malayalam
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_GU));				// ISCII Gujarati
-			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_PA));				// ISCII Punjabi
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_DE));		// ISCII Devanagari
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_BE));		// ISCII Bengali
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_TA));		// ISCII Tamil
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_TE));		// ISCII Telugu
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_AS));		// ISCII Assamese
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_OR));		// ISCII Oriya
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_KA));		// ISCII Kannada
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_MA));		// ISCII Malayalam
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_GU));		// ISCII Gujarati
+			a.Add(new EncodingEx(SupportedEncoding.X_ISCII_PA));		// ISCII Punjabi
 
 			return (a.ToArray());
 		}

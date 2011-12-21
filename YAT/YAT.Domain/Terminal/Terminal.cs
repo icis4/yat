@@ -489,7 +489,7 @@ namespace YAT.Domain
 					else if (b == 0x20) // Space.
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
-							text = "â£";
+							text = Settings.CharReplaceSettings.SpaceReplaceChar;
 						else
 							text = " ";
 					}

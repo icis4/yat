@@ -51,7 +51,7 @@
 			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
 			this.groupBox_DisplaySettings = new System.Windows.Forms.GroupBox();
 			this.groupBox_Display_Tab = new System.Windows.Forms.GroupBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.label_ReplaceTab = new System.Windows.Forms.Label();
 			this.checkBox_ReplaceTab = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_Space = new System.Windows.Forms.GroupBox();
 			this.label_SpaceReplacementChar = new System.Windows.Forms.Label();
@@ -347,7 +347,7 @@
 			// 
 			this.groupBox_Display_Tab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Display_Tab.Controls.Add(this.label1);
+			this.groupBox_Display_Tab.Controls.Add(this.label_ReplaceTab);
 			this.groupBox_Display_Tab.Controls.Add(this.checkBox_ReplaceTab);
 			this.groupBox_Display_Tab.Location = new System.Drawing.Point(6, 290);
 			this.groupBox_Display_Tab.Name = "groupBox_Display_Tab";
@@ -356,16 +356,16 @@
 			this.groupBox_Display_Tab.TabStop = false;
 			this.groupBox_Display_Tab.Text = "Tab";
 			// 
-			// label1
+			// label_ReplaceTab
 			// 
-			this.label1.AutoSize = true;
-			this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.label1.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(122, 21);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(44, 15);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "<TAB>";
+			this.label_ReplaceTab.AutoSize = true;
+			this.label_ReplaceTab.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.label_ReplaceTab.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_ReplaceTab.Location = new System.Drawing.Point(122, 21);
+			this.label_ReplaceTab.Name = "label_ReplaceTab";
+			this.label_ReplaceTab.Size = new System.Drawing.Size(44, 15);
+			this.label_ReplaceTab.TabIndex = 1;
+			this.label_ReplaceTab.Text = "<TAB>";
 			// 
 			// checkBox_ReplaceTab
 			// 
@@ -398,9 +398,9 @@
 			this.label_SpaceReplacementChar.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_SpaceReplacementChar.Location = new System.Drawing.Point(220, 21);
 			this.label_SpaceReplacementChar.Name = "label_SpaceReplacementChar";
-			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(23, 15);
+			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(16, 15);
 			this.label_SpaceReplacementChar.TabIndex = 1;
-			this.label_SpaceReplacementChar.Text = "â£";
+			this.label_SpaceReplacementChar.Text = "␣";
 			// 
 			// checkBox_ReplaceSpace
 			// 
@@ -676,7 +676,7 @@
 		private System.Windows.Forms.CheckBox checkBox_CopyPredefined;
 		private System.Windows.Forms.CheckBox checkBox_ShowRadix;
 		private System.Windows.Forms.GroupBox groupBox_Display_Tab;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label_ReplaceTab;
 		private System.Windows.Forms.CheckBox checkBox_ReplaceTab;
 		private System.Windows.Forms.CheckBox checkBox_SendImmediately;
 		private System.Windows.Forms.Label label_SendImmediately;
