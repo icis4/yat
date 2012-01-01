@@ -615,8 +615,10 @@ namespace YAT.Domain
 					lp.Add(de);
 			}
 
-			// Return data.
-			// Attention: Clone elements because they are needed again below.
+			// Return elements.
+			//
+			// \attention:
+			// Clone elements because they are needed again a line below.
 			lineState.LineElements.AddRange(lp.Clone());
 			elements.AddRange(lp);
 		}

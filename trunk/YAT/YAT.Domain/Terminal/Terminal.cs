@@ -620,7 +620,7 @@ namespace YAT.Domain
 			DisplayLine dl = new DisplayLine();
 
 			// Line begin and time stamp.
-			if (this.terminalSettings.Display.ShowTimeStamp)
+			if (TerminalSettings.Display.ShowTimeStamp)
 			{
 				dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
 				dl.Add(new DisplayElement.LeftMargin());
@@ -633,7 +633,7 @@ namespace YAT.Domain
 			}
 
 			// Line length and end.
-			if (this.terminalSettings.Display.ShowLength)
+			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
 				dl.Add(new DisplayElement.LineLength(re.Direction, 1));
@@ -643,7 +643,7 @@ namespace YAT.Domain
 			// Return elements.
 			//
 			// \attention:
-			// Clone elements because they are needed again below.
+			// Clone elements because they are needed again a line below.
 			elements.AddRange(dl.Clone());
 			lines.Add(dl);
 		}

@@ -450,6 +450,7 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Display.ShowRadix       = f.SettingsResult.Terminal.Display.ShowRadix;
 				this.settings_Form.Terminal.Display.ShowTimeStamp   = f.SettingsResult.Terminal.Display.ShowTimeStamp;
 				this.settings_Form.Terminal.Display.ShowLength      = f.SettingsResult.Terminal.Display.ShowLength;
+				this.settings_Form.Terminal.Display.ShowLineNumbers = f.SettingsResult.Terminal.Display.ShowLineNumbers;
 				this.settings_Form.Terminal.Status.ShowConnectTime  = f.SettingsResult.Terminal.Status.ShowConnectTime;
 				this.settings_Form.Terminal.Status.ShowCountAndRate = f.SettingsResult.Terminal.Status.ShowCountAndRate;
 

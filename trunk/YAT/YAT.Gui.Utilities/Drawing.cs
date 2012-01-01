@@ -54,6 +54,7 @@ namespace YAT.Gui.Utilities
 		/// <remarks>
 		/// For performance reasons, cache fonts and brushes used for drawing.
 		/// </remarks>
+		private static DrawingElements neutral     = new DrawingElements();
 		private static DrawingElements txData      = new DrawingElements();
 		private static DrawingElements txControl   = new DrawingElements();
 		private static DrawingElements rxData      = new DrawingElements();
@@ -63,26 +64,35 @@ namespace YAT.Gui.Utilities
 		private static DrawingElements whiteSpaces = new DrawingElements();
 		private static DrawingElements error       = new DrawingElements();
 
-		/// <summary>String format used for drawing.</summary>
-		private static StringFormat drawingStringFormat;
+		/// <summary>String format used for drawing line numbers.</summary>
+		private static StringFormat lineNumberStringFormat;
 
-		/// <summary>String format used for drawing.</summary>
-		private static StringFormat virtualStringFormat;
+		/// <summary>String format used for drawing monitor strings.</summary>
+		private static StringFormat monitorDrawingStringFormat;
 
+		/// <summary>String format used for measuring monitor strings.</summary>
+		private static StringFormat monitorVirtualStringFormat;
+
+		/// <summary>
+		/// Use GenericTypographic format to be able to measure characters indiviually,
+		///   i.e. without a small margin before and after the character.
+		/// </summary>
 		static Drawing()
 		{
-			// Use GenericTypographic format to be able to measure characters indiviually,
-			//   i.e. without a small margin before and after the character.
-			// Additionally enable trailing spaces to be able to correctly measure single spaces.
+			// Line numbers shall be aligned right.
+			lineNumberStringFormat = new StringFormat(StringFormat.GenericDefault);
+			lineNumberStringFormat.Alignment = StringAlignment.Far;
+
+			// Enable trailing spaces to be able to correctly measure single spaces.
 			// Also enable drawing of text that exceeds the layout rectangle.
-			drawingStringFormat = new StringFormat(StringFormat.GenericTypographic);
-			drawingStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
-			drawingStringFormat.Trimming = StringTrimming.EllipsisCharacter;
+			monitorDrawingStringFormat = new StringFormat(StringFormat.GenericTypographic);
+			monitorDrawingStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+			monitorDrawingStringFormat.Trimming = StringTrimming.EllipsisCharacter;
 
 			// Do not trim to measure the size actually requested.
-			virtualStringFormat = new StringFormat(StringFormat.GenericTypographic);
-			virtualStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
-			virtualStringFormat.Trimming = StringTrimming.None;
+			monitorVirtualStringFormat = new StringFormat(StringFormat.GenericTypographic);
+			monitorVirtualStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+			monitorVirtualStringFormat.Trimming = StringTrimming.None;
 		}
 
 		/// <summary></summary>
@@ -99,6 +109,32 @@ namespace YAT.Gui.Utilities
 
 				return (italicDefaultFont);
 			}
+		}
+
+		/// <summary></summary>
+		public static void DrawAndMeasureLineNumberString(string s, Model.Settings.FormatSettings formatSettings,
+		                                                  Graphics graphics, RectangleF bounds,
+		                                                  out SizeF requestedSize)
+		{
+			Font font;
+			Brush brush;
+			SetNeutralDrawingItems(formatSettings, graphics, out font, out brush);
+
+			graphics.DrawString(s, font, brush, bounds, lineNumberStringFormat);
+
+			requestedSize = graphics.MeasureString(s, font, int.MaxValue, lineNumberStringFormat);
+		}
+
+		private static void SetNeutralDrawingItems(Model.Settings.FormatSettings settings,
+		                                           Graphics graphics, out Font font, out Brush brush)
+		{
+			string    fontName  = settings.Font.Name;
+			float     fontSize  = settings.Font.Size;
+			FontStyle fontStyle = FontStyle.Regular;
+			Color     fontColor = SystemColors.ControlText;
+
+			font  = SetFont (ref neutral.Font, fontName, fontSize, fontStyle, graphics);
+			brush = SetBrush(ref neutral.Brush, fontColor);
 		}
 
 		/// <summary></summary>
@@ -136,12 +172,11 @@ namespace YAT.Gui.Utilities
 				brush = SystemBrushes.HighlightText;
 
 			// Perform drawing.
-			graphics.DrawString(element.Text, font, brush, bounds, drawingStringFormat);
+			graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
 
-			// Measure consumed rectangle:
-			// Requested virtual and effectively drawn.
-			requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, virtualStringFormat);
-			drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, drawingStringFormat);
+			// Measure consumed rectangle: Requested virtual and effectively drawn.
+			requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
+			drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
 		}
 
 		private static void SetDrawingItems(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
@@ -152,7 +187,7 @@ namespace YAT.Gui.Utilities
 			FontStyle fontStyle;
 			Color fontColor;
 
-			if (element is Domain.DisplayElement.TxData)
+			if      (element is Domain.DisplayElement.TxData)
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
@@ -255,8 +290,8 @@ namespace YAT.Gui.Utilities
 			for (int i = 0; i < 256; i++)
 				tabStops[i] = size.Width * 14.5f;
 
-			drawingStringFormat.SetTabStops(0, tabStops);
-			virtualStringFormat.SetTabStops(0, tabStops);
+			monitorDrawingStringFormat.SetTabStops(0, tabStops);
+			monitorVirtualStringFormat.SetTabStops(0, tabStops);
 		}
 
 		private static SolidBrush SetBrush(ref SolidBrush cachedBrush, Color color)

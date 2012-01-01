@@ -416,7 +416,10 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.TimeStamp(ts));
 				lp.Add(new DisplayElement.LeftMargin());
 
-				// Attention: Clone elements because they are needed again below.
+				// Return elements.
+				//
+				// \attention:
+				// Clone elements because they are needed again a line below.
 				lineState.LineElements.AddRange(lp.Clone());
 				elements.AddRange(lp);
 			}

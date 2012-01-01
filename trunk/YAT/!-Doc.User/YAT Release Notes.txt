@@ -49,10 +49,10 @@ YAT 2.0 Beta 4 Candidate 2 Version 1.99.xx :: 2012-0x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- <> (feature request #3044830)
+- Line numbers can optionally be displayed in monitors (feature request #3442828)
 
 Important changes:
-- <> (feature request #3044830)
+- Monitors automatically start vertical scrolling again if the last item gets selected
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)

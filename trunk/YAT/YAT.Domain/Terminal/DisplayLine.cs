@@ -216,8 +216,8 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "- ElementCount: " +       Count.ToString("D", NumberFormatInfo.InvariantInfo) + Environment.NewLine +
-					indent + "- DataCount: " + this.dataCount.ToString("D", NumberFormatInfo.InvariantInfo) + Environment.NewLine +
+			return (indent + "- ElementCount: " +       Count.ToString(NumberFormatInfo.InvariantInfo) + Environment.NewLine +
+					indent + "- DataCount: " + this.dataCount.ToString(NumberFormatInfo.InvariantInfo) + Environment.NewLine +
 					indent + "- Elements: " + Environment.NewLine + ElementsToString(indent + "--"));
 		}
 
