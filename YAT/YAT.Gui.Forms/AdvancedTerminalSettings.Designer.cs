@@ -74,6 +74,7 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
+			this.checkBox_ShowLineNumbers = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
@@ -319,6 +320,7 @@
 			// 
 			this.groupBox_DisplaySettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowLineNumbers);
 			this.groupBox_DisplaySettings.Controls.Add(this.groupBox_Display_Tab);
 			this.groupBox_DisplaySettings.Controls.Add(this.groupBox_Display_Space);
 			this.groupBox_DisplaySettings.Controls.Add(this.groupBox_Display_ControlChars);
@@ -543,9 +545,9 @@
 			this.checkBox_ShowLength.AutoSize = true;
 			this.checkBox_ShowLength.Location = new System.Drawing.Point(131, 118);
 			this.checkBox_ShowLength.Name = "checkBox_ShowLength";
-			this.checkBox_ShowLength.Size = new System.Drawing.Size(85, 17);
+			this.checkBox_ShowLength.Size = new System.Drawing.Size(104, 17);
 			this.checkBox_ShowLength.TabIndex = 7;
-			this.checkBox_ShowLength.Text = "Show &length";
+			this.checkBox_ShowLength.Text = "Show line &length";
 			this.checkBox_ShowLength.CheckedChanged += new System.EventHandler(this.checkBox_ShowLength_CheckedChanged);
 			// 
 			// comboBox_TxRadix
@@ -597,6 +599,17 @@
 			this.label_MaxLineCount.TabIndex = 11;
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// checkBox_ShowLineNumbers
+			// 
+			this.checkBox_ShowLineNumbers.AutoSize = true;
+			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(131, 95);
+			this.checkBox_ShowLineNumbers.Name = "checkBox_ShowLineNumbers";
+			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(110, 17);
+			this.checkBox_ShowLineNumbers.TabIndex = 17;
+			this.checkBox_ShowLineNumbers.Text = "Show line n&umber";
+			this.checkBox_ShowLineNumbers.UseVisualStyleBackColor = true;
+			this.checkBox_ShowLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowLineNumbers_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -688,5 +701,6 @@
 		private System.Windows.Forms.GroupBox groupBox_Communication_Break;
 		private System.Windows.Forms.CheckBox checkBox_OutputBreakModifiable;
 		private System.Windows.Forms.CheckBox checkBox_IndicateBreakStates;
+		private System.Windows.Forms.CheckBox checkBox_ShowLineNumbers;
 	}
 }

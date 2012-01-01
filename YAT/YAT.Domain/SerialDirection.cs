@@ -34,13 +34,13 @@ namespace YAT.Domain
 	public enum SerialDirection
 	{
 		/// <summary></summary>
-		None = 0,
+		None,
 
 		/// <summary></summary>
-		Tx   = 1,
+		Tx,
 
 		/// <summary></summary>
-		Rx   = 2,
+		Rx,
 	}
 }
 

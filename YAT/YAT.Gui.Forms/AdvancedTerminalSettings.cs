@@ -156,6 +156,12 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Display.ShowRadix = checkBox_ShowRadix.Checked;
 		}
 
+		private void checkBox_ShowLineNumbers_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settings_Form.Terminal.Display.ShowLineNumbers = checkBox_ShowLineNumbers.Checked;
+		}
+
 		private void checkBox_ShowTimeStamp_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -365,6 +371,7 @@ namespace YAT.Gui.Forms
 
 			// Display:
 			checkBox_ShowRadix.Checked        = this.settings_Form.Terminal.Display.ShowRadix;
+			checkBox_ShowLineNumbers.Checked  = this.settings_Form.Terminal.Display.ShowLineNumbers;
 			checkBox_ShowTimeStamp.Checked    = this.settings_Form.Terminal.Display.ShowTimeStamp;
 			checkBox_ShowLength.Checked       = this.settings_Form.Terminal.Display.ShowLength;
 			checkBox_ShowConnectTime.Checked  = this.settings_Form.Terminal.Status.ShowConnectTime;
@@ -420,6 +427,7 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.Display.ShowRadix       = Domain.Settings.DisplaySettings.ShowRadixDefault;
 			this.settings_Form.Terminal.Display.ShowTimeStamp   = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
 			this.settings_Form.Terminal.Display.ShowLength      = Domain.Settings.DisplaySettings.ShowLengthDefault;
+			this.settings_Form.Terminal.Display.ShowLineNumbers = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;
 			this.settings_Form.Terminal.Status.ShowConnectTime  = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
 			this.settings_Form.Terminal.Status.ShowCountAndRate = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
 

@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using System.Security.Permissions;
 using System.Windows.Forms;
@@ -89,20 +90,25 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		// State
+		// Line numbers:
+		private const int VerticalScrollBarWidth = 18;
+		private const int AdditionalMargin = 4;
+		private const bool ShowLineNumbersDefault = false;
+
+		// State:
 		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
 		private const MonitorActivityState  ActivityStateDefault  = MonitorActivityState.Inactive;
 
-		// Image
+		// Image:
 		private const double MinImageOpacity       =  0.00; //   0%
 		private const double MaxImageOpacity       =  1.00; // 100%
 		private const double ImageOpacityIncrement = +0.10; // +10%
 		private const double ImageOpacityDecrement = -0.10; // -10%
 
-		// Lines
+		// Lines:
 		private const int MaxLineCountDefault = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
-		// Time status
+		// Time status:
 		private const bool ShowTimeStatusDefault = false;
 		private const bool ShowCountAndRateStatusDefault = false;
 
@@ -112,6 +118,11 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		// Line numbers:
+		private int initialLineNumberWidth;
+		private int currentLineNumberWidth;
+		private bool showLineNumbers = ShowLineNumbersDefault;
 
 		// State:
 		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
@@ -180,6 +191,14 @@ namespace YAT.Gui.Controls
 		public Monitor()
 		{
 			InitializeComponent();
+
+			// Attention:
+			// Since the line number list box will display the vertical scroll bar automatically,
+			// the line number list box is placed underneath the monitor list box and sized larger
+			// than it would have to be.
+			this.initialLineNumberWidth = EffectiveWidthToRequestedWidth(fastListBox_LineNumbers.Width);
+			ResizeAndRelocateListBoxes(this.initialLineNumberWidth);
+
 			SetControls();
 		}
 
@@ -252,6 +271,23 @@ namespace YAT.Gui.Controls
 				{
 					this.formatSettings = value;
 					SetFormatDependentControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
+		[Description("Show the line numbers.")]
+		[DefaultValue(ShowLineNumbersDefault)]
+		public virtual bool ShowLineNumbers
+		{
+			get { return (this.showLineNumbers); }
+			set
+			{
+				if (value != this.showLineNumbers)
+				{
+					this.showLineNumbers = value;
+					SetLineNumbersControls();
 				}
 			}
 		}
@@ -498,17 +534,17 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			ClearFastListBox();
+			ClearAndResetListBoxes();
 		}
 
 		/// <summary></summary>
 		public virtual void Reload()
 		{
-			FastListBox flb = fastListBox_Monitor;
+			ListBox lb = fastListBox_Monitor;
 
 			// Retrieve lines from list box.
 			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
-			foreach (object item in flb.Items)
+			foreach (object item in lb.Items)
 			{
 				Domain.DisplayLine line = item as Domain.DisplayLine;
 				lines.Add(line);
@@ -561,24 +597,24 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void SelectAll()
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
+			ListBox lb = fastListBox_Monitor;
+			lb.BeginUpdate();
 
-			for (int i = 0; i < flb.Items.Count; i++)
-				flb.SelectedIndex = i;
+			for (int i = 0; i < lb.Items.Count; i++)
+				lb.SelectedIndex = i;
 
-			flb.EndUpdate();
+			lb.EndUpdate();
 		}
 
 		/// <summary></summary>
 		public virtual void SelectNone()
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
+			ListBox lb = fastListBox_Monitor;
+			lb.BeginUpdate();
 
-			flb.ClearSelected();
+			lb.ClearSelected();
 
-			flb.EndUpdate();
+			lb.EndUpdate();
 		}
 
 		/// <summary></summary>
@@ -592,18 +628,18 @@ namespace YAT.Gui.Controls
 		{
 			get
 			{
-				FastListBox flb = fastListBox_Monitor;
+				ListBox lb = fastListBox_Monitor;
 
 				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>();
-				if (flb.SelectedItems.Count > 0)
+				if (lb.SelectedItems.Count > 0)
 				{
-					foreach (int i in flb.SelectedIndices)
-						selectedLines.Add(flb.Items[i] as Domain.DisplayLine);
+					foreach (int i in lb.SelectedIndices)
+						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
 				}
 				else
 				{
-					for (int i = 0; i < flb.Items.Count; i++)
-						selectedLines.Add(flb.Items[i] as Domain.DisplayLine);
+					for (int i = 0; i < lb.Items.Count; i++)
+						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
 				}
 				return (selectedLines);
 			}
@@ -668,37 +704,38 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-#if (FALSE)
 		/// <remarks>
-		/// Measures item height only, not needed for OwnerDrawnFixed.
+		/// Note that the 'MeasureItem' event measures the item height only and is not needed for 'OwnerDrawnFixed'.
 		/// </remarks>
-		private void fastListBox_Monitor_MeasureItem(object sender, MeasureItemEventArgs e)
+		private void fastListBox_LineNumbers_DrawItem(object sender, DrawItemEventArgs e)
 		{
-			if (e.Index >= 0)
+			unchecked
 			{
 				if (e.Index >= 0)
 				{
-					FastListBox flb = fastListBox_Monitor;
+					string lineNumberString = ((e.Index + 1).ToString(NumberFormatInfo.InvariantInfo));
 
-					SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(flb.Items[e.Index]), this.formatSettings, e.Graphics, e.Bounds);
+					ListBox lb = fastListBox_LineNumbers;
+					SizeF requestedSize;
 
-					int width  = (int)Math.Ceiling(size.Width);
-					int height = (int)Math.Ceiling(size.Height);
+					// e.DrawBackground(); is not needed and actually draws a white background.
+					Drawing.DrawAndMeasureLineNumberString(lineNumberString, this.formatSettings,
+					                                       e.Graphics, e.Bounds, out requestedSize);
+					// e.DrawFocusRectangle(); is not needed.
 
-					e.ItemWidth  = width;
-					e.ItemHeight = height;
-
-					if (width > flb.HorizontalExtent)
-						flb.HorizontalExtent = width;
-
-					if (height != flb.ItemHeight)
-						flb.ItemHeight = height;
+					// Only handle the item width.
+					// The item height is set in SetFormatDependentControls().
+					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
+					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(fastListBox_LineNumbers.Width)))
+						ResizeAndRelocateListBoxes(requestedWidth);
 				}
 			}
 		}
-#endif
+
+		private int fastListBox_Monitor_DrawItem_lastTopIndex = ControlEx.InvalidIndex;
 
 		/// <remarks>
+		/// Note that the 'MeasureItem' event measures the item height only and is not needed for 'OwnerDrawnFixed'.
 		/// 
 		/// ListBox
 		/// -------
@@ -756,23 +793,27 @@ namespace YAT.Gui.Controls
 			{
 				if (e.Index >= 0)
 				{
-					FastListBox flb = fastListBox_Monitor;
+					ListBox lb = fastListBox_Monitor;
 					SizeF requestedSize;
 					SizeF drawnSize;
 
 					e.DrawBackground();
-					Drawing.DrawAndMeasureItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
+					Drawing.DrawAndMeasureItem(lb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
 					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
 					e.DrawFocusRectangle();
 
+					// Only handle the item width and horizontal extent.
+					// The item height is set in SetFormatDependentControls().
 					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
-					int requestedHeight = (int)Math.Ceiling(requestedSize.Height);
+					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
+						lb.HorizontalExtent = requestedWidth;
 
-					if ((requestedWidth > 0) && (requestedWidth > flb.HorizontalExtent))
-						flb.HorizontalExtent = requestedWidth;
-
-					if ((requestedHeight > 0) && (requestedHeight != flb.ItemHeight))
-						flb.ItemHeight = requestedHeight;
+					// Check whether the top index has changed, if yes, also scroll the line numbers.
+					if (this.fastListBox_Monitor_DrawItem_lastTopIndex != lb.TopIndex)
+					{
+						this.fastListBox_Monitor_DrawItem_lastTopIndex = lb.TopIndex;
+						ListBoxEx.ScrollToIndex(fastListBox_LineNumbers, lb.TopIndex);
+					}
 				}
 			}
 		}
@@ -844,7 +885,7 @@ namespace YAT.Gui.Controls
 				}
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
 
-				// image blending
+				// Image blending.
 				switch (this.activityState)
 				{
 					case MonitorActivityState.Active:   this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = this.imageActive; break;
@@ -890,20 +931,33 @@ namespace YAT.Gui.Controls
 
 		private void SetFormatDependentControls()
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
+			ListBox lb;
+			Font f = this.formatSettings.Font;
 
-			flb.Font = this.formatSettings.Font;
-			flb.ItemHeight = this.formatSettings.Font.Height;
-			flb.ScrollToBottomIfNoItemsSelected();
-			flb.Invalidate();
+			lb = fastListBox_Monitor;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			ListBoxEx.ScrollToBottomIfNoItemButTheLastIsSelected(lb);
+			lb.Invalidate();
+			lb.EndUpdate();
 
-			flb.EndUpdate();
+			lb = fastListBox_LineNumbers;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			lb.Invalidate();
+			lb.EndUpdate();
 		}
 
 		private void SetCharReplaceDependentControls()
 		{
 			fastListBox_Monitor.Invalidate();
+		}
+
+		private void SetLineNumbersControls()
+		{
+			ResizeAndRelocateListBoxes(this.currentLineNumberWidth);
 		}
 
 		private void SetTimeStatusControls()
@@ -986,8 +1040,11 @@ namespace YAT.Gui.Controls
 
 		private void UpdateFastListBoxWithPendingElementsAndLines()
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
+			ListBox lblin = fastListBox_LineNumbers;
+			ListBox lbmon = fastListBox_Monitor;
+
+			lblin.BeginUpdate();
+			lbmon.BeginUpdate();
 
 			foreach (object obj in (this.pendingElementsAndLines))
 			{
@@ -1038,8 +1095,11 @@ namespace YAT.Gui.Controls
 			// Keep tick stamp of update.
 			this.updateTickStamp = DateTime.Now.Ticks;
 
-			flb.ScrollToBottomIfNoItemsSelected();
-			flb.EndUpdate();
+			if (ListBoxEx.ScrollToBottomIfNoItemButTheLastIsSelected(lbmon))
+				ListBoxEx.ScrollToBottom(lblin);
+
+			lbmon.EndUpdate();
+			lblin.EndUpdate();
 		}
 
 		/// <summary>
@@ -1051,18 +1111,20 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void AddElementToListBox(Domain.DisplayElement element)
 		{
-			FastListBox flb = fastListBox_Monitor;
+			ListBox lblin = fastListBox_LineNumbers;
+			ListBox lbmon = fastListBox_Monitor;
 
 			// If first line, add element to a new line.
-			if (flb.Items.Count <= 0)
+			if (lbmon.Items.Count <= 0)
 			{
-				flb.Items.Add(new Domain.DisplayLine(element));
+				lbmon.Items.Add(new Domain.DisplayLine(element));
+				lblin.Items.Add(0);
 			}
 			else
 			{
 				// Get current line.
-				int lastLineIndex = flb.Items.Count - 1;
-				Domain.DisplayLine current = flb.Items[lastLineIndex] as Domain.DisplayLine;
+				int lastLineIndex = lbmon.Items.Count - 1;
+				Domain.DisplayLine current = lbmon.Items[lastLineIndex] as Domain.DisplayLine;
 
 				// If first element, add element to line.
 				if (current.Count <= 0)
@@ -1077,11 +1139,15 @@ namespace YAT.Gui.Controls
 					if (current[lastElementIndex] is Domain.DisplayElement.LineBreak)
 					{
 						// Remove lines if maximum exceeded.
-						while (flb.Items.Count >= (this.maxLineCount))
-							flb.Items.RemoveAt(0);
+						while (lbmon.Items.Count >= (this.maxLineCount))
+						{
+							lbmon.Items.RemoveAt(0);
+							lblin.Items.RemoveAt(0);
+						}
 
 						// Add element to a new line.
-						flb.Items.Add(new Domain.DisplayLine(element));
+						lbmon.Items.Add(new Domain.DisplayLine(element));
+						lblin.Items.Add(0);
 					}
 					else
 					{
@@ -1091,15 +1157,52 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void ClearFastListBox()
+		private void ClearAndResetListBoxes()
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
+			ListBox lb;
+			
+			lb = fastListBox_LineNumbers;
+			lb.BeginUpdate();
+			lb.Items.Clear();
+			lb.EndUpdate();
 
-			flb.Items.Clear();
-			flb.HorizontalExtent = 0;
+			lb = fastListBox_Monitor;
+			lb.BeginUpdate();
+			lb.Items.Clear();
+			lb.HorizontalExtent = 0;
+			lb.EndUpdate();
 
-			flb.EndUpdate();
+			ResizeAndRelocateListBoxes(this.initialLineNumberWidth);
+		}
+
+		private void ResizeAndRelocateListBoxes(int requestedWidth)
+		{
+			fastListBox_LineNumbers.Visible = this.showLineNumbers;
+
+			if (this.showLineNumbers)
+			{
+				int effectiveWidth = requestedWidth + VerticalScrollBarWidth + AdditionalMargin;
+				fastListBox_LineNumbers.Width = effectiveWidth;
+				fastListBox_LineNumbers.Invalidate();
+
+				int effectiveLeft = requestedWidth + AdditionalMargin; // Hide the vertical scroll bar.
+				fastListBox_Monitor.Left = effectiveLeft;
+				fastListBox_Monitor.Width = (Width - effectiveLeft);
+				fastListBox_Monitor.Invalidate();
+			}
+			else
+			{
+				fastListBox_Monitor.Left = 0;
+				fastListBox_Monitor.Width = Width;
+				fastListBox_Monitor.Invalidate();
+			}
+
+			this.currentLineNumberWidth = requestedWidth;
+		}
+
+		private int EffectiveWidthToRequestedWidth(int effectiveWidth)
+		{
+			return (effectiveWidth - (VerticalScrollBarWidth + AdditionalMargin));
 		}
 
 		private int TicksToTimeout(long ticks)

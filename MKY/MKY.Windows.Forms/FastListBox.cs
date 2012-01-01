@@ -156,22 +156,6 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		/// <summary>
-		/// Scroll list to bottom if no items are selected.
-		/// </summary>
-		public virtual void ScrollToBottomIfNoItemsSelected()
-		{
-			if ((SelectedItems.Count == 0) && (Items.Count > 0))
-				TopIndex = (Items.Count - 1);
-		}
-
-		#endregion
-
 		#region Protected Methods
 		//==========================================================================================
 		// Private Methods

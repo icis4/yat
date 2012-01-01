@@ -651,13 +651,15 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
 
 			// Options
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked     = this.settingsRoot.Display.ShowRadix;
-			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = this.settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked    = this.settingsRoot.Display.ShowLength;
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked      = this.settingsRoot.Display.ShowRadix;
+			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked  = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked     = this.settingsRoot.Display.ShowLength;
 			
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = isText;
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
+
+			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
 
 			this.isSettingControls.Leave();
 		}
@@ -746,6 +748,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowEol_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Format_Click(object sender, EventArgs e)
@@ -864,6 +871,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
+			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+
 			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
 			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
 			toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Enabled = showConnectTime;
@@ -938,6 +947,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_MonitorContextMenu_ShowEol_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
@@ -2025,6 +2039,14 @@ namespace YAT.Gui.Forms
 			ResumeLayout();
 		}
 
+		private void SetMonitorLineNumbers()
+		{
+			bool showLineNumbers = this.settingsRoot.Display.ShowLineNumbers;
+			monitor_Tx.ShowLineNumbers    = showLineNumbers;
+			monitor_Bidir.ShowLineNumbers = showLineNumbers;
+			monitor_Rx.ShowLineNumbers    = showLineNumbers;
+		}
+
 		private void SetMonitorIOStatus()
 		{
 			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
@@ -2038,9 +2060,9 @@ namespace YAT.Gui.Forms
 						activityState = Gui.Controls.MonitorActivityState.Pending;
 				}
 			}
-			monitor_Tx.ActivityState = activityState;
+			monitor_Tx.ActivityState    = activityState;
 			monitor_Bidir.ActivityState = activityState;
-			monitor_Rx.ActivityState = activityState;
+			monitor_Rx.ActivityState    = activityState;
 		}
 
 		private void SetMonitorCountAndRateStatus()
@@ -2443,6 +2465,7 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Display))
 			{
 				// DisplaySettings changed.
+				SetMonitorLineNumbers();
 				SetMonitorContents();
 				SetDisplayControls();
 			}
@@ -2483,6 +2506,7 @@ namespace YAT.Gui.Forms
 
 			SetIOStatus();
 			SetIOControlControls();
+			SetMonitorLineNumbers();
 			SetMonitorIOStatus();
 			SetMonitorCountAndRateStatus();
 			SetMonitorContents();
