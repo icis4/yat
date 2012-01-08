@@ -1,6 +1,9 @@
 
-Search for the following expressions and update year:
-> Copyright © 2003-2011 Matthias Kläy.
-> Copyright © 2007-2011 Matthias Kläy.
-> Copyright © 2010-2011 Matthias Kläy.
-> 2011, Matthias Kläy
+Search for the following expressions thoughout "*.sln;*csproj;*.vcproj;*.vdproj;*.ps1;*.bat;*.txt;*.cs" and update year:
+> "Copyright © 2003-2012 Matthias Kläy."
+> "Copyright © 2007-2012 Matthias Kläy."
+> "Copyright © 2010-2012 Matthias Kläy."
+> "2012, Matthias Kläy"
+
+Then, verify throughtout all files and there should be no hits except within SVN and other explainable locations:
+> "2012<space>"
