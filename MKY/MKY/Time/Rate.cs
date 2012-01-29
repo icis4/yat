@@ -70,13 +70,14 @@ namespace MKY.Time
 		private bool isDisposed;
 
 		private System.Timers.Timer timer;
-		private object timer_Elapsed_SyncObj = new object();
+		private object timerElapsedSyncObj = new object();
 
 		private int tick;
 		private int interval;
 		private int window;
 
 		private Queue<TimeStampItem<int>> queue = new Queue<TimeStampItem<int>>();
+		private object queueSyncObj = new object();
 		private int value;
 
 		#endregion
@@ -222,26 +223,42 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			this.queue.Clear();
+			ClearQueue();
 			CalculateValueFromQueueAndSignalIfChanged();
+		}
+
+		#region Methods > Private
+		//------------------------------------------------------------------------------------------
+		// Methods > Private
+		//------------------------------------------------------------------------------------------
+
+		private void ClearQueue()
+		{
+			lock (this.queueSyncObj)
+				this.queue.Clear();
 		}
 
 		private void AddValueToQueue(int value)
 		{
-			this.queue.Enqueue(new TimeStampItem<int>(value));
+			lock (this.queueSyncObj)
+				this.queue.Enqueue(new TimeStampItem<int>(value));
 		}
 
 		private void RemoveObsoleteFromQueue()
 		{
 			bool isWithinWindow = true;
 			DateTime otherEndOfWindow = DateTime.Now - TimeSpan.FromMilliseconds(this.window);
-			while ((this.queue.Count > 0) && isWithinWindow)
+
+			lock (this.queueSyncObj)
 			{
-				TimeStampItem<int> tsi = this.queue.Peek();
-				if (tsi.TimeStamp < otherEndOfWindow)
-					this.queue.Dequeue();
-				else
-					isWithinWindow = false;
+				while ((this.queue.Count > 0) && isWithinWindow)
+				{
+					TimeStampItem<int> tsi = this.queue.Peek();
+					if (tsi.TimeStamp < otherEndOfWindow)
+						this.queue.Dequeue();
+					else
+						isWithinWindow = false;
+				}
 			}
 		}
 
@@ -266,7 +283,12 @@ namespace MKY.Time
 				int numberOfIntervals = (int)(this.window / this.interval);
 				int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance<int>(numberOfIntervals, 0);
 				DateTime now = DateTime.Now;
-				foreach (TimeStampItem<int> tsi in this.queue.ToArray())
+
+				TimeStampItem<int>[] qa;
+				lock (this.queueSyncObj)
+					qa = this.queue.ToArray();
+
+				foreach (TimeStampItem<int> tsi in qa)
 				{
 					TimeSpan ts = (now - tsi.TimeStamp);
 					int i = Int32Ex.LimitToBounds((int)(ts.TotalMilliseconds / this.interval), 0, numberOfIntervals - 1);
@@ -302,6 +324,8 @@ namespace MKY.Time
 
 		#endregion
 
+		#endregion
+
 		#region Conversion Operators
 
 		/// <summary></summary>
@@ -324,7 +348,7 @@ namespace MKY.Time
 			{
 				// Ensure that only one timer elapsed event thread is active at a time.
 				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(timer_Elapsed_SyncObj))
+				if (Monitor.TryEnter(timerElapsedSyncObj))
 				{
 					try
 					{
@@ -333,7 +357,7 @@ namespace MKY.Time
 					}
 					finally
 					{
-						Monitor.Exit(timer_Elapsed_SyncObj);
+						Monitor.Exit(timerElapsedSyncObj);
 					}
 				}
 			}
