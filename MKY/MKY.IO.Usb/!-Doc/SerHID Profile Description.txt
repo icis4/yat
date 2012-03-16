@@ -1,0 +1,66 @@
+
+USB Ser/HID
+===========
+
+USB Ser/HID Device is a USB profile that uses a standard HID descriptor to transfer serial data
+between a USB Ser/HID Device and a USB Host. Thus, this profile can be used as a replacement for
+serial interfaces such as RS-232 or RS-422 or even USB Ser/CDC. The main advantage is the fact
+that this profile doesn't need any driver installation if the USB Host is a personal computer.
+
+
+References
+----------
+[1] USB Implementers Forum      http://www.usb.org
+[2] USB Specification 2.0 & 3.0 http://www.usb.org/developers/docs/
+[3] USB Class Specifications    http://www.usb.org/developers/devclass_docs
+[4] USB HID Specification 1.11  http://www.usb.org/developers/devclass_docs/HID1_11.pdf
+
+
+Pros and Cons of the Ser/HID Device profile
+-------------------------------------------
++ Can replace COM ports
++ Does not require any driver installation
++ Is very versatile and extendable
+- Needs a Ser/HID capable middle ware on PC
+- Needs a Ser/HID implementation on the device
+- Is not an official USB HID Device profile
+
+
+HID Report Descriptor
+---------------------
+USB_HID_GLOBAL_USAGE_PAGE + 1,
+USB_HID_USAGE_PAGE_GENERIC_DESKTOP_CONTROLS,
+USB_HID_LOCAL_USAGE + 1,             0x00,
+USB_HID_MAIN_COLLECTION + 1,         USB_HID_COLLECTION_APPLICATION,
+    USB_HID_LOCAL_USAGE + 1,         0x00,
+    USB_HID_GLOBAL_LOG_MIN + 1,      0x80,
+    USB_HID_GLOBAL_LOG_MAX + 1,      0x7F,
+    USB_HID_GLOBAL_REPORT_SIZE + 1,  0x08,
+    USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,
+    USB_HID_MAIN_INPUT + 1,          USB_HID_MAIN_VARIABLE,
+    USB_HID_LOCAL_USAGE + 1,         0x00,
+    USB_HID_GLOBAL_LOG_MIN + 1,      0x80,
+    USB_HID_GLOBAL_LOG_MAX + 1,      0x7F,
+    USB_HID_GLOBAL_REPORT_SIZE + 1,  0x08,
+    USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,
+    USB_HID_MAIN_OUTPUT + 1,         USB_HID_MAIN_VARIABLE,
+USB_HID_MAIN_ENDCOLLECTION
+
+
+Requirements for USB Ser/HID Device developers
+----------------------------------------------
+Either, implement the 3 pipes that are mandatory for HID devices:
+  > Control IN
+  > Control OUT
+  > Interrupt IN
+Or, implement 4 pipes:
+  > Control IN
+  > Control OUT
+  > Interrupt IN
+  > Interrupt OUT
+MKY.IO.Usb can handle both variants since it uses the Win32 'hid.dll' which itself is capable of
+handling both variants. For details about pipes of HID devices see [4], chapter 4.4.
+
+
+------------------------------------------------------------------
+2012-03 / Matthias Kläy, based on documentation by Adrian Rempfler
