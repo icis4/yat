@@ -10,10 +10,15 @@ that this profile doesn't need any driver installation if the USB Host is a pers
 
 References
 ----------
-[1] USB Implementers Forum      http://www.usb.org
-[2] USB Specification 2.0 & 3.0 http://www.usb.org/developers/docs/
-[3] USB Class Specifications    http://www.usb.org/developers/devclass_docs
-[4] USB HID Specification 1.11  http://www.usb.org/developers/devclass_docs/HID1_11.pdf
+[1] USB Implementers Forum             http://www.usb.org
+[2] USB Specification 2.0 & 3.0        http://www.usb.org/developers/docs/
+[3] USB Class Specifications           http://www.usb.org/developers/devclass_docs
+[4] USB HID Specification 1.11         http://www.usb.org/developers/devclass_docs/HID1_11.pdf
+
+[5] Using V-USB and the HID Class
+    http://lackawanna.hackhut.com/2011/10/04/using-v-usb-and-the-hid-class-part-i/
+    http://lackawanna.hackhut.com/2011/10/06/using-v-usb-and-the-hid-class-part-ii/
+    http://lackawanna.hackhut.com/2011/10/06/using-v-usb-and-the-hid-class-part-iiiiii/
 
 
 Pros and Cons of the Ser/HID Device profile
@@ -21,22 +26,22 @@ Pros and Cons of the Ser/HID Device profile
 + Can replace COM ports
 + Does not require any driver installation
 + Is very versatile and extendable
-- Needs a Ser/HID capable middle ware on PC
-- Needs a Ser/HID implementation on the device
+- Needs a Ser/HID capable middleware on the PC (e.g. MKY.IO.Usb)
+- Needs a Ser/HID implementation on the device (e.g. [5])
 - Is not an official USB HID Device profile
 
 
-HID Report Descriptor
----------------------
+Example of an HID Report Descriptor that can be handled by YAT USB Ser/HID
+--------------------------------------------------------------------------
 USB_HID_GLOBAL_USAGE_PAGE + 1,
 USB_HID_USAGE_PAGE_GENERIC_DESKTOP_CONTROLS,
-USB_HID_LOCAL_USAGE + 1,             0x00,
+USB_HID_LOCAL_USAGE + 1,             0x00,  // <= The HID Usage Page must be 0x00
 USB_HID_MAIN_COLLECTION + 1,         USB_HID_COLLECTION_APPLICATION,
     USB_HID_LOCAL_USAGE + 1,         0x00,
-    USB_HID_GLOBAL_LOG_MIN + 1,      0x80,
-    USB_HID_GLOBAL_LOG_MAX + 1,      0x7F,
-    USB_HID_GLOBAL_REPORT_SIZE + 1,  0x08,
-    USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,
+    USB_HID_GLOBAL_LOG_MIN + 1,      0x80,  // <= The data type shall be -128..+127
+    USB_HID_GLOBAL_LOG_MAX + 1,      0x7F,  // <=   i.e. signed 8 bits or int8_t 
+    USB_HID_GLOBAL_REPORT_SIZE + 1,  0x08,  // <= Each report shall be 8 bits
+    USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,  // <= Report count, see 1) below
     USB_HID_MAIN_INPUT + 1,          USB_HID_MAIN_VARIABLE,
     USB_HID_LOCAL_USAGE + 1,         0x00,
     USB_HID_GLOBAL_LOG_MIN + 1,      0x80,
@@ -45,6 +50,12 @@ USB_HID_MAIN_COLLECTION + 1,         USB_HID_COLLECTION_APPLICATION,
     USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,
     USB_HID_MAIN_OUTPUT + 1,         USB_HID_MAIN_VARIABLE,
 USB_HID_MAIN_ENDCOLLECTION
+
+1)
+The report count (or report length) ideally is equal or smaller than the length of a USB pipe.
+The pipe length typically is 8 to 64 bytes, depending on the USB controller that is used.
+In the example above, the pipe length is 64 and the report length is limited to 63. A byte is
+reserved for future use, it could be used for e.g. serve as a logical channel ID.
 
 
 Requirements for USB Ser/HID Device developers
@@ -59,7 +70,8 @@ Or, implement 4 pipes:
   > Interrupt IN
   > Interrupt OUT
 MKY.IO.Usb can handle both variants since it uses the Win32 'hid.dll' which itself is capable of
-handling both variants. For details about pipes of HID devices see [4], chapter 4.4.
+handling both variants. For details about pipes of HID devices see [4], chapter 4.4. For an example
+implementation of Ser/HID on a device, see [5].
 
 
 ------------------------------------------------------------------
