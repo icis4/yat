@@ -1,28 +1,38 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ALAZ.SystemEx</RootNamespace>
-    <AssemblyName>ALAZ.SystemEx</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\ALAZLibSN.snk</AssemblyOriginatorKeyFile>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-  </PropertyGroup>
+﻿
+All projects within YAT contain 'Any CPU', x86 as well as x64 configurations.
+YAT itself only uses the 'Any CPU' configuration, this also is the configuration being released.
+See below for reasons for the x86 and x64 configurations.
+
+
+Project > Build > General
+	@ Debug
+		CODE_ANALYSIS
+		Define DEBUG
+		Define TRACE
+	@ Release
+		Define TRACE
+		Optimize code
+
+Project > Build > Output
+	@ Any CPU
+		bin\<Debug|Release>\
+		Generate XML documentation file
+	@ x86
+		bin\x86\<Debug|Release>\
+		No XML documentation
+	@ x64
+		bin\x64\<Debug|Release>\
+		No XML documentation
+
+
+.vcproj contents
+----------------
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\<<PROJECT>>.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -31,6 +41,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\Release\<<PROJECT>>.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -72,31 +84,27 @@
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\ALAZ.Version.cs">
-      <Link>Properties\ALAZ.Version.cs</Link>
-    </Compile>
-    <Compile Include="BaseDisposable.cs" />
-    <Compile Include="BaseFinalizable.cs" />
-    <Compile Include="RunTimeEx\InteropServicesEx\MarshalEx.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThreadingEx\ThreadEx.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\ALAZLibSN.snk" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-</Project>
+
+
+x86 and x64
+-----------
+There are use cases where YAT sub-projects/assemblies are used in conjunction with non-managed C++
+assemblies, e.g. in case of automatized software testing of embedded C++ code. In these cases, the
+C++ code cannot be built into managed assemblies as it would no longer 1:1 relate to the C++ code
+that is excuted on the embedded system. To support such use cases, YAT...
+...projects contain x86 (and x64) configurations.
+...a YAT assembly based solution can build and release x86 (and x64) configurations.
+
+However, YAT...
+...still builds and releases 'Any CPU' only
+
+In general:
+> x86 EXEs/DLLs must be combined with x86 DLLs
+> x64 EXEs/DLLs must be combined with x64 DLLs
+> 'Any CPU' EXEs/DLLs must be combined with 'Any CPU' DLLs
+
+Remarks:
+> 'Any CPU' enables the .NET CLR to perform target-dependent optimizations
+> There are different opinions on the real benefits of such optimizations, you find pro's and con's
+> Nevertheless, the optimizations could at least result in better speed
+> In VS2010 there still are 'Any CPU', x86 as well as x64 configurations
