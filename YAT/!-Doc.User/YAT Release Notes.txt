@@ -53,6 +53,8 @@ New:
 
 Important changes:
 - Monitors automatically start vertical scrolling again if the last item gets selected
+- x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
+  x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
