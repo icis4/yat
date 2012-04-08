@@ -37,7 +37,7 @@ namespace YAT.Domain
 	public class RawRepository
 	{
 		private int capacity;
-		private Queue<RawElement> queue;
+        private Queue<RawElement> queue;
 
 		/// <summary></summary>
 		public RawRepository(int capacity)
@@ -64,10 +64,13 @@ namespace YAT.Domain
 
 				if (value < this.queue.Count)
 				{
-					while (this.queue.Count > value)
-						this.queue.Dequeue();
+                    lock (this.queue)
+                    {
+                        while (this.queue.Count > value)
+                            this.queue.Dequeue();
 
-					this.capacity = value;
+                        this.capacity = value;
+                    }
 				}
 			}
 		}
@@ -75,32 +78,44 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Enqueue(RawElement re)
 		{
-			while (this.queue.Count >= this.capacity)
-				this.queue.Dequeue();
+            lock (this.queue)
+            {
+                while (this.queue.Count >= this.capacity)
+                    this.queue.Dequeue();
 
-			this.queue.Enqueue(re);
+                this.queue.Enqueue(re);
+            }
 		}
 
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			this.queue.Clear();
+            lock (this.queue)
+                this.queue.Clear();
 		}
 
 		/// <summary></summary>
 		public virtual byte[] ToByteArray()
 		{
-			List<byte> to = new List<byte>(this.queue.Count);
-			foreach (RawElement re in this.queue.ToArray())
-				to.AddRange(re.Data);
-
+            List<byte> to;
+            lock (this.queue)
+            {
+                to = new List<byte>(this.queue.Count);
+                foreach (RawElement re in this.queue.ToArray())
+                    to.AddRange(re.Data);
+            }
 			return (to.ToArray());
 		}
 
 		/// <summary></summary>
 		public virtual List<RawElement> ToElements()
 		{
-			return (new List<RawElement>(this.queue));
+            List<RawElement> to;
+            lock (this.queue)
+            {
+                to = new List<RawElement>(this.queue);
+            }
+			return (to);
 		}
 
 		/// <summary></summary>

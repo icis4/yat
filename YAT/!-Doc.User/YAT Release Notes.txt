@@ -59,6 +59,7 @@ Important changes:
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
 - Optional replacement of space by open box character again works (bug #3451736)
+- IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085)
 - ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634)
 
 Limitations and known issues:
