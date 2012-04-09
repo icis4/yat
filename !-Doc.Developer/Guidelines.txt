@@ -9,6 +9,10 @@ Sign all library/dll assemblies using the strong name tool:
 4. Move the .snk file to the "\Properties" directory of the project
 5. Project Properties > Signing > Sign
 
+Note that it is not possible to link to an .snk file. Thus, it is not possible
+to create a single .snk file for collection of assemblies and than link to that
+single file from the various projects.
+
 Enforce CLS compliance
 [assembly: CLSCompliant(true)]
 
