@@ -58,7 +58,12 @@ namespace YAT.Controller
 		[OptionArg(Name = "NoLogo", ShortName = "nl", Description = "Do not display title and copyright.")]
 		public bool NoLogo;
 
-		/// <summary></summary>
+        /// <summary></summary>
+        [SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+        [OptionArg(Name = "NoView", ShortName = "nv", Description = "Start the YAT application just on the console, without any GUI at all.")]
+        public bool NoView;
+
+        /// <summary></summary>
 		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Names = new string[] { "Help", "HelpText" }, ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
@@ -84,15 +89,23 @@ namespace YAT.Controller
 		// Properties
 		//==========================================================================================
 
-		/// <summary>
-		/// Gets a value indicating whether [show logo].
-		/// </summary>
-		public bool ShowLogo
-		{
-			get { return (!(NoLogo)); }
-		}
+        /// <summary>
+        /// Gets a value indicating whether [show logo].
+        /// </summary>
+        public bool ShowLogo
+        {
+            get { return (!(NoLogo)); }
+        }
 
-		#endregion
+        /// <summary>
+        /// Gets a value indicating whether [show view].
+        /// </summary>
+        public bool ShowView
+        {
+            get { return (!(NoView)); }
+        }
+
+        #endregion
 	}
 }
 

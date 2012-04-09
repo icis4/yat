@@ -197,9 +197,9 @@ namespace YAT.Gui.Forms
 						MessageBox.Show
 							(
 							this,
-							"YAT could not be started because the given command line is invalid." + Environment.NewLine +
-							"Use 'YAT.exe /?' for command line help.",
-							"Invalid Command Line",
+							@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
+							@"Use ""YAT.exe /?"" for command line help.",
+							@"Invalid Command Line",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
 							);
@@ -209,8 +209,8 @@ namespace YAT.Gui.Forms
 						MessageBox.Show
 							(
 							this,
-							"YAT could not be started!",
-							"Application Start Error",
+							@"YAT could not be started!",
+							@"Application Start Error",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Error
 							);
