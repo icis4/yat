@@ -22,25 +22,23 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace YAT
 {
 	/// <summary>
-	/// Application main class of YAT for GUI operation.
+	/// Application main class of YAT for console operation.
 	/// </summary>
 	/// <remarks>
 	/// This class is separated into its own .exe project for those who want to use YAT components
 	/// within their own application context.
 	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
 	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public sealed class YAT
+	public sealed class YATConsole
 	{
 		/// <remarks>
 		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".
 		/// </remarks>
-		private YAT()
+        private YATConsole()
 		{
 		}
 
@@ -51,7 +49,7 @@ namespace YAT
 		/// <returns>
 		/// The application's exit code according to <see cref="Controller.MainResult"/>.
 		/// </returns>
-        /// <remarks>
+		/// <remarks>
         /// There must separate Windows.Forms application and console application projects to
         /// properly support running YAT from console as well as with GUI.
         /// 
@@ -76,12 +74,12 @@ namespace YAT
         /// asking other .NET developers.
         /// 
         /// Note that this remark can also be found at YAT.YAT.Main().
-        /// </remarks>
-        [STAThread]
+		/// </remarks>
+		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
 			Controller.Main main = new Controller.Main(commandLineArgs);
-			Controller.MainResult result = main.RunNormally();
+            Controller.MainResult result = main.RunFromConsole();
 			return ((int)result);
 		}
 	}

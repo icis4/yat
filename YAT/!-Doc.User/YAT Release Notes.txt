@@ -52,6 +52,8 @@ New:
 - Line numbers can optionally be displayed in monitors (feature request #3442828)
 
 Important changes:
+- Additional executable 'YATConsole.exe' added to ensure proper command line operation in case of
+  'cmd' as well as 'PowerShell' (bug #3482103)
 - Monitors automatically start vertical scrolling again if the last item gets selected
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)
@@ -73,7 +75,7 @@ Limitations and known issues:
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
 - Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
-- Support for serial ports which are named other than COM isn't supported by .NET
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
@@ -160,7 +162,7 @@ Limitations and known issues:
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
 - Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
-- Support for serial ports which are named other than COM isn't supported by .NET
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
@@ -221,7 +223,7 @@ Limitations and known issues:
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
-- Support for serial ports which are named other than COM isn't supported by .NET
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
@@ -267,7 +269,7 @@ Limitations and known issues:
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
-- Support for serial ports which are named other than COM isn't supported by .NET
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
@@ -364,7 +366,7 @@ Limitations and known issues:
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
-- Support for serial ports which are named other than COM isn't supported by .NET
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
@@ -433,7 +435,7 @@ Fixed bugs:
 Limitations and known issues:
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
-- Support for serial ports which are named other than COM isn't supported by .NET
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - UTF-16/32 testing pending (bug #1931537)
 - More advanced text line send and receive options not yet implemented
