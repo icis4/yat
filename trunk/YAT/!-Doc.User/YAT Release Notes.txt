@@ -63,6 +63,7 @@ Fixed bugs:
 - Optional replacement of space by open box character again works (bug #3451736)
 - IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085)
 - ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634)
+- Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms
