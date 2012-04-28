@@ -63,13 +63,22 @@ namespace YAT.Gui.Controls
 		// Types
 		//==========================================================================================
 
-		private enum FocusState
+		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+		// warnings for each undocumented member below. Documenting each member makes little sense
+		// since they pretty much tell their purpose and documentation tags between the members
+		// makes the code less readable.
+		#pragma warning disable 1591
+
+		/// <summary></summary>
+		protected enum FocusState
 		{
 			Inactive,
 			HasFocus,
 			IsLeaving,
 			IsLeavingControl,
 		}
+
+		#pragma warning restore 1591
 
 		#endregion
 
@@ -80,6 +89,9 @@ namespace YAT.Gui.Controls
 
 		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
+
+		/// <summary></summary>
+		public const bool SendImmediatelyDefault = false;
 
 		#endregion
 
@@ -95,11 +107,11 @@ namespace YAT.Gui.Controls
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
 
-		private FocusState focusState = FocusState.Inactive;
+		private FocusState editFocusState = FocusState.Inactive;
 		private bool isValidated;
 		private bool sendIsRequested;
 
-		private bool sendImmediately;
+		private bool sendImmediately = SendImmediatelyDefault;
 		private string partialCommandLine;
 
 		#endregion
@@ -113,6 +125,11 @@ namespace YAT.Gui.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the Command property is changed.")]
 		public event EventHandler CommandChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the EditFocusState property is changed.")]
+		public event EventHandler EditFocusStateChanged;
 
 		/// <summary></summary>
 		[Category("Action")]
@@ -162,6 +179,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		[DefaultValue(SendImmediatelyDefault)]
 		public virtual bool SendImmediately
 		{
 			get { return (this.sendImmediately); }
@@ -209,6 +227,19 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool EditIsActive
+		{
+			get { return (this.editFocusState != FocusState.Inactive); }
+		}
+
+		/// <summary></summary>
+		protected virtual void SetEditFocusState(FocusState editFocusSet)
+		{
+			this.editFocusState = editFocusSet;
+			OnEditFocusStateChanged(new EventArgs());
+		}
+
 		#endregion
 
 		#region Methods
@@ -233,21 +264,24 @@ namespace YAT.Gui.Controls
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((this.focusState != FocusState.Inactive) && (keyData == Keys.Enter))
+			if (EditIsActive)
 			{
-				if (button_SendCommand.Enabled)
+				if (keyData == Keys.Enter)
 				{
-					if (this.sendImmediately)
+					if (button_SendCommand.Enabled)
 					{
-						CreatePartialEolCommand();
-						RequestSendPartialEolCommand();
-					}
-					else
-					{
-						RequestSendCompleteCommand();
-					}
+						if (this.sendImmediately)
+						{
+							CreatePartialEolCommand();
+							RequestSendPartialEolCommand();
+						}
+						else
+						{
+							RequestSendCompleteCommand();
+						}
 
-					return (true);
+						return (true);
+					}
 				}
 			}
 
@@ -286,7 +320,7 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void SendCommand_Enter(object sender, EventArgs e)
 		{
-			this.focusState = FocusState.Inactive;
+			SetEditFocusState(FocusState.Inactive);
 		}
 
 		/// <remarks>
@@ -298,9 +332,9 @@ namespace YAT.Gui.Controls
 		private void SendCommand_Leave(object sender, EventArgs e)
 		{
 			if (this.isValidated)
-				this.focusState = FocusState.Inactive;
+				SetEditFocusState(FocusState.Inactive);
 			else
-				this.focusState = FocusState.IsLeavingControl;
+				SetEditFocusState(FocusState.IsLeavingControl);
 		}
 
 		#endregion
@@ -318,7 +352,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
-			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineText)
+			if ((this.editFocusState == FocusState.Inactive) && !this.command.IsSingleLineText)
 			{
 				this.isSettingControls.Enter();
 				comboBox_Command.Text      = "";
@@ -327,7 +361,7 @@ namespace YAT.Gui.Controls
 				this.isSettingControls.Leave();
 			}
 
-			this.focusState = FocusState.HasFocus;
+			SetEditFocusState(FocusState.HasFocus);
 			this.isValidated = false;
 		}
 
@@ -344,9 +378,9 @@ namespace YAT.Gui.Controls
 		private void comboBox_Command_Leave(object sender, EventArgs e)
 		{
 			if (this.isValidated)
-				this.focusState = FocusState.Inactive;
+				SetEditFocusState(FocusState.Inactive);
 			else
-				this.focusState = FocusState.IsLeaving;
+				SetEditFocusState(FocusState.IsLeaving);
 		}
 
 		private void comboBox_Command_KeyPress(object sender, KeyPressEventArgs e)
@@ -382,16 +416,16 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				if (!this.isValidated && (this.focusState != FocusState.IsLeavingControl))
+				if (!this.isValidated && (this.editFocusState != FocusState.IsLeavingControl))
 				{
 					if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
 					{
 						this.isValidated = true;
 
-						if (this.focusState == FocusState.IsLeaving)
-							this.focusState = FocusState.Inactive;
+						if (this.editFocusState == FocusState.IsLeaving)
+							SetEditFocusState(FocusState.Inactive);
 						else
-							this.focusState = FocusState.HasFocus;
+							SetEditFocusState(FocusState.HasFocus);
 
 						CreateSingleLineCommand(comboBox_Command.Text);
 						return;
@@ -403,16 +437,16 @@ namespace YAT.Gui.Controls
 					{
 						this.isValidated = true;
 
-						if (this.focusState == FocusState.IsLeaving)
-							this.focusState = FocusState.Inactive;
+						if (this.editFocusState == FocusState.IsLeaving)
+							SetEditFocusState(FocusState.Inactive);
 						else
-							this.focusState = FocusState.HasFocus;
+							SetEditFocusState(FocusState.HasFocus);
 
 						CreateSingleLineCommand(comboBox_Command.Text);
 						return;
 					}
 
-					this.focusState = FocusState.HasFocus;
+					SetEditFocusState(FocusState.HasFocus);
 					comboBox_Command.Select(invalidTextStart, invalidTextLength);
 					e.Cancel = true;
 				}
@@ -451,7 +485,7 @@ namespace YAT.Gui.Controls
 
 			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((int)(this.splitterRatio * splitContainer.Width), 0, splitContainer.Width);
 
-			if (this.focusState == FocusState.Inactive)
+			if (this.editFocusState == FocusState.Inactive)
 			{
 				if (this.command.IsText)
 				{
@@ -605,7 +639,7 @@ namespace YAT.Gui.Controls
 
 		private void RequestSendCommand()
 		{
-			if (this.focusState == FocusState.Inactive)
+			if (this.editFocusState == FocusState.Inactive)
 			{
 				OnSendCommandRequest(new EventArgs());
 			}
@@ -630,6 +664,12 @@ namespace YAT.Gui.Controls
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(CommandChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnEditFocusStateChanged(EventArgs e)
+		{
+			EventHelper.FireSync(EditFocusStateChanged, this, e);
 		}
 
 		/// <summary></summary>

@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -29,6 +34,8 @@ using MKY.Event;
 using MKY.Recent;
 
 using YAT.Model.Types;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -68,6 +75,11 @@ namespace YAT.Gui.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the Command property is changed.")]
 		public event EventHandler CommandChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the EditFocusState property is changed.")]
+		public event EventHandler EditFocusStateChanged;
 
 		/// <summary></summary>
 		[Category("Action")]
@@ -131,6 +143,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		[DefaultValue(SendCommand.SendImmediatelyDefault)]
 		public virtual bool SendCommandImmediately
 		{
 			get { return (sendCommand.SendImmediately); }
@@ -216,6 +229,12 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool EditIsActive
+		{
+			get { return (sendCommand.EditIsActive); }
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
@@ -231,6 +250,11 @@ namespace YAT.Gui.Controls
 		private void sendCommand_CommandChanged(object sender, EventArgs e)
 		{
 			OnCommandChanged(e);
+		}
+
+		private void sendCommand_EditFocusStateChanged(object sender, EventArgs e)
+		{
+			OnEditFocusStateChanged(e);
 		}
 
 		private void sendCommand_SendCommandRequest(object sender, EventArgs e)
@@ -285,6 +309,12 @@ namespace YAT.Gui.Controls
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(CommandChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnEditFocusStateChanged(EventArgs e)
+		{
+			EventHelper.FireSync(EditFocusStateChanged, this, e);
 		}
 
 		/// <summary></summary>

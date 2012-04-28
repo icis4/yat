@@ -13,6 +13,9 @@ Options
         > Diplay > Line numers = true
       > C#
         > Tabs > Keep tabs
+  > Debugging
+    > General
+      > Step over properties/operators = false
 
 
 StyleCop

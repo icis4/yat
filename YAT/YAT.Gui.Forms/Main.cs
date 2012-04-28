@@ -1308,17 +1308,17 @@ namespace YAT.Gui.Forms
 
 		private void workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
-			// Create terminal form
+			// Create terminal form.
 			Terminal mdiChild = new Terminal(e.Terminal);
 
-			// Link MDI child this MDI parent
+			// Link MDI child this MDI parent.
 			mdiChild.MdiParent = this;
 
 			mdiChild.Changed    += new EventHandler(mdiChild_Changed);
 			mdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(mdiChild_Saved);
 			mdiChild.FormClosed += new FormClosedEventHandler(mdiChild_FormClosed);
 
-			// Show form
+			// Show form.
 			mdiChild.Show();
 
 			SetChildControls();
