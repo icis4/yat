@@ -103,7 +103,7 @@ namespace YAT.Gui.Forms
 		private Model.Terminal terminal;
 
 		// Monitors:
-		private Domain.RepositoryType monitorSelection = Domain.RepositoryType.None;
+		private Domain.RepositoryType lastMonitorSelection = Domain.RepositoryType.None;
 
 		// Settings:
 		private TerminalSettingsRoot settingsRoot;
@@ -281,19 +281,19 @@ namespace YAT.Gui.Forms
 		/// <summary></summary>
 		public virtual void RequestSaveToFile()
 		{
-			ShowSaveMonitorDialog(GetMonitor(this.monitorSelection));
+			ShowSaveMonitorDialog(GetMonitor(this.lastMonitorSelection));
 		}
 
 		/// <summary></summary>
 		public virtual void RequestCopyToClipboard()
 		{
-			CopyMonitorToClipboard(GetMonitor(this.monitorSelection));
+			CopyMonitorToClipboard(GetMonitor(this.lastMonitorSelection));
 		}
 
 		/// <summary></summary>
 		public virtual void RequestPrint()
 		{
-			ShowPrintMonitorDialog(GetMonitor(this.monitorSelection));
+			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
 		}
 
 		/// <summary></summary>
@@ -431,12 +431,13 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  terminalIsStarted;
 
 			// Edit
-			bool monitorIsSelected = (this.monitorSelection != Domain.RepositoryType.None);
-			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = monitorIsSelected;
-			toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = monitorIsSelected;
-			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      = monitorIsSelected;
-			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = monitorIsSelected;
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           = monitorIsSelected;
+			bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
+			bool editIsNotActive = (!send.EditIsActive);
+			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
+			toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
+			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && editIsNotActive);
+			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      = monitorIsDefined;
+			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           = monitorIsDefined;
 
 			this.isSettingControls.Leave();
 		}
@@ -463,29 +464,27 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SelectAll_Click(object sender, EventArgs e)
 		{
-			Controls.Monitor monitor = GetMonitor(this.monitorSelection);
-			monitor.SelectAll();
+			SelectAllMonitorContents(GetMonitor(this.lastMonitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SelectNone_Click(object sender, EventArgs e)
 		{
-			Controls.Monitor monitor = GetMonitor(this.monitorSelection);
-			monitor.SelectNone();
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click(object sender, EventArgs e)
-		{
-			ShowSaveMonitorDialog(GetMonitor(this.monitorSelection));
+			SelectNoneMonitorContents(GetMonitor(this.lastMonitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
 		{
-			CopyMonitorToClipboard(GetMonitor(this.monitorSelection));
+			CopyMonitorToClipboard(GetMonitor(this.lastMonitorSelection));
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click(object sender, EventArgs e)
+		{
+			ShowSaveMonitorDialog(GetMonitor(this.lastMonitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Print_Click(object sender, EventArgs e)
 		{
-			ShowPrintMonitorDialog(GetMonitor(this.monitorSelection));
+			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -1517,50 +1516,20 @@ namespace YAT.Gui.Forms
 
 		private void monitor_Tx_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been actived last.
-			this.monitorSelection = Domain.RepositoryType.Tx;
-		}
-
-		private void monitor_Tx_CopyRequest(object sender, System.EventArgs e)
-		{
-			CopyMonitorToClipboard(monitor_Tx);
-		}
-
-		private void monitor_Tx_PrintRequest(object sender, System.EventArgs e)
-		{
-			PrintMonitor(monitor_Tx);
+			// Remember which monitor has been activated last.
+			this.lastMonitorSelection = Domain.RepositoryType.Tx;
 		}
 
 		private void monitor_Bidir_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been actived last.
-			this.monitorSelection = Domain.RepositoryType.Bidir;
-		}
-
-		private void monitor_Bidir_CopyRequest(object sender, System.EventArgs e)
-		{
-			CopyMonitorToClipboard(monitor_Bidir);
-		}
-
-		private void monitor_Bidir_PrintRequest(object sender, System.EventArgs e)
-		{
-			PrintMonitor(monitor_Bidir);
+			// Remember which monitor has been activated last.
+			this.lastMonitorSelection = Domain.RepositoryType.Bidir;
 		}
 
 		private void monitor_Rx_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been actived last.
-			this.monitorSelection = Domain.RepositoryType.Rx;
-		}
-
-		private void monitor_Rx_CopyRequest(object sender, System.EventArgs e)
-		{
-			CopyMonitorToClipboard(monitor_Rx);
-		}
-
-		private void monitor_Rx_PrintRequest(object sender, System.EventArgs e)
-		{
-			PrintMonitor(monitor_Rx);
+			// Remember which monitor has been activated last.
+			this.lastMonitorSelection = Domain.RepositoryType.Rx;
 		}
 
 		#endregion
@@ -1596,6 +1565,15 @@ namespace YAT.Gui.Forms
 		private void send_CommandChanged(object sender, EventArgs e)
 		{
 			this.settingsRoot.Implicit.SendCommand.Command = send.Command;
+		}
+
+		/// <remarks>
+		/// Ensure that the edit shortcuts such as Ctrl-A are disabled while the send control is
+		/// being edited.
+		/// </remarks>
+		private void send_EditFocusStateChanged(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
 		private void send_SendCommandRequest(object sender, EventArgs e)
@@ -2005,8 +1983,8 @@ namespace YAT.Gui.Forms
 				case Domain.RepositoryType.Tx:    return (monitor_Tx);
 				case Domain.RepositoryType.Bidir: return (monitor_Bidir);
 				case Domain.RepositoryType.Rx:    return (monitor_Rx);
+				default:                          return (null);
 			}
-			return (null);
 		}
 
 		#endregion
@@ -2149,9 +2127,27 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void SelectAllMonitorContents(Controls.Monitor monitor)
+		{
+			monitor.SelectAll();
+		}
+
+		private void SelectNoneMonitorContents(Controls.Monitor monitor)
+		{
+			monitor.SelectNone();
+		}
+
+		private void CopyMonitorToClipboard(Controls.Monitor monitor)
+		{
+			SetFixedStatusText("Copying data to clipboard...");
+			Model.Utilities.RtfWriter.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
+			SetTimedStatusText("Data copied to clipboard");
+		}
+
 		private void ShowSaveMonitorDialog(Controls.Monitor monitor)
 		{
-			SetFixedStatusText("Saving data as...");
+			SetFixedStatusText("Preparing to save data...");
+
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
 			sfd.Filter = ExtensionSettings.TextFilesFilter;
@@ -2206,27 +2202,26 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void CopyMonitorToClipboard(Controls.Monitor monitor)
-		{
-			SetFixedStatusText("Copying data to clipboard...");
-			Model.Utilities.RtfWriter.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
-			SetTimedStatusText("Data copied to clipboard");
-		}
-
 		private void ShowPrintMonitorDialog(Controls.Monitor monitor)
 		{
+			SetFixedStatusText("Preparing to print data...");
+
 			PrintDialog pd = new PrintDialog();
 			pd.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
+
+			// Note that the PrintDialog class may not work on AMD64 microprocessors unless you set the UseEXDialog property to true (MSDN):
+			if (EnvironmentEx.IsWindows64)
+				pd.UseEXDialog = true;
+
 			if (pd.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				PrintMonitor(monitor, pd.PrinterSettings);
 			}
-		}
-
-		private void PrintMonitor(Controls.Monitor monitor)
-		{
-			PrintMonitor(monitor, new System.Drawing.Printing.PrinterSettings());
+			else
+			{
+				ResetStatusText();
+			}
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]

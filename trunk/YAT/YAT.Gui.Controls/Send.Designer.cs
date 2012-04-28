@@ -28,8 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.groupBox_SendCommand = new System.Windows.Forms.GroupBox();
 			this.sendCommand = new YAT.Gui.Controls.SendCommand();
@@ -78,21 +76,12 @@
 			// 
 			// sendCommand
 			// 
-			command1.CommandLines = new string[] {
-		"<1 lines...> []"};
-			command1.DefaultRadix = YAT.Domain.Radix.String;
-			command1.Description = "<1 lines...> []";
-			command1.FilePath = "";
-			command1.IsFilePath = false;
-			command1.MultiLineText = new string[] {
-		"<1 lines...> []"};
-			command1.SingleLineText = "<1 lines...> []";
-			this.sendCommand.Command = command1;
 			this.sendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.sendCommand.Location = new System.Drawing.Point(3, 13);
 			this.sendCommand.Name = "sendCommand";
 			this.sendCommand.Size = new System.Drawing.Size(706, 27);
 			this.sendCommand.TabIndex = 0;
+			this.sendCommand.EditFocusStateChanged += new System.EventHandler(this.sendCommand_EditFocusStateChanged);
 			this.sendCommand.SendCommandRequest += new System.EventHandler(this.sendCommand_SendCommandRequest);
 			this.sendCommand.CommandChanged += new System.EventHandler(this.sendCommand_CommandChanged);
 			// 
@@ -111,16 +100,6 @@
 			// sendFile
 			// 
 			this.sendFile.Dock = System.Windows.Forms.DockStyle.Fill;
-			command2.CommandLines = new string[] {
-		"<1 lines...> []"};
-			command2.DefaultRadix = YAT.Domain.Radix.String;
-			command2.Description = "<1 lines...> []";
-			command2.FilePath = "";
-			command2.IsFilePath = false;
-			command2.MultiLineText = new string[] {
-		"<1 lines...> []"};
-			command2.SingleLineText = "<1 lines...> []";
-			this.sendFile.FileCommand = command2;
 			this.sendFile.Location = new System.Drawing.Point(3, 13);
 			this.sendFile.Name = "sendFile";
 			this.sendFile.Size = new System.Drawing.Size(706, 27);

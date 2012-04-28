@@ -165,23 +165,6 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-		#region Events
-		//==========================================================================================
-		// Events
-		//==========================================================================================
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("Event raised when copying is requested.")]
-		public event EventHandler CopyRequest;
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("Event raised when printing is requested.")]
-		public event EventHandler PrintRequest;
-
-		#endregion
-
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -656,26 +639,14 @@ namespace YAT.Gui.Controls
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if      (keyData == (Keys.Control | Keys.A)) // Ctrl-A = Select All
+			// Ctrl-A = Select All is implemented directly within the monitor since it is a common shortcut.
+			// Ctrl-Shift-N = Select None must not be implemented in here, but by the parent form instead.
+			if (keyData == (Keys.Control | Keys.A))
 			{
 				SelectAll();
 				return (true);
 			}
-			else if (keyData == (Keys.Control | Keys.N)) // Ctrl-N = Select None
-			{
-				SelectNone();
-				return (true);
-			}
-			else if (keyData == (Keys.Control | Keys.C)) // Ctrl-C = Copy
-			{
-				OnCopyRequest(new EventArgs());
-				return (true);
-			}
-			else if (keyData == (Keys.Control | Keys.P)) // Ctrl-P = Print
-			{
-				OnPrintRequest(new EventArgs());
-				return (true);
-			}
+
 			return (base.ProcessCmdKey(ref msg, keyData));
 		}
 
@@ -1285,25 +1256,6 @@ namespace YAT.Gui.Controls
 			timer_UpdateTimeout.Stop();
 			timer_UpdateTimeout.Interval = timeout;
 			timer_UpdateTimeout.Start();
-		}
-
-		#endregion
-
-		#region Event Invoking
-		//==========================================================================================
-		// Event Invoking
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected virtual void OnCopyRequest(EventArgs e)
-		{
-			EventHelper.FireSync(CopyRequest, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnPrintRequest(EventArgs e)
-		{
-			EventHelper.FireSync(PrintRequest, this, e);
 		}
 
 		#endregion

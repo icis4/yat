@@ -64,6 +64,8 @@ Fixed bugs:
 - IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085)
 - ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634)
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
+- Edit shortcuts such as Ctrl-A and Ctrl-C reenabled in 'Send Command' box (bug #3459888)
+- Printer dialog also gets shown on 64-bit systems
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms

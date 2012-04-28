@@ -33,47 +33,56 @@ namespace MKY.Win32
 		/// <summary>
 		/// Find out if the current operating system is Windows Vista or later.
 		/// </summary>
-		public static bool IsWindowsVistaOrLater()
+		public static bool IsWindowsVistaOrLater
 		{
-			if (!EnvironmentEx.IsWindows())
-				return (false);
+			get
+			{
+				if (!EnvironmentEx.IsWindows)
+					return (false);
 
-			// Windows Vista is version 6.0.
-			System.Version versionXP = new System.Version(6, 0);
+				// Windows Vista is version 6.0.
+				System.Version versionXP = new System.Version(6, 0);
 
-			System.Version environmentVersion = Environment.OSVersion.Version;
-			return (environmentVersion >= versionXP);
+				System.Version environmentVersion = Environment.OSVersion.Version;
+				return (environmentVersion >= versionXP);
+			}
 		}
 
 		/// <summary>
 		/// Find out if the current operating system is Windows XP or later.
 		/// </summary>
-		public static bool IsWindowsXpOrLater()
+		public static bool IsWindowsXpOrLater
 		{
-			if (!EnvironmentEx.IsWindows())
-				return (false);
+			get
+			{
+				if (!EnvironmentEx.IsWindows)
+					return (false);
 
-			// Windows XP is version 5.1.
-			System.Version versionXP = new System.Version(5, 1);
+				// Windows XP is version 5.1.
+				System.Version versionXP = new System.Version(5, 1);
 
-			System.Version environmentVersion = Environment.OSVersion.Version;
-			return (environmentVersion >= versionXP);
+				System.Version environmentVersion = Environment.OSVersion.Version;
+				return (environmentVersion >= versionXP);
+			}
 		}
 
 		/// <summary>
 		/// Find out if the current operating system is Windows 98 Standard Edition.
 		/// </summary>
-		public static bool IsWindows98Standard()
+		public static bool IsWindows98Standard
 		{
-			if (!EnvironmentEx.IsWindows())
-				return (false);
+			get
+			{
+				if (!EnvironmentEx.IsWindows)
+					return (false);
 
-			// Windows 98 Standard Edition is version 4.10 with a build number less than 2183.
-			System.Version version98 = new System.Version(4, 10);
-			System.Version versionAbove98 = new System.Version(4, 10, 2183);
+				// Windows 98 Standard Edition is version 4.10 with a build number less than 2183.
+				System.Version version98 = new System.Version(4, 10);
+				System.Version versionAbove98 = new System.Version(4, 10, 2183);
 
-			System.Version environmentVersion = Environment.OSVersion.Version;
-			return ((environmentVersion >= version98) && (environmentVersion < versionAbove98));
+				System.Version environmentVersion = Environment.OSVersion.Version;
+				return ((environmentVersion >= version98) && (environmentVersion < versionAbove98));
+			}
 		}
 	}
 }

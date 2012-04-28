@@ -40,21 +40,35 @@ namespace MKY
 		/// <summary>
 		/// Returns <c>true</c> if operating system is Win32 or Win64 or compatible.
 		/// </summary>
-		public static bool IsWindows()
+		public static bool IsWindows
 		{
-			switch (Environment.OSVersion.Platform)
+			get
 			{
-				case PlatformID.Win32S:
-				case PlatformID.Win32Windows:
-				case PlatformID.Win32NT:
-					return (true);
+				switch (Environment.OSVersion.Platform)
+				{
+					case PlatformID.Win32S:
+					case PlatformID.Win32Windows:
+					case PlatformID.Win32NT: // Also covers Win64!
+						return (true);
 
-				case PlatformID.WinCE:
-				case PlatformID.Unix:
-				case PlatformID.Xbox:
-				case PlatformID.MacOSX:
-				default:
-					return (false);
+					case PlatformID.WinCE:
+					case PlatformID.Unix:
+					case PlatformID.Xbox:
+					case PlatformID.MacOSX:
+					default:
+						return (false);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if operating system is Win64 or compatible.
+		/// </summary>
+		public static bool IsWindows64
+		{
+			get
+			{
+				return (IsWindows && (IntPtr.Size == 8));
 			}
 		}
 
