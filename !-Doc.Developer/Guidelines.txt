@@ -185,6 +185,11 @@ Useful .NET classes
 - DefaultFontValue
 
 
+Windows.Forms
+-------------
+- 'StatusStrip' items do not show tool tip by default, 'ShowItemToolTips' must be manually set to 'True'
+
+
 Known issues
 ------------
 - Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
