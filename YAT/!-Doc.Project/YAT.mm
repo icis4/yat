@@ -1,4 +1,4 @@
-<map version="0.8.1">
+<map version="0.9.0">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1293640779449" ID="Freemind_Link_1211602595" MODIFIED="1293640779449" TEXT="YAT">
 <node CREATED="1293640779452" MODIFIED="1293640779452" POSITION="right" TEXT="Bug Management">
@@ -130,7 +130,7 @@
 <node CREATED="1293640779452" MODIFIED="1293640779452" TEXT="AutoHotkey"/>
 </node>
 </node>
-<node CREATED="1293640779453" ID="Freemind_Link_329730933" MODIFIED="1293640779453" POSITION="left" TEXT="Development Management">
+<node CREATED="1293640779453" ID="Freemind_Link_329730933" MODIFIED="1336593225549" POSITION="left" TEXT="Development Management">
 <node CREATED="1293640779453" MODIFIED="1293640779453" TEXT="Optimizations">
 <node CREATED="1293640779453" MODIFIED="1293640779453" TEXT="Monitors">
 <node CREATED="1293640779453" MODIFIED="1293640779453" TEXT="Refactor monitors into model?"/>
@@ -195,6 +195,9 @@
 <node CREATED="1319663141564" ID="Freemind_Link_238224752" MODIFIED="1319663146393" TEXT="Improve CommandLine"/>
 <node CREATED="1319663101764" ID="Freemind_Link_134438230" MODIFIED="1319663129625" TEXT="Consider &lt;RCR&gt;\Logger\sw\win32\RoboScope\RoboScope\Utilities\CmdLine.cs"/>
 </node>
+<node CREATED="1336593230863" ID="ID_852723562" MODIFIED="1336593233231" TEXT="Font">
+<node CREATED="1336593234343" ID="ID_152420549" MODIFIED="1336593259831" TEXT="freefont-ttf.zip\sfd &gt; FreeMono would be an alternative"/>
+</node>
 </node>
 <node CREATED="1293642556772" ID="Freemind_Link_978153231" MODIFIED="1293642559097" POSITION="left" TEXT="Hosting">
 <node CREATED="1293642603781" ID="Freemind_Link_403076306" MODIFIED="1293642632345" TEXT="Delete old releases only if SF requests to do so">
@@ -211,7 +214,7 @@
 <node CREATED="1293640779453" MODIFIED="1293640779453" TEXT="Example see http://de.wikipedia.org/wiki/Media_Player_Classic"/>
 </node>
 <node CREATED="1293640779453" MODIFIED="1293640779453" TEXT="C&apos;t Artikel"/>
-<node CREATED="1293640779453" MODIFIED="1293640779453" TEXT="Elektronik">
+<node CREATED="1293640779453" ID="ID_299483563" MODIFIED="1293640779453" TEXT="Elektronik">
 <node CREATED="1293640779453" LINK="http://www.elektroniknet.de/" MODIFIED="1293640779453" TEXT="http://www.elektroniknet.de/"/>
 </node>
 </node>
