@@ -48,7 +48,7 @@ I get another deadlock because I have to synchronize events onto my main/GUI thr
 
 UDP
 
-I have removed all UDP stuff and used System.Net.Sockets.UdpClient directly
+I have removed all UDP stuff and use System.Net.Sockets.UdpClient directly
 
 
 By the way, are you still developing ALAZ? Or has this project, as so many others, come to a dead-end?
