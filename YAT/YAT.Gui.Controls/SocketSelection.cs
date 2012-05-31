@@ -306,6 +306,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -360,6 +361,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -410,6 +412,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -462,6 +465,7 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Leave();
 		}
 
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetLocalInterfaceList()
 		{
 			if (Enabled)

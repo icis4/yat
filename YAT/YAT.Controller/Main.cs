@@ -35,6 +35,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Event;
+using MKY.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -53,12 +54,12 @@ namespace YAT.Controller
 	/// </remarks>
 	public class Main : IDisposable
 	{
-        #region Constants
-        //==========================================================================================
+		#region Constants
+		//==========================================================================================
 		// Constants
 		//==========================================================================================
 
-        private const int DefaultWidth = 80;
+		private const int DefaultWidth = 80;
 
 		private static readonly string[] Logo =
 		{
@@ -213,121 +214,121 @@ namespace YAT.Controller
 		// Methods
 		//==========================================================================================
 
-        /// <summary>
-        /// This is the main run method for normal operation.
-        /// </summary>
-        public virtual MainResult RunNormally()
-        {
-            return (Run(false));
-        }
-
-        /// <summary>
-        /// This is the main run method for console operation.
-        /// </summary>
-        public virtual MainResult RunFromConsole()
+		/// <summary>
+		/// This is the main run method for normal operation.
+		/// </summary>
+		public virtual MainResult RunNormally()
 		{
-            return (Run(true));
-        }
+			return (Run(false));
+		}
 
-        private MainResult Run(bool runFromConsole)
-        {
-            bool showLogo = true;
-            bool showView = true;
-            bool showHelp = false;
-            MainResult mainResult = MainResult.Success;
+		/// <summary>
+		/// This is the main run method for console operation.
+		/// </summary>
+		public virtual MainResult RunFromConsole()
+		{
+			return (Run(true));
+		}
 
-            // Check command line arguments.
-            if (!this.commandLineArgs.IsValid)
-            {
-                mainResult = MainResult.CommandLineError;
-                showHelp = true;
-            }
-            else
-            {
-                showLogo = this.commandLineArgs.ShowLogo;
-                showView = this.commandLineArgs.ShowView;
-                showHelp = this.commandLineArgs.HelpIsRequested;
-            }
+		private MainResult Run(bool runFromConsole)
+		{
+			bool showLogo = true;
+			bool showView = true;
+			bool showHelp = false;
+			MainResult mainResult = MainResult.Success;
 
-            // Show help or run application.
-            if (showHelp)
-            {
-                if (showView)
-                    ShowMessageBoxHelp(showLogo);
-                else
-                    ShowConsoleHelp(showLogo);
-            }
-            else
-            {
-                mainResult = Run(runFromConsole, showView);
-            }
+			// Check command line arguments.
+			if (!this.commandLineArgs.IsValid)
+			{
+				mainResult = MainResult.CommandLineError;
+				showHelp = true;
+			}
+			else
+			{
+				showLogo = this.commandLineArgs.ShowLogo;
+				showView = this.commandLineArgs.ShowView;
+				showHelp = this.commandLineArgs.HelpIsRequested;
+			}
 
-            return (mainResult);
-        }
+			// Show help or run application.
+			if (showHelp)
+			{
+				if (showView)
+					ShowMessageBoxHelp(showLogo);
+				else
+					ShowConsoleHelp(showLogo);
+			}
+			else
+			{
+				mainResult = Run(runFromConsole, showView);
+			}
 
-        /// <summary>
-        /// This is the main run method that supports all run options. Do not directly call
-        /// this  method for normal or console operation. Call <see cref="RunNormally"/> or
-        /// <see cref="RunFromConsole"/> instead. Call this method directly for automated
-        /// testing purposes.
-        /// </summary>
+			return (mainResult);
+		}
+
+		/// <summary>
+		/// This is the main run method that supports all run options. Do not directly call
+		/// this  method for normal or console operation. Call <see cref="RunNormally"/> or
+		/// <see cref="RunFromConsole"/> instead. Call this method directly for automated
+		/// testing purposes.
+		/// </summary>
 		/// <remarks>
-        /// There are the following use cases to run YAT. This YAT.Controller.Run() method
-        /// supports all these use cases as also shown below:
-        /// 
-        /// 1. 'Normal' GUI operation
-        ///    > Start YAT from the Windows start menu
-        ///    > Equal to start YAT.exe directly
-        ///    ==> Run(false, true);
-        /// 
-        /// 2. 'File' triggered GUI operation
-        ///    > Start YAT by executing a .yaw or .yat file
-        ///    > Uses file type relationship as defined by YAT.Setup
-        ///    ==> Run(false, true);
-        /// 
-        /// 3. 'cmd console' operation with GUI
-        ///    > Must use 'YATConsole' to ensure that output is properly routed back to console
-        ///    ==> Run(true, true);
-        /// 
-        /// 4. 'PowerShell' operation with GUI
-        ///    > Must use 'YATConsole' to ensure that output is properly routed back to PowerShell
-        ///    ==> Run(true, true);
-        /// 
-        /// 5. 'cmd console' operation with console only, no GUI at all
-        ///    > Must use 'YATConsole' with the -NoView/-nv option
-        ///    ==> Run(true, false);
-        /// 
-        /// 6. 'PowerShell' operation with console only, no GUI at all
-        ///    > Must use 'YATConsole' with the -NoView/-nv option
-        ///    ==> Run(true, false);
-        /// 
-        /// 7. YAT testing
-        ///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
-        ///    ==> Run(false, false) or Run(true, false) to test the behaviour (e.g. controller test)
-        /// 
-        /// </remarks>
+		/// There are the following use cases to run YAT. This YAT.Controller.Run() method
+		/// supports all these use cases as also shown below:
+		/// 
+		/// 1. 'Normal' GUI operation
+		///    > Start YAT from the Windows start menu
+		///    > Equal to start YAT.exe directly
+		///    ==> Run(false, true);
+		/// 
+		/// 2. 'File' triggered GUI operation
+		///    > Start YAT by executing a .yaw or .yat file
+		///    > Uses file type relationship as defined by YAT.Setup
+		///    ==> Run(false, true);
+		/// 
+		/// 3. 'cmd console' operation with GUI
+		///    > Must use 'YATConsole' to ensure that output is properly routed back to console
+		///    ==> Run(true, true);
+		/// 
+		/// 4. 'PowerShell' operation with GUI
+		///    > Must use 'YATConsole' to ensure that output is properly routed back to PowerShell
+		///    ==> Run(true, true);
+		/// 
+		/// 5. 'cmd console' operation with console only, no GUI at all
+		///    > Must use 'YATConsole' with the -NoView/-nv option
+		///    ==> Run(true, false);
+		/// 
+		/// 6. 'PowerShell' operation with console only, no GUI at all
+		///    > Must use 'YATConsole' with the -NoView/-nv option
+		///    ==> Run(true, false);
+		/// 
+		/// 7. YAT testing
+		///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
+		///    ==> Run(false, false) or Run(true, false) to test the behaviour (e.g. controller test)
+		/// 
+		/// </remarks>
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)
 		{
 			MainResult mainResult = MainResult.Success;
 
-            if      (!runFromConsole &&  runWithView)
-                RunFullyWithView();                        // 1, 2, 7
-            else if ( runFromConsole &&  runWithView)
-                RunWithViewButOutputErrorsOnConsole();     // 3, 4, 7
-            else if ( runFromConsole && !runWithView)
-                RunFullyFromConsole();                     // 5, 6, 7
-            else
-                RunInvisible();                            // 7
+			if      (!runFromConsole &&  runWithView)
+				RunFullyWithView();                        // 1, 2, 7
+			else if ( runFromConsole &&  runWithView)
+				RunWithViewButOutputErrorsOnConsole();     // 3, 4, 7
+			else if ( runFromConsole && !runWithView)
+				RunFullyFromConsole();                     // 5, 6, 7
+			else
+				RunInvisible();                            // 7
 
-            if (mainResult == MainResult.CommandLineError)
-            {
-                bool showLogo = this.commandLineArgs.ShowLogo;
+			if (mainResult == MainResult.CommandLineError)
+			{
+				bool showLogo = this.commandLineArgs.ShowLogo;
 
-                if (runWithView)
-                    ShowMessageBoxHelp(showLogo);
-                else
-                    ShowConsoleHelp(showLogo);
-            }
+				if (runWithView)
+					ShowMessageBoxHelp(showLogo);
+				else
+					ShowConsoleHelp(showLogo);
+			}
 
 			return (mainResult);
 		}
@@ -337,11 +338,11 @@ namespace YAT.Controller
 		#region Private Methods
 		//==========================================================================================
 		// Private Methods
-        //==========================================================================================
+		//==========================================================================================
 
-        #region Private Methods > RunFullyWithView
-        //------------------------------------------------------------------------------------------
-        // Private Methods > RunFullyWithView
+		#region Private Methods > RunFullyWithView
+		//------------------------------------------------------------------------------------------
+		// Private Methods > RunFullyWithView
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -351,7 +352,7 @@ namespace YAT.Controller
 			MainResult mainResult = MainResult.Success;
 
 			AppDomain curentDomain = AppDomain.CurrentDomain;
-            curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_curentDomain_UnhandledException);
+			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_curentDomain_UnhandledException);
 
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -381,7 +382,7 @@ namespace YAT.Controller
 					{
 						// Assume unhandled exceptions and attach the application to the respective handler.
 						mainResult = MainResult.UnhandledException;
-                        Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+						Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
@@ -389,7 +390,7 @@ namespace YAT.Controller
 						// This call does not return until the application exits.
 						Application.Run(view);
 
-                        Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+						Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						Model.MainResult result = view.MainResult;
 						mainResult = ConvertToMainResult(result);
@@ -411,7 +412,7 @@ namespace YAT.Controller
 		/// <remarks>
 		/// In case of an <see cref="Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
-        private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+		private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
 			string message = "An unhandled synchronous exception occured while running" + Application.ProductName + ".";
 			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, false, true);
@@ -426,7 +427,7 @@ namespace YAT.Controller
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit.
 		/// </remarks>
-        private void RunFullyWithView_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunFullyWithView_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			Exception ex = e.ExceptionObject as Exception;
 			string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
@@ -440,122 +441,122 @@ namespace YAT.Controller
 
 		#endregion
 
-        #region Private Methods > RunWithViewButOutputErrorsOnConsole
-        //------------------------------------------------------------------------------------------
-        // Private Methods > RunWithViewButOutputErrorsOnConsole
-        //------------------------------------------------------------------------------------------
+		#region Private Methods > RunWithViewButOutputErrorsOnConsole
+		//------------------------------------------------------------------------------------------
+		// Private Methods > RunWithViewButOutputErrorsOnConsole
+		//------------------------------------------------------------------------------------------
 
-        /// <summary></summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-        private MainResult RunWithViewButOutputErrorsOnConsole()
-        {
-            MainResult mainResult = MainResult.Success;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		private MainResult RunWithViewButOutputErrorsOnConsole()
+		{
+			MainResult mainResult = MainResult.Success;
 
-            AppDomain curentDomain = AppDomain.CurrentDomain;
-            curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException);
+			AppDomain curentDomain = AppDomain.CurrentDomain;
+			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException);
 
-            // Create model and view and run application.
-            using (Model.Main model = new Model.Main(this.commandLineArgs))
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+			// Create model and view and run application.
+			using (Model.Main model = new Model.Main(this.commandLineArgs))
+			{
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
 
-                try
-                {
-                    Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
-                    if (welcomeScreen.ShowDialog() != DialogResult.OK)
-                        return (Controller.MainResult.ApplicationSettingsError);
-                }
-                catch (Exception ex)
-                {
-                    string message = "An unhandled synchronous exception occured while preparing " + Application.ProductName + ".";
-                    Console.WriteLine(message);
+				try
+				{
+					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+					if (welcomeScreen.ShowDialog() != DialogResult.OK)
+						return (Controller.MainResult.ApplicationSettingsError);
+				}
+				catch (Exception ex)
+				{
+					string message = "An unhandled synchronous exception occured while preparing " + Application.ProductName + ".";
+					Console.WriteLine(message);
 
-                    if (ex != null)
-                        MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+					if (ex != null)
+						MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
 
-                    return (MainResult.UnhandledException);
-                }
+					return (MainResult.UnhandledException);
+				}
 
-                try
-                {
-                    // If everything is fine so far, start main application including view.
-                    using (Gui.Forms.Main view = new Gui.Forms.Main(model))
-                    {
-                        // Assume unhandled exceptions and attach the application to the respective handler.
-                        mainResult = MainResult.UnhandledException;
-                        Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+				try
+				{
+					// If everything is fine so far, start main application including view.
+					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+					{
+						// Assume unhandled exceptions and attach the application to the respective handler.
+						mainResult = MainResult.UnhandledException;
+						Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
-                        // Start the Win32 message loop on the current thread and the main form.
-                        //
-                        // \attention:
-                        // This call does not return until the application exits.
-                        Application.Run(view);
+						// Start the Win32 message loop on the current thread and the main form.
+						//
+						// \attention:
+						// This call does not return until the application exits.
+						Application.Run(view);
 
-                        Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+						Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
-                        Model.MainResult result = view.MainResult;
-                        mainResult = ConvertToMainResult(result);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
-                    Console.WriteLine(message);
+						Model.MainResult result = view.MainResult;
+						mainResult = ConvertToMainResult(result);
+					}
+				}
+				catch (Exception ex)
+				{
+					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+					Console.WriteLine(message);
 
-                    if (ex != null)
-                        MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+					if (ex != null)
+						MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
 
-                    return (MainResult.UnhandledException);
-                }
+					return (MainResult.UnhandledException);
+				}
 
-                return (mainResult);
-            } // Dispose of model to ensure immediate release of resources.
-        }
+				return (mainResult);
+			} // Dispose of model to ensure immediate release of resources.
+		}
 
-        /// <remarks>
-        /// In case of an <see cref="Application.ThreadException"/>, it is possible to continue operation.
-        /// </remarks>
-        private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
-        {
-            string message = "An unhandled synchronous exception occured while running" + Application.ProductName + ".";
-            Console.WriteLine(message);
+		/// <remarks>
+		/// In case of an <see cref="Application.ThreadException"/>, it is possible to continue operation.
+		/// </remarks>
+		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+		{
+			string message = "An unhandled synchronous exception occured while running" + Application.ProductName + ".";
+			Console.WriteLine(message);
 
-            Exception ex = e.Exception;
-            if (ex != null)
-                MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
-        }
+			Exception ex = e.Exception;
+			if (ex != null)
+				MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+		}
 
-        /// <remarks>
-        /// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit.
-        /// </remarks>
-        private void RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
-            Console.WriteLine(message);
+		/// <remarks>
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit.
+		/// </remarks>
+		private void RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
+			Console.WriteLine(message);
 
-            Exception ex = e.ExceptionObject as Exception;
-            if (ex != null)
-                MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
-        }
+			Exception ex = e.ExceptionObject as Exception;
+			if (ex != null)
+				MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods > RunFullyFromConsole
-        //------------------------------------------------------------------------------------------
-        // Private Methods > RunFullyFromConsole
+		#region Private Methods > RunFullyFromConsole
+		//------------------------------------------------------------------------------------------
+		// Private Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Non-view application for automated test usage.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-        private MainResult RunFullyFromConsole()
+		private MainResult RunFullyFromConsole()
 		{
 			MainResult mainResult = MainResult.Success;
 
 			AppDomain curentDomain = AppDomain.CurrentDomain;
-            curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_curentDomain_UnhandledException);
+			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_curentDomain_UnhandledException);
 
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -590,9 +591,9 @@ namespace YAT.Controller
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit.
 		/// </remarks>
-        private void RunFullyFromConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunFullyFromConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-            string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
+			string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
 			Console.WriteLine(message);
 
 			Exception ex = e.ExceptionObject as Exception;
@@ -602,77 +603,78 @@ namespace YAT.Controller
 
 		#endregion
 
-        #region Private Methods > RunInvisible
-        //------------------------------------------------------------------------------------------
-        // Private Methods > RunInvisible
-        //------------------------------------------------------------------------------------------
-
-        /// <summary>
-        /// Non-view application for automated test usage.
-        /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-        private MainResult RunInvisible()
-        {
-            MainResult mainResult = MainResult.Success;
-
-            // Create model and run application.
-            using (Model.Main model = new Model.Main(this.commandLineArgs))
-            {
-                try
-                {
-                    Model.MainResult modelResult = model.Start();
-                    if (modelResult == Model.MainResult.Success)
-                    {
-                        modelResult = model.Exit();
-                        mainResult = ConvertToMainResult(modelResult);
-                    }
-                    else
-                    {
-                        mainResult = ConvertToMainResult(modelResult);
-                    }
-                }
-                catch
-                {
-                    mainResult = MainResult.UnhandledException;
-                }
-            } // Dispose of model to ensure immediate release of resources.
-
-            return (mainResult);
-        }
-
-        #endregion
-
-        #region Private Methods > MessageBox
-        //------------------------------------------------------------------------------------------
-        // Private Methods > MessageBox
+		#region Private Methods > RunInvisible
+		//------------------------------------------------------------------------------------------
+		// Private Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
 
-        private void ShowMessageBoxHelp(bool showLogo)
-        {
-            StringBuilder sb = new StringBuilder();
+		/// <summary>
+		/// Non-view application for automated test usage.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		private MainResult RunInvisible()
+		{
+			MainResult mainResult = MainResult.Success;
 
-            if (showLogo)
-            {
-                foreach (string line in Logo)
-                    sb.AppendLine(line);
+			// Create model and run application.
+			using (Model.Main model = new Model.Main(this.commandLineArgs))
+			{
+				try
+				{
+					Model.MainResult modelResult = model.Start();
+					if (modelResult == Model.MainResult.Success)
+					{
+						modelResult = model.Exit();
+						mainResult = ConvertToMainResult(modelResult);
+					}
+					else
+					{
+						mainResult = ConvertToMainResult(modelResult);
+					}
+				}
+				catch
+				{
+					mainResult = MainResult.UnhandledException;
+				}
+			} // Dispose of model to ensure immediate release of resources.
 
-                sb.AppendLine();
-            }
+			return (mainResult);
+		}
 
-            sb.Append(this.commandLineArgs.GetHelpText(DefaultWidth));
-            sb.AppendLine();
+		#endregion
 
-            foreach (string line in Return)
-                sb.AppendLine(line);
+		#region Private Methods > MessageBox
+		//------------------------------------------------------------------------------------------
+		// Private Methods > MessageBox
+		//------------------------------------------------------------------------------------------
 
-            MessageBox.Show
-                (
-                sb.ToString(),
-                ApplicationInfo.ProductNameLong,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning
-                );
-        }
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowMessageBoxHelp(bool showLogo)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if (showLogo)
+			{
+				foreach (string line in Logo)
+					sb.AppendLine(line);
+
+				sb.AppendLine();
+			}
+
+			sb.Append(this.commandLineArgs.GetHelpText(DefaultWidth));
+			sb.AppendLine();
+
+			foreach (string line in Return)
+				sb.AppendLine(line);
+
+			MessageBox.Show
+				(
+				sb.ToString(),
+				ApplicationInfo.ProductNameLong,
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Warning
+				);
+		}
 
 		#endregion
 
@@ -681,14 +683,14 @@ namespace YAT.Controller
 		// Private Methods > Console
 		//------------------------------------------------------------------------------------------
 
-        private void ShowConsoleHelp(bool showLogo)
-        {
-            if (showLogo)
-                WriteLogoToConsole();
+		private void ShowConsoleHelp(bool showLogo)
+		{
+			if (showLogo)
+				WriteLogoToConsole();
 
-            WriteHelpToConsole();
-            WriteReturnToConsole();
-        }
+			WriteHelpToConsole();
+			WriteReturnToConsole();
+		}
 
 		/// <remarks>
 		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines

@@ -447,6 +447,7 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Almost duplicated code in <see cref="YAT.Gui.Controls.SendCommand.ShowMultiLineCommandBox"/>.
 		/// </remarks>
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// Indicate multi line command.
@@ -482,6 +483,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenFileDialog()
 		{
 			OpenFileDialog ofd = new OpenFileDialog();

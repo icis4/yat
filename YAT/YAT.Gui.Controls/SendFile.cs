@@ -277,6 +277,7 @@ namespace YAT.Gui.Controls
 			OnFileCommandChanged(new EventArgs());
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private bool ShowOpenFileDialog()
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -316,6 +317,7 @@ namespace YAT.Gui.Controls
 			return (success);
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void RequestSendCommand()
 		{
 			if (!this.fileCommand.IsValidFilePath)

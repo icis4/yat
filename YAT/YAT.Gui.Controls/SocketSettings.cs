@@ -171,6 +171,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_TcpClientAutoReconnectInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)

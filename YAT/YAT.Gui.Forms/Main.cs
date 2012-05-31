@@ -181,6 +181,7 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.Windows.Forms.PaintEventArgs"/> instance containing the event data.</param>
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError)]
 		private void Main_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
@@ -194,27 +195,34 @@ namespace YAT.Gui.Forms
 				{
 					if (this.mainResult == Model.MainResult.CommandLineError)
 					{
-						MessageBox.Show
-							(
-							this,
-							@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
-							@"Use ""YAT.exe /?"" for command line help.",
-							@"Invalid Command Line",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
-							);
+						if (WithView)
+						{
+							MessageBox.Show
+								(
+								this,
+								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
+								@"Use ""YAT.exe /?"" for command line help.",
+								@"Invalid Command Line",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								);
+						}
 					}
 					else
 					{
-						MessageBox.Show
-							(
-							this,
-							@"YAT could not be started!",
-							@"Application Start Error",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-							);
+						if (WithView)
+						{
+							MessageBox.Show
+								(
+								this,
+								@"YAT could not be started!",
+								@"Application Start Error",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Error
+								);
+						}
 					}
+
 					Close();
 				}
 				else
@@ -507,6 +515,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Menu > Help
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_Contents_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.Help f = new Gui.Forms.Help();
@@ -515,6 +524,7 @@ namespace YAT.Gui.Forms
 			f.Show(this);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.ReleaseNotes f = new Gui.Forms.ReleaseNotes();
@@ -523,6 +533,7 @@ namespace YAT.Gui.Forms
 			f.Show(this);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Support);
@@ -531,6 +542,7 @@ namespace YAT.Gui.Forms
 			f.Show(this);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Feature);
@@ -539,6 +551,7 @@ namespace YAT.Gui.Forms
 			f.Show(this);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
@@ -547,6 +560,7 @@ namespace YAT.Gui.Forms
 			f.Show(this);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.About f = new Gui.Forms.About();
@@ -1049,6 +1063,7 @@ namespace YAT.Gui.Forms
 		// Preferences
 		//==========================================================================================
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPreferences()
 		{
 			Gui.Forms.Preferences f = new Gui.Forms.Preferences(ApplicationSettings.LocalUser);
@@ -1175,6 +1190,7 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText(e.Text);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void main_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			DialogResult dr;
@@ -1206,6 +1222,7 @@ namespace YAT.Gui.Forms
 		// Workspace > Methods
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenWorkspaceFromFileDialog()
 		{
 			SetFixedStatusText("Opening workspace...");
@@ -1230,6 +1247,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveWorkspaceAsFileDialog()
 		{
 			SetFixedStatusText("Saving workspace as...");
@@ -1342,6 +1360,7 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText(e.Text);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
@@ -1369,6 +1388,7 @@ namespace YAT.Gui.Forms
 		// Terminal
 		//==========================================================================================
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowNewTerminalDialog()
 		{
 			SetFixedStatusText("New terminal...");
@@ -1390,6 +1410,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenTerminalFromFileDialog()
 		{
 			SetFixedStatusText("Opening terminal...");

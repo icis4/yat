@@ -399,6 +399,7 @@ namespace YAT.Gui.Forms
 		// Private Methods > Pages
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always)]
 		private void NamePage()
 		{
 			string pageName;
@@ -417,6 +418,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void InsertPage()
 		{
 			int pageNumber = this.selectedPage;
@@ -437,6 +439,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void AddPage()
 		{
 			int pageNumber = this.settings_Form.Pages.Count + 1;
@@ -458,6 +461,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void CopyPage()
 		{
 			string pageName;
@@ -478,6 +482,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void DeletePage()
 		{
 			if (MessageBox.Show
@@ -515,6 +520,7 @@ namespace YAT.Gui.Forms
 			SetPagesControls();
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void DeletePages()
 		{
 			if (MessageBox.Show
@@ -549,6 +555,7 @@ namespace YAT.Gui.Forms
 			page.SetCommand(command - 1, this.predefinedCommandSettingsSets[command - 1].Command);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ClearPage()
 		{
 			if (MessageBox.Show
@@ -569,6 +576,7 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowHelp()
 		{
 			MessageBox.Show

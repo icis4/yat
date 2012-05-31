@@ -344,6 +344,7 @@ namespace YAT.Gui.Forms
 			// Do nothing.
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show
@@ -435,6 +436,7 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Leave();
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowSetRootDirectoryDialog()
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -464,6 +466,7 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ValidateFilenameChars(string filenameChars, string title)
 		{
 			StringWriter invalid = new StringWriter(CultureInfo.InvariantCulture);
@@ -481,6 +484,7 @@ namespace YAT.Gui.Forms
 					if (!Char.IsControl(c))
 						invalidPrintable.Write(c);
 				}
+
 				MessageBox.Show
 					(
 					this,
@@ -490,11 +494,13 @@ namespace YAT.Gui.Forms
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation
 					);
+
 				return (false);
 			}
 			return (true);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ExtensionConflictMessage()
 		{
 			MessageBox.Show
@@ -508,6 +514,7 @@ namespace YAT.Gui.Forms
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ResolveNamingConflicts()
 		{
 			if ((this.settings_Form.SameRawAndNeat) && (this.settings_Form.RawExtension == this.settings_Form.NeatExtension) &&
