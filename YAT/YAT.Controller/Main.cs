@@ -304,7 +304,7 @@ namespace YAT.Controller
 		/// 
 		/// 7. YAT testing
 		///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
-		///    ==> Run(false, false) or Run(true, false) to test the behaviour (e.g. controller test)
+		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
 		/// 
 		/// </remarks>
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)

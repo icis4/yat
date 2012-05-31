@@ -37,7 +37,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
 	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behaviour.
+	/// undefined behavior.
 	/// </remarks>
 	[Serializable]
 	public class DisplayElementCollection : List<DisplayElement>
@@ -107,7 +107,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>
-		/// Item must be cloned to prevent unexpected behaviour of the reference type.
+		/// Item must be cloned to prevent unexpected behavior of the reference type.
 		/// </remarks>
 		public new void Add(DisplayElement item)
 		{
@@ -252,7 +252,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
 	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behaviour.
+	/// undefined behavior.
 	/// </remarks>
 	[Serializable]
 	public class DisplayLine : DisplayElementCollection
@@ -315,7 +315,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
 	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
-	/// undefined behaviour.
+	/// undefined behavior.
 	/// </remarks>
 	[Serializable]
 	public class DisplayLinePart : DisplayLine

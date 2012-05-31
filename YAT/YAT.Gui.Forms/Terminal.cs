@@ -2650,17 +2650,22 @@ namespace YAT.Gui.Forms
 			monitor_Rx.RxLineRateStatus    = rxLineRate;
 		}
 
-		[ModalBehavior(ModalBehavior.InCaseOfNonUserError)]
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			SetTerminalControls();
 			OnTerminalChanged(new EventArgs());
 
+			bool showErrorModally = false;
+			Main main = (this.mdiParent as Main);
+			if (main != null)
+				showErrorModally = main.UnderlyingMain.StartArgs.KeepOpenOnError;
+
 			if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
 			{
 				SetTimedStatusText("Terminal Warning");
 
-				if (WithView)
+				if (showErrorModally)
 				{
 					MessageBox.Show
 						(
@@ -2676,7 +2681,7 @@ namespace YAT.Gui.Forms
 			{
 				SetFixedStatusText("Terminal Error");
 
-				if (WithView)
+				if (showErrorModally)
 				{
 					MessageBox.Show
 						(
