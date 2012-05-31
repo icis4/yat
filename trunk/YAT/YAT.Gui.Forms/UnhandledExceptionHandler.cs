@@ -30,6 +30,8 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 #endregion
 
 namespace YAT.Gui.Forms
@@ -73,6 +75,7 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, bool isAsynchronous, bool mayBeContinued)
 		{
 			if (!staticHandleExceptions)

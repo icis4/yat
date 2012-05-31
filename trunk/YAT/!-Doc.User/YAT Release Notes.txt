@@ -65,6 +65,7 @@ Fixed bugs:
 - ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634)
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Edit shortcuts such as Ctrl-A and Ctrl-C reenabled in 'Send Command' box (bug #3459888)
+- Improvement of modal behavior in case of console and non-view execution (bug #3516441)
 - Printer dialog also gets shown on 64-bit systems
 
 Limitations and known issues:
@@ -85,7 +86,7 @@ Limitations and known issues:
 - Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
   on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097)
 - Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
-  'Manual Combined' only but is always on for 'Software' and 'Combined' (bug #3456205)
+  'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
@@ -172,7 +173,7 @@ Limitations and known issues:
 - Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
   on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097)
 - Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
-  'Manual Combined' only but is always on for 'Software' and 'Combined' (bug #3456205)
+  'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)

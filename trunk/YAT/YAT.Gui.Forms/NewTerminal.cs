@@ -294,6 +294,7 @@ namespace YAT.Gui.Forms
 			// Do nothing.
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show
@@ -312,6 +313,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Help_Click(object sender, EventArgs e)
 		{
 			// \fixme: Replace MessageBox with a real help.

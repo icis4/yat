@@ -112,6 +112,7 @@ namespace MKY.Windows.Forms
 				SetControls();
 		}
 
+		[ModalBehavior(ModalBehavior.Always)]
 		private void listBox_StringList_DoubleClick(object sender, EventArgs e)
 		{
 			string item = (listBox_StringList.SelectedItem as string);
@@ -133,6 +134,7 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always)]
 		private void button_Add_Click(object sender, EventArgs e)
 		{
 			string item;

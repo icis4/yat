@@ -283,6 +283,7 @@ namespace YAT.Gui.Controls
 				BaudRate = (MKY.IO.Ports.BaudRateEx)comboBox_BaudRate.SelectedItem;
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -345,6 +346,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)

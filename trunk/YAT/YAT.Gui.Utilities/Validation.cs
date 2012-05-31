@@ -27,6 +27,8 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.Gui.Utilities
 {
 	/// <summary></summary>
@@ -70,6 +72,7 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode parseMode, out string parsedText)
 		{
 			Domain.Parser.Parser p = new Domain.Parser.Parser();
@@ -100,6 +103,7 @@ namespace YAT.Gui.Utilities
 					sb.Append(Environment.NewLine);
 					sb.Append(formatException.Message);
 				}
+
 				MessageBox.Show
 					(
 					owner,
@@ -108,6 +112,7 @@ namespace YAT.Gui.Utilities
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation
 					);
+
 				return (false);
 			}
 		}

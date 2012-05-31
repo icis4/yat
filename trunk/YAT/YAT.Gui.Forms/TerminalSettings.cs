@@ -277,6 +277,7 @@ namespace YAT.Gui.Forms
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			string text;
@@ -305,6 +306,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Help_Click(object sender, EventArgs e)
 		{
 			// \fixme: Replace MessageBox with a real help.
@@ -399,6 +401,7 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Leave();
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTextOrBinarySettings()
 		{
 			switch (this.settings_Form.Terminal.TerminalType)
@@ -434,6 +437,7 @@ namespace YAT.Gui.Forms
 		/// The following list must handle the same properties as
 		/// <see cref="Gui.Forms.AdvancedTerminalSettings.SetDefaults()"/> defaults.
 		/// </remarks>
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowAdvancedSettings()
 		{
 			Gui.Forms.AdvancedTerminalSettings f = new Gui.Forms.AdvancedTerminalSettings(this.settings_Form);

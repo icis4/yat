@@ -2117,6 +2117,7 @@ namespace YAT.Gui.Forms
 		// Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
 			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(this.settingsRoot.Format);
@@ -2144,6 +2145,7 @@ namespace YAT.Gui.Forms
 			SetTimedStatusText("Data copied to clipboard");
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowSaveMonitorDialog(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Preparing to save data...");
@@ -2169,6 +2171,7 @@ namespace YAT.Gui.Forms
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
 			SetFixedStatusText("Saving data...");
@@ -2202,6 +2205,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPrintMonitorDialog(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Preparing to print data...");
@@ -2283,6 +2287,7 @@ namespace YAT.Gui.Forms
 
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
 			PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, page, command);
@@ -2645,6 +2650,7 @@ namespace YAT.Gui.Forms
 			monitor_Rx.RxLineRateStatus    = rxLineRate;
 		}
 
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError)]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			SetTerminalControls();
@@ -2653,26 +2659,34 @@ namespace YAT.Gui.Forms
 			if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
 			{
 				SetTimedStatusText("Terminal Warning");
-				MessageBox.Show
-					(
-					this,
-					e.Message,
-					"Terminal Warning",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-					);
+
+				if (WithView)
+				{
+					MessageBox.Show
+						(
+						this,
+						e.Message,
+						"Terminal Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+				}
 			}
 			else
 			{
 				SetFixedStatusText("Terminal Error");
-				MessageBox.Show
-					(
-					this,
-					e.Message,
-					"Terminal Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-					);
+
+				if (WithView)
+				{
+					MessageBox.Show
+						(
+						this,
+						e.Message,
+						"Terminal Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+				}
 			}
 		}
 
@@ -2720,6 +2734,7 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText(e.Text);
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
@@ -2753,6 +2768,7 @@ namespace YAT.Gui.Forms
 		// Terminal > Methods
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveTerminalAsFileDialog()
 		{
 			SetFixedStatusText("Saving terminal as...");
@@ -2789,6 +2805,7 @@ namespace YAT.Gui.Forms
 		// Terminal > Settings
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTerminalSettings()
 		{
 			SetFixedStatusText("Terminal Settings...");
@@ -3028,6 +3045,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
 		{
 			Gui.Forms.LogSettings f = new Gui.Forms.LogSettings(this.settingsRoot.Log);

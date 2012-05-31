@@ -261,6 +261,7 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -302,6 +303,7 @@ namespace YAT.Gui.Controls
 			RefreshSerialPortList();
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Only used to temporarily display a modal dialog.")]
 		private void timer_ShowFillDialog_Tick(object sender, EventArgs e)
 		{
 			timer_ShowFillDialog.Stop();
@@ -309,6 +311,7 @@ namespace YAT.Gui.Controls
 			StatusBox.Show(this, "Retrieving ports...", "Serial Ports");
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Only used to temporarily display a modal dialog.")]
 		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
 		{
 			timer_ShowScanDialog.Stop();
@@ -330,6 +333,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetSerialPortList()
 		{
 			// Only scan for ports if control is enabled. This saves some time.

@@ -201,6 +201,7 @@ namespace YAT.Gui.Forms
 				label_MaxLineCountUnit.Text = "lines";
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_MaxLineCount_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -314,6 +315,7 @@ namespace YAT.Gui.Forms
 			// Do nothing.
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show

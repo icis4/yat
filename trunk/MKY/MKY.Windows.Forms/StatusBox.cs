@@ -66,6 +66,7 @@ namespace MKY.Windows.Forms
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
+		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string status1, string caption)
 		{
 			bool setting = false;
@@ -91,6 +92,7 @@ namespace MKY.Windows.Forms
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
+		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2)
 		{
 			bool setting = false;
@@ -123,12 +125,14 @@ namespace MKY.Windows.Forms
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
+		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
 		{
 			return (Show(owner, status1, caption, status2, "", ref setting, true));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
+		[ModalBehavior(ModalBehavior.Always)]
 		private static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting, bool showCancel)
 		{
 			DialogResult dialogResult = DialogResult.OK;

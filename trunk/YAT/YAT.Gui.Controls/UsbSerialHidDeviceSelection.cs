@@ -202,6 +202,7 @@ namespace YAT.Gui.Controls
 		// Private Methods
 		//==========================================================================================
 
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetDeviceList()
 		{
 			// Only scan for ports if control is enabled. This saves some time.

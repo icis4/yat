@@ -30,6 +30,8 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 using YAT.Utilities;
 
 #endregion
@@ -244,6 +246,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Manual Testing
 		//------------------------------------------------------------------------------------------
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show
@@ -262,6 +265,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show
@@ -298,6 +302,7 @@ namespace YAT.Gui.Forms
 		/// Such execptions are not dispatched back onto main thread. Therefore, use
 		/// EventHelper and a separate exception class for this test case.
 		/// </summary>
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show
