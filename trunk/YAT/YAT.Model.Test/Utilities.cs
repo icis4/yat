@@ -51,7 +51,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// \todo:
 		/// This test set class should be improved such that it can also handle expectations on the
-		/// sender side (i.e. terminal A). Rationale: Testing of \!(Clear) behaviour.
+		/// sender side (i.e. terminal A). Rationale: Testing of \!(Clear) behavior.
 		/// </remarks>
 		public struct TestSet
 		{

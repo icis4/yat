@@ -181,7 +181,7 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		/// <param name="sender">The source of the event.</param>
 		/// <param name="e">The <see cref="System.Windows.Forms.PaintEventArgs"/> instance containing the event data.</param>
-		[ModalBehavior(ModalBehavior.InCaseOfNonUserError)]
+		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void Main_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
@@ -193,9 +193,11 @@ namespace YAT.Gui.Forms
 
 				if (this.mainResult != Model.MainResult.Success)
 				{
+					bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
+
 					if (this.mainResult == Model.MainResult.CommandLineError)
 					{
-						if (WithView)
+						if (showErrorModally)
 						{
 							MessageBox.Show
 								(
@@ -210,7 +212,7 @@ namespace YAT.Gui.Forms
 					}
 					else
 					{
-						if (WithView)
+						if (showErrorModally)
 						{
 							MessageBox.Show
 								(
