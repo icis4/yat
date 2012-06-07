@@ -51,7 +51,7 @@ namespace MKY.Test.Settings
 		// IDs
 		//==========================================================================================
 
-		/// <remarks>Haven't care for a better implementation yet...</remarks>
+		/// <remarks>Haven't cared for a better implementation yet...</remarks>
 		public enum TestCase
 		{
 			/// <summary></summary>
@@ -449,7 +449,7 @@ namespace MKY.Test.Settings
 
 		/// <summary>
 		/// The following classes serve to test what happens if different versions of a type are
-		/// serialized/deserialize.
+		/// serialized/deserialized.
 		/// </summary>
 		[Serializable]
 		[XmlRoot("TestSettings")]

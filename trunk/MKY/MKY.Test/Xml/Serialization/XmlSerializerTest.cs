@@ -39,18 +39,16 @@ using MKY.Collections;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Recent;
-
-using YAT.Model.Settings;
-using YAT.Model.Types;
-using YAT.Settings.Terminal;
+using MKY.Xml;
+using MKY.Xml.Serialization;
 
 #endregion
 
-namespace YAT.Settings.Test
+namespace MKY.Test.Xml.Serialization
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class XmlTest
+	public class XmlSerializerTest
 	{
 		#region Constants
 		//==========================================================================================
@@ -99,11 +97,11 @@ namespace YAT.Settings.Test
 
 			filePath = Temp.MakeTempFilePath(this.GetType(), "Array", FileExtension);
 			string[] a = new string[] { "A", "B" };
-			TestSerialization(typeof(string[]), a, filePath);
+			TestSerialization(filePath, typeof(string[]), a);
 
 			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayEmpty", FileExtension);
 			string[] ae = new string[] { };
-			TestSerialization(typeof(string[]), ae, filePath);
+			TestSerialization(filePath, typeof(string[]), ae);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(this, "MultiArray");
@@ -120,7 +118,7 @@ namespace YAT.Settings.Test
 						new string[] { "A", "AA" },
 						new string[] { "B", "BB" },
 					};
-			TestSerialization(typeof(string[][]), aai, filePath);
+			TestSerialization(filePath, typeof(string[][]), aai);
 
 			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayOfArraysByCreate", FileExtension);
 			string[][] aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
@@ -132,7 +130,7 @@ namespace YAT.Settings.Test
 			aac[0][1] = "AA";
 			aac[1][0] = "B";
 			aac[1][1] = "BB";
-			TestSerialization(typeof(string[][]), aac, filePath);
+			TestSerialization(filePath, typeof(string[][]), aac);
 		}
 
 		#endregion
@@ -152,11 +150,11 @@ namespace YAT.Settings.Test
 			List<string> l = new List<string>();
 			l.Add("A");
 			l.Add("B");
-			TestSerialization(typeof(List<string>), l, filePath);
+			TestSerialization(filePath, typeof(List<string>), l);
 
 			filePath = Temp.MakeTempFilePath(this.GetType(), "ListEmpty", FileExtension);
 			List<string> le = new List<string>();
-			TestSerialization(typeof(List<string>), le, filePath);
+			TestSerialization(filePath, typeof(List<string>), le);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(this, "ListOfArrays");
@@ -227,7 +225,7 @@ namespace YAT.Settings.Test
 				i++;
 			}
 
-			TestSerialization(typeof(string[][]), aa, filePath);
+			TestSerialization(filePath, typeof(string[][]), aa);
 		}
 
 		#endregion
@@ -241,34 +239,14 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestNamedStringDictionarySerialization()
 		{
-			string filePath = Temp.MakeTempFilePath(this.GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
+			string filePath = "";
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
 			NamedStringDictionary nsd = new NamedStringDictionary();
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
 			nsd.Add("2", "B");
-			TestSerialization(typeof(NamedStringDictionary), nsd, filePath);
-		}
-
-		#endregion
-
-		#region Tests > Serialization > EmptyCommand
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization > EmptyCommand
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestEmptyCommandSerialization()
-		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "EmptyArrayOfCommands", FileExtension);
-			Command[] a = new Command[] { };
-			TestSerialization(typeof(Command[]), a, filePath);
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "EmptyListOfCommands", FileExtension);
-			List<Command> l = new List<Command>();
-			TestSerialization(typeof(List<Command>), l, filePath);
+			TestSerialization(filePath, typeof(NamedStringDictionary), nsd);
 		}
 
 		#endregion
@@ -286,81 +264,7 @@ namespace YAT.Settings.Test
 
 			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
-			TestSerialization(typeof(RecentItem<string>), ri, filePath);
-
-			RecentItemCollection<string> ric = new RecentItemCollection<string>();
-			ric.Add(ri);
-			ric.Add(ri);
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentFileSettings", FileExtension);
-			RecentFileSettings rfs = new RecentFileSettings();
-			rfs.FilePaths = ric;
-			TestSerialization(typeof(RecentFileSettings), rfs, filePath);
-		}
-
-		#endregion
-
-		#region Tests > Serialization > Predefined
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization > Predefined
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestPredefinedSerialization()
-		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandPage", FileExtension);
-			PredefinedCommandPage pcp = new PredefinedCommandPage();
-			pcp.Commands.Add(new Command("Hello", "World"));
-			pcp.Commands.Add(new Command("Hallo", "Wält"));
-			TestSerialization(typeof(PredefinedCommandPage), pcp, filePath);
-
-			PredefinedCommandPageCollection c = new PredefinedCommandPageCollection();
-			c.Add(pcp);
-			c.Add(pcp);
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandSettings", FileExtension);
-			PredefinedCommandSettings pcs = new PredefinedCommandSettings();
-			pcs.Pages = c;
-			TestSerialization(typeof(PredefinedCommandSettings), pcs, filePath);
-		}
-
-		#endregion
-
-		#region Tests > Serialization > Explicit
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization > Explicit
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestExplicitSerialization()
-		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ExplicitSettings", FileExtension);
-			ExplicitSettings s = new ExplicitSettings();
-			TestSerialization(typeof(ExplicitSettings), s, filePath);
-		}
-
-		#endregion
-
-		#region Tests > Serialization > Implicit
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization > Implicit
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestImplicitSerialization()
-		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ImplicitSettings", FileExtension);
-			ImplicitSettings s = new ImplicitSettings();
-			TestSerialization(typeof(ImplicitSettings), s, filePath);
+			TestSerialization(filePath, typeof(RecentItem<string>), ri);
 		}
 
 		#endregion
@@ -375,20 +279,16 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
-		private static void TestSerialization(Type type, object obj, string filePath)
+		private static void TestSerialization(string filePath, Type type, object obj)
 		{
 			// Save.
 			try
 			{
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					XmlSerializer serializer = new XmlSerializer(type);
-					serializer.Serialize(sw, obj);
-				}
+				SerializeToFile(filePath, type, obj);
 			}
 			catch (Exception ex)
 			{
-				TraceEx.WriteException(typeof(XmlTest), ex);
+				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -397,20 +297,83 @@ namespace YAT.Settings.Test
 			// Load.
 			try
 			{
-				using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-				{
-					XmlSerializer serializer = new XmlSerializer(type);
-					obj = serializer.Deserialize(sr);
-				}
+				DeserializeFromFile(filePath, type);
 			}
 			catch (Exception ex)
 			{
-				TraceEx.WriteException(typeof(XmlTest), ex);
+				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
 		}
+
+		#endregion
+
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
+		#region Static Methods > Deserialize
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Deserialize
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public static object DeserializeFromFile(string filePath, Type type)
+		{
+			object settings = null;
+			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			{
+				XmlSerializer serializer = new XmlSerializer(type);
+				settings = serializer.Deserialize(sr);
+			}
+			return (settings);
+		}
+
+		/// <summary></summary>
+		public static object TolerantDeserializeFromFile(string filePath, Type type)
+		{
+			object settings = null;
+			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			{
+				TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+				settings = serializer.Deserialize(sr);
+			}
+			return (settings);
+		}
+
+		/// <summary></summary>
+		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
+		{
+			object settings = null;
+			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			{
+				AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
+				settings = serializer.Deserialize(sr);
+			}
+			return (settings);
+		}
+
+		#endregion
+
+		#region Static Methods > Serialize
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Serialize
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public static void SerializeToFile(string filePath, Type type, object settings)
+		{
+			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			{
+				XmlSerializer serializer = new XmlSerializer(type);
+				serializer.Serialize(sw, settings);
+			}
+		}
+
+		#endregion
 
 		#endregion
 	}

@@ -87,7 +87,7 @@
     <Compile Include="FileVersionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsFilesProvider.cs" />
-    <Compile Include="XmlTest.cs" />
+    <Compile Include="XmlSerializerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
@@ -105,6 +105,10 @@
     <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Test\MKY.Test.csproj">
+      <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
+      <Name>MKY.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>

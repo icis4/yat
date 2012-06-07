@@ -30,6 +30,7 @@ using System.Xml.Serialization;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Xml;
+using MKY.Xml.Serialization;
 
 namespace MKY.Settings
 {
@@ -186,9 +187,7 @@ namespace MKY.Settings
 		public virtual bool Load()
 		{
 			bool loadSuccess = true;
-			object settings = null;
-
-			settings = LoadFromFile(this.settings.GetType(), this.settingsFilePath, this.alternateXmlElements);
+			object settings = SettingsHandler.LoadFromFile(this.settingsFilePath, this.settings.GetType(), this.alternateXmlElements, this.GetType());
 			if (settings == null)
 			{
 				settings = SettingsDefault;
@@ -205,66 +204,6 @@ namespace MKY.Settings
 			return (loadSuccess);
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private object LoadFromFile(Type type, string filePath, AlternateXmlElement[] alternateXmlElements)
-		{
-			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
-			{
-				if (alternateXmlElements == null)
-				{
-					// Try to open existing file with default deserialization.
-					try
-					{
-						object settings = null;
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							XmlSerializer serializer = new XmlSerializer(type);
-							settings = serializer.Deserialize(sr);
-						}
-						return (settings);
-					}
-					catch { }
-
-					// Try to open existing file with tolerant deserialization.
-					try
-					{
-						object settings = null;
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-							settings = serializer.Deserialize(sr);
-						}
-						return (settings);
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(this.GetType(), ex);
-					}
-				}
-				else
-				{
-					// Try to open existing file with tolerant & alternate-tolerant deserialization.
-					try
-					{
-						object settings = null;
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
-							settings = serializer.Deserialize(sr);
-						}
-						return (settings);
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(this.GetType(), ex);
-					}
-				}
-			}
-
-			// If not successful, return <c>null</c>.
-			return (null);
-		}
-
 		/// <summary>
 		/// Tries to save settings to <see cref="SettingsFilePath"/>.
 		/// </summary>
@@ -278,7 +217,7 @@ namespace MKY.Settings
 
 			try
 			{
-				SaveToFile(this.settings.GetType(), this.settingsFilePath, this.settings);
+				SettingsHandler.SaveToFile(this.settingsFilePath, this.settings.GetType(), this.settings, this.GetType());
 				this.accessedSettingsFilePath = this.settingsFilePath;
 				this.settings.ClearChanged();
 			}
@@ -291,50 +230,6 @@ namespace MKY.Settings
 			// Throw exception if either operation failed.
 			if (result != null)
 				throw (result);
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private void SaveToFile(Type type, string filePath, object settings)
-		{
-			string backup = filePath + ".bak";
-
-			try
-			{
-				if (File.Exists(backup))
-					File.Delete(backup);
-				if (File.Exists(filePath))
-					File.Move(filePath, backup);
-			}
-			catch { }
-
-			try
-			{
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					XmlSerializer serializer = new XmlSerializer(type);
-					serializer.Serialize(sw, settings);
-				}
-			}
-			catch
-			{
-				try
-				{
-					if (File.Exists(backup))
-						File.Move(backup, filePath);
-				}
-				catch { }
-
-				throw; // Re-throw!
-			}
-			finally
-			{
-				try
-				{
-					if (File.Exists(backup))
-						File.Delete(backup);
-				}
-				catch { }
-			}
 		}
 
 		/// <summary>

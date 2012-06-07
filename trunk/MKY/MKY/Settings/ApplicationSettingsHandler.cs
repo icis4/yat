@@ -31,6 +31,7 @@ using System.Xml.Serialization;
 
 using MKY.Diagnostics;
 using MKY.Xml;
+using MKY.Xml.Serialization;
 
 namespace MKY.Settings
 {
@@ -465,107 +466,38 @@ namespace MKY.Settings
 		private object LoadFromFile(Type type, string filePath, AlternateXmlElement[] alternateXmlElements)
 		{
 			// Try to open existing file of current version.
-			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
+			object settings = SettingsHandler.LoadFromFile(filePath, type, alternateXmlElements, this.GetType());
+			if (settings != null)
+				return (settings);
+
+			// Alternatively, try to open an existing file of an older version.
 			{
-				if (alternateXmlElements == null)
+				// Find all valid directories of older versions.
+				string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(filePath));
+				string[] allDirectories = Directory.GetDirectories(productSettingsPath);
+				List<string> oldDirectories = new List<string>();
+				Version currentVersion = new Version(Application.ProductVersion);
+				foreach (string directory in allDirectories)
 				{
-					// Try to open existing file with default deserialization.
 					try
 					{
-						object settings = null;
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							XmlSerializer serializer = new XmlSerializer(type);
-							settings = serializer.Deserialize(sr);
-						}
-						return (settings);
+						Version version = new Version(Path.GetFileName(directory));
+						if (version < currentVersion)
+							oldDirectories.Add(directory);
 					}
 					catch { }
+				}
 
-					// Try to open existing file with tolerant deserialization.
-					try
-					{
-						object settings = null;
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-							settings = serializer.Deserialize(sr);
-						}
+				// Iterate through the directories, start with most recent.
+				string fileName = Path.GetFileName(filePath);
+				oldDirectories.Sort();
+				for (int i = oldDirectories.Count - 1; i >= 0; i--)
+				{
+					string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
+					settings = SettingsHandler.LoadFromFile(oldFilePath, type, alternateXmlElements, this.GetType());
+					if (settings != null)
 						return (settings);
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(this.GetType(), ex);
-					}
 				}
-				else
-				{
-					// Try to open existing file with tolerant & alternate-tolerant deserialization.
-					try
-					{
-						object settings = null;
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
-							settings = serializer.Deserialize(sr);
-						}
-						return (settings);
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(this.GetType(), ex);
-					}
-				}
-			}
-
-			// Find all valid directories of older versions.
-			string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(filePath));
-			string[] allDirectories = Directory.GetDirectories(productSettingsPath);
-			List<string> oldDirectories = new List<string>();
-			Version currentVersion = new Version(Application.ProductVersion);
-			foreach (string directory in allDirectories)
-			{
-				try
-				{
-					Version version = new Version(Path.GetFileName(directory));
-					if (version < currentVersion)
-						oldDirectories.Add(directory);
-				}
-				catch { }
-			}
-
-			// Try to open an existing file of an older version, start with most recent.
-			string fileName = Path.GetFileName(filePath);
-			oldDirectories.Sort();
-			for (int i = oldDirectories.Count - 1; i >= 0; i--)
-			{
-				string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
-
-				// Try to open existing file with default deserialization.
-				try
-				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(oldFilePath, Encoding.UTF8, true))
-					{
-						XmlSerializer serializer = new XmlSerializer(type);
-						settings = serializer.Deserialize(sr);
-					}
-					return (settings);
-				}
-				catch { }
-
-				// Try to open existing file with tolerant deserialization.
-				try
-				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(oldFilePath, Encoding.UTF8, true))
-					{
-						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-						settings = serializer.Deserialize(sr);
-					}
-					return (settings);
-				}
-				catch { }
 			}
 
 			// If nothing found, return <c>null</c>.

@@ -99,6 +99,7 @@
     <Compile Include="Types\Int32ExTest.cs" />
     <Compile Include="Types\UInt64ExTest.cs" />
     <Compile Include="EqualityTest.cs" />
+    <Compile Include="Xml\Serialization\XmlSerializerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MKY\MKY.csproj">
