@@ -193,7 +193,11 @@ namespace YAT.Gui.Forms
 		// MDI Parent > Properties
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <summary>
+		/// This is the automatically assigned terminal name. The name is either an incrementally
+		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
+		/// by the user, e.g. 'MyTerminal.yat'.
+		/// </summary>
 		public virtual string AutoName
 		{
 			get
@@ -2783,7 +2787,12 @@ namespace YAT.Gui.Forms
 			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
 			sfd.DefaultExt = ExtensionSettings.TerminalFile;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			sfd.FileName = AutoName + "." + sfd.DefaultExt;
+
+			// Check wether the terminal has already been saved as a .yat file.
+			if (AutoName.EndsWith(ExtensionSettings.TerminalFile, StringComparison.OrdinalIgnoreCase))
+				sfd.FileName = AutoName;
+			else
+				sfd.FileName = AutoName + "." + sfd.DefaultExt;
 
 			DialogResult dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))

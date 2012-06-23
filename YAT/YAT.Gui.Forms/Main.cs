@@ -140,7 +140,7 @@ namespace YAT.Gui.Forms
 			this.main = main;
 			AttachMainEventHandlers();
 
-			Text = this.main.UserName;
+			Text = this.main.AutoName;
 
 			// Link and attach to terminal settings.
 			this.settingsRoot = ApplicationSettings.LocalUser;
@@ -1259,6 +1259,8 @@ namespace YAT.Gui.Forms
 			sfd.Filter = ExtensionSettings.WorkspaceFilesFilter;
 			sfd.DefaultExt = ExtensionSettings.WorkspaceFile;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
+
+			// Other than for terminal files, the workspace 'Save As' always suggests 'UserName.yaw'.
 			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
 
 			DialogResult dr = sfd.ShowDialog(this);
