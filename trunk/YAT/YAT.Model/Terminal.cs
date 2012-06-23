@@ -343,7 +343,11 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// This is the automatically assigned terminal name. The name is either an incrementally
+		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
+		/// by the user, e.g. 'MyTerminal.yat'.
+		/// </summary>
 		public virtual string AutoName
 		{
 			get

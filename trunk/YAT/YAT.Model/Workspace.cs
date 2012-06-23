@@ -239,8 +239,11 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		public virtual string UserName
+		/// <summary>
+		/// This is the automatically assigned workspace name. The name is corresponding to the
+		/// name of the currently active terminal.
+		/// </summary>
+		public virtual string AutoName
 		{
 			get
 			{
@@ -724,7 +727,7 @@ namespace YAT.Model
 					DialogResult dr = OnMessageInputRequest
 						(
 						"Save workspace?",
-						UserName,
+						AutoName,
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question
 						);

@@ -222,15 +222,18 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		public virtual string UserName
+		/// <summary>
+		/// This is the automatically assigned workspace name. The name is corresponding to the
+		/// name of the currently active terminal.
+		/// </summary>
+		public virtual string AutoName
 		{
 			get
 			{
 				AssertNotDisposed();
 
 				if (this.workspace != null)
-					return (this.workspace.UserName);
+					return (this.workspace.AutoName);
 				else
 					return (Application.ProductName);
 			}
