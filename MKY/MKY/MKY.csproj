@@ -109,7 +109,7 @@
     <Compile Include="Time\DateTimeEx.cs" />
     <Compile Include="Time\TimeStampItem.cs" />
     <Compile Include="Time\Rate.cs" />
-    <Compile Include="Types\BoolEx.cs" />
+    <Compile Include="Types\BooleanEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
     <Compile Include="Windows.Forms\ModalBehavior.cs" />
     <Compile Include="Windows.Forms\ListBoxEx.cs" />
