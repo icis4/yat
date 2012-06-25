@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LocalUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Version>1.99.12</Version>
+  <Paths>
+    <SettingsFilesPath>C:\Users\Matthias\Documents</SettingsFilesPath>
+    <SendFilesPath>C:\Users\Matthias\Documents</SendFilesPath>
+    <LogFilesPath>C:\Users\Matthias\Documents</LogFilesPath>
+    <MonitorFilesPath>C:\Users\Matthias\Documents</MonitorFilesPath>
+  </Paths>
+  <MainWindow>
+    <WindowState>Normal</WindowState>
+    <Location>
+      <X>0</X>
+      <Y>0</Y>
+    </Location>
+    <Size>
+      <Width>720</Width>
+      <Height>540</Height>
+    </Size>
+  </MainWindow>
+  <NewTerminal>
+    <TerminalType>Text</TerminalType>
+    <IOType>SerialPort</IOType>
+    <SerialPortId>
+      <Name>COM1</Name>
+    </SerialPortId>
+    <SocketRemoteHostNameOrAddress>localhost</SocketRemoteHostNameOrAddress>
+    <SocketRemotePort>10000</SocketRemotePort>
+    <SocketLocalHostNameOrAddress>&lt;Any&gt;</SocketLocalHostNameOrAddress>
+    <SocketLocalTcpPort>10000</SocketLocalTcpPort>
+    <SocketLocalUdpPort>10001</SocketLocalUdpPort>
+    <OpenTerminal>true</OpenTerminal>
+  </NewTerminal>
+  <RecentFiles>
+    <FilePathsMaximumCapacity>8</FilePathsMaximumCapacity>
+  </RecentFiles>
+</LocalUserSettings>

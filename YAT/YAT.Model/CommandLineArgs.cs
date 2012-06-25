@@ -329,14 +329,14 @@ namespace YAT.Model
 					{
 						RequestedFilePath = null;
 						Invalidate("Requested file is no workspace nor terminal file");
-						BoolEx.ClearIfSet(ref isValid);
+						BooleanEx.ClearIfSet(ref isValid);
 					}
 				}
 				else
 				{
 					RequestedFilePath = null;
 					Invalidate("Requested file does not exist");
-					BoolEx.ClearIfSet(ref isValid);
+					BooleanEx.ClearIfSet(ref isValid);
 				}
 			}
 
@@ -357,13 +357,13 @@ namespace YAT.Model
 						else
 						{
 							Invalidate("Requested file is no workspace nor terminal file");
-							BoolEx.ClearIfSet(ref isValid);
+							BooleanEx.ClearIfSet(ref isValid);
 						}
 					}
 					else
 					{
 						Invalidate("Requested file does not exist");
-						BoolEx.ClearIfSet(ref isValid);
+						BooleanEx.ClearIfSet(ref isValid);
 					}
 				}
 			}
@@ -375,7 +375,7 @@ namespace YAT.Model
 				{
 					RequestedTransmitFilePath = null;
 					Invalidate("Requested file does not exist");
-					BoolEx.ClearIfSet(ref isValid);
+					BooleanEx.ClearIfSet(ref isValid);
 				}
 			}
 
@@ -385,7 +385,7 @@ namespace YAT.Model
 				TileHorizontal = false;
 				TileVertical   = false;
 				Invalidate("Tile horizontal and vertical simultaneously is not possible");
-				BoolEx.ClearIfSet(ref isValid);
+				BooleanEx.ClearIfSet(ref isValid);
 			}
 
 			return (isValid);

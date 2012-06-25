@@ -84,6 +84,52 @@ namespace MKY.Test.Xml.Serialization
 		// Tests > Serialization
 		//------------------------------------------------------------------------------------------
 
+		#region Tests > Serialization > Boolean
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > Boolean
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestBooleanSerialization()
+		{
+			string filePath = "";
+			System.Boolean b;
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "BooleanFalse", FileExtension);
+			b = false;
+			TestSerialization(filePath, typeof(bool), b);
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "BooleanTrue", FileExtension);
+			b = true;
+			TestSerialization(filePath, typeof(bool), b);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > Guid
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > Guid
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestGuidSerialization()
+		{
+			string filePath = "";
+			System.Guid guid;
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "Guid", FileExtension);
+			guid = System.Guid.NewGuid();
+			TestSerialization(filePath, typeof(System.Guid), guid);
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "GuidEmpty", FileExtension);
+			guid = System.Guid.Empty;
+			TestSerialization(filePath, typeof(System.Guid), guid);
+		}
+
+		#endregion
+
 		#region Tests > Serialization > Array
 		//------------------------------------------------------------------------------------------
 		// Tests > Serialization > Array
@@ -104,13 +150,13 @@ namespace MKY.Test.Xml.Serialization
 			TestSerialization(filePath, typeof(string[]), ae);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this, "MultiArray");
+			filePath = Temp.MakeTempFilePath(this.GetType(), "MultiArray", FileExtension);
 			string[,] ma = new string[,]
 					{
 						{ "A", "AA" },
 						{ "B", "BB" },
 					};
-			TestSerialization(typeof(string[,]), ma, filePath);
+			TestSerialization(filePath, typeof(string[,]), ma);
 #endif
 			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayOfArraysOnInit", FileExtension);
 			string[][] aai = new string[][]
@@ -157,19 +203,19 @@ namespace MKY.Test.Xml.Serialization
 			TestSerialization(filePath, typeof(List<string>), le);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this, "ListOfArrays");
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ListOfArrays", FileExtension);
 			List<string[]> la = new List<string[]>();
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
-			Test_Serialization(typeof(List<string>), la, filePath);
+			Test_Serialization(filePath, typeof(List<string>), la);
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this, "ListOfLists");
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ListOfLists", FileExtension);
 			List<List<string>> ll = new List<List<string>>();
 			ll.Add(l);
 			ll.Add(l);
-			Test_Serialization(typeof(List<string>), ll, filePath);
+			Test_Serialization(filePath, typeof(List<string>), ll);
 #endif
 		}
 
@@ -188,19 +234,19 @@ namespace MKY.Test.Xml.Serialization
 			string filePath = "";
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this, "Dictionary");
+			filePath = Temp.MakeTempFilePath(this.GetType(), "Dictionary", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
-			TestSerialization(typeof(Dictionary<string, string>), l, filePath);
+			TestSerialization(filePath, typeof(Dictionary<string, string>), l);
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this, "DictionaryEmpty");
+			filePath = Temp.MakeTempFilePath(this.GetType(), "DictionaryEmpty", FileExtension);
 			Dictionary<string, string> le = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
-			TestSerialization(typeof(Dictionary<string, string>), le, filePath);
+			TestSerialization(filePath, typeof(Dictionary<string, string>), le);
 #endif
 			filePath = Temp.MakeTempFilePath(this.GetType(), "DictionaryToArrayOfArrays", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>();
@@ -265,6 +311,16 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
 			TestSerialization(filePath, typeof(RecentItem<string>), ri);
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItemList", FileExtension);
+			List<RecentItem<string>> ril = new List<RecentItem<string>>();
+			ril.Add(new RecentItem<string>("RIL1"));
+			ril.Add(new RecentItem<string>("RIL2"));
+			TestSerialization(filePath, typeof(List<RecentItem<string>>), ril);
+
+			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItemArray", FileExtension);
+			RecentItem<string>[] ria = ril.ToArray();
+			TestSerialization(filePath, typeof(RecentItem<string>[]), ria);
 		}
 
 		#endregion
@@ -306,6 +362,30 @@ namespace MKY.Test.Xml.Serialization
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
+
+			try
+			{
+				TolerantDeserializeFromFile(filePath, type);
+			}
+			catch (Exception ex)
+			{
+				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
+
+				// Attention: The following call throws an exception, code below it won't be executed.
+				Assert.Fail("XML deserialize error: " + ex.Message);
+			}
+
+			try
+			{
+				AlternateTolerantDeserializeFromFile(filePath, type, null);
+			}
+			catch (Exception ex)
+			{
+				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
+
+				// Attention: The following call throws an exception, code below it won't be executed.
+				Assert.Fail("XML deserialize error: " + ex.Message);
+			}
 		}
 
 		#endregion
@@ -314,6 +394,23 @@ namespace MKY.Test.Xml.Serialization
 		//==========================================================================================
 		// Static Methods
 		//==========================================================================================
+
+		#region Static Methods > Serialize
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Serialize
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public static void SerializeToFile(string filePath, Type type, object settings)
+		{
+			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+			{
+				XmlSerializer serializer = new XmlSerializer(type);
+				serializer.Serialize(sw, settings);
+			}
+		}
+
+		#endregion
 
 		#region Static Methods > Deserialize
 		//------------------------------------------------------------------------------------------
@@ -354,23 +451,6 @@ namespace MKY.Test.Xml.Serialization
 				settings = serializer.Deserialize(sr);
 			}
 			return (settings);
-		}
-
-		#endregion
-
-		#region Static Methods > Serialize
-		//------------------------------------------------------------------------------------------
-		// Static Methods > Serialize
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public static void SerializeToFile(string filePath, Type type, object settings)
-		{
-			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				serializer.Serialize(sw, settings);
-			}
 		}
 
 		#endregion

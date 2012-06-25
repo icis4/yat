@@ -126,7 +126,7 @@ namespace YAT.Gui.Forms
             this.label_Explanation.Name = "label_Explanation";
             this.label_Explanation.Size = new System.Drawing.Size(558, 49);
             this.label_Explanation.TabIndex = 1;
-            this.label_Explanation.Text = "An unhandled exception occured while running YAT. Report this exception to YAT > " +
+            this.label_Explanation.Text = "An unhandled exception occurred while running YAT. Report this exception to YAT > " +
                 "Tracker > Bugs on SourceForge.net to give valuable feedback to continuously impr" +
                 "ove YAT. See below for instructions.";
             // 

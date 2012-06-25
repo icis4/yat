@@ -39,11 +39,14 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Xml.XPath;
+
+using MKY.Xml.Schema;
 
 #endregion
 
@@ -75,7 +78,30 @@ namespace MKY.Xml.Serialization
 			this.type = type;
 
 			// Create an empty object tree of the type to be able to serialize it afterwards.
-			object obj = this.type.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
+			object obj;
+			if (this.type.IsValueType)
+			{
+				obj = Activator.CreateInstance(this.type);
+			}
+			else if (this.type.IsInterface)
+			{
+				throw (new InvalidOperationException("Interfaces cannot be serialized"));
+			}
+			else // IsClass
+			{
+				if (this.type.IsArray)
+				{
+					obj = Array.CreateInstance(this.type.GetElementType(), 0);
+				}
+				else
+				{
+					ConstructorInfo ci = this.type.GetConstructor(new System.Type[] { });
+					if (ci != null)
+						obj = ci.Invoke(new object[] { });
+					else
+						throw (new NotImplementedException("Tolerant serialization of type " + this.type.ToString() + " is not yet implemented"));
+				}
+			}
 
 			// Serialize the empty object tree into a string.
 			// Unlike file serialization, this string serialization will be UTF-16 encoded.
@@ -89,14 +115,16 @@ namespace MKY.Xml.Serialization
 			this.defaultDocument.LoadXml(sb.ToString());
 
 			// Retrieve default schema.
-			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
-			XmlTypeMapping typeMapping = reflectionImporter.ImportTypeMapping(type);
 			XmlSchemas schemas = new XmlSchemas();
-			XmlSchemaExporter schemaExporter = new XmlSchemaExporter(schemas);
-			schemaExporter.ExportTypeMapping(typeMapping);
+			XmlReflectionImporter importer = new XmlReflectionImporter();
+			XmlSchemaExporter exporter = new XmlSchemaExporter(schemas);
+
+			XmlTypeMapping mapping = importer.ImportTypeMapping(type);
+			exporter.ExportTypeMapping(mapping);
 
 			// Set and compile default schema.
 			this.defaultDocument.Schemas.Add(schemas[0]);
+			this.defaultDocument.Schemas.Add(XmlSchemaEx.GuidSchema);
 			this.defaultDocument.Schemas.Compile();
 			this.defaultDocument.Validate(null);
 
@@ -134,8 +162,13 @@ namespace MKY.Xml.Serialization
 		#endif
 
 			// Retrieve and activate schema within document.
-			inputDocument.Schemas = InferSchemaFromXml(inputDocument.OuterXml);
-			inputDocument.Validate(null);
+			using (StringReader sr = new StringReader(inputDocument.OuterXml))
+			{
+				XmlReader innerReader = XmlReader.Create(sr);
+				XmlSchemaInference inference = new XmlSchemaInference();
+				inputDocument.Schemas = inference.InferSchema(innerReader);
+				inputDocument.Validate(null);
+			}
 
 		#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(inputDocument.Schemas, "InputSchema");
@@ -408,28 +441,18 @@ namespace MKY.Xml.Serialization
 			}
 		}
 
-		private XmlSchemaSet InferSchemaFromXml(string xmlString)
-		{
-			using (StringReader sr = new StringReader(xmlString))
-			{
-				XmlReader reader = XmlReader.Create(sr);
-				XmlSchemaInference inference = new XmlSchemaInference();
-				return (inference.InferSchema(reader));
-			}
-		}
-
-	#if (WRITE_SCHEMAS_TO_FILES)
+#if (WRITE_SCHEMAS_TO_FILES)
 		private void WriteSchemasToFiles(XmlSchemaSet schemas, string label)
 		{
 			int i = 0;
 			foreach (XmlSchema schema in schemas.Schemas())
 			{
-				string filePath = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT" + Path.DirectorySeparatorChar + GetType() + "." + label + "-" + i + ".xsd";
+				string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, label, ".xsd");
 				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					schema.Write(sw);
 				}
-				Trace.WriteLine
+				System.Diagnostics.Trace.WriteLine
 				(
 					"For development purposes, schema written to" + Environment.NewLine +
 					@"""" + filePath + @""""
@@ -442,12 +465,12 @@ namespace MKY.Xml.Serialization
 #if (WRITE_DOCUMENTS_TO_FILES)
 		private void WriteDocumentToFile(XmlDocument document, string label)
 		{
-			string filePath = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT" + Path.DirectorySeparatorChar + GetType() + "." + label + ".xml";
+			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, label, ".xml");
 			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
 				document.Save(sw);
 			}
-			Trace.WriteLine
+			System.Diagnostics.Trace.WriteLine
 			(
 				"For development purposes, document written to" + Environment.NewLine +
 				@"""" + filePath + @""""

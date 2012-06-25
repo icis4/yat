@@ -44,7 +44,14 @@ namespace MKY.Settings
 		Implicit,
 	}
 
-	/// <summary></summary>
+	/// <remarks>
+	/// Attention, there currently are two similar implementations of this class:
+	///  > <see cref="Settings.SettingsItem"/>
+	///  > <see cref="Data.DataItem"/>
+	/// The YAT feature request #3392253 "Consider replacing 'Settings' by 'DataItem'" deals with
+	/// this issue, it will therefore not be forgotten. Until this feature request is implemented,
+	/// changes to this class also have to be applied to <see cref="Data.DataItem"/>.
+	/// </remarks>
 	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{

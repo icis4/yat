@@ -64,7 +64,7 @@ namespace MKY.IO
 		event EventHandler<IORequestEventArgs> IORequest;
 
 		/// <summary>
-		/// Fired after an I/O error has occured.
+		/// Fired after an I/O error has occurred.
 		/// </summary>
 		event EventHandler<IOErrorEventArgs> IOError;
 
