@@ -140,16 +140,19 @@ namespace MKY.Xml.Serialization
 
 		private string GetLocalNameAlternateTolerant(string[] standardXmlPath, string localName, AlternateXmlElement[] alternates)
 		{
-			foreach (AlternateXmlElement element in alternates)
+			if (alternates != null)
 			{
-				// Compare XML path.
-				if (ArrayEx.ValuesEqual(element.XmlPath, standardXmlPath))
+				foreach (AlternateXmlElement element in alternates)
 				{
-					// Compare alternates to given local name.
-					foreach (string alternateLocalName in element.AlternateLocalNames)
+					// Compare XML path.
+					if (ArrayEx.ValuesEqual(element.XmlPath, standardXmlPath))
 					{
-						if (StringEx.EqualsOrdinalIgnoreCase(alternateLocalName, localName))
-							return (element.LocalName);
+						// Compare alternates to given local name.
+						foreach (string alternateLocalName in element.AlternateLocalNames)
+						{
+							if (StringEx.EqualsOrdinalIgnoreCase(alternateLocalName, localName))
+								return (element.LocalName);
+						}
 					}
 				}
 			}

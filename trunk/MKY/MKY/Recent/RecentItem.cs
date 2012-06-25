@@ -143,8 +143,11 @@ namespace MKY.Recent
 			if (GetType() != other.GetType())
 				return (false);
 
-			// Do not compare time stamp.
-			return ((this.item != null) && (this.item.Equals(other.item)));
+			// Attention, default(T) can lead to null, e.g. in case of a string!
+			if (this.item != null)
+				return (this.item.Equals(other.item)); // Do not compare time stamp.
+			else
+				return (false);
 		}
 
 		/// <summary>
@@ -153,7 +156,11 @@ namespace MKY.Recent
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			return (this.item.GetHashCode());
+			// Attention, default(T) can lead to null, e.g. in case of a string!
+			if (this.item != null)
+				return (this.item.GetHashCode()); // Do not consider time stamp.
+			else
+				return (0);
 		}
 
 		#endregion

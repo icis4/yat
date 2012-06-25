@@ -62,7 +62,7 @@ namespace MKY.IO.Serial
 		event EventHandler DataSent;
 
 		/// <summary>
-		/// Fired after an I/O error has occured.
+		/// Fired after an I/O error has occurred.
 		/// </summary>
 		event EventHandler<IOErrorEventArgs> IOError;
 

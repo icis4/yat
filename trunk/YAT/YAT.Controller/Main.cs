@@ -368,7 +368,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while preparing " + Application.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
 					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, false, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
 						Application.Restart();
 
@@ -398,7 +398,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
 					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, false, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
 						Application.Restart();
 
@@ -414,7 +414,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			string message = "An unhandled synchronous exception occured while running" + Application.ProductName + ".";
+			string message = "An unhandled synchronous exception occurred while running" + Application.ProductName + ".";
 			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, false, true);
 			
 			if      (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
@@ -430,7 +430,7 @@ namespace YAT.Controller
 		private void RunFullyWithView_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			Exception ex = e.ExceptionObject as Exception;
-			string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
+			string message = "An unhandled asynchronous exception occurred while running " + Application.ProductName + ".";
 			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, true, false);
 
 			if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
@@ -469,7 +469,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while preparing " + Application.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
 					Console.WriteLine(message);
 
 					if (ex != null)
@@ -501,7 +501,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
 					Console.WriteLine(message);
 
 					if (ex != null)
@@ -519,7 +519,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			string message = "An unhandled synchronous exception occured while running" + Application.ProductName + ".";
+			string message = "An unhandled synchronous exception occurred while running" + Application.ProductName + ".";
 			Console.WriteLine(message);
 
 			Exception ex = e.Exception;
@@ -532,7 +532,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
+			string message = "An unhandled asynchronous exception occurred while running " + Application.ProductName + ".";
 			Console.WriteLine(message);
 
 			Exception ex = e.ExceptionObject as Exception;
@@ -576,7 +576,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
 					Console.WriteLine(message);
 
 					MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
@@ -593,7 +593,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyFromConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous exception occured while running " + Application.ProductName + ".";
+			string message = "An unhandled asynchronous exception occurred while running " + Application.ProductName + ".";
 			Console.WriteLine(message);
 
 			Exception ex = e.ExceptionObject as Exception;

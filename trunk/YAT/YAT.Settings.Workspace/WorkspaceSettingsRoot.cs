@@ -36,7 +36,9 @@ namespace YAT.Settings.Workspace
 	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem
 	{
-		private string productVersion = System.Windows.Forms.Application.ProductVersion;
+		private string settingsVersion = "1.1.1";
+		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
+
 		private bool autoSaved = false;
 		private WorkspaceSettings workspace;
 
@@ -66,6 +68,14 @@ namespace YAT.Settings.Workspace
 		public virtual string FileType
 		{
 			get { return ("YAT Workspace Settings"); }
+			set { } // Do nothing.
+		}
+
+		/// <summary></summary>
+		[XmlElement("SettingsVersion")]
+		public virtual string SettingsVersion
+		{
+			get { return (this.settingsVersion); }
 			set { } // Do nothing.
 		}
 

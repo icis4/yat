@@ -33,7 +33,9 @@ namespace YAT.Settings.Application
 	[XmlRoot("LocalUserSettings")]
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem
 	{
-		private string productVersion = System.Windows.Forms.Application.ProductVersion;
+		private string settingsVersion = "1.3.1";
+		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
+
 		private Settings.GeneralSettings general;
 		private Settings.PathSettings paths;
 		private Settings.AutoWorkspaceSettings autoAutoWorkspace;
@@ -79,6 +81,14 @@ namespace YAT.Settings.Application
 		public virtual string FileType
 		{
 			get { return ("YAT local user settings"); }
+			set { } // Do nothing.
+		}
+
+		/// <summary></summary>
+		[XmlElement("SettingsVersion")]
+		public virtual string SettingsVersion
+		{
+			get { return (this.settingsVersion); }
 			set { } // Do nothing.
 		}
 

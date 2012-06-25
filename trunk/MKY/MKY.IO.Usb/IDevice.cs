@@ -48,7 +48,7 @@ namespace MKY.IO.Usb
 		event EventHandler Disconnected;
 
 		/// <summary>
-		/// Fired after an error has occured.
+		/// Fired after an error has occurred.
 		/// </summary>
 		event EventHandler<ErrorEventArgs> Error;
 

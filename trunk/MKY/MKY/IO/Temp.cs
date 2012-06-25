@@ -41,8 +41,18 @@ namespace MKY.IO
 
 		private static string MakeTempPath(Type type, bool outputPathToDebug)
 		{
-			// Results in e.g. "D:\Temp\MKY.Test".
-			string path = Path.GetTempPath() + type.Namespace;
+			// Results in e.g. "MKY".
+			string root = string.Empty;
+			string[] splits = type.Namespace.Split('.');
+			if (splits.Length > 0)
+				root = splits[0];
+
+			// Results in e.g. "D:\Temp\MKY\MKY.Test".
+			string path;
+			if (string.IsNullOrEmpty(root))
+				path = Path.GetTempPath() + type.Namespace;
+			else
+				path = Path.GetTempPath() + root + Path.DirectorySeparatorChar + type.Namespace;
 
 			if (outputPathToDebug)
 				Debug.WriteLine(@"Temporary path is      """ + path + @""".");
@@ -121,21 +131,30 @@ namespace MKY.IO
 		private static string MakeTempFilePath(Type type, string name, string extension, bool outputFilePathToDebug)
 		{
 			string filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, "", extension, false);
+
+			// Postfix the file name with a unique number if the file already exists.
+			// Do not use a GUID:
+			//  > The file name gets very long.
+			//  > It's more difficult to find related files.
 			if (File.Exists(filePath))
 			{
-				const int Max = 9999;
+				const int Max = 999999999; // Pretty close to int.MaxValue, and ridiculously long for a number of file in a directory.
+				string istr = "";
 				int i = 0;
 				for (i = 0; i <= Max; i++)
 				{
-					filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, i.ToString(NumberFormatInfo.InvariantInfo), extension, false);
+					istr = i.ToString(NumberFormatInfo.InvariantInfo);
+					filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, istr, extension, false);
 					if (!File.Exists(filePath))
 						break;
 				}
 
 				if (i >= Max)
-					throw (new FileNotFoundException("Failed to create temporary file name"));
+					throw (new OverflowException("Failed to create a temporary file name because there already are " + istr + " files in the directory"));
 			}
 
+
+			// Optionally output the file path for debugging purposes.
 			if (outputFilePathToDebug)
 				Debug.WriteLine(@"Temporary file path is """ + filePath + @""".");
 

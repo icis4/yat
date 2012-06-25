@@ -53,7 +53,9 @@ namespace YAT.Settings.Terminal
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
 			};
 
-		private string productVersion = System.Windows.Forms.Application.ProductVersion;
+		private string settingsVersion = "1.3.1";
+		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
+
 		private bool autoSaved = false;
 		private ExplicitSettings explicit_;
 		private ImplicitSettings implicit_;
@@ -86,6 +88,14 @@ namespace YAT.Settings.Terminal
 		public virtual string FileType
 		{
 			get { return ("YAT Terminal Settings"); }
+			set { } // Do nothing.
+		}
+
+		/// <summary></summary>
+		[XmlElement("SettingsVersion")]
+		public virtual string SettingsVersion
+		{
+			get { return (this.settingsVersion); }
 			set { } // Do nothing.
 		}
 

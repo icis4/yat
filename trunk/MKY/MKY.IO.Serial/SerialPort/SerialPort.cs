@@ -609,7 +609,7 @@ namespace MKY.IO.Serial
 						{
 							lock (this.inputIsXOnSyncObj)
 							{
-								if (BoolEx.SetIfCleared(ref this.inputIsXOn))
+								if (BooleanEx.SetIfCleared(ref this.inputIsXOn))
 									signalXOnXOff = true;
 
 								lock (this.manualInputWasXOnSyncObj)
@@ -620,7 +620,7 @@ namespace MKY.IO.Serial
 						{
 							lock (this.inputIsXOnSyncObj)
 							{
-								if (BoolEx.ClearIfSet(ref this.inputIsXOn))
+								if (BooleanEx.ClearIfSet(ref this.inputIsXOn))
 									signalXOnXOff = true;
 
 								lock (this.manualInputWasXOnSyncObj)
@@ -1037,7 +1037,7 @@ namespace MKY.IO.Serial
 							{
 								lock (this.outputIsXOnSyncObj)
 								{
-									if (BoolEx.SetIfCleared(ref this.outputIsXOn))
+									if (BooleanEx.SetIfCleared(ref this.outputIsXOn))
 										signalXOnXOff = true;
 								}
 							}
@@ -1045,7 +1045,7 @@ namespace MKY.IO.Serial
 							{
 								lock (this.outputIsXOnSyncObj)
 								{
-									if (BoolEx.ClearIfSet(ref this.outputIsXOn))
+									if (BooleanEx.ClearIfSet(ref this.outputIsXOn))
 										signalXOnXOff = true;
 								}
 							}

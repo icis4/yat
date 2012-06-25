@@ -28,7 +28,14 @@ using MKY.Event;
 
 namespace MKY.Data
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Attention, there currently are two similar implementations of this class:
+	///  > <see cref="Data.DataItem"/>
+	///  > <see cref="Settings.SettingsItem"/>
+	/// The YAT feature request #3392253 "Consider replacing 'Settings' by 'DataItem'" deals with
+	/// this issue, it will therefore not be forgotten. Until this feature request is implemented,
+	/// changes to this class also have to be applied to <see cref="Settings.SettingsItem"/>.
+	/// </remarks>
 	[Serializable]
 	public abstract class DataItem : IEquatable<DataItem>
 	{

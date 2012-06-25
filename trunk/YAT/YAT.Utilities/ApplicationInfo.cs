@@ -46,8 +46,11 @@ namespace YAT.Utilities
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = Application.ProductName + ProductBuildName;
 
+		/// <summary>The product version.</summary>
+		public static readonly string ProductVersion = Application.ProductVersion;
+
 		/// <summary>The complete product name including build description and version.</summary>
-		public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + Application.ProductVersion;
+		public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + ProductVersion;
 
 		/// <summary>The long variant of the complete product name including build description and version.</summary>
 		public static readonly string ProductNameLong = Application.ProductName + " - Yet Another Terminal";

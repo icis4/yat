@@ -56,6 +56,35 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public static object LoadFromFile(string filePath, Type type, Type parentType)
+		{
+			return (LoadFromFile(filePath, type, null, parentType));
+		}
+
+		/// <summary>
+		/// This method loads settings from a file. If the schema of the settings doesn't match,
+		/// this method tries to load the settings using tolerant XML interpretation by making use
+		/// of <see cref="TolerantXmlSerializer"/> or <see cref="AlternateTolerantXmlSerializer"/>.
+		/// </summary>
+		/// <remarks>
+		/// There are some issues with tolerant XML interpretation in case of lists. See YAT bug
+		/// #3537940 "Issues with TolerantXmlSerializer" for details. The following solutions
+		/// could fix these issues:
+		///  > Fix these issues in <see cref="TolerantXmlSerializer"/>
+		///  > Implement a different variant of tolerant XML interpretation
+		///     > Use of the default XML serialization to only process parts of the XML tree
+		///  > Use of SerializationBinder (feature request #3392369)
+		///  > Use of XSLT
+		///     > Requires that every setting's schema is archived
+		///     > Requires an incremental XSLT chain from every former schema
+		///       (Alternatively, an immediate XSLT from every former schema)
+		/// 
+		/// Decision 2012-06: For the moment, the current solution is kept, rationale:
+		///  > Creating an XSLT is time consuming for each release
+		///  > Creating an XSLT fully or partly automatically requires an (expensive) tool
+		///  > Current solution isn't perfect but good enough and easy to handle (no efforts)
+		///  > Current solution also works for other software that makes use of MKY or YAT code
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements, Type parentType)
 		{
@@ -117,7 +146,9 @@ namespace MKY.Settings
 			return (settings);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="LoadFromFile"/> above.
+		/// </remarks>
 		public static object TolerantDeserializeFromFile(string filePath, Type type)
 		{
 			object settings = null;
@@ -129,7 +160,9 @@ namespace MKY.Settings
 			return (settings);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// For details on tolerant serialization <see cref="LoadFromFile"/> above.
+		/// </remarks>
 		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
 		{
 			object settings = null;
