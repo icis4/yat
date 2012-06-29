@@ -21,9 +21,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
-using System.IO;
+
+#endregion
 
 namespace YAT.Settings.Test
 {
@@ -42,6 +48,12 @@ namespace YAT.Settings.Test
 	// since they pretty much tell their purpose and documentation tags between the members
 	// makes the code less readable.
 	#pragma warning disable 1591
+
+	/// <summary></summary>
+	public enum LocalUserSettingsTestCase
+	{
+		Dummy,
+	}
 
 	/// <summary></summary>
 	public enum TerminalSettingsTestCase
@@ -73,9 +85,13 @@ namespace YAT.Settings.Test
 	//------------------------------------------------------------------------------------------
 
 	/// <summary></summary>
-	public struct SettingsFilePaths
+	public class SettingsFilePaths
 	{
-		private readonly string FilePath;
+		/// <summary></summary>
+		public readonly string Path;
+
+		/// <summary></summary>
+		public readonly Dictionary<LocalUserSettingsTestCase, string> LocalUserFilePaths;
 
 		/// <summary></summary>
 		public readonly Dictionary<TerminalSettingsTestCase, string> TerminalFilePaths;
@@ -84,30 +100,46 @@ namespace YAT.Settings.Test
 		public readonly Dictionary<WorkspaceSettingsTestCase, string> WorkspaceFilePaths;
 
 		/// <summary></summary>
+		public SettingsFilePaths()
+			: this(null)
+		{
+		}
+
+		/// <summary></summary>
 		public SettingsFilePaths(string directory)
 		{
 			// Traverse path from "<Root>\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>".
-			DirectoryInfo di = new DirectoryInfo(Environment.CurrentDirectory);
+			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Environment.CurrentDirectory);
 			for (int i = 0; i < 3; i++)
 				di = di.Parent;
 
-			// Set path to "<Root>\!-Settings\<Directory>\".
-			FilePath = di.FullName + Path.DirectorySeparatorChar + "!-Settings" + Path.DirectorySeparatorChar + directory + Path.DirectorySeparatorChar;
+			// Set path to "<Root>\!-Settings\" or "<Root>\!-Settings\<Directory>\".
+			if (string.IsNullOrEmpty(directory))
+				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar;
+			else
+				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
+			LocalUserFilePaths = new Dictionary<LocalUserSettingsTestCase, string>();
 			TerminalFilePaths  = new Dictionary<TerminalSettingsTestCase,  string>();
 			WorkspaceFilePaths = new Dictionary<WorkspaceSettingsTestCase, string>();
 		}
 
 		/// <summary></summary>
+		public void AddLocalUserFileName(LocalUserSettingsTestCase fileKey, string fileName)
+		{
+			LocalUserFilePaths.Add(fileKey, Path + fileName);
+		}
+
+		/// <summary></summary>
 		public void AddTerminalFileName(TerminalSettingsTestCase fileKey, string fileName)
 		{
-			TerminalFilePaths.Add(fileKey, FilePath + fileName);
+			TerminalFilePaths.Add(fileKey, Path + fileName);
 		}
 
 		/// <summary></summary>
 		public void AddWorkspaceFileName(WorkspaceSettingsTestCase fileKey, string fileName)
 		{
-			WorkspaceFilePaths.Add(fileKey, FilePath + fileName);
+			WorkspaceFilePaths.Add(fileKey, Path + fileName);
 		}
 	}
 
