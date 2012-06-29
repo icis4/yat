@@ -861,7 +861,7 @@ namespace MKY.Test.Settings
 			{
 				TraceEx.WriteException(typeof(SettingsTest), ex);
 
-				// Attention: The following call throws an exception, code below it won't be executed
+				// Attention: The following call throws an exception, code below that call won't be executed
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 		}
@@ -882,7 +882,7 @@ namespace MKY.Test.Settings
 				obj = null;
 				TraceEx.WriteException(typeof(SettingsTest), ex);
 
-				// Attention: The following call throws an exception, code below it won't be executed
+				// Attention: The following call throws an exception, code below that call won't be executed
 				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
 		}

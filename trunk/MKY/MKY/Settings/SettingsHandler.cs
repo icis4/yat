@@ -147,7 +147,7 @@ namespace MKY.Settings
 		}
 
 		/// <remarks>
-		/// For details on tolerant serialization <see cref="LoadFromFile"/> above.
+		/// For details on tolerant serialization <see cref="LoadFromFile(string, Type, AlternateXmlElement[], Type)"/> above.
 		/// </remarks>
 		public static object TolerantDeserializeFromFile(string filePath, Type type)
 		{
@@ -161,7 +161,7 @@ namespace MKY.Settings
 		}
 
 		/// <remarks>
-		/// For details on tolerant serialization <see cref="LoadFromFile"/> above.
+		/// For details on tolerant serialization <see cref="LoadFromFile(string, Type, AlternateXmlElement[], Type)"/> above.
 		/// </remarks>
 		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
 		{

@@ -217,7 +217,7 @@ namespace YAT.Settings.Test
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
-				// Attention: The following call throws an exception, code below it won't be executed.
+				// Attention: The following call throws an exception, code below that call won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 
@@ -230,7 +230,7 @@ namespace YAT.Settings.Test
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
-				// Attention: The following call throws an exception, code below it won't be executed.
+				// Attention: The following call throws an exception, code below that call won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
 		}

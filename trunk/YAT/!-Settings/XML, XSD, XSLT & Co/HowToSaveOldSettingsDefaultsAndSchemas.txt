@@ -1,88 +1,12 @@
 ﻿
-Procedure to serialize all settings defaults and schemas.
-Procedure done for all versions up to 1.99.28 on 2012-06-16.
+For YAT 1.99.29 and newer versions, these files can be created using NUnit based 'test' cases in YAT.Settings.Test.SettingsFilesArchiver.
+
+For YAT 1.99.28 and before, code as implemented in YAT.Settings.Test.SettingsFilesArchiver had to be manually added to YAT.Gui.Forms.Main:
 
 1. Open the project of the version to serialize
 2. Select the "Debug" configuration
-3. Place the following code into YAT.Gui.Forms.Main and YAT.Gui.Forms.Main.Main
+3. Place the code from YAT.Settings.Test.SettingsFilesArchiver into YAT.Gui.Forms.Main
 4. Run YAT
-   => Files are created in "D:\Temp\YAT"
+   => Files are created in the directory specified
 
-
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-
-
-			CreateDefaultDocumentAndSchema(typeof(YAT.Settings.Application.LocalUserSettingsRoot), "LocalUserSettings");
-			CreateDefaultDocumentAndSchema(typeof(YAT.Settings.Workspace.WorkspaceSettingsRoot), "WorkspaceSettings");
-			CreateDefaultDocumentAndSchema(typeof(YAT.Settings.Terminal.TerminalSettingsRoot), "TerminalSettings");
-		}
-
-		private void CreateDefaultDocumentAndSchema(Type type, string label)
-		{
-			ConstructorInfo ci = type.GetConstructor(new System.Type[] { });
-			object obj = ci.Invoke(new object[] { });
-
-			// Serialize the empty object tree into a string.
-			// Unlike file serialization, this string serialization will be UTF-16 encoded.
-			StringBuilder sb = new StringBuilder();
-			System.Xml.XmlWriter writer = System.Xml.XmlWriter.Create(sb);
-			XmlSerializer serializer = new XmlSerializer(type);
-			serializer.Serialize(writer, obj);
-
-			// Load that string into an XML document that serves as base for new documents.
-			XmlDocument defaultDocument = new XmlDocument();
-			defaultDocument.LoadXml(sb.ToString());
-
-			// Retrieve default schema.
-			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
-			XmlTypeMapping typeMapping = reflectionImporter.ImportTypeMapping(type);
-			XmlSchemas schemas = new XmlSchemas();
-			XmlSchemaExporter schemaExporter = new XmlSchemaExporter(schemas);
-			schemaExporter.ExportTypeMapping(typeMapping);
-
-			// Set and compile default schema.
-			defaultDocument.Schemas.Add(schemas[0]);
-			defaultDocument.Schemas.Compile();
-			defaultDocument.Validate(null);
-
-			WriteSchemasToFiles(defaultDocument.Schemas, label + "Schema");
-			WriteDocumentToFile(defaultDocument, label + "Default");
-		}
-
-		private void WriteSchemasToFiles(XmlSchemaSet schemas, string label)
-		{
-			int i = 0;
-			foreach (XmlSchema schema in schemas.Schemas())
-			{
-				string filePath = "D:\\Temp\\YAT\\" + label + ".xsd";
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					schema.Write(sw);
-				}
-				Trace.WriteLine
-				(
-					"For development purposes, schema written to" + Environment.NewLine +
-					@"""" + filePath + @""""
-				);
-				i++;
-			}
-		}
-
-		private void WriteDocumentToFile(XmlDocument document, string label)
-		{
-			string filePath = "D:\\Temp\\YAT\\" + label + ".xml";
-			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-			{
-				document.Save(sw);
-			}
-			Trace.WriteLine
-			(
-				"For development purposes, document written to" + Environment.NewLine +
-				@"""" + filePath + @""""
-			);
-		}
+This procedure was done for all versions up to 1.99.28 on 2012-06-16.

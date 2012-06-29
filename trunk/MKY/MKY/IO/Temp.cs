@@ -47,12 +47,12 @@ namespace MKY.IO
 			if (splits.Length > 0)
 				root = splits[0];
 
-			// Results in e.g. "D:\Temp\MKY\MKY.Test".
+			// Results in e.g. "D:\Temp\MKY\MKY.Test\MKY.Test.MyClass".
 			string path;
 			if (string.IsNullOrEmpty(root))
-				path = Path.GetTempPath() + type.Namespace;
+				path = Path.GetTempPath()                                      + type.Namespace + Path.DirectorySeparatorChar + type.Name;
 			else
-				path = Path.GetTempPath() + root + Path.DirectorySeparatorChar + type.Namespace;
+				path = Path.GetTempPath() + root + Path.DirectorySeparatorChar + type.Namespace + Path.DirectorySeparatorChar + type.Name;
 
 			if (outputPathToDebug)
 				Debug.WriteLine(@"Temporary path is      """ + path + @""".");

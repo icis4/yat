@@ -442,12 +442,18 @@ namespace MKY.Xml.Serialization
 		}
 
 #if (WRITE_SCHEMAS_TO_FILES)
-		private void WriteSchemasToFiles(XmlSchemaSet schemas, string label)
+		private void WriteSchemasToFiles(XmlSchemaSet schemas, string name)
 		{
+			int n = schemas.Schemas().Count;
 			int i = 0;
 			foreach (XmlSchema schema in schemas.Schemas())
 			{
-				string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, label, ".xsd");
+				string filePath;
+				if (n <= 1)
+					filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name, ".xsd");
+				else
+					filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name + "-" + i, ".xsd";
+
 				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					schema.Write(sw);
@@ -463,9 +469,9 @@ namespace MKY.Xml.Serialization
 #endif
 
 #if (WRITE_DOCUMENTS_TO_FILES)
-		private void WriteDocumentToFile(XmlDocument document, string label)
+		private void WriteDocumentToFile(XmlDocument document, string name)
 		{
-			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, label, ".xml");
+			string filePath = MKY.IO.Temp.MakeTempFilePath(this.type, name, ".xml");
 			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
 				document.Save(sw);

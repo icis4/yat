@@ -1643,7 +1643,7 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only displays the general functionality of Equals() and ==/!=. It does not test any MKY functionality.")]
+	[TestFixture, Explicit("This test fixture only displays the general functionality of Equals() and ==/!=. It does neither perform any tests nor tests any MKY functionality.")]
 	public class DisplayEquality
 	{
 		#region Tests
@@ -1735,7 +1735,7 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does not test any MKY functionality.")]
+	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
 	public class EqualityTestOfValueTypes
 	{
 		#region Tests
@@ -1798,7 +1798,7 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does not test any MKY functionality.")]
+	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
 	public class EqualityTestOfReferenceTypesWithoutOperators
 	{
 		#region Tests
@@ -1941,7 +1941,7 @@ namespace MKY.Test
 	}
 
 	/// <summary></summary>
-	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does not test any MKY functionality.")]
+	[TestFixture, Explicit("This test fixture only tests the general functionality of Equals() and ==/!=. It does neither perform any 'real' tests nor tests any MKY functionality.")]
 	public class EqualityTestOfReferenceTypesWithOperators
 	{
 		#region Tests
