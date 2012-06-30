@@ -630,11 +630,28 @@ namespace YAT.Model
 						"File error message: " + ex.InnerException.Message,
 						"File Error",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+						MessageBoxIcon.Error
 						);
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 			}
+			catch (Exception ex)
+			{
+				if (!doAutoSave)
+				{
+					OnFixedStatusTextRequest("Error saving workspace!");
+					OnMessageInputRequest
+						(
+						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"Error message: " + ex.Message,
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					OnTimedStatusTextRequest("Workspace not saved!");
+				}
+			}
+
 			return (success);
 		}
 
