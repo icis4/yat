@@ -70,7 +70,7 @@ Fixed bugs:
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Printer dialog also gets shown on 64-bit systems
 - Terminal SaveAs dialog no longer shows .yat.yat in case of already saved files (bug #3532391)
-- UnauthorizedAccessException in YAT.Model.Terminal/Workspace fixed (bug #3533201)
+- Handling of UnauthorizedAccessException in YAT.Model.Terminal/Workspace improved (bug #3533201)
 - IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085)
 - ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634)
 - Improvement of modal behavior in case of console and non-view execution (bug #3516441)
