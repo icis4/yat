@@ -43,7 +43,7 @@ namespace MKY.Settings
 	/// <summary>
 	/// Static utility class to provide basic settings file handling methods.
 	/// </summary>
-	public static class SettingsHandler
+	public static class SettingsFileHandler
 	{
 		#region Static Methods
 		//==========================================================================================

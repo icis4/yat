@@ -243,7 +243,7 @@ namespace MKY.Settings
 			private object LoadFromFile(Type type, string filePath, AlternateXmlElement[] alternateXmlElements)
 			{
 				// Try to open existing file of current version.
-				object settings = SettingsHandler.LoadFromFile(filePath, type, alternateXmlElements, this.GetType());
+				object settings = SettingsFileHandler.LoadFromFile(filePath, type, alternateXmlElements, this.GetType());
 				if (settings != null)
 					return (settings);
 
@@ -271,7 +271,7 @@ namespace MKY.Settings
 					for (int i = oldDirectories.Count - 1; i >= 0; i--)
 					{
 						string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
-						settings = SettingsHandler.LoadFromFile(oldFilePath, type, alternateXmlElements, this.GetType());
+						settings = SettingsFileHandler.LoadFromFile(oldFilePath, type, alternateXmlElements, this.GetType());
 						if (settings != null)
 							return (settings);
 					}
