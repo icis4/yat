@@ -42,10 +42,10 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
 			this.usbSerialHidDeviceSettings = new YAT.Gui.Controls.UsbSerialHidDeviceSettings();
 			this.usbSerialHidDeviceSelection = new YAT.Gui.Controls.UsbSerialHidDeviceSelection();
+			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
 			this.socketSettings = new YAT.Gui.Controls.SocketSettings();
 			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
 			this.serialPortSettings = new YAT.Gui.Controls.SerialPortSettings();
-			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
 			this.menuItem_Port = new System.Windows.Forms.ContextMenu();
 			this.menuItem_Port_Search = new System.Windows.Forms.MenuItem();
 			this.button_Defaults = new System.Windows.Forms.Button();
@@ -161,6 +161,20 @@ namespace YAT.Gui.Forms
 			this.usbSerialHidDeviceSelection.TabIndex = 4;
 			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
 			// 
+			// socketSelection
+			// 
+			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.socketSelection.Location = new System.Drawing.Point(6, 19);
+			this.socketSelection.Name = "socketSelection";
+			this.socketSelection.Size = new System.Drawing.Size(285, 125);
+			this.socketSelection.TabIndex = 2;
+			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
+			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
+			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
+			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
+			// 
 			// socketSettings
 			// 
 			this.socketSettings.Location = new System.Drawing.Point(9, 146);
@@ -196,20 +210,6 @@ namespace YAT.Gui.Forms
 			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
 			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
 			this.serialPortSettings.DataBitsChanged += new System.EventHandler(this.serialPortSettings_DataBitsChanged);
-			// 
-			// socketSelection
-			// 
-			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSelection.Location = new System.Drawing.Point(6, 19);
-			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(285, 125);
-			this.socketSelection.TabIndex = 2;
-			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
-			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
-			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
-			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
-			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
 			// 
 			// menuItem_Port
 			// 
@@ -263,7 +263,7 @@ namespace YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Terminal Settings";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TerminalSettings_Paint);
+			this.Shown += new System.EventHandler(this.TerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_PortSettings.ResumeLayout(false);
 			this.ResumeLayout(false);

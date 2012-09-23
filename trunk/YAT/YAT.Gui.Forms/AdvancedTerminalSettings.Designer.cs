@@ -50,6 +50,7 @@
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
 			this.groupBox_DisplaySettings = new System.Windows.Forms.GroupBox();
+			this.checkBox_ShowLineNumbers = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_Tab = new System.Windows.Forms.GroupBox();
 			this.label_ReplaceTab = new System.Windows.Forms.Label();
 			this.checkBox_ReplaceTab = new System.Windows.Forms.CheckBox();
@@ -74,7 +75,6 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
-			this.checkBox_ShowLineNumbers = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
@@ -345,6 +345,17 @@
 			this.groupBox_DisplaySettings.TabStop = false;
 			this.groupBox_DisplaySettings.Text = "Display Settings";
 			// 
+			// checkBox_ShowLineNumbers
+			// 
+			this.checkBox_ShowLineNumbers.AutoSize = true;
+			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(131, 95);
+			this.checkBox_ShowLineNumbers.Name = "checkBox_ShowLineNumbers";
+			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(110, 17);
+			this.checkBox_ShowLineNumbers.TabIndex = 17;
+			this.checkBox_ShowLineNumbers.Text = "Show line n&umber";
+			this.checkBox_ShowLineNumbers.UseVisualStyleBackColor = true;
+			this.checkBox_ShowLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowLineNumbers_CheckedChanged);
+			// 
 			// groupBox_Display_Tab
 			// 
 			this.groupBox_Display_Tab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
@@ -600,17 +611,6 @@
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// checkBox_ShowLineNumbers
-			// 
-			this.checkBox_ShowLineNumbers.AutoSize = true;
-			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(131, 95);
-			this.checkBox_ShowLineNumbers.Name = "checkBox_ShowLineNumbers";
-			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(110, 17);
-			this.checkBox_ShowLineNumbers.TabIndex = 17;
-			this.checkBox_ShowLineNumbers.Text = "Show line n&umber";
-			this.checkBox_ShowLineNumbers.UseVisualStyleBackColor = true;
-			this.checkBox_ShowLineNumbers.CheckedChanged += new System.EventHandler(this.checkBox_ShowLineNumbers_CheckedChanged);
-			// 
 			// AdvancedTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -629,7 +629,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Advanced Terminal Settings";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.ExtendendTerminalSettings_Paint);
+			this.Shown += new System.EventHandler(this.AdvancedTerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_User.ResumeLayout(false);
 			this.groupBox_User.PerformLayout();

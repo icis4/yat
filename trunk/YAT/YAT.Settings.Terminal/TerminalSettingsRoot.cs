@@ -53,10 +53,13 @@ namespace YAT.Settings.Terminal
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
 			};
 
+		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.3.1";
+
+		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
 		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
 
-		private bool autoSaved = false;
+		private bool autoSaved;
 		private ExplicitSettings explicit_;
 		private ImplicitSettings implicit_;
 

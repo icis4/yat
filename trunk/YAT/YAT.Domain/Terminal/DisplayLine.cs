@@ -119,7 +119,7 @@ namespace YAT.Domain
 			{
 				// For performance reasons, append the item to the last item if possible.
 				int lastIndex = Count - 1;
-				if (this[lastIndex].IsSameKindAs(item))
+				if (this[lastIndex].AcceptsAppendOf(item))
 					this[lastIndex].Append(item.Clone());
 				else
 					base.Add(item.Clone());

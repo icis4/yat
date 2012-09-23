@@ -24,22 +24,15 @@
 using System;
 using System.Windows.Forms;
 
-using YAT.Utilities;
-
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
 	public partial class Help : Form
 	{
-		/// <summary>
+		/// <remarks>
 		/// \fixme:
 		/// Add a true help to YAT.
-		/// 
-		/// \remind:
-		/// Explain framing errors:
-		/// "A framing error occurs when the last bit is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when using a null modem linking two computers or a protocol analyzer when the speed at which the data is being sent is different to that of what you have the UART set to receive it at."
-		/// In YAT, these errors are shown in red.
-		/// </summary>
+		/// </remarks>
 		public Help()
 		{
 			InitializeComponent();
@@ -61,6 +54,10 @@ namespace YAT.Gui.Forms
 			textBox_TextTerminalKeyword.Text = Domain.TextTerminal.KeywordHelp;
 			textBox_TextTerminalKeyword.SelectionStart = 0;
 			textBox_TextTerminalKeyword.SelectionLength = 0;
+
+			textBox_SerialPort.Text = Domain.Terminal.SerialPortHelp;
+			textBox_SerialPort.SelectionStart = 0;
+			textBox_SerialPort.SelectionLength = 0;
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)

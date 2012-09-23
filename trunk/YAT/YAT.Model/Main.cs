@@ -57,19 +57,6 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : IDisposable, IGuidProvider
 	{
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		/// <summary>
-		/// Keep track of how many instances of main are running, needed to check for multiple
-		/// instances in <see cref="Start()"/>.
-		/// </summary>
-		private static int staticInstancesRunning = 0;
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -291,7 +278,6 @@ namespace YAT.Model
 
 			// Start YAT according to the start requests:
 			bool success = false;
-			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 
 			bool workspaceIsRequested = (this.startArgs.WorkspaceSettings != null);
 			bool terminalIsRequested  = (this.startArgs.TerminalSettings  != null);
@@ -311,47 +297,33 @@ namespace YAT.Model
 					success = OpenTerminalFromSettings(this.startArgs.TerminalSettings);
 				}
 
-				if (success)
-				{
-					// Reset workspace file path to ensure that command line files are not used on
-					// next 'normal' start:
-					ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
-					ApplicationSettings.Save();
-
-					// Clean up all default workspaces/terminals since they're not needed anymore:
-					if (!otherInstanceIsAlreadyRunning)
-						CleanupLocalUserDirectory();
-				}
+				// Note that any existing auto workspace settings are kept as they are.
+				// Thus, they can be used again at the next 'normal' start of YAT.
 			}
 
-			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
+			if (!success && ApplicationSettings.LocalUserSettingsAreCurrentlyOwnedByThisInstance)
 			{
-				// Make sure that auto workspace is not already in use by another instance of YAT:
-				if (ApplicationSettings.LocalUser.AutoWorkspace.FilePathUser == Guid.Empty)
-				{
-					string filePath = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
-					if (File.Exists(filePath))
-						success = OpenWorkspaceFromFile(filePath);
-				}
-			}
+				string filePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+				if (File.Exists(filePath))
+					success = OpenWorkspaceFromFile(filePath);
 
-			// Clean up the default directory:
-			if (!otherInstanceIsAlreadyRunning)
+				// Clean up the local user directory:
 				CleanupLocalUserDirectory();
+			}
 
 			// If no success so far, create a new empty workspace:
 			if (!success)
 			{
 				// Reset workspace file path:
-				ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
+				ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
 				ApplicationSettings.Save();
 
 				success = CreateNewWorkspace();
 			}
 
-			// Update number of running instances:
+			// Start the workspace, i.e. start all included terminals:
 			if (success)
-				staticInstancesRunning++;
+				success = this.workspace.Start();
 
 			if (success)
 				return (MainResult.Success);
@@ -427,7 +399,7 @@ namespace YAT.Model
 			// Open the requested settings file:
 			if (!string.IsNullOrEmpty(requestedFilePath))
 			{
-				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(requestedFilePath)))
+				if (ExtensionSettings.IsWorkspaceFile(requestedFilePath))
 				{
 					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 					if (OpenWorkspaceFile(requestedFilePath, out sh))
@@ -435,7 +407,7 @@ namespace YAT.Model
 					else
 						return (false);
 				}
-				else if (ExtensionSettings.IsTerminalFile(Path.GetExtension(requestedFilePath)))
+				else if (ExtensionSettings.IsTerminalFile(requestedFilePath))
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					if (OpenTerminalFile(requestedFilePath, out sh))
@@ -708,32 +680,6 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OtherInstanceIsAlreadyRunning()
-		{
-			List<Process> processes = new List<Process>();
-
-			// Get all processes named "YAT" (also "NUnit" while testing).
-			processes.AddRange(Process.GetProcessesByName(Application.ProductName));
-
-			// Also get all debug processes named "YAT.vshost".
-			processes.AddRange(Process.GetProcessesByName(Application.ProductName + ".vshost"));
-
-			// Remove current instance.
-			Process currentProcess = Process.GetCurrentProcess();
-			foreach (Process p in processes)
-			{
-				// Comparision must happen through process ID.
-				if (p.Id == currentProcess.Id)
-				{
-					processes.Remove(p);
-					break;
-				}
-			}
-
-			// Consider multiple processes as well as multiple instances within this process.
-			return ((processes.Count > 0) || (staticInstancesRunning > 0));
-		}
-
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private void CleanupLocalUserDirectory()
 		{
@@ -802,13 +748,17 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			string fileName = Path.GetFileName(filePath);
+			string fileName  = Path.GetFileName(filePath);
 			string extension = Path.GetExtension(filePath);
 
 			if      (ExtensionSettings.IsWorkspaceFile(extension))
 			{
 				OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
-				return (OpenWorkspaceFromFile(filePath));
+
+				if (OpenWorkspaceFromFile(filePath))
+					return (this.workspace.Start());
+				else
+					return (false);
 			}
 			else if (ExtensionSettings.IsTerminalFile(extension))
 			{
@@ -820,7 +770,11 @@ namespace YAT.Model
 				}
 
 				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
-				return (this.workspace.OpenTerminalFromFile(filePath));
+
+				if (this.workspace.OpenTerminalFromFile(filePath))
+					return (this.workspace.ActiveTerminal.Start());
+				else
+					return (false);
 			}
 			else
 			{
@@ -849,7 +803,7 @@ namespace YAT.Model
 		public virtual bool OpenRecent(int userIndex)
 		{
 			AssertNotDisposed();
-			return (OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item));
+			return (OpenFromFile(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
 
 		/// <summary>
@@ -858,7 +812,7 @@ namespace YAT.Model
 		/// <param name="recentFile">Recent file.</param>
 		private void SetRecent(string recentFile)
 		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.Save();
 		}
 
@@ -878,9 +832,6 @@ namespace YAT.Model
 				success = this.workspace.Close(true);
 			else
 				success = true;
-
-			if (success)
-				staticInstancesRunning--;
 
 			if (success)
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
@@ -935,7 +886,7 @@ namespace YAT.Model
 
 		private void workspace_Saved(object sender, SavedEventArgs e)
 		{
-			ApplicationSettings.LocalUser.AutoWorkspace.SetFilePathAndUser(e.FilePath, Guid);
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.SetFilePath(e.FilePath);
 			ApplicationSettings.Save();
 		}
 
@@ -945,12 +896,11 @@ namespace YAT.Model
 		/// </remarks>
 		private void workspace_Closed(object sender, ClosedEventArgs e)
 		{
-			if (!e.IsParentClose) // In case of workspace intended close, completely reset workspace info
-				ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
-			else                  // In case of parent close, just signal that workspace isn't in use anymore
-				ApplicationSettings.LocalUser.AutoWorkspace.ResetUserOnly();
-
-			ApplicationSettings.Save();
+			if (!e.IsParentClose) // In case of workspace intended close, reset workspace info.
+			{
+				ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
+				ApplicationSettings.Save();
+			}
 
 			DetachWorkspaceEventHandlers();
 			this.workspace = null;
@@ -1118,7 +1068,7 @@ namespace YAT.Model
 				settings.SettingsFilePath = filePath;
 				settings.Load();
 
-				ApplicationSettings.LocalUser.AutoWorkspace.SetFilePathAndUser(filePath, Guid);
+				ApplicationSettings.LocalUserSettings.AutoWorkspace.SetFilePath(filePath);
 				ApplicationSettings.Save();
 
 				// Try to retrieve GUID from file path (in case of auto saved workspace files).
@@ -1163,15 +1113,6 @@ namespace YAT.Model
 				CreateNewWorkspace();
 
 			return (this.workspace.OpenTerminalFromSettings(sh));
-		}
-
-		/// <summary></summary>
-		public virtual bool OpenTerminalFromFile(string filePath)
-		{
-			if (this.workspace == null)
-				CreateNewWorkspace();
-
-			return (this.workspace.OpenTerminalFromFile(filePath));
 		}
 
 		#region Terminal > Private Methods

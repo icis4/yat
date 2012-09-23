@@ -28,6 +28,9 @@ namespace YAT.Utilities
 	/// <summary></summary>
 	public static class ApplicationInfo
 	{
+		/// <summary>The product name.</summary>
+		public static readonly string ProductName = Application.ProductName;
+
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Final";
 

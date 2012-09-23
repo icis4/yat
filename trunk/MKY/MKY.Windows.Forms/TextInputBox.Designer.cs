@@ -98,7 +98,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "<Caption>";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TextInputBox_Paint);
+			this.Shown += new System.EventHandler(this.TextInputBox_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

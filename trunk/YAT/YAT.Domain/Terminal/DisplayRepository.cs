@@ -180,6 +180,17 @@ namespace YAT.Domain
 			return (lines);
 		}
 
+		/// <summary></summary>
+		public virtual List<DisplayElement> ToElements()
+		{
+			List<DisplayElement> elements = new List<DisplayElement>();
+
+			foreach (DisplayLine line in ToLines())
+				elements.AddRange(line.ToArray());
+
+			return (elements);
+		}
+
 		#endregion
 
 		#region Private Methods

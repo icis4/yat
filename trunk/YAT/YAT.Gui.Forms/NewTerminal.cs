@@ -89,20 +89,21 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
-		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
-		private void NewTerminal_Paint(object sender, PaintEventArgs e)
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// </remarks>
+		private void NewTerminal_Shown(object sender, EventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
-				SetControls();
-			}
+			SetControls();
 		}
 
 		#endregion
@@ -365,15 +366,15 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = this.newTerminalSettings_Form.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = this.newTerminalSettings_Form.SocketLocalUdpPort;
 
-			socketSettings.Visible         = isSocket;
-			socketSettings.HostType        = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect = this.newTerminalSettings_Form.TcpClientAutoReconnect;
+			socketSettings.Visible                 = isSocket;
+			socketSettings.HostType                = (Domain.IOTypeEx)ioType;
+			socketSettings.TcpClientAutoReconnect  = this.newTerminalSettings_Form.TcpClientAutoReconnect;
 
 			usbSerialHidDeviceSelection.Visible    = isUsbSerialHid;
 			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbSerialHidDeviceInfo;
 
-			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
-			usbSerialHidDeviceSettings.AutoOpen = this.newTerminalSettings_Form.UsbSerialHidAutoOpen;
+			usbSerialHidDeviceSettings.Visible     = isUsbSerialHid;
+			usbSerialHidDeviceSettings.AutoOpen    = this.newTerminalSettings_Form.UsbSerialHidAutoOpen;
 
 			serialPortSelection.Visible    = isSerialPort;
 			serialPortSelection.PortId     = this.newTerminalSettings_Form.SerialPortId;

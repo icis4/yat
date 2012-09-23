@@ -33,6 +33,7 @@ namespace YAT.Gui.Forms
 		private void InitializeComponent()
 		{
 			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings1 = new YAT.Domain.Settings.BinaryDisplaySettings();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BinaryTerminalSettings));
 			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings2 = new YAT.Domain.Settings.BinaryDisplaySettings();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
@@ -110,6 +111,9 @@ namespace YAT.Gui.Forms
 			// 
 			this.binaryTerminalSettingsSet_Rx.Location = new System.Drawing.Point(12, 19);
 			this.binaryTerminalSettingsSet_Rx.Name = "binaryTerminalSettingsSet_Rx";
+			binaryDisplaySettings1.LengthLineBreak = ((YAT.Domain.BinaryLengthLineBreak)(resources.GetObject("binaryDisplaySettings1.LengthLineBreak")));
+			binaryDisplaySettings1.SequenceLineBreak = ((YAT.Domain.BinarySequenceLineBreak)(resources.GetObject("binaryDisplaySettings1.SequenceLineBreak")));
+			binaryDisplaySettings1.TimedLineBreak = ((YAT.Domain.BinaryTimedLineBreak)(resources.GetObject("binaryDisplaySettings1.TimedLineBreak")));
 			this.binaryTerminalSettingsSet_Rx.Settings = binaryDisplaySettings1;
 			this.binaryTerminalSettingsSet_Rx.Size = new System.Drawing.Size(263, 68);
 			this.binaryTerminalSettingsSet_Rx.TabIndex = 0;
@@ -131,6 +135,9 @@ namespace YAT.Gui.Forms
 			// 
 			this.binaryTerminalSettingsSet_Tx.Location = new System.Drawing.Point(9, 19);
 			this.binaryTerminalSettingsSet_Tx.Name = "binaryTerminalSettingsSet_Tx";
+			binaryDisplaySettings2.LengthLineBreak = ((YAT.Domain.BinaryLengthLineBreak)(resources.GetObject("binaryDisplaySettings2.LengthLineBreak")));
+			binaryDisplaySettings2.SequenceLineBreak = ((YAT.Domain.BinarySequenceLineBreak)(resources.GetObject("binaryDisplaySettings2.SequenceLineBreak")));
+			binaryDisplaySettings2.TimedLineBreak = ((YAT.Domain.BinaryTimedLineBreak)(resources.GetObject("binaryDisplaySettings2.TimedLineBreak")));
 			this.binaryTerminalSettingsSet_Tx.Settings = binaryDisplaySettings2;
 			this.binaryTerminalSettingsSet_Tx.Size = new System.Drawing.Size(263, 68);
 			this.binaryTerminalSettingsSet_Tx.TabIndex = 0;
@@ -166,7 +173,7 @@ namespace YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Binary Terminal Settings";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.BinaryTerminalSettings_Paint);
+			this.Shown += new System.EventHandler(this.BinaryTerminalSettings_Shown);
 			this.groupBox_Display.ResumeLayout(false);
 			this.groupBox_Display.PerformLayout();
 			this.groupBox_RxDisplay.ResumeLayout(false);

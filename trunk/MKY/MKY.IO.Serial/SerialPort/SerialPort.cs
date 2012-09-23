@@ -1331,7 +1331,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
-			EventHelper.FireAsync(IOControlChanged, this, e);
+			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>

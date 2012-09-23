@@ -286,24 +286,26 @@ namespace YAT.Gui.Controls
 			{
 				case Domain.TerminalType.Binary:
 				{
-					ofd.Filter     = ExtensionSettings.BinaryFilesFilter;
-					ofd.DefaultExt = ExtensionSettings.BinaryFilesDefault;
+					ofd.Filter      = ExtensionSettings.BinaryFilesFilter;
+					ofd.FilterIndex = ExtensionSettings.BinaryFilesFilterDefault;
+					ofd.DefaultExt  = ExtensionSettings.BinaryFilesDefault;
 					break;
 				}
 				default: // Includes Domain.TerminalType.Text:
 				{
-					ofd.Filter     = ExtensionSettings.TextFilesFilter;
-					ofd.DefaultExt = ExtensionSettings.TextFilesDefault;
+					ofd.Filter      = ExtensionSettings.TextFilesFilter;
+					ofd.FilterIndex = ExtensionSettings.TextFilesFilterDefault;
+					ofd.DefaultExt  = ExtensionSettings.TextFilesDefault;
 					break;
 				}
 			}
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFilesPath;
 			bool success = ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0));
 			if (success)
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				SetFileCommand(new Command(ofd.FileName, true, ofd.FileName));

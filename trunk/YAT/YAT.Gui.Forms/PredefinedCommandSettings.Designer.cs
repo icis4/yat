@@ -659,7 +659,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Predefined Commands";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.PredefinedCommandSettings_Paint);
+			this.Shown += new System.EventHandler(this.PredefinedCommandSettings_Shown);
 			this.groupBox_Page.ResumeLayout(false);
 			this.groupBox_Page.PerformLayout();
 			this.groupBox_Predefined.ResumeLayout(false);

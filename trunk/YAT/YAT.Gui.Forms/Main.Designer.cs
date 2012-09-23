@@ -980,8 +980,8 @@
 			this.MainMenuStrip = this.menuStrip_Main;
 			this.Name = "Main";
 			this.Text = "YAT";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Main_Paint);
 			this.SizeChanged += new System.EventHandler(this.Main_SizeChanged);
+			this.Shown += new System.EventHandler(this.Main_Shown);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
 			this.MdiChildActivate += new System.EventHandler(this.Main_MdiChildActivate);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);

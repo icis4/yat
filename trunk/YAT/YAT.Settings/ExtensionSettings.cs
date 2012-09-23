@@ -23,8 +23,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
+using MKY;
 using MKY.IO;
 
 namespace YAT.Settings
@@ -48,18 +50,22 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static bool IsTerminalFile(string extension)
+		public static bool IsTerminalFile(string filePath)
 		{
-			if (PathEx.Equals(extension, TerminalFile))
-				return (true);
-			else
-				return (false);
+			string extension = Path.GetExtension(filePath);
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, TerminalFile));
 		}
 
 		/// <summary></summary>
 		public static string TerminalFilesFilter
 		{
 			get { return ("Terminal Files (*" + TerminalFile + ")|*" + TerminalFile); }
+		}
+
+		/// <summary></summary>
+		public static int TerminalFilesFilterDefault
+		{
+			get { return (1); }
 		}
 
 		/// <summary>
@@ -73,18 +79,41 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static bool IsWorkspaceFile(string extension)
+		public static bool IsWorkspaceFile(string filePath)
 		{
-			if (PathEx.Equals(extension, WorkspaceFile))
-				return (true);
-			else
-				return (false);
+			string extension = Path.GetExtension(filePath);
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, WorkspaceFile));
 		}
 
 		/// <summary></summary>
 		public static string WorkspaceFilesFilter
 		{
 			get { return ("Workspace Files (*" + WorkspaceFile + ")|*" + WorkspaceFile); }
+		}
+
+		/// <summary></summary>
+		public static int WorkspaceFilesFilterDefault
+		{
+			get { return (1); }
+		}
+
+		/// <summary></summary>
+		public static string TerminalOrWorkspaceFilesFilter
+		{
+			get
+			{
+				return (TerminalFilesFilter +
+						"|" +
+						WorkspaceFilesFilter +
+						"|" +
+						"Terminal and Workspace Files (*" + TerminalFile + ";*" + WorkspaceFile + ")|*" + TerminalFile + ";*" + WorkspaceFile);
+			}
+		}
+
+		/// <summary></summary>
+		public static int TerminalOrWorkspaceFilesFilterDefault
+		{
+			get { return (3); }
 		}
 
 		/// <summary></summary>
@@ -118,9 +147,21 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
+		public static int TextFilesFilterDefault
+		{
+			get { return (1); }
+		}
+
+		/// <summary></summary>
 		public static string TextFilesDefault
 		{
 			get { return (".txt"); }
+		}
+
+		/// <summary></summary>
+		public static int LogFilesFilterDefault
+		{
+			get { return (1); }
 		}
 
 		/// <summary></summary>
@@ -130,50 +171,46 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
+		public static int MonitorFilesFilterDefault
+		{
+			get { return (2); }
+		}
+
+		/// <summary></summary>
 		public static string MonitorFilesDefault
 		{
 			get { return (".rtf"); }
 		}
 
 		/// <summary></summary>
-		public static bool IsTextFile(string extension)
+		public static bool IsTextFile(string filePath)
 		{
-			switch (extension)
-			{
-				case ".txt":
-				case ".text":
-				case ".log":
-					return (true);
+			string extension = Path.GetExtension(filePath);
 
-				default:
-					return (false);
-			}
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".txt"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".text"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".log"))
+				return (true);
+
+			return (false);
 		}
 
 		/// <summary></summary>
-		public static bool IsRtfFile(string extension)
+		public static bool IsRtfFile(string filePath)
 		{
-			switch (extension)
-			{
-				case ".rtf":
-					return (true);
-
-				default:
-					return (false);
-			}
+			string extension = Path.GetExtension(filePath);
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".rtf"));
 		}
 
 		/// <summary></summary>
-		public static bool IsXmlFile(string extension)
+		public static bool IsXmlFile(string filePath)
 		{
-			switch (extension)
-			{
-				case ".xml":
-					return (true);
-
-				default:
-					return (false);
-			}
+			string extension = Path.GetExtension(filePath);
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".xml"));
 		}
 
 		/// <summary></summary>
@@ -201,24 +238,28 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
+		public static int BinaryFilesFilterDefault
+		{
+			get { return (1); }
+		}
+
+		/// <summary></summary>
 		public static string BinaryFilesDefault
 		{
 			get { return (".dat"); }
 		}
 
 		/// <summary></summary>
-		public static string ExecutableFiles
+		public static string ExecutableFile
 		{
 			get { return (".exe"); }
 		}
 
 		/// <summary></summary>
-		public static bool IsExecutableFile(string extension)
+		public static bool IsExecutableFile(string filePath)
 		{
-			if (PathEx.Equals(extension, ExecutableFiles))
-				return (true);
-			else
-				return (false);
+			string extension = Path.GetExtension(filePath);
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ExecutableFile));
 		}
 
 		/// <summary></summary>

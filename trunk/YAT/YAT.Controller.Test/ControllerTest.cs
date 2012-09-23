@@ -74,8 +74,8 @@ namespace YAT.Controller.Test
 		public virtual void TestFixtureSetUp()
 		{
 			// Prevent auto-save of workspace settings.
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
+			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
 		#endregion
@@ -90,7 +90,7 @@ namespace YAT.Controller.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
 		}
 
 		#endregion

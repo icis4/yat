@@ -43,21 +43,16 @@ namespace YAT.Gui.Forms
 		private struct StartupControl
 		{
 			/// <summary></summary>
-			public bool Startup;
-
-			/// <summary></summary>
 			public int RequestedPage;
 
 			/// <summary></summary>
 			public int RequestedCommand;
 
-			/// <param name="startup">Startup control.</param>
 			/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 			/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-			public StartupControl(bool startup, int requestedPage, int requestedCommand)
+			public StartupControl(int requestedPage, int requestedCommand)
 			{
-				Startup = startup;
-				RequestedPage = requestedPage;
+				RequestedPage    = requestedPage;
 				RequestedCommand = requestedCommand;
 			}
 		}
@@ -69,7 +64,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private StartupControl startupControl = new StartupControl(true, 1, 1);
+		private StartupControl startupControl = new StartupControl(1, 1);
 		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.PredefinedCommandSettings settings;
@@ -156,30 +151,38 @@ namespace YAT.Gui.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-		private void PredefinedCommandSettings_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// </remarks>
+		private void PredefinedCommandSettings_Shown(object sender, EventArgs e)
 		{
-			if (this.startupControl.Startup)
+			// Create a page if no pages exist yet:
+			int pageCount = this.settings_Form.Pages.Count;
+			if (pageCount > 0)
 			{
-				this.startupControl.Startup = false;
-
-				// Create a page if no pages exist yet
-				int pageCount = this.settings_Form.Pages.Count;
-				if (pageCount > 0)
-				{
-					this.selectedPage = Int32Ex.LimitToBounds(this.startupControl.RequestedPage, 1, pageCount);
-				}
-				else
-				{
-					this.settings_Form.CreateDefaultPage();
-					this.selectedPage = 1;
-				}
-
-				// Initially set controls and validate its contents where needed
-				SetControls();
-
-				int selectedCommand = Int32Ex.LimitToBounds(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
-				this.predefinedCommandSettingsSetLabels[selectedCommand - 1].Select();
+				this.selectedPage = Int32Ex.LimitToBounds(this.startupControl.RequestedPage, 1, pageCount);
 			}
+			else
+			{
+				this.settings_Form.CreateDefaultPage();
+				this.selectedPage = 1;
+			}
+
+			// Initially set controls and validate its contents where needed:
+			SetControls();
+
+			int selectedCommand = Int32Ex.LimitToBounds(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			this.predefinedCommandSettingsSetLabels[selectedCommand - 1].Select();
 		}
 
 		#endregion

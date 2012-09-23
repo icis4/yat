@@ -440,10 +440,10 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				int lineLength = 0;
-				foreach (DisplayElement de in lineState.LineElements)
+				foreach (DisplayElement e in lineState.LineElements)
 				{
-					if (de.IsData)
-						lineLength++;
+					if (e.IsData)
+						lineLength += e.DataCount;
 				}
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.LineLength(lineLength));
@@ -482,10 +482,10 @@ namespace YAT.Domain
 		private void EvaluateLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
 		{
 			int lineLength = 0;
-			foreach (DisplayElement de in lineState.LineElements)
+			foreach (DisplayElement e in lineState.LineElements)
 			{
-				if (de.IsData)
-					lineLength++;
+				if (e.IsData)
+					lineLength += e.DataCount;
 			}
 
 			if (lineLength >= displaySettings.LengthLineBreak.LineLength)
@@ -507,10 +507,10 @@ namespace YAT.Domain
 			if (ElementsAreSeparate(d))
 			{
 				int lineLength = 0;
-				foreach (DisplayElement de in lineState.LineElements)
+				foreach (DisplayElement e in lineState.LineElements)
 				{
-					if (de.IsData)
-						lineLength++;
+					if (e.IsData)
+						lineLength += e.DataCount;
 				}
 				if (lineLength > 0)
 				{

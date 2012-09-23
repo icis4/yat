@@ -431,7 +431,7 @@ namespace YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Text Terminal Settings";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TextTerminalSettings_Paint);
+			this.Shown += new System.EventHandler(this.TextTerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
 			this.groupBox1.ResumeLayout(false);

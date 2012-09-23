@@ -235,6 +235,10 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
 		private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
@@ -316,12 +320,12 @@ namespace YAT.Gui.Controls
 		{
 			timer_ShowScanDialog.Stop();
 
-			bool setting = ApplicationSettings.LocalUser.General.DetectSerialPortsInUse;
+			bool setting = ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse;
 
 			if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", this.markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
 				this.markPortsInUseThread.CancelScanning();
 
-			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
+			ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse = setting;
 			ApplicationSettings.Save();
 		}
 
@@ -367,7 +371,7 @@ namespace YAT.Gui.Controls
 						timer_ShowFillDialog.Stop();
 					}
 
-					if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
+					if (ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse)
 					{
 						// Install timer which shows a dialog if scanning takes more than 500ms.
 						timer_ShowScanDialog.Start();

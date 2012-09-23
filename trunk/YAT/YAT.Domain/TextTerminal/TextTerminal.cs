@@ -531,10 +531,10 @@ namespace YAT.Domain
 			if (ElementsAreSeparate(d))
 			{
 				int lineLength = 0;
-				foreach (DisplayElement le in lineState.LineElements)
+				foreach (DisplayElement e in lineState.LineElements)
 				{
-					if (le.IsData)
-						lineLength++;
+					if (e.IsData)
+						lineLength += e.DataCount;
 				}
 				if (lineLength > 0)
 				{

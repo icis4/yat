@@ -319,6 +319,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         {
                             MKY.Diagnostics.DebugEx.WriteException(this.GetType(), ex, "This exception is intentionally output for debugging purposes only");
                         }
+
                         // ----- \remind  END  -----
                     }
 
@@ -1746,10 +1747,20 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   finally
                   {
 
-                      if (FSocketConnections.Count <= 0)
+                      // ----- \remind BEGIN -----
+
+                      // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
+                      // Added if != null due to NullReferenceExecption.
+
+                      if (FSocketConnections != null)
                       {
-                          FWaitConnectionsDisposing.Set();
+                          if (FSocketConnections.Count <= 0)
+                          {
+                              FWaitConnectionsDisposing.Set();
+                          }
                       }
+
+                      // ----- \remind  END  -----
 
                       FSocketConnectionsSync.ExitWriteLock();
 

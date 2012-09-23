@@ -136,7 +136,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public const string UnderscoreToString = "Underscore (this.)";
+		public const string UnderscoreToString = "Underscore (_)";
 
 		/// <summary></summary>
 		public const string DashToString = "Dash (-)";
@@ -154,7 +154,7 @@ namespace YAT.Log
 		public const string NoneToString = "None";
 
 		/// <summary></summary>
-		public static readonly FileNameSeparator Underscore = new FileNameSeparator("this.", UnderscoreToString);
+		public static readonly FileNameSeparator Underscore = new FileNameSeparator("_", UnderscoreToString);
 
 		/// <summary></summary>
 		public static readonly FileNameSeparator Dash = new FileNameSeparator("-", DashToString);

@@ -826,17 +826,25 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// Starts terminal, i.e. starts log and open I/O.
+		/// Starts terminal, i.e. starts log and opens I/O.
 		/// </summary>
-		public virtual void Start()
+		public virtual bool Start()
 		{
 			// Begin logging (in case opening of terminal needs to be logged).
 			if (this.settingsRoot.LogIsStarted)
-				BeginLog();
+			{
+				if (!BeginLog())
+					return (false);
+			}
 
 			// Then open terminal.
 			if (this.settingsRoot.TerminalIsStarted)
-				StartIO();
+			{
+				if (!StartIO())
+					return (false);
+			}
+
+			return (true);
 		}
 
 		/// <summary>
@@ -1291,7 +1299,7 @@ namespace YAT.Model
 		/// <param name="recentFile">Recent file.</param>
 		private void SetRecent(string recentFile)
 		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.Save();
 		}
 
@@ -1928,12 +1936,12 @@ namespace YAT.Model
 				if (this.terminal is Domain.TextTerminal)
 				{
 					string[] lines;
-					if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
+					if (ExtensionSettings.IsXmlFile(filePath))
 					{
 						// XML.
 						lines = XmlReader.LinesFromXmlFile(filePath);
 					}
-					else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
+					else if (ExtensionSettings.IsRtfFile(filePath))
 					{
 						// RTF.
 						lines = RtfReader.LinesFromRtfFile(filePath);
@@ -2063,6 +2071,15 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 			this.terminal.ReloadRepositories();
+		}
+
+		/// <summary>
+		/// Returns contents of desired repository.
+		/// </summary>
+		public virtual List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			return (this.terminal.RepositoryToDisplayElements(repositoryType));
 		}
 
 		/// <summary>
@@ -2318,7 +2335,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void BeginLog()
+		public virtual bool BeginLog()
 		{
 			try
 			{
@@ -2326,6 +2343,8 @@ namespace YAT.Model
 				this.log.Settings = this.settingsRoot.Log;
 				this.log.Begin();
 				this.settingsRoot.LogIsStarted = true;
+
+				return (true);
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -2340,6 +2359,8 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 					);
+
+				return (false);
 			}
 		}
 

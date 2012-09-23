@@ -32,7 +32,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
-using System.Threading;
 
 #endregion
 
@@ -136,18 +135,48 @@ namespace MKY.Event
 		private delegate void AsyncInvokeDelegate(Delegate eventDelegate, object[] args);
 
 		/// <summary>
-		/// Fires event with supplied arguments synchronously. Event is
-		/// fired safely, exceptions are caught. If an event sink implements
-		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise, the event is
-		/// invoked on a thread from the thread pool.
+		/// Fires event with supplied arguments asynchronously. Event is fired safely, exceptions are
+		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
+		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from the
+		/// thread pool.
 		/// </summary>
 		public static void FireAsync(Delegate eventDelegate, params object[] args)
 		{
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way for DEBUG and NON-DEBUG.
+			// Invoke event in a safe way.
+			Delegate[] sinks = eventDelegate.GetInvocationList();
+			foreach (Delegate sink in sinks)
+			{
+				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
+				if (sinkTarget != null)          // No need to check for InvokeRequired,
+				{                                //   async always requires invoke.
+					sinkTarget.BeginInvoke(sink, args);
+				}
+				else
+				{
+					AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
+					asyncInvoker.BeginInvoke(sink, args, null, null);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Fires event with supplied arguments asynchronously. Event is fired safely, exceptions are
+		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
+		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from the
+		/// thread pool.
+		/// </summary>
+		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		public static void FireAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
+			where TEventArgs : EventArgs
+		{
+			if (eventDelegate == null)
+				return;
+
+			// Invoke event in a safe way.
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{

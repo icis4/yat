@@ -84,23 +84,24 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
-		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
-		private void TextInputBox_Paint(object sender, PaintEventArgs e)
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// </remarks>
+		private void TextInputBox_Shown(object sender, EventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
-				SetControls();
+			SetControls();
 
-				// Move cursor to end
-				textBox_InputText.SelectionStart = textBox_InputText.Text.Length;
-			}
+			// Move cursor to the end.
+			textBox_InputText.SelectionStart = textBox_InputText.Text.Length;
 		}
 
 		#endregion

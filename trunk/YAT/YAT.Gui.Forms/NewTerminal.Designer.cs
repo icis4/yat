@@ -251,7 +251,7 @@ namespace YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New Terminal";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.NewTerminal_Paint);
+			this.Shown += new System.EventHandler(this.NewTerminal_Shown);
 			this.groupBox_NewTerminal.ResumeLayout(false);
 			this.groupBox_NewTerminal.PerformLayout();
 			this.groupBox_PortSettings.ResumeLayout(false);

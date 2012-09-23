@@ -120,7 +120,7 @@
 			this.checkBox_ShowTerminalInfo.AutoSize = true;
 			this.checkBox_ShowTerminalInfo.Location = new System.Drawing.Point(12, 19);
 			this.checkBox_ShowTerminalInfo.Name = "checkBox_ShowTerminalInfo";
-			this.checkBox_ShowTerminalInfo.Size = new System.Drawing.Size(234, 17);
+			this.checkBox_ShowTerminalInfo.Size = new System.Drawing.Size(188, 17);
 			this.checkBox_ShowTerminalInfo.TabIndex = 0;
 			this.checkBox_ShowTerminalInfo.Text = "Show &terminal indices in status bar";
 			this.checkBox_ShowTerminalInfo.UseVisualStyleBackColor = true;
@@ -214,7 +214,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Preferences";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Preferences_Paint);
+			this.Shown += new System.EventHandler(this.Preferences_Shown);
 			this.groupBox_Preferences.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();

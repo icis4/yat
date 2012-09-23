@@ -143,7 +143,7 @@ namespace YAT.Gui.Forms
 			Text = this.main.AutoName;
 
 			// Link and attach to terminal settings.
-			this.settingsRoot = ApplicationSettings.LocalUser;
+			this.settingsRoot = ApplicationSettings.LocalUserSettings;
 			AttachSettingsEventHandlers();
 
 			ApplyWindowSettingsAccordingToStartup();
@@ -177,79 +177,85 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Rest is done here as soon as form is visible.
+		/// Initially set controls and validate its contents where needed.
 		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.Forms.PaintEventArgs"/> instance containing the event data.</param>
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// Note that this main form is only created when YAT is run WITH a view. If YAT is run
+		/// WITHOUT a view, <see cref="YAT.Model.Main.Start"/> is called by either
+		/// YAT.Controller.Main.RunFullyFromConsole() or YAT.Controller.Main.RunInvisible().
+		/// </remarks>
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
-		private void Main_Paint(object sender, PaintEventArgs e)
+		private void Main_Shown(object sender, EventArgs e)
 		{
-			if (this.isStartingUp)
+			// Start YAT according to the main settings.
+			this.mainResult = this.main.Start();
+
+			if (this.mainResult != Model.MainResult.Success)
 			{
-				this.isStartingUp = false;
+				bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
 
-				// Start YAT according to the main settings.
-				this.mainResult = this.main.Start();
-
-				if (this.mainResult != Model.MainResult.Success)
+				if (this.mainResult == Model.MainResult.CommandLineError)
 				{
-					bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
-
-					if (this.mainResult == Model.MainResult.CommandLineError)
+					if (showErrorModally)
 					{
-						if (showErrorModally)
-						{
-							MessageBox.Show
-								(
-								this,
-								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
-								@"Use ""YAT.exe /?"" for command line help.",
-								@"Invalid Command Line",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-								);
-						}
+						MessageBox.Show
+							(
+							this,
+							@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
+							@"Use ""YAT.exe /?"" for command line help.",
+							@"Invalid Command Line",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+							);
 					}
-					else
+				}
+				else // In case of NOT Model.MainResult.CommandLineError.
+				{
+					if (showErrorModally)
 					{
-						if (showErrorModally)
-						{
-							MessageBox.Show
-								(
-								this,
-								@"YAT could not be started!",
-								@"Application Start Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Error
-								);
-						}
+						MessageBox.Show
+							(
+							this,
+							@"YAT could not be started!",
+							@"Application Start Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+							);
 					}
+				}
 
-					Close();
+				Close();
+			}
+			else // In case of Model.MainResult.Success.
+			{
+				if (this.workspace.TerminalCount == 0)
+				{
+					// If workspace is empty, and requested, display new terminal dialog.
+					if (this.main.StartArgs.ShowNewTerminalDialog)
+						ShowNewTerminalDialog();
 				}
 				else
 				{
-					if (this.workspace.TerminalCount == 0)
-					{
-						// If workspace is empty, and requested, display new terminal dialog.
-						if (this.main.StartArgs.ShowNewTerminalDialog)
-							ShowNewTerminalDialog();
-					}
-					else
-					{
-						// If workspace contains terminals, and requested, tile the terminal forms accordingly.
-						if      (this.main.StartArgs.TileHorizontal)
-							LayoutMdi(MdiLayout.TileHorizontal);
-						else if (this.main.StartArgs.TileVertical)
-							LayoutMdi(MdiLayout.TileVertical);
-					}
+					// If workspace contains terminals, and requested, tile the terminal forms accordingly.
+					if      (this.main.StartArgs.TileHorizontal)
+						LayoutMdi(MdiLayout.TileHorizontal);
+					else if (this.main.StartArgs.TileVertical)
+						LayoutMdi(MdiLayout.TileVertical);
+				}
 
-					// Automatically trigger transmit data if desired.
-					if (this.main.StartArgs.PerformActionOnRequestedTerminal)
-					{
-						SetFixedStatusText("Triggering start action(s)...");
-						timer_PerformStartAction.Start();
-					}
+				// Automatically trigger transmit data if desired.
+				if (this.main.StartArgs.PerformActionOnRequestedTerminal)
+				{
+					SetFixedStatusText("Triggering start action(s)...");
+					timer_PerformStartAction.Start();
 				}
 			}
 		}
@@ -351,11 +357,11 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetRecentMenuItems()
 		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
 
 			this.isSettingControls.Enter();
 
-			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
+			bool recentsAreReady = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
 
 			this.isSettingControls.Leave();
@@ -374,7 +380,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_File_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenTerminalFromFileDialog();
+			ShowOpenFileDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_CloseAll_Click(object sender, EventArgs e)
@@ -639,7 +645,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripButton_MainTool_File_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenTerminalFromFileDialog();
+			ShowOpenFileDialog();
 		}
 
 		private void toolStripButton_MainTool_File_Save_Click(object sender, EventArgs e)
@@ -725,11 +731,11 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Main_SetRecentMenuItems()
 		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
 
 			this.isSettingControls.Enter();
 
-			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
+			bool recentsAreReady = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = recentsAreReady;
 
 			this.isSettingControls.Leave();
@@ -754,7 +760,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainContextMenu_File_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenTerminalFromFileDialog();
+			ShowOpenFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
@@ -806,11 +812,11 @@ namespace YAT.Gui.Forms
 			}
 
 			// Show valid.
-			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
+			for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
 			{
 				string prefix = string.Format(NumberFormatInfo.InvariantInfo, "{0}: ", i + 1);
-				string file = PathEx.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
-				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths[i] != null)
+				string file = PathEx.LimitPath(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
+				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 				{
 					this.menuItems_recents[i].Text = "&" + prefix + file;
 					this.menuItems_recents[i].Enabled = true;
@@ -871,15 +877,15 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Status_Opening(object sender, CancelEventArgs e)
 		{
-			toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
-			toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+			toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+			toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 		}
 
 		private void toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
+				ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
 				ApplicationSettings.Save();
 			}
 		}
@@ -888,7 +894,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				ApplicationSettings.LocalUser.MainWindow.ShowChrono = !ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+				ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono = !ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 				ApplicationSettings.Save();
 			}
 		}
@@ -995,11 +1001,11 @@ namespace YAT.Gui.Forms
 				SuspendLayout();
 
 				// Retrieve saved settings.
-				FormWindowState savedWindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
-				FormStartPosition savedStartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
+				FormWindowState savedWindowState = ApplicationSettings.LocalUserSettings.MainWindow.WindowState;
+				FormStartPosition savedStartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
 
-				Point savedLocation = ApplicationSettings.LocalUser.MainWindow.Location;
-				Size savedSize = ApplicationSettings.LocalUser.MainWindow.Size;
+				Point savedLocation = ApplicationSettings.LocalUserSettings.MainWindow.Location;
+				Size savedSize = ApplicationSettings.LocalUserSettings.MainWindow.Size;
 				Rectangle savedBounds = new Rectangle(savedLocation, savedSize);
 
 				bool contains = false;
@@ -1043,17 +1049,17 @@ namespace YAT.Gui.Forms
 		{
 			if (setStartPositionToManual)
 			{
-				ApplicationSettings.LocalUser.MainWindow.StartPosition = FormStartPosition.Manual;
-				StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
+				ApplicationSettings.LocalUserSettings.MainWindow.StartPosition = FormStartPosition.Manual;
+				StartPosition = ApplicationSettings.LocalUserSettings.MainWindow.StartPosition;
 			}
 
-			ApplicationSettings.LocalUser.MainWindow.WindowState = WindowState;
+			ApplicationSettings.LocalUserSettings.MainWindow.WindowState = WindowState;
 
 			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
-				ApplicationSettings.LocalUser.MainWindow.Location = Location;
+				ApplicationSettings.LocalUserSettings.MainWindow.Location = Location;
 
 			if (WindowState == FormWindowState.Normal)
-				ApplicationSettings.LocalUser.MainWindow.Size = Size;
+				ApplicationSettings.LocalUserSettings.MainWindow.Size = Size;
 
 			ApplicationSettings.Save();
 		}
@@ -1068,13 +1074,13 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPreferences()
 		{
-			Gui.Forms.Preferences f = new Gui.Forms.Preferences(ApplicationSettings.LocalUser);
+			Gui.Forms.Preferences f = new Gui.Forms.Preferences(ApplicationSettings.LocalUserSettings);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.MainWindow = f.SettingsResult.MainWindow;
-				ApplicationSettings.LocalUser.General    = f.SettingsResult.General;
+				ApplicationSettings.LocalUserSettings.MainWindow = f.SettingsResult.MainWindow;
+				ApplicationSettings.LocalUserSettings.General    = f.SettingsResult.General;
 				ApplicationSettings.Save();
 			}
 		}
@@ -1212,6 +1218,85 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#region Main > New
+		//------------------------------------------------------------------------------------------
+		// Main > New
+		//------------------------------------------------------------------------------------------
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowNewTerminalDialog()
+		{
+			SetFixedStatusText("New terminal...");
+
+			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUserSettings.NewTerminal);
+			if (f.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
+				ApplicationSettings.Save();
+
+				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
+				this.main.CreateNewTerminalFromSettings(sh);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		#endregion
+
+		#region Main > Open File
+		//------------------------------------------------------------------------------------------
+		// Main > Open File
+		//------------------------------------------------------------------------------------------
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowOpenFileDialog()
+		{
+			SetFixedStatusText("Select a file...");
+
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Title = "Open Terminal or Workspace";
+			ofd.Filter      = ExtensionSettings.TerminalOrWorkspaceFilesFilter;
+			ofd.FilterIndex = ExtensionSettings.TerminalOrWorkspaceFilesFilterDefault;
+			ofd.DefaultExt  = ExtensionSettings.TerminalFile;
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath;
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
+			{
+				Refresh();
+
+				// \remind (MKY 2012-09-19 @ Dalian ;-)
+				// As soon as "PathSettings.TerminalFilesPath and .WorkspaceFilesPath should be merged"
+				// has been implemented, the following if-elif-else can be merged back as well.
+				if (ExtensionSettings.IsTerminalFile(ofd.FileName))
+				{
+					ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+					ApplicationSettings.Save();
+
+					this.main.OpenFromFile(ofd.FileName);
+				}
+				else if (ExtensionSettings.IsWorkspaceFile(ofd.FileName))
+				{
+					ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+					ApplicationSettings.Save();
+
+					this.main.OpenFromFile(ofd.FileName);
+				}
+				else
+				{
+					throw (new InvalidOperationException("Programm execution must never get here"));
+				}
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Workspace
@@ -1224,21 +1309,27 @@ namespace YAT.Gui.Forms
 		// Workspace > Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// This method shows a 'File Open' dialog that only allows workspace files to be selected.
+		/// This is for symmetricity with 'Save Workspace' and 'Save Workspace As...'. However, it
+		/// is also possible to select a workspace file using the 'normal' 'File Open' method
+		/// </remarks>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenWorkspaceFromFileDialog()
 		{
-			SetFixedStatusText("Opening workspace...");
+			SetFixedStatusText("Select a file...");
 
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Title = "Open";
-			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.WorkspaceFile;
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
+			ofd.Title = "Open Workspace";
+			ofd.Filter      = ExtensionSettings.WorkspaceFilesFilter;
+			ofd.FilterIndex = ExtensionSettings.WorkspaceFilesFilterDefault;
+			ofd.DefaultExt  = ExtensionSettings.WorkspaceFile;
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.main.OpenFromFile(ofd.FileName);
@@ -1252,13 +1343,14 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveWorkspaceAsFileDialog()
 		{
-			SetFixedStatusText("Saving workspace as...");
+			SetFixedStatusText("Select a workspace file name...");
 
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save Workspace As";
-			sfd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			sfd.DefaultExt = ExtensionSettings.WorkspaceFile;
-			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
+			sfd.Filter      = ExtensionSettings.WorkspaceFilesFilter;
+			sfd.FilterIndex = ExtensionSettings.WorkspaceFilesFilterDefault;
+			sfd.DefaultExt  = ExtensionSettings.WorkspaceFile;
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath;
 
 			// Other than for terminal files, the workspace 'Save As' always suggests 'UserName.yaw'.
 			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
@@ -1268,7 +1360,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.workspace.SaveAs(sfd.FileName);
@@ -1387,60 +1479,6 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Terminal
-		//==========================================================================================
-		// Terminal
-		//==========================================================================================
-
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowNewTerminalDialog()
-		{
-			SetFixedStatusText("New terminal...");
-
-			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUser.NewTerminal);
-			if (f.ShowDialog(this) == DialogResult.OK)
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.Save();
-
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
-				this.main.CreateNewTerminalFromSettings(sh);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowOpenTerminalFromFileDialog()
-		{
-			SetFixedStatusText("Opening terminal...");
-
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Title = "Open";
-			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.TerminalFile;
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
-
-				this.main.OpenTerminalFromFile(ofd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		#endregion
-
 		#region MDI Parent
 		//==========================================================================================
 		// MDI Parent
@@ -1492,8 +1530,8 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
-			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
 
 			this.isSettingControls.Leave();
 		}

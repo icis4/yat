@@ -255,16 +255,18 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
+		                                 TestSet testSet)
 		{
 			VerifyLines(linesA, linesB, testSet, 1);
 		}
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int cycle)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
+		                                 TestSet testSet, int cycle)
 		{
 			// Compare the expected line count at the receiver side.
-			int expectedLineCount = testSet.ExpectedLineCount * cycle;
-			bool expectedLineCountMatchB = linesB.Count == expectedLineCount;
+			int  expectedLineCount       = (testSet.ExpectedLineCount * cycle);
+			bool expectedLineCountMatchB = (linesB.Count == expectedLineCount);
 
 			// If both sides are expected to show the same line count, compare the counts.
 			// Otherwise, ignore the comparision.
@@ -278,15 +280,15 @@ namespace YAT.Model.Test
 			{
 				for (int i = 0; i < linesA.Count; i++)
 				{
+					int commandIndex         = i % testSet.ExpectedLineCount;
+					int expectedElementCount =     testSet.ExpectedElementCounts[commandIndex];
+					int expectedDataCount    =     testSet.ExpectedDataCounts[commandIndex];
+
 					Domain.DisplayLine lineA = linesA[i];
 					Domain.DisplayLine lineB = linesB[i];
 
-					int commandIndex = i % testSet.ExpectedLineCount;
-					int expectedElementCount = testSet.ExpectedElementCounts[commandIndex];
-					int expectedDataCount = testSet.ExpectedDataCounts[commandIndex];
-
 					if ((lineB.Count == lineA.Count) &&
-						(lineB.Count == expectedElementCount) &&
+						(lineB.Count     == expectedElementCount) &&
 						(lineB.DataCount == lineA.DataCount) &&
 						(lineB.DataCount == expectedDataCount))
 					{

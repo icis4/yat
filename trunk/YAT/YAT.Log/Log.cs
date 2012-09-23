@@ -87,15 +87,16 @@ namespace YAT.Log
 
 			private bool isDisposed;
 
-			private bool isEnabled = false;
+			private bool isEnabled;
 			private string file;
 			private LogFileWriteMode writeMode;
 			private FileNameSeparator separator;
 
 			private FileStream fileStream;
-			private bool isStarted = false;
+			private bool isStarted;
 
 			private Timer flushTimer;
+			private object flushTimerSyncObj = new object();
 
 			#endregion
 
@@ -300,7 +301,10 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StartFlushTimer()
 			{
-				this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, FlushTimeout, Timeout.Infinite);
+				lock (flushTimerSyncObj)
+				{
+					this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, FlushTimeout, Timeout.Infinite);
+				}
 			}
 
 			/// <summary></summary>
@@ -313,10 +317,13 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StopFlushTimer()
 			{
-				if (this.flushTimer != null)
+				lock (flushTimerSyncObj)
 				{
-					this.flushTimer.Dispose();
-					this.flushTimer = null;
+					if (this.flushTimer != null)
+					{
+						this.flushTimer.Dispose();
+						this.flushTimer = null;
+					}
 				}
 			}
 

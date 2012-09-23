@@ -93,7 +93,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
-			this.txRepository    = new RawRepository(bufferSettings.TxBufferSize);
+			this.txRepository = new RawRepository(bufferSettings.TxBufferSize);
 			this.bidirRepository = new RawRepository(bufferSettings.BidirBufferSize);
 			this.rxRepository    = new RawRepository(bufferSettings.RxBufferSize);
 
@@ -106,7 +106,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings, RawTerminal rhs)
 		{
-			this.txRepository    = new RawRepository(rhs.txRepository);
+			this.txRepository = new RawRepository(rhs.txRepository);
 			this.bidirRepository = new RawRepository(rhs.bidirRepository);
 			this.rxRepository    = new RawRepository(rhs.rxRepository);
 
