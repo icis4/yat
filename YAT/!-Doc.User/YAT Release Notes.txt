@@ -78,6 +78,7 @@ Fixed bugs:
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Printer dialog also gets shown on 64-bit systems
 - Terminal SaveAs dialog no longer shows .yat.yat in case of already saved files (bug #3532391)
+- Handling of InvalidOperationException in ALAZ.SystemEx.BaseSocketConnHost improved (bug #3528765)
 - Handling of UnauthorizedAccessException in YAT.Model.Terminal/Workspace improved (bug #3533201)
 - NullReferenceException in YAT.Log.Logs fixed (bug #3534799)
 - IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085)
