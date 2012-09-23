@@ -519,7 +519,7 @@ namespace YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Log Settings";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.LogSettings_Paint);
+			this.Shown += new System.EventHandler(this.LogSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
 			this.groupBox_Options_Subdirectories.ResumeLayout(false);

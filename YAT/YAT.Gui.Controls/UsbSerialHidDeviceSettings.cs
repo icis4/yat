@@ -121,6 +121,10 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
 		private void UsbSerialHidPortSettings_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)

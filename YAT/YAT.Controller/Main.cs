@@ -565,14 +565,9 @@ namespace YAT.Controller
 				{
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
-					{
 						modelResult = model.Exit();
-						mainResult = ConvertToMainResult(modelResult);
-					}
-					else
-					{
-						mainResult = ConvertToMainResult(modelResult);
-					}
+
+					mainResult = ConvertToMainResult(modelResult);
 				}
 				catch (Exception ex)
 				{
@@ -623,14 +618,9 @@ namespace YAT.Controller
 				{
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
-					{
 						modelResult = model.Exit();
-						mainResult = ConvertToMainResult(modelResult);
-					}
-					else
-					{
-						mainResult = ConvertToMainResult(modelResult);
-					}
+
+					mainResult = ConvertToMainResult(modelResult);
 				}
 				catch
 				{

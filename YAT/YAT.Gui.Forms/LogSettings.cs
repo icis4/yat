@@ -120,20 +120,21 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
-		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
-		private void LogSettings_Paint(object sender, PaintEventArgs e)
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// </remarks>
+		private void LogSettings_Shown(object sender, EventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
-				SetControls();
-			}
+			SetControls();
 		}
 
 		#endregion
@@ -442,10 +443,12 @@ namespace YAT.Gui.Forms
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Set Root";
 			ofd.Filter = ExtensionSettings.AllFilesFilter;
+
 			if (Directory.Exists(this.settings_Form.RootPath))
 				ofd.InitialDirectory = this.settings_Form.RootPath;
 			else
-				ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.LogFilesPath;
+				ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.LogFilesPath;
+
 			ofd.FileName = this.settings_Form.RootFileName;
 			ofd.CheckPathExists = false;
 			ofd.CheckFileExists = false;
@@ -453,7 +456,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.settings_Form.RootPath = Path.GetDirectoryName(ofd.FileName);

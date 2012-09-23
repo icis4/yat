@@ -662,9 +662,9 @@ namespace YAT.Gui.Controls
 			const int IconDistance = 14; // 14 relates to half the size of the direction icon.
 			int middle = (Width / 2);
 
-			label_TimeStatus.Width = middle - IconDistance;
+			label_TimeStatus.Width  = middle - IconDistance;
 
-			label_CountStatus.Left = middle + IconDistance;
+			label_CountStatus.Left  = middle + IconDistance;
 			label_CountStatus.Width = middle - IconDistance;
 		}
 
@@ -1069,8 +1069,8 @@ namespace YAT.Gui.Controls
 			if (ListBoxEx.ScrollToBottomIfNoItemButTheLastIsSelected(lbmon))
 				ListBoxEx.ScrollToBottom(lblin);
 
-			lbmon.EndUpdate();
 			lblin.EndUpdate();
+			lbmon.EndUpdate();
 		}
 
 		/// <summary>
@@ -1088,8 +1088,8 @@ namespace YAT.Gui.Controls
 			// If first line, add element to a new line.
 			if (lbmon.Items.Count <= 0)
 			{
-				lbmon.Items.Add(new Domain.DisplayLine(element));
 				lblin.Items.Add(0);
+				lbmon.Items.Add(new Domain.DisplayLine(element));
 			}
 			else
 			{
@@ -1112,13 +1112,13 @@ namespace YAT.Gui.Controls
 						// Remove lines if maximum exceeded.
 						while (lbmon.Items.Count >= (this.maxLineCount))
 						{
-							lbmon.Items.RemoveAt(0);
 							lblin.Items.RemoveAt(0);
+							lbmon.Items.RemoveAt(0);
 						}
 
 						// Add element to a new line.
-						lbmon.Items.Add(new Domain.DisplayLine(element));
 						lblin.Items.Add(0);
+						lbmon.Items.Add(new Domain.DisplayLine(element));
 					}
 					else
 					{

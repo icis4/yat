@@ -41,7 +41,7 @@ using MKY.Xml.Serialization;
 namespace MKY.Settings
 {
 	/// <summary>
-	/// Static utility class to provide basic settings handling methods.
+	/// Static utility class to provide basic settings file handling methods.
 	/// </summary>
 	public static class SettingsHandler
 	{

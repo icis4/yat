@@ -8,6 +8,14 @@ Tools
       > Visual Studio
         > Enable = true
 
+View
+  > Tree
+    > Show Checkboxes
+
+Categories
+  > Add all N/A categories to the 'Selected Categories'
+  > Tick 'Exclude these categories'
+
 
 YAT test suite
 --------------

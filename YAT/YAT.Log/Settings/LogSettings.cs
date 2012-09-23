@@ -150,7 +150,7 @@ namespace YAT.Log.Settings
 		{
 			base.SetMyDefaults();
 
-			RootPath     = ApplicationSettings.LocalUser.Paths.LogFilesPath;
+			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFilesPath;
 			RootFileName = "YAT-Log";
 
 			RawLogTx     = false;

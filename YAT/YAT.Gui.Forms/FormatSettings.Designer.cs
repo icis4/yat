@@ -126,6 +126,7 @@ namespace YAT.Gui.Forms
 			this.monitor_Error.Size = new System.Drawing.Size(127, 23);
 			this.monitor_Error.TabIndex = 22;
 			this.monitor_Error.TabStop = false;
+			this.monitor_Error.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_Length
 			// 
@@ -135,6 +136,7 @@ namespace YAT.Gui.Forms
 			this.monitor_Length.Size = new System.Drawing.Size(127, 23);
 			this.monitor_Length.TabIndex = 16;
 			this.monitor_Length.TabStop = false;
+			this.monitor_Length.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_TimeStamp
 			// 
@@ -144,6 +146,7 @@ namespace YAT.Gui.Forms
 			this.monitor_TimeStamp.Size = new System.Drawing.Size(127, 23);
 			this.monitor_TimeStamp.TabIndex = 13;
 			this.monitor_TimeStamp.TabStop = false;
+			this.monitor_TimeStamp.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_RxControl
 			// 
@@ -153,6 +156,7 @@ namespace YAT.Gui.Forms
 			this.monitor_RxControl.Size = new System.Drawing.Size(127, 23);
 			this.monitor_RxControl.TabIndex = 10;
 			this.monitor_RxControl.TabStop = false;
+			this.monitor_RxControl.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_RxData
 			// 
@@ -162,6 +166,7 @@ namespace YAT.Gui.Forms
 			this.monitor_RxData.Size = new System.Drawing.Size(127, 23);
 			this.monitor_RxData.TabIndex = 7;
 			this.monitor_RxData.TabStop = false;
+			this.monitor_RxData.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_TxControl
 			// 
@@ -171,6 +176,7 @@ namespace YAT.Gui.Forms
 			this.monitor_TxControl.Size = new System.Drawing.Size(127, 23);
 			this.monitor_TxControl.TabIndex = 4;
 			this.monitor_TxControl.TabStop = false;
+			this.monitor_TxControl.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_TxData
 			// 
@@ -180,6 +186,7 @@ namespace YAT.Gui.Forms
 			this.monitor_TxData.Size = new System.Drawing.Size(127, 23);
 			this.monitor_TxData.TabIndex = 1;
 			this.monitor_TxData.TabStop = false;
+			this.monitor_TxData.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// label_Error
 			// 
@@ -376,6 +383,7 @@ namespace YAT.Gui.Forms
 			this.monitor_Example.Size = new System.Drawing.Size(358, 58);
 			this.monitor_Example.TabIndex = 2;
 			this.monitor_Example.TabStop = false;
+			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// FormatSettings
 			// 
@@ -397,7 +405,7 @@ namespace YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Format Settings";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.FormatSettings_Paint);
+			this.Shown += new System.EventHandler(this.FormatSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
 			this.ResumeLayout(false);

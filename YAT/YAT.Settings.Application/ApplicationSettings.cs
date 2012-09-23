@@ -29,22 +29,80 @@ using MKY.Settings;
 
 namespace YAT.Settings.Application
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Should these application settings be static? Well, there's pro and con as often:
+	/// Pro:
+	///  > Easier to access throughout the application.
+	///  > Easier to load, and they can be loaded before any application 'Main' is created.
+	///  > Easier for those test cases where the settings have to be changed before the test is run.
+	/// Con:
+	///  > Static shall be avoided whenever possible, especially if the class hold data.
+	///  > Hardly possible to automatically test concurrent applications by NUnit test cases:
+	///    > The easy way would simply be to create two 'Main' objects and run them in parallel but
+	///      then both objects share the same static application settings object which isn't the
+	///      case if they're loaded in separate processes.
+	///    > The alternative is to do these test cases manually...
+	/// </remarks>
 	public static class ApplicationSettings
 	{
-		//------------------------------------------------------------------------------------------
-		// LocalUserSettings
-		//------------------------------------------------------------------------------------------
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
 
-		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> settingsHandler =
+		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> staticSettingsHandler =
 			new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static LocalUserSettingsRoot LocalUserSettings
+		{
+			get { return (staticSettingsHandler.LocalUserSettings); }
+		}
+
+		/// <summary></summary>
+		public static bool LocalUserSettingsSuccessfullyLoaded
+		{
+			get { return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoaded); }
+		}
+
+		/// <summary></summary>
+		public static bool LocalUserSettingsAreCurrentlyOwnedByThisInstance
+		{
+			get { return (staticSettingsHandler.LocalUserSettingsAreCurrentlyOwnedByThisInstance); }
+		}
+
+		/// <summary></summary>
+		public static string LocalUserSettingsFilePath
+		{
+			get { return (staticSettingsHandler.LocalUserSettingsFilePath); }
+		}
+
+		/// <summary></summary>
+		public static bool SettingsSuccessfullyLoaded
+		{
+			get { return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoaded); }
+		}
+
+		#endregion
+
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
 
 		/// <summary>
 		/// Loads settings. So far, there are only local user settings.
 		/// </summary>
 		public static bool Load()
 		{
-			return (settingsHandler.LoadLocalUser());
+			return (staticSettingsHandler.LoadLocalUserSettings());
 		}
 
 		/// <summary>
@@ -53,33 +111,11 @@ namespace YAT.Settings.Application
 		/// </summary>
 		public static void Save()
 		{
-			if (settingsHandler.LocalUserSettings.HaveChanged)
-				settingsHandler.SaveLocalUser();
+			if (staticSettingsHandler.LocalUserSettings.HaveChanged)
+				staticSettingsHandler.SaveLocalUserSettings();
 		}
 
-		/// <summary></summary>
-		public static LocalUserSettingsRoot LocalUser
-		{
-			get { return (settingsHandler.LocalUserSettings); }
-		}
-
-		/// <summary></summary>
-		public static bool LocalUserSettingsSuccessfullyLoaded
-		{
-			get { return (settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
-		}
-
-		/// <summary></summary>
-		public static string LocalUserSettingsFilePath
-		{
-			get { return (settingsHandler.LocalUserSettingsFilePath); }
-		}
-
-		/// <summary></summary>
-		public static bool SettingsSuccessfullyLoaded
-		{
-			get { return (settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
-		}
+		#endregion
 	}
 }
 

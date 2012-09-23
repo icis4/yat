@@ -45,35 +45,45 @@ and install it manually.
 ====================================================================================================
 
 
-YAT 2.0 Beta 4 Candidate 2 Version 1.99.xx :: 2012-0x-xx
+YAT 2.0 Beta 4 Candidate 2 Version 1.99.xx :: 2012-1x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
 - Line numbers can optionally be displayed in monitors (feature request #3442828)
-
-Important changes:
 - Additional executable 'YATConsole.exe' added to ensure proper command line operation in case of
   'cmd' as well as 'PowerShell' (bug #3482103)
+
+Important changes:
+- 'File > Open' now also allows to select workspace files (feature request #1917388)
 - Monitors automatically start vertical scrolling again if the last item gets selected
+- Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323)
+   > Implemented by use of a named mutex as suggested in the respective comments
+   > Also fixes use of same setting file by concurrent YAT instances (bug #3540438)
 - Schemas and defaults of all former settings filed and versioned, version of settings added to all
   three types of settings (related to bugs #3450553 and #3535709)
 - .NET/Microsoft XML serialization infrastructure extended by schema for GUID items (bug #3535709)
 - BoolEx renamed to BooleanEx for consistency with the .NET type Boolean (bug #3533831)
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)
+- Additional help content on serial port error indications added (feature request #3440986)
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
+- Empty lines are no longer skipped when not showing EOL (bug #2898163)
 - Optional replacement of space by open box character again works (bug #3451736)
 - Recent 'Send Command' items are again properly loaded from saved settings (bug #3450553)
 - Edit shortcuts such as Ctrl-A and Ctrl-C reenabled in 'Send Command' box (bug #3459888)
+- Log file separator 'Underline' fixed
+- Binary length line break fixed, again works correctly
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Printer dialog also gets shown on 64-bit systems
 - Terminal SaveAs dialog no longer shows .yat.yat in case of already saved files (bug #3532391)
 - Handling of UnauthorizedAccessException in YAT.Model.Terminal/Workspace improved (bug #3533201)
+- NullReferenceException in YAT.Log.Logs fixed (bug #3534799)
 - IndexOutOfRangeException in YAT.Domain.RawRepository fixed (bug #3483085)
 - ArgumentException and OverflowException in MKY.Time.Rate fixed (bug #3479634)
 - Improvement of modal behavior in case of console and non-view execution (bug #3516441)
+- Proper startup when YAT is started minimized or without view (bug #3542973)
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms

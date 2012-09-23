@@ -33,7 +33,6 @@ namespace YAT.Settings
 	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem
 	{
 		private string filePath;
-		private Guid filePathUser;
 
 		/// <summary></summary>
 		public AutoWorkspaceSettings()
@@ -58,7 +57,6 @@ namespace YAT.Settings
 			: base(rhs)
 		{
 			FilePath     = rhs.FilePath;
-			FilePathUser = rhs.FilePathUser;
 
 			ClearChanged();
 		}
@@ -70,8 +68,7 @@ namespace YAT.Settings
 		{
 			base.SetMyDefaults();
 
-			FilePath     = "";
-			FilePathUser = Guid.Empty;
+			FilePath = "";
 		}
 
 		#region Properties
@@ -95,38 +92,15 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("FilePathUser")]
-		public virtual Guid FilePathUser
-		{
-			get { return (this.filePathUser); }
-			set
-			{
-				if (value != this.filePathUser)
-				{
-					this.filePathUser = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public virtual void SetFilePathAndUser(string filePath, Guid filePathUser)
+		public virtual void SetFilePath(string filePath)
 		{
 			FilePath = filePath;
-			FilePathUser = filePathUser;
 		}
 
 		/// <summary></summary>
-		public virtual void ResetFilePathAndUser()
+		public virtual void ResetFilePath()
 		{
 			FilePath = "";
-			FilePathUser = Guid.Empty;
-		}
-
-		/// <summary></summary>
-		public virtual void ResetUserOnly()
-		{
-			FilePathUser = Guid.Empty;
 		}
 
 		#endregion
@@ -149,8 +123,7 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(this.filePath, other.filePath) &&
-				(this.filePathUser == other.filePathUser)
+				PathEx.Equals(this.filePath, other.filePath)
 			);
 		}
 
@@ -161,8 +134,7 @@ namespace YAT.Settings
 			(
 				base.GetHashCode() ^
 
-				this.filePath    .GetHashCode() ^
-				this.filePathUser.GetHashCode()
+				this.filePath.GetHashCode()
 			);
 		}
 

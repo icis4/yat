@@ -173,6 +173,10 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
 		private void PredefinedCommandSettingsSet_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
@@ -490,29 +494,27 @@ namespace YAT.Gui.Controls
 			ofd.Title = "Set File";
 			switch (this.terminalType)
 			{
-				case Domain.TerminalType.Text:
-				{
-					ofd.Filter = ExtensionSettings.TextFilesFilter;
-					ofd.DefaultExt = ExtensionSettings.TextFilesDefault;
-					break;
-				}
 				case Domain.TerminalType.Binary:
 				{
-					ofd.Filter = ExtensionSettings.BinaryFilesFilter;
-					ofd.DefaultExt = ExtensionSettings.BinaryFilesDefault;
+					ofd.Filter      = ExtensionSettings.BinaryFilesFilter;
+					ofd.FilterIndex = ExtensionSettings.BinaryFilesFilterDefault;
+					ofd.DefaultExt  = ExtensionSettings.BinaryFilesDefault;
 					break;
 				}
-				default:
+				default: // Includes Domain.TerminalType.Text:
 				{
-					throw (new NotImplementedException("Terminal type \"" + (Domain.TerminalTypeEx)this.terminalType + "\" unknown"));
+					ofd.Filter      = ExtensionSettings.TextFilesFilter;
+					ofd.FilterIndex = ExtensionSettings.TextFilesFilterDefault;
+					ofd.DefaultExt  = ExtensionSettings.TextFilesDefault;
+					break;
 				}
 			}
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.command.IsFilePath = true;

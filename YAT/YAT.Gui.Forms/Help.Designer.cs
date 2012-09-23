@@ -43,12 +43,13 @@ namespace YAT.Gui.Forms
 			this.label_Explanations = new System.Windows.Forms.Label();
 			this.groupBox_AsciiTable = new System.Windows.Forms.GroupBox();
 			this.dataGridView_AsciiTable = new System.Windows.Forms.DataGridView();
-			this.bindingSource_AsciiTable = new System.Windows.Forms.BindingSource(this.components);
 			this.decDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.hexDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.mnemonicDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.escDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.bindingSource_AsciiTable = new System.Windows.Forms.BindingSource(this.components);
+			this.textBox_SerialPort = new System.Windows.Forms.TextBox();
 			this.groupBox_ParserHelp.SuspendLayout();
 			this.groupBox_AsciiTable.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_AsciiTable)).BeginInit();
@@ -60,6 +61,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_ParserHelp.Controls.Add(this.textBox_ParserKeyword);
+			this.groupBox_ParserHelp.Controls.Add(this.textBox_SerialPort);
 			this.groupBox_ParserHelp.Controls.Add(this.textBox_TextTerminalKeyword);
 			this.groupBox_ParserHelp.Controls.Add(this.textBox_ParserFormat);
 			this.groupBox_ParserHelp.Controls.Add(this.label_ParserExplanations);
@@ -72,9 +74,9 @@ namespace YAT.Gui.Forms
 			// 
 			// textBox_ParserKeyword
 			// 
-			this.textBox_ParserKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.textBox_ParserKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_ParserKeyword.Location = new System.Drawing.Point(9, 312);
+			this.textBox_ParserKeyword.Location = new System.Drawing.Point(9, 272);
 			this.textBox_ParserKeyword.Multiline = true;
 			this.textBox_ParserKeyword.Name = "textBox_ParserKeyword";
 			this.textBox_ParserKeyword.ReadOnly = true;
@@ -85,28 +87,28 @@ namespace YAT.Gui.Forms
 			// 
 			// textBox_TextTerminalKeyword
 			// 
-			this.textBox_TextTerminalKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
+			this.textBox_TextTerminalKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_TextTerminalKeyword.Location = new System.Drawing.Point(9, 378);
+			this.textBox_TextTerminalKeyword.Location = new System.Drawing.Point(9, 338);
 			this.textBox_TextTerminalKeyword.Multiline = true;
 			this.textBox_TextTerminalKeyword.Name = "textBox_TextTerminalKeyword";
 			this.textBox_TextTerminalKeyword.ReadOnly = true;
 			this.textBox_TextTerminalKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_TextTerminalKeyword.Size = new System.Drawing.Size(437, 86);
+			this.textBox_TextTerminalKeyword.Size = new System.Drawing.Size(437, 60);
 			this.textBox_TextTerminalKeyword.TabIndex = 3;
 			this.textBox_TextTerminalKeyword.Text = "<TEXT TERMINAL KEYWORD HELP>";
 			// 
 			// textBox_ParserFormat
 			// 
-			this.textBox_ParserFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.textBox_ParserFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_ParserFormat.Location = new System.Drawing.Point(9, 51);
 			this.textBox_ParserFormat.Multiline = true;
 			this.textBox_ParserFormat.Name = "textBox_ParserFormat";
 			this.textBox_ParserFormat.ReadOnly = true;
 			this.textBox_ParserFormat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_ParserFormat.Size = new System.Drawing.Size(437, 255);
+			this.textBox_ParserFormat.Size = new System.Drawing.Size(437, 215);
 			this.textBox_ParserFormat.TabIndex = 1;
 			this.textBox_ParserFormat.Text = "<PARSER FORMAT HELP>";
 			// 
@@ -186,12 +188,6 @@ namespace YAT.Gui.Forms
 			this.dataGridView_AsciiTable.Size = new System.Drawing.Size(289, 445);
 			this.dataGridView_AsciiTable.TabIndex = 0;
 			// 
-			// bindingSource_AsciiTable
-			// 
-			this.bindingSource_AsciiTable.DataMember = "ASCII";
-			this.bindingSource_AsciiTable.DataSource = typeof(YAT.Gui.Utilities.AsciiTable);
-			this.bindingSource_AsciiTable.Position = 0;
-			// 
 			// decDataGridViewTextBoxColumn
 			// 
 			this.decDataGridViewTextBoxColumn.DataPropertyName = "Dec";
@@ -231,6 +227,25 @@ namespace YAT.Gui.Forms
 			this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
 			this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
 			this.descriptionDataGridViewTextBoxColumn.Width = 128;
+			// 
+			// bindingSource_AsciiTable
+			// 
+			this.bindingSource_AsciiTable.DataMember = "ASCII";
+			this.bindingSource_AsciiTable.DataSource = typeof(YAT.Gui.Utilities.AsciiTable);
+			this.bindingSource_AsciiTable.Position = 0;
+			// 
+			// textBox_SerialPort
+			// 
+			this.textBox_SerialPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_SerialPort.Location = new System.Drawing.Point(9, 404);
+			this.textBox_SerialPort.Multiline = true;
+			this.textBox_SerialPort.Name = "textBox_SerialPort";
+			this.textBox_SerialPort.ReadOnly = true;
+			this.textBox_SerialPort.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBox_SerialPort.Size = new System.Drawing.Size(437, 60);
+			this.textBox_SerialPort.TabIndex = 4;
+			this.textBox_SerialPort.Text = "<SERIAL PORT HELP>";
 			// 
 			// Help
 			// 
@@ -276,5 +291,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.DataGridViewTextBoxColumn mnemonicDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn escDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
+		private System.Windows.Forms.TextBox textBox_SerialPort;
 	}
 }

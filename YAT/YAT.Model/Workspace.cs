@@ -413,7 +413,7 @@ namespace YAT.Model
 			if (this.settingsRoot_Changed_handlingSettingsIsSuspended)
 				return;
 
-			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+			if (ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace)
 			{
 				// prevent recursive calls
 				this.settingsRoot_Changed_handlingSettingsIsSuspended = true;
@@ -698,7 +698,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool Close(bool isMainClose)
 		{
-			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
+			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
 			// Don't try to auto save if there is no existing file (w1).
 			if (!isMainClose && !this.settingsHandler.SettingsFileExists)
@@ -806,7 +806,7 @@ namespace YAT.Model
 		/// <param name="recentFile">Recent file.</param>
 		private void SetRecent(string recentFile)
 		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.Save();
 		}
 
@@ -899,9 +899,12 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Creating new terminal...");
 
-			// Create terminal
+			// Create terminal:
 			Terminal terminal = new Terminal(settingsHandler);
 			AddToWorkspace(terminal);
+
+			// Start terminal:
+			terminal.Start();
 
 			OnTimedStatusTextRequest("New terminal created.");
 			return (true);
@@ -1057,6 +1060,20 @@ namespace YAT.Model
 			return (true);
 		}
 
+		/// <summary></summary>
+		public virtual bool Start()
+		{
+			bool success = true;
+
+			foreach (Terminal t in this.terminals)
+			{
+				if (!t.Start())
+					success = false;
+			}
+
+			return (success);
+		}
+
 		#endregion
 
 		#region Terminal > Private Methods
@@ -1116,7 +1133,7 @@ namespace YAT.Model
 			TerminalSettingsItem tsi = new TerminalSettingsItem();
 
 			string filePath = terminal.SettingsFilePath;
-			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
+			if (ApplicationSettings.LocalUserSettings.General.UseRelativePaths)
 			{
 				PathCompareResult pcr = PathEx.CompareFilePaths(this.settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
 				if (pcr.AreRelative)

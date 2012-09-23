@@ -80,19 +80,25 @@ namespace MKY.IO
 				Debug.WriteLine(@"Temporary path         """ + path + @""" cleaned.");
 		}
 
-		/// <summary></summary>
+		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
+		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		public static string MakeTempFileName(Type type, string extension)
 		{
 			return (MakeTempFileName(type, "", extension));
 		}
 
-		/// <summary></summary>
+		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
+		/// <param name="name">An additional name that is appended to the file name.</param>
+		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		public static string MakeTempFileName(Type type, string name, string extension)
 		{
 			return (MakeTempFileName(type, name, "", extension, true));
 		}
 
-		/// <summary></summary>
+		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
+		/// <param name="name">An additional name that is appended to the file name.</param>
+		/// <param name="postfix">Yet another postfix to the file name.</param>
+		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		public static string MakeTempFileName(Type type, string name, string postfix, string extension)
 		{
 			return (MakeTempFileName(type, name, postfix, extension, true));
@@ -116,13 +122,16 @@ namespace MKY.IO
 			return (fileName);
 		}
 
-		/// <summary></summary>
+		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
+		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		public static string MakeTempFilePath(Type type, string extension)
 		{
 			return (MakeTempFilePath(type, "", extension));
 		}
 
-		/// <summary></summary>
+		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
+		/// <param name="name">An additional name that is appended to the file name.</param>
+		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		public static string MakeTempFilePath(Type type, string name, string extension)
 		{
 			return (MakeTempFilePath(type, name, extension, true));

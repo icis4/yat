@@ -487,20 +487,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Compares too display elements and returns <c>true</c> if both are of the same kind.
+		/// Returns <c>true</c> if <param name="de"></param> can be appended to this element. Only
+		/// data elements of the same direction can be appended. Appending other elements would
+		/// lead to missing elements.
 		/// </summary>
-		public virtual bool IsSameKindAs(DisplayElement de)
+		/// <remarks>
+		/// Note that the type of the element also has to be checked. This ensures that control
+		/// elements are not appended to 'normal' data elements.
+		/// </remarks>
+		public virtual bool AcceptsAppendOf(DisplayElement de)
 		{
 			if (this.GetType() != de.GetType())
 				return (false);
 
+			if (!this.isData || !de.isData)
+				return (false);
+
 			if (this.direction != de.direction)
-				return (false);
-
-			if (this.isData != de.isData)
-				return (false);
-
-			if (this.isEol != de.isEol)
 				return (false);
 
 			return (true);
@@ -515,17 +518,8 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual void Append(DisplayElement de)
 		{
-			if (this.GetType() != de.GetType())
-				throw (new InvalidOperationException("Cannot append because type doesn't match"));
-
-			if (this.direction != de.direction)
-				throw (new InvalidOperationException("Cannot append because direction doesn't match"));
-
-			if (this.isData != de.isData)
-				throw (new InvalidOperationException("Cannot append because kind doesn't match"));
-
-			if (this.isEol != de.isEol)
-				throw (new InvalidOperationException("Cannot append because EOL doesn't match"));
+			if (!AcceptsAppendOf(de))
+				throw (new InvalidOperationException("Cannot append because the given element cannot be appended to this element"));
 
 			// \fixme (2010-04-01 / mky):
 			// Weird ArgumentException when receiving large chunks of data.

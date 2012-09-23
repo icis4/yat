@@ -24,13 +24,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
-using System.Xml.Serialization;
 
-using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Xml;
-using MKY.Xml.Serialization;
 
 namespace MKY.Settings
 {

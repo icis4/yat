@@ -315,20 +315,25 @@ namespace YAT.Gui.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-		private void Terminal_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// </remarks>
+		private void Terminal_Shown(object sender, EventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
+			this.mdiParent = MdiParent;
 
-				this.mdiParent = MdiParent;
-
-				// Immediately set terminal controls so the terminal "looks" nice from the very start.
-				SetTerminalControls();
-
-				// Then start terminal.
-				this.terminal.Start();
-			}
+			// Immediately set terminal controls so the terminal "looks" nice from the very start.
+			SetTerminalControls();
 		}
 
 		private void Terminal_Activated(object sender, EventArgs e)
@@ -2156,14 +2161,15 @@ namespace YAT.Gui.Forms
 
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
-			sfd.Filter = ExtensionSettings.TextFilesFilter;
-			sfd.DefaultExt = ExtensionSettings.TextFilesDefault;
-			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.MonitorFilesPath;
+			sfd.Filter      = ExtensionSettings.TextFilesFilter;
+			sfd.FilterIndex = ExtensionSettings.TextFilesFilterDefault;
+			sfd.DefaultExt  = ExtensionSettings.TextFilesDefault;
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MonitorFilesPath;
 			if (sfd.ShowDialog(this) == DialogResult.OK && sfd.FileName.Length > 0)
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.MonitorFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MonitorFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				SaveMonitor(monitor, sfd.FileName);
@@ -2181,9 +2187,9 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText("Saving data...");
 			try
 			{
-				if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
+				if (ExtensionSettings.IsXmlFile(filePath))
 					Model.Utilities.XmlWriter.LinesToXmlFile(monitor.SelectedLines, filePath);
-				else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
+				else if (ExtensionSettings.IsRtfFile(filePath))
 					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.RichText);
 				else
 					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.PlainText);
@@ -2784,9 +2790,10 @@ namespace YAT.Gui.Forms
 
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save " + AutoName + " As";
-			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
-			sfd.DefaultExt = ExtensionSettings.TerminalFile;
-			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
+			sfd.Filter      = ExtensionSettings.TerminalFilesFilter;
+			sfd.FilterIndex = ExtensionSettings.TerminalFilesFilterDefault;
+			sfd.DefaultExt  = ExtensionSettings.TerminalFile;
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath;
 
 			// Check wether the terminal has already been saved as a .yat file.
 			if (AutoName.EndsWith(ExtensionSettings.TerminalFile, StringComparison.OrdinalIgnoreCase))
@@ -2799,7 +2806,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.terminal.SaveAs(sfd.FileName);

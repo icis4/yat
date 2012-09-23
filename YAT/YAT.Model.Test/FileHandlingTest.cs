@@ -73,9 +73,9 @@ namespace YAT.Model.Test
 		public virtual void TestFixtureSetUp()
 		{
 			// Allow modification of auto save setting.
-			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoOpenWorkspace;
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			this.workspaceFilePathToRestore = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
+			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace;
+			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+			this.workspaceFilePathToRestore = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
 		}
 
 		#endregion
@@ -90,9 +90,9 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = this.workspaceFilePathToRestore;
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath    = this.workspaceFilePathToRestore;
 		}
 
 		#endregion
@@ -225,9 +225,9 @@ namespace YAT.Model.Test
 			bool success = false;
 			string uc = "";
 
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
 
 			#region Use case 1
 			// - Initial start
@@ -649,9 +649,9 @@ namespace YAT.Model.Test
 			bool success = false;
 			string uc = "";
 
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
 
 			#region Preparation
 			// - Initial start
@@ -904,9 +904,9 @@ namespace YAT.Model.Test
 			bool success = false;
 			string step = "";
 
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Clear();
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Clear();
 
 			#region Step 1
 			// - Initial start
@@ -935,7 +935,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, true, terminal, true);
 
-				Assert.AreEqual(0, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, step + "Recent file list is not empty!!");
+				Assert.AreEqual(0, ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count, step + "Recent file list is not empty!!");
 			}
 			#endregion
 		}
@@ -957,9 +957,9 @@ namespace YAT.Model.Test
 			bool success = false;
 			string step = "";
 
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = false;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Clear();
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = false;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Clear();
 
 			#region Step 1
 			// - Initial start
@@ -990,7 +990,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
-				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, step + "Wrong number of recent file entries!");
+				Assert.AreEqual(1, ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count, step + "Wrong number of recent file entries!");
 			}
 			#endregion
 
@@ -1019,7 +1019,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
-				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, step + "Wrong number of recent file entries!");
+				Assert.AreEqual(1, ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count, step + "Wrong number of recent file entries!");
 			}
 			#endregion
 		}
@@ -1040,9 +1040,9 @@ namespace YAT.Model.Test
 			bool success = false;
 			string step = "";
 
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
 
 			#region Step 1
 			// - Initial start
@@ -1194,8 +1194,11 @@ namespace YAT.Model.Test
 		// Tests > TestConcurrentInstancesInCaseOfAutoSave
 		//------------------------------------------------------------------------------------------
 
+#if (FALSE)
 		/// <summary>
-		/// Expected: Concurrent instance don't lead to exceptions.
+		/// Expected:
+		/// > Concurrent instance doesn't lead to exceptions.
+		/// > Concurrent instance doesn't effect settings of the initial instance.
 		/// </summary>
 		[Test]
 		public virtual void TestConcurrentInstancesInCaseOfAutoSave()
@@ -1203,17 +1206,18 @@ namespace YAT.Model.Test
 			bool success = false;
 			string step = "";
 
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
 
-			#region Step 1
+			#region Step 1 :: Initial start and exit
 			// - Initial start
 			// - Create new terminal
 			//   => Auto workspace with 1 auto terminal
+			step = "Step 1: ";
+
 			using (Main main = new Main())
 			{
-				step = "Step 1: ";
 				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
@@ -1228,6 +1232,12 @@ namespace YAT.Model.Test
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
 
+				terminal.SettingsRoot.PredefinedCommand.Pages.Add(new Types.PredefinedCommandPage());
+				Assert.AreEqual(1, terminal.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal doesn't contain 1 predefined command page!");
+
+				terminal.SettingsRoot.PredefinedCommand.Pages[0].Commands.Add(new Types.Command("ABCD"));
+				Assert.AreEqual(1, terminal.SettingsRoot.PredefinedCommand.Pages[0].Commands.Count, step + "Terminal doesn't contain 1 predefined command!");
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited!");
 
@@ -1235,20 +1245,26 @@ namespace YAT.Model.Test
 			}
 			#endregion
 
-			#region Step 2
+			#region Step 2 :: Subsequent and concurrent start with nested exit
 			// - Subsequent start
 			//   => Workspace A must contain 1 terminal
+			//   => Terminal A must contain 1 predefined command page with 1 predefined command
 			// - Concurrent start
-			//   => Auto workspace with 1 auto terminal
+			//   => Auto workspace B with 1 auto terminal
+			step = "Step 2: ";
+
 			using (Main mainA = new Main())
 			{
-				step = "Step 2: ";
 				success = (mainA.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main A could not be started!");
 
 				Workspace workspaceA = mainA.Workspace;
 				Assert.IsNotNull(workspaceA, step + "Workspace A not created!");
 				Assert.AreEqual(1, workspaceA.TerminalCount, step + "Workspace A doesn't contain 1 terminal!");
+
+				Terminal terminalA = workspaceA.ActiveTerminal;
+				Assert.AreEqual(1, terminalA.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal A doesn't contain 1 predefined command page!");
+				Assert.AreEqual(1, terminalA.SettingsRoot.PredefinedCommand.Pages[0].Commands.Count, step + "Terminal A doesn't contain 1 predefined command!");
 
 				using (Main mainB = new Main())
 				{
@@ -1260,11 +1276,11 @@ namespace YAT.Model.Test
 					Assert.AreEqual(0, workspaceB.TerminalCount, step + "Workspace B doesn't contain 0 terminals!");
 
 					success = workspaceB.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-					Assert.IsTrue(success, step + "Terminal could not be created!");
+					Assert.IsTrue(success, step + "Terminal B could not be created!");
 					Assert.AreEqual(1, workspaceB.TerminalCount, step + "Workspace B doesn't contain 1 terminal!");
 
 					Terminal terminalB = workspaceB.ActiveTerminal;
-					Assert.IsNotNull(terminalB, step + "Terminal B could not be created!");
+					Assert.AreEqual(0, terminalB.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal B doesn't contain 0 predefined command page!");
 
 					success = (mainB.Exit() == MainResult.Success);
 					Assert.IsTrue(success, step + "Main B could not be exited!");
@@ -1273,7 +1289,7 @@ namespace YAT.Model.Test
 
 					// Verify application settings.
 					if (ApplicationSettings.Load())
-						StringAssert.AreEqualIgnoringCase(workspaceB.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, step + "Workspace B file path not set!");
+						StringAssert.AreEqualIgnoringCase(workspaceB.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, step + "Workspace B file path not set!");
 					else
 						Assert.Fail("Failed to reload application settings!");
 				}
@@ -1283,12 +1299,137 @@ namespace YAT.Model.Test
 
 				// Verify application settings.
 				if (ApplicationSettings.Load())
-					StringAssert.AreEqualIgnoringCase(workspaceA.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, step + "Workspace A file path not set!");
+					StringAssert.AreEqualIgnoringCase(workspaceA.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, step + "Workspace A file path not set!");
+				else
+					Assert.Fail("Failed to reload application settings!");
+			}
+			#endregion
+
+			#region Step 3 :: Subsequent start and exit
+			// - Subsequent start
+			//   => Workspace must still contain 1 terminal
+			//   => Terminal must still contain 1 predefined command page with 1 predefined command
+			step = "Step 3: ";
+
+			using (Main main = new Main())
+			{
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.AreEqual(1, terminal.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal doesn't contain 1 predefined command page!");
+				Assert.AreEqual(1, terminal.SettingsRoot.PredefinedCommand.Pages[0].Commands.Count, step + "Terminal doesn't contain 1 predefined command!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited!");
+
+				// Verify application settings.
+				if (ApplicationSettings.Load())
+					StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, step + "Workspace file path not set!");
+				else
+					Assert.Fail("Failed to reload application settings!");
+			}
+			#endregion
+
+			#region Step 4 :: Subsequent and concurrent start with sequential exit
+			// - Subsequent start
+			//   => Workspace A must contain 1 terminal
+			//   => Terminal A must contain 1 predefined command page with 1 predefined command
+			// - Concurrent start
+			//   => Auto workspace B with 1 auto terminal
+			step = "Step 4: ";
+
+			using (Main mainA = new Main())
+			{
+				using (Main mainB = new Main())
+				{
+					// Start A:
+					success = (mainA.Start() == MainResult.Success);
+					Assert.IsTrue(success, step + "Main A could not be started!");
+
+					Workspace workspaceA = mainA.Workspace;
+					Assert.IsNotNull(workspaceA, step + "Workspace A not created!");
+					Assert.AreEqual(1, workspaceA.TerminalCount, step + "Workspace A doesn't contain 1 terminal!");
+
+					Terminal terminalA = workspaceA.ActiveTerminal;
+					Assert.AreEqual(1, terminalA.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal A doesn't contain 1 predefined command page!");
+					Assert.AreEqual(1, terminalA.SettingsRoot.PredefinedCommand.Pages[0].Commands.Count, step + "Terminal A doesn't contain 1 predefined command!");
+
+					// Start B:
+					success = (mainB.Start() == MainResult.Success);
+					Assert.IsTrue(success, step + "Main B could not be started!");
+
+					Workspace workspaceB = mainB.Workspace;
+					Assert.IsNotNull(workspaceB, step + "Workspace B not created!");
+					Assert.AreEqual(0, workspaceB.TerminalCount, step + "Workspace B doesn't contain 0 terminals!");
+
+					success = workspaceB.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+					Assert.IsTrue(success, step + "Terminal B could not be created!");
+					Assert.AreEqual(1, workspaceB.TerminalCount, step + "Workspace B doesn't contain 1 terminal!");
+
+					Terminal terminalB = workspaceB.ActiveTerminal;
+					Assert.AreEqual(0, terminalB.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal B doesn't contain 0 predefined command page!");
+
+					// Exit A first:
+					success = (mainA.Exit() == MainResult.Success);
+					Assert.IsTrue(success, step + "Main A could not be exited!");
+
+					// Verify application settings.
+					if (ApplicationSettings.Load())
+						StringAssert.AreEqualIgnoringCase(workspaceA.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, step + "Workspace A file path not set!");
+					else
+						Assert.Fail("Failed to reload application settings!");
+
+					// Exit B:
+					success = (mainB.Exit() == MainResult.Success);
+					Assert.IsTrue(success, step + "Main B could not be exited!");
+
+					VerifyFiles(step, workspaceB, true, terminalB, true);
+
+					// Verify application settings.
+					if (ApplicationSettings.Load())
+						StringAssert.AreEqualIgnoringCase(workspaceB.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, step + "Workspace B file path not set!");
+					else
+						Assert.Fail("Failed to reload application settings!");
+				}
+			}
+			#endregion
+
+			#region Step 5 :: Subsequent start and exit
+			// - Subsequent start
+			//   => Workspace must still contain 1 terminal
+			//   => Terminal must still contain 1 predefined command page with 1 predefined command
+			step = "Step 5: ";
+
+			using (Main main = new Main())
+			{
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.AreEqual(1, terminal.SettingsRoot.PredefinedCommand.Pages.Count, step + "Terminal doesn't contain 1 predefined command page!");
+				Assert.AreEqual(1, terminal.SettingsRoot.PredefinedCommand.Pages[0].Commands.Count, step + "Terminal doesn't contain 1 predefined command!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited!");
+
+				// Verify application settings.
+				if (ApplicationSettings.Load())
+					StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, step + "Workspace file path not set!");
 				else
 					Assert.Fail("Failed to reload application settings!");
 			}
 			#endregion
 		}
+#endif
 
 		#endregion
 
@@ -1306,9 +1447,9 @@ namespace YAT.Model.Test
 
 		private void PrepareInitialTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = false;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = false;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
 
 			main = new Main();
 			main.Start();              // Creates empty workspace
@@ -1416,22 +1557,22 @@ namespace YAT.Model.Test
 
 			// Verify application settings.
 			if (workspaceFileExpected)
-				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, prefix + "Workspace file path not set!");
+				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not set!");
 			else
-				StringAssert.AreEqualIgnoringCase("", ApplicationSettings.LocalUser.AutoWorkspace.FilePath, prefix + "Workspace file path not reset!");
+				StringAssert.AreEqualIgnoringCase("", ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not reset!");
 
 			// Verify recent settings.
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
-				Assert.IsTrue(ApplicationSettings.LocalUser.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path doesn't exist in recents!");
+				Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path doesn't exist in recents!");
 			else
-				Assert.IsFalse(ApplicationSettings.LocalUser.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path must not be in recents!");
+				Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path must not be in recents!");
 
 			for (int i = 0; i < terminal.Length; i++)
 			{
 				if (terminalFileExpected[i] && (!terminalFileAutoExpected[i]))
-					Assert.IsTrue(ApplicationSettings.LocalUser.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path doesn't exist in recents!");
+					Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path doesn't exist in recents!");
 				else
-					Assert.IsFalse(ApplicationSettings.LocalUser.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path must not be in recents!");
+					Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path must not be in recents!");
 			}
 		}
 

@@ -46,6 +46,45 @@ namespace YAT.Domain
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Terminal : IDisposable
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string RxFramingErrorString        = "RX FRAMING ERROR";
+		private const string RxBufferOverrunErrorString  = "RX BUFFER OVERRUN";
+		private const string RxBufferOverflowErrorString = "RX BUFFER OVERFLOW";
+		private const string RxParityErrorString         = "RX PARITY ERROR";
+		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
+
+		#endregion
+
+		#region Help
+		//==========================================================================================
+		// Help
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static readonly string SerialPortHelp =
+			@"For serial ports (COM), if one of the following error conditions occurs, the according error indication will be shown in the terminal window:" + Environment.NewLine +
+			Environment.NewLine +
+			@"<" + RxFramingErrorString + ">" + Environment.NewLine +
+			@"An input framing error occurs when the last bit received is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when the speed at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
+			Environment.NewLine +
+			@"<" + RxBufferOverrunErrorString + ">" + Environment.NewLine +
+			@"An input overrun error occurs when the input gets out of synch. The next character will be lost and the input will be re-synch'd." + Environment.NewLine +
+			Environment.NewLine +
+			@"<" + RxBufferOverflowErrorString + ">" + Environment.NewLine +
+			@"An input overflow occurs when there is no more space in the input buffer, i.e. the serial driver, the operating system or YAT doesn't manage to process the incoming data fast enough." + Environment.NewLine +
+			Environment.NewLine +
+			@"<" + RxParityErrorString + ">" + Environment.NewLine +
+			@"An input parity error occurs when a parity check is enabled but the parity bit mismatches. You will most commonly encounter a parity error when the parity setting at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
+			Environment.NewLine +
+			@"<" + TxBufferFullErrorString + ">" + Environment.NewLine +
+			@"An output buffer full error occurs when there is no more space in the output buffer, i.e. the serial driver, the operating system or YAT doesn't manage to send the data fast enough.";
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -767,6 +806,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual List<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repository)
+				{
+					case RepositoryType.Tx:    return (this.txRepository.ToElements());
+					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
+					case RepositoryType.Rx:    return (this.rxRepository.ToElements());
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual List<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -990,11 +1046,11 @@ namespace YAT.Domain
 				// Handle serial port errors whenever possible.
 				switch (serialPortErrorEventArgs.SerialPortError)
 				{
-					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("RX FRAMING ERROR"));   break;
-					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("RX BUFFER OVERRUN"));  break;
-					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("RX BUFFER OVERFLOW")); break;
-					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("RX PARITY ERROR"));    break;
-					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("TX BUFFER FULL"));     break;
+					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxFramingErrorString));        break;
+					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxBufferOverrunErrorString));  break;
+					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxBufferOverflowErrorString)); break;
+					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxParityErrorString));         break;
+					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error(TxBufferFullErrorString));     break;
 					default:                                   OnIOError(e); break;
 				}
 			}

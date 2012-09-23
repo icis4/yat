@@ -80,14 +80,14 @@ namespace YAT.Model.Test
 		public virtual void TestFixtureSetUp()
 		{
 			// Prevent auto-save of workspace settings.
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
+			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 
 			// Ensure that recents contains files.
-			recentsToRestore = ApplicationSettings.LocalUser.RecentFiles;
-			ApplicationSettings.LocalUser.RecentFiles = new Model.Settings.RecentFileSettings();
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Add(TerminalFilePath);
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Add(WorkspaceFilePath);
+			recentsToRestore = ApplicationSettings.LocalUserSettings.RecentFiles;
+			ApplicationSettings.LocalUserSettings.RecentFiles = new Model.Settings.RecentFileSettings();
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(TerminalFilePath);
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(WorkspaceFilePath);
 		}
 
 		#endregion
@@ -102,8 +102,8 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
-			ApplicationSettings.LocalUser.RecentFiles               = this.recentsToRestore;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			ApplicationSettings.LocalUserSettings.RecentFiles               = this.recentsToRestore;
 		}
 
 		#endregion

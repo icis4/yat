@@ -117,6 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="binaryDisplaySettings1.LengthLineBreak" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNZQVQuRG9tYWluLCBWZXJzaW9uPTEuOTkuMjkuMjY4MDEsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49MDM1NWQ1ZjRhNjIxY2UyMwUBAAAAIFlBVC5Eb21h
+        aW4uQmluYXJ5TGVuZ3RoTGluZUJyZWFrAgAAAAdFbmFibGVkCkxpbmVMZW5ndGgAAAEIAgAAAAAQAAAA
+        Cw==
+</value>
+  </data>
+  <data name="binaryDisplaySettings1.SequenceLineBreak" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNZQVQuRG9tYWluLCBWZXJzaW9uPTEuOTkuMjkuMjY4MDEsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49MDM1NWQ1ZjRhNjIxY2UyMwUBAAAAIllBVC5Eb21h
+        aW4uQmluYXJ5U2VxdWVuY2VMaW5lQnJlYWsCAAAAB0VuYWJsZWQIU2VxdWVuY2UAAQECAAAAAAYDAAAA
+        BlxoKDAwKQs=
+</value>
+  </data>
+  <data name="binaryDisplaySettings1.TimedLineBreak" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNZQVQuRG9tYWluLCBWZXJzaW9uPTEuOTkuMjkuMjY4MDEsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49MDM1NWQ1ZjRhNjIxY2UyMwUBAAAAH1lBVC5Eb21h
+        aW4uQmluYXJ5VGltZWRMaW5lQnJlYWsCAAAAB0VuYWJsZWQHVGltZW91dAAAAQgCAAAAAPQBAAAL
+</value>
+  </data>
+  <data name="binaryDisplaySettings2.LengthLineBreak" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNZQVQuRG9tYWluLCBWZXJzaW9uPTEuOTkuMjkuMjY4MDEsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49MDM1NWQ1ZjRhNjIxY2UyMwUBAAAAIFlBVC5Eb21h
+        aW4uQmluYXJ5TGVuZ3RoTGluZUJyZWFrAgAAAAdFbmFibGVkCkxpbmVMZW5ndGgAAAEIAgAAAAAQAAAA
+        Cw==
+</value>
+  </data>
+  <data name="binaryDisplaySettings2.SequenceLineBreak" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNZQVQuRG9tYWluLCBWZXJzaW9uPTEuOTkuMjkuMjY4MDEsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49MDM1NWQ1ZjRhNjIxY2UyMwUBAAAAIllBVC5Eb21h
+        aW4uQmluYXJ5U2VxdWVuY2VMaW5lQnJlYWsCAAAAB0VuYWJsZWQIU2VxdWVuY2UAAQECAAAAAAYDAAAA
+        BlxoKDAwKQs=
+</value>
+  </data>
+  <data name="binaryDisplaySettings2.TimedLineBreak" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFNZQVQuRG9tYWluLCBWZXJzaW9uPTEuOTkuMjkuMjY4MDEsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49MDM1NWQ1ZjRhNjIxY2UyMwUBAAAAH1lBVC5Eb21h
+        aW4uQmluYXJ5VGltZWRMaW5lQnJlYWsCAAAAB0VuYWJsZWQHVGltZW91dAAAAQgCAAAAAPQBAAAL
+</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>33</value>
   </metadata>

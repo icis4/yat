@@ -324,8 +324,8 @@ namespace YAT.Model
 			{
 				if (File.Exists(RequestedFilePath))
 				{
-					if (!ExtensionSettings.IsWorkspaceFile(Path.GetExtension(RequestedFilePath)) &&
-						!ExtensionSettings.IsTerminalFile (Path.GetExtension(RequestedFilePath)))
+					if (!ExtensionSettings.IsWorkspaceFile(RequestedFilePath) &&
+						!ExtensionSettings.IsTerminalFile (RequestedFilePath))
 					{
 						RequestedFilePath = null;
 						Invalidate("Requested file is no workspace nor terminal file");
@@ -343,14 +343,14 @@ namespace YAT.Model
 			// Recent:
 			if (MostRecentIsRequested)
 			{
-				ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
-				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0)
+				ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0)
 				{
-					string mostRecent = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0];
+					string mostRecent = ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[0];
 					if (File.Exists(mostRecent))
 					{
-						if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(mostRecent)) ||
-							ExtensionSettings.IsTerminalFile (Path.GetExtension(mostRecent)))
+						if (ExtensionSettings.IsWorkspaceFile(mostRecent) ||
+							ExtensionSettings.IsTerminalFile (mostRecent))
 						{
 							MostRecentFilePath = mostRecent;
 						}
