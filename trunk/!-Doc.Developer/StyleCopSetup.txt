@@ -118,7 +118,7 @@ Add the following prefixes to the list of allowed Hungarian prefixes
 - pc
 - rs (RS-232/422/485)
 - rx (Receive)
-- ts (Timespan/Timestamp)
+- ts (TimeSpan/TimeStamp)
 - tx (Transmit)
 - x  (X-Coordinate/Extended/Extension)
 - y  (Y-Coordinate)

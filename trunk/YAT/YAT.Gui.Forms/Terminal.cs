@@ -1423,13 +1423,13 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
+			toolStripMenuItem_SendContextMenu_SendFile.Enabled    = this.settingsRoot.SendCommand.Command.IsValidFilePath;
 
 			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_SendContextMenu_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
 			this.isSettingControls.Leave();

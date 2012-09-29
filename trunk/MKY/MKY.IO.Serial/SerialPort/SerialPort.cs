@@ -635,7 +635,7 @@ namespace MKY.IO.Serial
 				OnIOControlChanged(new EventArgs());
 
 			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two receive threads could create a race condition.
+			// Without this exclusivity, two send threads could create a race condition.
 			if (Monitor.TryEnter(this.SendSyncObj))
 			{
 				try
@@ -691,7 +691,7 @@ namespace MKY.IO.Serial
 							}
 						}
 
-						// No break, no XOFff, no CTS disable, ready to send.
+						// No break, no XOff, no CTS disable, ready to send.
 						byte[] buffer;
 						lock (this.sendQueue)
 						{

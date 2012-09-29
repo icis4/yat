@@ -41,7 +41,7 @@
 			// label_LengthLineBreakUnit
 			// 
 			this.label_LengthLineBreakUnit.AutoSize = true;
-			this.label_LengthLineBreakUnit.Location = new System.Drawing.Point(165, 4);
+			this.label_LengthLineBreakUnit.Location = new System.Drawing.Point(153, 4);
 			this.label_LengthLineBreakUnit.Name = "label_LengthLineBreakUnit";
 			this.label_LengthLineBreakUnit.Size = new System.Drawing.Size(32, 13);
 			this.label_LengthLineBreakUnit.TabIndex = 2;
@@ -51,9 +51,9 @@
 			// textBox_SequenceLineBreakSequence
 			// 
 			this.textBox_SequenceLineBreakSequence.Enabled = false;
-			this.textBox_SequenceLineBreakSequence.Location = new System.Drawing.Point(160, 24);
+			this.textBox_SequenceLineBreakSequence.Location = new System.Drawing.Point(154, 24);
 			this.textBox_SequenceLineBreakSequence.Name = "textBox_SequenceLineBreakSequence";
-			this.textBox_SequenceLineBreakSequence.Size = new System.Drawing.Size(100, 20);
+			this.textBox_SequenceLineBreakSequence.Size = new System.Drawing.Size(106, 20);
 			this.textBox_SequenceLineBreakSequence.TabIndex = 4;
 			this.textBox_SequenceLineBreakSequence.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_SequenceLineBreakSequence.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SequenceLineBreakSequence_Validating);
@@ -61,13 +61,13 @@
 			// textBox_LengthLineBreak
 			// 
 			this.textBox_LengthLineBreak.Enabled = false;
-			this.textBox_LengthLineBreak.Location = new System.Drawing.Point(111, 1);
+			this.textBox_LengthLineBreak.Location = new System.Drawing.Point(105, 1);
 			this.textBox_LengthLineBreak.Name = "textBox_LengthLineBreak";
 			this.textBox_LengthLineBreak.Size = new System.Drawing.Size(48, 20);
 			this.textBox_LengthLineBreak.TabIndex = 1;
 			this.textBox_LengthLineBreak.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_LengthLineBreak.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_LengthLineBreak_Validating);
 			this.textBox_LengthLineBreak.TextChanged += new System.EventHandler(this.textBox_LengthLineBreak_TextChanged);
+			this.textBox_LengthLineBreak.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_LengthLineBreak_Validating);
 			// 
 			// checkBox_SequenceLineBreak
 			// 
@@ -92,7 +92,7 @@
 			// label_TimedLineBreakUnit
 			// 
 			this.label_TimedLineBreakUnit.AutoSize = true;
-			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(214, 50);
+			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(203, 50);
 			this.label_TimedLineBreakUnit.Name = "label_TimedLineBreakUnit";
 			this.label_TimedLineBreakUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_TimedLineBreakUnit.TabIndex = 7;
@@ -102,7 +102,7 @@
 			// textBox_TimedLineBreakTimeout
 			// 
 			this.textBox_TimedLineBreakTimeout.Enabled = false;
-			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(160, 47);
+			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(154, 47);
 			this.textBox_TimedLineBreakTimeout.Name = "textBox_TimedLineBreakTimeout";
 			this.textBox_TimedLineBreakTimeout.Size = new System.Drawing.Size(48, 20);
 			this.textBox_TimedLineBreakTimeout.TabIndex = 6;

@@ -50,6 +50,8 @@ YAT 2.0 Beta 4 Candidate 2 Version 1.99.xx :: 2012-1x-xx
 
 New:
 - Line numbers can optionally be displayed in monitors (feature request #3442828)
+- Keyword \!(Delay) implemented, time span in milliseconds can be configured in advanced settings
+  (related to feature requests #3105478 and #3538899)
 - Additional executable 'YATConsole.exe' added to ensure proper command line operation in case of
   'cmd' as well as 'PowerShell' (bug #3482103)
 

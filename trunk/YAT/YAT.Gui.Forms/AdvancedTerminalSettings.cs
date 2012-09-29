@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -29,6 +34,8 @@ using System.Windows.Forms;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -282,6 +289,36 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 		}
 
+		private void textBox_DefaultDelay_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_DefaultDelay_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int delay;
+				if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1))
+				{
+					this.settings_Form.Terminal.Send.DefaultDelay = delay;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Delay must be at least 1 ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
+		}
+
 		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -400,6 +437,7 @@ namespace YAT.Gui.Forms
 			checkBox_KeepCommand.Checked         = this.settings_Form.Terminal.Send.KeepCommand;
 			checkBox_CopyPredefined.Checked      = this.settings_Form.Terminal.Send.CopyPredefined;
 			checkBox_SendImmediately.Checked     = this.settings_Form.Terminal.Send.SendImmediately;
+			textBox_DefaultDelay.Text            = this.settings_Form.Terminal.Send.DefaultDelay.ToString();
 			checkBox_NoSendOnOutputBreak.Enabled = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
 			checkBox_NoSendOnOutputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
@@ -453,6 +491,7 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
 			this.settings_Form.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settings_Form.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settings_Form.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
 
 			// Receive:

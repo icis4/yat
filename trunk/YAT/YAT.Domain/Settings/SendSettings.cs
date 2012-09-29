@@ -41,9 +41,13 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SendImmediatelyDefault = false;
 
+		/// <summary></summary>
+		public const int DefaultDelayDefault = 100;
+
 		private bool keepCommand;
 		private bool copyPredefined;
 		private bool sendImmediately;
+		private int defaultDelay;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -70,6 +74,7 @@ namespace YAT.Domain.Settings
 			KeepCommand     = rhs.keepCommand;
 			CopyPredefined  = rhs.copyPredefined;
 			SendImmediately = rhs.sendImmediately;
+			DefaultDelay    = rhs.DefaultDelay;
 
 			ClearChanged();
 		}
@@ -84,6 +89,7 @@ namespace YAT.Domain.Settings
 			KeepCommand     = KeepCommandDefault;
 			CopyPredefined  = CopyPredefinedDefault;
 			SendImmediately = SendImmediatelyDefault;
+			DefaultDelay    = DefaultDelayDefault;
 		}
 
 		#region Properties
@@ -136,6 +142,21 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("DefaultDelay")]
+		public virtual int DefaultDelay
+		{
+			get { return (this.defaultDelay); }
+			set
+			{
+				if (value != this.defaultDelay)
+				{
+					this.defaultDelay = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -158,7 +179,8 @@ namespace YAT.Domain.Settings
 
 				(this.keepCommand     == other.keepCommand) &&
 				(this.copyPredefined  == other.copyPredefined) &&
-				(this.sendImmediately == other.sendImmediately)
+				(this.sendImmediately == other.sendImmediately) &&
+				(this.defaultDelay    == other.defaultDelay)
 			);
 		}
 
@@ -171,7 +193,8 @@ namespace YAT.Domain.Settings
 
 				this.keepCommand    .GetHashCode() ^
 				this.copyPredefined .GetHashCode() ^
-				this.sendImmediately.GetHashCode()
+				this.sendImmediately.GetHashCode() ^
+				this.defaultDelay   .GetHashCode()
 			);
 		}
 

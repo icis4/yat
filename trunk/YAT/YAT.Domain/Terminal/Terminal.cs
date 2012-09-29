@@ -21,14 +21,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Threading;
 
 using MKY;
 using MKY.Event;
 using MKY.Text;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -93,6 +101,9 @@ namespace YAT.Domain
 		private bool isDisposed;
 
 		private Settings.TerminalSettings terminalSettings;
+
+		/// <summary>Async sending.</summary>
+		private Queue<SendItem> sendQueue = new Queue<SendItem>();
 
 		private RawTerminal rawTerminal;
 
@@ -342,6 +353,10 @@ namespace YAT.Domain
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
+
+			// Do not clear the send queue, it already got cleared when stopping. This setup
+			// potentially allows to call Send() and buffer data before starting the terminal.
+
 			return (this.rawTerminal.Start());
 		}
 
@@ -350,6 +365,10 @@ namespace YAT.Domain
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
+
+			lock (this.sendQueue)
+				this.sendQueue.Clear();
+
 			this.rawTerminal.Stop();
 		}
 
@@ -360,37 +379,132 @@ namespace YAT.Domain
 		// Methods > Send
 		//------------------------------------------------------------------------------------------
 
+		/// <summary>
+		/// Asynchronously invoke outgoing send requests to ensure that software and/or hardware
+		/// flow control is properley buffered and suspended if the communication counterpart
+		/// requests so.
+		/// </summary>
+		private delegate void SendDelegate();
+		private object SendSyncObj = new object();
+
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
-			this.rawTerminal.Send(data);
-		}
 
-		/// <summary></summary>
-		public virtual void Send(string s)
-		{
-			AssertNotDisposed();
-
-			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
-			foreach (Parser.Result result in p.Parse(s, Parser.ParseMode.All))
+			lock (this.sendQueue)
 			{
-				if      (result is Parser.ByteArrayResult)
+				this.sendQueue.Enqueue(new BinarySendItem(data));
+			}
+
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two send threads could create a race condition.
+			if (Monitor.TryEnter(this.SendSyncObj))
+			{
+				try
 				{
-					this.rawTerminal.Send(((Parser.ByteArrayResult)result).ByteArray);
+					SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
+					asyncInvoker.BeginInvoke(null, null);
 				}
-				else if (result is Parser.KeywordResult)
+				finally
 				{
-					ProcessKeywords((Parser.KeywordResult)result);
+					Monitor.Exit(this.SendSyncObj);
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void SendLine(string line)
+		public virtual void Send(string data)
 		{
-			// Simply send line as string.
-			Send(line);
+			AssertNotDisposed();
+
+			lock (this.sendQueue)
+			{
+				this.sendQueue.Enqueue(new TextSendItem(data));
+			}
+
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two send threads could create a race condition.
+			if (Monitor.TryEnter(this.SendSyncObj))
+			{
+				try
+				{
+					SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
+					asyncInvoker.BeginInvoke(null, null);
+				}
+				finally
+				{
+					Monitor.Exit(this.SendSyncObj);
+				}
+			}
+		}
+
+		/// <remarks>
+		/// In case of this 'neutral' terminal, simply send line as string. In case of a terminal
+		/// where lines have a meaning (e.g. a text terminal), that implemenation shall override
+		/// this method.
+		/// </remarks>
+		public virtual void SendLine(string data)
+		{
+			Send(data);
+		}
+
+		private void SendAsynch()
+		{
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two receive threads could create a race condition.
+			Monitor.Enter(this.SendSyncObj);
+			try
+			{
+				while (true)
+				{
+					// Read items from queue until there are no more.
+					SendItem[] buffer;
+					lock (this.sendQueue)
+					{
+						if (this.sendQueue.Count <= 0)
+							break;
+
+						buffer = this.sendQueue.ToArray();
+						this.sendQueue.Clear();
+					}
+
+					foreach (SendItem si in buffer)
+					{
+						if (si is TextSendItem)
+						{
+							TextSendItem item = si as TextSendItem;
+
+							Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
+							foreach (Parser.Result result in p.Parse(item.Data, Parser.ParseMode.All))
+							{
+								if (result is Parser.ByteArrayResult)
+								{
+									this.rawTerminal.Send(((Parser.ByteArrayResult)result).ByteArray);
+								}
+								else if (result is Parser.KeywordResult)
+								{
+									ProcessKeywords((Parser.KeywordResult)result);
+								}
+							}
+						}
+						else if (si is BinarySendItem)
+						{
+							BinarySendItem item = si as BinarySendItem;
+
+							this.rawTerminal.Send(item.Data);
+						}
+						else
+						{
+							throw (new InvalidOperationException("Invalid send item: " + si));
+						}
+					}
+				}
+			}
+			finally
+			{
+				Monitor.Exit(this.SendSyncObj);
+			}
 		}
 
 		/// <summary></summary>
@@ -406,7 +520,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Delay:
 				{
-					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, @"\!(Delay(<TimeSpan>)) is not yet implemented, tracked as feature request #3105478"));
+					Thread.Sleep(this.terminalSettings.Send.DefaultDelay);
 					break;
 				}
 

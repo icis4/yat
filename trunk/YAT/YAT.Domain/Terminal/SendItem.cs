@@ -40,22 +40,72 @@ using MKY;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Defines an element received from or sent to a serial interface. In
-	/// addition to the serial data it also contains interface and time
-	/// information.
+	/// Defines an item that shall be sent by the terminal.
 	/// </summary>
-	public class RawElement
+	public abstract class SendItem
 	{
-		private byte[] data;
-		private SerialDirection direction;
-		private DateTime timeStamp;
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return (ToString(""));
+		}
 
 		/// <summary></summary>
-		public RawElement(byte[] data, SerialDirection direction)
+		public abstract string ToString(string indent);
+
+		/// <summary></summary>
+		public virtual string ToDetailedString()
+		{
+			return (ToDetailedString(""));
+		}
+
+		/// <summary></summary>
+		public abstract string ToDetailedString(string indent);
+	}
+
+	/// <summary>
+	/// Defines a text item that shall be sent by the terminal.
+	/// </summary>
+	public class TextSendItem : SendItem
+	{
+		private string data;
+
+		/// <summary></summary>
+		public TextSendItem(string data)
 		{
 			this.data = data;
-			this.direction = direction;
-			this.timeStamp = DateTime.Now;
+		}
+
+		/// <summary></summary>
+		public virtual string Data
+		{
+			get { return (this.data); }
+		}
+
+		/// <summary></summary>
+		public override string ToString(string indent)
+		{
+			return (indent + this.data);
+		}
+
+		/// <summary></summary>
+		public override string ToDetailedString(string indent)
+		{
+			return (indent + "- Data: " + this.data + Environment.NewLine);
+		}
+	}
+
+	/// <summary>
+	/// Defines a binary item that shall be sent by the terminal.
+	/// </summary>
+	public class BinarySendItem : SendItem
+	{
+		private byte[] data;
+
+		/// <summary></summary>
+		public BinarySendItem(byte[] data)
+		{
+			this.data = data;
 		}
 
 		/// <summary></summary>
@@ -65,25 +115,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual SerialDirection Direction
-		{
-			get { return (this.direction); }
-		}
-
-		/// <summary></summary>
-		public virtual DateTime TimeStamp
-		{
-			get { return (this.timeStamp); }
-		}
-
-		/// <summary></summary>
-		public override string ToString()
-		{
-			return (ToString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToString(string indent)
+		public override string ToString(string indent)
 		{
 			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			foreach (byte b in this.data)
@@ -93,13 +125,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string ToDetailedString()
-		{
-			return (ToDetailedString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToDetailedString(string indent)
+		public override string ToDetailedString(string indent)
 		{
 			bool begin = true;
 			StringWriter data = new StringWriter(CultureInfo.InvariantCulture);
@@ -112,9 +138,7 @@ namespace YAT.Domain
 				data.Write(b.ToString("X2", NumberFormatInfo.InvariantInfo) + "h");
 			}
 
-			return (indent + "- Data: " + data + Environment.NewLine +
-					indent + "- Direction: " + this.direction + Environment.NewLine +
-					indent + "- TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", NumberFormatInfo.InvariantInfo), 2) + Environment.NewLine);
+			return (indent + "- Data: " + data + Environment.NewLine);
 		}
 	}
 }
