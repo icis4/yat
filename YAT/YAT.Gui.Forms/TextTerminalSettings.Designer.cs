@@ -339,7 +339,7 @@ namespace YAT.Gui.Forms
 			// label_WaitForResponseUnit
 			// 
 			this.label_WaitForResponseUnit.AutoSize = true;
-			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(164, 65);
+			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(162, 65);
 			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
 			this.label_WaitForResponseUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_WaitForResponseUnit.TabIndex = 8;
@@ -358,7 +358,7 @@ namespace YAT.Gui.Forms
 			// 
 			// textBox_WaitForResponse
 			// 
-			this.textBox_WaitForResponse.Location = new System.Drawing.Point(113, 62);
+			this.textBox_WaitForResponse.Location = new System.Drawing.Point(111, 62);
 			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
 			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
 			this.textBox_WaitForResponse.TabIndex = 7;

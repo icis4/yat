@@ -129,7 +129,7 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Writes a line into log file and adds a timestamp.
+		/// Writes a line into log file and adds a time stamp.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void WriteLine(string line)

@@ -129,10 +129,16 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			// Always success:
-			// Either settings have been loaded or settings have been set to defaults.
-			ApplicationSettings.Load();
-			DialogResult = DialogResult.OK;
+			try
+			{
+				// Either settings have been loaded or settings have been set to defaults.
+				ApplicationSettings.Load();
+				DialogResult = DialogResult.OK;
+			}
+			catch
+			{
+				DialogResult = DialogResult.Abort;
+			}
 
 			this.finishedLoadingLock.EnterWriteLock();
 			this.finishedLoading = true;

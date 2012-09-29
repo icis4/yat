@@ -1700,17 +1700,17 @@ namespace YAT.Model
 		// Terminal > Send
 		//------------------------------------------------------------------------------------------
 
-		private void Send(byte[] b)
+		private void Send(byte[] data)
 		{
-			OnFixedStatusTextRequest("Sending " + b.Length + " bytes...");
+			OnFixedStatusTextRequest("Sending " + data.Length + " bytes...");
 			try
 			{
-				this.terminal.Send(b);
-				OnTimedStatusTextRequest(b.Length + " bytes sent.");
+				this.terminal.Send(data);
+				OnTimedStatusTextRequest(data.Length + " bytes sent.");
 			}
 			catch (System.IO.IOException ex)
 			{
-				OnFixedStatusTextRequest("Error sending " + b.Length + " bytes!");
+				OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
 
 				string text;
 				string title;
@@ -1729,21 +1729,21 @@ namespace YAT.Model
 			}
 		}
 
-		private void SendLine(string s)
+		private void SendLine(string data)
 		{
-			Send(s, true);
+			Send(data, true);
 		}
 
-		private void Send(string s)
+		private void SendText(string data)
 		{
-			Send(s, false);
+			Send(data, false);
 		}
 
-		private void Send(string s, bool isLine)
+		private void Send(string data, bool isLine)
 		{
 			string sent;
-			if (!string.IsNullOrEmpty(s))
-				sent = @"""" + s + @"""";
+			if (!string.IsNullOrEmpty(data))
+				sent = @"""" + data + @"""";
 			else if (isLine)
 				sent = "EOL";
 			else
@@ -1753,9 +1753,9 @@ namespace YAT.Model
 			try
 			{
 				if (isLine)
-					this.terminal.SendLine(s);
+					this.terminal.SendLine(data);
 				else
-					this.terminal.Send(s);
+					this.terminal.Send(data);
 
 				OnTimedStatusTextRequest(sent + " sent.");
 			}
@@ -1876,7 +1876,7 @@ namespace YAT.Model
 				else if (c.IsPartialText)
 				{
 					if (!c.IsPartialEolText)
-						Send(c.PartialText);
+						SendText(c.PartialText);
 					else
 						SendLine(""); // Simply add EOL to finalize a partial line.
 				}

@@ -296,20 +296,20 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public override void Send(string s)
+		public override void Send(string data)
 		{
 			AssertNotDisposed();
-			Send(s, null);
+			Send(data, null);
 		}
 
 		/// <summary></summary>
-		public override void SendLine(string line)
+		public override void SendLine(string data)
 		{
 			AssertNotDisposed();
-			Send(line, TextTerminalSettings.TxEol);
+			Send(data, TextTerminalSettings.TxEol);
 		}
 
-		private void Send(string s, string eol)
+		private void Send(string data, string eol)
 		{
 			bool sendEol = (eol != null);
 			byte[] eolByteArray = new byte[] { };
@@ -335,14 +335,14 @@ namespace YAT.Domain
 			{
 				foreach (string marker in TextTerminalSettings.EolCommentIndicators)
 				{
-					int index = StringEx.IndexOfOutsideDoubleQuotes(s, marker, StringComparison.Ordinal);
+					int index = StringEx.IndexOfOutsideDoubleQuotes(data, marker, StringComparison.Ordinal);
 					if (index >= 0)
-						s = StringEx.Left(s, index);
+						data = StringEx.Left(data, index);
 				}
 			}
 
 			// Parse string and execute keywords.
-			foreach (Parser.Result result in p.Parse(s, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
+			foreach (Parser.Result result in p.Parse(data, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
 			{
 				if      (result is Parser.ByteArrayResult)
 				{

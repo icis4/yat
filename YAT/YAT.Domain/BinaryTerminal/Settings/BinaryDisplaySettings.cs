@@ -31,9 +31,9 @@ namespace YAT.Domain.Settings
 	/// <summary></summary>
 	public class BinaryDisplaySettings : MKY.Settings.SettingsItem
 	{
-		private BinaryLengthLineBreak lengthLineBreak;
+		private BinaryLengthLineBreak   lengthLineBreak;
 		private BinarySequenceLineBreak sequenceLineBreak;
-		private BinaryTimedLineBreak timedLineBreak;
+		private BinaryTimedLineBreak    timedLineBreak;
 
 		/// <summary></summary>
 		public BinaryDisplaySettings()
