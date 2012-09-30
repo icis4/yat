@@ -663,7 +663,8 @@ namespace MKY.IO.Serial
 				// execute and to prevent that 'OnDataSent' events are fired consecutively.
 				while (true)
 				{
-					// Handle output break state.
+					// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
+					// an exception when trying to write while in output break!
 					bool isOutputBreak;
 					lock (this.port)
 						isOutputBreak = this.port.OutputBreak;
@@ -677,7 +678,8 @@ namespace MKY.IO.Serial
 							continue;
 						}
 
-						// In case of disabled CTS line, let other threads do their job and then try again.
+						// In case of disabled CTS line, let other threads do their job and then
+						// try again.
 						if (this.settings.Communication.FlowControlUsesRtsCts)
 						{
 							bool isClearToSend;
@@ -717,7 +719,12 @@ namespace MKY.IO.Serial
 					}
 					else
 					{
-						OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
+						OnIOError(new IOErrorEventArgs
+							(
+							IOErrorSeverity.Acceptable,
+							IODirection.Output,
+							"No data can be sent while port is in output break state")
+							);
 						break;
 					}
 				}
