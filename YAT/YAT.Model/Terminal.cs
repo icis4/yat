@@ -1565,19 +1565,27 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error starting terminal!");
 
-				string ioText;
+				string hintTitle;
+				string hintText;
 				if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
-					ioText = "port";
+				{
+					hintTitle = "YAT hints:";
+					hintText = "Check the settings of the serial port and make sure it is not already in use." + Environment.NewLine +
+					           "Note that hardware and driver may limit the allowed communication settings.";
+				}
 				else
-					ioText = "socket";
+				{
+					hintTitle = "YAT hint:";
+					hintText = "Make sure the socket is not already in use.";
+				}
 
 				OnMessageInputRequest
 					(
 					"Unable to start terminal!" + Environment.NewLine + Environment.NewLine +
 					"System error message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
-					"YAT hint:" + Environment.NewLine +
-					"Check the settings of the " + ioText + " and make sure it is not already in use.",
+					hintTitle + Environment.NewLine +
+					hintText,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
