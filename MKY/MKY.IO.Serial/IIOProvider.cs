@@ -54,11 +54,19 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Fired after the I/O provider has received data.
 		/// </summary>
+		/// <remarks>
+		/// Receive related code is located before send related code since I/O is a common term
+		/// and I comes before O.
+		/// </remarks>
 		event EventHandler DataReceived;
 
 		/// <summary>
 		/// Fired after the I/O provider has sent data.
 		/// </summary>
+		/// <remarks>
+		/// Receive related code is located before send related code since I/O is a common term
+		/// and I comes before O.
+		/// </remarks>
 		event EventHandler DataSent;
 
 		/// <summary>

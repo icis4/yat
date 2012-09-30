@@ -1396,6 +1396,8 @@ namespace YAT.Model
 
 		private void terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
 		{
+			OnTimedStatusTextRequest("Sending...");
+
 			// Count.
 			this.txByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
@@ -1414,6 +1416,8 @@ namespace YAT.Model
 
 		private void terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
 		{
+			OnTimedStatusTextRequest("Receiving...");
+
 			// Count.
 			this.rxByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
@@ -1706,7 +1710,6 @@ namespace YAT.Model
 			try
 			{
 				this.terminal.Send(data);
-				OnTimedStatusTextRequest(data.Length + " bytes sent.");
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1729,39 +1732,37 @@ namespace YAT.Model
 			}
 		}
 
+		private void Send(string data)
+		{
+			Send(data, false);
+		}
+
 		private void SendLine(string data)
 		{
 			Send(data, true);
 		}
 
-		private void SendText(string data)
-		{
-			Send(data, false);
-		}
-
 		private void Send(string data, bool isLine)
 		{
-			string sent;
+			string sendStatusText;
 			if (!string.IsNullOrEmpty(data))
-				sent = @"""" + data + @"""";
+				sendStatusText = @"""" + data + @"""";
 			else if (isLine)
-				sent = "EOL";
+				sendStatusText = "EOL";
 			else
-				sent = "<Nothing>";
+				sendStatusText = "<Nothing>";
 
-			OnFixedStatusTextRequest("Sending " + sent + "...");
+			OnFixedStatusTextRequest("Sending " + sendStatusText + "...");
 			try
 			{
 				if (isLine)
 					this.terminal.SendLine(data);
 				else
 					this.terminal.Send(data);
-
-				OnTimedStatusTextRequest(sent + " sent.");
 			}
 			catch (System.IO.IOException ex)
 			{
-				OnFixedStatusTextRequest("Error sending " + sent + "!");
+				OnFixedStatusTextRequest("Error sending " + sendStatusText + "!");
 
 				string text;
 				string title;
@@ -1780,7 +1781,7 @@ namespace YAT.Model
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				OnFixedStatusTextRequest("Error sending " + sent + "!");
+				OnFixedStatusTextRequest("Error sending " + sendStatusText + "!");
 				OnMessageInputRequest
 					(
 					"Bad data format:" + Environment.NewLine +
@@ -1876,7 +1877,7 @@ namespace YAT.Model
 				else if (c.IsPartialText)
 				{
 					if (!c.IsPartialEolText)
-						SendText(c.PartialText);
+						Send(c.PartialText);
 					else
 						SendLine(""); // Simply add EOL to finalize a partial line.
 				}

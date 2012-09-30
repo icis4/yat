@@ -140,7 +140,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s, CharSubstitution substitution)
 		{
-			// AssertNotDisposed() is called by base.Parse().
+			// AssertNotDisposed() is called by 'base.Parse()'.
 
 			string parsed;
 			return (Parse(s, substitution, out parsed));
@@ -149,7 +149,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s, CharSubstitution substitution, out string parsed)
 		{
-			// AssertNotDisposed() is called by base.Parse().
+			// AssertNotDisposed() is called by 'base.Parse()'.
 
 			this.substitution = substitution;
 			return (Parse(s, out parsed));
@@ -158,7 +158,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode)
 		{
-			// AssertNotDisposed() is called by base.Parse().
+			// AssertNotDisposed() is called by 'base.Parse()'.
 
 			string parsed;
 			return (Parse(s, substitution, mode, out parsed));
@@ -167,7 +167,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode, out string parsed)
 		{
-			// AssertNotDisposed() is called by base.Parse().
+			// AssertNotDisposed() is called by 'base.Parse()'.
 
 			this.substitution = substitution;
 			return (Parse(s, mode, out parsed));
@@ -176,7 +176,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result)
 		{
-			// AssertNotDisposed() is called by base.TryParse().
+			// AssertNotDisposed() is called by 'base.TryParse()'.
 
 			string parsed;
 			return (TryParse(s, substitution, out result, out parsed));
@@ -185,7 +185,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string parsed)
 		{
-			// AssertNotDisposed() is called by base.TryParse().
+			// AssertNotDisposed() is called by 'base.TryParse()'.
 
 			this.substitution = substitution;
 			return (TryParse(s, out result, out parsed));
@@ -194,7 +194,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected override bool TryParseContiguousRadixToken(string token, Radix parseRadix, out byte[] result, ref FormatException formatException)
 		{
-			// AssertNotDisposed() is called by base.TryParseContiguousRadixToken().
+			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixToken()'.
 
 			return (base.TryParseContiguousRadixToken(Substitute(token), parseRadix, out result, ref formatException));
 		}

@@ -58,9 +58,9 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message)
 		{
-			Severity = severity;
+			Severity  = severity;
 			Direction = direction;
-			Message = message;
+			Message   = message;
 		}
 	}
 

@@ -530,7 +530,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has' property below.
+				// AssertNotDisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					return (new TCommonSettings());
@@ -547,7 +547,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has' property below.
+				// AssertNotDisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					return (new TLocalUserSettings());
@@ -564,7 +564,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has' property below.
+				// AssertNotDisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					return (new TRoamingUserSettings());
@@ -589,7 +589,7 @@ namespace MKY.Settings
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'Has' property below.
+				// AssertNotDisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					this.commonSettings.FilePath = value;
@@ -614,7 +614,7 @@ namespace MKY.Settings
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'Has' property below.
+				// AssertNotDisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					this.localUserSettings.FilePath = value;
@@ -639,7 +639,7 @@ namespace MKY.Settings
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'Has' property below.
+				// AssertNotDisposed() is called by 'Has...' below.
 			
 				if (HasRoamingUserSettings)
 					this.roamingUserSettings.FilePath = value;
@@ -819,7 +819,7 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual bool Load()
 		{
-			// AssertNotDisposed() is called by 'Load' methods below.
+			// AssertNotDisposed() is called by 'Load()' below.
 
 			LoadCommonSettings();
 			LoadLocalUserSettings();
@@ -845,7 +845,7 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool LoadCommonSettings()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasCommonSettings)
 				return (this.commonSettings.Load());
@@ -862,7 +862,7 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool LoadLocalUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasLocalUserSettings)
 				return (this.localUserSettings.Load());
@@ -879,7 +879,7 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool LoadRoamingUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasRoamingUserSettings)
 				return (this.roamingUserSettings.Load());
@@ -947,7 +947,7 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void SaveCommonSettings()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasCommonSettings && CommonSettingsAreCurrentlyOwnedByThisInstance)
 				this.commonSettings.Save();
@@ -961,7 +961,7 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void SaveLocalUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasLocalUserSettings && LocalUserSettingsAreCurrentlyOwnedByThisInstance)
 				this.localUserSettings.Save();
@@ -975,7 +975,7 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void SaveRoamingUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasRoamingUserSettings && RoamingUserSettingsAreCurrentlyOwnedByThisInstance)
 				this.roamingUserSettings.Save();
@@ -987,7 +987,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void ForceThatCommonSettingsAreCurrentlyOwnedByThisInstance()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasCommonSettings)
 				this.commonSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();
@@ -999,7 +999,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void ForceThatLocalUserSettingsAreCurrentlyOwnedByThisInstance()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasLocalUserSettings)
 				this.localUserSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();
@@ -1011,7 +1011,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void ForceThatRoamingUserSettingsAreCurrentlyOwnedByThisInstance()
 		{
-			// AssertNotDisposed() is called by 'Has' property below.
+			// AssertNotDisposed() is called by 'Has...' below.
 
 			if (HasRoamingUserSettings)
 				this.roamingUserSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();

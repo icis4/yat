@@ -289,11 +289,6 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 		}
 
-		private void textBox_DefaultDelay_TextChanged(object sender, EventArgs e)
-		{
-
-		}
-
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultDelay_Validating(object sender, CancelEventArgs e)
 		{
@@ -303,6 +298,31 @@ namespace YAT.Gui.Forms
 				if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1))
 				{
 					this.settings_Form.Terminal.Send.DefaultDelay = delay;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Delay must be at least 1 ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_DefaultLineDelay_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int delay;
+				if (int.TryParse(textBox_DefaultLineDelay.Text, out delay) && (delay >= 1))
+				{
+					this.settings_Form.Terminal.Send.DefaultLineDelay = delay;
 				}
 				else
 				{
@@ -438,6 +458,7 @@ namespace YAT.Gui.Forms
 			checkBox_CopyPredefined.Checked      = this.settings_Form.Terminal.Send.CopyPredefined;
 			checkBox_SendImmediately.Checked     = this.settings_Form.Terminal.Send.SendImmediately;
 			textBox_DefaultDelay.Text            = this.settings_Form.Terminal.Send.DefaultDelay.ToString();
+			textBox_DefaultLineDelay.Text        = this.settings_Form.Terminal.Send.DefaultLineDelay.ToString();
 			checkBox_NoSendOnOutputBreak.Enabled = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
 			checkBox_NoSendOnOutputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
@@ -492,6 +513,7 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settings_Form.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
 			this.settings_Form.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
+			this.settings_Form.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
 			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
 
 			// Receive:
