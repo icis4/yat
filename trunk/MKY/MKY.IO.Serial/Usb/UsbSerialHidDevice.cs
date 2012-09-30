@@ -280,7 +280,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by IsStarted
+			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (!IsStarted)
 				return (TryCreateAndStartDevice());
@@ -292,7 +292,7 @@ namespace MKY.IO.Serial
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by IsStarted.
+			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 				StopAndDisposeDevice();

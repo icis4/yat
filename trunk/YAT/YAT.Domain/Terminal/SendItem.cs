@@ -66,20 +66,34 @@ namespace YAT.Domain
 	/// <summary>
 	/// Defines a text item that shall be sent by the terminal.
 	/// </summary>
-	public class TextSendItem : SendItem
+	public class ParsableSendItem : SendItem
 	{
 		private string data;
+		private bool isLine;
 
 		/// <summary></summary>
-		public TextSendItem(string data)
+		public ParsableSendItem(string data)
+			: this(data, false)
+		{
+		}
+
+		/// <summary></summary>
+		public ParsableSendItem(string data, bool isLine)
 		{
 			this.data = data;
+			this.isLine = isLine;
 		}
 
 		/// <summary></summary>
 		public virtual string Data
 		{
 			get { return (this.data); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsLine
+		{
+			get { return (this.isLine); }
 		}
 
 		/// <summary></summary>
@@ -91,19 +105,20 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			return (indent + "- Data: " + this.data + Environment.NewLine);
+			return (indent + "- Data: " + this.data + Environment.NewLine +
+					indent + "- IsLine: " + this.isLine + Environment.NewLine);
 		}
 	}
 
 	/// <summary>
 	/// Defines a binary item that shall be sent by the terminal.
 	/// </summary>
-	public class BinarySendItem : SendItem
+	public class RawSendItem : SendItem
 	{
 		private byte[] data;
 
 		/// <summary></summary>
-		public BinarySendItem(byte[] data)
+		public RawSendItem(byte[] data)
 		{
 			this.data = data;
 		}

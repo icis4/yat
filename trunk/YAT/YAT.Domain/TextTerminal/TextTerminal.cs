@@ -148,29 +148,6 @@ namespace YAT.Domain
 			}
 		}
 
-		private class LineSendDelayThread
-		{
-			private int delayMs;
-			private bool isDelaying;
-
-			public LineSendDelayThread(int delayMs)
-			{
-				this.delayMs = delayMs;
-			}
-
-			public virtual bool IsDelaying
-			{
-				get { return (this.isDelaying); }
-			}
-
-			public virtual void Delay()
-			{
-				this.isDelaying = true;
-				Thread.Sleep(this.delayMs);
-				this.isDelaying = false;
-			}
-		}
-
 		#endregion
 
 		#region Fields
@@ -296,30 +273,20 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public override void Send(string data)
+		protected override void ProcessParsableSendItem(ParsableSendItem item)
 		{
-			AssertNotDisposed();
-			Send(data, null);
-		}
+			string data = item.Data;
+			bool sendEol = item.IsLine;
+			bool performLineDelay = false;
 
-		/// <summary></summary>
-		public override void SendLine(string data)
-		{
-			AssertNotDisposed();
-			Send(data, TextTerminalSettings.TxEol);
-		}
-
-		private void Send(string data, string eol)
-		{
-			bool sendEol = (eol != null);
-			byte[] eolByteArray = new byte[] { };
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (EncodingEx)TextTerminalSettings.Encoding);
 
 			// Prepare EOL.
-			if (sendEol)
+			byte[] eolByteArray = new byte[] { };
+			if (item.IsLine)
 			{
 				MemoryStream eolWriter = new MemoryStream();
-				foreach (Parser.Result result in p.Parse(eol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
+				foreach (Parser.Result result in p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
 				{
 					if (result is Parser.ByteArrayResult)
 					{
@@ -346,51 +313,69 @@ namespace YAT.Domain
 			{
 				if      (result is Parser.ByteArrayResult)
 				{
-					Send(((Parser.ByteArrayResult)result).ByteArray);
+					ForwardDataToRawTerminal(((Parser.ByteArrayResult)result).ByteArray);
 				}
 				else if (result is Parser.KeywordResult)
 				{
 					Parser.KeywordResult keywordResult = (Parser.KeywordResult)result;
 					switch (keywordResult.Keyword)
 					{
-						case Parser.Keyword.Eol:
-							Send(eolByteArray);
+						// Process end-of-line keywords:
+						case Parser.Keyword.LineDelay:
+						{
+							performLineDelay = true;
 							break;
+						}
 
 						case Parser.Keyword.NoEol:
+						{
 							sendEol = false;
 							break;
+						}
 
-						default:
-							ProcessKeywords(keywordResult);
+						// Process text terminal specific in-line keywords:
+						case Parser.Keyword.Eol:
+						{
+							ForwardDataToRawTerminal(eolByteArray);
 							break;
+						}
+
+						// Process other in-line keywords:
+						default:
+						{
+							ProcessInLineKeywords(keywordResult);
+							break;
+						}
 					}
 				}
 			}
 
-			// Finally send EOL.
+			// Finalize the line.
 			if (sendEol)
+				ForwardDataToRawTerminal(eolByteArray);
+
+			int accumulatedLineDelay = 0;
+			if (performLineDelay)
 			{
-				Send(eolByteArray);
+				int delay = TerminalSettings.Send.DefaultLineDelay;
+				Thread.Sleep(delay);
+				accumulatedLineDelay += delay;
 			}
 
-			// Busy wait if desired.
 			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
 			{
 				this.lineSendDelayState.LineCount++;
-
 				if (this.lineSendDelayState.LineCount >= TerminalSettings.TextTerminal.LineSendDelay.LineInterval)
 				{
-					LineSendDelayThread lsdt = new LineSendDelayThread(TerminalSettings.TextTerminal.LineSendDelay.Delay);
-					Thread t = new Thread(new ThreadStart(lsdt.Delay));
-					t.Start();
-
-					while (lsdt.IsDelaying)
-						Application.DoEvents();
-
-					t.Join();
-
 					this.lineSendDelayState.Reset();
+
+					int delay = TerminalSettings.TextTerminal.LineSendDelay.Delay;
+					if (delay > accumulatedLineDelay)
+					{
+						delay -= accumulatedLineDelay;
+						Thread.Sleep(delay);
+						accumulatedLineDelay += delay;
+					}
 				}
 			}
 		}

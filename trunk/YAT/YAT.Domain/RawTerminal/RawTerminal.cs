@@ -21,12 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 using MKY.Event;
 using MKY.IO.Serial;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -52,8 +60,6 @@ namespace YAT.Domain
 		private RawRepository bidirRepository;
 		private RawRepository rxRepository;
 		private object repositorySyncObj = new object();
-
-		private object sendSyncObj = new object();
 
 		private Settings.IOSettings ioSettings;
 		private IIOProvider io;
@@ -93,7 +99,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
-			this.txRepository = new RawRepository(bufferSettings.TxBufferSize);
+			this.txRepository    = new RawRepository(bufferSettings.TxBufferSize);
 			this.bidirRepository = new RawRepository(bufferSettings.BidirBufferSize);
 			this.rxRepository    = new RawRepository(bufferSettings.RxBufferSize);
 
@@ -106,7 +112,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings, RawTerminal rhs)
 		{
-			this.txRepository = new RawRepository(rhs.txRepository);
+			this.txRepository    = new RawRepository(rhs.txRepository);
 			this.bidirRepository = new RawRepository(rhs.bidirRepository);
 			this.rxRepository    = new RawRepository(rhs.rxRepository);
 
@@ -302,26 +308,97 @@ namespace YAT.Domain
 		// Send
 		//------------------------------------------------------------------------------------------
 
+		private object sendSyncObj = new object();
+
+		/// <summary>Async sending.</summary>
+		private Queue<RawElement> sendEventQueue = new Queue<RawElement>();
+		private object sendEventSyncObj = new object();
+		private delegate void SendEventDelegate();
+
 		/// <remarks>
 		/// This method is implemented thread-safe to prevent race conditions when multiple threads
-		/// attempt to send data to this terminal. Note that the 'Sent' event is within the lock,
-		/// i.e. an event handler will not be able to call <see cref="Send"/> a again.
+		/// attempt to send data to this terminal.
+		///   => No race conditions in the send path.
+		/// 
+		/// In addition, the RawElementSent event is raised asynchronously but also within a lock
+		/// to ensure that the event handling doesn't block the sending but the sequence of the
+		/// events is still correct.
+		///   => No race conditions in the event path.
+		/// 
+		/// The I/O's DataSent event is not used as it doesn't tell what data was sent, and is
+		/// therefore of little use. Thus, the RawElementSent event is raised here.
 		/// </remarks>
 		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
-			lock (sendSyncObj)
+			lock (this.sendSyncObj)
 			{
+				// Send data:
 				this.io.Send(data);
 
+				// Immediately create the raw element to get the most accurate time stamp:
 				RawElement re = new RawElement(data, SerialDirection.Tx);
-				lock (repositorySyncObj)
+
+				// Then process the raw element:
+				lock (this.repositorySyncObj)
 				{
 					this.txRepository.Enqueue(re);
 					this.bidirRepository.Enqueue(re);
 				}
-				OnRawElementSent(new RawElementEventArgs(re));
+				lock (this.sendEventQueue)
+				{
+					this.sendEventQueue.Enqueue(re);
+				}
+			}
+
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two send threads could create a race condition.
+			if (Monitor.TryEnter(this.sendEventSyncObj))
+			{
+				try
+				{
+					SendEventDelegate asyncInvoker = new SendEventDelegate(SendEventAsynch);
+					asyncInvoker.BeginInvoke(null, null);
+				}
+				finally
+				{
+					Monitor.Exit(this.sendEventSyncObj);
+				}
+			}
+		}
+
+		private void SendEventAsynch()
+		{
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two receive threads could create a race condition.
+			Monitor.Enter(this.sendEventSyncObj);
+			try
+			{
+				// Fire events until there is no more data. Must be done to ensure that events
+				// are fired even for data that was enqueued above while the sync obj was busy.
+				// In addition, wait for the minimal time possible to allow other threads to
+				// execute and to prevent that 'OnDataSent' events are fired consecutively.
+				while (true)
+				{
+					// Read items from queue until there are no more.
+					RawElement[] buffer;
+					lock (this.sendEventQueue)
+					{
+						if (this.sendEventQueue.Count <= 0)
+							break;
+
+						buffer = this.sendEventQueue.ToArray();
+						this.sendEventQueue.Clear();
+					}
+
+					foreach (RawElement re in buffer)
+						OnRawElementSent(new RawElementEventArgs(re));
+				}
+			}
+			finally
+			{
+				Monitor.Exit(this.sendEventSyncObj);
 			}
 		}
 
@@ -335,7 +412,7 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			List<RawElement> l = null;
-			lock (repositorySyncObj)
+			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
@@ -358,7 +435,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			lock (repositorySyncObj)
+			lock (this.repositorySyncObj)
 			{
 				/*switch (repositoryType)
 				{
@@ -387,7 +464,7 @@ namespace YAT.Domain
 					}
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
-			} // lock (repositorySyncObj)
+			} // lock (this.repositorySyncObj)
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -408,7 +485,7 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			string s = null;
-			lock (repositorySyncObj)
+			lock (this.repositorySyncObj)
 			{
 				s = indent + "- IOSettings: " + this.ioSettings + Environment.NewLine +
 					indent + "- TxRepository: "    + Environment.NewLine + this.txRepository.ToString(indent + "- ") +
@@ -424,7 +501,7 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			string s = null;
-			lock (repositorySyncObj)
+			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
@@ -519,6 +596,10 @@ namespace YAT.Domain
 		// IO
 		//==========================================================================================
 
+		/// <remarks>
+		/// The DataSent event is not used as it doesn't tell what data was sent, and is therefore
+		/// of little use.
+		/// </remarks>
 		private void AttachIO(IIOProvider io)
 		{
 			if (IIOProvider.ReferenceEquals(this.io, io))
@@ -534,6 +615,10 @@ namespace YAT.Domain
 			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 		}
 
+		/// <remarks>
+		/// The DataSent event is not used as it doesn't tell what data was sent, and is therefore
+		/// of little use.
+		/// </remarks>
 		private void DetachIO()
 		{
 			this.io.IOChanged        -= new EventHandler(io_IOChanged);
@@ -560,6 +645,10 @@ namespace YAT.Domain
 			OnIOControlChanged(new EventArgs());
 		}
 
+		/// <remarks>
+		/// The DataSent event is not used as it doesn't tell what data was sent, and is therefore
+		/// of little use.
+		/// </remarks>
 		private void io_DataReceived(object sender, EventArgs e)
 		{
 			byte[] data;

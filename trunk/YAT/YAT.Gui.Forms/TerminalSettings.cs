@@ -478,6 +478,7 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Send.CopyPredefined               = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settings_Form.Terminal.Send.SendImmediately              = f.SettingsResult.Terminal.Send.SendImmediately;
 				this.settings_Form.Terminal.Send.DefaultDelay                 = f.SettingsResult.Terminal.Send.DefaultDelay;
+				this.settings_Form.Terminal.Send.DefaultLineDelay             = f.SettingsResult.Terminal.Send.DefaultLineDelay;
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
 				// Receive:

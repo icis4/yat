@@ -102,9 +102,6 @@ namespace YAT.Domain
 
 		private Settings.TerminalSettings terminalSettings;
 
-		/// <summary>Async sending.</summary>
-		private Queue<SendItem> sendQueue = new Queue<SendItem>();
-
 		private RawTerminal rawTerminal;
 
 		private DisplayRepository txRepository;
@@ -379,53 +376,45 @@ namespace YAT.Domain
 		// Methods > Send
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>
-		/// Asynchronously invoke outgoing send requests to ensure that software and/or hardware
-		/// flow control is properley buffered and suspended if the communication counterpart
-		/// requests so.
-		/// </summary>
-		private delegate void SendDelegate();
-		private object SendSyncObj = new object();
-
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			AssertNotDisposed();
-
-			lock (this.sendQueue)
-			{
-				this.sendQueue.Enqueue(new BinarySendItem(data));
-			}
-
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two send threads could create a race condition.
-			if (Monitor.TryEnter(this.SendSyncObj))
-			{
-				try
-				{
-					SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
-					asyncInvoker.BeginInvoke(null, null);
-				}
-				finally
-				{
-					Monitor.Exit(this.SendSyncObj);
-				}
-			}
+			Send(new RawSendItem(data));
 		}
 
 		/// <summary></summary>
 		public virtual void Send(string data)
 		{
+			Send(new ParsableSendItem(data));
+		}
+
+		/// <summary></summary>
+		public virtual void SendLine(string data)
+		{
+			Send(new ParsableSendItem(data, true));
+		}
+
+		/// <summary>Async sending.</summary>
+		private Queue<SendItem> sendQueue = new Queue<SendItem>();
+		private object sendSyncObj = new object();
+		private delegate void SendDelegate();
+
+		/// <remarks>
+		/// This method shall not be overridden. All send items shall be enqueued using this
+		/// method, but inheriting terminals can override <see cref="ProcessSendItem"/> instead.
+		/// </remarks>
+		protected void Send(SendItem item)
+		{
 			AssertNotDisposed();
 
 			lock (this.sendQueue)
 			{
-				this.sendQueue.Enqueue(new TextSendItem(data));
+				this.sendQueue.Enqueue(item);
 			}
 
 			// Ensure that only one data send thread is active at a time.
 			// Without this exclusivity, two send threads could create a race condition.
-			if (Monitor.TryEnter(this.SendSyncObj))
+			if (Monitor.TryEnter(this.sendSyncObj))
 			{
 				try
 				{
@@ -434,26 +423,16 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(this.SendSyncObj);
+					Monitor.Exit(this.sendSyncObj);
 				}
 			}
-		}
-
-		/// <remarks>
-		/// In case of this 'neutral' terminal, simply send line as string. In case of a terminal
-		/// where lines have a meaning (e.g. a text terminal), that implemenation shall override
-		/// this method.
-		/// </remarks>
-		public virtual void SendLine(string data)
-		{
-			Send(data);
 		}
 
 		private void SendAsynch()
 		{
 			// Ensure that only one data send thread is active at a time.
 			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(this.SendSyncObj);
+			Monitor.Enter(this.sendSyncObj);
 			try
 			{
 				while (true)
@@ -470,47 +449,85 @@ namespace YAT.Domain
 					}
 
 					foreach (SendItem si in buffer)
-					{
-						if (si is TextSendItem)
-						{
-							TextSendItem item = si as TextSendItem;
-
-							Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
-							foreach (Parser.Result result in p.Parse(item.Data, Parser.ParseMode.All))
-							{
-								if (result is Parser.ByteArrayResult)
-								{
-									this.rawTerminal.Send(((Parser.ByteArrayResult)result).ByteArray);
-								}
-								else if (result is Parser.KeywordResult)
-								{
-									ProcessKeywords((Parser.KeywordResult)result);
-								}
-							}
-						}
-						else if (si is BinarySendItem)
-						{
-							BinarySendItem item = si as BinarySendItem;
-
-							this.rawTerminal.Send(item.Data);
-						}
-						else
-						{
-							throw (new InvalidOperationException("Invalid send item: " + si));
-						}
-					}
+						ProcessSendItem(si);
 				}
 			}
 			finally
 			{
-				Monitor.Exit(this.SendSyncObj);
+				Monitor.Exit(this.sendSyncObj);
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessKeywords(Parser.KeywordResult result)
+		protected virtual void ProcessSendItem(SendItem item)
 		{
-			switch (((Parser.KeywordResult)result).Keyword)
+			if (item is RawSendItem)
+				ProcessRawSendItem(item as RawSendItem);
+			else if (item is ParsableSendItem)
+				ProcessParsableSendItem(item as ParsableSendItem);
+			else
+				throw (new InvalidOperationException("Invalid send item type " + item.GetType()));
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessRawSendItem(RawSendItem item)
+		{
+			// Nothing to further process, simply formward:
+			ForwardDataToRawTerminal(item.Data);
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
+		/// </remarks>
+		protected virtual void ForwardDataToRawTerminal(byte[] data)
+		{
+			this.rawTerminal.Send(data);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessParsableSendItem(ParsableSendItem item)
+		{
+			bool lineDelay = false;
+
+			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
+
+			foreach (Parser.Result result in p.Parse(item.Data, Parser.ParseMode.All))
+			{
+				if (result is Parser.ByteArrayResult)
+				{
+					ForwardDataToRawTerminal(((Parser.ByteArrayResult)result).ByteArray);
+				}
+				else if (result is Parser.KeywordResult)
+				{
+					Parser.KeywordResult keywordResult = (Parser.KeywordResult)result;
+					switch (keywordResult.Keyword)
+					{
+						// Process end-of-line keywords:
+						case Parser.Keyword.LineDelay:
+						{
+							lineDelay = true;
+							break;
+						}
+
+						// Process in-line keywords:
+						default:
+						{
+							ProcessInLineKeywords(keywordResult);
+							break;
+						}
+					}
+				}
+			}
+
+			// Finalize the line.
+			if (lineDelay)
+				Thread.Sleep(TerminalSettings.Send.DefaultLineDelay);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessInLineKeywords(Parser.KeywordResult result)
+		{
+			switch (result.Keyword)
 			{
 				case Parser.Keyword.Clear:
 				{
@@ -533,7 +550,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -547,7 +564,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -561,14 +578,14 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Break is only supported on serial COM ports"));
 					}
 					break;
 				}
 
 				default:
 				{
-					// \fixme
+					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + "is not yet supported"));
 					break;
 				}
 			}

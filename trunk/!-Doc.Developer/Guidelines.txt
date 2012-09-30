@@ -201,6 +201,20 @@ Useful .NET classes
 - DefaultFontValue
 
 
+Logging while debugging
+-----------------------
+
+private System.IO.StreamWriter _DEBUG_logWriter = new System.IO.StreamWriter(MKY.IO.Temp.MakeTempFilePath(typeof(<CLASS>), ".log"));
+
+_DEBUG_logWriter.Write(DateTime.Now + "::<CLASS>::<METHOD>()::<ID>::");
+foreach (byte b in data)
+	_DEBUG_logWriter.Write(b.ToString("X2"));
+_DEBUG_logWriter.WriteLine();
+_DEBUG_logWriter.Flush();
+
+File will be stored in C:\Users\<USER>\AppData\Local\Temp\YAT.
+
+
 Windows.Forms
 -------------
 - 'StatusStrip' items do not show tool tip by default, 'ShowItemToolTips' must be manually set to 'True'.

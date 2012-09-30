@@ -44,10 +44,14 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const int DefaultDelayDefault = 100;
 
+		/// <summary></summary>
+		public const int DefaultLineDelayDefault = 100;
+
 		private bool keepCommand;
 		private bool copyPredefined;
 		private bool sendImmediately;
 		private int defaultDelay;
+		private int defaultLineDelay;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -71,10 +75,11 @@ namespace YAT.Domain.Settings
 		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
-			KeepCommand     = rhs.keepCommand;
-			CopyPredefined  = rhs.copyPredefined;
-			SendImmediately = rhs.sendImmediately;
-			DefaultDelay    = rhs.DefaultDelay;
+			KeepCommand      = rhs.keepCommand;
+			CopyPredefined   = rhs.copyPredefined;
+			SendImmediately  = rhs.sendImmediately;
+			DefaultDelay     = rhs.DefaultDelay;
+			DefaultLineDelay = rhs.DefaultLineDelay;
 
 			ClearChanged();
 		}
@@ -86,10 +91,11 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			KeepCommand     = KeepCommandDefault;
-			CopyPredefined  = CopyPredefinedDefault;
-			SendImmediately = SendImmediatelyDefault;
-			DefaultDelay    = DefaultDelayDefault;
+			KeepCommand      = KeepCommandDefault;
+			CopyPredefined   = CopyPredefinedDefault;
+			SendImmediately  = SendImmediatelyDefault;
+			DefaultDelay     = DefaultDelayDefault;
+			DefaultLineDelay = DefaultLineDelayDefault;
 		}
 
 		#region Properties
@@ -157,6 +163,21 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("DefaultLineDelay")]
+		public virtual int DefaultLineDelay
+		{
+			get { return (this.defaultLineDelay); }
+			set
+			{
+				if (value != this.defaultLineDelay)
+				{
+					this.defaultLineDelay = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -177,10 +198,11 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.keepCommand     == other.keepCommand) &&
-				(this.copyPredefined  == other.copyPredefined) &&
-				(this.sendImmediately == other.sendImmediately) &&
-				(this.defaultDelay    == other.defaultDelay)
+				(this.keepCommand      == other.keepCommand) &&
+				(this.copyPredefined   == other.copyPredefined) &&
+				(this.sendImmediately  == other.sendImmediately) &&
+				(this.defaultDelay     == other.defaultDelay) &&
+				(this.defaultLineDelay == other.defaultLineDelay)
 			);
 		}
 
@@ -191,10 +213,11 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				this.keepCommand    .GetHashCode() ^
-				this.copyPredefined .GetHashCode() ^
-				this.sendImmediately.GetHashCode() ^
-				this.defaultDelay   .GetHashCode()
+				this.keepCommand     .GetHashCode() ^
+				this.copyPredefined  .GetHashCode() ^
+				this.sendImmediately .GetHashCode() ^
+				this.defaultDelay    .GetHashCode() ^
+				this.defaultLineDelay.GetHashCode()
 			);
 		}
 

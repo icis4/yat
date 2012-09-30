@@ -530,7 +530,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by IsStarted.
+			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (!IsStarted)
 				CreateAndOpenPort();
@@ -541,7 +541,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by IsStarted.
+			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 				ResetPort();
@@ -579,8 +579,8 @@ namespace MKY.IO.Serial
 		/// invokes the event, it will take some time until the monitor is released again. During
 		/// this time, no more new events are invoked, instead, outgoing data is buffered.
 		/// </summary>
+		private object sendSyncObj = new object();
 		private delegate void SendDelegate();
-		private object SendSyncObj = new object();
 
 		/// <summary></summary>
 		protected virtual void Send(byte data)
@@ -636,7 +636,7 @@ namespace MKY.IO.Serial
 
 			// Ensure that only one data send thread is active at a time.
 			// Without this exclusivity, two send threads could create a race condition.
-			if (Monitor.TryEnter(this.SendSyncObj))
+			if (Monitor.TryEnter(this.sendSyncObj))
 			{
 				try
 				{
@@ -645,7 +645,7 @@ namespace MKY.IO.Serial
 				}
 				finally
 				{
-					Monitor.Exit(this.SendSyncObj);
+					Monitor.Exit(this.sendSyncObj);
 				}
 			}
 		}
@@ -654,7 +654,7 @@ namespace MKY.IO.Serial
 		{
 			// Ensure that only one data send thread is active at a time.
 			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(this.SendSyncObj);
+			Monitor.Enter(this.sendSyncObj);
 			try
 			{
 				// Fire events until there is no more data. Must be done to ensure that events
@@ -694,21 +694,39 @@ namespace MKY.IO.Serial
 						}
 
 						// No break, no XOff, no CTS disable, ready to send.
-						byte[] buffer;
+
+						// Something to send?
 						lock (this.sendQueue)
 						{
 							if (this.sendQueue.Count <= 0)
 								break;
-
-							buffer = this.sendQueue.ToArray();
-							this.sendQueue.Clear();
 						}
+
+						// Send it!
 						lock (this.port)
 						{
 							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 								this.port.RtsEnable = true;
 
-							this.port.Write(buffer, 0, buffer.Length);
+							// 'WriteBufferSize' typically is 2048. However, devices on the other side may
+							// not be able to deal with too much data. Thus, send 96 bytes and then check
+							// flow control and break state again.
+							const int ChunkSize = 96;
+
+							while ((this.port.WriteBufferSize - this.port.BytesToWrite) < ChunkSize)
+								Thread.Sleep(0);
+
+							int availableBufferSpace = this.port.WriteBufferSize - this.port.BytesToWrite;
+
+							List<byte> temp = new List<byte>(ChunkSize);
+							lock (this.sendQueue)
+							{
+								for (int i = 0; (i < ChunkSize) && (this.sendQueue.Count > 0); i++)
+									temp.Add(this.sendQueue.Dequeue());
+							}
+
+							this.port.Write(temp.ToArray(), 0, temp.Count);
+							this.port.Flush(); // Make sure that data is sent before continuing.
 
 							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 								this.port.RtsEnable = false;
@@ -731,7 +749,7 @@ namespace MKY.IO.Serial
 			}
 			finally
 			{
-				Monitor.Exit(this.SendSyncObj);
+				Monitor.Exit(this.sendSyncObj);
 			}
 		}
 
@@ -769,7 +787,8 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public virtual void ToggleInputXOnXOff()
 		{
-			// AssertNotDisposed() and HandshakeIsNotUsingXOnXOff { get; } is called in functions below.
+			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
+			// 'InputIsXOn' property below.
 
 			if (InputIsXOn)
 				SetInputXOff();
