@@ -36,6 +36,8 @@ namespace YAT.Gui.Forms
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+			this.label_AdvancedSettings = new System.Windows.Forms.Label();
+			this.label_TextOrBinarySettings = new System.Windows.Forms.Label();
 			this.button_AdvancedSettings = new System.Windows.Forms.Button();
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
 			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
@@ -81,6 +83,8 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.label_AdvancedSettings);
+			this.groupBox_Settings.Controls.Add(this.label_TextOrBinarySettings);
 			this.groupBox_Settings.Controls.Add(this.button_AdvancedSettings);
 			this.groupBox_Settings.Controls.Add(this.button_TextOrBinarySettings);
 			this.groupBox_Settings.Controls.Add(this.terminalSelection);
@@ -91,13 +95,37 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
+			// label_AdvancedSettings
+			// 
+			this.label_AdvancedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_AdvancedSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_AdvancedSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_AdvancedSettings.Location = new System.Drawing.Point(312, 296);
+			this.label_AdvancedSettings.Name = "label_AdvancedSettings";
+			this.label_AdvancedSettings.Size = new System.Drawing.Size(135, 52);
+			this.label_AdvancedSettings.TabIndex = 4;
+			this.label_AdvancedSettings.Text = "Advanced display, radix,\r\ncommunication, send,\r\nreceive and user settings.";
+			this.label_AdvancedSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			// 
+			// label_TextOrBinarySettings
+			// 
+			this.label_TextOrBinarySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_TextOrBinarySettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_TextOrBinarySettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_TextOrBinarySettings.Location = new System.Drawing.Point(312, 47);
+			this.label_TextOrBinarySettings.Name = "label_TextOrBinarySettings";
+			this.label_TextOrBinarySettings.Size = new System.Drawing.Size(135, 52);
+			this.label_TextOrBinarySettings.TabIndex = 3;
+			this.label_TextOrBinarySettings.Text = "Text terminal dependent\r\nsettings such as encoding,\r\nend-of-line and comments.";
+			this.label_TextOrBinarySettings.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
 			// button_AdvancedSettings
 			// 
 			this.button_AdvancedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_AdvancedSettings.Location = new System.Drawing.Point(323, 351);
 			this.button_AdvancedSettings.Name = "button_AdvancedSettings";
 			this.button_AdvancedSettings.Size = new System.Drawing.Size(114, 23);
-			this.button_AdvancedSettings.TabIndex = 4;
+			this.button_AdvancedSettings.TabIndex = 5;
 			this.button_AdvancedSettings.Text = "&Advanced Settings...";
 			this.button_AdvancedSettings.Click += new System.EventHandler(this.button_AdvancedSettings_Click);
 			// 
@@ -107,7 +135,7 @@ namespace YAT.Gui.Forms
 			this.button_TextOrBinarySettings.Location = new System.Drawing.Point(323, 21);
 			this.button_TextOrBinarySettings.Name = "button_TextOrBinarySettings";
 			this.button_TextOrBinarySettings.Size = new System.Drawing.Size(114, 23);
-			this.button_TextOrBinarySettings.TabIndex = 3;
+			this.button_TextOrBinarySettings.TabIndex = 2;
 			this.button_TextOrBinarySettings.Text = "&Text Settings...";
 			this.button_TextOrBinarySettings.Click += new System.EventHandler(this.button_TextOrBinarySettings_Click);
 			// 
@@ -289,5 +317,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Help;
 		private YAT.Gui.Controls.UsbSerialHidDeviceSelection usbSerialHidDeviceSelection;
 		private YAT.Gui.Controls.UsbSerialHidDeviceSettings usbSerialHidDeviceSettings;
+		private System.Windows.Forms.Label label_TextOrBinarySettings;
+		private System.Windows.Forms.Label label_AdvancedSettings;
 	}
 }

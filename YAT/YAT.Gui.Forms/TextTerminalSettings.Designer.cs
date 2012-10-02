@@ -212,7 +212,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_SendSettings.Size = new System.Drawing.Size(272, 351);
 			this.groupBox_SendSettings.TabIndex = 3;
 			this.groupBox_SendSettings.TabStop = false;
-			this.groupBox_SendSettings.Text = "Transmit Settings";
+			this.groupBox_SendSettings.Text = "Send Settings";
 			// 
 			// groupBox_Comments
 			// 

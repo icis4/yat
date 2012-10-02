@@ -68,6 +68,9 @@ namespace MKY.IO.Serial
 		public const string XOffDescription = MKY.IO.Ports.SerialPortSettings.XOffDescription;
 
 		/// <summary></summary>
+		public const int MaxSendChunkSizeDefault = 50;
+		
+		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
 
 		/// <summary></summary>
@@ -83,6 +86,7 @@ namespace MKY.IO.Serial
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
+		private int maxSendChunkSize;
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
 
@@ -130,6 +134,7 @@ namespace MKY.IO.Serial
 
 			Communication       = new SerialCommunicationSettings(rhs.Communication);
 			AutoReopen          = rhs.autoReopen;
+			MaxSendChunkSize    = rhs.MaxSendChunkSize;
 			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
 			NoSendOnInputBreak  = rhs.NoSendOnInputBreak;
 
@@ -151,6 +156,7 @@ namespace MKY.IO.Serial
 			PortId                 = SerialPortId.FirstStandardPort;
 
 			AutoReopen          = AutoReopenDefault;
+			MaxSendChunkSize    = MaxSendChunkSizeDefault;
 			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
 			NoSendOnInputBreak  = NoSendOnInputBreakDefault;
 		}
@@ -219,6 +225,21 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[XmlElement("MaxSendChunkSize")]
+		public virtual int MaxSendChunkSize
+		{
+			get { return (this.maxSendChunkSize); }
+			set
+			{
+				if (value != this.maxSendChunkSize)
+				{
+					this.maxSendChunkSize = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("NoSendOnOutputBreak")]
 		public virtual bool NoSendOnOutputBreak
 		{
@@ -271,6 +292,7 @@ namespace MKY.IO.Serial
 				(this.portId              == other.portId) &&
 				(this.communication       == other.communication) &&
 				(this.autoReopen          == other.autoReopen) &&
+				(this.maxSendChunkSize    == other.maxSendChunkSize) &&
 				(this.noSendOnOutputBreak == other.noSendOnOutputBreak) &&
 				(this.noSendOnInputBreak  == other.noSendOnInputBreak)
 			);
@@ -287,11 +309,12 @@ namespace MKY.IO.Serial
 			(
 				base.GetHashCode() ^
 
-				portIdHashCode           .GetHashCode() ^
-				this.communication       .GetHashCode() ^
-				this.autoReopen          .GetHashCode() ^
-				this.noSendOnOutputBreak .GetHashCode() ^
-				this.noSendOnInputBreak  .GetHashCode()
+				portIdHashCode          .GetHashCode() ^
+				this.communication      .GetHashCode() ^
+				this.autoReopen         .GetHashCode() ^
+				this.maxSendChunkSize   .GetHashCode() ^
+				this.noSendOnOutputBreak.GetHashCode() ^
+				this.noSendOnInputBreak .GetHashCode()
 			);
 		}
 

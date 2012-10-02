@@ -289,6 +289,40 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 		}
 
+		private void textBox_MaxSendChunkSize_TextChanged(object sender, EventArgs e)
+		{
+			int bytes;
+			if (int.TryParse(textBox_MaxSendChunkSize.Text, out bytes) && (Math.Abs(bytes) == 1))
+				label_MaxSendChunkSizeUnit.Text = "byte";
+			else
+				label_MaxSendChunkSizeUnit.Text = "bytes";
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_MaxSendChunkSize_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int maxSendChunkSize;
+				if (int.TryParse(textBox_MaxSendChunkSize.Text, out maxSendChunkSize) && (maxSendChunkSize >= 1))
+				{
+					this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize = maxSendChunkSize;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Chunk size must be at least 1 byte!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
+		}
+
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_DefaultDelay_Validating(object sender, CancelEventArgs e)
 		{
@@ -414,6 +448,9 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
+			bool isSerialPort = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			bool flowControlIsActive = this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControlIsActive;
+
 			this.isSettingControls.Enter();
 
 			// Radix:
@@ -454,16 +491,24 @@ namespace YAT.Gui.Forms
 			checkBox_OutputBreakModifiable.Checked = this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 			// Send:
-			checkBox_KeepCommand.Checked         = this.settings_Form.Terminal.Send.KeepCommand;
-			checkBox_CopyPredefined.Checked      = this.settings_Form.Terminal.Send.CopyPredefined;
-			checkBox_SendImmediately.Checked     = this.settings_Form.Terminal.Send.SendImmediately;
-			textBox_DefaultDelay.Text            = this.settings_Form.Terminal.Send.DefaultDelay.ToString();
-			textBox_DefaultLineDelay.Text        = this.settings_Form.Terminal.Send.DefaultLineDelay.ToString();
-			checkBox_NoSendOnOutputBreak.Enabled = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			checkBox_KeepCommand.Checked     = this.settings_Form.Terminal.Send.KeepCommand;
+			checkBox_CopyPredefined.Checked  = this.settings_Form.Terminal.Send.CopyPredefined;
+			checkBox_SendImmediately.Checked = this.settings_Form.Terminal.Send.SendImmediately;
+
+			label_MaxSendChunkSizeRemark.Enabled = isSerialPort && flowControlIsActive;
+			label_MaxSendChunkSizeUnit.Enabled   = isSerialPort && flowControlIsActive;
+			label_MaxSendChunkSize.Enabled       = isSerialPort && flowControlIsActive;
+			textBox_MaxSendChunkSize.Enabled     = isSerialPort && flowControlIsActive;
+			textBox_MaxSendChunkSize.Text        = this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize.ToString();
+
+			textBox_DefaultDelay.Text     = this.settings_Form.Terminal.Send.DefaultDelay.ToString();
+			textBox_DefaultLineDelay.Text = this.settings_Form.Terminal.Send.DefaultLineDelay.ToString();
+
+			checkBox_NoSendOnOutputBreak.Enabled = isSerialPort;
 			checkBox_NoSendOnOutputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
 			// Receive:
-			groupBox_ReceiveSettings.Enabled    = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			groupBox_ReceiveSettings.Enabled    = isSerialPort;
 			checkBox_NoSendOnInputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			// User:
@@ -512,6 +557,7 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
 			this.settings_Form.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settings_Form.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize    = MKY.IO.Serial.SerialPortSettings.MaxSendChunkSizeDefault;
 			this.settings_Form.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settings_Form.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
 			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
