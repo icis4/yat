@@ -709,19 +709,24 @@ namespace MKY.IO.Serial
 								this.port.RtsEnable = true;
 
 							// 'WriteBufferSize' typically is 2048. However, devices on the other side may
-							// not be able to deal with too much data. Thus, send 96 bytes and then check
-							// flow control and break state again.
-							const int ChunkSize = 96;
+							// not be able to deal with that much data if flow control is active.
+							int chunkSize;
+							int availableSpace = this.port.WriteBufferSize - this.port.BytesToWrite;
+							if (this.settings.Communication.FlowControlIsInactive)
+							{
+								// Easy case, just stuff as much data as possible into output buffer:
+								chunkSize = availableSpace;
+							}
+							else
+							{
+								// Harder case, limit the chunk size to the maximum chunk size setting:
+								chunkSize = Int32Ex.LimitToBounds(availableSpace, 0, this.settings.MaxSendChunkSize);
+							}
 
-							while ((this.port.WriteBufferSize - this.port.BytesToWrite) < ChunkSize)
-								Thread.Sleep(0);
-
-							int availableBufferSpace = this.port.WriteBufferSize - this.port.BytesToWrite;
-
-							List<byte> temp = new List<byte>(ChunkSize);
+							List<byte> temp = new List<byte>(chunkSize);
 							lock (this.sendQueue)
 							{
-								for (int i = 0; (i < ChunkSize) && (this.sendQueue.Count > 0); i++)
+								for (int i = 0; (i < chunkSize) && (this.sendQueue.Count > 0); i++)
 									temp.Add(this.sendQueue.Dequeue());
 							}
 

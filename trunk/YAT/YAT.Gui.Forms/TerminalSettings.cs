@@ -343,15 +343,30 @@ namespace YAT.Gui.Forms
 			Domain.TerminalType terminalType = this.settings_Form.Terminal.TerminalType;
 			terminalSelection.TerminalType = terminalType;
 
-			string text = "&";
+			string button = "&";
+			string label = "";
 			switch (terminalType)
 			{
-				case Domain.TerminalType.Text:   text += "Text";   break;
-				case Domain.TerminalType.Binary: text += "Binary"; break;
-				default: throw (new NotImplementedException("Invalid terminal type"));
+				case Domain.TerminalType.Text:
+					button += "Text";
+					label = "Text terminal dependent" + Environment.NewLine +
+							"settings such as encoding," + Environment.NewLine +
+							"end-of-line and comments.";
+					break;
+
+				case Domain.TerminalType.Binary:
+					button += "Binary";
+					label = "Binary terminal dependent" + Environment.NewLine +
+							"settings such as sequence" + Environment.NewLine +
+							"and timeout line breaks.";
+					break;
+
+				default:
+					throw (new NotImplementedException("Invalid terminal type"));
 			}
-			text += " Settings...";
-			button_TextOrBinarySettings.Text = text;
+			button += " Settings...";
+			button_TextOrBinarySettings.Text = button;
+			label_TextOrBinarySettings.Text = label;
 
 			Domain.IOType ioType = this.settings_Form.Terminal.IO.IOType;
 			terminalSelection.IOType = ioType;
@@ -477,6 +492,7 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Send.KeepCommand                  = f.SettingsResult.Terminal.Send.KeepCommand;
 				this.settings_Form.Terminal.Send.CopyPredefined               = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settings_Form.Terminal.Send.SendImmediately              = f.SettingsResult.Terminal.Send.SendImmediately;
+				this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize    = f.SettingsResult.Terminal.IO.SerialPort.MaxSendChunkSize;
 				this.settings_Form.Terminal.Send.DefaultDelay                 = f.SettingsResult.Terminal.Send.DefaultDelay;
 				this.settings_Form.Terminal.Send.DefaultLineDelay             = f.SettingsResult.Terminal.Send.DefaultLineDelay;
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
