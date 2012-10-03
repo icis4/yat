@@ -188,11 +188,19 @@ namespace MKY.IO.Serial
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
+		private Thread receiveThread;
+		private AutoResetEvent receiveThreadEvent;
+		private bool receiveThreadSyncFlag;
+
 		/// <summary>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
+
+		private Thread sendThread;
+		private AutoResetEvent sendThreadEvent;
+		private bool sendThreadSyncFlag;
 
 		/// <remarks>
 		/// In case of manual RTS/CTS + DTR/DSR, RTS is enabled after initialization.
@@ -569,19 +577,6 @@ namespace MKY.IO.Serial
 			return (bytesReceived);
 		}
 
-		/// <summary>
-		/// Asynchronously invoke outgoing send requests to ensure that software and/or hardware
-		/// flow control is properley buffered and suspended if the communication counterpart
-		/// requests so.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of sent data will would generate many events in
-		/// <see cref="Send(byte[])"/>. However, since <see cref="OnDataSent"/> synchronously
-		/// invokes the event, it will take some time until the monitor is released again. During
-		/// this time, no more new events are invoked, instead, outgoing data is buffered.
-		/// </summary>
-		private object sendSyncObj = new object();
-		private delegate void SendDelegate();
-
 		/// <summary></summary>
 		protected virtual void Send(byte data)
 		{
@@ -632,36 +627,41 @@ namespace MKY.IO.Serial
 			}
 
 			if (signalXOnXOff)
-				OnIOControlChanged(new EventArgs());
-
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two send threads could create a race condition.
-			if (Monitor.TryEnter(this.sendSyncObj))
 			{
-				try
-				{
-					SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
-					asyncInvoker.BeginInvoke(null, null);
-				}
-				finally
-				{
-					Monitor.Exit(this.sendSyncObj);
-				}
+				// Signal XOn/XOff change to receive thread:
+				this.receiveThreadEvent.Set();
+
+				OnIOControlChanged(new EventArgs());
 			}
+
+			// Signal send thread:
+			this.sendThreadEvent.Set();
 		}
 
-		private void SendAsynch()
+		/// <summary>
+		/// Asynchronously manage outgoing send requests to ensure that software and/or hardware
+		/// flow control is properley buffered and suspended if the communication counterpart
+		/// requests so.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of sent data will would generate many events in
+		/// <see cref="Send(byte[])"/>. However, since <see cref="OnDataSent"/> synchronously
+		/// invokes the event, it will take some time until the send queue is checked again.
+		/// During this time, no more new events are invoked, instead, outgoing data is buffered.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by send method above, or by XOn/XOff while receiving.
+		/// </remarks>
+		private void SendThread()
 		{
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(this.sendSyncObj);
-			try
+			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': SendThread() has started.");
+
+			// Outer loop, requires another signal.
+			while (this.sendThreadSyncFlag)
 			{
-				// Fire events until there is no more data. Must be done to ensure that events
-				// are fired even for data that was enqueued above while the sync obj was busy.
-				// In addition, wait for the minimal time possible to allow other threads to
-				// execute and to prevent that 'OnDataSent' events are fired consecutively.
-				while (true)
+				this.sendThreadEvent.WaitOne();
+
+				// Inner loop, runs as long as there is data in the send queue.
+				while (this.sendThreadSyncFlag)
 				{
 					// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
 					// an exception when trying to write while in output break!
@@ -671,15 +671,11 @@ namespace MKY.IO.Serial
 
 					if (!isOutputBreak)
 					{
-						// In case of XOff, let other threads do their job and then try again.
+						// In case of XOff:
 						if (XOnXOffIsInUse && !OutputIsXOn)
-						{
-							Thread.Sleep(0);
-							continue;
-						}
+							break; // Let other threads do their job and wait until signaled again.
 
-						// In case of disabled CTS line, let other threads do their job and then
-						// try again.
+						// In case of disabled CTS line:
 						if (this.settings.Communication.FlowControlUsesRtsCts)
 						{
 							bool isClearToSend;
@@ -687,10 +683,7 @@ namespace MKY.IO.Serial
 								isClearToSend = this.port.CtsHolding;
 
 							if (!isClearToSend)
-							{
-								Thread.Sleep(0);
-								continue;
-							}
+								break; // Let other threads do their job and wait until signaled again.
 						}
 
 						// No break, no XOff, no CTS disable, ready to send.
@@ -699,7 +692,7 @@ namespace MKY.IO.Serial
 						lock (this.sendQueue)
 						{
 							if (this.sendQueue.Count <= 0)
-								break;
+								break; // Let other threads do their job and wait until signaled again.
 						}
 
 						// Send it!
@@ -723,14 +716,14 @@ namespace MKY.IO.Serial
 								chunkSize = Int32Ex.LimitToBounds(availableSpace, 0, this.settings.MaxSendChunkSize);
 							}
 
-							List<byte> temp = new List<byte>(chunkSize);
+							List<byte> chunk = new List<byte>(chunkSize);
 							lock (this.sendQueue)
 							{
 								for (int i = 0; (i < chunkSize) && (this.sendQueue.Count > 0); i++)
-									temp.Add(this.sendQueue.Dequeue());
+									chunk.Add(this.sendQueue.Dequeue());
 							}
 
-							this.port.Write(temp.ToArray(), 0, temp.Count);
+							this.port.Write(chunk.ToArray(), 0, chunk.Count);
 							this.port.Flush(); // Make sure that data is sent before continuing.
 
 							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
@@ -738,7 +731,6 @@ namespace MKY.IO.Serial
 						}
 
 						OnDataSent(new EventArgs());
-						Thread.Sleep(0);
 					}
 					else
 					{
@@ -748,14 +740,15 @@ namespace MKY.IO.Serial
 							IODirection.Output,
 							"No data can be sent while port is in output break state")
 							);
-						break;
 					}
 				}
 			}
-			finally
-			{
-				Monitor.Exit(this.sendSyncObj);
-			}
+
+			this.sendThread = null;
+			this.sendThreadEvent.Close();
+			this.sendThreadEvent = null;
+
+			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -958,8 +951,9 @@ namespace MKY.IO.Serial
 				}
 			} // lock (this.portSyncObj)
 
-			OpenPort();
+			StartThreads();
 			StartAliveTimer();
+			OpenPort();
 			SetStateSynchronizedAndNotify(State.Opened);
 
 			// Handle XOn/XOff
@@ -995,6 +989,7 @@ namespace MKY.IO.Serial
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
+				StopThreads();
 				StopAndDisposeAliveTimer();
 				CloseAndDisposePort();
 				SetStateSynchronizedAndNotify(State.Closed);
@@ -1009,9 +1004,9 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		/// <summary></summary>
 		private void ResetPort()
 		{
+			StopThreads();
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
@@ -1020,23 +1015,44 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region Port Threads
+		//==========================================================================================
+		// Port Threads
+		//==========================================================================================
+
+		private void StartThreads()
+		{
+			this.receiveThreadSyncFlag = true;
+			this.receiveThreadEvent = new AutoResetEvent(false);
+			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+			this.receiveThread.Start();
+
+			this.sendThreadSyncFlag = true;
+			this.sendThreadEvent = new AutoResetEvent(false);
+			this.sendThread = new Thread(new ThreadStart(SendThread));
+			this.sendThread.Start();
+		}
+
+		/// <remarks>
+		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
+		/// method could have been called from a thread that also has to handle the receive
+		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
+		/// </remarks>
+		private void StopThreads()
+		{
+			this.receiveThreadSyncFlag = false;
+			this.receiveThreadEvent.Set();
+
+			this.sendThreadSyncFlag = false;
+			this.sendThreadEvent.Set();
+		}
+
+		#endregion
+
 		#region Port Events
 		//==========================================================================================
 		// Port Events
 		//==========================================================================================
-
-		/// <summary>
-		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
-		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of received data will generate many events
-		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
-		/// synchronously invokes the event, it will take some time until the monitor is released
-		/// again. During this time, no more new events are invoked, instead, incoming data is
-		/// buffered.
-		/// </summary>
-		private delegate void port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
-		private object port_DataReceivedSyncObj = new object();
 
 		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
@@ -1084,53 +1100,68 @@ namespace MKY.IO.Serial
 					}
 				}
 
-				// Immediately invoke the event, but invoke it asynchronously!
 				if (signalXOnXOff)
-					OnIOControlChangedAsync(new EventArgs());
-
-				// Ensure that only one data received event thread is active at a time.
-				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(this.port_DataReceivedSyncObj))
 				{
-					try
-					{
-						port_DataReceivedDelegate asyncInvoker = new port_DataReceivedDelegate(port_DataReceivedAsync);
-						asyncInvoker.BeginInvoke(sender, e, null, null);
-					}
-					finally
-					{
-						Monitor.Exit(this.port_DataReceivedSyncObj);
-					}
+					// Signal XOn/XOff change to send thread:
+					this.receiveThreadEvent.Set();
+
+					// Immediately invoke the event, but invoke it asynchronously!
+					OnIOControlChangedAsync(new EventArgs());
 				}
+
+				// Signal receive thread:
+				this.receiveThreadEvent.Set();
 			}
 		}
 
-		private void port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
+		/// <summary>
+		/// Asynchronously manage incoming events to prevent potential dead-locks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of received data will generate many events
+		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
+		/// synchronously invokes the event, it will take some time until the send queue is checked
+		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// buffered.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by <see cref="port_DataReceived"/> event above, or by XOn/XOff while
+		/// sending.
+		/// </remarks>
+		private void ReceiveThread()
 		{
-			// Ensure that only one data received event thread is active at a time.
-			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(this.port_DataReceivedSyncObj);
-			try
+			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': ReceiveThread() has started.");
+
+			while (this.receiveThreadSyncFlag)
 			{
+				this.receiveThreadEvent.WaitOne();
+
 				// Fire events until there is no more data. Must be done to ensure that events
-				// are fired even for data that was enqueued above while the sync obj was busy.
-				// In addition, wait for the minimal time possible to allow other threads to
-				// execute and to prevent that 'OnDataReceived' events are fired consecutively.
+				// are fired even for data that was enqueued above while the 'OnDataReceived'
+				// event was being handled. In addition, wait for the minimal time possible to
+				// allow other threads to execute and to prevent that 'OnDataReceived' events
+				// are fired consecutively.
 				//
 				// Measurements 2011-04-24 on an Intel Core 2 Duo running Win7 at 2.4 GHz and 3 GB of RAM:
 				// > 0.0% CPU load in idle
-				// > Up to an short-term-average of 20% CPU load while sending a large chuck of text (\YAT\!-SendFiles\Stress-2-Large.txt, 106 kB)
-				// This is an acceptable CPU load.
-				while ((this.state == State.Opened) && (BytesAvailable > 0)) // Ensure not to forward any events during closing anymore.
+				// > Up to an short-term-average of 20% CPU load while sending a large chuck of text
+				//   (\YAT\!-SendFiles\Stress-2-Large.txt, 106 kB)
+				//
+				// This is considered an acceptable CPU load.
+
+				// Ensure not to forward any events during closing anymore.
+				while (this.receiveThreadSyncFlag && IsOpen && (BytesAvailable > 0))
 				{
 					OnDataReceived(new EventArgs());
 					Thread.Sleep(0);
 				}
 			}
-			finally
-			{
-				Monitor.Exit(this.port_DataReceivedSyncObj);
-			}
+
+			this.receiveThread = null;
+			this.receiveThreadEvent.Close();
+			this.receiveThreadEvent = null;
+
+			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': ReceiveThread() has terminated.");
 		}
 
 		// Additional information to the 'DataReceived' event
