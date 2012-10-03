@@ -41,7 +41,6 @@ namespace MKY.Time
 		private bool isDisposed;
 
 		private System.Timers.Timer timer;
-		private object timer_Elapsed_SyncObj = new object();
 
 		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
 		private DateTime startTimeStamp = DateTime.Now;
@@ -225,6 +224,8 @@ namespace MKY.Time
 		//==========================================================================================
 		// Timer Event Handlers
 		//==========================================================================================
+
+		private object timer_Elapsed_SyncObj = new object();
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{

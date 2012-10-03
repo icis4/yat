@@ -63,20 +63,20 @@ namespace YAT.Gui.Forms
 		private static bool staticHandleExceptions = true;
 
 		/// <summary></summary>
-		public static UnhandledExceptionResult ProvideExceptionToUser(string originMessage, bool isAsynchronous, bool mayBeContinued)
+		public static UnhandledExceptionResult ProvideExceptionToUser(string originMessage, bool isAsync, bool mayBeContinued)
 		{
-			return (ProvideExceptionToUser(null, null, originMessage, isAsynchronous, mayBeContinued));
+			return (ProvideExceptionToUser(null, null, originMessage, isAsync, mayBeContinued));
 		}
 
 		/// <summary></summary>
-		public static UnhandledExceptionResult ProvideExceptionToUser(Exception exception, string originMessage, bool isAsynchronous, bool mayBeContinued)
+		public static UnhandledExceptionResult ProvideExceptionToUser(Exception exception, string originMessage, bool isAsync, bool mayBeContinued)
 		{
-			return (ProvideExceptionToUser(null, exception, originMessage, isAsynchronous, mayBeContinued));
+			return (ProvideExceptionToUser(null, exception, originMessage, isAsync, mayBeContinued));
 		}
 
 		/// <summary></summary>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, bool isAsynchronous, bool mayBeContinued)
+		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, bool isAsync, bool mayBeContinued)
 		{
 			if (!staticHandleExceptions)
 				return (UnhandledExceptionResult.Continue);
@@ -85,7 +85,7 @@ namespace YAT.Gui.Forms
 			StringBuilder titleBuilder = new StringBuilder(productName);
 			titleBuilder.Append(" Unhandled");
 
-			if (isAsynchronous)
+			if (isAsync)
 				titleBuilder.Append(" Asynchronous");
 			else
 				titleBuilder.Append(" Synchronous");

@@ -70,7 +70,6 @@ namespace MKY.Time
 		private bool isDisposed;
 
 		private System.Timers.Timer timer;
-		private object timerElapsedSyncObj = new object();
 
 		private int tick;
 		private int interval;
@@ -340,6 +339,8 @@ namespace MKY.Time
 		//==========================================================================================
 		// Timer Event Handlers
 		//==========================================================================================
+
+		private object timerElapsedSyncObj = new object();
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{

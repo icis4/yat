@@ -418,7 +418,7 @@ namespace YAT.Domain
 			{
 				try
 				{
-					SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
+					SendDelegate asyncInvoker = new SendDelegate(SendAsync);
 					asyncInvoker.BeginInvoke(null, null);
 				}
 				finally
@@ -428,7 +428,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void SendAsynch()
+		private void SendAsync()
 		{
 			// Ensure that only one data send thread is active at a time.
 			// Without this exclusivity, two receive threads could create a race condition.
