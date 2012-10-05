@@ -41,7 +41,7 @@ and install it manually.
 
 
 ====================================================================================================
-2. History of changes in YAT
+2. History of Changes in YAT
 ====================================================================================================
 
 
@@ -75,7 +75,7 @@ Important changes:
 - BoolEx renamed to BooleanEx for consistency with the .NET type Boolean (bug #3533831)
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)
-- Additional help content on serial port error indications added (feature request #3440986)
+- Additional help content on serial port errors added (feature requests #2213647 and #3440986)
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
@@ -693,7 +693,7 @@ Limitations and known issues:
 
 
 ====================================================================================================
-3. History of changes in XTerm232
+3. History of Changes in XTerm232
 ====================================================================================================
 
 XTerm232 1.0.2 :: 2003-10-31
@@ -733,6 +733,12 @@ XTerm232 1.0.0 :: 2003-10-14
 ====================================================================================================
 4. Roadmap
 ====================================================================================================
+
+YAT 2.0 Final :: Expected in 2013/2014
+----------------------------------------------------------------------------------------------------
+Once all bugs and feature requests of priority 5 and above have been resolved, YAT 2.0 Final will
+be released. For details regarding these items, see the YAT bug and feature request trackers.
+
 
 YAT 2.1 :: Not planned yet
 ----------------------------------------------------------------------------------------------------
