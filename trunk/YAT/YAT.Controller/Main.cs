@@ -473,7 +473,7 @@ namespace YAT.Controller
 					Console.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 
 					return (MainResult.UnhandledException);
 				}
@@ -505,7 +505,7 @@ namespace YAT.Controller
 					Console.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 
 					return (MainResult.UnhandledException);
 				}
@@ -524,7 +524,7 @@ namespace YAT.Controller
 
 			Exception ex = e.Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 		}
 
 		/// <remarks>
@@ -537,7 +537,7 @@ namespace YAT.Controller
 
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 		}
 
 		#endregion
@@ -574,7 +574,7 @@ namespace YAT.Controller
 					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
 					Console.WriteLine(message);
 
-					MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 
 					mainResult = MainResult.UnhandledException;
 				}
@@ -593,7 +593,7 @@ namespace YAT.Controller
 
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 		}
 
 		#endregion

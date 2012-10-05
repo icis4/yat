@@ -212,7 +212,7 @@ namespace MKY.Data
 			if (GetType() != other.GetType())
 				return (false);
 
-			if (this.GetType() == other.GetType())
+			if (GetType() == other.GetType())
 			{
 				// Compare all nodes, settings values are compared by inheriting class.
 				if (this.nodes.Count == other.nodes.Count)

@@ -1080,7 +1080,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex);
+				DebugEx.WriteException(GetType(), ex);
 				settings = null;
 				guid = Guid.Empty;
 				exception = ex;
@@ -1148,7 +1148,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex);
+				DebugEx.WriteException(GetType(), ex);
 				settings = null;
 				exception = ex;
 				return (false);

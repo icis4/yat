@@ -82,7 +82,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			Temp.CleanTempPath(this.GetType());
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion
@@ -134,7 +134,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{
-			string filePath = Temp.MakeTempFilePath(this.GetType(), ".xml");
+			string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
 			SerialPortId id = new SerialPortId(portName);
 			SerialPortId idDeserialized = null;
 

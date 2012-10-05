@@ -69,7 +69,7 @@ namespace MKY.Test.Xml.Serialization
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			Temp.CleanTempPath(this.GetType());
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion
@@ -96,11 +96,11 @@ namespace MKY.Test.Xml.Serialization
 			string filePath = "";
 			System.Boolean b;
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "BooleanFalse", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "BooleanFalse", FileExtension);
 			b = false;
 			TestSerialization(filePath, typeof(bool), b);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "BooleanTrue", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "BooleanTrue", FileExtension);
 			b = true;
 			TestSerialization(filePath, typeof(bool), b);
 		}
@@ -119,11 +119,11 @@ namespace MKY.Test.Xml.Serialization
 			string filePath = "";
 			System.Guid guid;
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "Guid", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "Guid", FileExtension);
 			guid = System.Guid.NewGuid();
 			TestSerialization(filePath, typeof(System.Guid), guid);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "GuidEmpty", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "GuidEmpty", FileExtension);
 			guid = System.Guid.Empty;
 			TestSerialization(filePath, typeof(System.Guid), guid);
 		}
@@ -141,16 +141,16 @@ namespace MKY.Test.Xml.Serialization
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "Array", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "Array", FileExtension);
 			string[] a = new string[] { "A", "B" };
 			TestSerialization(filePath, typeof(string[]), a);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayEmpty", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ArrayEmpty", FileExtension);
 			string[] ae = new string[] { };
 			TestSerialization(filePath, typeof(string[]), ae);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this.GetType(), "MultiArray", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "MultiArray", FileExtension);
 			string[,] ma = new string[,]
 					{
 						{ "A", "AA" },
@@ -158,7 +158,7 @@ namespace MKY.Test.Xml.Serialization
 					};
 			TestSerialization(filePath, typeof(string[,]), ma);
 #endif
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayOfArraysOnInit", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ArrayOfArraysOnInit", FileExtension);
 			string[][] aai = new string[][]
 					{
 						new string[] { "A", "AA" },
@@ -166,7 +166,7 @@ namespace MKY.Test.Xml.Serialization
 					};
 			TestSerialization(filePath, typeof(string[][]), aai);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayOfArraysByCreate", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ArrayOfArraysByCreate", FileExtension);
 			string[][] aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
 			for (int i = 0; i < 2; i++)
 			{
@@ -192,18 +192,18 @@ namespace MKY.Test.Xml.Serialization
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "List", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "List", FileExtension);
 			List<string> l = new List<string>();
 			l.Add("A");
 			l.Add("B");
 			TestSerialization(filePath, typeof(List<string>), l);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ListEmpty", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ListEmpty", FileExtension);
 			List<string> le = new List<string>();
 			TestSerialization(filePath, typeof(List<string>), le);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ListOfArrays", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ListOfArrays", FileExtension);
 			List<string[]> la = new List<string[]>();
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
@@ -211,7 +211,7 @@ namespace MKY.Test.Xml.Serialization
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ListOfLists", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ListOfLists", FileExtension);
 			List<List<string>> ll = new List<List<string>>();
 			ll.Add(l);
 			ll.Add(l);
@@ -234,7 +234,7 @@ namespace MKY.Test.Xml.Serialization
 			string filePath = "";
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this.GetType(), "Dictionary", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "Dictionary", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
@@ -242,13 +242,13 @@ namespace MKY.Test.Xml.Serialization
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = Temp.MakeTempFilePath(this.GetType(), "DictionaryEmpty", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryEmpty", FileExtension);
 			Dictionary<string, string> le = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
 			TestSerialization(filePath, typeof(Dictionary<string, string>), le);
 #endif
-			filePath = Temp.MakeTempFilePath(this.GetType(), "DictionaryToArrayOfArrays", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryToArrayOfArrays", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
@@ -287,7 +287,7 @@ namespace MKY.Test.Xml.Serialization
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
 			NamedStringDictionary nsd = new NamedStringDictionary();
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
@@ -308,17 +308,17 @@ namespace MKY.Test.Xml.Serialization
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItem", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
 			TestSerialization(filePath, typeof(RecentItem<string>), ri);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItemList", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemList", FileExtension);
 			List<RecentItem<string>> ril = new List<RecentItem<string>>();
 			ril.Add(new RecentItem<string>("RIL1"));
 			ril.Add(new RecentItem<string>("RIL2"));
 			TestSerialization(filePath, typeof(List<RecentItem<string>>), ril);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItemArray", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemArray", FileExtension);
 			RecentItem<string>[] ria = ril.ToArray();
 			TestSerialization(filePath, typeof(RecentItem<string>[]), ria);
 		}

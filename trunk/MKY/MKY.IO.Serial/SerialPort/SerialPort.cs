@@ -989,7 +989,7 @@ namespace MKY.IO.Serial
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
-				StopThreads();
+				RequestStopThreads();
 				StopAndDisposeAliveTimer();
 				CloseAndDisposePort();
 				SetStateSynchronizedAndNotify(State.Closed);
@@ -1006,7 +1006,7 @@ namespace MKY.IO.Serial
 
 		private void ResetPort()
 		{
-			StopThreads();
+			RequestStopThreads();
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
@@ -1022,6 +1022,10 @@ namespace MKY.IO.Serial
 
 		private void StartThreads()
 		{
+			// Ensure that threads have stopped after the last stop request.
+			while ((this.receiveThread != null) && (this.sendThread != null))
+				Thread.Sleep(1);
+
 			this.receiveThreadSyncFlag = true;
 			this.receiveThreadEvent = new AutoResetEvent(false);
 			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
@@ -1038,7 +1042,7 @@ namespace MKY.IO.Serial
 		/// method could have been called from a thread that also has to handle the receive
 		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
 		/// </remarks>
-		private void StopThreads()
+		private void RequestStopThreads()
 		{
 			this.receiveThreadSyncFlag = false;
 			this.receiveThreadEvent.Set();
@@ -1420,6 +1424,12 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 		// Object Members
 		//==========================================================================================
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return (ToShortPortString());
+		}
 
 		/// <summary></summary>
 		public virtual string ToShortPortString()

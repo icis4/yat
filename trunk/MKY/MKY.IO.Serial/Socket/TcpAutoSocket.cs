@@ -941,6 +941,11 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
+		public override string ToString()
+		{
+			return (ToShortEndPointString());
+		}
+
 		/// <remarks>
 		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>

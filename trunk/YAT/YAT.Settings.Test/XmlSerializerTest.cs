@@ -70,7 +70,7 @@ namespace YAT.Settings.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			Temp.CleanTempPath(this.GetType());
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion
@@ -96,11 +96,11 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "EmptyArrayOfCommands", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "EmptyArrayOfCommands", FileExtension);
 			Command[] a = new Command[] { };
 			TestSerialization(filePath, typeof(Command[]), a);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "EmptyListOfCommands", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "EmptyListOfCommands", FileExtension);
 			List<Command> l = new List<Command>();
 			TestSerialization(filePath, typeof(List<Command>), l);
 		}
@@ -118,7 +118,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentFileSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "RecentFileSettings", FileExtension);
 
 			RecentItemCollection<string> ric = new RecentItemCollection<string>();
 			ric.Add(new RecentItem<string>("RIA"));
@@ -142,7 +142,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandPage", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandPage", FileExtension);
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
 			pcp.Commands.Add(new Command("Hello", "World"));
 			pcp.Commands.Add(new Command("Hallo", "Wält"));
@@ -152,7 +152,7 @@ namespace YAT.Settings.Test
 			c.Add(pcp);
 			c.Add(pcp);
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandSettings", FileExtension);
 			PredefinedCommandSettings pcs = new PredefinedCommandSettings();
 			pcs.Pages = c;
 			TestSerialization(filePath, typeof(PredefinedCommandSettings), pcs);
@@ -171,7 +171,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ExplicitSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ExplicitSettings", FileExtension);
 			ExplicitSettings s = new ExplicitSettings();
 			TestSerialization(filePath, typeof(ExplicitSettings), s);
 		}
@@ -189,7 +189,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this.GetType(), "ImplicitSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(GetType(), "ImplicitSettings", FileExtension);
 			ImplicitSettings s = new ImplicitSettings();
 			TestSerialization(filePath, typeof(ImplicitSettings), s);
 		}
