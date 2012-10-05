@@ -317,7 +317,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         }
                         catch (NullReferenceException ex)
                         {
-                            MKY.Diagnostics.DebugEx.WriteException(this.GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
                         }
 
                         // ----- \remind  END  -----

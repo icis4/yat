@@ -56,7 +56,7 @@ namespace MKY.IO.Serial
 		/// </summary>
 		/// <remarks>
 		/// Receive related code is located before send related code since I/O is a common term
-		/// and I comes before O.
+		/// where I comes before O.
 		/// </remarks>
 		event EventHandler DataReceived;
 
@@ -65,7 +65,7 @@ namespace MKY.IO.Serial
 		/// </summary>
 		/// <remarks>
 		/// Receive related code is located before send related code since I/O is a common term
-		/// and I comes before O.
+		/// where I comes before O.
 		/// </remarks>
 		event EventHandler DataSent;
 
@@ -184,6 +184,10 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Receives data from a the underlying I/O instance into a receive buffer.
 		/// </summary>
+		/// <remarks>
+		/// Receive related code is located before send related code since I/O is a common term
+		/// where I comes before O.
+		/// </remarks>
 		/// <param name="data">
 		/// An array of type System.Byte that is the storage location for the received data.
 		/// </param>
@@ -193,6 +197,10 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Sends data to a the underlying I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Receive related code is located before send related code since I/O is a common term
+		/// where I comes before O.
+		/// </remarks>
 		/// <param name="data">
 		/// An array of type System.Byte that contains the data to be sent.
 		/// </param>

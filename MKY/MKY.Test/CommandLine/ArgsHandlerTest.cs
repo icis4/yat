@@ -668,8 +668,8 @@ namespace MKY.Test.CommandLine
 				di = di.Parent;
 
 			// Set path to "<Root>\MKY\!-Settings\<Directory>\":
-			string assemblyFullName = this.GetType().Assembly.FullName;
-			string namespaceName    = this.GetType().Namespace;
+			string assemblyFullName = GetType().Assembly.FullName;
+			string namespaceName    = GetType().Namespace;
 
 			string filePath = di.FullName + Path.DirectorySeparatorChar +
 				"MKY" + Path.DirectorySeparatorChar +

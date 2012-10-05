@@ -295,7 +295,7 @@ namespace MKY.CommandLine
 		/// <summary></summary>
 		protected virtual FieldInfo[] GetMemberFields()
 		{
-			Type t = this.GetType();
+			Type t = GetType();
 			FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
 			return (fields);
 		}
@@ -505,7 +505,7 @@ namespace MKY.CommandLine
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex);
+				DebugEx.WriteException(GetType(), ex);
 				return (false);
 			}
 		}
@@ -588,7 +588,7 @@ namespace MKY.CommandLine
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex);
+				DebugEx.WriteException(GetType(), ex);
 				return (false);
 			}
 		}
@@ -619,7 +619,7 @@ namespace MKY.CommandLine
 						if (optionStrings.Contains(s))
 						{
 							string message = "Duplicate command line argument " + s;
-							Debug.WriteLine("Runtime validation failed for " + this.GetType() + ": " + message);
+							Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
 							throw (new RuntimeValidationException(message));
 						}
 						else
@@ -632,7 +632,7 @@ namespace MKY.CommandLine
 						if (optionStrings.Contains(s))
 						{
 							string message = "Duplicate command line argument " + s;
-							Debug.WriteLine("Runtime validation failed for " + this.GetType() + ": " + message);
+							Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
 							throw (new RuntimeValidationException(message));
 						}
 						else

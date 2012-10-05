@@ -183,7 +183,7 @@ namespace MKY.Settings
 		public virtual bool Load()
 		{
 			bool loadSuccess = true;
-			object settings = SettingsFileHandler.LoadFromFile(this.settingsFilePath, this.settings.GetType(), this.alternateXmlElements, this.GetType());
+			object settings = SettingsFileHandler.LoadFromFile(this.settingsFilePath, this.settings.GetType(), this.alternateXmlElements, GetType());
 			if (settings == null)
 			{
 				settings = SettingsDefault;
@@ -213,7 +213,7 @@ namespace MKY.Settings
 
 			try
 			{
-				SettingsFileHandler.SaveToFile(this.settingsFilePath, this.settings.GetType(), this.settings, this.GetType());
+				SettingsFileHandler.SaveToFile(this.settingsFilePath, this.settings.GetType(), this.settings, GetType());
 				this.accessedSettingsFilePath = this.settingsFilePath;
 				this.settings.ClearChanged();
 			}

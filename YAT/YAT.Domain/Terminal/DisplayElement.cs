@@ -458,7 +458,7 @@ namespace YAT.Domain
 			// Ensure to use the proper constructor.
 
 			// Attention: For performance reasons, reflection as shown below is not used
-			//ConstructorInfo ci = this.GetType().GetConstructor(Type.EmptyTypes);
+			//ConstructorInfo ci = GetType().GetConstructor(Type.EmptyTypes);
 			//DisplayElement de = (DisplayElement)ci.Invoke(null);
 
 			DisplayElement de;
@@ -497,7 +497,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual bool AcceptsAppendOf(DisplayElement de)
 		{
-			if (this.GetType() != de.GetType())
+			if (GetType() != de.GetType())
 				return (false);
 
 			if (!this.isData || !de.isData)
@@ -531,7 +531,7 @@ namespace YAT.Domain
 			}
 			catch (ArgumentException ex)
 			{
-				MKY.Diagnostics.DebugEx.WriteException(this.GetType(), ex);
+				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
 				System.Diagnostics.Debug.WriteLine(de.ToString());
 			}
 		}

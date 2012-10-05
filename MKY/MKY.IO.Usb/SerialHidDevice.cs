@@ -233,6 +233,10 @@ namespace MKY.IO.Usb
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>();
 
+		private Thread receiveThread;
+		private AutoResetEvent receiveThreadEvent;
+		private bool receiveThreadSyncFlag;
+
 		#endregion
 
 		#region Events
@@ -302,7 +306,7 @@ namespace MKY.IO.Usb
 		{
 			// Only attach handlers if this is an instance of the USB Ser/HID device class.
 			// If this instance is of a derived class, handlers must be attached there.
-			if (this.GetType() == typeof(SerialHidDevice))
+			if (GetType() == typeof(SerialHidDevice))
 				RegisterAndAttachStaticDeviceEventHandlers();
 		}
 
@@ -331,6 +335,7 @@ namespace MKY.IO.Usb
 			if (disposing)
 			{
 				DetachAndUnregisterStaticDeviceEventHandlers();
+				Stop();
 			}
 			base.Dispose(disposing);
 		}
@@ -489,6 +494,8 @@ namespace MKY.IO.Usb
 			if (IsOpen)
 				return (true);
 
+			CreateAndStartReceiveThread();
+
 			// Create a new stream and begin to read data from the device.
 			if (CreateStream())
 			{
@@ -513,6 +520,7 @@ namespace MKY.IO.Usb
 			if (!IsOpen)
 				return;
 
+			RequestStopReceiveThread();
 			CloseStream();
 
 			if (IsConnected)
@@ -574,6 +582,36 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Methods > Threads
+		//------------------------------------------------------------------------------------------
+		// Methods > Threads
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartReceiveThread()
+		{
+			// Ensure that thread has stopped after the last stop request.
+			while (this.receiveThread != null)
+				Thread.Sleep(1);
+
+			this.receiveThreadSyncFlag = true;
+			this.receiveThreadEvent = new AutoResetEvent(false);
+			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+			this.receiveThread.Start();
+		}
+
+		/// <remarks>
+		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
+		/// method could have been called from a thread that also has to handle the receive
+		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
+		/// </remarks>
+		private void RequestStopReceiveThread()
+		{
+			this.receiveThreadSyncFlag = false;
+			this.receiveThreadEvent.Set();
+		}
+
+		#endregion
+
 		#region Methods > Stream
 		//------------------------------------------------------------------------------------------
 		// Methods > Stream
@@ -601,21 +639,6 @@ namespace MKY.IO.Usb
 			byte[] inputReportBuffer = new byte[InputReportLength];
 			this.stream.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
 		}
-
-		/// <summary>
-		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
-		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
-		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of received data will generate many events
-		/// handled by <see cref="AsyncReadCompleted"/>. However, since <see cref="OnDataReceived"/>
-		/// synchronously invokes the event, it will take some time until the monitor is released
-		/// again. During this time, no more new events are invoked, instead, incoming data is
-		/// buffered.
-		/// </summary>
-		private delegate void AsyncReadCompletedDelegate();
-
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This field strictly belows to the method below and is therefore prefixed with the method's name.")]
-		private object AsyncReadCompletedSyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void AsyncReadCompleted(IAsyncResult result)
@@ -645,20 +668,8 @@ namespace MKY.IO.Usb
 							this.receiveQueue.Enqueue(b);
 					}
 
-					// Ensure that only one data received event thread is active at a time.
-					// Without this exclusivity, two receive threads could create a race condition.
-					if (Monitor.TryEnter(AsyncReadCompletedSyncObj))
-					{
-						try
-						{
-							AsyncReadCompletedDelegate asyncInvoker = new AsyncReadCompletedDelegate(AsyncReadCompletedAsync);
-							asyncInvoker.BeginInvoke(null, null);
-						}
-						finally
-						{
-							Monitor.Exit(AsyncReadCompletedSyncObj);
-						}
-					}
+					// Signal receive thread:
+					this.receiveThreadEvent.Set();
 
 					// Trigger the next async read.
 					BeginAsyncRead();
@@ -670,29 +681,52 @@ namespace MKY.IO.Usb
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(this.GetType(), ex); // Includes Close().
+					DebugEx.WriteException(GetType(), ex); // Includes Close().
 					OnError(new ErrorEventArgs("Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString()));
 				}
 			}
 		}
 
-		private void AsyncReadCompletedAsync()
+		/// <summary>
+		/// Asynchronously manage incoming events to prevent potential dead-locks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of received data will generate many events
+		/// handled by <see cref="AsyncReadCompleted"/>. However, since <see cref="OnDataReceived"/>
+		/// synchronously invokes the event, it will take some time until the send queue is checked
+		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// buffered.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by <see cref="AsyncReadCompleted"/> event above.
+		/// </remarks>
+		private void ReceiveThread()
 		{
-			// Ensure that only one data received event thread is active at a time.
-			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(AsyncReadCompletedSyncObj);
-			try
+			Debug.WriteLine(GetType() + " '" + ToString() + "': ReceiveThread() has started.");
+
+			while (this.receiveThreadSyncFlag)
 			{
-				// Fire events until there is no more data available. Must be done to ensure
-				// that events are fired even for data that was enqueued above while the sync
-				// obj was busy.
-				while (BytesAvailable > 0)
+				this.receiveThreadEvent.WaitOne();
+
+				// Fire events until there is no more data. Must be done to ensure that events
+				// are fired even for data that was enqueued above while the 'OnDataReceived'
+				// event was being handled. In addition, wait for the minimal time possible to
+				// allow other threads to execute and to prevent that 'OnDataReceived' events
+				// are fired consecutively.
+
+				// Ensure not to forward any events during closing anymore.
+				while (this.receiveThreadSyncFlag && IsOpen && (BytesAvailable > 0))
+				{
 					OnDataReceived(new EventArgs());
+					Thread.Sleep(0);
+				}
 			}
-			finally
-			{
-				Monitor.Exit(AsyncReadCompletedSyncObj);
-			}
+
+			this.receiveThread = null;
+			this.receiveThreadEvent.Close();
+			this.receiveThreadEvent = null;
+
+			Debug.WriteLine(GetType() + " '" + ToString() + "': ReceiveThread() has terminated.");
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
@@ -713,7 +747,7 @@ namespace MKY.IO.Usb
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex); // Includes Close().
+				DebugEx.WriteException(GetType(), ex); // Includes Close().
 				OnError(new ErrorEventArgs("Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString()));
 			}
 		}

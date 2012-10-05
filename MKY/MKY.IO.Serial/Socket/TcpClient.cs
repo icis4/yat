@@ -487,7 +487,7 @@ namespace MKY.IO.Serial
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(this.GetType(), ex);
+					DebugEx.WriteException(GetType(), ex);
 				}
 
 				try
@@ -496,7 +496,7 @@ namespace MKY.IO.Serial
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(this.GetType(), ex);
+					DebugEx.WriteException(GetType(), ex);
 				}
 
 				this.socket = null;
@@ -731,6 +731,12 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 		// Object Members
 		//==========================================================================================
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return (ToShortEndPointString());
+		}
 
 		/// <summary></summary>
 		/// <remarks>

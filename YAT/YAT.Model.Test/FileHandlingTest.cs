@@ -107,7 +107,7 @@ namespace YAT.Model.Test
 		[SetUp]
 		public virtual void SetUp()
 		{
-			Temp.MakeTempPath(this.GetType());
+			Temp.MakeTempPath(GetType());
 		}
 
 		#endregion
@@ -122,7 +122,7 @@ namespace YAT.Model.Test
 		[TearDown]
 		public virtual void TearDown()
 		{
-			Temp.CleanTempPath(this.GetType());
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion

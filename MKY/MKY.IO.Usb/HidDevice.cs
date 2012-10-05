@@ -306,7 +306,7 @@ namespace MKY.IO.Usb
 
 			// Only attach handlers if this is an instance of the USB HID device class.
 			// If this instance is e.g. an Ser/HID device, handlers must be attached there.
-			if (this.GetType() == typeof(HidDevice))
+			if (GetType() == typeof(HidDevice))
 				RegisterAndAttachStaticDeviceEventHandlers();
 		}
 

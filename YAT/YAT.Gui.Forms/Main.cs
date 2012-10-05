@@ -975,7 +975,7 @@ namespace YAT.Gui.Forms
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(this.GetType(), ex);
+					DebugEx.WriteException(GetType(), ex);
 					this.mainResult = Model.MainResult.ApplicationRunError;
 				}
 			}

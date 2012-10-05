@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 
 using MKY;
@@ -64,6 +65,8 @@ namespace YAT.Domain
 		private const string RxBufferOverflowErrorString = "RX BUFFER OVERFLOW";
 		private const string RxParityErrorString         = "RX PARITY ERROR";
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
+
+		private const string Undefined = "<Undefined>";
 
 		#endregion
 
@@ -973,15 +976,21 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string RepositoryToString(RepositoryType repository)
 		{
+			return (RepositoryToString(repository, ""));
+		}
+
+		/// <summary></summary>
+		public virtual string RepositoryToString(RepositoryType repository, string indent)
+		{
 			AssertNotDisposed();
 
 			lock (this.repositorySyncObj)
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.ToString());
-					case RepositoryType.Bidir: return (this.bidirRepository.ToString());
-					case RepositoryType.Rx:    return (this.rxRepository.ToString());
+					case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
+					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
+					case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}
@@ -992,57 +1001,6 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			return (this.rawTerminal.RepositoryToElements(repository));
-		}
-
-		#endregion
-
-		#region Methods > ToString
-		//------------------------------------------------------------------------------------------
-		// Methods > ToString
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public override string ToString()
-		{
-			AssertNotDisposed();
-			
-			return (ToString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToString(string indent)
-		{
-			AssertNotDisposed();
-
-			string s = null;
-			lock (this.repositorySyncObj)
-			{
-				s = indent + "- Settings: " + this.terminalSettings + Environment.NewLine +
-					indent + "- RawTerminal: "     + Environment.NewLine + this.rawTerminal.ToString(indent + "--") +
-					indent + "- TxRepository: "    + Environment.NewLine + this.txRepository.ToString(indent + "--") +
-					indent + "- BidirRepository: " + Environment.NewLine + this.bidirRepository.ToString(indent + "--") +
-					indent + "- RxRepository: "    + Environment.NewLine + this.rxRepository.ToString(indent + "--");
-			}
-			return (s);
-		}
-
-		/// <summary></summary>
-		public virtual string RepositoryToString(RepositoryType repository, string indent)
-		{
-			AssertNotDisposed();
-			
-			string s = null;
-			lock (this.repositorySyncObj)
-			{
-				switch (repository)
-				{
-					case RepositoryType.Tx:    s = this.txRepository.ToString(indent);    break;
-					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
-					case RepositoryType.Rx:    s = this.rxRepository.ToString(indent);    break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
-				}
-			}
-			return (s);
 		}
 
 		#endregion
@@ -1341,6 +1299,55 @@ namespace YAT.Domain
 		{
 			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			AssertNotDisposed();
+
+			return (ToString(""));
+		}
+
+		/// <summary></summary>
+		public virtual string ToString(string indent)
+		{
+			AssertNotDisposed();
+
+			StringBuilder sb = new StringBuilder();
+			lock (this.repositorySyncObj)
+			{
+				sb.AppendLine(indent + "- Settings: " + this.terminalSettings);
+
+				sb.AppendLine(indent + "- RawTerminal: ");
+				sb.AppendLine(this.rawTerminal.ToString(indent + "--"));
+
+				sb.AppendLine(indent + "- TxRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+
+				sb.AppendLine(indent + "- BidirRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+
+				sb.AppendLine(indent + "- RxRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+			}
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public virtual string ToIOString()
+		{
+			if (this.rawTerminal != null)
+				return (this.rawTerminal.ToIOString());
+			else
+				return (Undefined);
 		}
 
 		#endregion

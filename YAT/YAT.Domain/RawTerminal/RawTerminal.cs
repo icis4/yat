@@ -28,7 +28,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Threading;
 
 using MKY.Event;
@@ -47,6 +49,15 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawTerminal : IDisposable
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string Undefined = "<Undefined>";
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -63,6 +74,14 @@ namespace YAT.Domain
 
 		private Settings.IOSettings ioSettings;
 		private IIOProvider io;
+
+		private Thread sendThread;
+		private AutoResetEvent sendThreadEvent;
+		private bool sendThreadSyncFlag;
+
+		private Thread receiveThread;
+		private AutoResetEvent receiveThreadEvent;
+		private bool receiveThreadSyncFlag;
 
 		#endregion
 
@@ -141,8 +160,13 @@ namespace YAT.Domain
 			{
 				if (disposing)
 				{
+					Stop();
+
 					if (this.io != null)
+					{
 						this.io.Dispose();
+						this.io = null;
+					}
 				}
 				this.isDisposed = true;
 			}
@@ -293,6 +317,8 @@ namespace YAT.Domain
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
+
+			StartThreads();
 			return (this.io.Start());
 		}
 
@@ -301,6 +327,8 @@ namespace YAT.Domain
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
+
+			RequestStopThreads();
 			this.io.Stop();
 		}
 
@@ -308,98 +336,13 @@ namespace YAT.Domain
 		// Send
 		//------------------------------------------------------------------------------------------
 
-		private object sendSyncObj = new object();
-
-		/// <summary>Async sending.</summary>
-		private Queue<RawElement> sendEventQueue = new Queue<RawElement>();
-		private object sendEventSyncObj = new object();
-		private delegate void SendEventDelegate();
-
-		/// <remarks>
-		/// This method is implemented thread-safe to prevent race conditions when multiple threads
-		/// attempt to send data to this terminal.
-		///   => No race conditions in the send path.
-		/// 
-		/// In addition, the RawElementSent event is raised asynchronously but also within a lock
-		/// to ensure that the event handling doesn't block the sending but the sequence of the
-		/// events is still correct.
-		///   => No race conditions in the event path.
-		/// 
-		/// The I/O's DataSent event is not used as it doesn't tell what data was sent, and is
-		/// therefore of little use. Thus, the RawElementSent event is raised here.
-		/// </remarks>
+		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
-			lock (this.sendSyncObj)
-			{
-				// Send data:
+			if (IsReadyToSend)
 				this.io.Send(data);
-
-				// Immediately create the raw element to get the most accurate time stamp:
-				RawElement re = new RawElement(data, SerialDirection.Tx);
-
-				// Then process the raw element:
-				lock (this.repositorySyncObj)
-				{
-					this.txRepository.Enqueue(re);
-					this.bidirRepository.Enqueue(re);
-				}
-				lock (this.sendEventQueue)
-				{
-					this.sendEventQueue.Enqueue(re);
-				}
-			}
-
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two send threads could create a race condition.
-			if (Monitor.TryEnter(this.sendEventSyncObj))
-			{
-				try
-				{
-					SendEventDelegate asyncInvoker = new SendEventDelegate(SendEventAsync);
-					asyncInvoker.BeginInvoke(null, null);
-				}
-				finally
-				{
-					Monitor.Exit(this.sendEventSyncObj);
-				}
-			}
-		}
-
-		private void SendEventAsync()
-		{
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(this.sendEventSyncObj);
-			try
-			{
-				// Fire events until there is no more data. Must be done to ensure that events
-				// are fired even for data that was enqueued above while the sync obj was busy.
-				// In addition, wait for the minimal time possible to allow other threads to
-				// execute and to prevent that 'OnDataSent' events are fired consecutively.
-				while (true)
-				{
-					// Read items from queue until there are no more.
-					RawElement[] buffer;
-					lock (this.sendEventQueue)
-					{
-						if (this.sendEventQueue.Count <= 0)
-							break;
-
-						buffer = this.sendEventQueue.ToArray();
-						this.sendEventQueue.Clear();
-					}
-
-					foreach (RawElement re in buffer)
-						OnRawElementSent(new RawElementEventArgs(re));
-				}
-			}
-			finally
-			{
-				Monitor.Exit(this.sendEventSyncObj);
-			}
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -437,7 +380,8 @@ namespace YAT.Domain
 
 			lock (this.repositorySyncObj)
 			{
-				/*switch (repositoryType)
+				/* \todo:
+				switch (repositoryType)
 				{
 					case RepositoryType.Tx:    this.txRepository.Clear();    break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
@@ -465,34 +409,6 @@ namespace YAT.Domain
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 			} // lock (this.repositorySyncObj)
-		}
-
-		//------------------------------------------------------------------------------------------
-		// ToString
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public override string ToString()
-		{
-			AssertNotDisposed();
-
-			return (ToString(""));
-		}
-
-		/// <summary></summary>
-		public virtual string ToString(string indent)
-		{
-			AssertNotDisposed();
-
-			string s = null;
-			lock (this.repositorySyncObj)
-			{
-				s = indent + "- IOSettings: " + this.ioSettings + Environment.NewLine +
-					indent + "- TxRepository: "    + Environment.NewLine + this.txRepository.ToString(indent + "- ") +
-					indent + "- BidirRepository: " + Environment.NewLine + this.bidirRepository.ToString(indent + "- ") +
-					indent + "- RxRepository: "    + Environment.NewLine + this.rxRepository.ToString(indent + "- ");
-			}
-			return (s);
 		}
 
 		/// <summary></summary>
@@ -591,9 +507,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region IO
+		#region I/O
 		//==========================================================================================
-		// IO
+		// I/O
 		//==========================================================================================
 
 		/// <remarks>
@@ -630,9 +546,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region IO Events
+		#region I/O Events
 		//==========================================================================================
-		// IO Events
+		// I/O Events
 		//==========================================================================================
 
 		private void io_IOChanged(object sender, EventArgs e)
@@ -668,6 +584,44 @@ namespace YAT.Domain
 				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
 			else
 				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
+		}
+
+		#endregion
+
+		#region I/O Threads
+		//==========================================================================================
+		// I/O Threads
+		//==========================================================================================
+
+		private void StartThreads()
+		{
+			// Ensure that threads have stopped after the last stop request.
+			while ((this.receiveThread != null) && (this.sendThread != null))
+				Thread.Sleep(1);
+
+			this.receiveThreadSyncFlag = true;
+			this.receiveThreadEvent = new AutoResetEvent(false);
+			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+			this.receiveThread.Start();
+
+			this.sendThreadSyncFlag = true;
+			this.sendThreadEvent = new AutoResetEvent(false);
+			this.sendThread = new Thread(new ThreadStart(SendEventThread));
+			this.sendThread.Start();
+		}
+
+		/// <remarks>
+		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
+		/// method could have been called from a thread that also has to handle the receive
+		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
+		/// </remarks>
+		private void RequestStopThreads()
+		{
+			this.receiveThreadSyncFlag = false;
+			this.receiveThreadEvent.Set();
+
+			this.sendThreadSyncFlag = false;
+			this.sendThreadEvent.Set();
 		}
 
 		#endregion
@@ -711,6 +665,52 @@ namespace YAT.Domain
 		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
 		{
 			EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			AssertNotDisposed();
+
+			return (ToString(""));
+		}
+
+		/// <summary></summary>
+		public virtual string ToString(string indent)
+		{
+			AssertNotDisposed();
+
+			StringBuilder sb = new StringBuilder();
+			lock (this.repositorySyncObj)
+			{
+				sb.AppendLine(indent + "- TxRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+
+				sb.AppendLine(indent + "- BidirRepository: ");
+				sb.Append(this.bidirRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				
+				sb.AppendLine(indent + "- RxRepository: ");
+				sb.Append(this.rxRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				
+				sb.Append(indent + "- I/O: " + this.io.ToString());
+			}
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public virtual string ToIOString()
+		{
+			if (this.io != null)
+				return (this.io.ToString());
+			else
+				return (Undefined);
 		}
 
 		#endregion
