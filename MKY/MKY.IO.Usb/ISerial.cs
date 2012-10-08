@@ -31,6 +31,11 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Interface for serial communication, e.g. Ser/CDC or Ser/HID.
 	/// </summary>
+	/// <remarks>
+	/// This interface is defined similar to <see cref="System.IO.Ports.SerialPort"/>,
+	/// i.e. a  method must be called to send and receive data, and the corresponding
+	/// events do not contain any data.
+	/// </remarks>
 	public interface ISerial
 	{
 		#region Events

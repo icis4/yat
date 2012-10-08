@@ -34,26 +34,26 @@ namespace YAT.Domain
 	public enum IOErrorSeverity
 	{
 		/// <summary></summary>
-		Acceptable = MKY.IO.Serial.IOErrorSeverity.Acceptable,
+		Acceptable = MKY.IO.Serial.ErrorSeverity.Acceptable,
 
 		/// <summary></summary>
-		Severe = MKY.IO.Serial.IOErrorSeverity.Severe,
+		Severe = MKY.IO.Serial.ErrorSeverity.Severe,
 
 		/// <summary></summary>
-		Fatal = MKY.IO.Serial.IOErrorSeverity.Fatal,
+		Fatal = MKY.IO.Serial.ErrorSeverity.Fatal,
 	}
 
 	/// <summary></summary>
 	public enum IODirection
 	{
 		/// <summary></summary>
-		Any = MKY.IO.Serial.IODirection.Any,
+		Any = MKY.IO.Serial.Direction.Any,
 
 		/// <summary></summary>
-		Input = MKY.IO.Serial.IODirection.Input,
+		Input = MKY.IO.Serial.Direction.Input,
 
 		/// <summary></summary>
-		Output = MKY.IO.Serial.IODirection.Output,
+		Output = MKY.IO.Serial.Direction.Output,
 	}
 }
 

@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -74,14 +73,6 @@ namespace YAT.Domain
 
 		private Settings.IOSettings ioSettings;
 		private IIOProvider io;
-
-		private Thread sendThread;
-		private AutoResetEvent sendThreadEvent;
-		private bool sendThreadSyncFlag;
-
-		private Thread receiveThread;
-		private AutoResetEvent receiveThreadEvent;
-		private bool receiveThreadSyncFlag;
 
 		#endregion
 
@@ -317,8 +308,6 @@ namespace YAT.Domain
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
-
-			StartThreads();
 			return (this.io.Start());
 		}
 
@@ -327,8 +316,6 @@ namespace YAT.Domain
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
-
-			RequestStopThreads();
 			this.io.Stop();
 		}
 
@@ -512,10 +499,6 @@ namespace YAT.Domain
 		// I/O
 		//==========================================================================================
 
-		/// <remarks>
-		/// The DataSent event is not used as it doesn't tell what data was sent, and is therefore
-		/// of little use.
-		/// </remarks>
 		private void AttachIO(IIOProvider io)
 		{
 			if (IIOProvider.ReferenceEquals(this.io, io))
@@ -527,20 +510,18 @@ namespace YAT.Domain
 			this.io = io;
 			this.io.IOChanged        += new EventHandler(io_IOChanged);
 			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
-			this.io.DataReceived     += new EventHandler(io_DataReceived);
 			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
+			this.io.DataReceived     += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+			this.io.DataSent         += new EventHandler<DataSentEventArgs>(io_DataSent);
 		}
 
-		/// <remarks>
-		/// The DataSent event is not used as it doesn't tell what data was sent, and is therefore
-		/// of little use.
-		/// </remarks>
 		private void DetachIO()
 		{
 			this.io.IOChanged        -= new EventHandler(io_IOChanged);
 			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
-			this.io.DataReceived     -= new EventHandler(io_DataReceived);
 			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
+			this.io.DataReceived     -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+			this.io.DataSent         -= new EventHandler<DataSentEventArgs>(io_DataSent);
 			this.io = null;
 		}
 
@@ -561,67 +542,35 @@ namespace YAT.Domain
 			OnIOControlChanged(new EventArgs());
 		}
 
-		/// <remarks>
-		/// The DataSent event is not used as it doesn't tell what data was sent, and is therefore
-		/// of little use.
-		/// </remarks>
-		private void io_DataReceived(object sender, EventArgs e)
-		{
-			byte[] data;
-			if (this.io.Receive(out data) > 0)
-			{
-				RawElement re = new RawElement(data, SerialDirection.Rx);
-				this.rxRepository.Enqueue(re);
-				this.bidirRepository.Enqueue(re);
-				OnRawElementReceived(new RawElementEventArgs(re));
-			}
-		}
-
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
-			SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
+			MKY.IO.Serial.SerialPortErrorEventArgs serialPortErrorEventArgs = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
 				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
 			else
 				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
 		}
 
-		#endregion
-
-		#region I/O Threads
-		//==========================================================================================
-		// I/O Threads
-		//==========================================================================================
-
-		private void StartThreads()
+		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			// Ensure that threads have stopped after the last stop request.
-			while ((this.receiveThread != null) && (this.sendThread != null))
-				Thread.Sleep(1);
-
-			this.receiveThreadSyncFlag = true;
-			this.receiveThreadEvent = new AutoResetEvent(false);
-			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-			this.receiveThread.Start();
-
-			this.sendThreadSyncFlag = true;
-			this.sendThreadEvent = new AutoResetEvent(false);
-			this.sendThread = new Thread(new ThreadStart(SendEventThread));
-			this.sendThread.Start();
+			lock (this.repositorySyncObj)
+			{
+				RawElement re = new RawElement(e.Data, SerialDirection.Rx, e.TimeStamp);
+				this.rxRepository.Enqueue(re);
+				this.bidirRepository.Enqueue(re);
+				OnRawElementReceived(new RawElementEventArgs(re));
+			}
 		}
 
-		/// <remarks>
-		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
-		/// method could have been called from a thread that also has to handle the receive
-		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
-		/// </remarks>
-		private void RequestStopThreads()
+		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
-			this.receiveThreadSyncFlag = false;
-			this.receiveThreadEvent.Set();
-
-			this.sendThreadSyncFlag = false;
-			this.sendThreadEvent.Set();
+			lock (this.repositorySyncObj)
+			{
+				RawElement re = new RawElement(e.Data, SerialDirection.Tx, e.TimeStamp);
+				this.txRepository.Enqueue(re);
+				this.bidirRepository.Enqueue(re);
+				OnRawElementSent(new RawElementEventArgs(re));
+			}
 		}
 
 		#endregion

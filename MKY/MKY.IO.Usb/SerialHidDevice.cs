@@ -589,7 +589,7 @@ namespace MKY.IO.Usb
 
 		private void CreateAndStartReceiveThread()
 		{
-			// Ensure that thread has stopped after the last stop request.
+			// Ensure that threads have stopped after the last stop request.
 			while (this.receiveThread != null)
 				Thread.Sleep(1);
 
@@ -600,7 +600,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
+		/// Just signal the thread, it will stop soon. Do not wait (i.e. Join()) them, this
 		/// method could have been called from a thread that also has to handle the receive
 		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
 		/// </remarks>

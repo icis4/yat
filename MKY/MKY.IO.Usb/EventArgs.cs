@@ -26,19 +26,6 @@ using System;
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
-	public class ErrorEventArgs : EventArgs
-	{
-		/// <summary></summary>
-		public readonly string Message;
-
-		/// <summary></summary>
-		public ErrorEventArgs(string message)
-		{
-			Message = message;
-		}
-	}
-
-	/// <summary></summary>
 	public class DeviceEventArgs : EventArgs
 	{
 		/// <summary></summary>
@@ -54,6 +41,20 @@ namespace MKY.IO.Usb
 			DeviceInfo = deviceInfo;
 		}
 	}
+
+	/// <summary></summary>
+	public class ErrorEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public readonly string Message;
+
+		/// <summary></summary>
+		public ErrorEventArgs(string message)
+		{
+			Message = message;
+		}
+	}
+
 }
 
 //==================================================================================================

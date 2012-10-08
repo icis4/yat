@@ -45,7 +45,7 @@ namespace YAT.Model.Settings
 		private Domain.IOType ioType;
 
 		private MKY.IO.Ports.SerialPortId serialPortId;
-		private MKY.IO.Serial.SerialCommunicationSettings serialPortCommunication;
+		private MKY.IO.Serial.SerialPort.SerialCommunicationSettings serialPortCommunication;
 		private MKY.IO.Serial.AutoRetry serialPortAutoReopen;
 
 		private IPHost socketRemoteHost;
@@ -79,7 +79,7 @@ namespace YAT.Model.Settings
 
 		private void InitializeNodes()
 		{
-			SerialPortCommunication = new MKY.IO.Serial.SerialCommunicationSettings(SettingsType);
+			SerialPortCommunication = new MKY.IO.Serial.SerialPort.SerialCommunicationSettings(SettingsType);
 		}
 
 		/// <remarks>
@@ -127,17 +127,17 @@ namespace YAT.Model.Settings
 
 			SerialPortId            = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 			// SerialPortCommunication is attached as settings object.
-			SerialPortAutoReopen    = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
+			SerialPortAutoReopen    = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
-			SocketRemoteHost        = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
-			SocketRemotePort        = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
-			SocketLocalInterface    = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
-			SocketLocalTcpPort      = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
-			SocketLocalUdpPort      = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
-			TcpClientAutoReconnect  = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
+			SocketRemoteHost        = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
+			SocketRemotePort        = MKY.IO.Serial.Socket.SocketSettings.DefaultRemotePort;
+			SocketLocalInterface    = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+			SocketLocalTcpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
+			SocketLocalUdpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
+			TcpClientAutoReconnect  = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 
 			UsbSerialHidDeviceInfo  = null;
-			UsbSerialHidAutoOpen    = MKY.IO.Serial.UsbSerialHidDeviceSettings.AutoOpenDefault;
+			UsbSerialHidAutoOpen    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
 			StartTerminal           = true;
 		}
@@ -194,7 +194,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialPortCommunication")]
-		public virtual MKY.IO.Serial.SerialCommunicationSettings SerialPortCommunication
+		public virtual MKY.IO.Serial.SerialPort.SerialCommunicationSettings SerialPortCommunication
 		{
 			get { return (this.serialPortCommunication); }
 			set
@@ -211,7 +211,7 @@ namespace YAT.Model.Settings
 				}
 				else if (value != this.serialPortCommunication)
 				{
-					MKY.IO.Serial.SerialCommunicationSettings old = this.serialPortCommunication;
+					MKY.IO.Serial.SerialPort.SerialCommunicationSettings old = this.serialPortCommunication;
 					this.serialPortCommunication = value;
 					ReplaceNode(old, this.serialPortCommunication);
 				}

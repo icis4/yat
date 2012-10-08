@@ -96,10 +96,6 @@
       <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
       <Name>MKY.IO.Ports.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Test\MKY.IO.Serial.Test.csproj">
-      <Project>{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}</Project>
-      <Name>MKY.IO.Serial.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
       <Project>{E909B6F9-F856-4ED5-8D8F-6E77BC02C24C}</Project>
       <Name>MKY.IO.Usb.Test</Name>

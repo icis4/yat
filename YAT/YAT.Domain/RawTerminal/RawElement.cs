@@ -40,9 +40,8 @@ using MKY;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Defines an element received from or sent to a serial interface. In
-	/// addition to the serial data it also contains interface and time
-	/// information.
+	/// Defines an element received from or sent to a serial interface. In addition to the serial
+	/// data itself, it also contains interface and time information.
 	/// </summary>
 	public class RawElement
 	{
@@ -52,10 +51,16 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public RawElement(byte[] data, SerialDirection direction)
+			: this (data, direction, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public RawElement(byte[] data, SerialDirection direction, DateTime timeStamp)
 		{
 			this.data = data;
 			this.direction = direction;
-			this.timeStamp = DateTime.Now;
+			this.timeStamp = timeStamp;
 		}
 
 		/// <summary></summary>
