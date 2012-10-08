@@ -77,9 +77,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -90,42 +87,12 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="IIOProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialPort\IXOnXOffHandler.cs" />
-    <Compile Include="SerialPort\SerialFlowControl.cs" />
-    <Compile Include="SerialPort\SerialCommunicationSettings.cs" />
-    <Compile Include="SerialPort\SerialPort.cs" />
-    <Compile Include="SerialPort\SerialPortSettings.cs" />
-    <Compile Include="Socket\SocketDefaults.cs" />
-    <Compile Include="Socket\SocketSettings.cs" />
-    <Compile Include="Socket\TcpAutoSocket.cs" />
-    <Compile Include="Socket\TcpClient.cs" />
-    <Compile Include="Socket\TcpServer.cs" />
-    <Compile Include="Socket\SocketHostType.cs" />
-    <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
-    <Compile Include="Usb\UsbSerialHidDevice.cs" />
-    <Compile Include="Usb\UsbSerialHidDeviceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
-      <Project>{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}</Project>
-      <Name>ALAZ.SystemEx.NetEx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
-      <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
-      <Name>ALAZ.SystemEx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
-      <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
-      <Name>MKY.IO.Ports</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Usb\MKY.IO.Usb.csproj">
-      <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
-      <Name>MKY.IO.Usb</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY %28MKY\MKY%29</Name>

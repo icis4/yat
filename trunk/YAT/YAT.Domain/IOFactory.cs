@@ -26,6 +26,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using MKY.IO.Serial;
+using MKY.IO.Serial.SerialPort;
+using MKY.IO.Serial.Socket;
+using MKY.IO.Serial.Usb;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -85,7 +88,7 @@ namespace YAT.Domain
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					return (new UsbSerialHidDevice(settings.UsbSerialHidDevice));
+					return (new SerialHidDevice(settings.UsbSerialHidDevice));
 				}
 
 				default:

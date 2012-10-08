@@ -21,10 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace MKY.IO.Serial
 {

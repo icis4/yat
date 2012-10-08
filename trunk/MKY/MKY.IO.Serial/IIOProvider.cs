@@ -21,10 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+
+using MKY.Contracts;
+
+#endregion
 
 namespace MKY.IO.Serial
 {
@@ -52,13 +61,26 @@ namespace MKY.IO.Serial
 		event EventHandler IOControlChanged;
 
 		/// <summary>
+		/// Fired after an I/O error has occurred.
+		/// </summary>
+		event EventHandler<IOErrorEventArgs> IOError;
+
+		/// <summary>
 		/// Fired after the I/O provider has received data.
 		/// </summary>
 		/// <remarks>
+		/// Opposed to the interface of <see cref="System.IO.Ports.SerialPort"/>, i.e. a method
+		/// must be called to send and receive data, and the corresponding events do not contain
+		/// any data, this event is implemented with data. There are several reasons for this:
+		///  > Events with data are easier to use.
+		///  > Events with data ensure that multiple recipients, i.e. event sinks, can use it.
+		///  > Events with data can implemented in a way to prevent race conditions on handling.
+		/// 
 		/// Receive related code is located before send related code since I/O is a common term
 		/// where I comes before O.
 		/// </remarks>
-		event EventHandler DataReceived;
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		event EventHandler<DataReceivedEventArgs> DataReceived;
 
 		/// <summary>
 		/// Fired after the I/O provider has sent data.
@@ -67,12 +89,8 @@ namespace MKY.IO.Serial
 		/// Receive related code is located before send related code since I/O is a common term
 		/// where I comes before O.
 		/// </remarks>
-		event EventHandler DataSent;
-
-		/// <summary>
-		/// Fired after an I/O error has occurred.
-		/// </summary>
-		event EventHandler<IOErrorEventArgs> IOError;
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		event EventHandler<DataSentEventArgs> DataSent;
 
 		#endregion
 
@@ -142,14 +160,6 @@ namespace MKY.IO.Serial
 		bool IsReadyToSend { get; }
 
 		/// <summary>
-		/// Gets the amount of data received from the remote resource that is available to read.
-		/// </summary>
-		/// <returns>
-		/// The number of bytes of data received from the remote resource.
-		/// </returns>
-		int BytesAvailable { get; }
-
-		/// <summary>
 		/// Gets the underlying I/O instance.
 		/// </summary>
 		/// <returns>
@@ -180,19 +190,6 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		void Stop();
-
-		/// <summary>
-		/// Receives data from a the underlying I/O instance into a receive buffer.
-		/// </summary>
-		/// <remarks>
-		/// Receive related code is located before send related code since I/O is a common term
-		/// where I comes before O.
-		/// </remarks>
-		/// <param name="data">
-		/// An array of type System.Byte that is the storage location for the received data.
-		/// </param>
-		/// <returns>The number of bytes received.</returns>
-		int Receive(out byte[] data);
 
 		/// <summary>
 		/// Sends data to a the underlying I/O instance.

@@ -34,7 +34,7 @@ using System.Text;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
-	public enum IOErrorSeverity
+	public enum ErrorSeverity
 	{
 		Acceptable,
 		Severe,
@@ -42,7 +42,7 @@ namespace MKY.IO.Serial
 	}
 
 	/// <summary></summary>
-	public enum IODirection
+	public enum Direction
 	{
 		Any,
 		Input,
