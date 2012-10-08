@@ -81,7 +81,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MKY\MKY.Version.cs">
+    <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,11 +95,11 @@
       <Project>{57CDE954-53C3-48A1-AE20-A52A5F387855}</Project>
       <Name>MKY.IO.Serial.SerialPort</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
+    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY\MKY\MKY.csproj">
+    <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY %28MKY\MKY%29</Name>
     </ProjectReference>

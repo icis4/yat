@@ -73,7 +73,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MKY\MKY.Version.cs">
+    <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,19 +89,19 @@
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
       <Project>{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}</Project>
       <Name>ALAZ.SystemEx.NetEx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
       <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
       <Name>ALAZ.SystemEx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
+    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY\MKY\MKY.csproj">
+    <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY %28MKY\MKY%29</Name>
     </ProjectReference>
