@@ -145,18 +145,23 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
-					// First, detach event handlers to ensure that no more events are received
+					// In the 'normal' case, the workspace has already been closed, otherwise...
+
+					// ...first, detach event handlers to ensure that no more events are received...
 					DetachWorkspaceEventHandlers();
 
-					// Then, dispose of objects
+					// ...then, dispose of objects.
 					if (this.workspace != null)
 					{
 						this.workspace.Dispose();
 						this.workspace = null;
 					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -168,7 +173,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -838,8 +843,14 @@ namespace YAT.Model
 			else
 				OnTimedStatusTextRequest("Exit cancelled.");
 
-			if (success)
-				OnExited(new EventArgs());
+			// All done, all resources can get disposed.
+			Dispose();
+
+			// Close the static application settings.
+			success = ApplicationSettings.Close();
+
+			// Signal the exit.
+			OnExited(new EventArgs());
 
 			if (success)
 				return (MainResult.Success);

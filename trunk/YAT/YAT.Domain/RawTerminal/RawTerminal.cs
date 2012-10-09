@@ -149,16 +149,21 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, Stop() will have already been called...
 					Stop();
 
+					// ...and the I/O provider will have stopped as well.
 					if (this.io != null)
 					{
 						this.io.Dispose();
 						this.io = null;
 					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -170,7 +175,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -551,6 +556,11 @@ namespace YAT.Domain
 				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
 		}
 
+		/// <remarks>
+		/// Note that this I/O event has a calling contract of:
+		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		/// Therefore, no additional synchronization or locking is required here.
+		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
 			lock (this.repositorySyncObj)
@@ -562,6 +572,11 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// Note that this I/O event has a calling contract of:
+		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		/// Therefore, no additional synchronization or locking is required here.
+		/// </remarks>
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
 			lock (this.repositorySyncObj)

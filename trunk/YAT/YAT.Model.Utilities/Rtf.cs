@@ -190,17 +190,28 @@ namespace YAT.Model.Utilities
 		{
 			if (!this.isDisposed)
 			{
+				// In any case, dispose of the as they were created in the constructor:
+				if (this.pd != null)
+				{
+					this.pd.Dispose();
+					this.pd = null;
+				}
+				if (this.rtb != null)
+				{
+					this.rtb.Dispose();
+					this.rtb = null;
+				}
+				if (this.reader != null)
+				{
+					this.reader.Dispose();
+					this.reader = null;
+				}
+
 				if (disposing)
 				{
-					if (this.pd != null)
-						this.pd.Dispose();
-
-					if (this.rtb != null)
-						this.rtb.Dispose();
-
-					if (this.reader != null)
-						this.reader.Dispose();
+					// Dispose of unmanaged resources.
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -212,7 +223,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}

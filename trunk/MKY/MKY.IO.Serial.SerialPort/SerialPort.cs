@@ -186,9 +186,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
-		private Thread sendThread;
-		private AutoResetEvent sendThreadEvent;
 		private bool sendThreadSyncFlag;
+		private AutoResetEvent sendThreadEvent;
+		private Thread sendThread;
 
 		/// <summary>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
@@ -196,9 +196,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
-		private Thread receiveThread;
-		private AutoResetEvent receiveThreadEvent;
 		private bool receiveThreadSyncFlag;
+		private AutoResetEvent receiveThreadEvent;
+		private Thread receiveThread;
 
 		/// <remarks>
 		/// In case of manual RTS/CTS + DTR/DSR, RTS is enabled after initialization.
@@ -295,11 +295,14 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
-					// Ensure to reset state during Dispose().
+					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					ResetPort();
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -311,7 +314,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -713,8 +716,9 @@ namespace MKY.IO.Serial.SerialPort
 			}
 
 			this.sendThread = null;
-			this.sendThreadEvent.Close();
-			this.sendThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': SendThread() has terminated.");
 		}
@@ -1006,8 +1010,8 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <remarks>
-		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
-		/// method could have been called from a thread that also has to handle the receive
+		/// Just signal the threads, they will stop soon. Do not wait for them (i.e. Join()),
+		/// this method could have been called from a thread that also has to handle the receive
 		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
 		/// </remarks>
 		private void RequestStopThreads()
@@ -1139,8 +1143,9 @@ namespace MKY.IO.Serial.SerialPort
 			}
 
 			this.receiveThread = null;
-			this.receiveThreadEvent.Close();
-			this.receiveThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': ReceiveThread() has terminated.");
 		}

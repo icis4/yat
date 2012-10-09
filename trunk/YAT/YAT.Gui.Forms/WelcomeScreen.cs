@@ -131,9 +131,18 @@ namespace YAT.Gui.Forms
 		{
 			try
 			{
-				// Either settings have been loaded or settings have been set to defaults.
-				ApplicationSettings.Load();
-				DialogResult = DialogResult.OK;
+				if (ApplicationSettings.Create())
+				{
+					// Don't care about result,
+					//   either the settings have been loaded or they have been set to defaults.
+					ApplicationSettings.Load();
+
+					DialogResult = DialogResult.OK;
+				}
+				else
+				{
+					DialogResult = DialogResult.Abort;
+				}
 			}
 			catch
 			{

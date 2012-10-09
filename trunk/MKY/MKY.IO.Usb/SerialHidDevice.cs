@@ -233,9 +233,9 @@ namespace MKY.IO.Usb
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>();
 
-		private Thread receiveThread;
-		private AutoResetEvent receiveThreadEvent;
 		private bool receiveThreadSyncFlag;
+		private AutoResetEvent receiveThreadEvent;
+		private Thread receiveThread;
 
 		#endregion
 
@@ -332,11 +332,14 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
+			DetachAndUnregisterStaticDeviceEventHandlers();
+			Stop();
+
 			if (disposing)
 			{
-				DetachAndUnregisterStaticDeviceEventHandlers();
-				Stop();
+				// Dispose of unmanaged resources.
 			}
+
 			base.Dispose(disposing);
 		}
 
@@ -600,8 +603,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// Just signal the thread, it will stop soon. Do not wait (i.e. Join()) them, this
-		/// method could have been called from a thread that also has to handle the receive
+		/// Just signal the thread, it will stop soon. Do not wait for it (i.e. Join()),
+		/// this method could have been called from a thread that also has to handle the receive
 		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
 		/// </remarks>
 		private void RequestStopReceiveThread()
@@ -723,8 +726,9 @@ namespace MKY.IO.Usb
 			}
 
 			this.receiveThread = null;
-			this.receiveThreadEvent.Close();
-			this.receiveThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToString() + "': ReceiveThread() has terminated.");
 		}

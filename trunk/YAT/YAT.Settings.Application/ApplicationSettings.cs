@@ -98,21 +98,80 @@ namespace YAT.Settings.Application
 		//==========================================================================================
 
 		/// <summary>
-		/// Loads settings. So far, there are only local user settings.
+		/// Create settings. So far, there are only local user settings.
 		/// </summary>
-		public static bool Load()
+		public static bool Create()
 		{
-			return (staticSettingsHandler.LoadLocalUserSettings());
+			try
+			{
+				staticSettingsHandler = new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
+				return (true);
+			}
+			catch
+			{
+				staticSettingsHandler = null;
+				return (false);
+			}
 		}
 
 		/// <summary>
-		/// Saves settings. So far, there are only local user settings.
+		/// Load settings. So far, there are only local user settings.
+		/// </summary>
+		public static bool Load()
+		{
+			if (staticSettingsHandler != null)
+				return (staticSettingsHandler.LoadLocalUserSettings());
+			else
+				return (false);
+		}
+
+		/// <summary>
+		/// Save settings. So far, there are only local user settings.
 		/// To improved performance, settings are only saved if they have changed.
 		/// </summary>
-		public static void Save()
+		public static bool Save()
 		{
-			if (staticSettingsHandler.LocalUserSettings.HaveChanged)
-				staticSettingsHandler.SaveLocalUserSettings();
+			if (staticSettingsHandler != null)
+			{
+				try
+				{
+					if (staticSettingsHandler.LocalUserSettings.HaveChanged)
+						staticSettingsHandler.SaveLocalUserSettings();
+
+					return (true);
+				}
+				catch
+				{
+					return (false);
+				}
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Close settings. So far, there are only local user settings.
+		/// </summary>
+		public static bool Close()
+		{
+			if (staticSettingsHandler != null)
+			{
+				try
+				{
+					staticSettingsHandler.Close();
+					return (true);
+				}
+				catch
+				{
+					return (false);
+				}
+			}
+			else
+			{
+				return (false);
+			}
 		}
 
 		#endregion

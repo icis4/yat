@@ -149,9 +149,11 @@ namespace YAT.Controller
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
-					// Nothing to do yet.
+					// Dispose of unmanaged resources.
 				}
 
 				this.isDisposed = true;
@@ -165,7 +167,7 @@ namespace YAT.Controller
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -349,8 +351,6 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private MainResult RunFullyWithView()
 		{
-			MainResult mainResult = MainResult.Success;
-
 			AppDomain curentDomain = AppDomain.CurrentDomain;
 			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_curentDomain_UnhandledException);
 
@@ -362,9 +362,12 @@ namespace YAT.Controller
 
 				try
 				{
+					// ApplicationSettings are loaded while showing the welcome screen.
+					// They will be closed when exiting or disposing the main model.
+
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (Controller.MainResult.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 				}
 				catch (Exception ex)
 				{
@@ -381,7 +384,6 @@ namespace YAT.Controller
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
 						// Assume unhandled exceptions and attach the application to the respective handler.
-						mainResult = MainResult.UnhandledException;
 						Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
@@ -393,7 +395,7 @@ namespace YAT.Controller
 						Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						Model.MainResult result = view.MainResult;
-						mainResult = ConvertToMainResult(result);
+						return (ConvertToMainResult(result));
 					}
 				}
 				catch (Exception ex)
@@ -404,8 +406,6 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
-
-				return (mainResult);
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
@@ -450,8 +450,6 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
-			MainResult mainResult = MainResult.Success;
-
 			AppDomain curentDomain = AppDomain.CurrentDomain;
 			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException);
 
@@ -463,9 +461,12 @@ namespace YAT.Controller
 
 				try
 				{
+					// ApplicationSettings are loaded while showing the welcome screen.
+					// They will be closed when exiting or disposing the main model.
+
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (Controller.MainResult.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 				}
 				catch (Exception ex)
 				{
@@ -484,7 +485,6 @@ namespace YAT.Controller
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
 						// Assume unhandled exceptions and attach the application to the respective handler.
-						mainResult = MainResult.UnhandledException;
 						Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
@@ -496,7 +496,7 @@ namespace YAT.Controller
 						Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
 						Model.MainResult result = view.MainResult;
-						mainResult = ConvertToMainResult(result);
+						return (ConvertToMainResult(result));
 					}
 				}
 				catch (Exception ex)
@@ -509,8 +509,6 @@ namespace YAT.Controller
 
 					return (MainResult.UnhandledException);
 				}
-
-				return (mainResult);
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
@@ -553,8 +551,6 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private MainResult RunFullyFromConsole()
 		{
-			MainResult mainResult = MainResult.Success;
-
 			AppDomain curentDomain = AppDomain.CurrentDomain;
 			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_curentDomain_UnhandledException);
 
@@ -563,11 +559,37 @@ namespace YAT.Controller
 			{
 				try
 				{
+					if (ApplicationSettings.Create())
+					{
+						// Don't care about result,
+						//   either settings have been loaded or settings have been set to defaults.
+						ApplicationSettings.Load();
+
+						// The ApplicationSettings will be closed when exiting or disposing the main model.
+					}
+					else
+					{
+						return (MainResult.ApplicationSettingsError);
+					}
+				}
+				catch (Exception ex)
+				{
+					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
+					Console.WriteLine(message);
+
+					if (ex != null)
+						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+
+					return (MainResult.UnhandledException);
+				}
+
+				try
+				{
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
-					mainResult = ConvertToMainResult(modelResult);
+					return (ConvertToMainResult(modelResult));
 				}
 				catch (Exception ex)
 				{
@@ -576,11 +598,9 @@ namespace YAT.Controller
 
 					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
 
-					mainResult = MainResult.UnhandledException;
+					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
-
-			return (mainResult);
 		}
 
 		/// <remarks>
@@ -609,26 +629,42 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private MainResult RunInvisible()
 		{
-			MainResult mainResult = MainResult.Success;
-
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
+				try
+				{
+					if (ApplicationSettings.Create())
+					{
+						// Don't care about result,
+						// either settings have been loaded or settings have been set to defaults.
+						ApplicationSettings.Load();
+
+						// The ApplicationSettings will be closed when exiting or disposing the main model.
+					}
+					else
+					{
+						return (MainResult.ApplicationSettingsError);
+					}
+				}
+				catch
+				{
+					return (MainResult.UnhandledException);
+				}
+
 				try
 				{
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
-					mainResult = ConvertToMainResult(modelResult);
+					return (ConvertToMainResult(modelResult));
 				}
 				catch
 				{
-					mainResult = MainResult.UnhandledException;
+					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
-
-			return (mainResult);
 		}
 
 		#endregion

@@ -626,10 +626,13 @@ namespace MKY.IO.Usb
 		{
 			if (!this.isDisposed)
 			{
+				DetachAndUnregisterStaticDeviceEventHandlers();
+
 				if (disposing)
 				{
-					DetachAndUnregisterStaticDeviceEventHandlers();
+					// Dispose of unmanaged resources.
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -641,7 +644,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}

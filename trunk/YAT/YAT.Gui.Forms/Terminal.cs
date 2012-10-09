@@ -202,7 +202,7 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (this.terminal != null)
+				if (TerminalIsReady)
 					return (this.terminal.AutoName);
 				else
 					return ("");
@@ -214,7 +214,7 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (this.terminal != null)
+				if (TerminalIsReady)
 					return (this.terminal.IsStopped);
 				else
 					return (true);
@@ -226,7 +226,7 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (this.terminal != null)
+				if (TerminalIsReady)
 					return (this.terminal.IsStarted);
 				else
 					return (false);
@@ -2037,7 +2037,7 @@ namespace YAT.Gui.Forms
 		private void SetMonitorIOStatus()
 		{
 			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
-			if (this.terminal != null)
+			if (TerminalIsReady)
 			{
 				if (this.terminal.IsStarted)
 				{
@@ -2592,6 +2592,11 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private bool TerminalIsReady
+		{
+			get { return ((this.terminal != null) && (!this.terminal.IsDisposed)); }
+		}
+
 		#endregion
 
 		#region Terminal > Event Handlers
@@ -2888,13 +2893,13 @@ namespace YAT.Gui.Forms
 
 		private void SetTerminalCaption()
 		{
-			if (this.terminal != null)
+			if (TerminalIsReady)
 				Text = this.terminal.Caption;
 		}
 
 		private void SetIOStatus()
 		{
-			if (this.terminal != null)
+			if (TerminalIsReady)
 			{
 				Image on = Properties.Resources.Image_On_12x12;
 				Image off = Properties.Resources.Image_Off_12x12;

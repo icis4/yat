@@ -271,13 +271,17 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
-					// First, detach event handlers to ensure that no more events are received
+					// In the 'normal' case, terminal and log have already been closed, otherwise...
+
+					// ...first, detach event handlers to ensure that no more events are received...
 					DetachTerminalEventHandlers();
 					DetachSettingsEventHandlers();
 
-					// Then, dispose of objects
+					// ...then, dispose of objects.
 					DisposeRates();
 					DisposeChronos();
 					if (this.log != null)
@@ -291,6 +295,7 @@ namespace YAT.Model
 						this.terminal = null;
 					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -302,7 +307,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -830,6 +835,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool Start()
 		{
+			AssertNotDisposed();
+
 			// Begin logging (in case opening of terminal needs to be logged).
 			if (this.settingsRoot.LogIsStarted)
 			{
@@ -852,6 +859,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SetSettings(ExplicitSettings settings)
 		{
+			AssertNotDisposed();
+
 			// Settings have changed, recreate terminal with new settings.
 			if (this.terminal.IsStarted)
 			{
@@ -892,6 +901,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SetLogSettings(Log.Settings.LogSettings settings)
 		{
+			AssertNotDisposed();
+
 			this.settingsRoot.Log = settings;
 			this.log.Settings = this.settingsRoot.Log;
 		}
@@ -994,6 +1005,8 @@ namespace YAT.Model
 		/// </summary>
 		private bool TryAutoSave()
 		{
+			AssertNotDisposed();
+
 			bool success = false;
 			if (this.settingsHandler.SettingsFileExists && !this.settingsRoot.AutoSaved)
 				success = SaveToFile(false);
@@ -1203,6 +1216,8 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool Close(bool isWorkspaceClose, bool tryAutoSave)
 		{
+			AssertNotDisposed();
+
 			// Don't try to auto save if there is no existing file (w1).
 			if (!isWorkspaceClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
@@ -1283,6 +1298,10 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Terminal not closed!");
 			}
+
+			// All done, all resources can get disposed.
+			Dispose();
+
 			return (success);
 		}
 
@@ -2217,54 +2236,88 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual int TxByteCount
 		{
-			get { return (this.txByteCount); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.txByteCount);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int TxLineCount
 		{
-			get { return (this.txLineCount); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.txLineCount);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int RxByteCount
 		{
-			get { return (this.rxByteCount); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.rxByteCount);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int RxLineCount
 		{
-			get { return (this.rxLineCount); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.rxLineCount);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int TxByteRate
 		{
-			get { return (this.txByteRate); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.txByteRate);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int TxLineRate
 		{
-			get { return (this.txLineRate); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.txLineRate);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int RxByteRate
 		{
-			get { return (this.rxByteRate); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.rxByteRate);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual int RxLineRate
 		{
-			get { return (this.rxLineRate); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.rxLineRate);
+			}
 		}
 
 		/// <summary></summary>
 		public virtual void ResetIOCountAndRate()
 		{
+			AssertNotDisposed();
+
 			this.txByteCount = 0;
 			this.txLineCount = 0;
 			this.rxByteCount = 0;

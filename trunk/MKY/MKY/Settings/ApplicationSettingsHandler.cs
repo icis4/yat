@@ -110,15 +110,14 @@ namespace MKY.Settings
 			{
 				if (!this.isDisposed)
 				{
+					// The mutex must be closed and released by the application because it would
+					// be called from the wrong process if it was closed by the garbage collector.
+
 					if (disposing)
 					{
-						if (this.mutex != null)
-						{
-							this.mutex.ReleaseMutex();
-							this.mutex.Close();
-							this.mutex = null;
-						}
+						// Dispose of unmanaged resources.
 					}
+
 					this.isDisposed = true;
 				}
 			}
@@ -130,7 +129,7 @@ namespace MKY.Settings
 			}
 
 			/// <summary></summary>
-			protected bool IsDisposed
+			public bool IsDisposed
 			{
 				get { return (this.isDisposed); }
 			}
@@ -349,6 +348,21 @@ namespace MKY.Settings
 				this.areCurrentlyOwnedByThisInstance = true;
 			}
 
+			/// <summary>
+			/// Close the settings and release all resources.
+			/// </summary>
+			public virtual void Close()
+			{
+				AssertNotDisposed();
+
+				if (this.mutex != null)
+				{
+					this.mutex.ReleaseMutex();
+					this.mutex.Close();
+					this.mutex = null;
+				}
+			}
+
 			#endregion
 		}
 
@@ -436,8 +450,11 @@ namespace MKY.Settings
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, all settings have already been closed in Close().
 					if (this.commonSettings != null)
 					{
 						this.commonSettings.Dispose();
@@ -454,6 +471,7 @@ namespace MKY.Settings
 						this.roamingUserSettings = null;
 					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -465,7 +483,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -1015,6 +1033,21 @@ namespace MKY.Settings
 
 			if (HasRoamingUserSettings)
 				this.roamingUserSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();
+		}
+
+		/// <summary>
+		/// Close the application settings and release all resources.
+		/// </summary>
+		public virtual void Close()
+		{
+			if (HasCommonSettings)
+				this.commonSettings.Close();
+
+			if (HasLocalUserSettings)
+				this.localUserSettings.Close();
+
+			if (HasRoamingUserSettings)
+				this.roamingUserSettings.Close();
 		}
 
 		#endregion

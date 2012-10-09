@@ -72,11 +72,18 @@ namespace MKY.IO
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, the writer is closed in Close().
 					if (this.writer != null)
+					{
 						this.writer.Dispose();
+						this.writer = null;
+					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -88,7 +95,7 @@ namespace MKY.IO
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}

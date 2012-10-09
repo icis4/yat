@@ -135,11 +135,18 @@ namespace MKY.Time
 		{
 			if (!this.isDisposed)
 			{
+				// In any case, dispose of the timer as it was created in the constructor:
+				if (this.timer != null)
+				{
+					this.timer.Dispose();
+					this.timer = null;
+				}
+
 				if (disposing)
 				{
-					if (this.timer != null)
-						this.timer.Dispose();
+					// Dispose of unmanaged resources.
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -151,7 +158,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
