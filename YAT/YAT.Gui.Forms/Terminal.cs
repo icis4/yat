@@ -1892,7 +1892,7 @@ namespace YAT.Gui.Forms
 				case 6:	presetString = "19200, 8, None, 1, XOn/XOff"; break;
 			}
 
-			MKY.IO.Serial.SerialCommunicationSettings settings = this.settingsRoot.Terminal.IO.SerialPort.Communication;
+			MKY.IO.Serial.SerialPort.SerialCommunicationSettings settings = this.settingsRoot.Terminal.IO.SerialPort.Communication;
 			settings.SuspendChangeEvent();
 			switch (preset)
 			{
@@ -1902,7 +1902,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.None;
+					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 					break;
 				}
 				case 2: // "2400, 7, Even, 1, XOn/XOff"
@@ -1911,7 +1911,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.Software;
+					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
 					break;
 				}
 				case 3: // "9600, 8, None, 1, None"
@@ -1920,7 +1920,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.None;
+					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 					break;
 				}
 				case 4: // "9600, 8, None, 1, XOn/XOff"
@@ -1929,7 +1929,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.Software;
+					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
 					break;
 				}
 				case 5: // "19200, 8, None, 1, None"
@@ -1938,7 +1938,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.None;
+					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 					break;
 				}
 				case 6: // "19200, 8, None, 1, XOn/XOff"
@@ -1947,7 +1947,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.Software;
+					settings.FlowControl = MKY.IO.Serial.SerialPort.SerialFlowControl.Software;
 					break;
 				}
 			}
@@ -2940,7 +2940,7 @@ namespace YAT.Gui.Forms
 						throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
 					}
 
-					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
+					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485);
 					if (rs485FlowControl)
 					{
 						if (pins.Rts)
@@ -2957,7 +2957,7 @@ namespace YAT.Gui.Forms
 					bool showXOnXOff = false;
 					bool outputIsXOn = false;
 					bool inputIsXOn = false;
-					MKY.IO.Serial.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+					MKY.IO.Serial.SerialPort.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler;
 					if (x != null)
 					{
 						showXOnXOff = x.XOnXOffIsInUse;

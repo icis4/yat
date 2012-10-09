@@ -35,7 +35,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Event;
-using MKY.IO.Serial;
+using MKY.IO.Serial.Socket;
 using MKY.Net;
 using MKY.Windows.Forms;
 
@@ -53,16 +53,16 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType DefaultHostType                     = SocketHostType.TcpAutoSocket;
+		private const SocketHostType DefaultHostType                      = SocketHostType.TcpAutoSocket;
 
-		private static readonly IPHost DefaultRemoteHost                 = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
-		private static readonly IPAddress DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
-		private const int DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
+		private static readonly IPHost DefaultRemoteHost                  = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
+		private static readonly IPAddress DefaultResolvedRemoteIPAddress  = MKY.IO.Serial.Socket.SocketSettings.DefaultResolvedRemoteIPAddress;
+		private const int DefaultRemotePort                               = MKY.IO.Serial.Socket.SocketSettings.DefaultRemotePort;
 
-		private static readonly IPNetworkInterface DefaultLocalInterface = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
-		private static readonly IPAddress DefaultResolvedLocalIPAddress  = MKY.IO.Serial.SocketSettings.DefaultResolvedLocalIPAddress;
-		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
-		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
+		private static readonly IPNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+		private static readonly IPAddress DefaultResolvedLocalIPAddress   = MKY.IO.Serial.Socket.SocketSettings.DefaultResolvedLocalIPAddress;
+		private const int DefaultLocalTcpPort                             = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
+		private const int DefaultLocalUdpPort                             = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
 
 		#endregion
 
@@ -75,7 +75,7 @@ namespace YAT.Gui.Controls
 
 		private SocketHostType hostType = DefaultHostType;
 
-		private IPHost remoteHost                = DefaultRemoteHost;
+		private IPHost remoteHost                 = DefaultRemoteHost;
 		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 		private int remotePort                    = DefaultRemotePort;
 

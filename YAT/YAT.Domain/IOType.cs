@@ -26,8 +26,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
-using MKY.IO.Serial;
-using MKY.IO.Serial.Socket;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -236,28 +234,28 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator SocketHostType(IOTypeEx type)
+		public static implicit operator MKY.IO.Serial.Socket.SocketHostType(IOTypeEx type)
 		{
 			switch ((IOType)type)
 			{
-				case IOType.TcpClient:     return (SocketHostType.TcpClient);
-				case IOType.TcpServer:     return (SocketHostType.TcpServer);
-				case IOType.TcpAutoSocket: return (SocketHostType.TcpAutoSocket);
-				case IOType.Udp:           return (SocketHostType.Udp);
-				default:                   return (SocketHostType.Unknown);
+				case IOType.TcpClient:     return (MKY.IO.Serial.Socket.SocketHostType.TcpClient);
+				case IOType.TcpServer:     return (MKY.IO.Serial.Socket.SocketHostType.TcpServer);
+				case IOType.TcpAutoSocket: return (MKY.IO.Serial.Socket.SocketHostType.TcpAutoSocket);
+				case IOType.Udp:           return (MKY.IO.Serial.Socket.SocketHostType.Udp);
+				default:                   return (MKY.IO.Serial.Socket.SocketHostType.Unknown);
 			}
 		}
 
 		/// <summary></summary>
-		public static implicit operator IOTypeEx(SocketHostType type)
+		public static implicit operator IOTypeEx(MKY.IO.Serial.Socket.SocketHostType type)
 		{
 			switch (type)
 			{
-				case SocketHostType.TcpClient:     return (IOType.TcpClient);
-				case SocketHostType.TcpServer:     return (IOType.TcpServer);
-				case SocketHostType.TcpAutoSocket: return (IOType.TcpAutoSocket);
-				case SocketHostType.Udp:           return (IOType.Udp);
-				default:                           return (IOType.Unknown);
+				case MKY.IO.Serial.Socket.SocketHostType.TcpClient:     return (IOType.TcpClient);
+				case MKY.IO.Serial.Socket.SocketHostType.TcpServer:     return (IOType.TcpServer);
+				case MKY.IO.Serial.Socket.SocketHostType.TcpAutoSocket: return (IOType.TcpAutoSocket);
+				case MKY.IO.Serial.Socket.SocketHostType.Udp:           return (IOType.Udp);
+				default:                                                return (IOType.Unknown);
 			}
 		}
 

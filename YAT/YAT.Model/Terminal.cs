@@ -473,7 +473,7 @@ namespace YAT.Model
 					{
 						case Domain.IOType.SerialPort:
 						{
-							MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
+							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 							sb.Append(" - ");
 							sb.Append(s.PortId.ToString(true, false));
 							sb.Append(" - ");
@@ -499,7 +499,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpClient:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
@@ -519,7 +519,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpServer:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 
 							sb.Append(" - ");
 							sb.Append("Server:");
@@ -536,13 +536,13 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpAutoSocket:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							if (IsStarted)
 							{
 								bool isClient = false;
 								bool isServer = false;
 
-								MKY.IO.Serial.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.TcpAutoSocket;
+								MKY.IO.Serial.Socket.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket;
 								if (socket != null)
 								{
 									isClient = socket.IsClient;
@@ -586,7 +586,7 @@ namespace YAT.Model
 
 						case Domain.IOType.Udp:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
@@ -601,7 +601,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Serial.UsbSerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.UsbSerialHidDevice;
+							MKY.IO.Serial.Usb.SerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice;
 							if (device != null)
 							{
 								sb.Append(" - ");
@@ -641,7 +641,7 @@ namespace YAT.Model
 					{
 						case Domain.IOType.SerialPort:
 						{
-							MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
+							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 							sb.Append("Serial port ");
 							sb.Append(s.PortId.ToString(true, false));
 							sb.Append(" (" + s.Communication + ") is ");
@@ -666,7 +666,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpClient:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP client is ");
 
 							if (IsConnected)
@@ -684,7 +684,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpServer:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP server is ");
 							if (IsStarted)
 							{
@@ -692,7 +692,7 @@ namespace YAT.Model
 								{
 									int count = 0;
 
-									MKY.IO.Serial.TcpServer server = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.TcpServer;
+									MKY.IO.Serial.Socket.TcpServer server = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpServer;
 									if (server != null)
 										count = server.ConnectedClientCount;
 
@@ -725,13 +725,13 @@ namespace YAT.Model
 						{
 							sb.Append("TCP auto socket is ");
 
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							if (IsStarted)
 							{
 								bool isClient = false;
 								bool isServer = false;
 
-								MKY.IO.Serial.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.TcpAutoSocket;
+								MKY.IO.Serial.Socket.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket;
 								if (socket != null)
 								{
 									isClient = socket.IsClient;
@@ -771,7 +771,7 @@ namespace YAT.Model
 
 						case Domain.IOType.Udp:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("UDP socket is ");
 							sb.Append(IsOpen ? "open" : "closed");
 							sb.Append(" for sending to ");
@@ -785,7 +785,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Serial.UsbSerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.UsbSerialHidDevice;
+							MKY.IO.Serial.Usb.SerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice;
 							if (device != null)
 							{
 								sb.Append("USB HID device '");
@@ -1682,7 +1682,7 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
 			{
-				MKY.IO.Serial.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+				MKY.IO.Serial.SerialPort.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler;
 				if (x != null)
 					x.ToggleInputXOnXOff();
 				else

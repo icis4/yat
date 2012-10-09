@@ -21,14 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 
 using MKY.Event;
-using MKY.IO.Serial;
 using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -42,7 +48,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType HostTypeDefault = SocketHostType.TcpAutoSocket;
+		private const MKY.IO.Serial.Socket.SocketHostType HostTypeDefault = MKY.IO.Serial.Socket.SocketHostType.TcpAutoSocket;
 
 		#endregion
 
@@ -53,8 +59,8 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private SocketHostType hostType = HostTypeDefault;
-		private AutoRetry tcpClientAutoReconnect = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
+		private MKY.IO.Serial.Socket.SocketHostType hostType = HostTypeDefault;
+		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 
 		#endregion
 
@@ -92,7 +98,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public SocketHostType HostType
+		public MKY.IO.Serial.Socket.SocketHostType HostType
 		{
 			set
 			{
@@ -107,7 +113,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("Sets TCP client auto reconnect.")]
-		public AutoRetry TcpClientAutoReconnect
+		public MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set
@@ -181,7 +187,7 @@ namespace YAT.Gui.Controls
 			if (!this.isSettingControls)
 			{
 				int interval;
-				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectMinimumInterval))
+				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval))
 				{
 					MKY.IO.Serial.AutoRetry ar = this.tcpClientAutoReconnect;
 					ar.Interval = interval;
@@ -192,7 +198,7 @@ namespace YAT.Gui.Controls
 					MessageBox.Show
 						(
 						this,
-						"Reconnect interval must be at least " + MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectMinimumInterval + " ms!",
+						"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -213,7 +219,7 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			bool enabledTcpClient = (Enabled && (this.hostType == SocketHostType.TcpClient));
+			bool enabledTcpClient = (Enabled && (this.hostType == MKY.IO.Serial.Socket.SocketHostType.TcpClient));
 
 			bool autoReconnectEnabled;
 			if (enabledTcpClient)

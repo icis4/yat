@@ -344,14 +344,14 @@ namespace YAT.Model.Test
 
 				Assert.AreEqual(5, (int)main.StartArgs.TerminalSettings.Settings.IO.SerialPort.PortId); // COM5
 
-				Assert.AreEqual(MKY.IO.Serial.SerialCommunicationSettings.BaudRateDefault,   main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate);
-				Assert.AreEqual(MKY.IO.Ports.DataBits.Seven,                                 main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
-				Assert.AreEqual(System.IO.Ports.Parity.Even,                                 main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.Parity);
-				Assert.AreEqual(MKY.IO.Serial.SerialCommunicationSettings.StopBitsDefault,   main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits);
-				Assert.AreEqual(MKY.IO.Serial.SerialFlowControl.Software,                     main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl);
+				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault,   main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate);
+				Assert.AreEqual(MKY.IO.Ports.DataBits.Seven,                                            main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
+				Assert.AreEqual(System.IO.Ports.Parity.Even,                                            main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.Parity);
+				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault,   main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits);
+				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialFlowControl.Software,                    main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl);
 
-				Assert.AreEqual(MKY.IO.Serial.SerialPortSettings.AutoReopenDefault.Enabled,  main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Enabled);
-				Assert.AreEqual(MKY.IO.Serial.SerialPortSettings.AutoReopenDefault.Interval, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Interval);
+				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Enabled,  main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Enabled);
+				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Interval, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Interval);
 
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsStarted);

@@ -26,7 +26,6 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Event;
-using MKY.IO.Serial;
 using MKY.Windows.Forms;
 
 namespace YAT.Gui.Controls
@@ -41,7 +40,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool AutoOpenDefault = MKY.IO.Serial.UsbSerialHidDeviceSettings.AutoOpenDefault;
+		private const bool AutoOpenDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
 		#endregion
 

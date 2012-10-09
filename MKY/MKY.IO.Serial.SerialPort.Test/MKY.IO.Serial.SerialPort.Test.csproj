@@ -91,6 +91,10 @@
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
+      <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
+      <Name>MKY.IO.Ports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.IO.Serial.SerialPort\MKY.IO.Serial.SerialPort.csproj">
       <Project>{57CDE954-53C3-48A1-AE20-A52A5F387855}</Project>
       <Name>MKY.IO.Serial.SerialPort</Name>
