@@ -97,6 +97,18 @@
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
+      <Project>{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}</Project>
+      <Name>ALAZ.SystemEx.NetEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
+      <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
+      <Name>ALAZ.SystemEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
+      <Name>NUnit %28NUnit\NUnit%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj">
       <Project>{A19A5215-89AB-49F7-BE7B-32A886A76F0C}</Project>
       <Name>MKY.IO.Serial.Socket</Name>

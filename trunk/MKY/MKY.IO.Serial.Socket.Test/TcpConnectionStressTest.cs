@@ -30,7 +30,7 @@ using System.Threading;
 using NUnit;
 using NUnit.Framework;
 
-using MKY.IO.Serial;
+using MKY.IO.Serial.Socket;
 
 namespace MKY.IO.Serial.Socket.Test
 {

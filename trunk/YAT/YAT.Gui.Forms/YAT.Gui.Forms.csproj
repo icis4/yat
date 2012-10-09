@@ -290,6 +290,18 @@
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.SerialPort\MKY.IO.Serial.SerialPort.csproj">
+      <Project>{57CDE954-53C3-48A1-AE20-A52A5F387855}</Project>
+      <Name>MKY.IO.Serial.SerialPort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj">
+      <Project>{A19A5215-89AB-49F7-BE7B-32A886A76F0C}</Project>
+      <Name>MKY.IO.Serial.Socket</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Usb\MKY.IO.Serial.Usb.csproj">
+      <Project>{925A9CE4-F45B-4665-ADA5-20C832AAA986}</Project>
+      <Name>MKY.IO.Serial.Usb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>

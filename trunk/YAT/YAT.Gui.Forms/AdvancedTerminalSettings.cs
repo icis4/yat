@@ -557,13 +557,13 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
 			this.settings_Form.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settings_Form.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
-			this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize    = MKY.IO.Serial.SerialPortSettings.MaxSendChunkSizeDefault;
+			this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize    = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendChunkSizeDefault;
 			this.settings_Form.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settings_Form.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
-			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
+			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 
 			// Receive:
-			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnInputBreakDefault;
+			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 
 			// User:
 			this.settings_Form.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;

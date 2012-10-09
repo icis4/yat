@@ -48,11 +48,11 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int                             BaudRateDefault    = (int)MKY.IO.Ports.BaudRate.Baud009600;
-		private const MKY.IO.Ports.DataBits           DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
-		private const System.IO.Ports.Parity          ParityDefault      = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits        StopBitsDefault    = System.IO.Ports.StopBits.One;
-		private const MKY.IO.Serial.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialFlowControl.None;
+		private const int                                        BaudRateDefault    = (int)MKY.IO.Ports.BaudRate.Baud009600;
+		private const MKY.IO.Ports.DataBits                      DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
+		private const System.IO.Ports.Parity                     ParityDefault      = System.IO.Ports.Parity.None;
+		private const System.IO.Ports.StopBits                   StopBitsDefault    = System.IO.Ports.StopBits.One;
+		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
 
 		#endregion
 
@@ -63,12 +63,12 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private int                             baudRate    = BaudRateDefault;
-		private MKY.IO.Ports.DataBits           dataBits    = DataBitsDefault;
-		private System.IO.Ports.Parity          parity      = ParityDefault;
-		private System.IO.Ports.StopBits        stopBits    = StopBitsDefault;
-		private MKY.IO.Serial.SerialFlowControl flowControl = FlowControlDefault;
-		private MKY.IO.Serial.AutoRetry         autoReopen  = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
+		private int                                        baudRate    = BaudRateDefault;
+		private MKY.IO.Ports.DataBits                      dataBits    = DataBitsDefault;
+		private System.IO.Ports.Parity                     parity      = ParityDefault;
+		private System.IO.Ports.StopBits                   stopBits    = StopBitsDefault;
+		private MKY.IO.Serial.SerialPort.SerialFlowControl flowControl = FlowControlDefault;
+		private MKY.IO.Serial.AutoRetry                    autoReopen  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -206,7 +206,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The flow control type.")]
 		[DefaultValue(FlowControlDefault)]
-		public virtual MKY.IO.Serial.SerialFlowControl FlowControl
+		public virtual MKY.IO.Serial.SerialPort.SerialFlowControl FlowControl
 		{
 			get { return (this.flowControl); }
 			set
@@ -337,7 +337,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				FlowControl = (MKY.IO.Serial.SerialFlowControlEx)comboBox_FlowControl.SelectedItem;
+				FlowControl = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
@@ -356,7 +356,7 @@ namespace YAT.Gui.Controls
 			if (!this.isSettingControls)
 			{
 				int interval;
-				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPortSettings.AutoReopenMinimumInterval))
+				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval))
 				{
 					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
 					ar.Interval = interval;
@@ -367,7 +367,7 @@ namespace YAT.Gui.Controls
 					MessageBox.Show
 						(
 						this,
-						"Reconnect interval must be at least " + MKY.IO.Serial.SerialPortSettings.AutoReopenMinimumInterval + " ms!",
+						"Reconnect interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -388,11 +388,11 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			comboBox_BaudRate.Items.AddRange(MKY.IO.Ports.BaudRateEx.GetItems());
-			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.DataBitsEx.GetItems());
-			comboBox_Parity.Items.AddRange(MKY.IO.Ports.ParityEx.GetItems());
-			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.StopBitsEx.GetItems());
-			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.SerialFlowControlEx.GetItems());
+			comboBox_BaudRate.Items.AddRange   (MKY.IO.Ports.BaudRateEx.GetItems());
+			comboBox_DataBits.Items.AddRange   (MKY.IO.Ports.DataBitsEx.GetItems());
+			comboBox_Parity.Items.AddRange     (MKY.IO.Ports.ParityEx.GetItems());
+			comboBox_StopBits.Items.AddRange   (MKY.IO.Ports.StopBitsEx.GetItems());
+			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.SerialPort.SerialFlowControlEx.GetItems());
 
 			this.isSettingControls.Leave();
 		}
@@ -414,7 +414,7 @@ namespace YAT.Gui.Controls
 				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.DataBitsEx)this.dataBits;
 				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.ParityEx)this.parity;
 				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.StopBitsEx)this.stopBits;
-				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.SerialFlowControlEx)this.flowControl;
+				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.SerialPort.SerialFlowControlEx)this.flowControl;
 			}
 			else
 			{

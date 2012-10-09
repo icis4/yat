@@ -538,8 +538,8 @@ namespace YAT.Model
 					}
 					if (this.commandLineArgs.OptionIsGiven("FlowControl"))
 					{
-						MKY.IO.Serial.SerialFlowControlEx flowControl;
-						if (MKY.IO.Serial.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
+						MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
+						if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
 							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl = flowControl;
 						else
 							return (false);
@@ -548,7 +548,7 @@ namespace YAT.Model
 					{
 						if (this.commandLineArgs.SerialPortAutoReopen == 0)
 							this.startArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
-						else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPortSettings.AutoReopenMinimumInterval)
+						else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval)
 							this.startArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
 						else
 							return (false);
@@ -600,7 +600,7 @@ namespace YAT.Model
 					{
 						if (this.commandLineArgs.TcpAutoReconnect == 0)
 							this.startArgs.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
-						else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectMinimumInterval)
+						else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval)
 							this.startArgs.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
 						else
 							return (false);
