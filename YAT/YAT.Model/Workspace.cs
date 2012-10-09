@@ -176,11 +176,15 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, the terminals have already been closed, otherwise...
+
 					if (this.terminals != null)
 					{
-						// First, detach event handlers to ensure that no more events are received
+						// ...first, detach event handlers to ensure that no more events are received...
 						foreach (Terminal t in this.terminals)
 							DetachTerminalEventHandlers(t);
 					}
@@ -189,7 +193,7 @@ namespace YAT.Model
 
 					if (this.terminals != null)
 					{
-						// Then, dispose of objects
+						// ...then, dispose of objects.
 						foreach (Terminal t in this.terminals)
 							t.Dispose();
 
@@ -197,6 +201,7 @@ namespace YAT.Model
 						this.terminals = null;
 					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -208,7 +213,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -776,6 +781,10 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Workspace not closed!");
 			}
+
+			// All done, all resources can get disposed.
+			Dispose();
+
 			return (success);
 		}
 

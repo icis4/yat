@@ -110,9 +110,9 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		private Queue<byte> dataSentQueue = new Queue<byte>(DataSentQueueInitialCapacity);
 
-		private Thread dataSentThread;
-		private AutoResetEvent dataSentThreadEvent;
 		private bool dataSentThreadSyncFlag;
+		private AutoResetEvent dataSentThreadEvent;
+		private Thread dataSentThread;
 
 		#endregion
 
@@ -171,10 +171,14 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSocketAndSocketConnectionsAndThreads();
 				}
+
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Disposed.");
@@ -188,7 +192,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -459,8 +463,8 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Just signal the thread, it will stop soon. Do not wait (i.e. Join()) them, this
-		/// method could have been called from a thread that also has to handle the receive
+		/// Just signal the thread, it will stop soon. Do not wait for it (i.e. Join()),
+		/// this method could have been called from a thread that also has to handle the receive
 		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
 		/// </remarks>
 		private void RequestStopDataSentThread()
@@ -563,8 +567,9 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			this.dataSentThread = null;
-			this.dataSentThreadEvent.Close();
-			this.dataSentThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has terminated.");
 		}

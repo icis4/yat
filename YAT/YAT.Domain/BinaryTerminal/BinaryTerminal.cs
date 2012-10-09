@@ -81,11 +81,14 @@ namespace YAT.Domain
 			{
 				if (!this.isDisposed)
 				{
+					// Finalize managed resources.
+
 					if (disposing)
 					{
-						if (this.timer != null)
-							this.timer.Dispose();
+						// In the 'normal' case, the timer is stopped in Stop().
+						StopAndDisposeTimer();
 					}
+
 					this.isDisposed = true;
 				}
 			}
@@ -97,7 +100,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			protected bool IsDisposed
+			public bool IsDisposed
 			{
 				get { return (this.isDisposed); }
 			}
@@ -115,8 +118,7 @@ namespace YAT.Domain
 			public virtual void Start()
 			{
 				AssertNotDisposed();
-
-				this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
+				CreateAndStartTimer();
 			}
 
 			/// <summary></summary>
@@ -133,11 +135,21 @@ namespace YAT.Domain
 			public virtual void Stop()
 			{
 				AssertNotDisposed();
+				StopAndDisposeTimer();
+			}
 
+			private void CreateAndStartTimer()
+			{
+				this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
+			}
+
+			private void StopAndDisposeTimer()
+			{
 				if (this.timer != null)
+				{
 					this.timer.Dispose();
-
-				this.timer = null;
+					this.timer = null;
+				}
 			}
 
 			private void timer_Timeout(object obj)
@@ -205,11 +217,18 @@ namespace YAT.Domain
 			{
 				if (!this.isDisposed)
 				{
+					// Finalize managed resources.
+
 					if (disposing)
 					{
+						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
 						if (this.LineBreakTimer != null)
+						{
 							this.LineBreakTimer.Dispose();
+							this.LineBreakTimer = null;
+						}
 					}
+
 					this.isDisposed = true;
 				}
 			}
@@ -221,7 +240,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			protected bool IsDisposed
+			public bool IsDisposed
 			{
 				get { return (this.isDisposed); }
 			}
@@ -332,14 +351,23 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
+			// In any case, dispose of the state objects as they were created in the constructor.
+			if (this.txLineState != null)
+			{
+				this.txLineState.Dispose();
+				this.txLineState = null;
+			}
+			if (this.rxLineState != null)
+			{
+				this.rxLineState.Dispose();
+				this.rxLineState = null;
+			}
+
 			if (disposing)
 			{
-				if (this.txLineState != null)
-					this.txLineState.Dispose();
-
-				if (this.rxLineState != null)
-					this.rxLineState.Dispose();
+				// Dispose of unmanaged resources.
 			}
+
 			base.Dispose(disposing);
 		}
 

@@ -210,10 +210,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
+			// Finalize managed resources.
+
 			if (disposing)
 			{
-				// Nothing to do (yet).
+				// Dispose of unmanaged resources.
 			}
+
 			base.Dispose(disposing);
 		}
 

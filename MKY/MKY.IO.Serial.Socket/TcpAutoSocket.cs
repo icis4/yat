@@ -228,10 +228,14 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, the items have already been disposed of.
 					DisposeSockets();
 				}
+
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
@@ -245,7 +249,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -520,9 +524,15 @@ namespace MKY.IO.Serial.Socket
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			if (this.client != null)
+			{
 				this.client.Stop();
+				this.client = null;
+			}
 			if (this.server != null)
+			{
 				this.server.Stop();
+				this.server = null;
+			}
 		}
 
 		private void DisposeSockets()

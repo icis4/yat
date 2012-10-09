@@ -603,7 +603,7 @@ namespace YAT.Gui.Forms
 			if (childIsReady)
 			{
 				Model.Terminal terminal = ((Gui.Forms.Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if (terminal != null)
+				if ((terminal != null) && (!terminal.IsDisposed))
 				{
 					radixIsReady = !(terminal.SettingsRoot.Display.SeparateTxRxRadix);
 					if (radixIsReady)

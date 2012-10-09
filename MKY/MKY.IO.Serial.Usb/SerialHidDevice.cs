@@ -74,9 +74,9 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
-		private Thread sendThread;
-		private AutoResetEvent sendThreadEvent;
 		private bool sendThreadSyncFlag;
+		private AutoResetEvent sendThreadEvent;
+		private Thread sendThread;
 
 		/// <summary>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
@@ -84,9 +84,9 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
-		private Thread receiveThread;
-		private AutoResetEvent receiveThreadEvent;
 		private bool receiveThreadSyncFlag;
+		private AutoResetEvent receiveThreadEvent;
+		private Thread receiveThread;
 
 		#endregion
 
@@ -142,10 +142,14 @@ namespace MKY.IO.Serial.Usb
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeDeviceAndThreads();
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -157,7 +161,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -346,23 +350,28 @@ namespace MKY.IO.Serial.Usb
 			{
 				this.sendThreadEvent.WaitOne();
 
-				byte[] data;
-				lock (this.sendQueue)
+				// Read items from queue until there are no more.
+				while (true)
 				{
-					if (this.sendQueue.Count <= 0)
-						continue;
+					byte[] data;
+					lock (this.sendQueue)
+					{
+						if (this.sendQueue.Count <= 0)
+							break; // Let other threads do their job and wait until signaled again.
 
-					data = this.sendQueue.ToArray();
-					this.sendQueue.Clear();
+						data = this.sendQueue.ToArray();
+						this.sendQueue.Clear();
+					}
+
+					this.device.Send(data);
+					OnDataSent(new DataSentEventArgs(data));
 				}
-
-				this.device.Send(data);
-				OnDataSent(new DataSentEventArgs(data));
 			}
 
 			this.sendThread = null;
-			this.sendThreadEvent.Close();
-			this.sendThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': SendThread() has terminated.");
 		}
@@ -400,6 +409,8 @@ namespace MKY.IO.Serial.Usb
 		{
 			if (this.device != null)
 				DisposeDeviceAndThreads();
+
+			StartThreads();
 
 			IO.Usb.DeviceInfo di = this.settings.DeviceInfo;
 			if (di != null)
@@ -447,6 +458,8 @@ namespace MKY.IO.Serial.Usb
 			{
 				try
 				{
+					RequestStopThreads();
+
 					lock (this.deviceSyncObj)
 					{
 						this.device.Dispose();
@@ -483,8 +496,8 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <remarks>
-		/// Just signal the threads, they will stop soon. Do not wait (i.e. Join()) them, this
-		/// method could have been called from a thread that also has to handle the receive
+		/// Just signal the threads, they will stop soon. Do not wait for them (i.e. Join()),
+		/// this method could have been called from a thread that also has to handle the receive
 		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
 		/// </remarks>
 		private void RequestStopThreads()
@@ -588,8 +601,9 @@ namespace MKY.IO.Serial.Usb
 			}
 
 			this.receiveThread = null;
-			this.receiveThreadEvent.Close();
-			this.receiveThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': ReceiveThread() has terminated.");
 		}

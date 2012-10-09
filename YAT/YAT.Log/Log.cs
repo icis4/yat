@@ -142,10 +142,14 @@ namespace YAT.Log
 			{
 				if (!this.isDisposed)
 				{
+					// Finalize managed resources.
+
 					if (disposing)
 					{
+						// In the 'normal' case, Close() has already been called.
 						Close();
 					}
+
 					this.isDisposed = true;
 				}
 			}
@@ -157,7 +161,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			protected bool IsDisposed
+			public bool IsDisposed
 			{
 				get { return (this.isDisposed); }
 			}
@@ -533,10 +537,14 @@ namespace YAT.Log
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, End() has already been called.
 					End();
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -548,7 +556,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}

@@ -128,10 +128,18 @@ Base class
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+				   - or -
+				// In any case, <CLOSE> the <ITEM> as it was created in the constructor:
+				// In any case, <CLOSE> the <ITEM>:
+
 				if (disposing)
 				{
 					// Dispose of unmanaged resources.
+					   - or -
+					// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -143,7 +151,7 @@ Base class
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -167,10 +175,17 @@ Inherited class
 
 		protected override void Dispose(bool disposing)
 		{
+			// Finalize managed resources.
+			   - or -
+			// In any case, <CLOSE> the <ITEM>:
+			
 			if (disposing)
 			{
 				// Dispose of unmanaged resources.
+				   - or -
+				// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
 			}
+
 			base.Dispose(disposing);
 		}
 

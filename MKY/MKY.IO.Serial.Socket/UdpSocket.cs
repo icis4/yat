@@ -113,9 +113,9 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
-		private Thread sendThread;
-		private AutoResetEvent sendThreadEvent;
 		private bool sendThreadSyncFlag;
+		private AutoResetEvent sendThreadEvent;
+		private Thread sendThread;
 
 		#endregion
 
@@ -175,10 +175,14 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
+				// Finalize managed resources.
+
 				if (disposing)
 				{
+					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSocketAndThreads();
 				}
+
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
@@ -192,7 +196,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -399,23 +403,28 @@ namespace MKY.IO.Serial.Socket
 			{
 				this.sendThreadEvent.WaitOne();
 
-				byte[] data;
-				lock (this.sendQueue)
+				// Read items from queue until there are no more.
+				while (true)
 				{
-					if (this.sendQueue.Count <= 0)
-						continue;
+					byte[] data;
+					lock (this.sendQueue)
+					{
+						if (this.sendQueue.Count <= 0)
+							break; // Let other threads do their job and wait until signaled again.
 
-					data = this.sendQueue.ToArray();
-					this.sendQueue.Clear();
+						data = this.sendQueue.ToArray();
+						this.sendQueue.Clear();
+					}
+
+					this.socket.Send(data, data.Length);
+					OnDataSent(new DataSentEventArgs(data));
 				}
-
-				this.socket.Send(data, data.Length);
-				OnDataSent(new DataSentEventArgs(data));
 			}
 
 			this.sendThread = null;
-			this.sendThreadEvent.Close();
-			this.sendThreadEvent = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
 
 			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has terminated.");
 		}
@@ -459,7 +468,7 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartSocket()
 		{
-			StartSendThread();
+			CreateAndStartSendThread();
 
 			SetStateSynchronizedAndNotify(SocketState.Opening);
 
@@ -473,7 +482,7 @@ namespace MKY.IO.Serial.Socket
 			BeginReceive();
 		}
 
-		private void StartSendThread()
+		private void CreateAndStartSendThread()
 		{
 			// Ensure that thread has stopped after the last stop request.
 			while (this.sendThread != null)

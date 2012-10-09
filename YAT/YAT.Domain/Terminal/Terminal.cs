@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -107,10 +108,16 @@ namespace YAT.Domain
 
 		private RawTerminal rawTerminal;
 
+		private Queue<SendItem> sendQueue = new Queue<SendItem>();
+
+		private bool sendThreadSyncFlag;
+		private AutoResetEvent sendThreadEvent;
+		private Thread sendThread;
+
+		private object repositorySyncObj = new object();
 		private DisplayRepository txRepository;
 		private DisplayRepository bidirRepository;
 		private DisplayRepository rxRepository;
-		private object repositorySyncObj = new object();
 
 		private bool eventsSuspendedForReload;
 
@@ -164,6 +171,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
+			CreateAndStartSendThread();
+
 			this.txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
 			this.bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
 			this.rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
@@ -177,6 +186,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
+			CreateAndStartSendThread();
+
 			this.txRepository    = new DisplayRepository(terminal.txRepository);
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
 			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
@@ -190,6 +201,36 @@ namespace YAT.Domain
 
 			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
 		}
+
+		#region Send Thread
+		//------------------------------------------------------------------------------------------
+		// Send Thread
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartSendThread()
+		{
+			// Ensure that thread has stopped after the last stop request.
+			while (this.sendThread != null)
+				Thread.Sleep(1);
+
+			this.sendThreadSyncFlag = true;
+			this.sendThreadEvent = new AutoResetEvent(false);
+			this.sendThread = new Thread(new ThreadStart(SendThread));
+			this.sendThread.Start();
+		}
+
+		/// <remarks>
+		/// Just signal the thread, it will stop soon. Do not wait for it (i.e. Join()),
+		/// this method could have been called from a thread that also has to handle the receive
+		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
+		/// </remarks>
+		private void RequestStopSendThread()
+		{
+			this.sendThreadSyncFlag = false;
+			this.sendThreadEvent.Set();
+		}
+
+		#endregion
 
 		#region Disposal
 		//------------------------------------------------------------------------------------------
@@ -208,11 +249,19 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
+				// In any case, stop the send thread as it was created in the constructor:
+				RequestStopSendThread();
+
 				if (disposing)
 				{
+					// In the 'normal' case, the terminal will already have been stopped in Stop().
 					if (this.rawTerminal != null)
+					{
 						this.rawTerminal.Dispose();
+						this.rawTerminal = null;
+					}
 				}
+
 				this.isDisposed = true;
 			}
 		}
@@ -224,7 +273,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected bool IsDisposed
+		public bool IsDisposed
 		{
 			get { return (this.isDisposed); }
 		}
@@ -367,7 +416,9 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			lock (this.sendQueue)
+			{
 				this.sendQueue.Clear();
+			}
 
 			this.rawTerminal.Stop();
 		}
@@ -397,11 +448,6 @@ namespace YAT.Domain
 			Send(new ParsableSendItem(data, true));
 		}
 
-		/// <summary>Async sending.</summary>
-		private Queue<SendItem> sendQueue = new Queue<SendItem>();
-		private object sendSyncObj = new object();
-		private delegate void SendDelegate();
-
 		/// <remarks>
 		/// This method shall not be overridden. All send items shall be enqueued using this
 		/// method, but inheriting terminals can override <see cref="ProcessSendItem"/> instead.
@@ -415,50 +461,54 @@ namespace YAT.Domain
 				this.sendQueue.Enqueue(item);
 			}
 
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two send threads could create a race condition.
-			if (Monitor.TryEnter(this.sendSyncObj))
-			{
-				try
-				{
-					SendDelegate asyncInvoker = new SendDelegate(SendAsync);
-					asyncInvoker.BeginInvoke(null, null);
-				}
-				finally
-				{
-					Monitor.Exit(this.sendSyncObj);
-				}
-			}
+			// Signal send thread:
+			this.sendThreadEvent.Set();
 		}
 
-		private void SendAsync()
+		/// <summary>
+		/// Asynchronously manage outgoing send requests to ensure that send events are not
+		/// invoked on the same thread that triggered the send operation.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of sent data would generate many events in
+		/// <see cref="Send(SendItem)"/>. However, since <see cref="OnDataSent"/> synchronously
+		/// invokes the event, it will take some time until the send queue is checked again.
+		/// During this time, no more new events are invoked, instead, outgoing data is buffered.
+		/// </summary>
+		/// <remarks>
+		/// Will be signaled by <see cref="Send(SendItem)"/> method above.
+		/// </remarks>
+		private void SendThread()
 		{
-			// Ensure that only one data send thread is active at a time.
-			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(this.sendSyncObj);
-			try
+			Debug.WriteLine(GetType() + " '" + ToIOString() + "': SendThread() has started.");
+
+			while (this.sendThreadSyncFlag)
 			{
+				this.sendThreadEvent.WaitOne();
+
+				// Read items from queue until there are no more.
 				while (true)
 				{
-					// Read items from queue until there are no more.
-					SendItem[] buffer;
+					SendItem[] pendingItems;
 					lock (this.sendQueue)
 					{
 						if (this.sendQueue.Count <= 0)
-							break;
+							break; // Let other threads do their job and wait until signaled again.
 
-						buffer = this.sendQueue.ToArray();
+						pendingItems = this.sendQueue.ToArray();
 						this.sendQueue.Clear();
 					}
 
-					foreach (SendItem si in buffer)
+					foreach (SendItem si in pendingItems)
 						ProcessSendItem(si);
 				}
 			}
-			finally
-			{
-				Monitor.Exit(this.sendSyncObj);
-			}
+
+			this.sendThread = null;
+
+			// Do not Close() and de-reference the corresponding event as it may be Set() again
+			// right now by another thread, e.g. during closing.
+
+			Debug.WriteLine(GetType() + " '" + ToIOString() + "': SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
