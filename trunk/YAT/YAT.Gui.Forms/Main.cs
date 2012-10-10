@@ -201,38 +201,70 @@ namespace YAT.Gui.Forms
 			if (this.mainResult != Model.MainResult.Success)
 			{
 				bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
+				bool keepOpenOnError  = this.main.StartArgs.KeepOpenOnError;
 
-				if (this.mainResult == Model.MainResult.CommandLineError)
+				switch (this.mainResult)
 				{
-					if (showErrorModally)
+					case Model.MainResult.CommandLineError:
 					{
-						MessageBox.Show
-							(
-							this,
-							@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
-							@"Use ""YAT.exe /?"" for command line help.",
-							@"Invalid Command Line",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
-							);
+						if (showErrorModally)
+						{
+							MessageBox.Show
+								(
+								this,
+								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
+								@"Use ""YAT.exe /?"" for command line help.",
+								@"Invalid Command Line",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								);
+						}
+						break;
+					}
+
+					case YAT.Model.MainResult.ApplicationStartError:
+					{
+						if (showErrorModally)
+						{
+							MessageBox.Show
+								(
+								this,
+								@"YAT could not successfully be started with the given settings in the current environment!",
+								@"Start Warning",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								);
+						}
+						break;
+					}
+
+					case YAT.Model.MainResult.ApplicationRunError:
+					{
+						if (showErrorModally)
+						{
+							MessageBox.Show
+								(
+								this,
+								@"YAT could not successfully execute the requested operation!",
+								@"Execution Warning",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								);
+						}
+						break;
+					}
+
+					// Do nothing in the following cases:
+					case YAT.Model.MainResult.ApplicationExitError:
+					case YAT.Model.MainResult.UnhandledException:
+					default:
+					{
+						break;
 					}
 				}
-				else // In case of NOT Model.MainResult.CommandLineError.
-				{
-					if (showErrorModally)
-					{
-						MessageBox.Show
-							(
-							this,
-							@"YAT could not be started!",
-							@"Application Start Error",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-							);
-					}
-				}
 
-				Close();
+				if (!keepOpenOnError)
+					Close();
 			}
 			else // In case of Model.MainResult.Success.
 			{
@@ -252,10 +284,10 @@ namespace YAT.Gui.Forms
 				}
 
 				// Automatically trigger transmit data if desired.
-				if (this.main.StartArgs.PerformActionOnRequestedTerminal)
+				if (this.main.StartArgs.PerformOperationOnRequestedTerminal)
 				{
-					SetFixedStatusText("Triggering start action(s)...");
-					timer_PerformStartAction.Start();
+					SetFixedStatusText("Triggering start operation...");
+					timer_PerformStartOperation.Start();
 				}
 			}
 		}
@@ -940,13 +972,13 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > PerformStartAction
+		#region Controls Event Handlers > PerformStartOperation
 		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > PerformStartAction
+		// Controls Event Handlers > PerformStartOperation
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private void timer_PerformStartAction_Tick(object sender, EventArgs e)
+		private void timer_PerformStartOperation_Tick(object sender, EventArgs e)
 		{
 			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;
 			if (this.workspace.GetTerminalByDynamicIndex(id) != null)
@@ -961,7 +993,7 @@ namespace YAT.Gui.Forms
 			}
 
 			// Preconditions fullfilled.
-			timer_PerformStartAction.Stop();
+			timer_PerformStartOperation.Stop();
 			SetTimedStatusText("Trigger received, preparing transmit");
 
 			// Automatically transmit data if desired.

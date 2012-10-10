@@ -978,8 +978,8 @@ namespace YAT.Gui.Controls
 			sb.Append(this.txLineCountStatus);
 			sb.Append(" @ ");
 			sb.Append(this.txByteRateStatus);
-			sb.Append("/s");
-			sb.Append(" | ");
+			sb.Append("/s");  // " B/s" is not really readable, compare 1024/s vs 1024 B/s,
+			sb.Append(" | "); //   and consider that the values may be flickering.
 			sb.Append(this.txLineRateStatus);
 			sb.Append("/s");
 		}

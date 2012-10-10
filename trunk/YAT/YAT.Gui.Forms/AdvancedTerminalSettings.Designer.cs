@@ -296,11 +296,11 @@
 			// label_MaxSendChunkSizeRemark
 			// 
 			this.label_MaxSendChunkSizeRemark.AutoSize = true;
-			this.label_MaxSendChunkSizeRemark.Location = new System.Drawing.Point(9, 103);
+			this.label_MaxSendChunkSizeRemark.Location = new System.Drawing.Point(9, 106);
 			this.label_MaxSendChunkSizeRemark.Name = "label_MaxSendChunkSizeRemark";
-			this.label_MaxSendChunkSizeRemark.Size = new System.Drawing.Size(189, 13);
+			this.label_MaxSendChunkSizeRemark.Size = new System.Drawing.Size(110, 13);
 			this.label_MaxSendChunkSizeRemark.TabIndex = 4;
-			this.label_MaxSendChunkSizeRemark.Text = "In case of serial ports with flow control,";
+			this.label_MaxSendChunkSizeRemark.Text = "In case of serial ports,";
 			// 
 			// textBox_MaxSendChunkSize
 			// 
@@ -394,7 +394,7 @@
 			// label_SendImmediately
 			// 
 			this.label_SendImmediately.AutoSize = true;
-			this.label_SendImmediately.Location = new System.Drawing.Point(28, 83);
+			this.label_SendImmediately.Location = new System.Drawing.Point(28, 82);
 			this.label_SendImmediately.Name = "label_SendImmediately";
 			this.label_SendImmediately.Size = new System.Drawing.Size(164, 13);
 			this.label_SendImmediately.TabIndex = 3;

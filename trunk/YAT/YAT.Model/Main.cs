@@ -659,15 +659,15 @@ namespace YAT.Model
 			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
 				this.startArgs.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
 
-			// Prio 10 = Perform actions:
+			// Prio 10 = Perform requested operation:
 			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 			{
 				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
-				this.startArgs.PerformActionOnRequestedTerminal = true;
+				this.startArgs.PerformOperationOnRequestedTerminal = true;
 			}
 
 			// Prio 11 = Set behavior:
-			if (this.startArgs.PerformActionOnRequestedTerminal)
+			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
 				this.startArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;

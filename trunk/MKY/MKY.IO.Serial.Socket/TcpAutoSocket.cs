@@ -722,22 +722,22 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.Connecting:
 				{
-					if (this.client.IsConnected)          // If IO changed during startup,
-					{                                 //   check for connected and change state
+					if (this.client.IsConnected)      // If IO changed during startup,
+					{                                 //   check for connected and change state.
 						SetStateSynchronizedAndNotify(SocketState.Connected);
 					}
 					break;
 				}
 				case SocketState.Connected:
 				{
-					if (this.client.IsConnected)          // If IO changed during client operation
+					if (this.client.IsConnected)      // If IO changed during client operation
 					{                                 //   and client is connected to a server,
-						OnIOChanged(e);               //   simply forward the event
+						OnIOChanged(e);               //   simply forward the event.
 					}
 					else
 					{
 						DisposeSockets();             // If client lost connection to server,
-						StartListening();             //   change to server operation
+						StartListening();             //   change to server operation.
 					}
 					break;
 				}
@@ -752,13 +752,13 @@ namespace MKY.IO.Serial.Socket
 				case SocketState.ConnectingFailed:
 				{
 					DisposeSockets();                 // In case of error during startup,
-					StartListening();                 //   try to start as server
+					StartListening();                 //   try to start as server.
 					break;
 				}
 				case SocketState.Connected:
 				{
 					DisposeSockets();                 // In case of error during client operation,
-					StartConnecting();                //   restart AutoSocket
+					StartConnecting();                //   restart AutoSocket.
 					break;
 				}
 			}
