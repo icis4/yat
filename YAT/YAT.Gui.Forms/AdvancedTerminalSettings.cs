@@ -449,7 +449,6 @@ namespace YAT.Gui.Forms
 		private void SetControls()
 		{
 			bool isSerialPort = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
-			bool flowControlIsActive = this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControlIsActive;
 
 			this.isSettingControls.Enter();
 
@@ -495,10 +494,10 @@ namespace YAT.Gui.Forms
 			checkBox_CopyPredefined.Checked  = this.settings_Form.Terminal.Send.CopyPredefined;
 			checkBox_SendImmediately.Checked = this.settings_Form.Terminal.Send.SendImmediately;
 
-			label_MaxSendChunkSizeRemark.Enabled = isSerialPort && flowControlIsActive;
-			label_MaxSendChunkSizeUnit.Enabled   = isSerialPort && flowControlIsActive;
-			label_MaxSendChunkSize.Enabled       = isSerialPort && flowControlIsActive;
-			textBox_MaxSendChunkSize.Enabled     = isSerialPort && flowControlIsActive;
+			label_MaxSendChunkSizeRemark.Enabled = isSerialPort;
+			label_MaxSendChunkSizeUnit.Enabled   = isSerialPort;
+			label_MaxSendChunkSize.Enabled       = isSerialPort;
+			textBox_MaxSendChunkSize.Enabled     = isSerialPort;
 			textBox_MaxSendChunkSize.Text        = this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize.ToString();
 
 			textBox_DefaultDelay.Text     = this.settings_Form.Terminal.Send.DefaultDelay.ToString();

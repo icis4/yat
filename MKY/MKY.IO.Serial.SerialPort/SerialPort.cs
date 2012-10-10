@@ -674,17 +674,18 @@ namespace MKY.IO.Serial.SerialPort
 							// 'WriteBufferSize' typically is 2048. However, devices on the other side may
 							// not be able to deal with that much data if flow control is active.
 							int chunkSize;
-							int availableSpace = this.port.WriteBufferSize - this.port.BytesToWrite;
-							if (this.settings.Communication.FlowControlIsInactive)
-							{
-								// Easy case, just stuff as much data as possible into output buffer:
-								chunkSize = availableSpace;
-							}
-							else
-							{
+							int availableSpace = (this.port.WriteBufferSize - this.port.BytesToWrite);
+						//	if (this.settings.Communication.FlowControlIsInactive)
+						//	{
+						//		// Easy case, just stuff as much data as possible into output buffer:
+						//		chunkSize = availableSpace;
+						//	}
+						//	else
+						//	{
 								// Harder case, limit the chunk size to the maximum chunk size setting:
 								chunkSize = Int32Ex.LimitToBounds(availableSpace, 0, this.settings.MaxSendChunkSize);
-							}
+						//	}
+						// Always use max chunk size, otherwise the DataSent event is very erratic.
 
 							List<byte> chunkList = new List<byte>(chunkSize);
 							lock (this.sendQueue)

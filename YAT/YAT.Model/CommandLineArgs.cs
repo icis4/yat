@@ -260,7 +260,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start YAT but neither show any dialog nor perform any action.")]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start YAT but neither show any dialog nor perform any operation.")]
 		public bool Empty;
 
 		/// <summary></summary>
@@ -424,7 +424,7 @@ namespace YAT.Model
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and show the 'New Terminal' dialog."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /e"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT but neither show any dialog nor perform any action."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT but neither show any dialog nor perform any operation."));
 			helpText.AppendLine();
 
 			helpText.Append(base.GetHelpText(maxWidth));

@@ -130,7 +130,7 @@ namespace YAT.Model.Test
 				Assert.IsNull(main.StartArgs.TerminalSettings);
 				Assert.IsTrue(main.StartArgs.ShowNewTerminalDialog);
 
-				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
@@ -356,7 +356,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsStarted);
 
-				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
@@ -398,7 +398,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
 				Assert.IsTrue(main.StartArgs.TerminalSettings.Settings.LogIsStarted);
 
-				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
@@ -438,7 +438,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsStarted);
 
-				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
@@ -473,7 +473,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(19200, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
-				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 
 				Assert.IsTrue (main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
@@ -504,7 +504,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual (MKY.IO.Ports.DataBits.Seven, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
-				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 
 				Assert.IsTrue (main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
@@ -534,7 +534,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
-				Assert.IsTrue(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsTrue(main.StartArgs.PerformOperationOnRequestedTerminal);
 
 				Assert.IsFalse(main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
@@ -565,7 +565,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
-				Assert.IsTrue (main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsTrue (main.StartArgs.PerformOperationOnRequestedTerminal);
 
 				Assert.IsFalse(main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);

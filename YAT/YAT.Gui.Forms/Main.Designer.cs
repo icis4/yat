@@ -123,7 +123,7 @@
 			this.timer_Chrono = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
-			this.timer_PerformStartAction = new System.Windows.Forms.Timer(this.components);
+			this.timer_PerformStartOperation = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
@@ -959,10 +959,10 @@
 			// 
 			this.chronometer_Main.TimeSpanChanged += new System.EventHandler<MKY.TimeSpanEventArgs>(this.chronometer_Main_TimeSpanChanged);
 			// 
-			// timer_PerformStartAction
+			// timer_PerformStartOperation
 			// 
-			this.timer_PerformStartAction.Interval = 1000;
-			this.timer_PerformStartAction.Tick += new System.EventHandler(this.timer_PerformStartAction_Tick);
+			this.timer_PerformStartOperation.Interval = 1000;
+			this.timer_PerformStartOperation.Tick += new System.EventHandler(this.timer_PerformStartOperation_Tick);
 			// 
 			// Main
 			// 
@@ -1091,7 +1091,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_4;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Char;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_String;
-		private System.Windows.Forms.Timer timer_PerformStartAction;
+		private System.Windows.Forms.Timer timer_PerformStartOperation;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_TerminalInfo;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Status;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowTerminalInfo;
