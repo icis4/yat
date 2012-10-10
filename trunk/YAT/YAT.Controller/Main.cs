@@ -362,9 +362,13 @@ namespace YAT.Controller
 
 				try
 				{
-					// ApplicationSettings are loaded while showing the welcome screen.
-					// They will be closed when exiting or disposing the main model.
-
+					// Application settings must be created and closed on main thread, otherwise
+					// there will be a synchronization exception on exit.
+					if (!ApplicationSettings.Create())
+						return (MainResult.ApplicationSettingsError);
+				
+					// ApplicationSettings are loaded while showing the welcome screen, and will
+					// be closed when exiting or disposing the main model.
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
@@ -461,9 +465,13 @@ namespace YAT.Controller
 
 				try
 				{
-					// ApplicationSettings are loaded while showing the welcome screen.
-					// They will be closed when exiting or disposing the main model.
+					// Application settings must be created and closed on main thread, otherwise
+					// there will be a synchronization exception on exit.
+					if (!ApplicationSettings.Create())
+						return (MainResult.ApplicationSettingsError);
 
+					// ApplicationSettings are loaded while showing the welcome screen, and will
+					// be closed when exiting or disposing the main model.
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);

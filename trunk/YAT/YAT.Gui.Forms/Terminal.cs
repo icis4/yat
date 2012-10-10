@@ -202,7 +202,7 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (TerminalIsReady)
+				if (TerminalIsAvailable)
 					return (this.terminal.AutoName);
 				else
 					return ("");
@@ -214,7 +214,7 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (TerminalIsReady)
+				if (TerminalIsAvailable)
 					return (this.terminal.IsStopped);
 				else
 					return (true);
@@ -226,7 +226,7 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (TerminalIsReady)
+				if (TerminalIsAvailable)
 					return (this.terminal.IsStarted);
 				else
 					return (false);
@@ -435,9 +435,16 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			// Start/stop
-			bool terminalIsStarted = this.terminal.IsStarted;
-			toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !terminalIsStarted;
-			toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  terminalIsStarted;
+			if (TerminalIsAvailable)
+			{
+				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
+				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
+			}
+			else
+			{
+				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = false;
+				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
+			}
 
 			// Edit
 			bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
@@ -2037,7 +2044,7 @@ namespace YAT.Gui.Forms
 		private void SetMonitorIOStatus()
 		{
 			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
-			if (TerminalIsReady)
+			if (TerminalIsAvailable)
 			{
 				if (this.terminal.IsStarted)
 				{
@@ -2592,7 +2599,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private bool TerminalIsReady
+		private bool TerminalIsAvailable
 		{
 			get { return ((this.terminal != null) && (!this.terminal.IsDisposed)); }
 		}
@@ -2617,52 +2624,64 @@ namespace YAT.Gui.Forms
 
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			monitor_Tx.ConnectTime         = this.terminal.ConnectTime;
-			monitor_Tx.TotalConnectTime    = this.terminal.TotalConnectTime;
+			// Ensure not to handle event during closing anymore.
+			if (!IsDisposed && TerminalIsAvailable)
+			{
+				monitor_Tx.ConnectTime         = this.terminal.ConnectTime;
+				monitor_Tx.TotalConnectTime    = this.terminal.TotalConnectTime;
 
-			monitor_Bidir.ConnectTime      = this.terminal.ConnectTime;
-			monitor_Bidir.TotalConnectTime = this.terminal.TotalConnectTime;
+				monitor_Bidir.ConnectTime      = this.terminal.ConnectTime;
+				monitor_Bidir.TotalConnectTime = this.terminal.TotalConnectTime;
 
-			monitor_Rx.ConnectTime         = this.terminal.ConnectTime;
-			monitor_Rx.TotalConnectTime    = this.terminal.TotalConnectTime;
+				monitor_Rx.ConnectTime         = this.terminal.ConnectTime;
+				monitor_Rx.TotalConnectTime    = this.terminal.TotalConnectTime;
+			}
 		}
 
 		private void terminal_IOCountChanged(object sender, EventArgs e)
 		{
-			int txByteCount = this.terminal.TxByteCount;
-			int rxByteCount = this.terminal.RxByteCount;
+			// Ensure not to handle event during closing anymore.
+			if (!IsDisposed && TerminalIsAvailable)
+			{
+				int txByteCount = this.terminal.TxByteCount;
+				int rxByteCount = this.terminal.RxByteCount;
 
-			int txLineCount = this.terminal.TxLineCount;
-			int rxLineCount = this.terminal.RxLineCount;
+				int txLineCount = this.terminal.TxLineCount;
+				int rxLineCount = this.terminal.RxLineCount;
 
-			monitor_Tx.TxByteCountStatus    = txByteCount;
-			monitor_Tx.TxLineCountStatus    = txLineCount;
-			monitor_Bidir.TxByteCountStatus = txByteCount;
-			monitor_Bidir.TxLineCountStatus = txLineCount;
+				monitor_Tx.TxByteCountStatus    = txByteCount;
+				monitor_Tx.TxLineCountStatus    = txLineCount;
+				monitor_Bidir.TxByteCountStatus = txByteCount;
+				monitor_Bidir.TxLineCountStatus = txLineCount;
 
-			monitor_Bidir.RxByteCountStatus = rxByteCount;
-			monitor_Bidir.RxLineCountStatus = rxLineCount;
-			monitor_Rx.RxByteCountStatus    = rxByteCount;
-			monitor_Rx.RxLineCountStatus    = rxLineCount;
+				monitor_Bidir.RxByteCountStatus = rxByteCount;
+				monitor_Bidir.RxLineCountStatus = rxLineCount;
+				monitor_Rx.RxByteCountStatus    = rxByteCount;
+				monitor_Rx.RxLineCountStatus    = rxLineCount;
+			}
 		}
 
 		private void terminal_IORateChanged(object sender, EventArgs e)
 		{
-			int txByteRate = this.terminal.TxByteRate;
-			int rxByteRate = this.terminal.RxByteRate;
+			// Ensure not to handle event during closing anymore.
+			if (!IsDisposed && TerminalIsAvailable)
+			{
+				int txByteRate = this.terminal.TxByteRate;
+				int rxByteRate = this.terminal.RxByteRate;
 
-			int txLineRate = this.terminal.TxLineRate;
-			int rxLineRate = this.terminal.RxLineRate;
+				int txLineRate = this.terminal.TxLineRate;
+				int rxLineRate = this.terminal.RxLineRate;
 
-			monitor_Tx.TxByteRateStatus    = txByteRate;
-			monitor_Tx.TxLineRateStatus    = txLineRate;
-			monitor_Bidir.TxByteRateStatus = txByteRate;
-			monitor_Bidir.TxLineRateStatus = txLineRate;
+				monitor_Tx.TxByteRateStatus    = txByteRate;
+				monitor_Tx.TxLineRateStatus    = txLineRate;
+				monitor_Bidir.TxByteRateStatus = txByteRate;
+				monitor_Bidir.TxLineRateStatus = txLineRate;
 
-			monitor_Bidir.RxByteRateStatus = rxByteRate;
-			monitor_Bidir.RxLineRateStatus = rxLineRate;
-			monitor_Rx.RxByteRateStatus    = rxByteRate;
-			monitor_Rx.RxLineRateStatus    = rxLineRate;
+				monitor_Bidir.RxByteRateStatus = rxByteRate;
+				monitor_Bidir.RxLineRateStatus = rxLineRate;
+				monitor_Rx.RxByteRateStatus    = rxByteRate;
+				monitor_Rx.RxLineRateStatus    = rxLineRate;
+			}
 		}
 
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
@@ -2893,21 +2912,28 @@ namespace YAT.Gui.Forms
 
 		private void SetTerminalCaption()
 		{
-			if (TerminalIsReady)
+			if (TerminalIsAvailable)
 				Text = this.terminal.Caption;
 		}
 
 		private void SetIOStatus()
 		{
-			if (TerminalIsReady)
-			{
-				Image on = Properties.Resources.Image_On_12x12;
-				Image off = Properties.Resources.Image_Off_12x12;
+			Image on  = Properties.Resources.Image_On_12x12;
+			Image off = Properties.Resources.Image_Off_12x12;
 
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = this.terminal.IsStarted;
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (this.terminal.IsReadyToSend ? on : off);
+			if (TerminalIsAvailable)
+			{
+				toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled =  this.terminal.IsStarted;
+				toolStripStatusLabel_TerminalStatus_ConnectionState.Image   = (this.terminal.IsReadyToSend ? on : off);
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
+			}
+			else
+			{
+				toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = false;
+				toolStripStatusLabel_TerminalStatus_ConnectionState.Image   = off;
+
+				toolStripStatusLabel_TerminalStatus_IOStatus.Text = "";
 			}
 		}
 

@@ -299,11 +299,15 @@ namespace YAT.Gui.Forms
 			{
 				this.closingState = ClosingState.IsClosingFromForm;
 
-				e.Cancel = (this.main.Exit() != Model.MainResult.Success);
+				bool cancel;
+				Model.MainResult result = this.main.Exit(out cancel);
+				if (cancel)
+				{
+					e.Cancel = true;
 
-				// Revert closing state in case of cancel.
-				if (!e.Cancel)
+					// Revert closing state.
 					this.closingState = ClosingState.None;
+				}
 			}
 		}
 

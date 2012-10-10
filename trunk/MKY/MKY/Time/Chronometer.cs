@@ -151,8 +151,13 @@ namespace MKY.Time
 				if (!this.timer.Enabled)
 					return (this.accumulatedTimeSpan);
 				else
-					return (this.accumulatedTimeSpan + (DateTime.Now - this.startTimeStamp));
+					return (CalculateTimeSpan(DateTime.Now));
 			}
+		}
+
+		protected virtual TimeSpan CalculateTimeSpan(DateTime now)
+		{
+			return (this.accumulatedTimeSpan + (now - this.startTimeStamp));
 		}
 
 		#endregion
@@ -236,21 +241,21 @@ namespace MKY.Time
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			// Ensure not to forward events during closing anymore.
-			if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
+			// Ensure that only one timer elapsed event thread is active at a time.
+			// Without this exclusivity, two timer threads could create a race condition.
+			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
 			{
-				// Ensure that only one timer elapsed event thread is active at a time.
-				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(timer_Elapsed_SyncObj))
+				try
 				{
-					try
+					// Ensure not to forward events during closing anymore.
+					if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
 					{
-						OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
+						OnTimeSpanChanged(new TimeSpanEventArgs(CalculateTimeSpan(e.SignalTime)));
 					}
-					finally
-					{
-						Monitor.Exit(timer_Elapsed_SyncObj);
-					}
+				}
+				finally
+				{
+					Monitor.Exit(timer_Elapsed_SyncObj);
 				}
 			}
 		}

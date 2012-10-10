@@ -831,31 +831,45 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual MainResult Exit()
 		{
-			bool success;
+			bool cancel;
+			return (Exit(out cancel));
+		}
 
+		/// <summary></summary>
+		public virtual MainResult Exit(out bool cancel)
+		{
+			bool success;
 			if (this.workspace != null)
 				success = this.workspace.Close(true);
 			else
 				success = true;
 
 			if (success)
+			{
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
+
+				// All done, all resources can get disposed.
+				Dispose();
+
+				// Close the static application settings.
+				success = ApplicationSettings.Close();
+
+				// Signal the exit.
+				OnExited(new EventArgs());
+
+				cancel = false;
+				if (success)
+					return (MainResult.Success);
+				else
+					return (MainResult.ApplicationExitError);
+			}
 			else
+			{
 				OnTimedStatusTextRequest("Exit cancelled.");
 
-			// All done, all resources can get disposed.
-			Dispose();
-
-			// Close the static application settings.
-			success = ApplicationSettings.Close();
-
-			// Signal the exit.
-			OnExited(new EventArgs());
-
-			if (success)
-				return (MainResult.Success);
-			else
+				cancel = true;
 				return (MainResult.ApplicationExitError);
+			}
 		}
 
 		#endregion

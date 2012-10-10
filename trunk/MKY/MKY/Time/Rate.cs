@@ -252,8 +252,13 @@ namespace MKY.Time
 
 		private void RemoveObsoleteFromQueue()
 		{
+			RemoveObsoleteFromQueue(DateTime.Now);
+		}
+
+		private void RemoveObsoleteFromQueue(DateTime now)
+		{
 			bool isWithinWindow = true;
-			DateTime otherEndOfWindow = DateTime.Now - TimeSpan.FromMilliseconds(this.window);
+			DateTime otherEndOfWindow = (now - TimeSpan.FromMilliseconds(this.window));
 
 			lock (this.queueSyncObj)
 			{
@@ -347,26 +352,26 @@ namespace MKY.Time
 		// Timer Event Handlers
 		//==========================================================================================
 
-		private object timerElapsedSyncObj = new object();
+		private object timer_Elapsed_SyncObj = new object();
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			// Ensure not to forward events during closing anymore.
-			if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
+			// Ensure that only one timer elapsed event thread is active at a time.
+			// Without this exclusivity, two timer threads could create a race condition.
+			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
 			{
-				// Ensure that only one timer elapsed event thread is active at a time.
-				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(timerElapsedSyncObj))
+				try
 				{
-					try
+					// Ensure not to forward events during closing anymore.
+					if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
 					{
-						RemoveObsoleteFromQueue();
+						RemoveObsoleteFromQueue(e.SignalTime);
 						CalculateValueFromQueueAndSignalIfChanged();
 					}
-					finally
-					{
-						Monitor.Exit(timerElapsedSyncObj);
-					}
+				}
+				finally
+				{
+					Monitor.Exit(timer_Elapsed_SyncObj);
 				}
 			}
 		}
