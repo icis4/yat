@@ -113,7 +113,7 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
-		private bool sendThreadSyncFlag;
+		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
 
@@ -399,12 +399,14 @@ namespace MKY.IO.Serial.Socket
 		{
 			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has started.");
 
-			while (this.sendThreadSyncFlag)
+			// Outer loop, requires another signal.
+			while (this.sendThreadRunFlag)
 			{
 				this.sendThreadEvent.WaitOne();
 
-				// Read items from queue until there are no more.
-				while (true)
+				// Inner loop, runs as long as there is data in the send queue.
+				// Ensure not to forward any events during closing anymore.
+				while (this.sendThreadRunFlag && IsReadyToSend)
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -418,6 +420,10 @@ namespace MKY.IO.Serial.Socket
 
 					this.socket.Send(data, data.Length);
 					OnDataSent(new DataSentEventArgs(data));
+
+					// Wait for the minimal time possible to allow other threads to execute and
+					// to prevent that 'DataSent' events are fired consecutively.
+					Thread.Sleep(TimeSpan.Zero);
 				}
 			}
 
@@ -488,7 +494,7 @@ namespace MKY.IO.Serial.Socket
 			while (this.sendThread != null)
 				Thread.Sleep(1);
 
-			this.sendThreadSyncFlag = true;
+			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
 			this.sendThread = new Thread(new ThreadStart(SendThread));
 			this.sendThread.Start();
@@ -503,7 +509,7 @@ namespace MKY.IO.Serial.Socket
 
 		private void DisposeSocketAndThreads()
 		{
-			this.sendThreadSyncFlag = false;
+			this.sendThreadRunFlag = false;
 			this.sendThreadEvent.Set();
 
 			this.socket.Close();

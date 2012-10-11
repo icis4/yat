@@ -1277,9 +1277,12 @@ namespace YAT.Model
 				}
 			} // End of if no success on auto save or auto save disabled.
 
-			// Next, close underlying terminal.
+			// Next, stop underlying terminal...
 			if (this.terminal.IsStarted)
 				success = StopIO(false);
+
+			// ...and signal that the terminal can definitely close.
+			this.terminal.Close();
 
 			// Then, close log.
 			if (this.log.IsStarted)

@@ -57,6 +57,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Ports.Test", "MKY\MK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial", "MKY\MKY.IO.Serial\MKY.IO.Serial.csproj", "{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.SerialPort", "MKY\MKY.IO.Serial.SerialPort\MKY.IO.Serial.SerialPort.csproj", "{57CDE954-53C3-48A1-AE20-A52A5F387855}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.SerialPort.Test", "MKY\MKY.IO.Serial.SerialPort.Test\MKY.IO.Serial.SerialPort.Test.csproj", "{48429C05-4BC7-431F-AE89-9F667640798B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Socket", "MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj", "{A19A5215-89AB-49F7-BE7B-32A886A76F0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Socket.Test", "MKY\MKY.IO.Serial.Socket.Test\MKY.IO.Serial.Socket.Test.csproj", "{D1F642B8-B8A2-44E5-8CDD-3C70F7EAED88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Usb", "MKY\MKY.IO.Serial.Usb\MKY.IO.Serial.Usb.csproj", "{925A9CE4-F45B-4665-ADA5-20C832AAA986}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Usb.Test", "MKY\MKY.IO.Serial.Usb.Test\MKY.IO.Serial.Usb.Test.csproj", "{840930E0-828A-484C-8600-760AB8AC6F33}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Usb", "MKY\MKY.IO.Usb\MKY.IO.Usb.csproj", "{1B657329-940D-4AA1-9768-431288B555E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Usb.Demo", "MKY\MKY.IO.Usb.Demo\MKY.IO.Usb.Demo.csproj", "{55647A42-640F-4D93-AFA3-72393D101DBA}"
@@ -145,18 +157,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YATConsole", "YAT\YATConsole\YATConsole.csproj", "{189787C4-AE83-4A89-BC74-8F34EF1DBE57}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup", "YAT\YAT.Setup\YAT.Setup.vdproj", "{F46DFE27-1F74-4558-AD39-E7EA74822483}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Usb", "MKY\MKY.IO.Serial.Usb\MKY.IO.Serial.Usb.csproj", "{925A9CE4-F45B-4665-ADA5-20C832AAA986}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Usb.Test", "MKY\MKY.IO.Serial.Usb.Test\MKY.IO.Serial.Usb.Test.csproj", "{840930E0-828A-484C-8600-760AB8AC6F33}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.SerialPort", "MKY\MKY.IO.Serial.SerialPort\MKY.IO.Serial.SerialPort.csproj", "{57CDE954-53C3-48A1-AE20-A52A5F387855}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.SerialPort.Test", "MKY\MKY.IO.Serial.SerialPort.Test\MKY.IO.Serial.SerialPort.Test.csproj", "{48429C05-4BC7-431F-AE89-9F667640798B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Socket", "MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj", "{A19A5215-89AB-49F7-BE7B-32A886A76F0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Socket.Test", "MKY\MKY.IO.Serial.Socket.Test\MKY.IO.Serial.Socket.Test.csproj", "{D1F642B8-B8A2-44E5-8CDD-3C70F7EAED88}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

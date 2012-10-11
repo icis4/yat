@@ -69,6 +69,8 @@ Important changes:
   split into separate assemblies to allow dedicated use of one of the new assemblies without
   unnecessary dependencies to the other parts (feature request #3388950)
 - Error message in case a serial port cannot be opened has been improved (bug #3565648)
+- The ALAZ socket library has been replaced by SuperSocket, due to some issues with ALAZ and the
+  fact that ALAZ is no longer maintained, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
 - Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323)
    > Implemented by use of a named mutex as suggested in the respective comments
    > Also fixes use of same setting file by concurrent YAT instances (bug #3540438)
