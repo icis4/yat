@@ -523,16 +523,12 @@ namespace MKY.IO.Serial.Socket
 			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
+
 			if (this.client != null)
-			{
 				this.client.Stop();
-				this.client = null;
-			}
+
 			if (this.server != null)
-			{
 				this.server.Stop();
-				this.server = null;
-			}
 		}
 
 		private void DisposeSockets()
@@ -577,9 +573,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			catch
 			{
-				this.client.Dispose();
-				this.client = null;
-
+				DestroyClient();
 				StartListening();
 			}
 		}
@@ -604,9 +598,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			catch
 			{
-				this.server.Dispose();
-				this.server = null;
-
+				DestroyServer();
 				RequestTryAgain();
 			}
 		}

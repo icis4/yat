@@ -1,0 +1,47 @@
+﻿
+MKY.IO.Serial.Socket
+====================
+
+This socket library implements the MKY.IO.Serial.IIOProvider interface for:
+ > TCP/IP Client
+ > TCP/IP Server
+ > TCP/IP AutoSocket
+ > UDP/IP Socket
+
+
+ALAZ
+----
+From 2007 until 2012, this library was based on ALAZ:
+ > An Asynchronous Socket Server and Client, by Andre Azevedo
+ > http://www.codeproject.com/Articles/14155/An-Asynchronous-Socket-Server-and-Client
+
+However, I found some issues which I fed back to Andre by email. But based on the fact that my
+feedback was not responded, and a response of Andre to an online question of mine on 2012-05-31,
+no update can be expected of ALAZ anymore. Therefore, on 2012-10-11, I have decided to exchange
+ALAZ by SuperSocket, as suggested by Andre himself.
+
+Other socket libraries have been looked at as well, but not proven good enough:
+ > dotnetasyncsocket,a "TCP/IP socket networking library for .NET"
+   > http://code.google.com/p/dotnetasyncsocket/
+   > Looks fairly handish, and not like an active project
+ > Extasys, an "Asynchronous TCP/UDP socket library"
+   > http://code.google.com/p/extasys/
+   > Looks more mature, but the API does not provide any events, well...
+ > SocketAsyncServerAndClient, "C# SocketAsyncEventArgs High Performance Socket Code"
+   > http://www.codeproject.com/Articles/83102/C-SocketAsyncEventArgs-High-Performance-Socket-Cod
+   > Looks quite mature and powerful, but architecture as well as implementation doesn't look
+     that convincing
+
+Until SuperSocket has proven stable and suitable for YAT, ALAZ will still be part of the YAT SVN
+respository.
+
+
+SuperSocket
+-----------
+Since 2012
+ > SuperSocket, an extensible socket application framework
+ > http://supersocket.codeplex.com/downloads/get/464265
+
+
+-----------------------
+2012-10 / Matthias Kläy

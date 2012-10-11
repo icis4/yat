@@ -110,7 +110,7 @@ namespace YAT.Domain
 
 		private Queue<SendItem> sendQueue = new Queue<SendItem>();
 
-		private bool sendThreadSyncFlag;
+		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
 
@@ -171,8 +171,6 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			CreateAndStartSendThread();
-
 			this.txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
 			this.bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
 			this.rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
@@ -181,13 +179,13 @@ namespace YAT.Domain
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.eventsSuspendedForReload = false;
+
+			CreateAndStartSendThread();
 		}
 
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
-			CreateAndStartSendThread();
-
 			this.txRepository    = new DisplayRepository(terminal.txRepository);
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
 			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
@@ -200,6 +198,8 @@ namespace YAT.Domain
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer, terminal.rawTerminal));
 
 			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
+
+			CreateAndStartSendThread();
 		}
 
 		#region Send Thread
@@ -213,21 +213,18 @@ namespace YAT.Domain
 			while (this.sendThread != null)
 				Thread.Sleep(1);
 
-			this.sendThreadSyncFlag = true;
+			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
 			this.sendThread = new Thread(new ThreadStart(SendThread));
 			this.sendThread.Start();
 		}
 
-		/// <remarks>
-		/// Just signal the thread, it will stop soon. Do not wait for it (i.e. Join()),
-		/// this method could have been called from a thread that also has to handle the receive
-		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
-		/// </remarks>
-		private void RequestStopSendThread()
+		private void StopSendThread()
 		{
-			this.sendThreadSyncFlag = false;
-			this.sendThreadEvent.Set();
+			this.sendThreadRunFlag = false;
+
+			while (this.sendThread != null)
+				this.sendThreadEvent.Set();
 		}
 
 		#endregion
@@ -249,8 +246,7 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
-				// In any case, stop the send thread as it was created in the constructor:
-				RequestStopSendThread();
+				// Finalize managed resources.
 
 				if (disposing)
 				{
@@ -260,6 +256,9 @@ namespace YAT.Domain
 						this.rawTerminal.Dispose();
 						this.rawTerminal = null;
 					}
+
+					// In the 'normal' case, the send thread will already have been stopped in Close().
+					StopSendThread();
 				}
 
 				this.isDisposed = true;
@@ -393,9 +392,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Start/Stop
+		#region Methods > Start/Stop/Close
 		//------------------------------------------------------------------------------------------
-		// Methods > Start/Stop
+		// Methods > Start/Stop/Close
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -421,6 +420,14 @@ namespace YAT.Domain
 			}
 
 			this.rawTerminal.Stop();
+		}
+
+		/// <summary></summary>
+		public virtual void Close()
+		{
+			AssertNotDisposed();
+
+			StopSendThread();
 		}
 
 		#endregion
@@ -481,12 +488,14 @@ namespace YAT.Domain
 		{
 			Debug.WriteLine(GetType() + " '" + ToIOString() + "': SendThread() has started.");
 
-			while (this.sendThreadSyncFlag)
+			// Outer loop, requires another signal.
+			while (this.sendThreadRunFlag)
 			{
 				this.sendThreadEvent.WaitOne();
 
-				// Read items from queue until there are no more.
-				while (true)
+				// Inner loop, runs as long as there is data in the send queue.
+				// Ensure not to forward any events during closing anymore.
+				while (this.sendThreadRunFlag && IsReadyToSend)
 				{
 					SendItem[] pendingItems;
 					lock (this.sendQueue)

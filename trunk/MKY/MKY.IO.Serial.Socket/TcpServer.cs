@@ -110,7 +110,7 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		private Queue<byte> dataSentQueue = new Queue<byte>(DataSentQueueInitialCapacity);
 
-		private bool dataSentThreadSyncFlag;
+		private bool dataSentThreadRunFlag;
 		private AutoResetEvent dataSentThreadEvent;
 		private Thread dataSentThread;
 
@@ -456,21 +456,18 @@ namespace MKY.IO.Serial.Socket
 			while (this.dataSentThread != null)
 				Thread.Sleep(1);
 
-			this.dataSentThreadSyncFlag = true;
+			this.dataSentThreadRunFlag = true;
 			this.dataSentThreadEvent = new AutoResetEvent(false);
 			this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
 			this.dataSentThread.Start();
 		}
 
-		/// <remarks>
-		/// Just signal the thread, it will stop soon. Do not wait for it (i.e. Join()),
-		/// this method could have been called from a thread that also has to handle the receive
-		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
-		/// </remarks>
-		private void RequestStopDataSentThread()
+		private void StopDataSentThread()
 		{
-			this.dataSentThreadSyncFlag = false;
-			this.dataSentThreadEvent.Set();
+			this.dataSentThreadRunFlag = false;
+
+			while (this.dataSentThread != null)
+				this.dataSentThreadEvent.Set();
 		}
 
 		#endregion
@@ -523,14 +520,18 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			lock (this.dataSentQueue)
+			// No clue why the 'Sent' event fires once before actual data is being sent...
+			if (e.Buffer != null)
 			{
-				foreach (byte b in e.Buffer)
-					this.dataSentQueue.Enqueue(b);
-			}
+				lock (this.dataSentQueue)
+				{
+					foreach (byte b in e.Buffer)
+						this.dataSentQueue.Enqueue(b);
+				}
 
-			// Signal receive thread:
-			this.dataSentThreadEvent.Set();
+				// Signal receive thread:
+				this.dataSentThreadEvent.Set();
+			}
 		}
 
 		/// <summary>
@@ -549,21 +550,34 @@ namespace MKY.IO.Serial.Socket
 		{
 			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has started.");
 
-			while (this.dataSentThreadSyncFlag)
+			// Outer loop, requires another signal.
+			while (this.dataSentThreadRunFlag)
 			{
 				this.dataSentThreadEvent.WaitOne();
 
-				byte[] data;
-				lock (this.dataSentQueue)
+				// Inner loop, runs as long as there is data to be handled. Must be done to
+				// ensure that events are fired even for data that was enqueued above while the
+				// 'OnDataReceived' event was being handled.
+				// 
+				// Ensure not to forward any events during closing anymore.
+				while (this.dataSentThreadRunFlag && IsOpen)
 				{
-					if (this.dataSentQueue.Count <= 0)
-						continue;
+					byte[] data;
+					lock (this.dataSentQueue)
+					{
+						if (this.dataSentQueue.Count <= 0)
+							break; // Let other threads do their job and wait until signaled again.
 
-					data = this.dataSentQueue.ToArray();
-					this.dataSentQueue.Clear();
+						data = this.dataSentQueue.ToArray();
+						this.dataSentQueue.Clear();
+					}
+
+					OnDataSent(new DataSentEventArgs(data));
+
+					// Wait for the minimal time possible to allow other threads to execute and
+					// to prevent that 'DataSent' events are fired consecutively.
+					Thread.Sleep(TimeSpan.Zero);
 				}
-
-				OnDataSent(new DataSentEventArgs(data));
 			}
 
 			this.dataSentThread = null;
@@ -612,7 +626,16 @@ namespace MKY.IO.Serial.Socket
 			DisposeSocketAndSocketConnectionsAndThreads();
 
 			SetStateSynchronizedAndNotify(SocketState.Error);
-			OnIOError(new IOErrorEventArgs(e.Exception.Message));
+
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("The socket of this TCP/IP Server has fired an exception!");
+			sb.AppendLine();
+			sb.AppendLine("Exception type:");
+			sb.AppendLine(e.Exception.GetType().Name);
+			sb.AppendLine();
+			sb.AppendLine("Exception error message:");
+			sb.AppendLine(e.Exception.Message);
+			OnIOError(new IOErrorEventArgs(sb.ToString()));
 		}
 
 		#endregion

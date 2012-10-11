@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
-		private bool sendThreadSyncFlag;
+		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
 
@@ -84,7 +84,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
-		private bool receiveThreadSyncFlag;
+		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
 
@@ -346,12 +346,14 @@ namespace MKY.IO.Serial.Usb
 		{
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': SendThread() has started.");
 
-			while (this.sendThreadSyncFlag)
+			// Outer loop, requires another signal.
+			while (this.sendThreadRunFlag)
 			{
 				this.sendThreadEvent.WaitOne();
 
-				// Read items from queue until there are no more.
-				while (true)
+				// Inner loop, runs as long as there is data in the send queue.
+				// Ensure not to forward any events during closing anymore.
+				while (this.sendThreadRunFlag && IsReadyToSend)
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -365,6 +367,10 @@ namespace MKY.IO.Serial.Usb
 
 					this.device.Send(data);
 					OnDataSent(new DataSentEventArgs(data));
+
+					// Wait for the minimal time possible to allow other threads to execute and
+					// to prevent that 'DataSent' events are fired consecutively.
+					Thread.Sleep(TimeSpan.Zero);
 				}
 			}
 
@@ -458,13 +464,14 @@ namespace MKY.IO.Serial.Usb
 			{
 				try
 				{
-					RequestStopThreads();
+					StopThreads();
 
 					lock (this.deviceSyncObj)
 					{
 						this.device.Dispose();
 						this.device = null;
 					}
+
 					OnIOChanged(new EventArgs());
 				}
 				catch { }
@@ -484,29 +491,29 @@ namespace MKY.IO.Serial.Usb
 			while ((this.receiveThread != null) && (this.sendThread != null))
 				Thread.Sleep(1);
 
-			this.sendThreadSyncFlag = true;
+			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
 			this.sendThread = new Thread(new ThreadStart(SendThread));
 			this.sendThread.Start();
 
-			this.receiveThreadSyncFlag = true;
+			this.receiveThreadRunFlag = true;
 			this.receiveThreadEvent = new AutoResetEvent(false);
 			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
 			this.receiveThread.Start();
 		}
 
-		/// <remarks>
-		/// Just signal the threads, they will stop soon. Do not wait for them (i.e. Join()),
-		/// this method could have been called from a thread that also has to handle the receive
-		/// events (e.g. the application main thread). Waiting here would lead to deadlocks.
-		/// </remarks>
-		private void RequestStopThreads()
+		private void StopThreads()
 		{
-			this.sendThreadSyncFlag = false;
-			this.sendThreadEvent.Set();
+			// First clear both flags to reduce the time to stop the receive thread, it may already
+			// be signaled while receiving data while the send thread is still running.
+			this.sendThreadRunFlag = false;
+			this.receiveThreadRunFlag = false;
 
-			this.receiveThreadSyncFlag = false;
-			this.receiveThreadEvent.Set();
+			while (this.sendThread != null)
+				this.sendThreadEvent.Set();
+
+			while (this.receiveThread != null)
+				this.receiveThreadEvent.Set();
 		}
 
 		#endregion
@@ -572,31 +579,33 @@ namespace MKY.IO.Serial.Usb
 		{
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': ReceiveThread() has started.");
 
-			while (this.receiveThreadSyncFlag)
+			// Outer loop, requires another signal.
+			while (this.receiveThreadRunFlag)
 			{
 				this.receiveThreadEvent.WaitOne();
 
-				// Fire events until there is no more data. Must be done to ensure that events
-				// are fired even for data that was enqueued above while the 'OnDataReceived'
-				// event was being handled. In addition, wait for the minimal time possible to
-				// allow other threads to execute and to prevent that 'OnDataReceived' events
-				// are fired consecutively.
-
+				// Inner loop, runs as long as there is data to be received. Must be done to
+				// ensure that events are fired even for data that was enqueued above while the
+				// 'OnDataReceived' event was being handled.
+				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.receiveThreadSyncFlag && IsOpen)
+				while (this.receiveThreadRunFlag && IsOpen)
 				{
 					byte[] data;
 					lock (this.receiveQueue)
 					{
 						if (this.receiveQueue.Count <= 0)
-							break;
+							break; // Let other threads do their job and wait until signaled again.
 
 						data = this.receiveQueue.ToArray();
 						this.receiveQueue.Clear();
 					}
 
 					OnDataReceived(new DataReceivedEventArgs(data));
-					Thread.Sleep(0);
+
+					// Wait for the minimal time possible to allow other threads to execute and
+					// to prevent that 'DataReceived' events are fired consecutively.
+					Thread.Sleep(TimeSpan.Zero);
 				}
 			}
 

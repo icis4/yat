@@ -653,10 +653,10 @@ namespace MKY.IO.Ports
 			{
 				try
 				{
-					// Flush() can throw System.Exception
+					// Flush() can throw System.Exception.
 					while (BytesToWrite > 0)
 					{
-						System.Threading.Thread.Sleep(0);
+						Thread.Sleep(TimeSpan.Zero);
 					}
 				}
 				catch (Exception ex)
