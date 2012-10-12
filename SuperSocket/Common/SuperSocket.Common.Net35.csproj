@@ -60,10 +60,6 @@
     <AssemblyOriginatorKeyFile>..\supersocket.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Reference\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -94,11 +90,9 @@
     <Compile Include="ConfigurationExtension.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="DictionaryExtension.cs" />
-    <Compile Include="DynamicLog4NetLogger.cs" />
     <Compile Include="GenericConfigurationElementCollection.cs" />
     <Compile Include="GlobalResourceManager.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="Log4NetLogger.cs" />
     <Compile Include="LoggerBase.cs" />
     <Compile Include="LogUtil.cs" />
     <Compile Include="Platform.cs" />

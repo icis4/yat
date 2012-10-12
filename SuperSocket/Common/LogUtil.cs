@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using log4net.Config;
+//using log4net.Config;
 
 namespace SuperSocket.Common
 {
     public class LogUtil
     {
-        private static ILogger m_logger;
+        private static ILogger m_logger = null;
 
+        /* In order to reduce dependecies and assemblies, 'log4net' removed 2012-10-12 by MKY.
         public static void Setup()
         {
             if(Path.DirectorySeparatorChar == '\\') // Windows
@@ -31,6 +32,7 @@ namespace SuperSocket.Common
         {
             m_logger = logger; 
         }
+        */
 
         public static ILogger GetRootLogger()
         {

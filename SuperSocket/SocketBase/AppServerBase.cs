@@ -206,15 +206,9 @@ namespace SuperSocket.SocketBase
             switch (RootConfig.LoggingMode)
             {
                 case (LoggingMode.IndependantFile):
-                    Logger = new DynamicLog4NetLogger(Config.Name);
-                    break;
-
                 case (LoggingMode.Console):
-                    Logger = new ConsoleLogger(Config.Name);
-                    break;
-
                 default:
-                    Logger = new Log4NetLogger(Config.Name);
+                    Logger = new ConsoleLogger(Config.Name);
                     break;
             }
         }
