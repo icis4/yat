@@ -10,7 +10,8 @@ improvementes of ALAZ can be expected in the future:
   a "project" with upgrades/new versions. Maybe I'll write some update using .NET 4.5 but, till
   there, you can check SuperSocket Library hosted on codeplex."
 After all, 6 releases (1.0 through 1.5) were published between May 2006 and September 2007. So in
-2007 this indeed looked like an active project. Well, yet another open-source-dead-end...
+2007 this indeed looked like an active project. And in 2009 version 2.0 was released. But then,
+well, yet another open-source-dead-end...
 
 
 Modifications to ALAZ
@@ -47,6 +48,14 @@ Minor modifications to the behaviour of the source code have led to the followin
    > BaseSocketConnectionHost.StopConnections() has been modified to be non-blocking
 
 Modifications to all files are also stored as unified diffs.
+
+
+Non-Modifications
+-----------------
+I also found some potential issues which don't have any impact on YAT, so no modifications were
+done in these cases:
+ > There are 10 occurrences of "Encoding.GetEncoding(1252)"
+    i.e. some code is fixed to Windows code page 1252
 
 
 -----------------------
