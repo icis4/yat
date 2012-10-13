@@ -477,9 +477,10 @@ namespace YAT.Domain
 		/// invoked on the same thread that triggered the send operation.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of sent data would generate many events in
-		/// <see cref="Send(SendItem)"/>. However, since <see cref="OnDataSent"/> synchronously
-		/// invokes the event, it will take some time until the send queue is checked again.
-		/// During this time, no more new events are invoked, instead, outgoing data is buffered.
+		/// <see cref="Send(SendItem)"/>. However, since <see cref="OnDisplayElementProcessed"/>
+		/// synchronously invokes the event, it will take some time until the send queue is checked
+		/// again. During this time, no more new events are invoked, instead, outgoing data is
+		/// buffered.
 		/// </summary>
 		/// <remarks>
 		/// Will be signaled by <see cref="Send(SendItem)"/> method above.
