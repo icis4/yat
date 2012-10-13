@@ -87,7 +87,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\ALAZ.Version.cs">
+    <Compile Include="..\ALAZ.Version.cs">
       <Link>Properties\ALAZ.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
