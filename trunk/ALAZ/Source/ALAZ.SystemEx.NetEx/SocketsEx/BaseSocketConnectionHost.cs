@@ -1577,8 +1577,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             {
 
                 switch (connection.EventProcessing)
-                {
-                    
+	            {
+		            
                     case EventProcessing.epNone:
 
                         if (InitializeConnectionProxy(connection))
@@ -1623,7 +1623,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                         break;
     
-                }
+	            }
 
             }
 
@@ -1824,15 +1824,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             {
 
                 connection.Active = false;
-
-                // ----- \remind BEGIN -----
-
-                // 2009-08-22 / Matthias Klaey
-                // Commented-out because of ObjectDisposedException when stopping.
-
-                //connection.Socket.Shutdown(SocketShutdown.Send);
-
-                // ----- \remind  END  -----
+                connection.Socket.Shutdown(SocketShutdown.Send);
 
                 lock (connection.WriteQueue)
                 {
