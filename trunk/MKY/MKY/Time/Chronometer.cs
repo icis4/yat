@@ -155,6 +155,7 @@ namespace MKY.Time
 			}
 		}
 
+		/// <summary></summary>
 		protected virtual TimeSpan CalculateTimeSpan(DateTime now)
 		{
 			return (this.accumulatedTimeSpan + (now - this.startTimeStamp));
