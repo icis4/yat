@@ -1,5 +1,4 @@
-
-@@ -306,20 +306,7 @@
+@@ -306,21 +306,7 @@
  
                      if (creators.Length > 0)
                      {
@@ -14,14 +13,15 @@
 -                        }
 -                        catch (NullReferenceException ex)
 -                        {
--                            MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+-                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
 -                        }
+-
 -                        // ----- \remind  END  -----
 +                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
                      }
  
                  }
-@@ -352,22 +339,11 @@
+@@ -353,22 +339,11 @@
                          ThreadEx.LoopSleep(ref loopSleep);
                      }
  
@@ -48,41 +48,27 @@
                  }
  
              }
-@@ -1576,8 +1552,8 @@
-             {
+@@ -1747,21 +1722,11 @@
+                   finally
+                   {
  
-                 switch (connection.EventProcessing)
--                {
--                    
-+	            {
-+		            
-                     case EventProcessing.epNone:
- 
-                         if (InitializeConnectionProxy(connection))
-@@ -1622,7 +1598,7 @@
- 
-                         break;
-     
--                }
-+	            }
- 
-             }
- 
-@@ -1813,16 +1789,8 @@
-             {
- 
-                 connection.Active = false;
-+                connection.Socket.Shutdown(SocketShutdown.Send);
- 
--                // ----- \remind BEGIN -----
+-                      // ----- \remind BEGIN -----
 -
--                // 2009-08-22 / Matthias Klaey
--                // Commented-out because of ObjectDisposedException when stopping.
+-                      // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
+-                      // Added if != null due to NullReferenceExecption.
 -
--                //connection.Socket.Shutdown(SocketShutdown.Send);
--
--                // ----- \remind  END  -----
--
-                 lock (connection.WriteQueue)
-                 {
+-                      if (FSocketConnections != null)
++                      if (FSocketConnections.Count <= 0)
+                       {
+-                          if (FSocketConnections.Count <= 0)
+-                          {
+-                              FWaitConnectionsDisposing.Set();
+-                          }
++                          FWaitConnectionsDisposing.Set();
+                       }
  
+-                      // ----- \remind  END  -----
+-
+                       FSocketConnectionsSync.ExitWriteLock();
+ 
+                   }
