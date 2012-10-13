@@ -184,10 +184,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 // at System.Net.Sockets.SocketAsyncEventArgs.StartConfiguring()
                 // at System.Net.Sockets.SocketAsyncEventArgs.SetBufferInternal(Byte[] buffer, Int32 offset, Int32 count)
                 // at System.Net.Sockets.SocketAsyncEventArgs.SetBuffer(Byte[] buffer, Int32 offset, Int32 count)
-                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Free(Boolean canAccessFinalizable) in C:\_Matthias\Sandboxes\YAT\Trunk\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnection.cs:line 178
-                // at ALAZ.SystemEx.BaseDisposable.Dispose() in C:\_Matthias\Sandboxes\YAT\Trunk\ALAZ\Source\ALAZ.SystemEx\BaseDisposable.cs:line 108
-                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.DisposeConnection(BaseSocketConnection connection) in C:\_Matthias\Sandboxes\YAT\Trunk\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs:line 1797
-                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(Object sender, SocketAsyncEventArgs e) in C:\_Matthias\Sandboxes\YAT\Trunk\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs:line 1509
+                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Free(Boolean canAccessFinalizable) in <ROOT>\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnection.cs:line 178
+                // at ALAZ.SystemEx.BaseDisposable.Dispose() in <ROOT>\ALAZ\Source\ALAZ.SystemEx\BaseDisposable.cs:line 108
+                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.DisposeConnection(BaseSocketConnection connection) in <ROOT>\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs:line 1797
+                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(Object sender, SocketAsyncEventArgs e) in <ROOT>\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs:line 1509
                 // at System.Net.Sockets.SocketAsyncEventArgs.OnCompleted(SocketAsyncEventArgs e)
                 // at System.Net.Sockets.SocketAsyncEventArgs.ExecutionCallback(Object ignored)
                 // at System.Threading.ExecutionContext.runTryCode(Object userData)
