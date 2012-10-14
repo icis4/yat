@@ -226,22 +226,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 e2.UserToken = listener;
                 e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
-                // ----- \remind BEGIN -----
-                // 2010-05-14 / Matthias Klaey
-                // Handling exceptions.
-
-                try
+                if (!listener.Socket.AcceptAsync(e2))
                 {
-                    if (!listener.Socket.AcceptAsync(e2))
-                    {
-                        BeginAcceptCallbackAsync(this, e2);
-                    }
+                    BeginAcceptCallbackAsync(this, e2);
                 }
-                catch (ObjectDisposedException ex)
-                {
-                    MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
-                }
-                // ----- \remind  END  -----
 
             }
 
