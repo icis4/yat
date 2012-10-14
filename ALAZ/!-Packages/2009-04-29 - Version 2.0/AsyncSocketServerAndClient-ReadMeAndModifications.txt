@@ -71,6 +71,9 @@ Some details about the modifications or work-arounds which impact YAT:
  > 'ALAZ.SystemEx.NetEx.SocketsEx.SocketClient/Server.Dispose()' doesn't seem to properly stop the
     socket, i.e. Stop() must be called prior to Dispose() to ensure that stopping is properly done.
 
+ > 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnSent()' now takes an additional
+    argument 'buffer' to forward the raw data buffer to the event handler.
+
 
 Issues but no modifications
 ---------------------------

@@ -1,10 +1,11 @@
-@@ -306,7 +306,21 @@
+--- C:/Users/Matthias/AppData/Local/Temp/BaseSocketConnectionHost.cs-revBASE.svn003.tmp.cs	So Okt 14 13:18:15 2012
++++ D:/Sandboxes/YAT/Trunk/ALAZ/Source/ALAZ.SystemEx.NetEx/SocketsEx/BaseSocketConnectionHost.cs	So Okt 14 16:48:26 2012
+@@ -306,7 +306,20 @@
  
                      if (creators.Length > 0)
                      {
 -                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
 +                        // ----- \remind BEGIN -----
-+
 +                        // 2010-05-14 / Matthias Klaey
 +                        // Handling exceptions.
 +
@@ -21,40 +22,89 @@
                      }
  
                  }
-@@ -339,11 +353,22 @@
-                         ThreadEx.LoopSleep(ref loopSleep);
+@@ -404,7 +417,11 @@
+ 
+         #region FireOnSent
+ 
+-        private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
++        // ----- \remind BEGIN -----
++        // 2012-10-13 / Matthias Klaey
++        // Added buffer which is now forwarded to FSocketService.OnSent().
++
++        private void FireOnSent(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
+         {
+ 
+             if (!Disposed)
+@@ -421,7 +438,7 @@
+ 
+                             case EventProcessing.epUser:
+ 
+-                                FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
++                                FSocketService.OnSent(new MessageEventArgs(connection, buffer, sentByServer));
+                                 break;
+ 
+                             case EventProcessing.epEncrypt:
+@@ -448,6 +465,8 @@
+ 
+         }
+ 
++        // ----- \remind  END  -----
++
+         #endregion
+ 
+         #region FireOnReceived
+@@ -718,9 +737,15 @@
+                         connection.Stream.EndWrite(ar);
+                         connection.SetConnectionData(0, connection.WriteOV.Count);
+ 
++                        // ----- \remind BEGIN -----
++                        // 2012-10-14 / Matthias Klaey
++                        // Clone buffer to forwared it to FireOnSent().
++
++                        byte[] buffer = (byte[])connection.WriteOV.Buffer.Clone();
++
+                         FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
+ 
+-                        FireOnSent(connection, sentByServer);
++                        FireOnSent(connection, buffer, sentByServer);
+ 
+                         if (connection.Active)
+                         {
+@@ -748,6 +773,8 @@
+ 
+                         }
+ 
++                        // ----- \remind  END  -----
++
                      }
  
--                    if (connections.Length > 0)
--                    {
--                        FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
--                    }
-+                    // ----- \remind BEGIN -----
- 
-+                    // 2007-03-22 / Matthias Klaey
-+                    // Why wait on thread here? Start() is non-blocking!
-+                    // If Stop() is called from a GUI thread and the GUI is attached to
-+                    //   the Disconnected event, a dead-lock happens:
-+                    //   - The GUI thread is blocked here
-+                    //   - FireOnDisconnected is blocked when trying to synchronize
-+                    //     Invoke() onto the GUI thread
-+
-+                    //if (connections.Length > 0)
-+                    //{
-+                    //    FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-+                    //}
-+
-+                    // ----- \remind  END  -----
                  }
+@@ -832,12 +859,18 @@
+                             }
+                             else
+                             {
++                                // ----- \remind BEGIN -----
++                                // 2012-10-14 / Matthias Klaey
++                                // Clone buffer to forwared it to FireOnSent().
  
-             }
-@@ -1722,11 +1747,21 @@
++                                byte[] buffer = (byte[])e.Buffer.Clone();
++
+                                 FBufferManager.ReturnBuffer(e.Buffer);
+                                 e.SetBuffer(null, 0, 0);
+ 
+-                                FireOnSent(connection, sentByServer);
++                                FireOnSent(connection, buffer, sentByServer);
+ 
++                                // ----- \remind  END  -----
+                             }
+ 
+                         }
+@@ -1722,11 +1755,20 @@
                    finally
                    {
  
 -                      if (FSocketConnections.Count <= 0)
 +                      // ----- \remind BEGIN -----
-+
 +                      // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
 +                      // Added if != null due to NullReferenceExecption.
 +
