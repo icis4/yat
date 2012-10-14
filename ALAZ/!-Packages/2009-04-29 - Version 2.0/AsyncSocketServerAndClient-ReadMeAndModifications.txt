@@ -34,7 +34,7 @@ Modifications to the project settings have led to the following file diffs:
  "\ALAZ\Source\ALAZ.SystemEx\Properties\AssemblyInfo.cs" modified
  "\ALAZ\Source\ALAZ.SystemEx\RuntTimeEx" renamed to RunTimeEx
  "\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj" modified
- "\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZLibSN.snk" moved to "\Properties"
+ "\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZLibSN.snk" added to "\Properties"
  "\ALAZ\Source\ALAZ.SystemEx.NetEx\Properties\AssemblyInfo.cs" modified
 
 Additional exception handling in source code have led to the following file diffs:
