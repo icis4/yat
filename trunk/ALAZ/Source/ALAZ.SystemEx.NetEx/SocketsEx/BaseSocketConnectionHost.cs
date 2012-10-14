@@ -306,7 +306,20 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                     if (creators.Length > 0)
                     {
-                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+                        // ----- \remind BEGIN -----
+                        // 2010-05-14 / Matthias Klaey
+                        // Handling exceptions.
+
+                        try
+                        {
+                            FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+                        }
+                        catch (NullReferenceException ex)
+                        {
+                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                        }
+
+                        // ----- \remind  END  -----
                     }
 
                 }
@@ -404,7 +417,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #region FireOnSent
 
-        private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
+        // ----- \remind BEGIN -----
+        // 2012-10-13 / Matthias Klaey
+        // Added buffer which is now forwarded to FSocketService.OnSent().
+
+        private void FireOnSent(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
         {
 
             if (!Disposed)
@@ -421,7 +438,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                             case EventProcessing.epUser:
 
-                                FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
+                                FSocketService.OnSent(new MessageEventArgs(connection, buffer, sentByServer));
                                 break;
 
                             case EventProcessing.epEncrypt:
@@ -447,6 +464,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             }
 
         }
+
+        // ----- \remind  END  -----
 
         #endregion
 
@@ -718,9 +737,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         connection.Stream.EndWrite(ar);
                         connection.SetConnectionData(0, connection.WriteOV.Count);
 
+                        // ----- \remind BEGIN -----
+                        // 2012-10-14 / Matthias Klaey
+                        // Clone buffer to forwared it to FireOnSent().
+
+                        byte[] buffer = (byte[])connection.WriteOV.Buffer.Clone();
+
                         FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
 
-                        FireOnSent(connection, sentByServer);
+                        FireOnSent(connection, buffer, sentByServer);
 
                         if (connection.Active)
                         {
@@ -747,6 +772,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                             }
 
                         }
+
+                        // ----- \remind  END  -----
 
                     }
 
@@ -832,12 +859,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                             }
                             else
                             {
+                                // ----- \remind BEGIN -----
+                                // 2012-10-14 / Matthias Klaey
+                                // Clone buffer to forwared it to FireOnSent().
+
+                                byte[] buffer = (byte[])e.Buffer.Clone();
 
                                 FBufferManager.ReturnBuffer(e.Buffer);
                                 e.SetBuffer(null, 0, 0);
 
-                                FireOnSent(connection, sentByServer);
+                                FireOnSent(connection, buffer, sentByServer);
 
+                                // ----- \remind  END  -----
                             }
 
                         }
@@ -1722,10 +1755,19 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   finally
                   {
 
-                      if (FSocketConnections.Count <= 0)
+                      // ----- \remind BEGIN -----
+                      // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
+                      // Added if != null due to NullReferenceExecption.
+
+                      if (FSocketConnections != null)
                       {
-                          FWaitConnectionsDisposing.Set();
+                          if (FSocketConnections.Count <= 0)
+                          {
+                              FWaitConnectionsDisposing.Set();
+                          }
                       }
+
+                      // ----- \remind  END  -----
 
                       FSocketConnectionsSync.ExitWriteLock();
 
