@@ -1743,30 +1743,39 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               // ----- \remind BEGIN -----
               // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
               // Added if != null due to NullReferenceExecption to finally{}.
+              // 
               // 2012-10-15 / Matthias Klaey
-              // Moved check up here as (FSocketConnections != null)
+              // Moved check up here as (FSocketConnections != null) and added catch (NullReferenceException)
+              // to prevent exceptions during disposing.
 
-              if ((socketConnection != null) && (FSocketConnections != null))
+              if ((socketConnection != null) && (FSocketConnections != null) && (FSocketConnectionsSync != null))
               {
-
 
                   FSocketConnectionsSync.EnterWriteLock();
 
                   try
                   {
-
                       FSocketConnections.Remove(socketConnection.ConnectionId);
-
+                  }
+                  catch (NullReferenceException ex)
+                  {
+                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
                   }
                   finally
                   {
-
-                      if (FSocketConnections.Count <= 0)
+                      try
                       {
-                          FWaitConnectionsDisposing.Set();
-                      }
+                          if (FSocketConnections.Count <= 0)
+                          {
+                              FWaitConnectionsDisposing.Set();
+                          }
 
-                      FSocketConnectionsSync.ExitWriteLock();
+                          FSocketConnectionsSync.ExitWriteLock();
+                      }
+                      catch (NullReferenceException ex)
+                      {
+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                      }
 
                   }
 
