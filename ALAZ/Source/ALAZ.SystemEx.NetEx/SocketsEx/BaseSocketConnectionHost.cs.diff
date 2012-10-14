@@ -1,5 +1,3 @@
---- C:/Users/Matthias/AppData/Local/Temp/BaseSocketConnectionHost.cs-revBASE.svn003.tmp.cs	So Okt 14 13:18:15 2012
-+++ D:/Sandboxes/YAT/Trunk/ALAZ/Source/ALAZ.SystemEx.NetEx/SocketsEx/BaseSocketConnectionHost.cs	So Okt 14 16:48:26 2012
 @@ -306,7 +306,20 @@
  
                      if (creators.Length > 0)
@@ -99,26 +97,30 @@
                              }
  
                          }
-@@ -1722,11 +1755,20 @@
-                   finally
-                   {
+@@ -1707,7 +1740,13 @@
+           if (!Disposed)
+           {
  
--                      if (FSocketConnections.Count <= 0)
-+                      // ----- \remind BEGIN -----
-+                      // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
-+                      // Added if != null due to NullReferenceExecption.
+-              if (socketConnection != null)
++              // ----- \remind BEGIN -----
++              // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
++              // Added if != null due to NullReferenceExecption to finally{}.
++              // 2012-10-15 / Matthias Klaey
++              // Moved check up here as (FSocketConnections != null)
 +
-+                      if (FSocketConnections != null)
-                       {
--                          FWaitConnectionsDisposing.Set();
-+                          if (FSocketConnections.Count <= 0)
-+                          {
-+                              FWaitConnectionsDisposing.Set();
-+                          }
-                       }
++              if ((socketConnection != null) && (FSocketConnections != null))
+               {
  
-+                      // ----- \remind  END  -----
+ 
+@@ -1733,8 +1772,10 @@
+ 
+               }
+ 
+-        }
++              // ----- \remind  END  -----
+ 
++          }
 +
-                       FSocketConnectionsSync.ExitWriteLock();
+         }
  
-                   }
+         #endregion
