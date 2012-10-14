@@ -102,7 +102,7 @@ namespace MKY.IO.Serial.Socket
 		private int localPort;
 
 		private SocketState state = SocketState.Closed;
-		private object stateSyncObj = new object();
+		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
 		private System.Net.IPEndPoint endPoint;
 		private System.Net.Sockets.UdpClient socket;
@@ -446,8 +446,9 @@ namespace MKY.IO.Serial.Socket
 		{
 			SocketState state;
 
-			lock (this.stateSyncObj)
-				state = this.state;
+			this.stateLock.EnterReadLock();
+			state = this.state;
+			this.stateLock.ExitReadLock();
 
 			return (state);
 		}
@@ -457,8 +458,9 @@ namespace MKY.IO.Serial.Socket
 #if (DEBUG)
 			SocketState oldState = this.state;
 #endif
-			lock (this.stateSyncObj)
-				this.state = state;
+			this.stateLock.EnterWriteLock();
+			this.state = state;
+			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif
