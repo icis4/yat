@@ -64,7 +64,7 @@ namespace YAT.Gui.Controls
 			Environment.NewLine +
 			"TCP/IP AutoSocket automatically determines whether to run as client or server. On start, it tries to" + Environment.NewLine +
 			"   connect to a remote server and run as client. If this fails, it tries to run as server. Retry cycles and" + Environment.NewLine +
-			"   random wait times always ensure proper operation." + Environment.NewLine +
+			"   random wait times ensure proper operation even when two AutoSockets are interconnected to each other." + Environment.NewLine +
 			Environment.NewLine +
 			Environment.NewLine +
 			"TCP/IP and UDP/IP:" + Environment.NewLine +

@@ -41,7 +41,31 @@ using MKY.Event;
 
 namespace MKY.IO.Serial.Socket
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// In case of YAT with the original ALAZ implementation, a TCP client created a deadlock on
+	/// shutdown. The situation:
+	/// 
+	/// 1. <see cref="Stop()"/> is called from a GUI/main thread
+	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks
+	/// 3. The 'OnDisconnected' event is fired
+	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main
+	///    thread and a dead-lock happens
+	/// 
+	/// Further down the calling chain, 'BaseSocketConnection.Active.get()' was also blocking.
+	/// 
+	/// These two issues could be solved by modifying 'BaseSocketConnection.Active.get()' to be
+	/// non-blocking, by calling Stop() asynchronously and by suppressing the 'OnDisconnected' and
+	/// 'OnException' events while stopping.
+	/// 
+	/// These two issues were also reported back to Andre Luis Azevedo. But unfortunately he doesn't
+	/// reply and ALAZ seems to have come to a deadend. An alternative to ALAZ might need to be
+	/// found in the future.
+	/// 
+	/// Note that the very same issue existed in <see cref="TcpServer"/>.
+	/// 
+	/// Also note that a very simliar issue existed when stopping two <see cref="TcpAutoSocket"/>
+	/// that were interconnected with each other. See remarks of this class for details.
+	/// </remarks>
 	public class TcpClient : IIOProvider, IDisposable, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService
 	{
 		#region Types
@@ -100,13 +124,19 @@ namespace MKY.IO.Serial.Socket
 		private SocketState state = SocketState.Reset;
 		private object stateSyncObj = new object();
 
+		/// <remarks>
+		/// Required to deal with the issues described in the remarks in the header of this class.
+		/// </remarks>
+		private bool eventHandlingIsSuppressedWhileStopping;
+		private object eventHandlingIsSuppressedWhileStoppingSyncObj = new object();
+
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
 
-		/// <summary>
+		/// <remarks>
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
-		/// </summary>
+		/// </remarks>
 		private Queue<byte> dataSentQueue = new Queue<byte>(DataSentQueueInitialCapacity);
 
 		private bool dataSentThreadRunFlag;
@@ -190,7 +220,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. OnDisconnected().
 					StopAndDisposeReconnectTimer();
-					DisposeSocketAndSocketConnectionAndThreads();
+					SuppressEventsAndThenStopAndDisposeSocket();
 				}
 
 				this.isDisposed = true;
@@ -328,6 +358,21 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		private bool EventHandlingIsSuppressedWhileStoppingSynchronized
+		{
+			get
+			{
+				lock (this.eventHandlingIsSuppressedWhileStoppingSyncObj)
+					return (this.eventHandlingIsSuppressedWhileStopping);
+			}
+
+			set
+			{
+				lock (this.eventHandlingIsSuppressedWhileStoppingSyncObj)
+					this.eventHandlingIsSuppressedWhileStopping = value;
+			}
+		}
+
 		/// <summary></summary>
 		public virtual object UnderlyingIOInstance
 		{
@@ -371,7 +416,9 @@ namespace MKY.IO.Serial.Socket
 			if (IsStarted)
 			{
 				StopAndDisposeReconnectTimer();
-				StopSocket();
+
+				// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+				StopAndDisposeSocketWithoutSuppressingEvents();
 			}
 			else
 			{
@@ -430,7 +477,11 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartSocket()
 		{
+			EventHandlingIsSuppressedWhileStoppingSynchronized = false;
+
 			SetStateSynchronizedAndNotify(SocketState.Connecting);
+
+			StartDataSentThread();
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
 				(
@@ -448,32 +499,48 @@ namespace MKY.IO.Serial.Socket
 			this.socket.Start(); // The ALAZ socket will be started asynchronously
 		}
 
-		private void StopSocket()
+		/// <remarks>
+		/// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+		/// 
+		/// \attention:
+		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
+		/// See remarks of the header of this class for details.
+		/// </remarks>
+		private void StopAndDisposeSocketWithoutSuppressingEvents()
 		{
 			if (this.state == SocketState.Connected)
 			{
 				SetStateSynchronizedAndNotify(SocketState.Disconnecting);
 
-				// \remind:
-				// The ALAZ sockets by default stop synchronously. However, due to some other issues
-				// the ALAZ sockets had to be modified. The modified version stops asynchronously.
-				// Thus, care has to be taken here and in the 'OnException' event. That event will
-				// fire at least once after this method has been called.
-				this.socket.Stop();
+				VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionAndThreadWithoutFiringEvents);
+				asyncInvoker.BeginInvoke(null, null);
 			}
 			else
 			{
 				// Nothing to do.
 			}
+		}
 
-			SetStateSynchronizedAndNotify(SocketState.Reset);
+		/// <remarks>
+		/// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+		/// 
+		/// \attention:
+		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
+		/// See remarks of the header of this class for details.
+		/// </remarks>
+		private void SuppressEventsAndThenStopAndDisposeSocket()
+		{
+			EventHandlingIsSuppressedWhileStoppingSynchronized = true;
+
+			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionAndThreadWithoutFiringEvents);
+			asyncInvoker.BeginInvoke(null, null);
 		}
 
 		/// <summary>
-		/// try-catch needed because ALAZ doesn't seem to properly shut-down in certain cases.
+		/// try/catch needed because ALAZ doesn't seem to properly shut-down in certain cases.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private void DisposeSocketAndSocketConnectionAndThreads()
+		private void StopAndDisposeSocketAndConnectionAndThreadWithoutFiringEvents()
 		{
 			if (this.socket != null)
 			{
@@ -496,8 +563,11 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				this.socket = null;
-				this.socketConnection = null;
 			}
+
+			this.socketConnection = null;
+
+			StopDataSentThread();
 		}
 
 		#endregion
@@ -652,31 +722,34 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			// Dispose ALAZ socket in any case. A new socket will be created if needed.
-			DisposeSocketAndSocketConnectionAndThreads();
-
-			// \attention:
-			// Ensure that exceptions are only handled if socket is still active. This is important
-			// especially in case of Stop() because stopping will be done asynchronously and an
-			// 'OnDisconnected' event will be fired after stopping has finished. Then, this event
-			// handler must not signal any state anymore, nor does it need to try to reconnect.
-			// 
-			// \attention:
-			// The same code is needed in 'OnException' below. Changes here may also have to be
-			// applied there.
-			if (!IsDisposed && IsStarted)
+			if (!EventHandlingIsSuppressedWhileStoppingSynchronized)
 			{
-				// Signal that socket got disconnected to ensure that auto reconnect is allowed.
-				SetStateSynchronizedAndNotify(SocketState.Disconnected);
+				// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+				SuppressEventsAndThenStopAndDisposeSocket();
 
-				if (AutoReconnectEnabledAndAllowed)
+				// \attention:
+				// Ensure that exceptions are only handled if socket is still active. This is important
+				// especially in case of Stop() because stopping will be done asynchronously and an
+				// 'OnDisconnected' event will be fired after stopping has finished. Then, this event
+				// handler must not signal any state anymore, nor does it need to try to reconnect.
+				// 
+				// \attention:
+				// The same code is needed in 'OnException' below. Changes here may also have to be
+				// applied there.
+				if (!IsDisposed && IsStarted)
 				{
-					SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
-					StartReconnectTimer();
-				}
-				else
-				{
-					SetStateSynchronizedAndNotify(SocketState.Reset);
+					// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+					SetStateSynchronizedAndNotify(SocketState.Disconnected);
+
+					if (AutoReconnectEnabledAndAllowed)
+					{
+						SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
+						StartReconnectTimer();
+					}
+					else
+					{
+						SetStateSynchronizedAndNotify(SocketState.Reset);
+					}
 				}
 			}
 		}
@@ -693,46 +766,50 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			// Dispose ALAZ socket in any case. A new socket will be created if needed.
-			DisposeSocketAndSocketConnectionAndThreads();
-
-			// \attention:
-			// Ensure that exceptions are only handled if socket is still active. This is important
-			// especially in case of Stop() because stopping will be done asynchronously and an
-			// 'OnException' event will be fired after stopping has finished. Then, this event
-			// handler must not signal any state anymore, nor does it need to try to reconnect.
-			// 
-			// \attention:
-			// The same code is needed in 'OnDisconnected' above. Changes here may also have to be
-			// applied there.
-			if (!IsDisposed && IsStarted)
+			if (!EventHandlingIsSuppressedWhileStoppingSynchronized)
 			{
-				// Signal that socket got disconnected to ensure that auto reconnect is allowed.
-				SetStateSynchronizedAndNotify(SocketState.Disconnected);
+				// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+				SuppressEventsAndThenStopAndDisposeSocket();
 
-				if (AutoReconnectEnabledAndAllowed)
+				// \attention:
+				// Ensure that exceptions are only handled if socket is still active. This is important
+				// especially in case of Stop() because stopping will be done asynchronously and an
+				// 'OnException' event will be fired after stopping has finished. Then, this event
+				// handler must not signal any state anymore, nor does it need to try to reconnect.
+				// 
+				// \attention:
+				// The same code is needed in 'OnDisconnected' above. Changes here may also have to be
+				// applied there.
+				if (!IsDisposed && IsStarted)
 				{
-					SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
-					StartReconnectTimer();
-				}
-				else
-				{
-					SetStateSynchronizedAndNotify(SocketState.Error);
-					if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
+					// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+					SetStateSynchronizedAndNotify(SocketState.Disconnected);
+
+					if (AutoReconnectEnabledAndAllowed)
 					{
-						OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));
+						SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
+						StartReconnectTimer();
 					}
 					else
 					{
-						StringBuilder sb = new StringBuilder();
-						sb.AppendLine("The socket of this TCP/IP Client has fired an exception!");
-						sb.AppendLine();
-						sb.AppendLine("Exception type:");
-						sb.AppendLine(e.Exception.GetType().Name);
-						sb.AppendLine();
-						sb.AppendLine("Exception error message:");
-						sb.AppendLine(e.Exception.Message);
-						OnIOError(new IOErrorEventArgs(sb.ToString()));
+						SetStateSynchronizedAndNotify(SocketState.Error);
+
+						if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
+						{
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));
+						}
+						else
+						{
+							StringBuilder sb = new StringBuilder();
+							sb.AppendLine("The socket of this TCP/IP Client has fired an exception!");
+							sb.AppendLine();
+							sb.AppendLine("Exception type:");
+							sb.AppendLine(e.Exception.GetType().Name);
+							sb.AppendLine();
+							sb.AppendLine("Exception error message:");
+							sb.AppendLine(e.Exception.Message);
+							OnIOError(new IOErrorEventArgs(sb.ToString()));
+						}
 					}
 				}
 			}

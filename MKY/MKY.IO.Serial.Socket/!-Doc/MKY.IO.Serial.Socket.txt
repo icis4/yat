@@ -23,27 +23,10 @@ improvementes of ALAZ can be expected in the future:
   a "project" with upgrades/new versions. Maybe I'll write some update using .NET 4.5 but, till
   there, you can check SuperSocket Library hosted on codeplex."
 After all, 6 releases (1.0 through 1.5) were published between May 2006 and September 2007. So in
-2007 this indeed looked like an active project. Well, yet another open-source-dead-end...
+2007 this indeed looked like an active project. And in 2009 version 2.0 was released. But then,
+well, yet another open-source-dead-end...
 
-
-Modifications to ALAZ
----------------------
-Three kinds of modifications have been made:
- > Project settings
- > Additional exception handling in source code
- > Minor modifications of the behaviour of the source code
-
-Modifications to all files are also stored as SVN unified diff.
-
-Modifications to the project settings have led to 
-
-Source/ALAZ.SystemEx.NetEx/ALAZ.SystemEx.NetEx.csproj
-Source/ALAZ.SystemEx.NetEx/Properties/AssemblyInfo.cs
-Source/ALAZ.SystemEx.NetEx/SocketsEx/BaseSocketConnection.cs
-Source/ALAZ.SystemEx.NetEx/SocketsEx/BaseSocketConnectionHost.cs
-Source/ALAZ.SystemEx.NetEx/SocketsEx/SocketListener.cs
-Source/ALAZ.SystemEx/ALAZ.SystemEx.csproj
-Source/ALAZ.SystemEx/Properties/AssemblyInfo.cs
+See "\ALAZ\!-Packages\2009-04-29 - Version 2.0" for more details.
 
 
 Alternatives to ALAZ

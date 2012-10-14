@@ -212,6 +212,15 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int ReceiveQueueInitialCapacity = 4096;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -222,16 +231,17 @@ namespace MKY.IO.Usb
 
 		private bool autoOpen;
 
-		/// <summary>
-		/// It just a single stream object, but it contains the basically independent input and
+		/// <remarks>
+		/// It's just a single stream object, but it contains the basically independent input and
 		/// output streams.
-		/// </summary>
+		/// </remarks>
 		private FileStream stream;
 
-		/// <summary>
-		/// Queue for async receiving.
-		/// </summary>
-		private Queue<byte> receiveQueue = new Queue<byte>();
+		/// <remarks>
+		/// Async receiving. The capacity is set large enough to reduce the number of resizing
+		/// operations while adding elements.
+		/// </remarks>
+		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;

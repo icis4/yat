@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-TestSettings", "!-TestSet
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ALAZ", "ALAZ", "{1AFE4E73-E215-4331-9E03-F33F61E3F442}"
 	ProjectSection(SolutionItems) = preProject
-		ALAZ\ALAZ.Version.cs = ALAZ\ALAZ.Version.cs
+		ALAZ\Source\ALAZ.Version.cs = ALAZ\Source\ALAZ.Version.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj", "{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}"

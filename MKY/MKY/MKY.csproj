@@ -99,6 +99,7 @@
     <Compile Include="Configuration\Selector.cs" />
     <Compile Include="Configuration\SelectionSection.cs" />
     <Compile Include="Contracts\CallingContract.cs" />
+    <Compile Include="DelegateEx.cs" />
     <Compile Include="Data\EventArgs.cs" />
     <Compile Include="Data\DataItem.cs" />
     <Compile Include="IDisposableEx.cs" />

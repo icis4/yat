@@ -40,12 +40,17 @@ using MKY.Event;
 
 namespace MKY.IO.Serial.Socket
 {
-	/// <summary></summary>
+	/// <summary>
+	/// This TCP/IP AutoSocket automatically determines whether to run as client or server. On start,
+	/// it tries to connect to a remote server and run as client. If this fails, it tries to run as
+	/// server. Retry cycles and random wait times ensure proper operation even when two AutoSockets
+	/// are interconnected to each other.
+	/// </summary>
 	/// <remarks>
-	/// With YAT, AutoSockets created a deadlock on shutdown in case of two AutoSockets that
-	/// were interconnected with each other. Here is the situation:
+	/// In case of YAT with the original ALAZ implementation, AutoSockets created a deadlock on
+	/// shutdown when two AutoSockets that were interconnected with each other. The situation:
 	/// 
-	/// a) The main thread requests stopping all terminals:
+	/// a) The GUI/main thread requests stopping all terminals:
 	/// 
 	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
 	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 1446
@@ -69,7 +74,8 @@ namespace MKY.IO.Serial.Socket
 	/// YAT.Controller.Main.Run() Line 261
 	/// YAT.YAT.Main(string[] commandLineArgs = {string[0]}) Line 63
 	/// 
-	/// b) As a result, the first AutoSocket shuts down, the second changes from 'Accepted' to 'Listening' and tries to sychronize from the ALAZ socket event to the main thread:
+	/// b) As a result, the first AutoSocket shuts down, the second changes from 'Accepted' to
+	///    'Listening' and tries to sychronize from the ALAZ socket event to the GUI/main thread:
 	/// 
 	/// MKY.Event.EventHelper.InvokeSynchronized(System.ComponentModel.ISynchronizeInvoke sinkTarget = {YAT.Gui.Forms.Terminal}, System.Delegate sink = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 319
 	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 163
@@ -92,10 +98,8 @@ namespace MKY.IO.Serial.Socket
 	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 535
 	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(object sender = {System.Net.Sockets.Socket}, System.Net.Sockets.SocketAsyncEventArgs e = null) Line 1501
 	/// 
-	/// As a workaround to this issue, I removed the lock where the deadlock happens in
-	/// in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() and reported this
-	/// issue back to Andre Luis Azevedo. But unfortunately he doesn't reply and ALAZ seems
-	/// to have come to a deadend. An alternative to ALAZ might need to be found in the future.
+	/// Very simliar issues existed when stopping <see cref="TcpClient"/> or <see cref="TcpServer"/>
+	/// objects stand-alone. See remarks of these classes for how all these issues have been solved.
 	/// </remarks>
 	public class TcpAutoSocket : IIOProvider, IDisposable
 	{
@@ -520,10 +524,6 @@ namespace MKY.IO.Serial.Socket
 
 		private void StopSockets()
 		{
-			// \remind:
-			// The ALAZ sockets by default stop synchronously. However, due to some other issues
-			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
-
 			if (this.client != null)
 				this.client.Stop();
 
@@ -631,13 +631,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			SetStateSynchronizedAndNotify(SocketState.Restarting);
 
-			// \remind:
-			// The ALAZ sockets by default stop synchronously. However, due to some other issues
-			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
-
-			// \remind:
-			//DisposeSockets();
+			DisposeSockets();
 
 			StartAutoSocket();
 		}
@@ -646,13 +641,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			SetStateSynchronizedAndNotify(SocketState.Stopping);
 
-			// \remind:
-			// The ALAZ sockets by default stop synchronously. However, due to some other issues
-			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
-
-			// \remind:
-			//DisposeSockets();
+			DisposeSockets();
 
 			SetStateSynchronizedAndNotify(SocketState.Reset);
 		}

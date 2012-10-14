@@ -107,10 +107,10 @@ namespace MKY.IO.Serial.Socket
 		private System.Net.IPEndPoint endPoint;
 		private System.Net.Sockets.UdpClient socket;
 
-		/// <summary>
+		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
-		/// </summary>
+		/// </remarks>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
 		private bool sendThreadRunFlag;
