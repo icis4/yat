@@ -176,7 +176,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 f.SetValue(FReadOV, null);
 
                 // ----- \remind BEGIN -----
-
                 // 2010-05-14 / Matthias Klaey
                 // Handling System.InvalidOperationException on closing/disposing:
                 // "An asynchronous socket operation is already in progress using this SocketAsyncEventArgs instance."
@@ -314,12 +313,12 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 // ----- \remind BEGIN -----
 
                 // 2011-04-25 / Matthias Klaey
-                // Work-around to the issue described in the header of AutoSocket.
+                // Work-around to an issue described in the headers of MKY AutoSocket/TcpClient/TcpServer.
 
-                //lock (FSyncActive)
-                //{
+//              lock (FSyncActive)
+//              {
                     return FActive;
-                //}
+//              }
 
                 // ----- \remind  END  -----
             }

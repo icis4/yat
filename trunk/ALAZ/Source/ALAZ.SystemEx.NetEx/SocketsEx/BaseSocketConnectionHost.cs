@@ -307,7 +307,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     if (creators.Length > 0)
                     {
                         // ----- \remind BEGIN -----
-
                         // 2010-05-14 / Matthias Klaey
                         // Handling exceptions.
 
@@ -353,22 +352,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         ThreadEx.LoopSleep(ref loopSleep);
                     }
 
-                    // ----- \remind BEGIN -----
+                    if (connections.Length > 0)
+                    {
+                        FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
+                    }
 
-                    // 2007-03-22 / Matthias Klaey
-                    // Why wait on thread here? Start() is non-blocking!
-                    // If Stop() is called from a GUI thread and the GUI is attached to
-                    //   the Disconnected event, a dead-lock happens:
-                    //   - The GUI thread is blocked here
-                    //   - FireOnDisconnected is blocked when trying to synchronize
-                    //     Invoke() onto the GUI thread
-
-                    //if (connections.Length > 0)
-                    //{
-                    //    FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-                    //}
-
-                    // ----- \remind  END  -----
                 }
 
             }
@@ -429,7 +417,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #region FireOnSent
 
-        private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
+        // ----- \remind BEGIN -----
+        // 2012-10-13 / Matthias Klaey
+        // Added buffer which is now forwarded to FSocketService.OnSent().
+
+        private void FireOnSent(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
         {
 
             if (!Disposed)
@@ -446,7 +438,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                             case EventProcessing.epUser:
 
-                                FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
+                                FSocketService.OnSent(new MessageEventArgs(connection, buffer, sentByServer));
                                 break;
 
                             case EventProcessing.epEncrypt:
@@ -472,6 +464,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             }
 
         }
+
+        // ----- \remind  END  -----
 
         #endregion
 
@@ -743,9 +737,16 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         connection.Stream.EndWrite(ar);
                         connection.SetConnectionData(0, connection.WriteOV.Count);
 
+                        // ----- \remind BEGIN -----
+                        // 2012-10-13 / Matthias Klaey
+                        // Buffer is now forwarded to FireOnSent().
+
                         FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
 
-                        FireOnSent(connection, sentByServer);
+                        byte[] buffer = null;
+                        //rawBuffer = BufferUtils.GetRawBuffer(connection, e.Buffer, readBytes);
+
+                        FireOnSent(connection, buffer, sentByServer);
 
                         if (connection.Active)
                         {
@@ -772,6 +773,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                             }
 
                         }
+
+                        // ----- \remind  END  -----
 
                     }
 
@@ -857,12 +860,19 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                             }
                             else
                             {
+                                // ----- \remind BEGIN -----
+                                // 2012-10-13 / Matthias Klaey
+                                // Buffer is now forwarded to FireOnSent().
 
                                 FBufferManager.ReturnBuffer(e.Buffer);
                                 e.SetBuffer(null, 0, 0);
 
-                                FireOnSent(connection, sentByServer);
+                                byte[] buffer = null;
+                                //rawBuffer = BufferUtils.GetRawBuffer(connection, e.Buffer, readBytes);
 
+                                FireOnSent(connection, buffer, sentByServer);
+
+                                // ----- \remind  END  -----
                             }
 
                         }
@@ -1748,7 +1758,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   {
 
                       // ----- \remind BEGIN -----
-
                       // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
                       // Added if != null due to NullReferenceExecption.
 

@@ -227,7 +227,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
                 // ----- \remind BEGIN -----
-
                 // 2010-05-14 / Matthias Klaey
                 // Handling exceptions.
 

@@ -20,7 +20,7 @@ Four kinds of modifications have been made:
  > Repository
  > Project settings
  > Additional exception handling in source code
- > Minor modifications to the behaviour of the source code
+ > Modifications to the behaviour of the source code
 
 The following contents of the original distribution were not added to the YAT respoitory:
  "\ALAZ\*.cache"
@@ -42,18 +42,39 @@ Additional exception handling in source code have led to the following file diff
  "\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs"
  "\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\SocketListener.cs"
 
-Minor modifications to the behaviour of the source code have led to the following file diffs:
+Mdifications to the behaviour of the source code have led to the following file diffs:
  "\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnection.cs"
  "\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs"
-   > BaseSocketConnectionHost.StopConnections() has been modified to be non-blocking
 
 Modifications to all files are also stored as unified diffs.
 
 
-Non-Modifications
------------------
-I also found some potential issues which don't have any impact on YAT, so no modifications were
-done in these cases:
+Details on modifications
+------------------------
+Some details about the modifications or work-arounds which impact YAT:
+
+ > 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' is blocking:
+    > If Stop() is called from a GUI/main thread and the GUI/main is attached to the Disconnected
+      event, a dead-lock happens:
+       - StopConnections() blocks the GUI/main thread
+       - FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main thread
+ > 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get()' was also blocking but has been
+    modified to be non-blocking:
+    > In case of YAT with the original ALAZ implementation, AutoSockets created a deadlock on
+      shutdown in case of two AutoSockets that were interconnected with each other:
+       - Active.get() blocks the GUI/main thread
+       - FireOnDisconnected is blocked when trying to synchronize Invoke() onto the GUI/main thread
+ > These two issues could be solved by modifying 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get()'
+   to be non-blocking, by calling Stop() asynchronously and by suppressing the 'OnDisconnected' and
+   'OnException' events while stopping.
+
+ > 'ALAZ.SystemEx.NetEx.SocketsEx.SocketClient/Server.Dispose()' doesn't seem to properly stop the
+    socket, i.e. Stop() must be called prior to Dispose() to ensure that stopping is properly done.
+
+
+Issues but no modifications
+---------------------------
+Potential issues which don't have any impact on YAT, so no modifications were done in these cases:
  > There are 10 occurrences of "Encoding.GetEncoding(1252)"
     i.e. some code is fixed to Windows code page 1252
 
