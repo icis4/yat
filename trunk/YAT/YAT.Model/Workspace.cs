@@ -994,7 +994,7 @@ namespace YAT.Model
 			return (OpenTerminalFromFile(filePath, Guid.Empty, Indices.DefaultFixedIndex, null, false));
 		}
 
-		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
+		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool errorHandlingIsSuppressed)
 		{
 			AssertNotDisposed();
 
@@ -1010,7 +1010,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				if (!suppressErrorHandling)
+				if (!errorHandlingIsSuppressed)
 				{
 					OnFixedStatusTextRequest("Error opening terminal!");
 					OnMessageInputRequest

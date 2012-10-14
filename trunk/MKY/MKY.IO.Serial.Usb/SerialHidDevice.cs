@@ -68,20 +68,20 @@ namespace MKY.IO.Serial.Usb
 		private IO.Usb.SerialHidDevice device;
 		private object deviceSyncObj = new object();
 
-		/// <summary>
+		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
-		/// </summary>
+		/// </remarks>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
 
-		/// <summary>
+		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
-		/// </summary>
+		/// </remarks>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
 		private bool receiveThreadRunFlag;
