@@ -227,7 +227,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		private State state = State.Reset;
-		private object stateSyncObj = new object();
+		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
 		private bool autoOpen;
 
@@ -791,8 +791,9 @@ namespace MKY.IO.Usb
 		{
 			State state;
 
-			lock (this.stateSyncObj)
-				state = this.state;
+			this.stateLock.EnterReadLock();
+			state = this.state;
+			this.stateLock.ExitReadLock();
 
 			return (state);
 		}
@@ -802,8 +803,9 @@ namespace MKY.IO.Usb
 #if (DEBUG)
 			State oldState = this.state;
 #endif
-			lock (this.stateSyncObj)
-				this.state = state;
+			this.stateLock.EnterWriteLock();
+			this.state = state;
+			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			Debug.WriteLine(GetType() + " '" + ToString() + "': State has changed from " + oldState + " to " + this.state + ".");
 #endif

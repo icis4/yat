@@ -122,13 +122,13 @@ namespace MKY.IO.Serial.Socket
 		private AutoRetry autoReconnect;
 
 		private SocketState state = SocketState.Reset;
-		private object stateSyncObj = new object();
+		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
 		/// <remarks>
 		/// Required to deal with the issues described in the remarks in the header of this class.
 		/// </remarks>
 		private bool eventHandlingIsSuppressedWhileStopping;
-		private object eventHandlingIsSuppressedWhileStoppingSyncObj = new object();
+		private ReaderWriterLockSlim eventHandlingIsSuppressedWhileStoppingLock = new ReaderWriterLockSlim();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
@@ -362,14 +362,20 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				lock (this.eventHandlingIsSuppressedWhileStoppingSyncObj)
-					return (this.eventHandlingIsSuppressedWhileStopping);
+				bool isSuppressed;
+
+				this.eventHandlingIsSuppressedWhileStoppingLock.EnterReadLock();
+				isSuppressed = this.eventHandlingIsSuppressedWhileStopping;
+				this.eventHandlingIsSuppressedWhileStoppingLock.ExitReadLock();
+
+				return (isSuppressed);
 			}
 
 			set
 			{
-				lock (this.eventHandlingIsSuppressedWhileStoppingSyncObj)
-					this.eventHandlingIsSuppressedWhileStopping = value;
+				this.eventHandlingIsSuppressedWhileStoppingLock.EnterWriteLock();
+				this.eventHandlingIsSuppressedWhileStopping = value;
+				this.eventHandlingIsSuppressedWhileStoppingLock.ExitWriteLock();
 			}
 		}
 
@@ -449,8 +455,9 @@ namespace MKY.IO.Serial.Socket
 		{
 			SocketState state;
 
-			lock (this.stateSyncObj)
-				state = this.state;
+			this.stateLock.EnterReadLock();
+			state = this.state;
+			this.stateLock.ExitReadLock();
 
 			return (state);
 		}
@@ -460,8 +467,9 @@ namespace MKY.IO.Serial.Socket
 #if (DEBUG)
 			SocketState oldState = this.state;
 #endif
-			lock (this.stateSyncObj)
-				this.state = state;
+			this.stateLock.EnterWriteLock();
+			this.state = state;
+			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif

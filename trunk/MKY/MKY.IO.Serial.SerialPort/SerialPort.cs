@@ -169,7 +169,7 @@ namespace MKY.IO.Serial.SerialPort
 		private bool isDisposed;
 
 		private State state = State.Reset;
-		private object stateSyncObj = new object();
+		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 		
 		private SerialPortSettings settings;
 
@@ -810,8 +810,9 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			State state;
 
-			lock (this.stateSyncObj)
-				state = this.state;
+			this.stateLock.EnterReadLock();
+			state = this.state;
+			this.stateLock.ExitReadLock();
 
 			return (state);
 		}
@@ -821,8 +822,9 @@ namespace MKY.IO.Serial.SerialPort
 #if (DEBUG)
 			State oldState = this.state;
 #endif
-			lock (this.stateSyncObj)
-				this.state = state;
+			this.stateLock.EnterWriteLock();
+			this.state = state;
+			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': State has changed from " + oldState + " to " + this.state + ".");
 #endif
