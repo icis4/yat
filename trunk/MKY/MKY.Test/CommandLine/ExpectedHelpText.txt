@@ -10,14 +10,14 @@ Usage examples:
           of actions.
 
 
-Arguments:
+Value arguments:
 
   A pure value argument.
 
   A combined value/option argument, this is the value argument description.
 
 
-Options:
+Option arguments:
 
   /cvoa=STR, -cvoa=STR, --CombinedValueOptionArg=STR
           A combined value/option argument, this is the option argument
@@ -26,8 +26,8 @@ Options:
   /svo=STR, -svo=STR, --StringValueOption=STR
           A string value option.
 
-  /sbo, -sbo, --SimpleBooleanOption
-          A simple boolean option.
+  /sbo, -sbo, --BooleanOption
+          A boolean option.
 
   /ivo=VAL, -ivo=VAL, --IntValueOption=VAL
           A int value option.
@@ -52,13 +52,26 @@ Options:
           Display this help text.
 
 
+Array option arguments:
+
+  /sa=STR[], -sa=STR[], --StringArgs=STR[], --StringArguments=STR[]
+          A string array option.
+
+  /ia=VAL[], -ia=VAL[], --IntArgs=VAL[], --IntArguments=VAL[]
+          An int array option.
+
+
 Notes:
 
   Options that take values may use an equal sign '=', a colon ':' or a space to
-  separate the option from its value.
+  separate the name from its value. Option names are case-insensitive. Option
+  values are also case-insensitive unless stated otherwise.
 
-  Option names are case-insensitive. Values are also case-insensitive unless
-  stated otherwise.
+  Use quotes to pass string values "including spaces". Use \" to pass a quote.
+
+  Array options start with the option name and continue until the next option.
+  Typically an array option is used at the end of the command line to take a
+  variable number of additional arguments, i.e. ellipsis.
 
   Some additional notes.
 

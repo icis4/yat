@@ -52,18 +52,21 @@ New:
 - Line numbers can optionally be displayed in monitors (feature request #3442828)
 - Keywords \!(Delay) and \!(LineDelay) implemented, time span in milliseconds can be configured in
   advanced settings (related to feature requests #3105414, #3105478 and #3538899)
+- Optional support for array options added MKY.CommandLine (feature request #3571456)
 - Additional executable 'YATConsole.exe' added to ensure proper command line operation in case of
   'cmd' as well as 'PowerShell' (bug #3482103)
 
 Important changes:
 - 'File > Open' now also allows to select workspace files (feature request #1917388)
 - Monitors automatically start vertical scrolling again if the last item gets selected
-- Massive refactoring of the send data/event path, allows to implement asynchronuous send features
-   > Fixes bugs #3072919, #3137968 and #3292415
-   > Allows keywords \!(Delay) and \!(LineDelay)
-   > Prepares for features #1808500, #2455838, #3105414, #3105478, #3406521, #3488645 and #3538899
-- Massive refactoring of the display data/event path, fixes several display and performance issues
+- Massive refactoring of the send data/event path, implementation is now fully asynchronous
+   > Fixes several display issues and improves performance (bugs #3072919, #3137968 and #3292415)
+   > Received data is no longer displayed with delay when sending multi-line commands or files
+   > Allows to implement asynchronuous send features such as keywords \!(Delay) and \!(LineDelay)
+     and upcoming features #1808500, #2455838, #3105414, #3105478, #3406521, #3488645 and #3538899
+- Massive refactoring of the display data/event path, implementation is now fully asynchronous
    > Prevents race conditions while processing fast and large amounts of data
+   > Fixes several display and log issues with mixed up data, and improves performance
    > Fixes bugs #2455804, #2868735, #2981794, #3176813, #3284550 and #3480565
 - Serial COM port, USB as well as TCP/IP and UDP/IP socket functionality of MKY.IO.Serial has been
   split into separate assemblies to allow dedicated use of one of the new assemblies without
