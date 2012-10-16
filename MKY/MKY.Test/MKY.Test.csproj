@@ -89,7 +89,7 @@
     </Compile>
     <Compile Include="CommandLine\ArgsHandlerTest.cs" />
     <Compile Include="CommandLine\CommandLineArgs.cs" />
-    <Compile Include="CommandLine\CommandLineArgsInvalid.cs" />
+    <Compile Include="CommandLine\InvalidCommandLineArgs.cs" />
     <Compile Include="Guid\GuidExTest.cs" />
     <Compile Include="IO\PathExTest.cs" />
     <Compile Include="Net\IPHostTest.cs" />

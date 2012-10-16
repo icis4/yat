@@ -44,10 +44,10 @@ namespace MKY.Test.CommandLine
 		A,
 
 		/// <summary></summary>
-		Be,
+		Bb,
 
 		/// <summary></summary>
-		Cee,
+		Ccc,
 	}
 
 	/// <summary></summary>
@@ -73,8 +73,8 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Name = "SimpleBooleanOption", ShortName = "sbo", Description = "A simple boolean option.")]
-		public bool SimpleBooleanOption;
+		[OptionArg(Name = "BooleanOption", ShortName = "bo", Description = "A boolean option.")]
+		public bool BooleanOption;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -107,8 +107,18 @@ namespace MKY.Test.CommandLine
 		public bool HelpIsRequested;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Names = new string[] { "StringArgs", "StringArguments" }, ShortNames = new string[] { "sa" }, Description = "A string array option.")]
+		public string[] StringArrayOption;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Names = new string[] { "IntArgs", "IntArguments" }, ShortNames = new string[] { "ia" }, Description = "An int array option.")]
+		public int[] IntArrayOption;
+
+		/// <summary></summary>
 		public CommandLineArgs(string[] args)
-			: base(args)
+			: base(args, true, true, true)
 		{
 		}
 

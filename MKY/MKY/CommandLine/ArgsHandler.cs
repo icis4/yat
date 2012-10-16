@@ -72,11 +72,14 @@ namespace MKY.CommandLine
 	/// Gert Lombard (gert@codeblast.com)
 	/// James Newkirk (jim@nunit.org)
 	/// -------------------------------------------------------------------------------------------
-	/// </summary>
-	/// <remarks>
+	/// 
 	/// The implementation has been copied and improved to be more .NET-ish and edited to comply
 	/// with the YAT/MKY naming and coding conventions such as passing FxCop and StyleCop analysis.
-	/// </remarks>
+	/// 
+	/// In addition, this implementation has added so-called multi-options. Multi-options can be
+	/// used to deal with a variable number of additional argument, i.e. ellipsis. This feature is
+	/// optional.
+	/// </summary>
 	public abstract class ArgsHandler
 	{
 		#region Types
@@ -122,10 +125,15 @@ namespace MKY.CommandLine
 		// Fields
 		//==========================================================================================
 
+		private bool supportValueArgs;
+		private bool supportOptionArgs;
+		private bool supportArrayOptionArgs;
+
 		private string[] args;
 
 		private List<string> valueArgs = new List<string>();
 		private List<string> optionArgs = new List<string>();
+		private List<string[]> arrayOptionArgs = new List<string[]>();
 		private List<string> invalidArgs = new List<string>();
 
 		private List<FieldInfo> optionFields = new List<FieldInfo>();
@@ -140,8 +148,12 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgsHandler"/> class.
 		/// </summary>
-		protected ArgsHandler(string[] args)
+		protected ArgsHandler(string[] args, bool supportValueArgs, bool supportOptionArgs, bool supportArrayOptionArgs)
 		{
+			this.supportValueArgs = supportValueArgs;
+			this.supportOptionArgs = supportOptionArgs;
+			this.supportArrayOptionArgs = supportArrayOptionArgs;
+
 			Initialize(args);
 			Validate();
 		}
@@ -156,13 +168,17 @@ namespace MKY.CommandLine
 			{
 				for (int i = 0; i < this.args.Length; i++)
 				{
+					string thisArg = this.args[i];
+
 					int pos;
-					if (string.IsNullOrEmpty(this.args[i]))
+					if (string.IsNullOrEmpty(thisArg))
 					{
 						// Ignore empty strings within the array.
 					}
-					else if (IsOption(this.args[i], out pos))
+					else if (IsOption(thisArg, out pos) && SupportOptionArgs)
 					{
+						EndArrayOption();
+
 						// Prepare next argument:
 						string nextArg = null;
 						if ((i + 1) < this.args.Length)
@@ -170,34 +186,113 @@ namespace MKY.CommandLine
 
 						// Store option argument:
 						bool nextArgHasBeenConsumedToo = false;
-						if (InitializeOption(this.args[i].Substring(pos), nextArg, ref nextArgHasBeenConsumedToo))
+						object value = null;
+						FieldInfo field = null;
+						if (ParseOption(thisArg.Substring(pos), nextArg, ref nextArgHasBeenConsumedToo, ref value, ref field))
 						{
+							string arg;
 							if (!nextArgHasBeenConsumedToo)
-								this.optionArgs.Add(this.args[i]);
+								arg = thisArg;
 							else
-								this.optionArgs.Add(this.args[i] + " " + nextArg);
+								arg = thisArg + " " + nextArg;
+
+							if (field.FieldType.IsArray)
+							{
+								BeginArrayOption(field, value, arg);
+							}
+							else
+							{
+								if (InitializeOption(field, value))
+									this.optionArgs.Add(arg);
+								else
+									this.invalidArgs.Add(arg);
+							}
 						}
 						else
 						{
-							this.invalidArgs.Add(this.args[i]);
+							this.invalidArgs.Add(thisArg);
 						}
 
 						if (nextArgHasBeenConsumedToo)
 							i++; // Advance index.
 					}
-					else if (IsValue(this.args[i]))
+					else if (IsValue(thisArg))
 					{
-						if (InitializeValue(this.args[i], this.valueArgs.Count))
-							this.valueArgs.Add(this.args[i]);
+						if (SupportOptionArgs && ArrayOptionIsBeingComposed)
+						{
+							ContinueArrayOption(thisArg);
+						}
+						else if (SupportValueArgs)
+						{
+							EndArrayOption();
+
+							if (InitializeValue(thisArg, this.valueArgs.Count))
+								this.valueArgs.Add(thisArg);
+							else
+								this.invalidArgs.Add(thisArg);
+						}
 						else
-							this.invalidArgs.Add(this.args[i]);
+						{
+							EndArrayOption();
+							this.invalidArgs.Add(thisArg);
+						}
 					}
 					else
 					{
-						this.invalidArgs.Add(this.args[i]);
+						EndArrayOption();
+
+						this.invalidArgs.Add(thisArg);
 					}
 				}
 			}
+		}
+
+		private FieldInfo arrayOptionField;
+		private List<object> arrayOptionValues;
+		private List<string> arrayOptionStrings;
+
+		private bool ArrayOptionIsBeingComposed
+		{
+			get { return (this.arrayOptionField != null); }
+		}
+
+		private void BeginArrayOption(FieldInfo field, object value, string arg)
+		{
+			this.arrayOptionField = field;
+
+			this.arrayOptionValues = new List<object>();
+			this.arrayOptionValues.Add(value);
+
+			this.arrayOptionStrings = new List<string>();
+			this.arrayOptionStrings.Add(arg);
+		}
+
+		private void ContinueArrayOption(string arg)
+		{
+			this.arrayOptionValues.Add(arg);
+			this.arrayOptionStrings.Add(arg);
+		}
+
+		private void EndArrayOption()
+		{
+			if ((this.arrayOptionField != null) && (this.arrayOptionValues != null) &&
+				(this.arrayOptionStrings != null) && (this.arrayOptionStrings.Count > 0))
+			{
+				if (this.arrayOptionValues.Count > 0)
+				{
+					InitializeOption(this.arrayOptionField, this.arrayOptionValues);
+					this.arrayOptionArgs.Add(this.arrayOptionStrings.ToArray());
+				}
+				else
+				{
+					foreach (string arg in this.arrayOptionStrings)
+						this.invalidArgs.Add(arg);
+				}
+			}
+
+			this.arrayOptionField = null;
+			this.arrayOptionValues = null;
+			this.arrayOptionStrings = null;
 		}
 
 		#endregion
@@ -253,6 +348,22 @@ namespace MKY.CommandLine
 		public int OptionArgsCount
 		{
 			get { return (this.optionArgs.Count); }
+		}
+
+		/// <summary>
+		/// Gets the array option arguments.
+		/// </summary>
+		public string[][] ArrayOptionArgs
+		{
+			get { return (this.arrayOptionArgs.ToArray()); }
+		}
+
+		/// <summary>
+		/// Gets the option argument count.
+		/// </summary>
+		public int ArrayOptionArgsCount
+		{
+			get { return (this.arrayOptionArgs.Count); }
 		}
 
 		/// <summary>
@@ -366,6 +477,22 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
+		/// Determines whether value args are supported.
+		/// </summary>
+		protected virtual bool SupportValueArgs
+		{
+			get { return (this.supportValueArgs); }
+		}
+
+		/// <summary>
+		/// Determines whether value args are supported.
+		/// </summary>
+		protected virtual bool SupportOptionArgs
+		{
+			get { return (this.supportOptionArgs || this.supportArrayOptionArgs); }
+		}
+
+		/// <summary>
 		/// Determines whether the specified character is a valid option name character.
 		/// </summary>
 		protected virtual bool IsOptionNameChar(char c)
@@ -436,7 +563,7 @@ namespace MKY.CommandLine
 		/// Initializes an option argument.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		protected virtual bool InitializeOption(string optionArgWithoutIndicator, string nextArg, ref bool nextArgHasBeenConsumedToo)
+		protected virtual bool ParseOption(string optionArgWithoutIndicator, string nextArg, ref bool nextArgHasBeenConsumedToo, ref object value, ref FieldInfo field)
 		{
 			try
 			{
@@ -457,10 +584,9 @@ namespace MKY.CommandLine
 				if (!hasSuccessfullyBeenSplit)
 					optionStr = optionArgWithoutIndicator.Trim();
 
-				FieldInfo field = GetMemberField(optionStr);
+				field = GetMemberField(optionStr);
 				if (field != null)
 				{
-					object value;
 					if (field.FieldType == typeof(bool))
 					{
 						if (hasSuccessfullyBeenSplit && (!string.IsNullOrEmpty(valueStr)))
@@ -494,14 +620,31 @@ namespace MKY.CommandLine
 							value = valueStr;
 					}
 
-					field.SetValue(this, Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture));
-					this.optionFields.Add(field);
 					return (true);
 				}
 				else
 				{
 					return (false);
 				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex);
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Initializes an option argument.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		protected virtual bool InitializeOption(FieldInfo field, object value)
+		{
+			try
+			{
+				field.SetValue(this, Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture));
+				this.optionFields.Add(field);
+				return (true);
 			}
 			catch (Exception ex)
 			{
@@ -673,8 +816,15 @@ namespace MKY.CommandLine
 		/// <summary></summary>
 		public virtual bool OptionIsGiven(string name)
 		{
-			FieldInfo fi = GetMemberField(name);
-			return (this.optionFields.Contains(fi));
+			if (this.supportOptionArgs || this.supportArrayOptionArgs)
+			{
+				FieldInfo fi = GetMemberField(name);
+				return (this.optionFields.Contains(fi));
+			}
+			else
+			{
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
@@ -728,9 +878,24 @@ namespace MKY.CommandLine
 			foreach (FieldInfo field in fields)
 			{
 				string valueTypeString;
-				if      (field.FieldType == typeof(bool)) valueTypeString = "";
-				else if (field.FieldType.IsPrimitive)     valueTypeString = "=VAL";
-				else                                      valueTypeString = "=STR";
+				if (field.FieldType == typeof(bool))
+				{
+					valueTypeString = "";
+				}
+				else if (field.FieldType.IsArray)
+				{
+					if (field.FieldType.GetElementType().IsPrimitive)
+						valueTypeString = "=VAL[]";
+					else
+						valueTypeString = "=STR[]";
+				}
+				else
+				{
+					if (field.FieldType.IsPrimitive)
+						valueTypeString = "=VAL";
+					else
+						valueTypeString = "=STR";
+				}
 
 				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 				{
@@ -805,12 +970,32 @@ namespace MKY.CommandLine
 
 			helpText.AppendLine();
 			helpText.AppendLine("Notes:");
-			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
-				"Options that take values may use an equal sign '=', a colon ':' or a space to separate the option from its value."));
-			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
-				"Option names are case-insensitive. Values are also case-insensitive unless stated otherwise."));
+
+			if (this.supportOptionArgs || this.supportArrayOptionArgs)
+			{
+				helpText.AppendLine();
+				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+					"Options that take values may use an equal sign '=', a colon ':' or a space" +
+					" to separate the name from its value. Option names are case-insensitive. " +
+					"Option values are also case-insensitive unless stated otherwise."));
+			}
+
+			// Applies to any kind of args.
+			{
+				helpText.AppendLine();
+				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+					@"Use quotes to pass string values that ""including spaces"". " +
+					@"Use \"" to pass a quote."));
+			}
+
+			if (this.supportArrayOptionArgs)
+			{
+				helpText.AppendLine();
+				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+					"Array options start with the option name and continue until the next option. " +
+					"Typically an array option is used at the end of the command line to take" +
+					" a variable number of additional arguments, i.e. ellipsis."));
+			}
 
 			return (helpText.ToString());
 		}

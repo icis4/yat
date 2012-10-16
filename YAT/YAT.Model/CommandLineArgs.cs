@@ -294,7 +294,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public CommandLineArgs(string[] args)
-			: base(args)
+			: base(args, true, true, false)
 		{
 		}
 

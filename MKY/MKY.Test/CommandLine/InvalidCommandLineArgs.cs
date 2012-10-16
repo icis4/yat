@@ -37,7 +37,7 @@ using MKY.CommandLine;
 namespace MKY.Test.CommandLine
 {
 	/// <summary></summary>
-	public class CommandLineArgsInvalid1 : ArgsHandler
+	public class InvalidCommandLineArgs1 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -52,14 +52,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid1(string[] args)
+		public InvalidCommandLineArgs1(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid2 : ArgsHandler
+	public class InvalidCommandLineArgs2 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -74,14 +74,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid2(string[] args)
+		public InvalidCommandLineArgs2(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid3 : ArgsHandler
+	public class InvalidCommandLineArgs3 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -96,14 +96,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid3(string[] args)
+		public InvalidCommandLineArgs3(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid4 : ArgsHandler
+	public class InvalidCommandLineArgs4 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -119,14 +119,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid4(string[] args)
+		public InvalidCommandLineArgs4(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid5 : ArgsHandler
+	public class InvalidCommandLineArgs5 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -142,14 +142,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid5(string[] args)
+		public InvalidCommandLineArgs5(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid6 : ArgsHandler
+	public class InvalidCommandLineArgs6 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -165,14 +165,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid6(string[] args)
+		public InvalidCommandLineArgs6(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid7 : ArgsHandler
+	public class InvalidCommandLineArgs7 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -188,14 +188,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid7(string[] args)
+		public InvalidCommandLineArgs7(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid8 : ArgsHandler
+	public class InvalidCommandLineArgs8 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -211,14 +211,14 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid8(string[] args)
+		public InvalidCommandLineArgs8(string[] args)
 			: base(args)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class CommandLineArgsInvalid9 : ArgsHandler
+	public class InvalidCommandLineArgs9 : ArgsHandler
 	{
 		private const string SuppressionJustification = "This is a simple container for command line args.";
 
@@ -234,7 +234,7 @@ namespace MKY.Test.CommandLine
 		public string BBB;
 
 		/// <summary></summary>
-		public CommandLineArgsInvalid9(string[] args)
+		public InvalidCommandLineArgs9(string[] args)
 			: base(args)
 		{
 		}
