@@ -26,7 +26,7 @@ Option arguments:
   /svo=STR, -svo=STR, --StringValueOption=STR
           A string value option.
 
-  /sbo, -sbo, --BooleanOption
+  /bo, -bo, --BooleanOption
           A boolean option.
 
   /ivo=VAL, -ivo=VAL, --IntValueOption=VAL
@@ -37,6 +37,12 @@ Option arguments:
 
   /evo=STR, -evo=STR, --EnumValueOption=STR
           An enum value option.
+
+  /sao=STR[], -sao=STR[], --StringArrayOption=STR[]
+          A string array option.
+
+  /iao=VAL[], -iao=VAL[], --IntArrayOption=VAL[]
+          An int array option.
 
   /ld=STR, -ld=STR, --LongDescription=STR
           A long description string value option that comes with a description
@@ -50,15 +56,6 @@ Option arguments:
 
   /h, -h, /?, -?, --Help, --HelpText
           Display this help text.
-
-
-Array option arguments:
-
-  /sa=STR[], -sa=STR[], --StringArgs=STR[], --StringArguments=STR[]
-          A string array option.
-
-  /ia=VAL[], -ia=VAL[], --IntArgs=VAL[], --IntArguments=VAL[]
-          An int array option.
 
 
 Notes:

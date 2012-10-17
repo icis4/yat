@@ -198,11 +198,11 @@ namespace MKY.Test.CommandLine
 		{
 			get
 			{
-				yield return (new Pair<bool, Pair<bool, string[]>>(true,  new Pair<bool, string[]>(true, new string[] { "/sbo" })));
+				yield return (new Pair<bool, Pair<bool, string[]>>(true,  new Pair<bool, string[]>(true, new string[] { "/bo" })));
 
-				yield return (new Pair<bool, Pair<bool, string[]>>(false, new Pair<bool, string[]>(true, new string[] { "/sbo=MyText" })));
-				yield return (new Pair<bool, Pair<bool, string[]>>(false, new Pair<bool, string[]>(true, new string[] { "/sbo:MyText" })));
-				yield return (new Pair<bool, Pair<bool, string[]>>(true,  new Pair<bool, string[]>(true, new string[] { "/sbo", "MyText" })));
+				yield return (new Pair<bool, Pair<bool, string[]>>(false, new Pair<bool, string[]>(true, new string[] { "/bo=MyText" })));
+				yield return (new Pair<bool, Pair<bool, string[]>>(false, new Pair<bool, string[]>(true, new string[] { "/bo:MyText" })));
+				yield return (new Pair<bool, Pair<bool, string[]>>(true,  new Pair<bool, string[]>(true, new string[] { "/bo", "MyText" })));
 			}
 		}
 
@@ -365,8 +365,8 @@ namespace MKY.Test.CommandLine
 			get
 			{
 				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(2, new string[] { "/cvoa=AA", "/svo=ABC" })));
-				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(2, new string[] { "/svo=ABC", "/sbo" })));
-				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(5, new string[] { "/svo=ABC", "/sbo", "/ivo=1", "/dvo=2.2", "/evo=A" })));
+				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(2, new string[] { "/svo=ABC", "/bo" })));
+				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(5, new string[] { "/svo=ABC", "/bo", "/ivo=1", "/dvo=2.2", "/evo=A" })));
 			}
 		}
 
@@ -396,13 +396,13 @@ namespace MKY.Test.CommandLine
 		{
 			get
 			{
-				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A" },              new string[] { "/sa=A" })));
-				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", "CCC" }, new string[] { "/sa=A", "BB", "CCC" })));
+				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A" },              new string[] { "/sao=A" })));
+				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", "CCC" }, new string[] { "/sao=A", "BB", "CCC" })));
 
 				// Quoted text that looks like another option:
-				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", "/BooleanOption" },         new string[] { "/sa=A", "BB", @"""/BooleanOption""" })));
-				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", "/IntValueOption=1" },      new string[] { "/sa=A", "BB", @"""/IntValueOption=1""" })));
-				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", "/DoubleValueOption:2.3" }, new string[] { "/sa=A", "BB", @"""/DoubleValueOption:2.3""" })));
+				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", @"""/BooleanOption""" },         new string[] { "/sao=A", "BB", @"""/BooleanOption""" })));
+				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", @"""/IntValueOption=1""" },      new string[] { "/sao=A", "BB", @"""/IntValueOption=1""" })));
+				yield return (new Pair<bool, Pair<string[], string[]>>(true, new Pair<string[], string[]>(new string[] { "A", "BB", @"""/DoubleValueOption:2.3""" }, new string[] { "/sao=A", "BB", @"""/DoubleValueOption:2.3""" })));
 			}
 		}
 
@@ -432,13 +432,8 @@ namespace MKY.Test.CommandLine
 		{
 			get
 			{
-				yield return (new Pair<bool, Pair<int[], string[]>>(true, new Pair<int[], string[]>(new int[] { 1 },       new string[] { "/ia=1" })));
-				yield return (new Pair<bool, Pair<int[], string[]>>(true, new Pair<int[], string[]>(new int[] { 1, 2, 3 }, new string[] { "/ia=1", "2", "3" })));
-
-				// Quoted text that looks like another option:
-				yield return (new Pair<bool, Pair<int[], string[]>>(false, new Pair<int[], string[]>(new int[] { 1, 2, 0 }, new string[] { "/ia=1", "2", @"""/BooleanOption""" })));
-				yield return (new Pair<bool, Pair<int[], string[]>>(false, new Pair<int[], string[]>(new int[] { 1, 2, 0 }, new string[] { "/ia=1", "2", @"""/IntValueOption=1""" })));
-				yield return (new Pair<bool, Pair<int[], string[]>>(false, new Pair<int[], string[]>(new int[] { 1, 2, 0 }, new string[] { "/ia=1", "2", @"""/DoubleValueOption:2.3""" })));
+				yield return (new Pair<bool, Pair<int[], string[]>>(true, new Pair<int[], string[]>(new int[] { 1 },       new string[] { "/iao=1" })));
+				yield return (new Pair<bool, Pair<int[], string[]>>(true, new Pair<int[], string[]>(new int[] { 1, 2, 3 }, new string[] { "/iao=1", "2", "3" })));
 			}
 		}
 
@@ -456,7 +451,7 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
-	public static class CombinedMultiTestData
+	public static class CombinedTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -464,12 +459,12 @@ namespace MKY.Test.CommandLine
 		//==========================================================================================
 
 		/// <summary></summary>
-		private static IEnumerable<Pair<bool, Pair<int, string[]>>> TestCasePairs
+		private static IEnumerable<Pair<bool, Pair<Pair<int, int>, string[]>>> TestCasePairs
 		{
 			get
 			{
-				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(3, new string[] { "/svo=ABC", "/sbo", "/a=A", "BB", "CCC" })));
-				yield return (new Pair<bool, Pair<int, string[]>>(true, new Pair<int, string[]>(7, new string[] { "/svo=ABC", "/sbo", "/a=A", "BB", "CCC", "/ivo=1", "/dvo=2.2", "/evo=A", "/oa=X", "YY", "ZZZ" })));
+				yield return (new Pair<bool, Pair<Pair<int, int>, string[]>>(true, new Pair<Pair<int, int>, string[]>(new Pair<int, int>(2, 1), new string[] { "/svo=ABC", "/bo", "/sao=A", "BB", "CCC" })));
+				yield return (new Pair<bool, Pair<Pair<int, int>, string[]>>(true, new Pair<Pair<int, int>, string[]>(new Pair<int, int>(5, 2), new string[] { "/svo=ABC", "/bo", "/sao=A", "BB", "CCC", "/ivo=1", "/dvo=2.2", "/evo=A", "/iao=1", "2", "3" })));
 			}
 		}
 
@@ -478,8 +473,8 @@ namespace MKY.Test.CommandLine
 		{
 			get
 			{
-				foreach (Pair<bool, Pair<int, string[]>> pair in TestCasePairs)
-					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
+				foreach (Pair<bool, Pair<Pair<int, int>, string[]>> pair in TestCasePairs)
+					yield return (new TestCaseData(pair.Value1, pair.Value2.Value1.Value1, pair.Value2.Value1.Value2, pair.Value2.Value2).SetName(ArrayEx.ElementsToString(pair.Value2.Value2)));
 			}
 		}
 
@@ -633,7 +628,7 @@ namespace MKY.Test.CommandLine
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("sbo"));
+				Assert.IsTrue(cla.OptionIsGiven("bo"));
 				Assert.AreEqual(expectedValue, cla.BooleanOption);
 			}
 		}
@@ -745,7 +740,7 @@ namespace MKY.Test.CommandLine
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("sa"));
+				Assert.IsTrue(cla.OptionIsGiven("sao"));
 				Assert.IsTrue(ArrayEx.ValuesEqual(expectedArrayOptionArgs, cla.StringArrayOption));
 			}
 		}
@@ -768,21 +763,21 @@ namespace MKY.Test.CommandLine
 
 			if (isValid)
 			{
-				Assert.IsTrue(cla.OptionIsGiven("ia"));
+				Assert.IsTrue(cla.OptionIsGiven("iao"));
 				Assert.IsTrue(ArrayEx.ValuesEqual(expectedArrayOptionArgs, cla.IntArrayOption));
 			}
 		}
 
 		#endregion
 
-		#region Tests > CombinedMulti
+		#region Tests > Combined
 		//------------------------------------------------------------------------------------------
-		// Tests > CombinedMulti
+		// Tests > Combined
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(CombinedMultiTestData), "TestCases")]
-		public virtual void TestCombinedMulti(bool isValid, int expectedNumberOfOptions, params string[] commandLineArgs)
+		[Test, TestCaseSource(typeof(CombinedTestData), "TestCases")]
+		public virtual void TestCombined(bool isValid, int expectedNumberOfOptions, int expectedNumberOfArrayOptions, params string[] commandLineArgs)
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
@@ -790,7 +785,10 @@ namespace MKY.Test.CommandLine
 			Assert.IsFalse(cla.HelpIsRequested);
 
 			if (isValid)
+			{
 				Assert.AreEqual(expectedNumberOfOptions, cla.OptionArgsCount);
+				Assert.AreEqual(expectedNumberOfArrayOptions, cla.ArrayOptionArgsCount);
+			}
 		}
 
 		#endregion

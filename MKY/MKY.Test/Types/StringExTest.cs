@@ -25,6 +25,7 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text;
 
 using NUnit.Framework;
 
@@ -65,6 +66,100 @@ namespace MKY.Test.Types
 	}
 
 	/// <summary></summary>
+	public static class CountLeftRightTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesLeft
+		{
+			get
+			{
+				yield return (new TestCaseData("aaa", 3, new char[] { 'a' }));
+				yield return (new TestCaseData("aab", 2, new char[] { 'a' }));
+				yield return (new TestCaseData("abc", 1, new char[] { 'a' }));
+				yield return (new TestCaseData("bcd", 0, new char[] { 'a' }));
+				yield return (new TestCaseData("",    0, new char[] { 'a' }));
+
+				yield return (new TestCaseData("abc", 2, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("bac", 2, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("acb", 1, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("cba", 0, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("",    0, new char[] { 'a', 'b' }));
+
+				yield return (new TestCaseData(@"""",   1, new char[] { '"' }));
+				yield return (new TestCaseData(@"""""", 2, new char[] { '"' }));
+				yield return (new TestCaseData(@"\\""", 1, new char[] { '"' }));
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesRight
+		{
+			get
+			{
+				yield return (new TestCaseData("aaa", 3, new char[] { 'a' }));
+				yield return (new TestCaseData("baa", 2, new char[] { 'a' }));
+				yield return (new TestCaseData("cba", 1, new char[] { 'a' }));
+				yield return (new TestCaseData("dcb", 0, new char[] { 'a' }));
+				yield return (new TestCaseData("",    0, new char[] { 'a' }));
+
+				yield return (new TestCaseData("cba", 2, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("cab", 2, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("bca", 1, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("abc", 0, new char[] { 'a', 'b' }));
+				yield return (new TestCaseData("",    0, new char[] { 'a', 'b' }));
+
+				yield return (new TestCaseData(@"""",   1, new char[] { '"' }));
+				yield return (new TestCaseData(@"""""", 2, new char[] { '"' }));
+				yield return (new TestCaseData(@"\\""", 1, new char[] { '"' }));
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
+	public static class SplitLeftRightTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesLeft
+		{
+			get
+			{
+				yield return (new TestCaseData("abc", 0, new string[] { "", "abc" }));
+				yield return (new TestCaseData("abc", 1, new string[] { "a", "bc" }));
+				yield return (new TestCaseData("abc", 2, new string[] { "ab", "c" }));
+				yield return (new TestCaseData("abc", 3, new string[] { "abc", "" }));
+				yield return (new TestCaseData("abc", 4, new string[] { "abc", "" }));
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesRight
+		{
+			get
+			{
+				yield return (new TestCaseData("abc", 0, new string[] { "abc", "" }));
+				yield return (new TestCaseData("abc", 1, new string[] { "ab", "c" }));
+				yield return (new TestCaseData("abc", 2, new string[] { "a", "bc" }));
+				yield return (new TestCaseData("abc", 3, new string[] { "", "abc" }));
+				yield return (new TestCaseData("abc", 4, new string[] { "", "abc" }));
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
 	public static class SplitLexicallyTestData
 	{
 		#region Test Cases
@@ -97,6 +192,44 @@ namespace MKY.Test.Types
 	}
 
 	/// <summary></summary>
+	public static class TrimTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				yield return (new TestCaseData(@"""", 0, new char[] { '"' }));
+				yield return (new TestCaseData(@"""a", 1, new char[] { '"' }));
+				yield return (new TestCaseData(@"""a""", 1, new char[] { '"' }));
+				yield return (new TestCaseData(@"""""a""", 1, new char[] { '"' }));
+				yield return (new TestCaseData(@"""""a""""", 1, new char[] { '"' }));
+
+			//	yield return (new TestCaseData(@"\""", 0, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"\""a", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"\""a""", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"\""""a""", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"\""""a""""", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"\""\""a""""", 1, new char[] { '"' }));
+
+				yield return (new TestCaseData(@"""", 0, new char[] { '"' }));
+				yield return (new TestCaseData(@"""a", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"""a\""", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"""""a\""", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"""""a""\""", 1, new char[] { '"' }));
+			//	yield return (new TestCaseData(@"""""a\""\""", 1, new char[] { '"' }));
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
 	[TestFixture]
 	public class StringExTest
 	{
@@ -120,6 +253,102 @@ namespace MKY.Test.Types
 
 		#endregion
 
+		#region Tests > CountLeft()
+		//------------------------------------------------------------------------------------------
+		// Tests > CountLeft()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(CountLeftRightTestData), "TestCasesLeft")]
+		public virtual void CountLeft(string testString, int expectedCount, char[] countChars)
+		{
+			int actualCount = StringEx.CountLeft(testString, countChars);
+			Assert.AreEqual(expectedCount, actualCount);
+		}
+
+		#endregion
+
+		#region Tests > CountRight()
+		//------------------------------------------------------------------------------------------
+		// Tests > CountRight()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(CountLeftRightTestData), "TestCasesRight")]
+		public virtual void CountRight(string testString, int expectedCount, char[] countChars)
+		{
+			int actualCount = StringEx.CountRight(testString, countChars);
+			Assert.AreEqual(expectedCount, actualCount);
+		}
+
+		#endregion
+
+		#region Tests > SplitLeft()
+		//------------------------------------------------------------------------------------------
+		// Tests > SplitLeft()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesLeft")]
+		public virtual void SplitLeft(string testString, int desiredSplitLength, string[] expectedChunks)
+		{
+			string[] actualChunks = StringEx.SplitLeft(testString, desiredSplitLength);
+
+			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+
+			for (int i = 0; i < expectedChunks.Length; i++)
+			{
+				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
+				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+			}
+		}
+
+		#endregion
+
+		#region Tests > SplitRight()
+		//------------------------------------------------------------------------------------------
+		// Tests > SplitRight()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesRight")]
+		public virtual void SplitRight(string testString, int desiredSplitLength, string[] expectedChunks)
+		{
+			string[] actualChunks = StringEx.SplitRight(testString, desiredSplitLength);
+
+			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+
+			for (int i = 0; i < expectedChunks.Length; i++)
+			{
+				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
+				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+			}
+		}
+
+		#endregion
+
+		#region Tests > Trim()
+		//------------------------------------------------------------------------------------------
+		// Tests > Trim()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(TrimTestData), "TestCases")]
+		public virtual void TestTrim(string testString, int expectedLength, char[] trimChars)
+		{
+			string trim = testString.Trim(trimChars);
+
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("Test string was:");
+			sb.AppendLine(testString);
+			sb.AppendLine("Which was trimmed to:");
+			sb.AppendLine(trim);
+
+			Assert.AreEqual(expectedLength, trim.Length, sb.ToString());
+		}
+
+		#endregion
+
 		#region Tests > SplitLexically()
 		//------------------------------------------------------------------------------------------
 		// Tests > SplitLexically()
@@ -127,9 +356,9 @@ namespace MKY.Test.Types
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(SplitLexicallyTestData), "TestCases")]
-		public virtual void TestSplitLexically(string testString, int desiredChunkSize, string[] expectedChunks)
+		public virtual void TestSplitLexically(string testString, int desiredChunkLength, string[] expectedChunks)
 		{
-			string[] actualChunks = StringEx.SplitLexically(testString, desiredChunkSize);
+			string[] actualChunks = StringEx.SplitLexically(testString, desiredChunkLength);
 			
 			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
 

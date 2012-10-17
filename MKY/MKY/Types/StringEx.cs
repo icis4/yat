@@ -48,6 +48,11 @@ namespace MKY
 			return (string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase));
 		}
 
+		#region Equals
+		//------------------------------------------------------------------------------------------
+		// Equals
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Compares two specified <see cref="System.String"/> objects ignoring culture.
 		/// </summary>
@@ -117,49 +122,30 @@ namespace MKY
 			return (false);
 		}
 
-		/// <summary>
-		/// Truncates "truncateString" to the "length" leftmost characters.
-		/// </summary>
-		public static string Left(string truncateString, int length)
-		{
-			if (length >= truncateString.Length)
-				return (truncateString);
-			else
-				return (truncateString.Substring(0, length));
-		}
+		#endregion
+
+		#region Contains
+		//------------------------------------------------------------------------------------------
+		// Contains
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Truncates "truncateString" from "begin" to "end".
-		/// </summary>
-		public static string Mid(string truncateString, int begin, int end)
-		{
-			if (begin >= end)
-				return ("");
-			else
-				return (truncateString.Substring(begin, end - begin + 1));
-		}
-
-		/// <summary>
-		/// Truncates "truncateString" to the "length" rightmost characters.
-		/// </summary>
-		public static string Right(string truncateString, int length)
-		{
-			if (length >= truncateString.Length)
-				return (truncateString);
-			else
-				return (truncateString.Substring(truncateString.Length - length, length));
-		}
-
-		/// <summary>
-		/// Returns whether "str" contains any of the "searchChars".
+		/// Returns whether <paramref name="str"/> contains any of the <paramref name="searchChars"/>.
 		/// </summary>
 		public static bool ContainsAny(string str, char[] searchChars)
 		{
 			return (str.IndexOfAny(searchChars) >= 0);
 		}
 
+		#endregion
+
+		#region Index
+		//------------------------------------------------------------------------------------------
+		// Index
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
-		/// Reports the index of the first occurrence of the specified string in "str".
+		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>
@@ -169,7 +155,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Reports the index of the first occurrence of the specified string in "str".
+		/// Reports the index of the first occurrence of the specified string in <paramref name="str"/>.
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>
@@ -211,35 +197,192 @@ namespace MKY
 			return (InvalidIndex);
 		}
 
+		#endregion
+
+		#region Count
+		//------------------------------------------------------------------------------------------
+		// Count
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
-		/// Splits "str" into chunks of "desiredChunkSize".
+		/// Counts the number of <paramref name="countChars"/> to the left of <paramref name="str"/>.
 		/// </summary>
-		public static string[] Split(string str, int desiredChunkSize)
+		public static int CountLeft(string str, params char[] countChars)
+		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
+			if (countChars != null)
+			{
+				int i = 0;
+				while (i < str.Length)
+				{
+					bool found = false;
+					foreach (char c in countChars)
+					{
+						if (str[i] == c)
+						{
+							found = true;
+							break; // Immediately break once a matching character has been found.
+						}
+					}
+
+					if (found)
+						i++;
+					else
+						break;
+				}
+
+				return (i);
+			}
+			else
+			{
+				return (0);
+			}
+		}
+
+		/// <summary>
+		/// Counts the number of <paramref name="countChars"/> to the right of <paramref name="str"/>.
+		/// </summary>
+		public static int CountRight(string str, params char[] countChars)
+		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
+			if (countChars != null)
+			{
+				int i = str.Length;
+				while (i > 0)
+				{
+					bool found = false;
+					foreach (char c in countChars)
+					{
+						if (str[i - 1] == c)
+						{
+							found = true;
+							break; // Immediately break once a matching character has been found.
+						}
+					}
+
+					if (found)
+						i--;
+					else
+						break;
+				}
+
+				return (str.Length - i);
+			}
+			else
+			{
+				return (0);
+			}
+		}
+
+		#endregion
+
+		#region Left/Mid/Right
+		//------------------------------------------------------------------------------------------
+		// Left/Mid/Right
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Truncates <paramref name="str"/> to the <paramref name="length"/> leftmost characters.
+		/// </summary>
+		public static string Left(string str, int length)
+		{
+			if (length >= str.Length)
+				return (str);
+			else
+				return (str.Substring(0, length));
+		}
+
+		/// <summary>
+		/// Truncates <paramref name="str"/> from <paramref name="begin"/> to <paramref name="end"/>.
+		/// </summary>
+		public static string Mid(string str, int begin, int end)
+		{
+			if (begin >= end)
+				return ("");
+			else
+				return (str.Substring(begin, end - begin + 1));
+		}
+
+		/// <summary>
+		/// Truncates <paramref name="str"/> to the <paramref name="length"/> rightmost characters.
+		/// </summary>
+		public static string Right(string str, int length)
+		{
+			if (length >= str.Length)
+				return (str);
+			else
+				return (str.Substring(str.Length - length, length));
+		}
+
+		#endregion
+
+		#region Split
+		//------------------------------------------------------------------------------------------
+		// Split
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Splits <paramref name="str"/> to the <paramref name="length"/> leftmost characters.
+		/// </summary>
+		public static string[] SplitLeft(string str, int length)
+		{
+			string left = Left(str, length);
+			string right = Right(str, (str.Length - left.Length));
+
+			List<string> l = new List<string>();
+			l.Add(left);
+			l.Add(right);
+			return (l.ToArray());
+		}
+
+		/// <summary>
+		/// Splits <paramref name="str"/> to the <paramref name="length"/> rightmost characters.
+		/// </summary>
+		public static string[] SplitRight(string str, int length)
+		{
+			string right = Right(str, length);
+			string left = Left(str, (str.Length - right.Length));
+
+			List<string> l = new List<string>();
+			l.Add(left);
+			l.Add(right);
+			return (l.ToArray());
+		}
+
+		/// <summary>
+		/// Splits <paramref name="str"/> into chunks of <paramref name="desiredChunkLength"/>.
+		/// </summary>
+		public static string[] SplitFixedLength(string str, int desiredChunkLength)
 		{
 			List<string> l = new List<string>();
-			for (int i = 0; i < str.Length; i += desiredChunkSize)
+			for (int i = 0; i < str.Length; i += desiredChunkLength)
 			{
-				int effectiveChunkSize = Int32Ex.LimitToBounds(desiredChunkSize, 0, str.Length - i);
-				l.Add(str.Substring(i, effectiveChunkSize));
+				int effectiveChunkLength = Int32Ex.LimitToBounds(desiredChunkLength, 0, str.Length - i);
+				l.Add(str.Substring(i, effectiveChunkLength));
 			}
 			return (l.ToArray());
 		}
 
 		/// <summary>
-		/// Splits "str" into chunks of "desiredChunkSize" taking word boundaries into account.
+		/// Splits <paramref name="str"/> into chunks of <paramref name="desiredChunkLength"/>,
+		/// taking word boundaries into account.
 		/// </summary>
-		public static string[] SplitLexically(string str, int desiredChunkSize)
+		public static string[] SplitLexically(string str, int desiredChunkLength)
 		{
 			List<string> chunks = new List<string>();
 			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
 
 			foreach (string paragraph in str.Split(newLineSeparators, StringSplitOptions.None))
-				chunks.AddRange(SplitLexicallyWithoutTakingNewLineIntoAccount(paragraph, desiredChunkSize));
+				chunks.AddRange(SplitLexicallyWithoutTakingNewLineIntoAccount(paragraph, desiredChunkLength));
 
 			return (chunks.ToArray());
 		}
 
-		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkSize)
+		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
 			List<int> spaces = new List<int>();
 
@@ -260,14 +403,14 @@ namespace MKY
 			while (startIndex < str.Length)
 			{
 				// Find the furthermost split position:
-				Predicate<int> p = new Predicate<int>(value => (value <= (startIndex + desiredChunkSize)));
+				Predicate<int> p = new Predicate<int>(value => (value <= (startIndex + desiredChunkLength)));
 				int spaceIndex = spaces.FindLastIndex(p);
 				
 				int splitIndex;
 				if (spaceIndex >= 0)
 					splitIndex = spaces[spaceIndex];
 				else
-					splitIndex = (startIndex + desiredChunkSize);
+					splitIndex = (startIndex + desiredChunkLength);
 
 				// Limit to split within the string and execute the split:
 				splitIndex = Int32Ex.LimitToBounds(splitIndex, startIndex, str.Length);
@@ -285,6 +428,108 @@ namespace MKY
 
 			return (chunks.ToArray());
 		}
+
+		#endregion
+
+		#region Trim
+		//------------------------------------------------------------------------------------------
+		// Trim
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Removes up to <paramref name="maxLength"/> leading and trailing occurrences of a set
+		/// of characters specified in an array from the current <see cref="System.String"/> object.
+		/// </summary>
+		/// <param name="str">The string to trim.</param>
+		/// <param name="maxLength">The maximum number of characters to trim at both ends.</param>
+		/// <param name="trimChars">An array of Unicode characters to remove or null.</param>
+		/// <returns>
+		/// The string that remains after all occurrences of the characters in the trimChars
+		/// parameter are removed from the start and end of the current <see cref="System.String"/>
+		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
+		/// instead.
+		/// </returns>
+		public static string TrimMaxLength(string str, int maxLength, params char[] trimChars)
+		{
+			if (trimChars != null)
+			{
+				// Left:
+				string[] sl = SplitLeft(str, maxLength);
+				string left = sl[0];
+				string rest = sl[1];
+				left = left.Trim(trimChars);
+
+				// Right:
+				string[] sr = SplitRight(rest, maxLength);
+				string mid = sr[0];
+				string right = sr[1];
+				right = right.Trim(trimChars);
+
+				// Re-compose:
+				return (left + mid + right);
+			}
+			else
+			{
+				return (str.Trim());
+			}
+		}
+
+		/// <summary>
+		/// Removes up to <paramref name="maxLength"/> leading and trailing occurrences of a set
+		/// of characters specified in an array from the current <see cref="System.String"/> object,
+		/// but only if they occur to both ends of the string.
+		/// </summary>
+		/// <param name="str">The string to trim.</param>
+		/// <param name="maxLength">The maximum number of characters to trim at both ends.</param>
+		/// <param name="trimChars">An array of Unicode characters to remove or null.</param>
+		/// <returns>
+		/// The string that remains after all occurrences of the characters in the trimChars
+		/// parameter are removed from the start and end of the current <see cref="System.String"/>
+		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
+		/// instead.
+		/// </returns>
+		public static string TrimMaxLengthSymmetrical(string str, int maxLength, params char[] trimChars)
+		{
+			if (trimChars != null)
+			{
+				int countLeft = CountLeft(str, trimChars);
+				int countRight = CountRight(str, trimChars);
+				int trimMaxLength = Math.Min(countLeft, countRight);
+
+				return (TrimMaxLength(str, trimMaxLength, trimChars));
+			}
+			else
+			{
+				return (str.Trim());
+			}
+		}
+
+		/// <summary>
+		/// Removes all leading and trailing occurrences of a set of characters specified in an
+		/// array from the current <see cref="System.String"/> object, but only if they occur to
+		/// both ends of the string.
+		/// </summary>
+		/// <param name="str">The string to trim.</param>
+		/// <param name="trimChars">An array of Unicode characters to remove or null.</param>
+		/// <returns>
+		/// The string that remains after all occurrences of the characters in the trimChars
+		/// parameter are removed from the start and end of the current <see cref="System.String"/>
+		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
+		/// instead.
+		/// </returns>
+		public static string TrimSymmetrical(string str, params char[] trimChars)
+		{
+			if (trimChars != null)
+			{
+				return (TrimMaxLengthSymmetrical(str, int.MaxValue, trimChars));
+			}
+			else
+			{
+				return (str.Trim());
+			}
+		}
+
+		#endregion
 	}
 }
 

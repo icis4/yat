@@ -829,7 +829,7 @@ namespace YAT.Domain.Parser
 					{
 						MemoryStream bytes = new MemoryStream();
 						string errorString = null;
-						foreach (string s in StringEx.Split(parseString, 2))
+						foreach (string s in StringEx.SplitFixedLength(parseString, 2))
 						{
 							byte b;
 							if (byte.TryParse(s, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out b))
