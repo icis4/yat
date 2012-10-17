@@ -92,6 +92,18 @@ namespace MKY.Test.CommandLine
 		public CommandLineEnum EnumValueOption;
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "StringArrayOption", ShortNames = new string[] { "sao" }, Description = "A string array option.")]
+		public string[] StringArrayOption;
+
+		/// <summary></summary>
+		[CLSCompliant(false)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "IntArrayOption", ShortNames = new string[] { "iao" }, Description = "An int array option.")]
+		public int[] IntArrayOption;
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "LongDescription", ShortName = "ld", Description =
 			"A long description string value option that comes with a description that blablabla blablabla blablabla blablabla blablabla " +
@@ -105,16 +117,6 @@ namespace MKY.Test.CommandLine
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Names = new string[] { "Help", "HelpText" }, ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
 		public bool HelpIsRequested;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Names = new string[] { "StringArgs", "StringArguments" }, ShortNames = new string[] { "sa" }, Description = "A string array option.")]
-		public string[] StringArrayOption;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Names = new string[] { "IntArgs", "IntArguments" }, ShortNames = new string[] { "ia" }, Description = "An int array option.")]
-		public int[] IntArrayOption;
 
 		/// <summary></summary>
 		public CommandLineArgs(string[] args)

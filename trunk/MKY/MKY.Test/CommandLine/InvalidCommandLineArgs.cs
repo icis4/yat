@@ -53,7 +53,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs1(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -75,7 +75,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs2(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -97,7 +97,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs3(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -120,7 +120,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs4(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -143,7 +143,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs5(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -166,7 +166,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs6(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -189,7 +189,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs7(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -212,7 +212,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs8(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}
@@ -235,7 +235,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		public InvalidCommandLineArgs9(string[] args)
-			: base(args)
+			: base(args, false, true, false)
 		{
 		}
 	}

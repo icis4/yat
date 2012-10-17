@@ -175,75 +175,89 @@ namespace MKY.CommandLine
 					{
 						// Ignore empty strings within the array.
 					}
-					else if (IsOption(thisArg, out pos) && SupportOptionArgs)
+					else if (IsOption(thisArg, out pos))
 					{
 						EndArrayOption();
 
-						// Prepare next argument:
-						string nextArg = null;
-						if ((i + 1) < this.args.Length)
-							nextArg = this.args[i + 1];
-
-						// Store option argument:
-						bool nextArgHasBeenConsumedToo = false;
-						object value = null;
-						FieldInfo field = null;
-						if (ParseOption(thisArg.Substring(pos), nextArg, ref nextArgHasBeenConsumedToo, ref value, ref field))
+						if (SupportOptionArgs)
 						{
-							string arg;
-							if (!nextArgHasBeenConsumedToo)
-								arg = thisArg;
-							else
-								arg = thisArg + " " + nextArg;
+							// Prepare next argument:
+							string nextArg = null;
+							if ((i + 1) < this.args.Length)
+								nextArg = this.args[i + 1];
 
-							if (field.FieldType.IsArray)
+							// Store option argument:
+							bool nextArgHasBeenConsumedToo = false;
+							object value = null;
+							FieldInfo field = null;
+							if (ParseOption(thisArg.Substring(pos), nextArg, ref nextArgHasBeenConsumedToo, ref value, ref field))
 							{
-								BeginArrayOption(field, value, arg);
-							}
-							else
-							{
-								if (InitializeOption(field, value))
-									this.optionArgs.Add(arg);
+								string arg;
+								if (!nextArgHasBeenConsumedToo)
+									arg = thisArg;
 								else
-									this.invalidArgs.Add(arg);
+									arg = thisArg + " " + nextArg;
+
+								if (field.FieldType.IsArray)
+								{
+									BeginArrayOption(field, value, arg);
+								}
+								else
+								{
+									if (InitializeOption(field, value))
+										this.optionArgs.Add(arg);
+									else
+										this.invalidArgs.Add(arg);
+								}
 							}
+							else
+							{
+								this.invalidArgs.Add(thisArg);
+							}
+
+							if (nextArgHasBeenConsumedToo)
+								i++; // Advance index.
 						}
-						else
+						else // !SupportOptionArgs
 						{
+							Debug.WriteLine(@"Option arg """ + thisArg + @""" detected but " + GetType() + " doesn't support option args");
 							this.invalidArgs.Add(thisArg);
 						}
-
-						if (nextArgHasBeenConsumedToo)
-							i++; // Advance index.
 					}
 					else if (IsValue(thisArg))
 					{
-						if (SupportOptionArgs && ArrayOptionIsBeingComposed)
-						{
-							ContinueArrayOption(thisArg);
-						}
-						else if (SupportValueArgs)
-						{
-							EndArrayOption();
-
-							if (InitializeValue(thisArg, this.valueArgs.Count))
-								this.valueArgs.Add(thisArg);
-							else
-								this.invalidArgs.Add(thisArg);
+						if (ArrayOptionIsBeingComposed)   // No need to check 'SupportOptionArgs',
+						{                                 // array option would never be began with
+							ContinueArrayOption(thisArg); // if 'SupportOptionArgs' was false.
 						}
 						else
 						{
 							EndArrayOption();
-							this.invalidArgs.Add(thisArg);
+
+							if (SupportValueArgs)
+							{
+								if (InitializeValue(thisArg, this.valueArgs.Count))
+									this.valueArgs.Add(thisArg);
+								else
+									this.invalidArgs.Add(thisArg);
+							}
+							else
+							{
+								Debug.WriteLine(@"Value arg """ + thisArg + @""" detected but " + GetType() + " doesn't support value args");
+								this.invalidArgs.Add(thisArg);
+							}
 						}
 					}
 					else
 					{
 						EndArrayOption();
 
+						Debug.WriteLine(@"Invalid arg """ + thisArg + @""" detected in " + GetType());
 						this.invalidArgs.Add(thisArg);
 					}
 				}
+
+				EndArrayOption();
 			}
 		}
 
@@ -280,7 +294,7 @@ namespace MKY.CommandLine
 			{
 				if (this.arrayOptionValues.Count > 0)
 				{
-					InitializeOption(this.arrayOptionField, this.arrayOptionValues);
+					InitializeArrayOption(this.arrayOptionField, this.arrayOptionValues.ToArray());
 					this.arrayOptionArgs.Add(this.arrayOptionStrings.ToArray());
 				}
 				else
@@ -609,7 +623,7 @@ namespace MKY.CommandLine
 
 						// Trim and process value:
 						valueStr = valueStr.Trim();
-						valueStr = valueStr.Trim('"');
+						valueStr = StringEx.TrimSymmetrical(valueStr, '"');
 
 						if (valueStr.Length <= 0)
 							return (false);
@@ -642,7 +656,31 @@ namespace MKY.CommandLine
 		{
 			try
 			{
-				field.SetValue(this, Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture));
+				object convertedValue = Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture);
+				field.SetValue(this, convertedValue);
+				this.optionFields.Add(field);
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex);
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Initializes an option argument.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		protected virtual bool InitializeArrayOption(FieldInfo field, object[] values)
+		{
+			try
+			{
+				Type t = field.FieldType.GetElementType();
+				int n = values.Length;
+				Array convertedValues = Array.CreateInstance(t, n);
+				Array.Copy(Array.ConvertAll(values, value => Convert.ChangeType(value, t, CultureInfo.InvariantCulture)), convertedValues, n);
+				field.SetValue(this, convertedValues);
 				this.optionFields.Add(field);
 				return (true);
 			}
@@ -667,7 +705,6 @@ namespace MKY.CommandLine
 
 				value = optionArgWithoutIndicator.Substring(pos + 1);
 				value = value.Trim();
-				value = value.Trim('"');
 
 				return (true);
 			}
@@ -675,6 +712,7 @@ namespace MKY.CommandLine
 			{
 				option = null;
 				value = null;
+
 				return (false);
 			}
 		}
@@ -858,7 +896,7 @@ namespace MKY.CommandLine
 			FieldInfo[] fields = GetMemberFields();
 
 			helpText.AppendLine();
-			helpText.AppendLine("Arguments:");
+			helpText.AppendLine("Value arguments:");
 			helpText.AppendLine();
 			foreach (FieldInfo field in fields)
 			{
@@ -873,7 +911,7 @@ namespace MKY.CommandLine
 			}
 
 			helpText.AppendLine();
-			helpText.AppendLine("Options:");
+			helpText.AppendLine("Option arguments:");
 			helpText.AppendLine();
 			foreach (FieldInfo field in fields)
 			{
@@ -984,7 +1022,7 @@ namespace MKY.CommandLine
 			{
 				helpText.AppendLine();
 				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
-					@"Use quotes to pass string values that ""including spaces"". " +
+					@"Use quotes to pass string values ""including spaces"". " +
 					@"Use \"" to pass a quote."));
 			}
 
