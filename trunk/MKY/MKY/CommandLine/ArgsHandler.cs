@@ -499,11 +499,19 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Determines whether value args are supported.
+		/// Determines whether option args are supported.
 		/// </summary>
 		protected virtual bool SupportOptionArgs
 		{
 			get { return (this.supportOptionArgs || this.supportArrayOptionArgs); }
+		}
+
+		/// <summary>
+		/// Determines whether array option args are supported.
+		/// </summary>
+		protected virtual bool SupportArrayOptionArgs
+		{
+			get { return (this.supportArrayOptionArgs); }
 		}
 
 		/// <summary>
@@ -795,6 +803,20 @@ namespace MKY.CommandLine
 			{
 				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 				{
+					if(!SupportOptionArgs)
+					{
+						string message = "Option argument defined, but support for option arguments in not enabled in constructor call";
+						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+						throw (new RuntimeValidationException(message));
+					}
+
+					if (field.FieldType.IsArray && !SupportArrayOptionArgs)
+					{
+						string message = "Array option argument defined, but support for array option arguments in not enabled in constructor call";
+						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+						throw (new RuntimeValidationException(message));
+					}
+
 					foreach (string s in att.ShortNames)
 					{
 						if (optionStrings.Contains(s))
@@ -820,6 +842,15 @@ namespace MKY.CommandLine
 						{
 							optionStrings.Add(s);
 						}
+					}
+				}
+				foreach (ValueArgAttribute att in GetValueArgAttributes(field))
+				{
+					if (!SupportValueArgs)
+					{
+						string message = "Value argument defined, but support for value arguments in not enabled in constructor call";
+						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+						throw (new RuntimeValidationException(message));
 					}
 				}
 			}
