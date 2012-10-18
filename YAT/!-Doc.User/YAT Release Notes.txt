@@ -67,7 +67,7 @@ Important changes:
 - Massive refactoring of the display data/event path, implementation is now fully asynchronous
    > Prevents race conditions while processing fast and large amounts of data
    > Fixes several display and log issues with mixed up data, and improves performance
-   > Fixes bugs #2455804, #2868735, #2981794, #3176813, #3284550 and #3480565
+   > Fixes bugs #2005758, #2455804, #2868735, #2981794, #3176813, #3284550 and #3480565
 - Serial COM port, USB as well as TCP/IP and UDP/IP socket functionality of MKY.IO.Serial has been
   split into separate assemblies to allow dedicated use of one of the new assemblies without
   unnecessary dependencies to the other parts (feature request #3388950)
