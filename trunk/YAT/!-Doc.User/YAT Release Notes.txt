@@ -96,7 +96,8 @@ Fixed bugs:
 - Binary length line break fixed, again works correctly
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Printer dialog also gets shown on 64-bit systems
-- Terminal SaveAs dialog no longer shows .yat.yat in case of already saved files (bug #3532391)
+- Terminal 'SaveAs' dialog no longer shows .yat.yat in case of already saved files (bug #3532391)
+- Proper handling if a .yaw or .yat was located on a storage that has been removed (bug #2455825)
 - Handling of potential FileNotFoundException in YAT.Gui.Forms.WelcomeScreen improved (bug #3576101)
 - Handling of UnauthorizedAccessException in YAT.Model.Terminal/Workspace improved (bug #3533201)
 - Handling of InvalidOperationException in ALAZ.SystemEx.BaseSocketConnHost improved (bug #3528765)
@@ -111,12 +112,12 @@ Limitations and known issues:
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything. (bug #3454532)
+   > System errors are output in local language, even though YAT is all-English (bug #1927786)
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494, #2846917, #3160095 and #3454550)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
 - Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
-- Response of multi-line commands or files is delayed (bug #3072919)
 - Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
@@ -131,7 +132,6 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- System errors are output in local language, even though YAT is all-English (bug #1927786)
 
 
 YAT 2.0 Beta 4 Candidate 1 Version 1.99.28 :: 2011-12-05
@@ -198,6 +198,8 @@ Fixed bugs:
 - NullReferenceException in YAT.Log fixed (bug #3441961)
 
 Limitations and known issues:
+- General imitations of .NET Windows.Forms
+   > System errors are output in local language, even though YAT is all-English (bug #1927786)
 - MDI limitations of .NET
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494, #2846917 and #3160095)
@@ -218,7 +220,6 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- System errors are output in local language, even though YAT is all-English (bug #1927786)
 
 
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25

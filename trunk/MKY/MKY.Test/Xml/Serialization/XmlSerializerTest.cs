@@ -340,7 +340,7 @@ namespace MKY.Test.Xml.Serialization
 			// Save.
 			try
 			{
-				SerializeToFile(filePath, type, obj);
+				XmlSerializerEx.SerializeToFile(filePath, type, obj);
 			}
 			catch (Exception ex)
 			{
@@ -353,7 +353,7 @@ namespace MKY.Test.Xml.Serialization
 			// Load.
 			try
 			{
-				DeserializeFromFile(filePath, type);
+				XmlSerializerEx.DeserializeFromFile(filePath, type);
 			}
 			catch (Exception ex)
 			{
@@ -365,7 +365,7 @@ namespace MKY.Test.Xml.Serialization
 
 			try
 			{
-				TolerantDeserializeFromFile(filePath, type);
+				XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
 			}
 			catch (Exception ex)
 			{
@@ -377,7 +377,7 @@ namespace MKY.Test.Xml.Serialization
 
 			try
 			{
-				AlternateTolerantDeserializeFromFile(filePath, type, null);
+				XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, null);
 			}
 			catch (Exception ex)
 			{
@@ -387,73 +387,6 @@ namespace MKY.Test.Xml.Serialization
 				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
 		}
-
-		#endregion
-
-		#region Static Methods
-		//==========================================================================================
-		// Static Methods
-		//==========================================================================================
-
-		#region Static Methods > Serialize
-		//------------------------------------------------------------------------------------------
-		// Static Methods > Serialize
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public static void SerializeToFile(string filePath, Type type, object settings)
-		{
-			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				serializer.Serialize(sw, settings);
-			}
-		}
-
-		#endregion
-
-		#region Static Methods > Deserialize
-		//------------------------------------------------------------------------------------------
-		// Static Methods > Deserialize
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public static object DeserializeFromFile(string filePath, Type type)
-		{
-			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				settings = serializer.Deserialize(sr);
-			}
-			return (settings);
-		}
-
-		/// <summary></summary>
-		public static object TolerantDeserializeFromFile(string filePath, Type type)
-		{
-			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-			{
-				TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-				settings = serializer.Deserialize(sr);
-			}
-			return (settings);
-		}
-
-		/// <summary></summary>
-		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
-		{
-			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-			{
-				AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
-				settings = serializer.Deserialize(sr);
-			}
-			return (settings);
-		}
-
-		#endregion
 
 		#endregion
 	}

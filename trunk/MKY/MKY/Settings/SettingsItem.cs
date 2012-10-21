@@ -401,6 +401,12 @@ namespace MKY.Settings
 
 		#endregion
 	}
+
+	/// <summary></summary>
+	[Serializable]
+	public class EmptySettingsItem : SettingsItem
+	{
+	}
 }
 
 //==================================================================================================

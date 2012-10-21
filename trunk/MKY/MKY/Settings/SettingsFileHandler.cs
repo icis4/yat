@@ -29,10 +29,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
-using System.Xml.Serialization;
 
 using MKY.Diagnostics;
+using MKY.IO;
 using MKY.Xml;
 using MKY.Xml.Serialization;
 
@@ -41,24 +40,146 @@ using MKY.Xml.Serialization;
 namespace MKY.Settings
 {
 	/// <summary>
-	/// Static utility class to provide basic settings file handling methods.
+	/// Utility class to provide basic settings file handling methods.
 	/// </summary>
-	public static class SettingsFileHandler
+	public class SettingsFileHandler
 	{
-		#region Static Methods
+		#region Fields
 		//==========================================================================================
-		// Static Methods
+		// Fields
 		//==========================================================================================
 
-		#region Static Methods > Load
+		private string filePath;
+
+		private bool successfullyLoaded;
+
+		private string lastAccessFilePath;
+		private DateTime lastAccessTimeUtc;
+
+		private Type parentType;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		public SettingsFileHandler()
+			: this("", null)
+		{
+		}
+
+		/// <summary></summary>
+		public SettingsFileHandler(string filePath)
+			: this(filePath, null)
+		{
+		}
+
+		/// <summary></summary>
+		public SettingsFileHandler(Type parentType)
+			: this("", parentType)
+		{
+		}
+
+		/// <summary></summary>
+		public SettingsFileHandler(string filePath, Type parentType)
+		{
+			this.filePath = filePath;
+			this.parentType = parentType;
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Complete path to settings file.
+		/// </summary>
+		public virtual string FilePath
+		{
+			get { return (this.filePath); }
+			set { this.filePath = value;  }
+		}
+
+		/// <summary>
+		/// Returns whether the settings file path is defined.
+		/// </summary>
+		public virtual bool FilePathIsDefined
+		{
+			get { return (PathEx.IsDefined(this.filePath)); }
+		}
+
+		/// <summary>
+		/// Returns whether the settings file path is valid.
+		/// </summary>
+		public virtual bool FilePathIsValid
+		{
+			get { return (PathEx.IsValid(this.filePath)); }
+		}
+
+		/// <summary>
+		/// Returns whether the settings file exists.
+		/// </summary>
+		public virtual bool FileExists
+		{
+			get { return (File.Exists(this.filePath)); }
+		}
+
+		/// <summary>
+		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
+		/// no valid settings file available.
+		/// </summary>
+		public virtual bool FileSuccessfullyLoaded
+		{
+			get { return (this.successfullyLoaded); }
+		}
+
+		/// <summary>
+		/// Returns whether the settings file is up to date.
+		/// </summary>
+		public virtual bool FileIsUpToDate
+		{
+			get
+			{
+				// String validation and file existence:
+				if (!FileExists)
+					return (false);
+
+				// Return whether current settings file is still the same as at the last access.
+				if (!PathEx.Equals(this.filePath, this.lastAccessFilePath))
+					return (false);
+
+				return (File.GetLastAccessTimeUtc(this.filePath) == this.lastAccessTimeUtc);
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		#region Methods > Load
 		//------------------------------------------------------------------------------------------
-		// Static Methods > Load
+		// Methods > Load
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public static object LoadFromFile(string filePath, Type type, Type parentType)
+		public object LoadFromFile(Type type)
 		{
-			return (LoadFromFile(filePath, type, null, parentType));
+			return (LoadFromFile(type, null));
+		}
+
+		/// <summary></summary>
+		public object LoadFromFile(Type type, AlternateXmlElement[] alternateXmlElements)
+		{
+			return (LoadFromFile(this.filePath, type, alternateXmlElements));
 		}
 
 		/// <summary>
@@ -86,160 +207,158 @@ namespace MKY.Settings
 		///  > Current solution also works for other software that makes use of MKY or YAT code
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		public static object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements, Type parentType)
+		public object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
 		{
+			bool success = false;
+			object result = null; // If not successful, return <c>null</c>.
+
 			// Try to open existing file of current version.
-			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
+			if (FileExists) // First check for file to minimize exceptions thrown.
 			{
 				// Try to open existing file with default deserialization.
 				// Always try this as this is the fastest way of deserialization.
 				try
 				{
-					return (DeserializeFromFile(filePath, type));
+					result = XmlSerializerEx.DeserializeFromFile(filePath, type);
+					success = true;
 				}
 				catch { }
 
-				if (alternateXmlElements == null)
+				if (!success)
 				{
-					// Try to open existing file with tolerant deserialization.
-					try
+					if (alternateXmlElements == null)
 					{
-						return (TolerantDeserializeFromFile(filePath, type));
+						// Try to open existing file with tolerant deserialization.
+						try
+						{
+							result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+							success = true;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(this.parentType, ex);
+						}
 					}
-					catch (Exception ex)
+					else
 					{
-						DebugEx.WriteException(parentType, ex);
+						// Try to open existing file with tolerant/alternate-tolerant deserialization.
+						try
+						{
+							result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
+							success = true;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(this.parentType, ex);
+						}
 					}
 				}
-				else
-				{
-					// Try to open existing file with tolerant/alternate-tolerant deserialization.
-					try
-					{
-						return (AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements));
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(parentType, ex);
-					}
-				}
 			}
 
-			// If not successful, return <c>null</c>.
-			return (null);
-		}
-
-		#region Static Methods > Load > Deserialize
-		//------------------------------------------------------------------------------------------
-		// Static Methods > Load > Deserialize
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public static object DeserializeFromFile(string filePath, Type type)
-		{
-			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
+			if (success)
 			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				settings = serializer.Deserialize(sr);
-			}
-			return (settings);
-		}
+				this.successfullyLoaded = true;
 
-		/// <remarks>
-		/// For details on tolerant serialization <see cref="LoadFromFile(string, Type, AlternateXmlElement[], Type)"/> above.
-		/// </remarks>
-		public static object TolerantDeserializeFromFile(string filePath, Type type)
-		{
-			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-			{
-				TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-				settings = serializer.Deserialize(sr);
+				this.lastAccessFilePath = filePath;
+				this.lastAccessTimeUtc = File.GetLastAccessTimeUtc(filePath);
 			}
-			return (settings);
-		}
 
-		/// <remarks>
-		/// For details on tolerant serialization <see cref="LoadFromFile(string, Type, AlternateXmlElement[], Type)"/> above.
-		/// </remarks>
-		public static object AlternateTolerantDeserializeFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
-		{
-			object settings = null;
-			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-			{
-				AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
-				settings = serializer.Deserialize(sr);
-			}
-			return (settings);
+			return (result);
 		}
 
 		#endregion
 
-		#endregion
-
-		#region Static Methods > Save
+		#region Methods > Save
 		//------------------------------------------------------------------------------------------
-		// Static Methods > Save
+		// Methods > Save
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		public static void SaveToFile(string filePath, Type type, object settings, Type parentType)
+		public bool SaveToFile(Type type, object settings)
 		{
-			string backup = filePath + IO.FileEx.BackupFileExtension;
+			return (SaveToFile(this.filePath, type, settings));
+		}
 
-			try
-			{
-				if (File.Exists(backup))
-					File.Delete(backup);
-				if (File.Exists(filePath))
-					File.Move(filePath, backup);
-			}
-			catch { }
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		public bool SaveToFile(string filePath, Type type, object settings)
+		{
+			bool success = false;
 
-			try
+			if (FilePathIsValid)
 			{
-				SerializeToFile(filePath, type, settings);
-			}
-			catch
-			{
-				try
-				{
-					if (File.Exists(backup))
-						File.Move(backup, filePath);
-				}
-				catch { }
+				string backup = filePath + IO.FileEx.BackupFileExtension;
 
-				throw; // Re-throw!
-			}
-			finally
-			{
 				try
 				{
 					if (File.Exists(backup))
 						File.Delete(backup);
+					if (File.Exists(filePath))
+						File.Move(filePath, backup);
 				}
 				catch { }
-			}
-		}
 
-		#region Static Methods > Save > Serialize
-		//------------------------------------------------------------------------------------------
-		// Static Methods > Save > Serialize
-		//------------------------------------------------------------------------------------------
+				try
+				{
+					XmlSerializerEx.SerializeToFile(filePath, type, settings);
 
-		/// <summary></summary>
-		public static void SerializeToFile(string filePath, Type type, object settings)
-		{
-			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				serializer.Serialize(sw, settings);
+					this.lastAccessFilePath = filePath;
+					this.lastAccessTimeUtc = File.GetLastAccessTimeUtc(filePath);
+
+					success = true;
+				}
+				catch
+				{
+					try
+					{
+						if (File.Exists(backup))
+							File.Move(backup, filePath);
+					}
+					catch { }
+
+					throw; // Re-throw!
+				}
+				finally
+				{
+					try
+					{
+						if (File.Exists(backup))
+							File.Delete(backup);
+					}
+					catch { }
+				}
 			}
+
+			return (success);
 		}
 
 		#endregion
+
+		#region Methods > Delete
+		//------------------------------------------------------------------------------------------
+		// Methods > Delete
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Tries to delete file <see cref="FilePath"/>.
+		/// </summary>
+		/// <returns>
+		/// Returns <c>true</c> if file successfully saved.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		public virtual bool TryDelete()
+		{
+			try
+			{
+				File.Delete(this.filePath);
+				return (true);
+			}
+			catch
+			{
+				return (false);
+			}
+		}
 
 		#endregion
 

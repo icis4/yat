@@ -82,33 +82,37 @@ namespace YAT.Gui.Forms
 				return (UnhandledExceptionResult.Continue);
 
 			string productName = Application.ProductName;
+
 			StringBuilder titleBuilder = new StringBuilder(productName);
-			titleBuilder.Append(" Unhandled");
+			{
+				titleBuilder.Append(" Unhandled");
 
-			if (isAsync)
-				titleBuilder.Append(" Asynchronous");
-			else
-				titleBuilder.Append(" Synchronous");
+				if (isAsync)
+					titleBuilder.Append(" Asynchronous");
+				else
+					titleBuilder.Append(" Synchronous");
 
-			titleBuilder.Append(" Exception");
+				titleBuilder.Append(" Exception");
+			}
+			string title = titleBuilder.ToString();
 
 			if (exception != null)
 			{
 				if (MessageBox.Show(owner,
 									originMessage + Environment.NewLine +
 									"Show detailed information?",
-									productName,
+									title,
 									MessageBoxButtons.YesNo,
 									MessageBoxIcon.Error) == DialogResult.Yes)
 				{
-					UnhandledException f = new UnhandledException(exception, titleBuilder.ToString(), originMessage);
+					UnhandledException f = new UnhandledException(exception, title, originMessage);
 					f.ShowDialog(owner);
 				}
 			}
 			else
 			{
 				MessageBox.Show(owner,
-								titleBuilder.ToString() + Environment.NewLine +
+								title +Environment.NewLine +
 								originMessage,
 								productName,
 								MessageBoxButtons.OK,
@@ -123,7 +127,7 @@ namespace YAT.Gui.Forms
 										"Select cancel/abort to exit " + productName + " now." + Environment.NewLine +
 										"Or would you like to continue/retry anyway?" + Environment.NewLine +
 										"Or would you like to continue but ignore any additional unhandled exceptions?",
-										productName,
+										title,
 										MessageBoxButtons.AbortRetryIgnore,
 										MessageBoxIcon.Exclamation))
 				{
@@ -135,12 +139,12 @@ namespace YAT.Gui.Forms
 				{
 					switch (MessageBox.Show(owner,
 											"Would you like to restart " + productName + " after exit?",
-											productName,
+											productName + " Restart",
 											MessageBoxButtons.YesNo,
 											MessageBoxIcon.Question))
 					{
 						case DialogResult.Yes: result = UnhandledExceptionResult.ExitAndRestart; break;
-						default:               result = UnhandledExceptionResult.Exit; break;
+						default:               result = UnhandledExceptionResult.Exit;           break;
 					}
 				}
 				return (result);
@@ -151,7 +155,7 @@ namespace YAT.Gui.Forms
 				switch (MessageBox.Show(owner,
 										"After this unhandled exception " + productName + " will have to exit." + Environment.NewLine +
 										"Would you like to restart " + productName + " after exit?",
-										productName,
+										productName + " Restart",
 										MessageBoxButtons.YesNo,
 										MessageBoxIcon.Question))
 				{

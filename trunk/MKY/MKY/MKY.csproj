@@ -175,6 +175,7 @@
     <Compile Include="Xml\Serialization\AlternateTolerantXmlSerializer.cs" />
     <Compile Include="Xml\AlternateXmlElement.cs" />
     <Compile Include="Xml\Serialization\TolerantXmlSerializer.cs" />
+    <Compile Include="Xml\Serialization\XmlSerializerEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
