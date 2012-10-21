@@ -37,12 +37,12 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			// Form title
+			// Form title/caption:
 			string text = Application.ProductName;
 			text += " Help";
 			Text = text;
 
-			// Help texts
+			// Help texts:
 			textBox_ParserFormat.Text = Domain.Parser.Parser.FormatHelp;
 			textBox_ParserFormat.SelectionStart = 0;
 			textBox_ParserFormat.SelectionLength = 0;

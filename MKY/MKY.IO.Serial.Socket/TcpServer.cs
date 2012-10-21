@@ -525,14 +525,17 @@ namespace MKY.IO.Serial.Socket
 			{
 				try
 				{
-					this.socket.Stop();
+					this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
 				}
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex);
 				}
+			}
 
-				try
+			if (this.socket != null) // If everything works as intended, the socket will already
+			{                        // have gotten disposed while handling the 'Disconnected'
+				try                  // event that is raised after the call to Stop() above.
 				{
 					this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
 				}

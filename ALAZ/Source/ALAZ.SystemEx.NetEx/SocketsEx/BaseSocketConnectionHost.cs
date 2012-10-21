@@ -194,7 +194,17 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 FBufferManager = null;
             }
 
+            // ----- \remind BEGIN -----
+            // 2012-10-21 / Matthias Klaey
+            // Ensure that lock is properly released, even in cases where asynchronous calls are
+            // still being processed while the socket is free'd.
+
+            FSocketConnectionsSync.Dispose();
+
+            // ----- \remind  END  -----
+
             FSocketConnectionsSync = null;
+
             FSocketService = null;
             FDelimiter = null;
             FDelimiterEncrypt = null;

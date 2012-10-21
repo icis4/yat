@@ -50,8 +50,8 @@ namespace YAT.Settings.Application
 		// Static Fields
 		//==========================================================================================
 
-		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> staticSettingsHandler =
-			new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
+		private static ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem> staticSettingsHandler =
+			new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>(false, true, false);
 
 		#endregion
 
@@ -67,9 +67,9 @@ namespace YAT.Settings.Application
 		}
 
 		/// <summary></summary>
-		public static bool LocalUserSettingsSuccessfullyLoaded
+		public static bool LocalUserSettingsSuccessfullyLoadedFromFile
 		{
-			get { return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoaded); }
+			get { return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoadedFromFile); }
 		}
 
 		/// <summary></summary>
@@ -82,12 +82,6 @@ namespace YAT.Settings.Application
 		public static string LocalUserSettingsFilePath
 		{
 			get { return (staticSettingsHandler.LocalUserSettingsFilePath); }
-		}
-
-		/// <summary></summary>
-		public static bool SettingsSuccessfullyLoaded
-		{
-			get { return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoaded); }
 		}
 
 		#endregion
@@ -104,7 +98,7 @@ namespace YAT.Settings.Application
 		{
 			try
 			{
-				staticSettingsHandler = new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
+				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>(false, true, false);
 				return (true);
 			}
 			catch
@@ -117,6 +111,10 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Load settings. So far, there are only local user settings.
 		/// </summary>
+		/// <returns>
+		/// Returns <c>true</c> if settings could be loaded from teh respective file paths,
+		/// return <c>false</c> if they could not be loaded and were set to defaults instead.
+		/// </returns>
 		public static bool Load()
 		{
 			if (staticSettingsHandler != null)

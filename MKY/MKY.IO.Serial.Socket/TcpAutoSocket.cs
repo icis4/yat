@@ -320,17 +320,18 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case SocketState.Reset:
 					case SocketState.Error:
-						{
-							return (true);
-						}
+					{
+						return (true);
+					}
 					default:
-						{
-							return (false);
-						}
+					{
+						return (false);
+					}
 				}
 			}
 		}
@@ -347,6 +348,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case SocketState.Connected:
@@ -384,6 +386,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case SocketState.Connected:
@@ -408,6 +411,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case SocketState.Listening:
@@ -450,7 +454,8 @@ namespace MKY.IO.Serial.Socket
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
-			switch (this.state)
+
+			switch (GetStateSynchronized())
 			{
 				case SocketState.Reset:
 				case SocketState.Error:
@@ -471,7 +476,20 @@ namespace MKY.IO.Serial.Socket
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
-			StopAutoSocket();
+
+			switch (GetStateSynchronized())
+			{
+				case SocketState.Reset:
+				{
+					Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Stop() requested but state is " + this.state + ".");
+					return;
+				}
+				default:
+				{
+					StopAutoSocket();
+					return;
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -479,10 +497,13 @@ namespace MKY.IO.Serial.Socket
 		{
 			AssertNotDisposed();
 
-			if (IsClient)
-				this.client.Send(data);
-			else if (IsServer)
-				this.server.Send(data);
+			if (IsReadyToSend)
+			{
+				if      (IsClient)
+					this.client.Send(data);
+				else if (IsServer)
+					this.server.Send(data);
+			}
 		}
 
 		#endregion
@@ -512,7 +533,17 @@ namespace MKY.IO.Serial.Socket
 			this.state = state;
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
-			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
+			string isClientOrServerString;
+			if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
+				isClientOrServerString = "is connected as client";
+			else if (IsServer && IsConnected)
+				isClientOrServerString = "is connected as server";
+			else if (IsServer && !IsConnected)
+				isClientOrServerString = "is server and listening";
+			else
+				isClientOrServerString = "is neither client nor server";
+
+			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ", " + isClientOrServerString + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}

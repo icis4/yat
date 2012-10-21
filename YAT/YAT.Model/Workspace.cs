@@ -470,10 +470,12 @@ namespace YAT.Model
 		private bool TryAutoSave()
 		{
 			bool success = false;
+
 			if (this.settingsHandler.SettingsFileExists && !this.settingsRoot.AutoSaved)
-				success = SaveToFile(false);
+				success = SaveTerminalsAndWorkspaceToFile(false);
 			else
-				success = SaveToFile(true);
+				success = SaveTerminalsAndWorkspaceToFile(true);
+
 			return (success);
 		}
 
@@ -487,10 +489,10 @@ namespace YAT.Model
 		private bool TryAutoSaveIfFileAlreadyAutoSaved()
 		{
 			bool success = false;
+
 			if (this.settingsHandler.SettingsFileExists && this.settingsRoot.AutoSaved)
-			{
-				success = SaveToFile(true);
-			}
+				success = SaveTerminalsAndWorkspaceToFile(true);
+
 			return (success);
 		}
 
@@ -517,17 +519,17 @@ namespace YAT.Model
 				if (this.settingsHandler.Settings.AutoSaved)
 				{
 					if (autoSaveIsAllowed)
-						success = SaveToFile(true);
+						success = SaveTerminalsAndWorkspaceToFile(true);
 				}
 				else
 				{
-					success = SaveToFile(false);
+					success = SaveTerminalsAndWorkspaceToFile(false);
 				}
 			}
 			else // Auto save creates default file path.
 			{
 				if (autoSaveIsAllowed)
-					success = SaveToFile(true);
+					success = SaveTerminalsAndWorkspaceToFile(true);
 			}
 
 			// If not successful yet, request new file path.
@@ -549,28 +551,17 @@ namespace YAT.Model
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
 			this.settingsHandler.SettingsFilePath = filePath;
-			return (SaveToFile(false, autoSaveFilePathToDelete));
+			return (SaveTerminalsAndWorkspaceToFile(false, autoSaveFilePathToDelete));
 		}
 
-		private bool SaveToFile(bool doAutoSave)
+		private bool SaveTerminalsAndWorkspaceToFile(bool doAutoSave)
 		{
-			return (SaveToFile(doAutoSave, ""));
+			return (SaveTerminalsAndWorkspaceToFile(doAutoSave, ""));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
-		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
+		private bool SaveTerminalsAndWorkspaceToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
-			// -------------------------------------------------------------------------------------
-			// Skip save if file is up to date and there were no changes.
-			// -------------------------------------------------------------------------------------
-
-			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
-			{
-				// Event must be fired anyway to ensure that dependent objects are updated.
-				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
-				return (true);
-			}
-
 			// -------------------------------------------------------------------------------------
 			// First, save all contained terminals.
 			// -------------------------------------------------------------------------------------
@@ -592,6 +583,17 @@ namespace YAT.Model
 			{
 				OnTimedStatusTextRequest("Workspace not saved!");
 				return (false);
+			}
+
+			// -------------------------------------------------------------------------------------
+			// Skip save of workspace file if file is up to date and there were no changes.
+			// -------------------------------------------------------------------------------------
+
+			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
+			{
+				// Event must be fired anyway to ensure that dependent objects are updated.
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
+				return (true);
 			}
 
 			try
@@ -705,22 +707,15 @@ namespace YAT.Model
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
-			// Don't try to auto save if there is no existing file (w1).
+			// Don't try to auto save if there is no existing file (w1):
 			if (!isMainClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			// First, close all contained terminals signaling them a workspace close.
-			if (!CloseAllTerminals(true, tryAutoSave))
-			{
-				OnTimedStatusTextRequest("Workspace not closed.");
-				return (false);
-			}
-
 			bool success = false;
 
-			// Try to auto save if desired.
+			// Try to auto save if desired:
 			if (tryAutoSave)
 				success = TryAutoSave();
 
@@ -771,6 +766,11 @@ namespace YAT.Model
 				}
 			} // End of if no success on auto save or auto save disabled.
 
+			// Then, close all contained terminals signaling them a workspace close, but do not try
+			// auto save again:
+			if (success)
+				success = CloseAllTerminals(true, false);
+
 			if (success)
 			{
 				// Status text request must be before closed event, closed event may close the view.
@@ -782,7 +782,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Workspace not closed!");
 			}
 
-			// All done, all resources can get disposed.
+			// All done, all resources can get disposed:
 			Dispose();
 
 			return (success);
@@ -794,6 +794,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool TryTerminalAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
 		{
+			// Do not auto save if no file exists anymore.
+			// Applies when settings were e.g. loaded from a memory stick but the stick was removed.
+			if (tryAutoSave && !SettingsFileExists && !terminal.SettingsFileExists)
+				return (false);
+
 			// Do not auto save if terminal file already exists but workspace doesn't.
 			// Applies to terminal use case w4a/b.
 			if (tryAutoSave && !SettingsFileExists && terminal.SettingsFileExists)
@@ -1420,13 +1425,15 @@ namespace YAT.Model
 
 			bool success = true;
 
-			// Calling Close() on a terminal will modify the list, therefore clone it first.
+			// Calling Close() on a terminal will modify 'this.terminals' in the terminal_Closed()
+			// event, therefore clone the list first.
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
 				if (!t.Close(isWorkspaceClose, TryTerminalAutoSaveIsDesired(tryAutoSave, t)))
 					success = false;
 			}
+
 			return (success);
 		}
 

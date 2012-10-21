@@ -1032,7 +1032,7 @@ namespace YAT.Gui.Forms
 
 		private void ApplyWindowSettingsAccordingToStartup()
 		{
-			if (ApplicationSettings.LocalUserSettingsSuccessfullyLoaded)
+			if (ApplicationSettings.LocalUserSettingsSuccessfullyLoadedFromFile)
 			{
 				SuspendLayout();
 

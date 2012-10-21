@@ -64,7 +64,7 @@ namespace YAT.Gui.Forms
 			this.title = title;
 			this.originMessage = originMessage;
 
-			// Set form title.
+			// Set form title/caption.
 			Text = this.title;
 
 			// Compose exception text.

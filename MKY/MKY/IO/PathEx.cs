@@ -35,7 +35,36 @@ namespace MKY.IO
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class PathEx
 	{
-		#region LimitPath Method
+		#region Is...()
+
+		/// <summary>
+		/// Returns whether the folder or file path is defined.
+		/// </summary>
+		public static bool IsDefined(string path)
+		{
+			// String validation:
+			if (string.IsNullOrEmpty(path))
+				return (false);
+
+			return (true);
+		}
+
+		/// <summary>
+		/// Returns whether the folder or file path is valid.
+		/// </summary>
+		public static bool IsValid(string path)
+		{
+			// String validation:
+			if (string.IsNullOrEmpty(path))
+				return (false);
+
+			// File path validation:
+			return (!string.IsNullOrEmpty(Path.GetFullPath(path)));
+		}
+
+		#endregion
+
+		#region LimitPath()
 
 		/// <summary>
 		/// Limits a folder or file path to the specified max length.
@@ -72,7 +101,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Equals Method
+		#region Equals()
 
 		/// <summary>
 		/// Compares two specified path string dependent on the operating systems policies.
@@ -97,7 +126,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region ConvertPathToPlatform Method
+		#region ConvertPathToPlatform()
 
 		/// <summary>
 		/// Convert non-platform separators according to platform.
@@ -110,7 +139,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Compare Methods
+		#region Compare...()
 
 		/// <summary>
 		/// Compares directoryPath2 relative to directoryPath1 and returns relative path of directory2.
@@ -196,7 +225,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Combine Methods
+		#region Combine...()
 
 		/// <summary>
 		/// Resolves directoryPath2 relative to directoryPath1 and returns absolute path of directory2.
@@ -284,7 +313,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region DoCompareDirectoryPaths Method
+		#region DoCompareDirectoryPaths()
 
 		/// <summary>
 		/// Returns relation between the two absolute directory paths.
@@ -449,7 +478,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region DoCombineDirectoryPaths Method
+		#region DoCombineDirectoryPaths()
 
 		/// <summary>
 		/// Takes the first directory path and combines it with the second directory
@@ -550,7 +579,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region DoPrepareDirectoryPath Method
+		#region DoPrepareDirectoryPath()
 
 		private static void DoPrepareDirectoryPath(string path, out DirectoryInfo pathInfo, out string dirPath, out DirectoryInfo dirInfo)
 		{
@@ -587,7 +616,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region DoPrepareFilePath Method
+		#region DoPrepareFilePath()
 
 		private static void DoPrepareFilePath(string path, out DirectoryInfo pathInfo, out string dirPath, out DirectoryInfo dirInfo, out string fileName)
 		{
@@ -622,7 +651,7 @@ namespace MKY.IO
 		#endregion
 	}
 
-	#region PathCompareResult Struct
+	#region PathCompareResult
 
 	/// <summary>
 	/// Structure to hold the complete result of a directory comparison.

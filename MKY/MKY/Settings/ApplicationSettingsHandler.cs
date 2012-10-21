@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -32,6 +37,8 @@ using System.Xml.Serialization;
 
 using MKY.Xml;
 
+#endregion
+
 namespace MKY.Settings
 {
 	/// <summary>
@@ -42,17 +49,17 @@ namespace MKY.Settings
 	/// <typeparam name="TLocalUserSettings">The type of the local user settings.</typeparam>
 	/// <typeparam name="TRoamingUserSettings">The type of the roaming user settings.</typeparam>
 	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : IDisposable
-		where TCommonSettings : new()
-		where TLocalUserSettings : new()
-		where TRoamingUserSettings : new()
+		where TCommonSettings : SettingsItem, new()
+		where TLocalUserSettings : SettingsItem, new()
+		where TRoamingUserSettings : SettingsItem, new()
 	{
 		#region Types
 		//==========================================================================================
 		// Types
 		//==========================================================================================
 
-		private class Handler<TSettings> : IDisposable
-			where TSettings : new()
+		private class Handler<TSettings> : SettingsFileHandler, IDisposable
+			where TSettings : SettingsItem, new()
 		{
 			#region Fields
 			//==========================================================================================
@@ -61,11 +68,9 @@ namespace MKY.Settings
 
 			private bool isDisposed;
 
-			private string filePath = "";
 			private TSettings settings = default(TSettings);
 			private AlternateXmlElement[] alternateXmlElements = null;
 			private Mutex mutex;
-			private bool successfullyLoaded = false;
 			private bool areCurrentlyOwnedByThisInstance = false;
 
 			#endregion
@@ -76,9 +81,9 @@ namespace MKY.Settings
 			//==========================================================================================
 
 			/// <summary></summary>
-			public Handler(string name, string filePath)
+			public Handler(string name, string filePath, Type parentType)
+				: base(filePath, parentType)
 			{
-				this.filePath = filePath;
 				this.settings = new TSettings();
 
 				IAlternateXmlElementProvider aep = this.settings as IAlternateXmlElementProvider;
@@ -151,21 +156,6 @@ namespace MKY.Settings
 			//==========================================================================================
 
 			/// <summary></summary>
-			public virtual string FilePath
-			{
-				get
-				{
-					AssertNotDisposed();
-					return (this.filePath);
-				}
-				set
-				{
-					AssertNotDisposed();
-					this.filePath = value;
-				}
-			}
-
-			/// <summary></summary>
 			public virtual TSettings Settings
 			{
 				get
@@ -176,15 +166,14 @@ namespace MKY.Settings
 			}
 
 			/// <summary>
-			/// Returns whether settings have successfully been loaded, <c>false</c> if
-			/// they was no valid settings file and they were set to their defaults.
+			/// Handler to settings default.
 			/// </summary>
-			public virtual bool SuccessfullyLoaded
+			public virtual TSettings SettingsDefault
 			{
 				get
 				{
 					AssertNotDisposed();
-					return (this.successfullyLoaded);
+					return (new TSettings());
 				}
 			}
 
@@ -217,39 +206,25 @@ namespace MKY.Settings
 			/// Tries to load settings from corresponding file path.
 			/// </summary>
 			/// <returns>
-			/// Returns false if either settings could not be loaded from
-			/// its file path and have been set to defaults.
+			/// Returns <c>true</c> if settings could be loaded from the given file path,
+			/// return <c>false</c> if they could not be loaded and were set to defaults instead.
 			/// </returns>
 			public virtual bool Load()
 			{
 				AssertNotDisposed();
 
-				bool result = true;
-
-				object settings = LoadFromFile(typeof(TSettings), this.filePath, this.alternateXmlElements);
-				this.successfullyLoaded = (settings != null);
-				if (!this.successfullyLoaded)
-				{
-					settings = new TSettings();
-					result = false;
-				}
-				this.settings = (TSettings)settings;
-
-				return (result);
-			}
-
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-			private object LoadFromFile(Type type, string filePath, AlternateXmlElement[] alternateXmlElements)
-			{
 				// Try to open existing file of current version.
-				object settings = SettingsFileHandler.LoadFromFile(filePath, type, alternateXmlElements, GetType());
+				object settings = base.LoadFromFile(typeof(TSettings), this.alternateXmlElements);
 				if (settings != null)
-					return (settings);
+				{
+					this.settings = (TSettings)settings;
+					return (true);
+				}
 
 				// Alternatively, try to open an existing file of an older version.
 				{
 					// Find all valid directories of older versions.
-					string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(filePath));
+					string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(FilePath));
 					string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 					List<string> oldDirectories = new List<string>();
 					Version currentVersion = new Version(Application.ProductVersion);
@@ -265,19 +240,23 @@ namespace MKY.Settings
 					}
 
 					// Iterate through the directories, start with most recent.
-					string fileName = Path.GetFileName(filePath);
+					string fileName = Path.GetFileName(FilePath);
 					oldDirectories.Sort();
 					for (int i = oldDirectories.Count - 1; i >= 0; i--)
 					{
 						string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
-						settings = SettingsFileHandler.LoadFromFile(oldFilePath, type, alternateXmlElements, GetType());
+						settings = base.LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
 						if (settings != null)
-							return (settings);
+						{
+							this.settings = (TSettings)settings;
+							return (true);
+						}
 					}
 				}
 
-				// If nothing found, return <c>null</c>.
-				return (null);
+				// Nothing found, return default settings:
+				this.settings = SettingsDefault;
+				return (false);
 			}
 
 			/// <summary>
@@ -290,51 +269,22 @@ namespace MKY.Settings
 			{
 				AssertNotDisposed();
 
-				SaveToFile(typeof(TSettings), this.filePath, this.settings);
-			}
-
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-			private void SaveToFile(Type type, string filePath, object settings)
-			{
-				string backup = filePath + IO.FileEx.BackupFileExtension;
+				Exception result = null;
 
 				try
 				{
-					if (File.Exists(backup))
-						File.Delete(backup);
-					if (File.Exists(filePath))
-						File.Move(filePath, backup);
+					SaveToFile(typeof(TSettings), this.settings);
+					this.settings.ClearChanged();
 				}
-				catch { }
+				catch (Exception ex)
+				{
+					if (result == null)
+						result = ex;
+				}
 
-				try
-				{
-					using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-					{
-						XmlSerializer serializer = new XmlSerializer(type);
-						serializer.Serialize(sw, settings);
-					}
-				}
-				catch
-				{
-					try
-					{
-						if (File.Exists(backup))
-							File.Move(backup, filePath);
-					}
-					catch { }
-
-					throw; // Re-throw!
-				}
-				finally
-				{
-					try
-					{
-						if (File.Exists(backup))
-							File.Delete(backup);
-					}
-					catch { }
-				}
+				// Throw exception if either operation failed.
+				if (result != null)
+					throw (result);
 			}
 
 			/// <summary>
@@ -415,21 +365,24 @@ namespace MKY.Settings
 				this.commonSettings = new Handler<TCommonSettings>
 					(
 					CommonName,
-					Application.CommonAppDataPath + Path.DirectorySeparatorChar + CommonFileName
+					Application.CommonAppDataPath + Path.DirectorySeparatorChar + CommonFileName,
+					GetType()
 					);
 
 			if (hasLocalUserSettings)
 				this.localUserSettings = new Handler<TLocalUserSettings>
 					(
 					LocalUserName,
-					Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + LocalUserFileName
+					Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + LocalUserFileName,
+					GetType()
 					);
 			
 			if (hasRoamingUserSettings)
 				this.roamingUserSettings = new Handler<TRoamingUserSettings>
 					(
 					RoamingUserName,
-					Application.UserAppDataPath + Path.DirectorySeparatorChar + RoamingUserFileName
+					Application.UserAppDataPath + Path.DirectorySeparatorChar + RoamingUserFileName,
+					GetType()
 					);
 		}
 
@@ -706,12 +659,12 @@ namespace MKY.Settings
 		/// Returns whether common settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
-		public virtual bool CommonSettingsSuccessfullyLoaded
+		public virtual bool CommonSettingsSuccessfullyLoadedFromFile
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.commonSettings.SuccessfullyLoaded);
+				return (this.commonSettings.FileSuccessfullyLoaded);
 			}
 		}
 
@@ -719,12 +672,12 @@ namespace MKY.Settings
 		/// Returns whether local user settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
-		public virtual bool LocalUserSettingsSuccessfullyLoaded
+		public virtual bool LocalUserSettingsSuccessfullyLoadedFromFile
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.localUserSettings.SuccessfullyLoaded);
+				return (this.localUserSettings.FileSuccessfullyLoaded);
 			}
 		}
 
@@ -732,35 +685,12 @@ namespace MKY.Settings
 		/// Returns whether roaming user settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
-		public virtual bool RoamingUserSettingsSuccessfullyLoaded
+		public virtual bool RoamingUserSettingsSuccessfullyLoadedFromFile
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.roamingUserSettings.SuccessfullyLoaded);
-			}
-		}
-
-		/// <summary>
-		/// Returns whether all settings have successfully been loaded, <c>false</c> if
-		/// they were no valid settings files and they were set to their defaults.
-		/// </summary>
-		public virtual bool AllSettingsSuccessfullyLoaded
-		{
-			get
-			{
-				// AssertNotDisposed() is called by 'Has' properties below.
-
-				if (HasCommonSettings && !CommonSettingsSuccessfullyLoaded)
-					return (false);
-
-				if (HasLocalUserSettings && !LocalUserSettingsSuccessfullyLoaded)
-					return (false);
-
-				if (HasRoamingUserSettings && !RoamingUserSettingsSuccessfullyLoaded)
-					return (false);
-
-				return (true);
+				return (this.roamingUserSettings.FileSuccessfullyLoaded);
 			}
 		}
 
@@ -839,9 +769,16 @@ namespace MKY.Settings
 		{
 			// AssertNotDisposed() is called by 'Load()' below.
 
-			LoadCommonSettings();
-			LoadLocalUserSettings();
-			LoadRoamingUserSettings();
+			bool result = true;
+
+			if (!LoadCommonSettings())
+				result = false;
+
+			if (!LoadLocalUserSettings())
+				result = false;
+
+			if (!LoadRoamingUserSettings())
+				result = false;
 
 			// Immediately try to save settings to reflect current version.
 			try
@@ -851,7 +788,7 @@ namespace MKY.Settings
 			catch { }
 
 			// Return load result.
-			return (AllSettingsSuccessfullyLoaded);
+			return (result);
 		}
 
 		/// <summary>
