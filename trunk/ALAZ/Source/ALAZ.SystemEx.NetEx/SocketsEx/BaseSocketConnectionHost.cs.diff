@@ -1,4 +1,22 @@
-@@ -306,7 +306,20 @@
+@@ -194,7 +194,17 @@
+                 FBufferManager = null;
+             }
+ 
++            // ----- \remind BEGIN -----
++            // 2012-10-21 / Matthias Klaey
++            // Ensure that lock is properly released, even in cases where asynchronous calls are
++            // still being processed while the socket is free'd.
++
++            FSocketConnectionsSync.Dispose();
++
++            // ----- \remind  END  -----
++
+             FSocketConnectionsSync = null;
++
+             FSocketService = null;
+             FDelimiter = null;
+             FDelimiterEncrypt = null;
+@@ -306,7 +316,26 @@
  
                      if (creators.Length > 0)
                      {
@@ -6,10 +24,16 @@
 +                        // ----- \remind BEGIN -----
 +                        // 2010-05-14 / Matthias Klaey
 +                        // Handling exceptions.
++                        // 
++                        // 2012-10-23 / Matthias Klaey
++                        // Check (FWaitCreatorsDisposing != null) added to prevent exceptions.
 +
 +                        try
 +                        {
-+                            FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
++                            if (FWaitCreatorsDisposing != null)
++                                FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
++                            else
++                                MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
 +                        }
 +                        catch (NullReferenceException ex)
 +                        {
@@ -20,7 +44,7 @@
                      }
  
                  }
-@@ -404,7 +417,11 @@
+@@ -404,7 +433,11 @@
  
          #region FireOnSent
  
@@ -33,7 +57,7 @@
          {
  
              if (!Disposed)
-@@ -421,7 +438,7 @@
+@@ -421,7 +454,7 @@
  
                              case EventProcessing.epUser:
  
@@ -42,7 +66,7 @@
                                  break;
  
                              case EventProcessing.epEncrypt:
-@@ -448,6 +465,8 @@
+@@ -448,6 +481,8 @@
  
          }
  
@@ -51,7 +75,7 @@
          #endregion
  
          #region FireOnReceived
-@@ -718,9 +737,15 @@
+@@ -718,9 +753,15 @@
                          connection.Stream.EndWrite(ar);
                          connection.SetConnectionData(0, connection.WriteOV.Count);
  
@@ -68,7 +92,7 @@
  
                          if (connection.Active)
                          {
-@@ -748,6 +773,8 @@
+@@ -748,6 +789,8 @@
  
                          }
  
@@ -77,7 +101,7 @@
                      }
  
                  }
-@@ -832,12 +859,18 @@
+@@ -832,12 +875,18 @@
                              }
                              else
                              {
@@ -97,7 +121,7 @@
                              }
  
                          }
-@@ -1707,34 +1740,51 @@
+@@ -1707,34 +1756,58 @@
            if (!Disposed)
            {
  
@@ -107,10 +131,12 @@
 +              // Added if != null due to NullReferenceExecption to finally{}.
 +              // 
 +              // 2012-10-15 / Matthias Klaey
-+              // Moved check up here as (FSocketConnections != null) and added catch (NullReferenceException)
-+              // to prevent exceptions during disposing.
++              // Added catch (NullReferenceException) to prevent exceptions during disposing.
++              // 
++              // 2012-10-23 / Matthias Klaey
++              // Rearranged checks (FSocketConnectionsSync != null) and (FSocketConnections != null).
 +
-+              if ((socketConnection != null) && (FSocketConnections != null) && (FSocketConnectionsSync != null))
++              if ((socketConnection != null)  && (FSocketConnectionsSync != null))
                {
  
 -
@@ -119,8 +145,12 @@
                    try
                    {
 -
-                       FSocketConnections.Remove(socketConnection.ConnectionId);
+-                      FSocketConnections.Remove(socketConnection.ConnectionId);
 -
++                      if (FSocketConnections != null)
++                          FSocketConnections.Remove(socketConnection.ConnectionId);
++                      else
++                          MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
                    }
 +                  catch (NullReferenceException ex)
 +                  {
@@ -128,21 +158,24 @@
 +                  }
                    finally
                    {
-+                      try
-+                      {
-+                          if (FSocketConnections.Count <= 0)
-+                          {
-+                              FWaitConnectionsDisposing.Set();
-+                          }
- 
+-
 -                      if (FSocketConnections.Count <= 0)
-+                          FSocketConnectionsSync.ExitWriteLock();
-+                      }
-+                      catch (NullReferenceException ex)
++                      try
                        {
 -                          FWaitConnectionsDisposing.Set();
-+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
++                          if (FSocketConnections.Count <= 0)
++                              FWaitConnectionsDisposing.Set();
++                          else
++                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
                        }
++                      catch (NullReferenceException ex)
++                      {
++                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
++                      }
++                      finally
++                      {
++                          FSocketConnectionsSync.ExitWriteLock();
++                      }
  
 -                      FSocketConnectionsSync.ExitWriteLock();
 -

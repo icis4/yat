@@ -1182,9 +1182,13 @@ namespace YAT.Model
 		/// <summary>
 		/// Closes the terminal and prompts if needed if settings have changed.
 		/// </summary>
+		/// <remarks>
+		/// In case of a workspace close, <see cref="Close(bool, bool)"/> below must be called with
+		/// the first argument set to <c>true</c>.
+		/// </remarks>
 		public virtual bool Close()
 		{
-			return (Close(false, false));
+			return (Close(false, false)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1194,7 +1198,7 @@ namespace YAT.Model
 		/// \attention:
 		/// This method is needed for MDI applications. In case of MDI parent/application closing,
 		/// Close() of the terminal is called before Close() of the workspace. Without taking care
-		/// of this, the workspace would be saved after the terminal has already been close, i.e.
+		/// of this, the workspace would be saved after the terminal has already been closed, i.e.
 		/// removed from the workspace. Therefore, the terminal has to signal such cases to the
 		/// workspace.
 		/// 

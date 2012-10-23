@@ -319,10 +319,16 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         // ----- \remind BEGIN -----
                         // 2010-05-14 / Matthias Klaey
                         // Handling exceptions.
+                        // 
+                        // 2012-10-23 / Matthias Klaey
+                        // Check (FWaitCreatorsDisposing != null) added to prevent exceptions.
 
                         try
                         {
-                            FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+                            if (FWaitCreatorsDisposing != null)
+                                FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+                            else
+                                MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
                         }
                         catch (NullReferenceException ex)
                         {
@@ -1755,17 +1761,22 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               // Added if != null due to NullReferenceExecption to finally{}.
               // 
               // 2012-10-15 / Matthias Klaey
-              // Moved check up here as (FSocketConnections != null) and added catch (NullReferenceException)
-              // to prevent exceptions during disposing.
+              // Added catch (NullReferenceException) to prevent exceptions during disposing.
+              // 
+              // 2012-10-23 / Matthias Klaey
+              // Rearranged checks (FSocketConnectionsSync != null) and (FSocketConnections != null).
 
-              if ((socketConnection != null) && (FSocketConnections != null) && (FSocketConnectionsSync != null))
+              if ((socketConnection != null)  && (FSocketConnectionsSync != null))
               {
 
                   FSocketConnectionsSync.EnterWriteLock();
 
                   try
                   {
-                      FSocketConnections.Remove(socketConnection.ConnectionId);
+                      if (FSocketConnections != null)
+                          FSocketConnections.Remove(socketConnection.ConnectionId);
+                      else
+                          MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
                   }
                   catch (NullReferenceException ex)
                   {
@@ -1776,15 +1787,17 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                       try
                       {
                           if (FSocketConnections.Count <= 0)
-                          {
                               FWaitConnectionsDisposing.Set();
-                          }
-
-                          FSocketConnectionsSync.ExitWriteLock();
+                          else
+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
                       }
                       catch (NullReferenceException ex)
                       {
                           MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                      }
+                      finally
+                      {
+                          FSocketConnectionsSync.ExitWriteLock();
                       }
 
                   }

@@ -497,7 +497,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet.
+		/// Saves all terminals and workspace to files, prompts for files if they don't exist yet.
 		/// </summary>
 		public virtual bool Save()
 		{
@@ -505,7 +505,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet.
+		/// Saves all terminals and workspace to files, prompts for files if they don't exist yet.
 		/// </summary>
 		public virtual bool Save(bool autoSaveIsAllowed)
 		{
@@ -672,9 +672,13 @@ namespace YAT.Model
 		/// <summary>
 		/// Closes the workspace and prompts if the settings have changed.
 		/// </summary>
+		/// <remarks>
+		/// In case of a main close, <see cref="Close(bool)"/> below must be called with
+		/// the first argument set to <c>true</c>.
+		/// </remarks>
 		public virtual bool Close()
 		{
-			return (Close(false));
+			return (Close(false)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1410,7 +1414,10 @@ namespace YAT.Model
 			return (success);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool)"/> below must be
+		/// called with the first argument set to <c>true</c>.
+		/// </remarks>
 		public virtual bool CloseAllTerminals()
 		{
 			return (CloseAllTerminals(false, false));
