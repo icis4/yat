@@ -174,7 +174,7 @@ namespace MKY.Settings
 		{
 			// Try to open existing file of current version.
 			object settings = this.fileHandler.LoadFromFile(this.settings.GetType(), this.alternateXmlElements);
-			if (settings == null)
+			if (settings != null)
 			{
 				this.settings = (TSettings)settings;
 				return (true);

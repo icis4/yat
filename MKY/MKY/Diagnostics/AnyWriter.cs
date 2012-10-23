@@ -66,6 +66,14 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
+		public static void WriteStack(TextWriter writer, Type type, string additionalMessage)
+		{
+			WriteStack(writer, type, new StackTrace(), additionalMessage);
+		}
+
+		/// <summary>
+		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
+		/// </summary>
 		public static void WriteStack(TextWriter writer, Type type, StackTrace st)
 		{
 			WriteStack(writer, type, st, "");
