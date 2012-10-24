@@ -403,8 +403,7 @@ namespace MKY
 			while (startIndex < str.Length)
 			{
 				// Find the furthermost split position:
-				Predicate<int> p = new Predicate<int>(value => (value <= (startIndex + desiredChunkLength)));
-				int spaceIndex = spaces.FindLastIndex(p);
+				int spaceIndex = spaces.FindLastIndex(value => (value <= (startIndex + desiredChunkLength)));
 				
 				int splitIndex;
 				if (spaceIndex >= 0)
