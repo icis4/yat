@@ -158,6 +158,11 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		private bool IsStartingUp
+		{
+			get { return (this.isStartingUp); }
+		}
+
 		private bool IsClosing
 		{
 			get { return (this.closingState != ClosingState.None); }
@@ -195,6 +200,8 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)
 		{
+			this.isStartingUp = false;
+
 			// Start YAT according to the main settings.
 			this.mainResult = this.main.Start();
 
@@ -294,13 +301,13 @@ namespace YAT.Gui.Forms
 
 		private void Main_LocationChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp)
+			if (!IsStartingUp)
 				SaveWindowSettings(true);
 		}
 
 		private void Main_SizeChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp)
+			if (!IsStartingUp)
 				SaveWindowSettings();
 		}
 

@@ -65,15 +65,11 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
 		{
-			if (Contains(item))
-			{
-				Remove(item);
-			}
-			else
-			{
-				while (Count >= Capacity)
-					RemoveMostRecent();
-			}
+			RemoveAll(li => (li == item));
+
+			while (Count >= Capacity)
+				RemoveMostRecent();
+
 			Insert(0, item);
 		}
 

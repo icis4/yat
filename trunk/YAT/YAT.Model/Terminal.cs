@@ -1093,19 +1093,30 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Save terminal.
+			// Skip auto save if there were no explicit changes.
 			// -------------------------------------------------------------------------------------
 
-			bool success = false;
+			if (doAutoSave && (!this.settingsRoot.ExplicitHaveChanged))
+			{
+				// Event must be fired anyway to ensure that dependent objects are updated.
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
+				return (true);
+			}
 
-			if (!doAutoSave)
-				OnFixedStatusTextRequest("Saving terminal...");
+			// -------------------------------------------------------------------------------------
+			// Save terminal.
+			// -------------------------------------------------------------------------------------
 
 			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
 			{
 				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFile;
 				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
+
+			if (!doAutoSave)
+				OnFixedStatusTextRequest("Saving terminal...");
+
+			bool success = false;
 
 			try
 			{
@@ -1183,12 +1194,12 @@ namespace YAT.Model
 		/// Closes the terminal and prompts if needed if settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a workspace close, <see cref="Close(bool, bool)"/> below must be called with
-		/// the first argument set to <c>true</c>.
+		/// In case of a workspace close, <see cref="Close(bool, bool, bool)"/> below must be called
+		/// with the first argument set to <c>true</c>.
 		/// </remarks>
 		public virtual bool Close()
 		{
-			return (Close(false, false)); // See remarks above.
+			return (Close(false, true, false)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1218,12 +1229,16 @@ namespace YAT.Model
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (t4a)
 		///   - normal, existing file, no auto save => question                           : (t4b)
 		/// </remarks>
-		public virtual bool Close(bool isWorkspaceClose, bool tryAutoSave)
+		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool tryAutoSave)
 		{
 			AssertNotDisposed();
 
-			// Don't try to auto save if there is no existing file (w1).
-			if (!isWorkspaceClose && !this.settingsHandler.SettingsFileExists)
+			// Do not try to auto save if save is not inteded at all.
+			if (tryAutoSave && !doSave)
+				tryAutoSave = false;
+
+			// Do not try to auto save if there is no existing file (w1).
+			if (tryAutoSave && !isWorkspaceClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing terminal...");
@@ -1235,10 +1250,10 @@ namespace YAT.Model
 				success = TryAutoSave();
 
 			// No success on auto save or auto save not desired.
-			if (!success)
+			if (doSave && !success)
 			{
-				// No file (w1, w3, t1, t3).
-				if (!this.settingsHandler.SettingsFileExists)
+				// No file to save (w1, w3, t1, t3).
+				if (!this.settingsHandler.SettingsFilePathIsDefined)
 				{
 					success = true; // Consider it successful if there was no file to save
 				}

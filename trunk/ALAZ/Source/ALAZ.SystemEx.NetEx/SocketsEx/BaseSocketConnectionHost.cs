@@ -318,7 +318,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     {
                         // ----- \remind BEGIN -----
                         // 2010-05-14 / Matthias Klaey
-                        // Handling exceptions.
+                        // Added catch (NullReferenceException) to handle cases where asynchronous
+                        // operations set the reference to null while this method is active.
                         // 
                         // 2012-10-23 / Matthias Klaey
                         // Check (FWaitCreatorsDisposing != null) added to prevent exceptions.
@@ -328,11 +329,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                             if (FWaitCreatorsDisposing != null)
                                 FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
                             else
-                                MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
+                                MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
                         }
                         catch (NullReferenceException ex)
                         {
-                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
                         }
 
                         // ----- \remind  END  -----
@@ -1761,7 +1762,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               // Added if != null due to NullReferenceExecption to finally{}.
               // 
               // 2012-10-15 / Matthias Klaey
-              // Added catch (NullReferenceException) to prevent exceptions during disposing.
+              // Added catch (NullReferenceException) to handle cases where asynchronous
+              // operations set the reference to null while this method is active.
               // 
               // 2012-10-23 / Matthias Klaey
               // Rearranged checks (FSocketConnectionsSync != null) and (FSocketConnections != null).
@@ -1776,11 +1778,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                       if (FSocketConnections != null)
                           FSocketConnections.Remove(socketConnection.ConnectionId);
                       else
-                          MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
+                          MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
                   }
                   catch (NullReferenceException ex)
                   {
-                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
                   }
                   finally
                   {
@@ -1789,15 +1791,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                           if (FSocketConnections.Count <= 0)
                               FWaitConnectionsDisposing.Set();
                           else
-                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes only");
+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
                       }
                       catch (NullReferenceException ex)
                       {
-                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes only");
+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
                       }
                       finally
                       {
-                          FSocketConnectionsSync.ExitWriteLock();
+                          if (FSocketConnectionsSync != null)
+                              FSocketConnectionsSync.ExitWriteLock();
+                          else
+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
                       }
 
                   }

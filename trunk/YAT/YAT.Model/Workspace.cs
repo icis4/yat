@@ -562,15 +562,6 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool SaveTerminalsAndWorkspaceToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
-			// -------------------------------------------------------------------------------------
-			// First, save all contained terminals.
-			// -------------------------------------------------------------------------------------
-
-			bool success = false;
-
-			if (!doAutoSave)
-				OnFixedStatusTextRequest("Saving workspace...");
-
 			// In case of auto save, assign workspace settings file path before saving terminals.
 			// This ensures that relative paths are correctly retrieved by SaveAllTerminals().
 			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
@@ -579,6 +570,10 @@ namespace YAT.Model
 				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
+			// -------------------------------------------------------------------------------------
+			// Then, save all contained terminals.
+			// -------------------------------------------------------------------------------------
+
 			if (!SaveAllTerminals(doAutoSave))
 			{
 				OnTimedStatusTextRequest("Workspace not saved!");
@@ -586,7 +581,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Skip save of workspace file if file is up to date and there were no changes.
+			// Skip save if file is up to date and there were no changes.
 			// -------------------------------------------------------------------------------------
 
 			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
@@ -596,12 +591,28 @@ namespace YAT.Model
 				return (true);
 			}
 
+			// -------------------------------------------------------------------------------------
+			// Skip auto save if there were no explicit changes.
+			// -------------------------------------------------------------------------------------
+
+			if (doAutoSave && (!this.settingsRoot.ExplicitHaveChanged))
+			{
+				// Event must be fired anyway to ensure that dependent objects are updated.
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
+				return (true);
+			}
+
+			// ---------------------------------------------------------------------------------
+			// Save workspace.
+			// ---------------------------------------------------------------------------------
+
+			if (!doAutoSave)
+				OnFixedStatusTextRequest("Saving workspace...");
+
+			bool success = false;
+
 			try
 			{
-				// ---------------------------------------------------------------------------------
-				// Save workspace.
-				// ---------------------------------------------------------------------------------
-
 				this.settingsHandler.Settings.AutoSaved = doAutoSave;
 				this.settingsHandler.Save();
 
@@ -711,8 +722,8 @@ namespace YAT.Model
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
-			// Don't try to auto save if there is no existing file (w1):
-			if (!isMainClose && !this.settingsHandler.SettingsFileExists)
+			// Do not try to auto save if there is no existing file (w1):
+			if (tryAutoSave && !isMainClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
@@ -726,8 +737,8 @@ namespace YAT.Model
 			// No success on auto save or auto save not desired.
 			if (!success)
 			{
-				// No file (m1, m3, w1, w3).
-				if (!this.settingsHandler.SettingsFileExists)
+				// No file to save (m1, m3, w1, w3).
+				if (!this.settingsHandler.SettingsFilePathIsDefined)
 				{
 					success = true; // Consider it successful if there was no file to save.
 				}
@@ -770,10 +781,10 @@ namespace YAT.Model
 				}
 			} // End of if no success on auto save or auto save disabled.
 
-			// Then, close all contained terminals signaling them a workspace close, but do not try
-			// auto save again:
+			// Then, close all contained terminals signaling them a workspace close, but do not save
+			// again:
 			if (success)
-				success = CloseAllTerminals(true, false);
+				success = CloseAllTerminals(true, false, false);
 
 			if (success)
 			{
@@ -868,8 +879,9 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.Close(bool, bool)"/> for details on why this event handler
-		/// needs to treat the Closed event differently in case of a parent (i.e. workspace) close.
+		/// See remarks of <see cref="Terminal.Close(bool, bool, bool)"/> for details on why
+		/// this event handler needs to treat the Closed event differently in case of a parent
+		/// (i.e. workspace) close.
 		/// </remarks>
 		private void terminal_Closed(object sender, ClosedEventArgs e)
 		{
@@ -1415,18 +1427,18 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool)"/> below must be
-		/// called with the first argument set to <c>true</c>.
+		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool, bool)"/> below
+		///  must be called with the first argument set to <c>true</c>.
 		/// </remarks>
 		public virtual bool CloseAllTerminals()
 		{
-			return (CloseAllTerminals(false, false));
+			return (CloseAllTerminals(false, true, false));
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.Close(bool, bool)"/> for details on 'WorkspaceClose'.
+		/// See remarks of <see cref="Terminal.Close(bool, bool, bool)"/> for details on 'WorkspaceClose'.
 		/// </remarks>
-		private bool CloseAllTerminals(bool isWorkspaceClose, bool tryAutoSave)
+		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool tryAutoSave)
 		{
 			AssertNotDisposed();
 
@@ -1437,7 +1449,11 @@ namespace YAT.Model
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				if (!t.Close(isWorkspaceClose, TryTerminalAutoSaveIsDesired(tryAutoSave, t)))
+				bool tryAutoSaveThisTerminal = false;
+				if (doSave)
+					tryAutoSaveThisTerminal = TryTerminalAutoSaveIsDesired(tryAutoSave, t);
+
+				if (!t.Close(isWorkspaceClose, doSave, tryAutoSaveThisTerminal))
 					success = false;
 			}
 

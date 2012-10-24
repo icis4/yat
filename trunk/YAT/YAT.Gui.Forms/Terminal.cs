@@ -176,6 +176,11 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		private bool IsStartingUp
+		{
+			get { return (this.isStartingUp); }
+		}
+
 		private bool IsClosing
 		{
 			get { return (this.closingState != ClosingState.None); }
@@ -330,6 +335,8 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void Terminal_Shown(object sender, EventArgs e)
 		{
+			this.isStartingUp = false;
+
 			this.mdiParent = MdiParent;
 
 			// Immediately set terminal controls so the terminal "looks" nice from the very start.
@@ -344,13 +351,13 @@ namespace YAT.Gui.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp && !IsClosing)
+			if (!IsStartingUp && !IsClosing)
 				SaveWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp && !IsClosing)
+			if (!IsStartingUp && !IsClosing)
 				SaveWindowSettings();
 		}
 
@@ -1491,7 +1498,7 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!this.isStartingUp && !this.isSettingControls && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsClosing)
 			{
 				int widthOrHeight = 0;
 				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
@@ -1505,7 +1512,7 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!this.isStartingUp && !this.isSettingControls && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsClosing)
 			{
 				int widthOrHeight = 0;
 				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
@@ -1519,7 +1526,7 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!this.isStartingUp && !this.isSettingControls && !IsClosing)
+			if (!IsStartingUp && !this.isSettingControls && !IsClosing)
 				this.settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
 		}
 
