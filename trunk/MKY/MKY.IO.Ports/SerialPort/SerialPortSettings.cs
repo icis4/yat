@@ -157,6 +157,10 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(SerialPortSettings other)
 		{
 			if (ReferenceEquals(other, null))
@@ -167,39 +171,49 @@ namespace MKY.IO.Ports
 
 			return
 			(
-				(this.baudRate  == other.baudRate) &&
-				(this.dataBits  == other.dataBits) &&
-				(this.parity    == other.parity) &&
-				(this.stopBits  == other.stopBits) &&
-				(this.handshake == other.handshake)
+				(BaudRate  == other.BaudRate) &&
+				(DataBits  == other.DataBits) &&
+				(Parity    == other.Parity)   &&
+				(StopBits  == other.StopBits) &&
+				(Handshake == other.Handshake)
 			);
 		}
 
 		/// <summary>
-		/// Returns hash code.
+		/// Serves as a hash function for a particular type.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.baudRate .GetHashCode() ^
-				this.dataBits .GetHashCode() ^
-				this.parity   .GetHashCode() ^
-				this.stopBits .GetHashCode() ^
-				this.handshake.GetHashCode()
+				BaudRate .GetHashCode() ^
+				DataBits .GetHashCode() ^
+				Parity   .GetHashCode() ^
+				StopBits .GetHashCode() ^
+				Handshake.GetHashCode()
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return
 				(
-				((BaudRateEx) this.baudRate) + ", " +
-				((DataBitsEx) this.dataBits) + ", " +
-				((ParityEx)   this.parity)   + ", " +
-				((StopBitsEx) this.stopBits) + ", " +
-				((HandshakeEx)this.handshake).ToShortString()
+				((BaudRateEx) BaudRate) + ", " +
+				((DataBitsEx) DataBits) + ", " +
+				((ParityEx)   Parity)   + ", " +
+				((StopBitsEx) StopBits) + ", " +
+				((HandshakeEx)Handshake).ToShortString()
 				);
 		}
 
@@ -212,10 +226,10 @@ namespace MKY.IO.Ports
 
 			string delimiters = "/,;";
 			string[] sa = s.Split(delimiters.ToCharArray());
-			ps.baudRate  = BaudRateEx.Parse(sa[0]);
-			ps.dataBits  = DataBitsEx.Parse(sa[1]);
-			ps.parity    = ParityEx.Parse(sa[2]);
-			ps.stopBits  = StopBitsEx.Parse(sa[3]);
+			ps.baudRate  = BaudRateEx .Parse(sa[0]);
+			ps.dataBits  = DataBitsEx .Parse(sa[1]);
+			ps.parity    = ParityEx   .Parse(sa[2]);
+			ps.stopBits  = StopBitsEx .Parse(sa[3]);
 			ps.handshake = HandshakeEx.Parse(sa[4]);
 
 			return (ps);

@@ -227,11 +227,14 @@ namespace YAT.Model.Types
 				{
 					this.description = value;
 				}
-				else if ((value != null) &&
-						 (value.Length > 0)) // ensure that XML deserialization keeps command undefined
-				{
+				else if (!string.IsNullOrEmpty(value)) // Ensure that only non-empty strings define
+				{                                      // the command during XML deserialization!
 					this.isDefined = true;
 					this.description = value;
+				}
+				else
+				{
+					// Ensure that XML deserialization keeps command undefined in case of empty strings!
 				}
 			}
 		}
@@ -256,10 +259,14 @@ namespace YAT.Model.Types
 				else if ((value != null) &&
 						 (value.Length >= 1) &&
 						 (value[0] != null) &&
-						 (value[0].Length > 0)) // ensure that XML deserialization keeps command undefined
-				{
+						 (value[0].Length > 0)) // Ensure that only non-empty strings define
+				{                               // the command during XML deserialization!
 					this.isDefined = true;
 					this.commandLines = value;
+				}
+				else
+				{
+					// Ensure that XML deserialization keeps command undefined in case of empty strings!
 				}
 			}
 		}
@@ -286,10 +293,14 @@ namespace YAT.Model.Types
 				{
 					this.isPartial = value;
 				}
-				else if (value) // Ensure that XML deserialization keeps command undefined.
-				{
+				else if (value) // Ensure that only a set flag defines the
+				{               // command during XML deserialization!
 					this.isDefined = true;
 					this.isPartial = value;
+				}
+				else
+				{
+					// Ensure that XML deserialization keeps command undefined in case of cleared flag!
 				}
 			}
 		}
@@ -308,10 +319,14 @@ namespace YAT.Model.Types
 				{
 					this.isPartialEol = value;
 				}
-				else if (value) // Ensure that XML deserialization keeps command undefined.
-				{
+				else if (value) // Ensure that only a set flag defines the
+				{               // command during XML deserialization!
 					this.isDefined = true;
 					this.isPartialEol = value;
+				}
+				else
+				{
+					// Ensure that XML deserialization keeps command undefined in case of cleared flag!
 				}
 			}
 		}
@@ -330,10 +345,14 @@ namespace YAT.Model.Types
 				{
 					this.isFilePath = value;
 				}
-				else if (value) // Ensure that XML deserialization keeps command undefined.
-				{
+				else if (value) // Ensure that only a set flag defines the
+				{               // command during XML deserialization!
 					this.isDefined = true;
 					this.isFilePath = value;
+				}
+				else
+				{
+					// Ensure that XML deserialization keeps command undefined in case of cleared flag!
 				}
 			}
 		}
@@ -355,11 +374,14 @@ namespace YAT.Model.Types
 				{
 					this.filePath = value;
 				}
-				else if ((value != null) &&
-						 (value.Length > 0)) // Ensure that XML deserialization keeps command undefined.
-				{
+				else if (!string.IsNullOrEmpty(value)) // Ensure that only non-empty strings define
+				{                                      // the command during XML deserialization!
 					this.isDefined = true;
 					this.filePath = value;
+				}
+				else
+				{
+					// Ensure that XML deserialization keeps command undefined in case of empty strings!
 				}
 			}
 		}
@@ -576,6 +598,10 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(Command other)
 		{
 			if (ReferenceEquals(other, null))
@@ -586,26 +612,32 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(this.isDefined    == other.isDefined) &&
-				(this.description  == other.description) &&
-				ArrayEx.ValuesEqual(this.commandLines, other.commandLines) &&
-				(this.defaultRadix == other.defaultRadix) &&
-				(this.isFilePath   == other.isFilePath) &&
-				PathEx.Equals(this.filePath, other.filePath)
+				(IsDefined                     == other.IsDefined) &&
+				(Description                   == other.Description) &&
+				ArrayEx.ValuesEqual(CommandLines, other.CommandLines) &&
+				(DefaultRadix                  == other.DefaultRadix) &&
+				(IsFilePath                    == other.IsFilePath) &&
+				PathEx.Equals(FilePath,           other.FilePath)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.isDefined   .GetHashCode() ^
-				this.description .GetHashCode() ^
-				this.commandLines.GetHashCode() ^
-				this.defaultRadix.GetHashCode() ^
-				this.isFilePath  .GetHashCode() ^
-				this.filePath    .GetHashCode()
+				IsDefined   .GetHashCode() ^
+				Description .GetHashCode() ^
+				CommandLines.GetHashCode() ^
+				DefaultRadix.GetHashCode() ^
+				IsFilePath  .GetHashCode() ^
+				FilePath    .GetHashCode()
 			);
 		}
 

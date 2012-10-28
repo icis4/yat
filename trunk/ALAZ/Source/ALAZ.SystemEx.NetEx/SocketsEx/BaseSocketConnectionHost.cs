@@ -1866,6 +1866,13 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             if (!Disposed)
             {
 
+              // ----- \remind BEGIN -----
+              // 2012-10-28 / Matthias Klaey
+              // Handling exceptions:
+
+              try
+              {
+
                 connection.Active = false;
                 connection.Socket.Shutdown(SocketShutdown.Send);
 
@@ -1890,6 +1897,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     }
 
                 }
+
+              }
+              catch (ObjectDisposedException ex)
+              {
+                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+              }
+
+              // ----- \remind  END  -----
+
             }
         }
 

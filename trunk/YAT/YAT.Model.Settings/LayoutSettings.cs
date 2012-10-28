@@ -265,6 +265,10 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -278,40 +282,46 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.txMonitorPanelIsVisible    == other.txMonitorPanelIsVisible) &&
-				(this.bidirMonitorPanelIsVisible == other.bidirMonitorPanelIsVisible) &&
-				(this.rxMonitorPanelIsVisible    == other.rxMonitorPanelIsVisible) &&
-				(this.monitorOrientation         == other.monitorOrientation) &&
-				(this.txMonitorSplitterRatio     == other.txMonitorSplitterRatio) &&
-				(this.rxMonitorSplitterRatio     == other.rxMonitorSplitterRatio) &&
+				(TxMonitorPanelIsVisible    == other.TxMonitorPanelIsVisible) &&
+				(BidirMonitorPanelIsVisible == other.BidirMonitorPanelIsVisible) &&
+				(RxMonitorPanelIsVisible    == other.RxMonitorPanelIsVisible) &&
+				(MonitorOrientation         == other.MonitorOrientation) &&
+				(TxMonitorSplitterRatio     == other.TxMonitorSplitterRatio) &&
+				(RxMonitorSplitterRatio     == other.RxMonitorSplitterRatio) &&
 
-				(this.predefinedPanelIsVisible   == other.predefinedPanelIsVisible) &&
-				(this.predefinedSplitterRatio    == other.predefinedSplitterRatio) &&
+				(PredefinedPanelIsVisible   == other.PredefinedPanelIsVisible) &&
+				(PredefinedSplitterRatio    == other.PredefinedSplitterRatio) &&
 
-				(this.sendCommandPanelIsVisible  == other.sendCommandPanelIsVisible) &&
-				(this.sendFilePanelIsVisible     == other.sendFilePanelIsVisible)
+				(SendCommandPanelIsVisible  == other.SendCommandPanelIsVisible) &&
+				(SendFilePanelIsVisible     == other.SendFilePanelIsVisible)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.txMonitorPanelIsVisible   .GetHashCode() ^
-				this.bidirMonitorPanelIsVisible.GetHashCode() ^
-				this.rxMonitorPanelIsVisible   .GetHashCode() ^
-				this.monitorOrientation        .GetHashCode() ^
-				this.txMonitorSplitterRatio    .GetHashCode() ^
-				this.rxMonitorSplitterRatio    .GetHashCode() ^
+				TxMonitorPanelIsVisible   .GetHashCode() ^
+				BidirMonitorPanelIsVisible.GetHashCode() ^
+				RxMonitorPanelIsVisible   .GetHashCode() ^
+				MonitorOrientation        .GetHashCode() ^
+				TxMonitorSplitterRatio    .GetHashCode() ^
+				RxMonitorSplitterRatio    .GetHashCode() ^
 
-				this.predefinedPanelIsVisible  .GetHashCode() ^
-				this.predefinedSplitterRatio   .GetHashCode() ^
+				PredefinedPanelIsVisible  .GetHashCode() ^
+				PredefinedSplitterRatio   .GetHashCode() ^
 
-				this.sendCommandPanelIsVisible .GetHashCode() ^
-				this.sendFilePanelIsVisible    .GetHashCode()
+				SendCommandPanelIsVisible .GetHashCode() ^
+				SendFilePanelIsVisible    .GetHashCode()
 			);
 		}
 

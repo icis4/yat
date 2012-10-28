@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,6 +36,8 @@ using MKY.Text;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -376,16 +383,22 @@ namespace YAT.Gui.Forms
 				this.settings_Form.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
-		private void checkBox_SkipEolComments_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_SkipEolComment_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.SkipEolComments = checkBox_SkipEolComments.Checked;
+				this.settings_Form.EolComment.SkipComment = checkBox_SkipEolComment.Checked;
 		}
 
 		private void stringListEdit_EolCommentIndicators_StringListChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.EolCommentIndicators = new List<string>(stringListEdit_EolCommentIndicators.StringList);
+				this.settings_Form.EolComment.Indicators = new List<string>(stringListEdit_EolCommentIndicators.StringList);
+		}
+
+		private void checkBox_SkipEolCommentWhiteSpace_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settings_Form.EolComment.SkipWhiteSpace = checkBox_SkipEolCommentWhiteSpace.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -489,8 +502,12 @@ namespace YAT.Gui.Forms
 				default:                              radioButton_SubstituteNone.Checked    = true; break;
 			}
 
-			stringListEdit_EolCommentIndicators.Enabled    = this.settings_Form.SkipEolComments;
-			stringListEdit_EolCommentIndicators.StringList = this.settings_Form.EolCommentIndicators.ToArray();
+			bool doSkip = this.settings_Form.EolComment.SkipComment;
+			checkBox_SkipEolComment.Checked                = doSkip;
+			stringListEdit_EolCommentIndicators.Enabled    = doSkip;
+			stringListEdit_EolCommentIndicators.StringList = this.settings_Form.EolComment.Indicators.ToArray();
+			checkBox_SkipEolCommentWhiteSpace.Enabled      = doSkip;
+			checkBox_SkipEolCommentWhiteSpace.Checked      = this.settings_Form.EolComment.SkipWhiteSpace;
 
 			this.isSettingControls.Leave();
 		}

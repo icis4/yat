@@ -23,10 +23,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
-using MKY;
 using MKY.Text;
 
 namespace YAT.Domain.Settings
@@ -38,23 +36,24 @@ namespace YAT.Domain.Settings
 		public static readonly string DefaultEol = (string)EolEx.Parse(Environment.NewLine);
 
 		/// <summary></summary>
-		public static readonly int DefaultEncoding = (EncodingEx)(System.Text.Encoding.Default);
+		public static readonly int DefaultEncoding = (EncodingEx)System.Text.Encoding.Default;
 
-		private bool              separateTxRxEol;
-		private string            txEol;
-		private string            rxEol;
-		private int               encoding;
-		private bool              showEol;
-		private TextLineSendDelay lineSendDelay;
-		private WaitForResponse   waitForResponse;
-		private CharSubstitution  charSubstitution;
-		private bool              skipEolComments;
-		private List<string>      eolCommentIndicators;
+		private bool               separateTxRxEol;
+		private string             txEol;
+		private string             rxEol;
+		private int                encoding;
+		private bool               showEol;
+		private TextLineSendDelay  lineSendDelay;
+		private WaitForResponse    waitForResponse;
+		private CharSubstitution   charSubstitution;
+		private EolCommentSettings eolComment;
 
 		/// <summary></summary>
 		public TextTerminalSettings()
 		{
 			SetMyDefaults();
+			InitializeNodes();
+			SetNodeDefaults();
 			ClearChanged();
 		}
 
@@ -63,7 +62,14 @@ namespace YAT.Domain.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
+			InitializeNodes();
+			SetNodeDefaults();
 			ClearChanged();
+		}
+
+		private void InitializeNodes()
+		{
+			EolComment = new EolCommentSettings(SettingsType);
 		}
 
 		/// <remarks>
@@ -73,16 +79,16 @@ namespace YAT.Domain.Settings
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxEol      = rhs.SeparateTxRxEol;
-			TxEol                = rhs.TxEol;
-			RxEol                = rhs.RxEol;
-			Encoding             = rhs.Encoding;
-			ShowEol              = rhs.ShowEol;
-			LineSendDelay        = rhs.LineSendDelay;
-			WaitForResponse      = rhs.WaitForResponse;
-			CharSubstitution     = rhs.CharSubstitution;
-			SkipEolComments      = rhs.SkipEolComments;
-			EolCommentIndicators = new List<string>(rhs.EolCommentIndicators);
+			SeparateTxRxEol          = rhs.SeparateTxRxEol;
+			TxEol                    = rhs.TxEol;
+			RxEol                    = rhs.RxEol;
+			Encoding                 = rhs.Encoding;
+			ShowEol                  = rhs.ShowEol;
+			LineSendDelay            = rhs.LineSendDelay;
+			WaitForResponse          = rhs.WaitForResponse;
+			CharSubstitution         = rhs.CharSubstitution;
+
+			EolComment = new EolCommentSettings(rhs.EolComment);
 
 			ClearChanged();
 		}
@@ -94,20 +100,29 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxEol  = false;
-			TxEol            = DefaultEol;
-			RxEol            = DefaultEol;
-			Encoding         = DefaultEncoding;
-			ShowEol          = false;
-			LineSendDelay    = new TextLineSendDelay(false, 500, 1);
-			WaitForResponse  = new WaitForResponse(false, 500);
-			CharSubstitution = CharSubstitution.None;
-			SkipEolComments  = false;
+			SeparateTxRxEol          = false;
+			TxEol                    = DefaultEol;
+			RxEol                    = DefaultEol;
+			Encoding                 = DefaultEncoding;
+			ShowEol                  = false;
+			LineSendDelay            = new TextLineSendDelay(false, 500, 1);
+			WaitForResponse          = new WaitForResponse(false, 500);
+			CharSubstitution         = CharSubstitution.None;
+		}
 
-			List<string> l = new List<string>();
-			l.Add("//");
-			l.Add("REM");
-			EolCommentIndicators = l;
+		/// <remarks>
+		/// No other way has yet been found to properly set defaults of a list of settings. Before
+		/// this solution, the issue #3581368 "EOL comment indicators always contain the defaults"
+		/// existed. With this solution, the underlying node itself does no longer know any default,
+		/// and default deserialization properly deserializes the settings into the underlying node.
+		/// </remarks>
+		protected override void SetNodeDefaults()
+		{
+			base.SetNodeDefaults();
+
+			EolComment.Indicators.Clear();
+			EolComment.Indicators.Add("//");
+			EolComment.Indicators.Add("REM");
 		}
 
 		#region Properties
@@ -242,31 +257,27 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SkipEolComments")]
-		public virtual bool SkipEolComments
+		[XmlElement("EolComment")]
+		public virtual EolCommentSettings EolComment
 		{
-			get { return (this.skipEolComments); }
+			get { return (this.eolComment); }
 			set
 			{
-				if (value != this.skipEolComments)
+				if (value == null)
 				{
-					this.skipEolComments = value;
-					SetChanged();
+					this.eolComment = value;
+					DetachNode(this.eolComment);
 				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("EolCommentIndicators")]
-		public List<string> EolCommentIndicators
-		{
-			get { return (this.eolCommentIndicators); }
-			set
-			{
-				if (value != this.eolCommentIndicators)
+				else if (this.eolComment == null)
 				{
-					this.eolCommentIndicators = value;
-					SetChanged();
+					this.eolComment = value;
+					AttachNode(this.eolComment);
+				}
+				else if (value != this.eolComment)
+				{
+					EolCommentSettings old = this.eolComment;
+					this.eolComment = value;
+					ReplaceNode(old, this.eolComment);
 				}
 			}
 		}
@@ -278,6 +289,10 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -291,36 +306,38 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.separateTxRxEol      == other.separateTxRxEol) &&
-				(this.txEol                == other.txEol) &&
-				(this.rxEol                == other.rxEol) &&
-				(this.encoding             == other.encoding) &&
-				(this.showEol              == other.showEol) &&
-				(this.lineSendDelay        == other.lineSendDelay) &&
-				(this.waitForResponse      == other.waitForResponse) &&
-				(this.charSubstitution     == other.charSubstitution) &&
-				(this.skipEolComments      == other.skipEolComments) &&
-				(this.eolCommentIndicators == other.eolCommentIndicators)
+				(SeparateTxRxEol          == other.SeparateTxRxEol) &&
+				(TxEol                    == other.TxEol) &&
+				(RxEol                    == other.RxEol) &&
+				(Encoding                 == other.Encoding) &&
+				(ShowEol                  == other.ShowEol) &&
+				(LineSendDelay            == other.LineSendDelay) &&
+				(WaitForResponse          == other.WaitForResponse) &&
+				(CharSubstitution         == other.CharSubstitution)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.separateTxRxEol     .GetHashCode() ^
-				this.txEol               .GetHashCode() ^
-				this.rxEol               .GetHashCode() ^
-				this.encoding            .GetHashCode() ^
-				this.showEol             .GetHashCode() ^
-				this.lineSendDelay       .GetHashCode() ^
-				this.waitForResponse     .GetHashCode() ^
-				this.charSubstitution    .GetHashCode() ^
-				this.skipEolComments     .GetHashCode() ^
-				this.eolCommentIndicators.GetHashCode()
+				SeparateTxRxEol         .GetHashCode() ^
+				TxEol                   .GetHashCode() ^
+				RxEol                   .GetHashCode() ^
+				Encoding                .GetHashCode() ^
+				ShowEol                 .GetHashCode() ^
+				LineSendDelay           .GetHashCode() ^
+				WaitForResponse         .GetHashCode() ^
+				CharSubstitution        .GetHashCode()
 			);
 		}
 

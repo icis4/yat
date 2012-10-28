@@ -29,9 +29,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Text;
-using System.Xml.Serialization;
 
 using NUnit.Framework;
 
@@ -39,7 +36,6 @@ using MKY.Collections;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Recent;
-using MKY.Xml;
 using MKY.Xml.Serialization;
 
 #endregion

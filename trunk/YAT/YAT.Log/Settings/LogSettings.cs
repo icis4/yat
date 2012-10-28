@@ -734,6 +734,10 @@ namespace YAT.Log.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -747,28 +751,34 @@ namespace YAT.Log.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(this.rootPath,     other.rootPath) &&
-				PathEx.Equals(this.rootFileName, other.rootFileName) &&
-				(this.rawLogTx              == other.rawLogTx) &&
-				(this.rawLogBidir           == other.rawLogBidir) &&
-				(this.rawLogRx              == other.rawLogRx) &&
-				(this.rawExtension          == other.rawExtension) &&
-				(this.neatLogTx             == other.neatLogTx) &&
-				(this.neatLogBidir          == other.neatLogBidir) &&
-				(this.neatLogRx             == other.neatLogRx) &&
-				(this.neatExtension         == other.neatExtension) &&
-				(this.writeMode             == other.writeMode) &&
-				(this.subdirectoriesFormat  == other.subdirectoriesFormat) &&
-				(this.subdirectoriesChannel == other.subdirectoriesChannel) &&
-				(this.nameFormat            == other.nameFormat) &&
-				(this.nameChannel           == other.nameChannel) &&
-				(this.nameDate              == other.nameDate) &&
-				(this.nameTime              == other.nameTime) &&
-				(this.nameSeparator         == other.nameSeparator)
+				PathEx.Equals(RootPath,     other.RootPath) &&
+				PathEx.Equals(RootFileName, other.RootFileName) &&
+				(RawLogTx                == other.RawLogTx) &&
+				(RawLogBidir             == other.RawLogBidir) &&
+				(RawLogRx                == other.RawLogRx) &&
+				(RawExtension            == other.RawExtension) &&
+				(NeatLogTx               == other.NeatLogTx) &&
+				(NeatLogBidir            == other.NeatLogBidir) &&
+				(NeatLogRx               == other.NeatLogRx) &&
+				(NeatExtension           == other.NeatExtension) &&
+				(WriteMode               == other.WriteMode) &&
+				(SubdirectoriesFormat    == other.SubdirectoriesFormat) &&
+				(SubdirectoriesChannel   == other.SubdirectoriesChannel) &&
+				(NameFormat              == other.NameFormat) &&
+				(NameChannel             == other.NameChannel) &&
+				(NameDate                == other.NameDate) &&
+				(NameTime                == other.NameTime) &&
+				(NameSeparator           == other.NameSeparator)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return

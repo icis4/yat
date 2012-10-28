@@ -126,6 +126,10 @@ namespace MKY.IO.Serial.Usb
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -139,24 +143,30 @@ namespace MKY.IO.Serial.Usb
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.deviceInfo == other.deviceInfo) &&
-				(this.autoOpen == other.autoOpen)
+				(DeviceInfo == other.DeviceInfo) &&
+				(AutoOpen   == other.AutoOpen)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			int deviceInfoHashCode = 0;
-			if (this.deviceInfo != null)
-				deviceInfoHashCode = this.deviceInfo.GetHashCode();
+			if (DeviceInfo != null)
+				deviceInfoHashCode = DeviceInfo.GetHashCode();
 
 			return
 			(
 				base.GetHashCode() ^
 
 				deviceInfoHashCode ^
-				this.autoOpen.GetHashCode()
+				AutoOpen.GetHashCode()
 			);
 		}
 

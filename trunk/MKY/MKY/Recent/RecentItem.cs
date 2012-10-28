@@ -117,14 +117,6 @@ namespace MKY.Recent
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns the recent item.
-		/// </summary>
-		public override string ToString()
-		{
-			return (this.item.ToString());
-		}
-
-		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
 		public override bool Equals(object obj)
@@ -135,6 +127,10 @@ namespace MKY.Recent
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(RecentItem<T> other)
 		{
 			if (ReferenceEquals(other, null))
@@ -144,23 +140,38 @@ namespace MKY.Recent
 				return (false);
 
 			// Attention, default(T) can lead to null, e.g. in case of a string!
-			if (this.item != null)
-				return (this.item.Equals(other.item)); // Do not compare time stamp.
+			if (Item != null)
+				return (Item.Equals(other.Item)); // Do not consider time stamp.
 			else
 				return (false);
 		}
 
 		/// <summary>
-		/// Returns the hash code for this instance.
+		/// Serves as a hash function for a particular type.
 		/// </summary>
-		/// <returns>A 32-bit signed integer hash code.</returns>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			// Attention, default(T) can lead to null, e.g. in case of a string!
-			if (this.item != null)
-				return (this.item.GetHashCode()); // Do not consider time stamp.
+			if (Item != null)
+				return (Item.GetHashCode()); // Do not consider time stamp.
 			else
 				return (0);
+		}
+
+		/// <summary>
+		/// Returns the recent item.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return (Item.ToString());
 		}
 
 		#endregion

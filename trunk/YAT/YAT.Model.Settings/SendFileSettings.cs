@@ -22,8 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 using MKY.Recent;
@@ -40,7 +38,7 @@ namespace YAT.Model.Settings
 		public const int MaxRecentCommands = 24;
 
 		private Command command;
-		private RecentItemCollection<Command> recentsCommands;
+		private RecentItemCollection<Command> recentCommands;
 
 		/// <summary></summary>
 		public SendFileSettings()
@@ -104,12 +102,12 @@ namespace YAT.Model.Settings
 		[XmlElement("RecentCommands")]
 		public RecentItemCollection<Command> RecentCommands
 		{
-			get { return (this.recentsCommands); }
+			get { return (this.recentCommands); }
 			set
 			{
-				if (value != this.recentsCommands)
+				if (value != this.recentCommands)
 				{
-					this.recentsCommands = value;
+					this.recentCommands = value;
 					SetChanged();
 				}
 			}
@@ -122,6 +120,10 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -135,20 +137,26 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.command == other.command) &&
-				(this.recentsCommands == other.recentsCommands)
+				(Command        == other.Command) &&
+				(RecentCommands == other.RecentCommands)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.command        .GetHashCode() ^
-				this.recentsCommands.GetHashCode()
+				Command       .GetHashCode() ^
+				RecentCommands.GetHashCode()
 			);
 		}
 

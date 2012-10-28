@@ -172,6 +172,10 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -185,26 +189,32 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(this.terminalFilesPath,  other.terminalFilesPath) &&
-				PathEx.Equals(this.workspaceFilesPath, other.workspaceFilesPath) &&
-				PathEx.Equals(this.sendFilesPath,      other.sendFilesPath) &&
-				PathEx.Equals(this.logFilesPath,       other.logFilesPath) &&
-				PathEx.Equals(this.monitorFilesPath,   other.monitorFilesPath)
+				PathEx.Equals(TerminalFilesPath,  other.TerminalFilesPath) &&
+				PathEx.Equals(WorkspaceFilesPath, other.WorkspaceFilesPath) &&
+				PathEx.Equals(SendFilesPath,      other.SendFilesPath) &&
+				PathEx.Equals(LogFilesPath,       other.LogFilesPath) &&
+				PathEx.Equals(MonitorFilesPath,   other.MonitorFilesPath)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.terminalFilesPath .GetHashCode() ^
-				this.workspaceFilesPath.GetHashCode() ^
-				this.sendFilesPath     .GetHashCode() ^
-				this.logFilesPath      .GetHashCode() ^
-				this.monitorFilesPath  .GetHashCode()
+				this.TerminalFilesPath .GetHashCode() ^
+				this.WorkspaceFilesPath.GetHashCode() ^
+				this.SendFilesPath     .GetHashCode() ^
+				this.LogFilesPath      .GetHashCode() ^
+				this.MonitorFilesPath  .GetHashCode()
 			);
 		}
 

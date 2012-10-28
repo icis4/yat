@@ -21,19 +21,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 using MKY.Net;
-
-#endregion
 
 namespace YAT.Model.Settings
 {
@@ -412,6 +403,10 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -425,60 +420,66 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.terminalType == other.terminalType) &&
-				(this.ioType       == other.ioType) &&
+				(TerminalType == other.TerminalType) &&
+				(IOType       == other.IOType) &&
 
-				(this.serialPortId            == other.serialPortId) &&
-				(this.serialPortCommunication == other.serialPortCommunication) &&
-				(this.serialPortAutoReopen    == other.serialPortAutoReopen) &&
+				(SerialPortId            == other.SerialPortId) &&
+				(SerialPortCommunication == other.SerialPortCommunication) &&
+				(SerialPortAutoReopen    == other.SerialPortAutoReopen) &&
 
-				(this.socketRemoteHost       == other.socketRemoteHost) &&
-				(this.socketRemotePort       == other.socketRemotePort) &&
-				(this.socketLocalInterface   == other.socketLocalInterface) &&
-				(this.socketLocalTcpPort     == other.socketLocalTcpPort) &&
-				(this.socketLocalUdpPort     == other.socketLocalUdpPort) &&
-				(this.tcpClientAutoReconnect == other.tcpClientAutoReconnect) &&
+				(SocketRemoteHost       == other.SocketRemoteHost) &&
+				(SocketRemotePort       == other.SocketRemotePort) &&
+				(SocketLocalInterface   == other.SocketLocalInterface) &&
+				(SocketLocalTcpPort     == other.SocketLocalTcpPort) &&
+				(SocketLocalUdpPort     == other.SocketLocalUdpPort) &&
+				(TcpClientAutoReconnect == other.TcpClientAutoReconnect) &&
 
-				(this.usbSerialHidDeviceInfo == other.usbSerialHidDeviceInfo) &&
-				(this.usbSerialHidAutoOpen   == other.usbSerialHidAutoOpen) &&
+				(UsbSerialHidDeviceInfo == other.UsbSerialHidDeviceInfo) &&
+				(UsbSerialHidAutoOpen   == other.UsbSerialHidAutoOpen) &&
 
-				(this.startTerminal == other.startTerminal)
+				(StartTerminal == other.StartTerminal)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			int serialPortIdHashCode = 0;
-			if (this.serialPortId != null)
-				serialPortIdHashCode = this.serialPortId.GetHashCode();
+			if (SerialPortId != null)
+				serialPortIdHashCode = SerialPortId.GetHashCode();
 
 			int usbSerialHidDeviceInfoHashCode = 0;
-			if (this.usbSerialHidDeviceInfo != null)
-				usbSerialHidDeviceInfoHashCode = this.usbSerialHidDeviceInfo.GetHashCode();
+			if (UsbSerialHidDeviceInfo != null)
+				usbSerialHidDeviceInfoHashCode = UsbSerialHidDeviceInfo.GetHashCode();
 
 			return
 			(
 				base.GetHashCode() ^
 
-				this.terminalType.GetHashCode() ^
-				this.ioType      .GetHashCode() ^
+				TerminalType.GetHashCode() ^
+				IOType      .GetHashCode() ^
 
 				serialPortIdHashCode ^
-				this.serialPortCommunication.GetHashCode() ^
-				this.serialPortAutoReopen   .GetHashCode() ^
+				SerialPortCommunication.GetHashCode() ^
+				SerialPortAutoReopen   .GetHashCode() ^
 
-				this.socketRemoteHost      .GetHashCode() ^
-				this.socketRemotePort      .GetHashCode() ^
-				this.socketLocalInterface  .GetHashCode() ^
-				this.socketLocalTcpPort    .GetHashCode() ^
-				this.socketLocalUdpPort    .GetHashCode() ^
-				this.tcpClientAutoReconnect.GetHashCode() ^
+				SocketRemoteHost      .GetHashCode() ^
+				SocketRemotePort      .GetHashCode() ^
+				SocketLocalInterface  .GetHashCode() ^
+				SocketLocalTcpPort    .GetHashCode() ^
+				SocketLocalUdpPort    .GetHashCode() ^
+				TcpClientAutoReconnect.GetHashCode() ^
 
 				usbSerialHidDeviceInfoHashCode ^
-				this.usbSerialHidAutoOpen.GetHashCode() ^
+				UsbSerialHidAutoOpen.GetHashCode() ^
 
-				this.startTerminal       .GetHashCode()
+				StartTerminal       .GetHashCode()
 			);
 		}
 

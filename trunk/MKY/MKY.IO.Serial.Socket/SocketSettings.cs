@@ -347,6 +347,10 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -360,17 +364,23 @@ namespace MKY.IO.Serial.Socket
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.hostType               == other.hostType) &&
-				StringEx.EqualsOrdinalIgnoreCase(this.remoteHost, other.remoteHost) &&
-				(this.remotePort             == other.remotePort) &&
-				StringEx.EqualsOrdinalIgnoreCase(this.localInterface, other.localInterface) &&
-				(this.localTcpPort           == other.localTcpPort) &&
-				(this.localUdpPort           == other.localUdpPort) &&
-				(this.tcpClientAutoReconnect == other.tcpClientAutoReconnect)
+				(HostType                                     == other.HostType) &&
+				StringEx.EqualsOrdinalIgnoreCase(RemoteHost,     other.RemoteHost) &&
+				(RemotePort                                   == other.RemotePort) &&
+				StringEx.EqualsOrdinalIgnoreCase(LocalInterface, other.LocalInterface) &&
+				(LocalTcpPort                                 == other.LocalTcpPort) &&
+				(LocalUdpPort                                 == other.LocalUdpPort) &&
+				(TcpClientAutoReconnect                       == other.TcpClientAutoReconnect)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return

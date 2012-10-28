@@ -284,7 +284,7 @@ namespace YAT.Domain
 
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (EncodingEx)TextTerminalSettings.Encoding);
 
-			// Prepare EOL.
+			// Prepare EOL:
 			byte[] eolByteArray = new byte[] { };
 			if (item.IsLine)
 			{
@@ -300,18 +300,23 @@ namespace YAT.Domain
 				eolByteArray = eolWriter.ToArray();
 			}
 
-			// Check for comment markers.
-			if (TextTerminalSettings.SkipEolComments)
+			// Check for EOL comment indicators:
+			if (TextTerminalSettings.EolComment.SkipComment)
 			{
-				foreach (string marker in TextTerminalSettings.EolCommentIndicators)
+				foreach (string marker in TextTerminalSettings.EolComment.Indicators)
 				{
 					int index = StringEx.IndexOfOutsideDoubleQuotes(data, marker, StringComparison.Ordinal);
 					if (index >= 0)
+					{
 						data = StringEx.Left(data, index);
+
+						if (TextTerminalSettings.EolComment.SkipWhiteSpace)
+							data = data.TrimEnd(null); // <c>null</c> means white-spaces.
+					}
 				}
 			}
 
-			// Parse string and execute keywords.
+			// Parse string and execute keywords:
 			foreach (Parser.Result result in p.Parse(data, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
 			{
 				if      (result is Parser.ByteArrayResult)
@@ -353,7 +358,7 @@ namespace YAT.Domain
 				}
 			}
 
-			// Finalize the line.
+			// Finalize the line:
 			if (sendEol)
 				ForwardDataToRawTerminal(eolByteArray);
 

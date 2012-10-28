@@ -49,6 +49,7 @@ namespace YAT.Settings.Terminal
 		private static readonly MKY.Xml.AlternateXmlElement[] alternateXmlElements =
 			{
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",       new string[] { "Handshake" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, "EolComment",        new string[] { "EolCommentIndicators" } ),
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted", new string[] { "TerminalIsOpen" } ),
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
 			};
@@ -423,6 +424,10 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -436,19 +441,25 @@ namespace YAT.Settings.Terminal
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.productVersion == other.productVersion)
-				//// Do not compare AutoSaved.
+				(ProductVersion == other.ProductVersion)
+				//// Do not consider AutoSaved.
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.productVersion.GetHashCode()
+				ProductVersion.GetHashCode()
 			);
 		}
 

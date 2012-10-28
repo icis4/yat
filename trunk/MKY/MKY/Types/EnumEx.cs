@@ -210,6 +210,10 @@ namespace MKY
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(EnumEx other)
 		{
 			if (ReferenceEquals(other, null))
@@ -222,27 +226,37 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Returns the hash code for this instance.
+		/// Serves as a hash function for a particular type.
 		/// </summary>
-		/// <returns>A 32-bit signed integer hash code.</returns>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return (UnderlyingEnum.GetHashCode());
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string
-		/// representation.
+		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			return (UnderlyingEnum.ToString());
 		}
 
 		/// <summary>
-		/// Converts the value of this instance to its equivalent string
-		/// representation using the specified format.
+		/// Converts the value of this instance to its equivalent string representation using the
+		/// specified format.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public virtual string ToString(string format)
 		{
 			return (UnderlyingEnum.ToString(format));

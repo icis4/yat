@@ -150,9 +150,8 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Returns the hash code for this instance.
+		/// Serves as a hash function for a particular type.
 		/// </summary>
-		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
 			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)

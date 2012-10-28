@@ -208,7 +208,7 @@ namespace YAT.Settings.Test
 			// Save.
 			try
 			{
-				MKY.Test.Xml.Serialization.XmlSerializerTest.SerializeToFile(filePath, type, obj);
+				MKY.Xml.Serialization.XmlSerializerEx.SerializeToFile(filePath, type, obj);
 			}
 			catch (Exception ex)
 			{
@@ -221,7 +221,7 @@ namespace YAT.Settings.Test
 			// Load.
 			try
 			{
-				MKY.Test.Xml.Serialization.XmlSerializerTest.DeserializeFromFile(filePath, type);
+				MKY.Xml.Serialization.XmlSerializerEx.DeserializeFromFile(filePath, type);
 			}
 			catch (Exception ex)
 			{

@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace MKY.Recent
 {
@@ -32,6 +31,7 @@ namespace MKY.Recent
 	/// Collection for recent items like recent files, provides methods to handle the recent items.
 	/// </summary>
 	/// <typeparam name="T">The underlying type of the recent item.</typeparam>
+	[Serializable]
 	public class RecentItemCollection<T> : List<RecentItem<T>>
 		where T : IEquatable<T>
 	{

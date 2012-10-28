@@ -48,6 +48,10 @@ namespace MKY.Xml
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -59,18 +63,24 @@ namespace MKY.Xml
 			AlternateXmlElement other = (AlternateXmlElement)obj;
 			return
 			(
-				(StringEx.EqualsOrdinalIgnoreCase(XmlPath,   other.XmlPath)) &&
-				(StringEx.EqualsOrdinalIgnoreCase(LocalName, other.LocalName)) &&
+				(StringEx.EqualsOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
+				(StringEx.EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
 				(StringEx.EqualsOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				XmlPath.GetHashCode()   ^
+				XmlPath.GetHashCode() ^
 				LocalName.GetHashCode() ^
 				AlternateLocalNames.GetHashCode()
 			);

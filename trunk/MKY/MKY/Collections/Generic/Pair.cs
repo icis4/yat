@@ -71,22 +71,12 @@ namespace MKY.Collections.Generic
 		#region Object Members
 
 		/// <summary>
-		/// Standard ToString method returning the element contents only.
-		/// </summary>
-		public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(this.value1);
-			sb.Append(" / ");
-			sb.Append(this.value2);
-
-			return (sb.ToString());
-		}
-
-		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -98,19 +88,43 @@ namespace MKY.Collections.Generic
 			Pair<T1, T2> other = (Pair<T1, T2>)obj;
 			return
 			(
-				(this.value1.Equals(other.value1)) &&
-				(this.value2.Equals(other.value2))
+				(Value1.Equals(other.Value1)) &&
+				(Value2.Equals(other.Value2))
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.value1.GetHashCode() ^
-				this.value2.GetHashCode()
+				Value1.GetHashCode() ^
+				Value2.GetHashCode()
 			);
+		}
+
+		/// <summary>
+		/// Standard ToString method returning the element contents only.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Value1);
+			sb.Append(" / ");
+			sb.Append(Value2);
+
+			return (sb.ToString());
 		}
 
 		#endregion

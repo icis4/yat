@@ -81,22 +81,12 @@ namespace MKY.Time
 		#region Object Members
 
 		/// <summary>
-		/// Standard ToString method returning the element contents only.
-		/// </summary>
-		public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(this.timeStamp.ToString());
-			sb.Append(" / ");
-			sb.Append(this.item.ToString());
-
-			return (sb.ToString());
-		}
-
-		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -108,19 +98,43 @@ namespace MKY.Time
 			TimeStampItem<T> other = (TimeStampItem<T>)obj;
 			return
 			(
-				(this.timeStamp.Equals(other.timeStamp)) &&
-				(this.item.Equals(other.item))
+				(TimeStamp.Equals(other.TimeStamp)) &&
+				(Item.Equals(other.Item))
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.timeStamp.GetHashCode() ^
-				this.item.GetHashCode()
+				TimeStamp.GetHashCode() ^
+				Item.GetHashCode()
 			);
+		}
+
+		/// <summary>
+		/// Standard ToString method returning the element contents only.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(TimeStamp.ToString());
+			sb.Append(" / ");
+			sb.Append(Item.ToString());
+
+			return (sb.ToString());
 		}
 
 		#endregion

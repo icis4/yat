@@ -89,10 +89,12 @@ Important changes:
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
 - Empty lines are no longer skipped when not showing EOL (bug #2898163)
-- Optional replacement of space by open box character again works (bug #3451736)
-- Recent 'Send Command' items are again properly loaded from saved settings (bug #3450553)
 - Edit shortcuts such as Ctrl-A and Ctrl-C reenabled in 'Send Command' box (bug #3459888)
+- Recent 'Send Command' items are again properly loaded from saved settings (bug #3450553)
+- Optional replacement of space by open box character again works (bug #3451736)
 - Log file separator 'Underline' fixed
+- Default EOL comment indicators can now also be removed (bug #3581368)
+   > This fix required a change in the settings schema, custom indicators have to be entered again
 - Binary length line break fixed, again works correctly
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Printer dialog also gets shown on 64-bit systems
