@@ -257,6 +257,10 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -270,34 +274,40 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.font              == other.font) &&
-				(this.txDataFormat      == other.txDataFormat) &&
-				(this.txControlFormat   == other.txControlFormat) &&
-				(this.rxDataFormat      == other.rxDataFormat) &&
-				(this.rxControlFormat   == other.rxControlFormat) &&
-				(this.timeStampFormat   == other.timeStampFormat) &&
-				(this.lengthFormat      == other.lengthFormat) &&
-				(this.whiteSpacesFormat == other.whiteSpacesFormat) &&
-				(this.errorFormat       == other.errorFormat)
+				(Font              == other.Font) &&
+				(TxDataFormat      == other.TxDataFormat) &&
+				(TxControlFormat   == other.TxControlFormat) &&
+				(RxDataFormat      == other.RxDataFormat) &&
+				(RxControlFormat   == other.RxControlFormat) &&
+				(TimeStampFormat   == other.TimeStampFormat) &&
+				(LengthFormat      == other.LengthFormat) &&
+				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
+				(ErrorFormat       == other.ErrorFormat)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.font             .GetHashCode() ^
-				this.txDataFormat     .GetHashCode() ^
-				this.txControlFormat  .GetHashCode() ^
-				this.rxDataFormat     .GetHashCode() ^
-				this.rxControlFormat  .GetHashCode() ^
-				this.timeStampFormat  .GetHashCode() ^
-				this.lengthFormat     .GetHashCode() ^
-				this.whiteSpacesFormat.GetHashCode() ^
-				this.errorFormat      .GetHashCode()
+				Font             .GetHashCode() ^
+				TxDataFormat     .GetHashCode() ^
+				TxControlFormat  .GetHashCode() ^
+				RxDataFormat     .GetHashCode() ^
+				RxControlFormat  .GetHashCode() ^
+				TimeStampFormat  .GetHashCode() ^
+				LengthFormat     .GetHashCode() ^
+				WhiteSpacesFormat.GetHashCode() ^
+				ErrorFormat      .GetHashCode()
 			);
 		}
 

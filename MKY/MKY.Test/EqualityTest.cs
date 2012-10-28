@@ -81,12 +81,16 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return ("A = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return ("A = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -111,7 +115,7 @@ namespace MKY.Test
 				}
 
 				ValueTypeWithOperators other = (ValueTypeWithOperators)obj;
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -128,15 +132,21 @@ namespace MKY.Test
 					return (false);
 
 				ValueTypeWithOperators other = (ValueTypeWithOperators)obj;
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -226,12 +236,16 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return ("A = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return ("A = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -256,7 +270,7 @@ namespace MKY.Test
 				}
 
 				ValueTypeWithoutOperators other = (ValueTypeWithoutOperators)obj;
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -273,15 +287,21 @@ namespace MKY.Test
 					return (false);
 
 				ValueTypeWithoutOperators other = (ValueTypeWithoutOperators)obj;
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -315,13 +335,21 @@ namespace MKY.Test
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			public override bool Equals(object obj)
 			{
 				return (Equals(obj as OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -331,7 +359,7 @@ namespace MKY.Test
 				Trace.Indent();
 				Trace.WriteLine("OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>.Equals<OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>>()");
 
-				bool result = (base.Equals(other) && (this.B == other.B));
+				bool result = (base.Equals(other) && (B == other.B));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -355,7 +383,13 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
 				return (base.GetHashCode());
@@ -379,13 +413,21 @@ namespace MKY.Test
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			public override bool Equals(object obj)
 			{
 				return (Equals(obj as OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -395,7 +437,7 @@ namespace MKY.Test
 				Trace.Indent();
 				Trace.WriteLine("OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>.Equals<OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>>()");
 
-				bool result = (base.Equals(other) && (this.B == other.B));
+				bool result = (base.Equals(other) && (B == other.B));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -419,7 +461,13 @@ namespace MKY.Test
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
 				return (base.GetHashCode());
@@ -501,7 +549,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public BaseReferenceTypeNotIEquatableWithoutOperators(int a)
 			{
-				this.A = a;
+				A = a;
 			}
 
 			#region Object Members
@@ -509,10 +557,16 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -537,7 +591,7 @@ namespace MKY.Test
 				}
 
 				BaseReferenceTypeNotIEquatableWithoutOperators other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -554,15 +608,21 @@ namespace MKY.Test
 					return (false);
 
 				BaseReferenceTypeNotIEquatableWithoutOperators other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -578,7 +638,7 @@ namespace MKY.Test
 			public DerivedReferenceTypeNotIEquatableWithoutOperators(int a, int b)
 				: base(a)
 			{
-				this.B = b;
+				B = b;
 			}
 
 			#region Object Members
@@ -589,11 +649,17 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -611,7 +677,7 @@ namespace MKY.Test
 				}
 
 				DerivedReferenceTypeNotIEquatableWithoutOperators other = obj as DerivedReferenceTypeNotIEquatableWithoutOperators;
-				bool result = (this.B == other.B);
+				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -625,15 +691,21 @@ namespace MKY.Test
 					return (false);
 
 				DerivedReferenceTypeNotIEquatableWithoutOperators other = obj as DerivedReferenceTypeNotIEquatableWithoutOperators;
-				return (this.B == other.B);
+				return (B == other.B);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ this.A.GetHashCode());
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			#endregion
@@ -648,7 +720,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public BaseReferenceTypeIEquatableWithoutOperators(int a)
 			{
-				this.A = a;
+				A = a;
 			}
 
 			#region Object Members
@@ -656,16 +728,24 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			public override bool Equals(object obj)
 			{
 				return (Equals(obj as BaseReferenceTypeIEquatableWithoutOperators));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public bool Equals(BaseReferenceTypeIEquatableWithoutOperators other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -689,7 +769,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -705,15 +785,21 @@ namespace MKY.Test
 				if (GetType() != other.GetType())
 					return (false);
 
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -729,7 +815,7 @@ namespace MKY.Test
 			public DerivedReferenceTypeIEquatableWithoutOperators(int a, int b)
 				: base(a)
 			{
-				this.B = b;
+				B = b;
 			}
 
 			#region Object Members
@@ -740,17 +826,25 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			public override bool Equals(object obj)
 			{
 				return (Equals(obj as DerivedReferenceTypeIEquatableWithoutOperators));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public bool Equals(DerivedReferenceTypeIEquatableWithoutOperators other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -760,7 +854,7 @@ namespace MKY.Test
 				Trace.Indent();
 				Trace.WriteLine("DerivedReferenceTypeIEquatableWithoutOperators.Equals<DerivedReferenceTypeIEquatableWithoutOperators>()");
 
-				bool result = (base.Equals(other) && (this.B == other.B));
+				bool result = (base.Equals(other) && (B == other.B));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -770,15 +864,21 @@ namespace MKY.Test
 
 				// Normal implementation:
 
-				return (base.Equals(other) && (this.B == other.B));
+				return (base.Equals(other) && (B == other.B));
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ this.B.GetHashCode());
+				return (base.GetHashCode() ^ B.GetHashCode());
 			}
 
 			#endregion
@@ -793,7 +893,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public BaseReferenceTypeNotIEquatableWithOperators(int a)
 			{
-				this.A = a;
+				A = a;
 			}
 
 			#region Object Members
@@ -801,10 +901,16 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -829,7 +935,7 @@ namespace MKY.Test
 				}
 
 				BaseReferenceTypeNotIEquatableWithOperators other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -846,15 +952,21 @@ namespace MKY.Test
 					return (false);
 
 				BaseReferenceTypeNotIEquatableWithOperators other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -935,7 +1047,7 @@ namespace MKY.Test
 			public DerivedReferenceTypeNotIEquatableWithOperators(int a, int b)
 				: base(a)
 			{
-				this.B = b;
+				B = b;
 			}
 
 			#region Object Members
@@ -946,11 +1058,17 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -968,7 +1086,7 @@ namespace MKY.Test
 				}
 
 				DerivedReferenceTypeNotIEquatableWithOperators other = obj as DerivedReferenceTypeNotIEquatableWithOperators;
-				bool result = (this.B == other.B);
+				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -982,15 +1100,21 @@ namespace MKY.Test
 					return (false);
 
 				DerivedReferenceTypeNotIEquatableWithOperators other = obj as DerivedReferenceTypeNotIEquatableWithOperators;
-				return (this.B == other.B);
+				return (B == other.B);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ this.A.GetHashCode());
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			#endregion
@@ -1085,7 +1209,13 @@ namespace MKY.Test
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -1103,7 +1233,7 @@ namespace MKY.Test
 				}
 
 				DerivedReferenceTypeNotIEquatableWithDerivedOperators other = obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators;
-				bool result = (this.B == other.B);
+				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -1117,15 +1247,21 @@ namespace MKY.Test
 					return (false);
 
 				DerivedReferenceTypeNotIEquatableWithDerivedOperators other = obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators;
-				return (this.B == other.B);
+				return (B == other.B);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ this.A.GetHashCode());
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			#endregion
@@ -1148,10 +1284,16 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -1176,7 +1318,7 @@ namespace MKY.Test
 				}
 
 				BaseReferenceTypeNotIEquatableWithBaseOperators other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -1193,15 +1335,21 @@ namespace MKY.Test
 					return (false);
 
 				BaseReferenceTypeNotIEquatableWithBaseOperators other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -1300,11 +1448,17 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -1322,7 +1476,7 @@ namespace MKY.Test
 				}
 
 				DerivedReferenceTypeNotIEquatableWithBaseOperators other = obj as DerivedReferenceTypeNotIEquatableWithBaseOperators;
-				bool result = (this.B == other.B);
+				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -1336,15 +1490,21 @@ namespace MKY.Test
 					return (false);
 
 				DerivedReferenceTypeNotIEquatableWithBaseOperators other = obj as DerivedReferenceTypeNotIEquatableWithBaseOperators;
-				return (this.B == other.B);
+				return (B == other.B);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ this.A.GetHashCode());
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			#endregion
@@ -1367,16 +1527,24 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + this.A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
 			public override bool Equals(object obj)
 			{
 				return (Equals(obj as BaseReferenceTypeIEquatableWithBaseOperators));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public bool Equals(BaseReferenceTypeIEquatableWithBaseOperators other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -1400,7 +1568,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				bool result = (this.A == other.A);
+				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -1416,15 +1584,21 @@ namespace MKY.Test
 				if (GetType() != other.GetType())
 					return (false);
 
-				return (this.A == other.A);
+				return (A == other.A);
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (this.A.GetHashCode());
+				return (A.GetHashCode());
 			}
 
 			#endregion
@@ -1523,11 +1697,17 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + this.B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
 					);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -1552,7 +1732,7 @@ namespace MKY.Test
 				}
 
 				DerivedReferenceTypeDerivedIEquatableWithBaseOperators other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
-				bool result = (base.Equals(other) && (this.B == other.B));
+				bool result = (base.Equals(other) && (B == other.B));
 
 				Trace.WriteLine("Results in " + result);
 				Trace.Unindent();
@@ -1569,15 +1749,21 @@ namespace MKY.Test
 					return (false);
 
 				DerivedReferenceTypeDerivedIEquatableWithBaseOperators other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
-				return (base.Equals(other) && (this.B == other.B));
+				return (base.Equals(other) && (B == other.B));
 
 			#endif
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode() ^ this.A.GetHashCode());
+				return (base.GetHashCode() ^ A.GetHashCode());
 			}
 
 			#endregion

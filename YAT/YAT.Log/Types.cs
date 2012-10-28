@@ -104,6 +104,10 @@ namespace YAT.Log
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(FileNameSeparator other)
 		{
 			if (ReferenceEquals(other, null))
@@ -114,18 +118,24 @@ namespace YAT.Log
 
 			return
 			(
-				StringEx.EqualsOrdinalIgnoreCase(this.Separator,   other.Separator) &&
-				StringEx.EqualsOrdinalIgnoreCase(this.Description, other.Description)
+				StringEx.EqualsOrdinalIgnoreCase(Separator,   other.Separator) &&
+				StringEx.EqualsOrdinalIgnoreCase(Description, other.Description)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.Separator  .GetHashCode() ^
-				this.Description.GetHashCode()
+				Separator  .GetHashCode() ^
+				Description.GetHashCode()
 			);
 		}
 

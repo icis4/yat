@@ -21,39 +21,27 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace YAT.Settings
+namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	[Serializable]
-	public class GeneralSettings : MKY.Settings.SettingsItem
+	public class EolCommentSettings : MKY.Settings.SettingsItem
 	{
-		/// <summary></summary>
-		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;
+		private bool skipComment;
+		private bool skipWhiteSpace;
+		private List<string> indicators;
 
 		/// <summary></summary>
-		public const string AutoSaveTerminalFileNamePrefix = "Terminal-";
-
-		/// <summary></summary>
-		public const string AutoSaveWorkspaceFileNamePrefix = "Workspace-";
-
-		private bool autoOpenWorkspace;
-		private bool autoSaveWorkspace;
-		private bool useRelativePaths;
-		private bool detectSerialPortsInUse;
-
-		/// <summary></summary>
-		public GeneralSettings()
+		public EolCommentSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public GeneralSettings(MKY.Settings.SettingsType settingsType)
+		public EolCommentSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -64,13 +52,12 @@ namespace YAT.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public GeneralSettings(GeneralSettings rhs)
+		public EolCommentSettings(EolCommentSettings rhs)
 			: base(rhs)
 		{
-			AutoOpenWorkspace      = rhs.AutoOpenWorkspace;
-			AutoSaveWorkspace      = rhs.AutoSaveWorkspace;
-			UseRelativePaths       = rhs.UseRelativePaths;
-			DetectSerialPortsInUse = rhs.DetectSerialPortsInUse;
+			SkipComment    = rhs.SkipComment;
+			SkipWhiteSpace = rhs.SkipWhiteSpace;
+			Indicators     = new List<string>(rhs.Indicators);
 
 			ClearChanged();
 		}
@@ -82,10 +69,9 @@ namespace YAT.Settings
 		{
 			base.SetMyDefaults();
 
-			AutoOpenWorkspace      = true;
-			AutoSaveWorkspace      = true;
-			UseRelativePaths       = true;
-			DetectSerialPortsInUse = true;
+			SkipComment    = false;
+			SkipWhiteSpace = true;
+			Indicators     = new List<string>();
 		}
 
 		#region Properties
@@ -94,60 +80,45 @@ namespace YAT.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("AutoOpenWorkspace")]
-		public virtual bool AutoOpenWorkspace
+		[XmlElement("SkipComment")]
+		public virtual bool SkipComment
 		{
-			get { return (this.autoOpenWorkspace); }
+			get { return (this.skipComment); }
 			set
 			{
-				if (value != this.autoOpenWorkspace)
+				if (value != this.skipComment)
 				{
-					this.autoOpenWorkspace = value;
+					this.skipComment = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("AutoSaveWorkspace")]
-		public virtual bool AutoSaveWorkspace
+		[XmlElement("SkipWhiteSpace")]
+		public virtual bool SkipWhiteSpace
 		{
-			get { return (this.autoSaveWorkspace); }
+			get { return (this.skipWhiteSpace); }
 			set
 			{
-				if (value != this.autoSaveWorkspace)
+				if (value != this.skipWhiteSpace)
 				{
-					this.autoSaveWorkspace = value;
+					this.skipWhiteSpace = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("UseRelativePaths")]
-		public virtual bool UseRelativePaths
+		[XmlElement("Indicators")]
+		public virtual List<string> Indicators
 		{
-			get { return (this.useRelativePaths); }
+			get { return (this.indicators); }
 			set
 			{
-				if (value != this.useRelativePaths)
+				if (value != this.indicators)
 				{
-					this.useRelativePaths = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("DetectSerialPortsInUse")]
-		public virtual bool DetectSerialPortsInUse
-		{
-			get { return (this.detectSerialPortsInUse); }
-			set
-			{
-				if (value != this.detectSerialPortsInUse)
-				{
-					this.detectSerialPortsInUse = value;
+					this.indicators = value;
 					SetChanged();
 				}
 			}
@@ -172,15 +143,14 @@ namespace YAT.Settings
 			if (GetType() != obj.GetType())
 				return (false);
 
-			GeneralSettings other = (GeneralSettings)obj;
+			EolCommentSettings other = (EolCommentSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(AutoOpenWorkspace      == other.AutoOpenWorkspace) &&
-				(AutoSaveWorkspace      == other.AutoSaveWorkspace) &&
-				(UseRelativePaths       == other.UseRelativePaths) &&
-				(DetectSerialPortsInUse == other.DetectSerialPortsInUse)
+				(SkipComment    == other.SkipComment) &&
+				(SkipWhiteSpace == other.SkipWhiteSpace) &&
+				(Indicators     == other.Indicators)
 			);
 		}
 
@@ -197,10 +167,9 @@ namespace YAT.Settings
 			(
 				base.GetHashCode() ^
 
-				AutoOpenWorkspace     .GetHashCode() ^
-				AutoSaveWorkspace     .GetHashCode() ^
-				UseRelativePaths      .GetHashCode() ^
-				DetectSerialPortsInUse.GetHashCode()
+				SkipComment   .GetHashCode() ^
+				SkipWhiteSpace.GetHashCode() ^
+				Indicators    .GetHashCode()
 			);
 		}
 

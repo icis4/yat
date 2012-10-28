@@ -191,6 +191,10 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -204,30 +208,36 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.startPosition == other.startPosition) &&
-				(this.windowState   == other.windowState) &&
-				(this.location      == other.location) &&
-				(this.size          == other.size) &&
+				(StartPosition == other.StartPosition) &&
+				(WindowState   == other.WindowState) &&
+				(Location      == other.Location) &&
+				(Size          == other.Size) &&
 
-				(this.showTerminalInfo == other.showTerminalInfo) &&
-				(this.showChrono       == other.showChrono)
+				(ShowTerminalInfo == other.ShowTerminalInfo) &&
+				(ShowChrono       == other.ShowChrono)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.startPosition.GetHashCode() ^
-				this.windowState  .GetHashCode() ^
-				this.location     .GetHashCode() ^
-				this.size         .GetHashCode() ^
+				StartPosition.GetHashCode() ^
+				WindowState  .GetHashCode() ^
+				Location     .GetHashCode() ^
+				Size         .GetHashCode() ^
 
-				this.showTerminalInfo.GetHashCode() ^
-				this.showChrono      .GetHashCode()
+				ShowTerminalInfo.GetHashCode() ^
+				ShowChrono      .GetHashCode()
 			);
 		}
 

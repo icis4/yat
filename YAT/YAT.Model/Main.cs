@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -40,12 +39,10 @@ using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
 
-using YAT.Model.Settings;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
-using YAT.Utilities;
 
 #endregion
 

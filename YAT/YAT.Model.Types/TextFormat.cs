@@ -160,6 +160,10 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(TextFormat other)
 		{
 			if (ReferenceEquals(other, null))
@@ -170,18 +174,24 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(this.fontStyle == other.fontStyle) &&
-				(this.color     == other.color)
+				(FontStyle == other.FontStyle) &&
+				(Color     == other.Color)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.fontStyle.GetHashCode() ^
-				this.color    .GetHashCode()
+				FontStyle.GetHashCode() ^
+				Color    .GetHashCode()
 			);
 		}
 

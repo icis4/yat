@@ -200,7 +200,7 @@ namespace MKY.Test.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable TestCases
+		public static IEnumerable QuoteTestCases
 		{
 			get
 			{
@@ -226,6 +226,40 @@ namespace MKY.Test.Types
 			}
 		}
 
+		/// <summary></summary>
+		public static IEnumerable EndWhiteSpaceTestCases
+		{
+			get
+			{
+				yield return (new TestCaseData("a",    1, new char[] { ' ' }));
+				yield return (new TestCaseData("a ",   1, new char[] { ' ' }));
+				yield return (new TestCaseData("a \t", 3, new char[] { ' ' }));
+				yield return (new TestCaseData("a\t",  2, new char[] { ' ' }));
+				yield return (new TestCaseData("a\t ", 2, new char[] { ' ' }));
+				yield return (new TestCaseData("a a",  3, new char[] { ' ' }));
+
+				yield return (new TestCaseData("a",    1, new char[] { '\t' }));
+				yield return (new TestCaseData("a ",   2, new char[] { '\t' }));
+				yield return (new TestCaseData("a \t", 2, new char[] { '\t' }));
+				yield return (new TestCaseData("a\t",  1, new char[] { '\t' }));
+				yield return (new TestCaseData("a\t ", 3, new char[] { '\t' }));
+				yield return (new TestCaseData("a a",  3, new char[] { '\t' }));
+
+				yield return (new TestCaseData("a",    1, new char[] { ' ', '\t' }));
+				yield return (new TestCaseData("a ",   1, new char[] { ' ', '\t' }));
+				yield return (new TestCaseData("a \t", 1, new char[] { ' ', '\t' }));
+				yield return (new TestCaseData("a\t",  1, new char[] { ' ', '\t' }));
+				yield return (new TestCaseData("a\t ", 1, new char[] { ' ', '\t' }));
+				yield return (new TestCaseData("a a",  3, new char[] { ' ', '\t' }));
+
+				yield return (new TestCaseData("a",    1, null));
+				yield return (new TestCaseData("a ",   1, null));
+				yield return (new TestCaseData("a \t", 1, null));
+				yield return (new TestCaseData("a\t",  1, null));
+				yield return (new TestCaseData("a\t ", 1, null));
+				yield return (new TestCaseData("a a",  3, null));
+			}
+		}
 		#endregion
 	}
 
@@ -333,10 +367,25 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(TrimTestData), "TestCases")]
-		public virtual void TestTrim(string testString, int expectedLength, char[] trimChars)
+		[Test, TestCaseSource(typeof(TrimTestData), "QuoteTestCases")]
+		public virtual void TestTrimOfQuotes(string testString, int expectedLength, char[] trimChars)
 		{
 			string trim = testString.Trim(trimChars);
+
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("Test string was:");
+			sb.AppendLine(testString);
+			sb.AppendLine("Which was trimmed to:");
+			sb.AppendLine(trim);
+
+			Assert.AreEqual(expectedLength, trim.Length, sb.ToString());
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(TrimTestData), "EndWhiteSpaceTestCases")]
+		public virtual void TestTrimEndOfWhiteSpaces(string testString, int expectedLength, char[] trimChars)
+		{
+			string trim = testString.TrimEnd(trimChars);
 
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine("Test string was:");

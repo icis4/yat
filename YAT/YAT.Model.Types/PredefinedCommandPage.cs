@@ -22,9 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace YAT.Model.Types
@@ -55,12 +53,10 @@ namespace YAT.Model.Types
 		{
 			this.pageName = rhs.pageName;
 
-			// clone all commands
+			// Clone all commands:
 			this.commands = new List<Command>();
 			foreach (Command c in rhs.commands)
-			{
 				this.commands.Add(new Command(c));
-			}
 		}
 
 		/// <summary></summary>
@@ -137,6 +133,10 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(PredefinedCommandPage other)
 		{
 			if (ReferenceEquals(other, null))
@@ -146,26 +146,29 @@ namespace YAT.Model.Types
 				return (false);
 
 			// Compare page name, i.e. header of page.
-			if (this.pageName != other.pageName)
+			if (PageName != other.PageName)
 				return (false);
 
 			// Compare commands, i.e. contents of page.
-			for (int i = 0; i < this.commands.Count; i++)
+			for (int i = 0; i < Commands.Count; i++)
 			{
-				if (this.commands[i] != other.commands[i])
+				if (Commands[i] != other.Commands[i])
 					return (false);
 			}
 			return (true);
 		}
 
 		/// <summary>
-		/// Returns the hash code for this instance.
+		/// Serves as a hash function for a particular type.
 		/// </summary>
-		/// <returns>A 32-bit signed integer hash code.</returns>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			int hashCode = 0;
-			foreach (Command c in this.commands)
+			foreach (Command c in Commands)
 				hashCode ^= c.GetHashCode();
 
 			return (hashCode);

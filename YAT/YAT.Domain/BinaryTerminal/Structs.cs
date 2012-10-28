@@ -57,6 +57,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -68,17 +72,23 @@ namespace YAT.Domain
 			BinaryLengthLineBreak other = (BinaryLengthLineBreak)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
+				(Enabled    == other.Enabled) &&
 				(LineLength == other.LineLength)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				Enabled.GetHashCode() ^
+				Enabled   .GetHashCode() ^
 				LineLength.GetHashCode()
 			);
 		}
@@ -137,6 +147,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -148,17 +162,23 @@ namespace YAT.Domain
 			BinarySequenceLineBreak other = (BinarySequenceLineBreak)obj;
 			return
 			(
-				(Enabled == other.Enabled) &&
+				(Enabled                                 == other.Enabled) &&
 				(StringEx.EqualsOrdinalIgnoreCase(Sequence, other.Sequence))
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				Enabled.GetHashCode() ^
+				Enabled .GetHashCode() ^
 				Sequence.GetHashCode()
 			);
 		}
@@ -217,6 +237,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -233,7 +257,13 @@ namespace YAT.Domain
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return

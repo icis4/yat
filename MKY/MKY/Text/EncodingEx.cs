@@ -558,7 +558,7 @@ namespace MKY.Text
 		{
 		}
 
-		#region CodePage/Name/DisplayName/Encoding/IsDefault/ToString/HashCode
+		#region CodePage/Name/DisplayName/Encoding/IsDefault
 
 		/// <summary>
 		/// Encoding code page.
@@ -644,9 +644,43 @@ namespace MKY.Text
 			}
 		}
 
+		#endregion
+
+		#region Object Members
+		//------------------------------------------------------------------------------------------
+		// Object Members
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			EncodingEx other = (EncodingEx)obj;
+			return (base.Equals(other));
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			return (base.GetHashCode());
+		}
+
 		/// <summary>
 		/// Returns "DisplayName [CodePage]".
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -656,14 +690,6 @@ namespace MKY.Text
 				sb.Append(" (Default)");
 
 			return (sb.ToString());
-		}
-
-		/// <summary>
-		/// Returns code page.
-		/// </summary>
-		public override int GetHashCode()
-		{
-			return (base.GetHashCode());
 		}
 
 		#endregion
@@ -953,6 +979,13 @@ namespace MKY.Text
 		{
 			return (Parse(encoding));
 		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

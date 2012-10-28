@@ -110,6 +110,10 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -123,18 +127,24 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(this.filePath, other.filePath)
+				PathEx.Equals(FilePath, other.FilePath)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.filePath.GetHashCode()
+				FilePath.GetHashCode()
 			);
 		}
 

@@ -75,22 +75,12 @@ namespace MKY.Collections
 		#region Object Members
 
 		/// <summary>
-		/// Standard ToString method returning the element contents only.
-		/// </summary>
-		public override string ToString()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(this.key);
-			sb.Append(" / ");
-			sb.Append(this.value);
-
-			return (sb.ToString());
-		}
-
-		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -102,19 +92,43 @@ namespace MKY.Collections
 			StringKeyValuePair other = (StringKeyValuePair)obj;
 			return
 			(
-				(this.key   == other.key) &&
-				(this.value == other.value)
+				(Key   == other.Key) &&
+				(Value == other.Value)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
-				this.key  .GetHashCode() ^
-				this.value.GetHashCode()
+				Key  .GetHashCode() ^
+				Value.GetHashCode()
 			);
+		}
+
+		/// <summary>
+		/// Standard ToString method returning the element contents only.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Key);
+			sb.Append(" / ");
+			sb.Append(Value);
+
+			return (sb.ToString());
 		}
 
 		#endregion

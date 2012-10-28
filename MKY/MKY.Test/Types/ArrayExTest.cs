@@ -66,7 +66,13 @@ namespace MKY.Test.Types
 				B = b;
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 				if (ReferenceEquals(obj, null))
@@ -76,10 +82,16 @@ namespace MKY.Test.Types
 					return (false);
 
 				SimpleType other = (SimpleType)obj;
-				return ((this.A == other.A) && (this.B == other.B));
+				return ((A == other.A) && (B == other.B));
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
 				return (A.GetHashCode() ^ B.GetHashCode());

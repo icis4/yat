@@ -22,8 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 using MKY;
@@ -216,6 +214,10 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -228,14 +230,26 @@ namespace YAT.Settings.Terminal
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
-				StringEx.EqualsOrdinal(this.userName, other.userName)
+
+				StringEx.EqualsOrdinal(UserName, other.UserName)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				UserName.GetHashCode()
+			);
 		}
 
 		#endregion

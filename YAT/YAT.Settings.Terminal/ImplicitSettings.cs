@@ -264,6 +264,10 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -277,20 +281,26 @@ namespace YAT.Settings.Terminal
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.terminalIsStarted == other.terminalIsStarted) &&
-				(this.logIsStarted      == other.logIsStarted)
+				(TerminalIsStarted == other.TerminalIsStarted) &&
+				(LogIsStarted      == other.LogIsStarted)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.terminalIsStarted.GetHashCode() ^
-				this.logIsStarted     .GetHashCode()
+				TerminalIsStarted.GetHashCode() ^
+				LogIsStarted     .GetHashCode()
 			);
 		}
 

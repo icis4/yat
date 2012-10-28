@@ -101,12 +101,16 @@ namespace MKY.Test.Settings
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "        2:SimpleValue = " + this.SimpleValue.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "        2:SimpleValue = " + SimpleValue.ToString(NumberFormatInfo.InvariantInfo));
 			}
 
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 				if (ReferenceEquals(obj, null))
@@ -119,17 +123,23 @@ namespace MKY.Test.Settings
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
-					(this.SimpleValue == other.SimpleValue)
+					(SimpleValue == other.SimpleValue)
 				);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
 				return
 				(
 					base.GetHashCode() ^
-					this.SimpleValue.GetHashCode()
+					SimpleValue.GetHashCode()
 				);
 			}
 
@@ -247,6 +257,10 @@ namespace MKY.Test.Settings
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 				if (ReferenceEquals(obj, null))
@@ -259,17 +273,23 @@ namespace MKY.Test.Settings
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
-					(this.SimpleValue == other.SimpleValue)
+					(SimpleValue == other.SimpleValue)
 				);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
 				return
 				(
 					base.GetHashCode() ^
-					this.SimpleValue.GetHashCode()
+					SimpleValue.GetHashCode()
 				);
 			}
 
@@ -356,6 +376,10 @@ namespace MKY.Test.Settings
 			/// <summary>
 			/// Determines whether this instance and the specified object have value equality.
 			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override bool Equals(object obj)
 			{
 				if (ReferenceEquals(obj, null))
@@ -368,17 +392,23 @@ namespace MKY.Test.Settings
 				return
 				(
 					base.Equals(other) && // Compare all settings nodes.
-					(this.SimpleValue == other.SimpleValue)
+					(SimpleValue == other.SimpleValue)
 				);
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
 			public override int GetHashCode()
 			{
 				return
 				(
 					base.GetHashCode() ^
-					this.SimpleValue.GetHashCode()
+					SimpleValue.GetHashCode()
 				);
 			}
 

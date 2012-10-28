@@ -179,12 +179,19 @@ namespace MKY.Data
 				node.SetDefaults();
 
 			SetMyDefaults();
+			SetNodeDefaults();
 
 			ResumeChangeEvent();
 		}
 
 		/// <summary></summary>
 		protected virtual void SetMyDefaults()
+		{
+			// Default implementation has nothing to do (yet).
+		}
+
+		/// <summary></summary>
+		protected virtual void SetNodeDefaults()
 		{
 			// Default implementation has nothing to do (yet).
 		}
@@ -228,7 +235,9 @@ namespace MKY.Data
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
 		public override int GetHashCode()
 		{
 			int hashCode = 0;

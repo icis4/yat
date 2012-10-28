@@ -259,6 +259,10 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -272,26 +276,32 @@ namespace MKY.IO.Serial.SerialPort
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.baudRate    == other.baudRate) &&
-				(this.dataBits    == other.dataBits) &&
-				(this.parity      == other.parity) &&
-				(this.stopBits    == other.stopBits) &&
-				(this.flowControl == other.flowControl)
+				(BaudRate    == other.BaudRate) &&
+				(DataBits    == other.DataBits) &&
+				(Parity      == other.Parity)   &&
+				(StopBits    == other.StopBits) &&
+				(FlowControl == other.FlowControl)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.baudRate   .GetHashCode() ^
-				this.dataBits   .GetHashCode() ^
-				this.parity     .GetHashCode() ^
-				this.stopBits   .GetHashCode() ^
-				this.flowControl.GetHashCode()
+				BaudRate   .GetHashCode() ^
+				DataBits   .GetHashCode() ^
+				Parity     .GetHashCode() ^
+				StopBits   .GetHashCode() ^
+				FlowControl.GetHashCode()
 			);
 		}
 
@@ -300,11 +310,11 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			return
 			(
-				this.baudRate                           + ", " +
-				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  this.parity)   + ", " +
-				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
-				((SerialFlowControlEx)this.flowControl).ToShortString()
+				BaudRate                            + ", " +
+				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)  Parity)   + ", " +
+				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
+				((SerialFlowControlEx)FlowControl).ToShortString()
 			);
 		}
 
@@ -315,9 +325,9 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			return
 			(
-				this.baudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  this.parity).ToShortString()
+				BaudRate                            + ", " +
+				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)  Parity).ToShortString()
 			);
 		}
 
@@ -326,11 +336,11 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			return
 			(
-				this.baudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  this.parity)   + ", " +
-				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
-				((SerialFlowControlEx)    this.flowControl)
+				BaudRate                            + ", " +
+				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)  Parity)   + ", " +
+				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
+				((SerialFlowControlEx)    FlowControl)
 			);
 		}
 

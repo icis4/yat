@@ -392,6 +392,10 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public bool Equals(SerialPortId other)
 		{
 			if (ReferenceEquals(other, null))
@@ -400,34 +404,52 @@ namespace MKY.IO.Ports
 			if (GetType() != other.GetType())
 				return (false);
 
-			return (Equals(other.name));
+			return (Equals(other.Name));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(string other)
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool Equals(string otherName)
 		{
 			// Only field 'name' is relevant. Other properties are for convenience only.
-			return (StringEx.EqualsOrdinalIgnoreCase(this.name, other));
+			return (StringEx.EqualsOrdinalIgnoreCase(Name, otherName));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
-			if (this.name != null)
-				return (this.name.GetHashCode());
+			if (Name != null)
+				return (Name.GetHashCode());
 			else
 				return (base.GetHashCode());
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
 		public override string ToString()
 		{
 			return (ToString(true, true));
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public virtual string ToString(bool appendDescription, bool appendInUseText)
 		{
 			StringBuilder sb = new StringBuilder();

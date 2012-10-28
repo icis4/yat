@@ -303,6 +303,10 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))
@@ -316,36 +320,42 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.separateTxRxRadix         == other.separateTxRxRadix) &&
-				(this.txRadix                   == other.txRadix) &&
-				(this.rxRadix                   == other.rxRadix) &&
-				(this.showRadix                 == other.showRadix) &&
-				(this.showTimeStamp             == other.showTimeStamp) &&
-				(this.showLength                == other.showLength) &&
-				(this.showLineNumbers           == other.showLineNumbers) &&
-				(this.txMaxLineCount            == other.txMaxLineCount) &&
-				(this.rxMaxLineCount            == other.rxMaxLineCount) &&
-				(this.directionLineBreakEnabled == other.directionLineBreakEnabled)
+				(SeparateTxRxRadix         == other.SeparateTxRxRadix) &&
+				(TxRadix                   == other.TxRadix) &&
+				(RxRadix                   == other.RxRadix) &&
+				(ShowRadix                 == other.ShowRadix) &&
+				(ShowTimeStamp             == other.ShowTimeStamp) &&
+				(ShowLength                == other.ShowLength) &&
+				(ShowLineNumbers           == other.ShowLineNumbers) &&
+				(TxMaxLineCount            == other.TxMaxLineCount) &&
+				(RxMaxLineCount            == other.rxMaxLineCount) &&
+				(DirectionLineBreakEnabled == other.DirectionLineBreakEnabled)
 			);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				base.GetHashCode() ^
 
-				this.separateTxRxRadix        .GetHashCode() ^
-				this.txRadix                  .GetHashCode() ^
-				this.rxRadix                  .GetHashCode() ^
-				this.showRadix                .GetHashCode() ^
-				this.showTimeStamp            .GetHashCode() ^
-				this.showLength               .GetHashCode() ^
-				this.showLineNumbers          .GetHashCode() ^
-				this.txMaxLineCount           .GetHashCode() ^
-				this.rxMaxLineCount           .GetHashCode() ^
-				this.directionLineBreakEnabled.GetHashCode()
+				SeparateTxRxRadix        .GetHashCode() ^
+				TxRadix                  .GetHashCode() ^
+				RxRadix                  .GetHashCode() ^
+				ShowRadix                .GetHashCode() ^
+				ShowTimeStamp            .GetHashCode() ^
+				ShowLength               .GetHashCode() ^
+				ShowLineNumbers          .GetHashCode() ^
+				TxMaxLineCount           .GetHashCode() ^
+				RxMaxLineCount           .GetHashCode() ^
+				DirectionLineBreakEnabled.GetHashCode()
 			);
 		}
 
