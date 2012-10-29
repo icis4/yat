@@ -45,13 +45,18 @@ namespace YAT.Settings.Terminal
 		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
 		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
 		/// due to limitation described above.
+		/// \remind (2012-10-29 / mky)
+		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
+		/// alternate the depth of the path as well. Such alternate is required for the commented
+		/// case with 'EolComment' below.
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] alternateXmlElements =
 			{
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",       new string[] { "Handshake" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, "EolComment",        new string[] { "EolCommentIndicators" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted", new string[] { "TerminalIsOpen" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",                               new string[] { "Handshake" } ),
+			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal",                                     }, "Status",                                    new string[] { "Display" } ), */
+			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
 			};
 
 		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
