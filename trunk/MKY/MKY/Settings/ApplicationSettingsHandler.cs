@@ -262,6 +262,11 @@ namespace MKY.Settings
 			/// <summary>
 			/// Tries to save settings to corresponding file path.
 			/// </summary>
+			/// <remarks>
+			/// Use of exception instead of boolean return value to ease handling of errors:
+			///  - Exception will contain the reason for the failure
+			///  - 'good-weather' case be easier implemented, kind of scripted
+			/// </remarks>
 			/// <exception cref="Exception">
 			/// Thrown if settings could not be saved.
 			/// </exception>
@@ -269,22 +274,8 @@ namespace MKY.Settings
 			{
 				AssertNotDisposed();
 
-				Exception result = null;
-
-				try
-				{
-					SaveToFile(typeof(TSettings), this.settings);
-					this.settings.ClearChanged();
-				}
-				catch (Exception ex)
-				{
-					if (result == null)
-						result = ex;
-				}
-
-				// Throw exception if either operation failed.
-				if (result != null)
-					throw (result);
+				SaveToFile(typeof(TSettings), this.settings);
+				this.settings.ClearChanged();
 			}
 
 			/// <summary>
@@ -846,6 +837,11 @@ namespace MKY.Settings
 		/// Tries to save settings to <see cref="CommonSettingsFilePath"/>,
 		/// <see cref="LocalUserSettingsFilePath"/> and <see cref="RoamingUserSettingsFilePath"/>.
 		/// </summary>
+		/// <remarks>
+		/// Use of exception instead of boolean return value to ease handling of errors:
+		///  - Exception will contain the reason for the failure
+		///  - 'good-weather' case be easier implemented, kind of scripted
+		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
@@ -897,6 +893,11 @@ namespace MKY.Settings
 		/// <summary>
 		/// Tries to save settings to <see cref="CommonSettingsFilePath"/>.
 		/// </summary>
+		/// <remarks>
+		/// Use of exception instead of boolean return value to ease handling of errors:
+		///  - Exception will contain the reason for the failure
+		///  - 'good-weather' case be easier implemented, kind of scripted
+		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
@@ -911,6 +912,11 @@ namespace MKY.Settings
 		/// <summary>
 		/// Tries to save settings to <see cref="LocalUserSettingsFilePath"/>.
 		/// </summary>
+		/// <remarks>
+		/// Use of exception instead of boolean return value to ease handling of errors:
+		///  - Exception will contain the reason for the failure
+		///  - 'good-weather' case be easier implemented, kind of scripted
+		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
@@ -925,6 +931,11 @@ namespace MKY.Settings
 		/// <summary>
 		/// Tries to save settings to <see cref="RoamingUserSettingsFilePath"/>.
 		/// </summary>
+		/// <remarks>
+		/// Use of exception instead of boolean return value to ease handling of errors:
+		///  - Exception will contain the reason for the failure
+		///  - 'good-weather' case be easier implemented, kind of scripted
+		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>

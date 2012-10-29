@@ -188,35 +188,26 @@ namespace MKY.Settings
 		/// <summary>
 		/// Tries to save settings to <see cref="SettingsFilePath"/>.
 		/// </summary>
+		/// <remarks>
+		/// Use of exception instead of boolean return value to ease handling of errors:
+		///  - Exception will contain the reason for the failure
+		///  - 'good-weather' case be easier implemented, kind of scripted
+		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void Save()
 		{
-			Exception result = null;
-
-			try
-			{
-				this.fileHandler.SaveToFile(typeof(TSettings), this.settings);
-				this.settings.ClearChanged();
-			}
-			catch (Exception ex)
-			{
-				if (result == null)
-					result = ex;
-			}
-
-			// Throw exception if either operation failed.
-			if (result != null)
-				throw (result);
+			this.fileHandler.SaveToFile(typeof(TSettings), this.settings);
+			this.settings.ClearChanged();
 		}
 
 		/// <summary>
 		/// Tries to delete file <see cref="SettingsFilePath"/>.
 		/// </summary>
 		/// <returns>
-		/// Returns <c>true</c> if file successfully saved.
+		/// Returns <c>true</c> if settings file successfully deleted.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual bool TryDelete()

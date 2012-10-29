@@ -1082,10 +1082,10 @@ namespace YAT.Model
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
-			// Skip save if file is up to date and there were no changes.
+			// Skip auto save if there is no reason to save, in order to increase speed.
 			// -------------------------------------------------------------------------------------
 
-			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
+			if (doAutoSave && this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
 			{
 				// Event must be fired anyway to ensure that dependent objects are updated.
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
@@ -1093,18 +1093,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Skip auto save if there were no explicit changes.
-			// -------------------------------------------------------------------------------------
-
-			if (doAutoSave && (!this.settingsRoot.ExplicitHaveChanged))
-			{
-				// Event must be fired anyway to ensure that dependent objects are updated.
-				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
-				return (true);
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Save terminal.
+			// Create auto save file path if necessary.
 			// -------------------------------------------------------------------------------------
 
 			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
@@ -1112,6 +1101,10 @@ namespace YAT.Model
 				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFile;
 				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
+
+			// -------------------------------------------------------------------------------------
+			// Save terminal.
+			// -------------------------------------------------------------------------------------
 
 			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving terminal...");
@@ -1122,11 +1115,11 @@ namespace YAT.Model
 			{
 				this.settingsHandler.Settings.AutoSaved = doAutoSave;
 				this.settingsHandler.Save();
+				success = true;
 
 				if (!doAutoSave)
 					AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
-				success = true;
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 
 				if (!doAutoSave)
@@ -1141,6 +1134,8 @@ namespace YAT.Model
 
 				try
 				{
+					// No need to check whether string is valid, File.Exists() returns <c>false</c>
+					// in such cases.
 					if (File.Exists(autoSaveFilePathToDelete))
 						File.Delete(autoSaveFilePathToDelete);
 				}

@@ -562,14 +562,6 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool SaveTerminalsAndWorkspaceToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
-			// In case of auto save, assign workspace settings file path before saving terminals.
-			// This ensures that relative paths are correctly retrieved by SaveAllTerminals().
-			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
-			{
-				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
-				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
-			}
-
 			// -------------------------------------------------------------------------------------
 			// Then, save all contained terminals.
 			// -------------------------------------------------------------------------------------
@@ -581,10 +573,10 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Skip save if file is up to date and there were no changes.
+			// Skip auto save if there is no reason to save, in order to increase speed.
 			// -------------------------------------------------------------------------------------
 
-			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
+			if (doAutoSave && this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
 			{
 				// Event must be fired anyway to ensure that dependent objects are updated.
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
@@ -592,19 +584,18 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Skip auto save if there were no explicit changes.
+			// Create auto save file path if necessary.
 			// -------------------------------------------------------------------------------------
 
-			if (doAutoSave && (!this.settingsRoot.ExplicitHaveChanged))
+			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
 			{
-				// Event must be fired anyway to ensure that dependent objects are updated.
-				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
-				return (true);
+				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
+				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
-			// ---------------------------------------------------------------------------------
+			// -------------------------------------------------------------------------------------
 			// Save workspace.
-			// ---------------------------------------------------------------------------------
+			// -------------------------------------------------------------------------------------
 
 			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving workspace...");
@@ -615,8 +606,8 @@ namespace YAT.Model
 			{
 				this.settingsHandler.Settings.AutoSaved = doAutoSave;
 				this.settingsHandler.Save();
-
 				success = true;
+
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 
 				if (!doAutoSave)
@@ -631,6 +622,8 @@ namespace YAT.Model
 
 				try
 				{
+					// No need to check whether string is valid, File.Exists() returns <c>false</c>
+					// in such cases.
 					if (File.Exists(autoSaveFilePathToDelete))
 						File.Delete(autoSaveFilePathToDelete);
 				}
