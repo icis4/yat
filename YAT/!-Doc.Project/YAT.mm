@@ -53,12 +53,15 @@
 <node CREATED="1293645369964" ID="Freemind_Link_1465369545" MODIFIED="1293645380417" TEXT="Make stress test non-interactive"/>
 </node>
 </node>
-<node CREATED="1293640779450" ID="Freemind_Link_1715450852" MODIFIED="1293640779450" TEXT="Model">
+<node CREATED="1293640779450" ID="Freemind_Link_1715450852" MODIFIED="1353449298121" TEXT="Model">
 <node CREATED="1293640779450" ID="Freemind_Link_856266152" MODIFIED="1293640779450" TEXT="File Handling">
 <node CREATED="1293640779450" MODIFIED="1293640779450" TEXT="AutoFiles">
 <node CREATED="1293640779450" MODIFIED="1293640779450" TEXT="Name not in title"/>
 </node>
 <node CREATED="1293642529885" ID="Freemind_Link_1324369782" MODIFIED="1293642537152" TEXT="Directly opened terminals don&apos;t automatically get saved anymore (bug #2821291)"/>
+<node CREATED="1353449301700" ID="ID_933518760" MODIFIED="1353449317095" TEXT="Files on temporary storage">
+<node CREATED="1353449325831" ID="ID_704129581" MODIFIED="1353449341599" TEXT="Could maybe moved into an automated test"/>
+</node>
 </node>
 <node CREATED="1293643790293" ID="Freemind_Link_768913068" MODIFIED="1293643793529" TEXT="Recents">
 <node CREATED="1293643794444" ID="Freemind_Link_394982307" MODIFIED="1293643801697" TEXT="Implement recent command test case"/>

@@ -54,16 +54,12 @@ namespace MKY.Windows.Forms
 				throw (new InvalidOperationException("SettingControlsHelper count has fallen below 0"));
 		}
 
-		#region Conversion Operators
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates", Justification = "Special operator for much easier use of this helper class.")]
 		public static implicit operator bool(SettingControlsHelper isSettingControls)
 		{
 			return (isSettingControls.IsSettingsControls);
 		}
-
-		#endregion
 	}
 }
 

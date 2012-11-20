@@ -305,9 +305,12 @@ namespace YAT.Model
 
 			if (!success && ApplicationSettings.LocalUserSettingsAreCurrentlyOwnedByThisInstance)
 			{
-				string filePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
-				if (File.Exists(filePath))
-					success = OpenWorkspaceFromFile(filePath);
+				if (ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace)
+				{
+					string filePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+					if (File.Exists(filePath))
+						success = OpenWorkspaceFromFile(filePath);
+				}
 
 				// Clean up the local user directory:
 				CleanupLocalUserDirectory();
@@ -844,9 +847,6 @@ namespace YAT.Model
 			if (success)
 			{
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
-
-				// All done, all resources can get disposed.
-				Dispose();
 
 				// Close the static application settings.
 				success = ApplicationSettings.Close();

@@ -42,7 +42,18 @@ namespace MKY
 
 		/// <summary>
 		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
+		/// The method returns an integer that indicates the relationship of the two
+		/// <see cref="System.String"> objects to one another in the sort order.
 		/// </summary>
+		/// <param name="strA">The first <see cref="System.String"> object.</param>
+		/// <param name="strB">The second <see cref="System.String"> object.</param>
+		/// <returns>
+		/// A 32-bit signed integer indicating the lexical relationship between the two comparands.
+		/// Value Condition:
+		///  - Less than zero <paramref name="strA"/> is less than <paramref name="strB"/>.
+		///  - Zero <paramref name="strA"/> equals <paramref name="strB"/>.
+		///  - Greater than zero <paramref name="strA"/> is greater than <paramref name="strB"/>.
+		/// </returns>
 		public static int CompareOrdinalIgnoreCase(string strA, string strB)
 		{
 			return (string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase));

@@ -52,9 +52,9 @@ namespace MKY.IO
 		/// </summary>
 		public static string MakeUniqueFileName(string path, string separator)
 		{
-			string dir = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;
+			string dir  = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;
 			string name = Path.GetFileNameWithoutExtension(path);
-			string ext = Path.GetExtension(path);
+			string ext  = Path.GetExtension(path);
 
 			if (File.Exists(dir + name + ext))
 			{
@@ -62,10 +62,11 @@ namespace MKY.IO
 				string unique = "";
 				do
 				{
-					index++;
+					index++; // No need to check for overflow, that is checked by the .NET runtime.
 					unique = index.ToString(NumberFormatInfo.InvariantInfo);
 				}
 				while (File.Exists(dir + name + separator + unique + ext));
+
 				return (dir + name + separator + unique + ext);
 			}
 			return (dir + name + ext);

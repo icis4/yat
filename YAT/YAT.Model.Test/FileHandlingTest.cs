@@ -148,9 +148,13 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialTerminal(out main, out workspace, out terminal);
-			main.Exit();
-			VerifyFiles(workspace, true, terminal, true);
+			StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			
+			using (main)
+			{
+				main.Exit();
+				VerifyFiles(workspace, true, terminal, true);
+			}
 		}
 
 		/// <summary>
@@ -164,11 +168,15 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialTerminal(out main, out workspace, out terminal);
-			workspace.Close();
-			VerifyFiles(workspace, false, terminal, false);
-			main.Exit();
-			VerifyFiles(workspace, false, terminal, false);
+			StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			
+			using (main)
+			{
+				workspace.Close();
+				VerifyFiles(workspace, false, terminal, false);
+				main.Exit();
+				VerifyFiles(workspace, false, terminal, false);
+			}
 		}
 
 		/// <summary>
@@ -182,11 +190,15 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialTerminal(out main, out workspace, out terminal);
-			terminal.Close();
-			VerifyFiles(workspace, false, terminal, false);
-			main.Exit();
-			VerifyFiles(workspace, true, terminal, false);
+			StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			
+			using (main)
+			{
+				terminal.Close();
+				VerifyFiles(workspace, false, terminal, false);
+				main.Exit();
+				VerifyFiles(workspace, true, terminal, false);
+			}
 		}
 
 		/// <summary>
@@ -200,13 +212,17 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialTerminal(out main, out workspace, out terminal);
-			terminal.Close();
-			VerifyFiles(workspace, false, terminal, false);
-			workspace.Close();
-			VerifyFiles(workspace, false, terminal, false);
-			main.Exit();
-			VerifyFiles(workspace, false, terminal, false);
+			StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+	
+			using (main)
+			{
+				terminal.Close();
+				VerifyFiles(workspace, false, terminal, false);
+				workspace.Close();
+				VerifyFiles(workspace, false, terminal, false);
+				main.Exit();
+				VerifyFiles(workspace, false, terminal, false);
+			}
 		}
 
 		#endregion
@@ -1093,9 +1109,9 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
-				Assert.AreEqual(Indices.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + Indices.FirstFixedIndex + "!");
-				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.AreEqual(1, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
+				Assert.AreEqual(Indices.FirstFixedIndex,   workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
+				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
+				Assert.AreEqual(1,                         workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
@@ -1140,8 +1156,8 @@ namespace YAT.Model.Test
 				for (int i = first; i <= last; i++)
 				{
 					workspace.ActivateTerminalBySequentialIndex(i);
-					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal " + i + " isn't " + i + "!");
-					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal " + i + " isn't " + i + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal "      + i + " isn't " + i + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal "    + i + " isn't " + i + "!");
 					Assert.AreEqual(i, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal " + i + " isn't " + i + "!");
 				}
 
@@ -1172,13 +1188,13 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				workspace.ActivateTerminalBySequentialIndex(1);
-				Assert.AreEqual(Indices.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + Indices.FirstFixedIndex + "!");
-				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.AreEqual(1, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
+				Assert.AreEqual(Indices.FirstFixedIndex,   workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
+				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
+				Assert.AreEqual(1,                         workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
 
 				workspace.ActivateTerminalBySequentialIndex(2);
-				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 3 isn't 3!");
-				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 3 isn't 2!");
+				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 3 isn't 3!");
+				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 3 isn't 2!");
 				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 3 isn't 2!");
 
 				success = (main.Exit() == MainResult.Success);
@@ -1196,12 +1212,12 @@ namespace YAT.Model.Test
 		// Private Methods
 		//==========================================================================================
 
-		#region Private Methods > Prepare
+		#region Private Methods > Start
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Prepare
+		// Private Methods > Start
 		//------------------------------------------------------------------------------------------
 
-		private void PrepareInitialTerminal(out Main main, out Workspace workspace, out Terminal terminal)
+		private void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = false;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
@@ -1278,7 +1294,7 @@ namespace YAT.Model.Test
 
 		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
-			// Verify workspace file(s).
+			// Verify workspace file.
 			if (workspaceFileExpected)
 			{
 				Assert.IsTrue(File.Exists(workspace.SettingsFilePath), prefix + "Workspace file doesn't exist!");
@@ -1293,7 +1309,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(File.Exists(workspace.SettingsFilePath), prefix + "Workspace file exists unexpectantly!");
 			}
 
-			// Verify terminal file.
+			// Verify terminal file(s).
 			for (int i = 0; i < terminal.Length; i++)
 			{
 				if (terminalFileExpected[i])
