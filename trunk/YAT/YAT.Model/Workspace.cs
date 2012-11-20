@@ -420,7 +420,7 @@ namespace YAT.Model
 
 			if (ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace)
 			{
-				// prevent recursive calls
+				// Prevent recursive calls:
 				this.settingsRoot_Changed_handlingSettingsIsSuspended = true;
 				TryAutoSaveIfFileAlreadyAutoSaved();
 				this.settingsRoot_Changed_handlingSettingsIsSuspended = false;
@@ -471,10 +471,10 @@ namespace YAT.Model
 		{
 			bool success = false;
 
-			if (this.settingsHandler.SettingsFileExists && !this.settingsRoot.AutoSaved)
-				success = SaveTerminalsAndWorkspaceToFile(false);
+			if (this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
+				success = SaveToFile(false);
 			else
-				success = SaveTerminalsAndWorkspaceToFile(true);
+				success = SaveToFile(true);
 
 			return (success);
 		}
@@ -490,8 +490,8 @@ namespace YAT.Model
 		{
 			bool success = false;
 
-			if (this.settingsHandler.SettingsFileExists && this.settingsRoot.AutoSaved)
-				success = SaveTerminalsAndWorkspaceToFile(true);
+			if (this.settingsHandler.SettingsFilePathIsValid && this.settingsRoot.AutoSaved)
+				success = SaveToFile(true);
 
 			return (success);
 		}
@@ -519,17 +519,17 @@ namespace YAT.Model
 				if (this.settingsHandler.Settings.AutoSaved)
 				{
 					if (autoSaveIsAllowed)
-						success = SaveTerminalsAndWorkspaceToFile(true);
+						success = SaveToFile(true);
 				}
 				else
 				{
-					success = SaveTerminalsAndWorkspaceToFile(false);
+					success = SaveToFile(false);
 				}
 			}
 			else // Auto save creates default file path.
 			{
 				if (autoSaveIsAllowed)
-					success = SaveTerminalsAndWorkspaceToFile(true);
+					success = SaveToFile(true);
 			}
 
 			// If not successful yet, request new file path.
@@ -546,21 +546,24 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = "";
-			if (this.settingsRoot.AutoSaved)
+			if (this.settingsRoot.AutoSaved && (!StringEx.EqualsOrdinalIgnoreCase(filePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
+			// Set the new file path:
 			this.settingsHandler.SettingsFilePath = filePath;
-			return (SaveTerminalsAndWorkspaceToFile(false, autoSaveFilePathToDelete));
+
+			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
-		private bool SaveTerminalsAndWorkspaceToFile(bool doAutoSave)
+		private bool SaveToFile(bool doAutoSave)
 		{
-			return (SaveTerminalsAndWorkspaceToFile(doAutoSave, ""));
+			return (SaveToFile(doAutoSave, ""));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
-		private bool SaveTerminalsAndWorkspaceToFile(bool doAutoSave, string autoSaveFilePathToDelete)
+		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
 			// Then, save all contained terminals.
@@ -789,9 +792,6 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Workspace not closed!");
 			}
-
-			// All done, all resources can get disposed:
-			Dispose();
 
 			return (success);
 		}

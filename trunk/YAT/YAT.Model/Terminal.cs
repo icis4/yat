@@ -1008,10 +1008,12 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			bool success = false;
-			if (this.settingsHandler.SettingsFileExists && !this.settingsRoot.AutoSaved)
+
+			if (this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
 				success = SaveToFile(false);
 			else
 				success = SaveToFile(true);
+
 			return (success);
 		}
 
@@ -1065,11 +1067,14 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = "";
-			if (this.settingsRoot.AutoSaved)
+			if (this.settingsRoot.AutoSaved && (!StringEx.EqualsOrdinalIgnoreCase(filePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
+			// Set the new file path:
 			this.settingsHandler.SettingsFilePath = filePath;
+
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
@@ -1315,9 +1320,6 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Terminal not closed!");
 			}
-
-			// All done, all resources can get disposed.
-			Dispose();
 
 			return (success);
 		}
