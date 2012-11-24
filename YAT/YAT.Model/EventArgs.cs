@@ -64,7 +64,10 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly string FilePath;
 
-		/// <summary></summary>
+		/// <summary>
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly bool IsAutoSave;
 

@@ -107,8 +107,8 @@ namespace YAT.Gui.Forms
 
 		// Settings:
 		private TerminalSettingsRoot settingsRoot;
-		private bool handlingTerminalSettingsIsSuspended = false;
-
+		private bool handlingTerminalSettingsIsSuspended = false; // A simple flag is sufficient as
+		                                                          // the form is ISynchronizeInvoke.
 		#endregion
 
 		#region Events

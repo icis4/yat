@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -411,19 +412,22 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private bool settingsRoot_Changed_handlingSettingsIsSuspended = false;
+		private object settingsRoot_Changed_SyncObj = new object();
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			if (this.settingsRoot_Changed_handlingSettingsIsSuspended)
-				return;
-
-			if (ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace)
+			// Prevent recursive calls to improve performance:
+			if (Monitor.TryEnter(settingsRoot_Changed_SyncObj))
 			{
-				// Prevent recursive calls:
-				this.settingsRoot_Changed_handlingSettingsIsSuspended = true;
-				TryAutoSaveIfFileAlreadyAutoSaved();
-				this.settingsRoot_Changed_handlingSettingsIsSuspended = false;
+				try
+				{
+					if (ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace)
+						TryAutoSaveIfFileAlreadyAutoSaved();
+				}
+				finally
+				{
+					Monitor.Exit(settingsRoot_Changed_SyncObj);
+				}
 			}
 		}
 
@@ -464,17 +468,31 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// Performs auto save if no file yet or on previously auto saved files.
 		/// Performs normal save on existing normal files.
+		/// Performs auto save if no file yet or on previously auto saved files.
 		/// </summary>
-		private bool TryAutoSave()
+		private bool TryNonInteractiveSave(bool autoSaveIsAllowed)
 		{
 			bool success = false;
 
-			if (this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
-				success = SaveToFile(false);
-			else
-				success = SaveToFile(true);
+			// Save if file path is valid.
+			if (this.settingsHandler.SettingsFilePathIsValid)
+			{
+				if (this.settingsHandler.Settings.AutoSaved)
+				{
+					if (autoSaveIsAllowed)
+						success = SaveToFile(true);
+				}
+				else
+				{
+					success = SaveToFile(false);
+				}
+			}
+			else // Auto save creates default file path.
+			{
+				if (autoSaveIsAllowed)
+					success = SaveToFile(true);
+			}
 
 			return (success);
 		}
@@ -482,10 +500,6 @@ namespace YAT.Model
 		/// <summary>
 		/// Performs auto save on previously auto saved files.
 		/// </summary>
-		/// <remarks>
-		/// This method is intentionally named this long to emphasize the difference to
-		/// <see cref="TryAutoSave()"/> above.
-		/// </remarks>
 		private bool TryAutoSaveIfFileAlreadyAutoSaved()
 		{
 			bool success = false;
@@ -511,26 +525,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			bool success = false;
-
-			// Save workspace if file path is valid.
-			if (this.settingsHandler.SettingsFilePathIsValid)
-			{
-				if (this.settingsHandler.Settings.AutoSaved)
-				{
-					if (autoSaveIsAllowed)
-						success = SaveToFile(true);
-				}
-				else
-				{
-					success = SaveToFile(false);
-				}
-			}
-			else // Auto save creates default file path.
-			{
-				if (autoSaveIsAllowed)
-					success = SaveToFile(true);
-			}
+			bool success = TryNonInteractiveSave(autoSaveIsAllowed);
 
 			// If not successful yet, request new file path.
 			if (!success)
@@ -557,11 +552,23 @@ namespace YAT.Model
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
+		/// <param name="doAutoSave">
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </param>
 		private bool SaveToFile(bool doAutoSave)
 		{
 			return (SaveToFile(doAutoSave, ""));
 		}
 
+		/// <param name="doAutoSave">
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </param>
+		/// <param name="autoSaveFilePathToDelete">
+		/// The path to the former auto saved file, it will be deleted if the file can successfully
+		/// be stored in the new location.
+		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
@@ -699,7 +706,7 @@ namespace YAT.Model
 		/// workspace has to signal such cases to main.
 		/// 
 		/// Cases (similar to cases in Model.Terminal):
-		/// - Main close
+		/// - Main exit
 		///   - auto,   no file,       auto save    => auto save, if it fails => nothing  : (m1a)
 		///   - auto,   no file,       no auto save => nothing                            : (m1b)
 		///   - auto,   existing file, auto save    => auto save, if it fails => delete   : (m2a)
@@ -714,23 +721,22 @@ namespace YAT.Model
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (w4a)
 		///   - normal, existing file, no auto save => question                           : (w4b)
 		/// </remarks>
-		public virtual bool Close(bool isMainClose)
+		public virtual bool Close(bool isMainExit)
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
 			// Do not try to auto save if there is no existing file (w1):
-			if (tryAutoSave && !isMainClose && !this.settingsHandler.SettingsFileExists)
+			if (tryAutoSave && !isMainExit && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
 			bool success = false;
 
-			// Try to auto save if desired:
-			if (tryAutoSave)
-				success = TryAutoSave();
+			// Try to save without user interaction:
+			success = TryNonInteractiveSave(tryAutoSave);
 
-			// No success on auto save or auto save not desired.
+			// No success on non-interactive save.
 			if (!success)
 			{
 				// No file to save (m1, m3, w1, w3).
@@ -786,7 +792,7 @@ namespace YAT.Model
 			{
 				// Status text request must be before closed event, closed event may close the view.
 				OnTimedStatusTextRequest("Workspace successfully closed.");
-				OnClosed(new ClosedEventArgs(isMainClose));
+				OnClosed(new ClosedEventArgs(isMainExit));
 			}
 			else
 			{
