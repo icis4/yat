@@ -132,9 +132,9 @@ namespace YAT.Model.Test
 		// Tests
 		//==========================================================================================
 
-		#region Tests > TestInitialAutoSaveOnClose
+		#region Tests > TestInitialAutoSaveOnExit
 		//------------------------------------------------------------------------------------------
-		// Tests > TestInitialAutoSaveOnClose
+		// Tests > TestInitialAutoSaveOnExit
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -142,7 +142,7 @@ namespace YAT.Model.Test
 		/// Expected:  Auto save of terminal and workspace.
 		/// </summary>
 		[Test]
-		public virtual void TestInitialAutoSaveOnMainClose()
+		public virtual void TestInitialAutoSaveOnMainExit()
 		{
 			Main main;
 			Workspace workspace;
@@ -162,7 +162,7 @@ namespace YAT.Model.Test
 		/// Expected:  No auto save.
 		/// </summary>
 		[Test]
-		public virtual void TestInitialAutoSaveOnWorkspaceAndMainClose()
+		public virtual void TestInitialAutoSaveOnWorkspaceAndMainExit()
 		{
 			Main main;
 			Workspace workspace;
@@ -184,7 +184,7 @@ namespace YAT.Model.Test
 		/// Expected:  Auto save of workspace.
 		/// </summary>
 		[Test]
-		public virtual void TestInitialAutoSaveOnTerminalAndMainClose()
+		public virtual void TestInitialAutoSaveOnTerminalAndMainExit()
 		{
 			Main main;
 			Workspace workspace;
@@ -206,7 +206,7 @@ namespace YAT.Model.Test
 		/// Expected:  No auto save.
 		/// </summary>
 		[Test]
-		public virtual void TestInitialAutoSaveOnTerminalAndWorkspaceAndMainClose()
+		public virtual void TestInitialAutoSaveOnTerminalAndWorkspaceAndMainExit()
 		{
 			Main main;
 			Workspace workspace;

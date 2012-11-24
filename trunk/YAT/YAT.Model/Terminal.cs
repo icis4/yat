@@ -940,7 +940,8 @@ namespace YAT.Model
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			// Nothing to do yet.
+			// Terminal files are never saved automatically. They are either auto saved on exit, or
+			// manually saved by the user.
 		}
 
 		#endregion
@@ -1000,19 +1001,31 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// Performs auto save if no file yet or on previously auto saved files.
 		/// Performs normal save on existing normal files.
+		/// Performs auto save if no file yet or on previously auto saved files.
 		/// </summary>
-		private bool TryAutoSave()
+		private bool TryNonInteractiveSave(bool autoSaveIsAllowed)
 		{
-			AssertNotDisposed();
-
 			bool success = false;
 
-			if (this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
-				success = SaveToFile(false);
-			else
-				success = SaveToFile(true);
+			// Save if file path is valid.
+			if (this.settingsHandler.SettingsFilePathIsValid)
+			{
+				if (this.settingsHandler.Settings.AutoSaved)
+				{
+					if (autoSaveIsAllowed)
+						success = SaveToFile(true);
+				}
+				else
+				{
+					success = SaveToFile(false);
+				}
+			}
+			else // Auto save creates default file path.
+			{
+				if (autoSaveIsAllowed)
+					success = SaveToFile(true);
+			}
 
 			return (success);
 		}
@@ -1032,26 +1045,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			bool success = false;
-
-			// Save terminal if file path is valid.
-			if (this.settingsHandler.SettingsFilePathIsValid)
-			{
-				if (this.settingsHandler.Settings.AutoSaved)
-				{
-					if (autoSaveIsAllowed)
-						success = SaveToFile(true);
-				}
-				else
-				{
-					success = SaveToFile(false);
-				}
-			}
-			else // Auto save creates default file path.
-			{
-				if (autoSaveIsAllowed)
-					success = SaveToFile(true);
-			}
+			bool success = TryNonInteractiveSave(autoSaveIsAllowed);
 
 			// If not successful yet, request new file path.
 			if (!success)
@@ -1078,11 +1072,23 @@ namespace YAT.Model
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
+		/// <param name="doAutoSave">
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </param>
 		private bool SaveToFile(bool doAutoSave)
 		{
 			return (SaveToFile(doAutoSave, ""));
 		}
 
+		/// <param name="doAutoSave">
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </param>
+		/// <param name="autoSaveFilePathToDelete">
+		/// The path to the former auto saved file, it will be deleted if the file can successfully
+		/// be stored in the new location.
+		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
@@ -1245,11 +1251,10 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// Try to auto save if desired.
-			if (tryAutoSave)
-				success = TryAutoSave();
+			// Try to save without user interaction:
+			success = TryNonInteractiveSave(tryAutoSave);
 
-			// No success on auto save or auto save not desired.
+			// No success on non-interactive save.
 			if (doSave && !success)
 			{
 				// No file to save (w1, w3, t1, t3).

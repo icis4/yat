@@ -52,13 +52,17 @@ namespace MKY.IO
 		/// <summary>
 		/// Returns whether the folder or file path is valid.
 		/// </summary>
+		/// <remarks>
+		/// This method only checks whether the path is valid but not whether it actually exists.
+		/// Use <see cref="Directory.Exists"/> or <see cref="File.Exists"/> to check existence.
+		/// </remarks>
 		public static bool IsValid(string path)
 		{
 			// String validation:
 			if (string.IsNullOrEmpty(path))
 				return (false);
 
-			// File path validation:
+			// Path validation:
 			return (!string.IsNullOrEmpty(Path.GetFullPath(path)));
 		}
 

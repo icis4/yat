@@ -106,7 +106,10 @@ namespace YAT.Settings.Workspace
 			set { } // Do nothing.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </summary>
 		[XmlElement("AutoSaved")]
 		public virtual bool AutoSaved
 		{

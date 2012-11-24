@@ -43,10 +43,10 @@ namespace MKY
 		/// <summary>
 		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
 		/// The method returns an integer that indicates the relationship of the two
-		/// <see cref="System.String"> objects to one another in the sort order.
+		/// <see cref="System.String"/> objects to one another in the sort order.
 		/// </summary>
-		/// <param name="strA">The first <see cref="System.String"> object.</param>
-		/// <param name="strB">The second <see cref="System.String"> object.</param>
+		/// <param name="strA">The first <see cref="System.String"/> object.</param>
+		/// <param name="strB">The second <see cref="System.String"/> object.</param>
 		/// <returns>
 		/// A 32-bit signed integer indicating the lexical relationship between the two comparands.
 		/// Value Condition:

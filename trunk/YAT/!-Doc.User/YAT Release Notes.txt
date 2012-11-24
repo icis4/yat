@@ -77,6 +77,8 @@ Important changes:
 - Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323)
    > Implemented by use of a named mutex as suggested in the respective comments
    > Also fixes use of same setting file by concurrent YAT instances (bug #3540438)
+- Proper handling if a .yaw or .yat was located on a storage that has been removed (bug #2455825)
+   > Minor refactoring of the save/close/exit procedure
 - Schemas and defaults of all former settings filed and versioned, version of settings added to all
   three types of settings (related to bugs #3450553 and #3535709)
 - .NET/Microsoft XML serialization infrastructure extended by schema for GUID items (bug #3535709)
@@ -99,7 +101,6 @@ Fixed bugs:
 - Missing tool tip on main window fixed, wrong tool tip on terminal window fixed (bug #3471809)
 - Printer dialog also gets shown on 64-bit systems
 - Terminal 'SaveAs' dialog no longer shows .yat.yat in case of already saved files (bug #3532391)
-- Proper handling if a .yaw or .yat was located on a storage that has been removed (bug #2455825)
 - Handling of potential FileNotFoundException in YAT.Gui.Forms.WelcomeScreen improved (bug #3576101)
 - Handling of UnauthorizedAccessException in YAT.Model.Terminal/Workspace improved (bug #3533201)
 - Handling of InvalidOperationException in ALAZ.SystemEx.BaseSocketConnHost improved (bug #3528765)
