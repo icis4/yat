@@ -729,12 +729,18 @@ namespace YAT.Model.Test
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, uc + "Terminal could not be opened!");
 
+				// The auto workspace may still be set to some other workspace. Keep it to compare below.
+				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
 				VerifyFiles(uc, workspace, false, terminal, true, false);
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited!");
 
 				VerifyFiles(uc, workspace, true, terminal, true, false);
+
+				// Ensure that the auto workspace has been changed.
+				string currentLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+				Assert.AreNotEqual(formerLocalUserAutoWorkspaceFilePath, currentLocalUserAutoWorkspaceFilePath, uc + "Auto workspace not created new!");
 			}
 			#endregion
 
@@ -845,15 +851,12 @@ namespace YAT.Model.Test
 
 			#region Use case 9
 			// - Start with auto workspace that contains 1 normal terminal
-			// - Start another main
-			//   => 2 auto workspaces, first with 1 normal terminal
-			using (Main main2 = new Main(),
-						main3 = new Main())
+			//   => 1 auto workspaces with 1 normal terminal
+			using (Main main2 = new Main())
 			{
 				uc = "UC9: ";
 
 				Workspace workspace2;
-				Workspace workspace3;
 
 				Terminal terminal2;
 
@@ -870,26 +873,6 @@ namespace YAT.Model.Test
 					Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be opened!");
 
 					VerifyFiles(uc, workspace2, true, terminal2, true, false);
-				}
-
-				// Main 3 start.
-				{
-					success = (main3.Start() == MainResult.Success);
-					Assert.IsTrue(success, uc + "Main 3 could not be started!");
-
-					workspace3 = main3.Workspace;
-					Assert.IsNotNull(workspace3, uc + "Workspace 3 not created!");
-					Assert.AreEqual(0, workspace3.TerminalCount, uc + "Workspace 3 doesn't contain 0 terminals!");
-
-					VerifyFiles(uc, workspace3, false);
-				}
-
-				// Main 3 exit.
-				{
-					success = (main3.Exit() == MainResult.Success);
-					Assert.IsTrue(success, uc + "Main 3 could not be exited!");
-
-					VerifyFiles(uc, workspace3, true);
 				}
 
 				// Main 2 exit.
@@ -1331,7 +1314,9 @@ namespace YAT.Model.Test
 			if (workspaceFileExpected)
 				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not set!");
 			else
-				StringAssert.AreEqualIgnoringCase("", ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not reset!");
+				// Note that the application settings may still contain a former workspace file path.
+				// Therefore, do not check the local user settings, instead, check that the workspace file path is reset.
+				StringAssert.AreEqualIgnoringCase("", workspace.SettingsFilePath, prefix + "Workspace file path not reset!");
 
 			// Verify recent settings.
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
