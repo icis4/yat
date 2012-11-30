@@ -1014,17 +1014,17 @@ namespace YAT.Model
 				if (this.settingsHandler.Settings.AutoSaved)
 				{
 					if (autoSaveIsAllowed)
-						success = SaveToFile(true);
+						success = DoSave(true, false);
 				}
 				else
 				{
-					success = SaveToFile(false);
+					success = DoSave(false, false);
 				}
 			}
 			else // Auto save creates default file path.
 			{
 				if (autoSaveIsAllowed)
-					success = SaveToFile(true);
+					success = DoSave(true, false);
 			}
 
 			return (success);
@@ -1035,20 +1035,20 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool Save()
 		{
-			return (Save(true));
+			return (Save(true, true));
 		}
 
 		/// <summary>
 		/// Saves terminal to file, prompts for file if it doesn't exist yet.
 		/// </summary>
-		public virtual bool Save(bool autoSaveIsAllowed)
+		public virtual bool Save(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
 		{
 			AssertNotDisposed();
 
 			bool success = TryNonInteractiveSave(autoSaveIsAllowed);
 
 			// If not successful yet, request new file path.
-			if (!success)
+			if (!success && userInteractionIsAllowed)
 				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 
 			return (success);
@@ -1069,29 +1069,38 @@ namespace YAT.Model
 			// Set the new file path:
 			this.settingsHandler.SettingsFilePath = filePath;
 
-			return (SaveToFile(false, autoSaveFilePathToDelete));
+			return (DoSave(false, true, autoSaveFilePathToDelete));
 		}
 
 		/// <param name="doAutoSave">
 		/// Auto save means that the settings have been saved at an automatically chosen location,
 		/// without telling the user anything about it.
 		/// </param>
-		private bool SaveToFile(bool doAutoSave)
+		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
+		private bool DoSave(bool doAutoSave, bool userInteractionIsAllowed)
 		{
-			return (SaveToFile(doAutoSave, ""));
+			return (DoSave(doAutoSave, userInteractionIsAllowed, ""));
 		}
 
+		/// <summary>
+		/// This method implements the logic that is needed when saving, opposed to the method
+		/// <see cref="SaveToFile"/> which just performs the actual save, i.e. file handling.
+		/// </summary>
 		/// <param name="doAutoSave">
 		/// Auto save means that the settings have been saved at an automatically chosen location,
 		/// without telling the user anything about it.
 		/// </param>
+		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
 		/// <param name="autoSaveFilePathToDelete">
 		/// The path to the former auto saved file, it will be deleted if the file can successfully
 		/// be stored in the new location.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
-		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
+		private bool DoSave(bool doAutoSave, bool userInteractionIsAllowed, string autoSaveFilePathToDelete)
 		{
+			// The 'userInteractionIsAllowed' parameter is only implemented for symmetricity with
+			// the corresponding method in 'Workspace'.
+			UnusedArg.PreventAnalysisWarning(userInteractionIsAllowed);
+
 			// -------------------------------------------------------------------------------------
 			// Skip auto save if there is no reason to save, in order to increase speed.
 			// -------------------------------------------------------------------------------------
@@ -1114,9 +1123,32 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
+			// Let save fail if the file does not exist and no user interaction is allowed.
+			// -------------------------------------------------------------------------------------
+
+			if ((!userInteractionIsAllowed) && (!this.settingsHandler.SettingsFileExists))
+			{
+				return (false);
+			}
+
+			// -------------------------------------------------------------------------------------
 			// Save terminal.
 			// -------------------------------------------------------------------------------------
 
+			return (SaveToFile(false, autoSaveFilePathToDelete));
+		}
+
+		/// <param name="doAutoSave">
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </param>
+		/// <param name="autoSaveFilePathToDelete">
+		/// The path to the former auto saved file, it will be deleted if the file can successfully
+		/// be stored in the new location.
+		/// </param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
+		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
+		{
 			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving terminal...");
 
@@ -1177,7 +1209,8 @@ namespace YAT.Model
 					OnMessageInputRequest
 						(
 						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"Error message: " + ex.Message,
+						"System error message:" + Environment.NewLine +
+						ex.Message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -1251,8 +1284,9 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// Try to save without user interaction:
-			success = TryNonInteractiveSave(tryAutoSave);
+			// If intended, try to save without user interaction:
+			if (doSave)
+				success = TryNonInteractiveSave(tryAutoSave);
 
 			// No success on non-interactive save.
 			if (doSave && !success)
