@@ -1015,6 +1015,11 @@ namespace YAT.Model
 			this.workspace = new Workspace(settings, guid);
 			AttachWorkspaceEventHandlers();
 
+			// Save auto workspace.
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.SetFilePath(settings.SettingsFilePath);
+			ApplicationSettings.Save();
+
+			// Save recent.
 			if (!settings.Settings.AutoSaved)
 				SetRecent(settings.SettingsFilePath);
 
@@ -1089,9 +1094,6 @@ namespace YAT.Model
 				settings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 				settings.SettingsFilePath = filePath;
 				settings.Load();
-
-				ApplicationSettings.LocalUserSettings.AutoWorkspace.SetFilePath(filePath);
-				ApplicationSettings.Save();
 
 				// Try to retrieve GUID from file path (in case of auto saved workspace files).
 				if (!GuidEx.TryCreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
