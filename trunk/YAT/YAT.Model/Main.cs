@@ -724,14 +724,7 @@ namespace YAT.Model
 			// Delete all obsolete file paths in default directory.
 			foreach (string ddfp in localUserDirectoryFilePaths)
 			{
-				try
-				{
-					File.Delete(ddfp);
-				}
-				catch
-				{
-					// Don't care about exceptions.
-				}
+				FileEx.TryDelete(ddfp);
 			}
 		}
 
@@ -847,6 +840,7 @@ namespace YAT.Model
 			if (success)
 			{
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
+				cancel = false;
 
 				// Close the static application settings.
 				success = ApplicationSettings.Close();
@@ -854,7 +848,6 @@ namespace YAT.Model
 				// Signal the exit.
 				OnExited(new EventArgs());
 
-				cancel = false;
 				if (success)
 					return (MainResult.Success);
 				else
@@ -863,7 +856,6 @@ namespace YAT.Model
 			else
 			{
 				OnTimedStatusTextRequest("Exit cancelled.");
-
 				cancel = true;
 				return (MainResult.ApplicationExitError);
 			}
@@ -908,7 +900,7 @@ namespace YAT.Model
 
 		private void workspace_Saved(object sender, SavedEventArgs e)
 		{
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.SetFilePath(e.FilePath);
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = e.FilePath;
 			ApplicationSettings.Save();
 		}
 
@@ -1016,7 +1008,7 @@ namespace YAT.Model
 			AttachWorkspaceEventHandlers();
 
 			// Save auto workspace.
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.SetFilePath(settings.SettingsFilePath);
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = settings.SettingsFilePath;
 			ApplicationSettings.Save();
 
 			// Save recent.
@@ -1217,6 +1209,11 @@ namespace YAT.Model
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
 			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+
+			// Ensure that the request is processed!
+			if (e.Result == DialogResult.None)
+				throw (new InvalidOperationException("A 'Message Input' request by main was not processed by the application!"));
+
 			return (e.Result);
 		}
 

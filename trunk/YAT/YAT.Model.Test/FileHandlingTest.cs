@@ -513,7 +513,7 @@ namespace YAT.Model.Test
 					new bool[]     { false,     true      }  // Auto.
 					);
 
-				// install callback handler that sets the normal file path for terminal 2
+				// Install callback handler that sets the normal file path for terminal 2:
 				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest);
 
 				string autoWorkspaceFilePath = workspace.SettingsFilePath;
@@ -523,6 +523,17 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 				Assert.IsFalse(File.Exists(autoWorkspaceFilePath), uc + "Auto workspace file not deleted!");
 				Assert.IsFalse(File.Exists(autoTerminal2FilePath), uc + "Auto terminal 2 file not deleted!");
+
+				VerifyFiles
+					(
+					uc,
+					workspace,
+					true,
+					false,
+					new Terminal[] { terminal1, terminal2 },
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     false     }  // Auto.
+					);
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited!");
@@ -577,7 +588,7 @@ namespace YAT.Model.Test
 				Terminal terminal3 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
 
-				// install callback handler that sets the normal file path for terminal 3
+				// Install callback handler that sets the normal file path for terminal 3:
 				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest);
 
 				success = (main.Exit() == MainResult.Success);

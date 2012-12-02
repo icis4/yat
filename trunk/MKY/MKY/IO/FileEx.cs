@@ -71,6 +71,35 @@ namespace MKY.IO
 			}
 			return (dir + name + ext);
 		}
+
+		/// <summary>
+		/// Tries to delete file <paramref name="filePath"/>.
+		/// </summary>
+		/// <returns>
+		/// Returns <c>true</c> if file successfully saved.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		public static bool TryDelete(string filePath)
+		{
+			// No need to check whether string is valid, 'File.Exists()' returns <c>false</c>
+			// in such cases.
+			if (File.Exists(filePath))
+			{
+				try
+				{
+					File.Delete(filePath);
+					return (true);
+				}
+				catch
+				{
+					return (false);
+				}
+			}
+			else
+			{
+				return (false);
+			}
+		}
 	}
 }
 

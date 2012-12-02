@@ -468,36 +468,6 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// Performs normal save on existing normal files.
-		/// Performs auto save if no file yet or on previously auto saved files.
-		/// </summary>
-		private bool TryNonInteractiveSave(bool autoSaveIsAllowed)
-		{
-			bool success = false;
-
-			// Save if file path is valid.
-			if (this.settingsHandler.SettingsFilePathIsValid)
-			{
-				if (this.settingsHandler.Settings.AutoSaved)
-				{
-					if (autoSaveIsAllowed)
-						success = DoSave(true, false);
-				}
-				else
-				{
-					success = DoSave(false, false);
-				}
-			}
-			else // Auto save creates default file path.
-			{
-				if (autoSaveIsAllowed)
-					success = DoSave(true, false);
-			}
-
-			return (success);
-		}
-
-		/// <summary>
 		/// Performs auto save on previously auto saved files.
 		/// </summary>
 		private bool TryAutoSaveIfFileAlreadyAutoSaved()
@@ -505,7 +475,7 @@ namespace YAT.Model
 			bool success = false;
 
 			if (this.settingsHandler.SettingsFilePathIsValid && this.settingsRoot.AutoSaved)
-				success = DoSave(true, false);
+				success = SaveDependentOnState(true, false);
 
 			return (success);
 		}
@@ -515,31 +485,106 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool Save()
 		{
-			return (Save(true, true));
-		}
-
-		/// <summary>
-		/// Saves all terminals and workspace to files, prompts for files if they don't exist yet.
-		/// </summary>
-		public virtual bool Save(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
-		{
 			AssertNotDisposed();
 
-			bool success = TryNonInteractiveSave(autoSaveIsAllowed);
+			// First, save all contained terminals:
+			if (!SaveAllTerminals())
+				return (false);
 
-			// If not successful yet, request new file path.
-			if (!success && userInteractionIsAllowed)
-				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
-
-			return (success);
+			// Then, save the workspace itself:
+			return (SaveDependentOnState(true, true));
 		}
 
 		/// <summary>
-		/// Saves all terminals and workspace to given file.
+		/// This method implements the logic that is needed when saving, opposed to the method
+		/// <see cref="SaveToFile"/> which just performs the actual save, i.e. file handling.
 		/// </summary>
+		/// <param name="autoSaveIsAllowed">
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </param>
+		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
+		private bool SaveDependentOnState(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
+		{
+			// Evaluate auto save.
+			bool isAutoSave;
+			if (this.settingsHandler.SettingsFilePathIsValid && !this.settingsRoot.AutoSaved)
+				isAutoSave = false;
+			else
+				isAutoSave = autoSaveIsAllowed;
+
+			// -------------------------------------------------------------------------------------
+			// Skip auto save if there is no reason to save, in order to increase speed.
+			// -------------------------------------------------------------------------------------
+
+			if (isAutoSave && this.settingsHandler.SettingsFileIsUpToDate && !this.settingsRoot.HaveChanged)
+			{
+				// Event must be fired anyway to ensure that dependent objects are updated.
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
+				return (true);
+			}
+
+			// -------------------------------------------------------------------------------------
+			// Create auto save file path or request manual/normal file path if necessary.
+			// -------------------------------------------------------------------------------------
+
+			if (!this.settingsHandler.SettingsFilePathIsValid)
+			{
+				if (isAutoSave)
+				{
+					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
+					this.settingsHandler.SettingsFilePath = autoSaveFilePath;
+				}
+				else if (userInteractionIsAllowed)
+				{
+					// This Save As... request will request the file path from the user and then
+					// call the 'SaveAs()' method below.
+					return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+				}
+				else
+				{
+					// Let save fail if the file path is not valid and no user interaction is allowed.
+					return (false);
+				}
+			}
+			else // SettingsFilePathIsValid
+			{
+				// Ensure that existing former auto files are 'Saved As' if auto save is not allowed.
+				if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+				{
+					// This Save As... request will request the file path from the user and then
+					// call the 'SaveAs()' method below.
+					return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+				}
+			}
+
+			// -------------------------------------------------------------------------------------
+			// Save workspace.
+			// -------------------------------------------------------------------------------------
+
+			return (SaveToFile(isAutoSave, ""));
+		}
+
+		/// <summary>
+		/// Saves workspace settings to given file, also saves all terminals and prompts for
+		/// files if they don't exist yet.
+		/// </summary>
+		/// <remarks>
+		/// Note that not only the workspace gets saved, but also the terminals. Consider the
+		/// default case:
+		/// 1. Application start, default workspace is created
+		/// 2. Create a terminal
+		/// 3. Intentionally save the workspace as
+		/// => The user expects to save the terminal as well.
+		/// => No saving the terminal would lead to a normal file referring to an auto file!
+		/// </remarks>
 		public virtual bool SaveAs(string filePath)
 		{
 			AssertNotDisposed();
+
+			// First, save all contained terminals:
+			if (!SaveAllTerminals(false, true))
+				return (false);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = "";
@@ -549,87 +594,11 @@ namespace YAT.Model
 			// Set the new file path:
 			this.settingsHandler.SettingsFilePath = filePath;
 
-			return (DoSave(false, true, autoSaveFilePathToDelete));
-		}
-
-		/// <param name="doAutoSave">
-		/// Auto save means that the settings have been saved at an automatically chosen location,
-		/// without telling the user anything about it.
-		/// </param>
-		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
-		private bool DoSave(bool doAutoSave, bool userInteractionIsAllowed)
-		{
-			return (DoSave(doAutoSave, userInteractionIsAllowed, ""));
-		}
-
-		/// <summary>
-		/// This method implements the logic that is needed when saving, opposed to the method
-		/// <see cref="SaveToFile"/> which just performs the actual save, i.e. file handling.
-		/// </summary>
-		/// <param name="doAutoSave">
-		/// Auto save means that the settings have been saved at an automatically chosen location,
-		/// without telling the user anything about it.
-		/// </param>
-		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
-		/// <param name="autoSaveFilePathToDelete">
-		/// The path to the former auto saved file, it will be deleted if the file can successfully
-		/// be stored in the new location.
-		/// </param>
-		private bool DoSave(bool doAutoSave, bool userInteractionIsAllowed, string autoSaveFilePathToDelete)
-		{
-			// -------------------------------------------------------------------------------------
-			// First, save all contained terminals.
-			// -------------------------------------------------------------------------------------
-
-			if (!SaveAllTerminals(doAutoSave, userInteractionIsAllowed))
-			{
-				if (!doAutoSave)
-					OnTimedStatusTextRequest("Workspace not saved!");
-
-				return (false);
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Skip auto save if there is no reason to save, in order to increase speed.
-			// -------------------------------------------------------------------------------------
-
-			if (doAutoSave && this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
-			{
-				// Event must be fired anyway to ensure that dependent objects are updated.
-				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
-				return (true);
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Create auto save file path if necessary.
-			// -------------------------------------------------------------------------------------
-
-			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
-			{
-				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
-				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Let save fail if the file does not exist and no user interaction is allowed.
-			// -------------------------------------------------------------------------------------
-
-			if ((!userInteractionIsAllowed) && (!this.settingsHandler.SettingsFileExists))
-			{
-				if (!doAutoSave)
-					OnTimedStatusTextRequest("Workspace not saved!");
-
-				return (false);
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Save workspace.
-			// -------------------------------------------------------------------------------------
-
+			// Then, save the workspace itself:
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
-		/// <param name="doAutoSave">
+		/// <param name="isAutoSave">
 		/// Auto save means that the settings have been saved at an automatically chosen location,
 		/// without telling the user anything about it.
 		/// </param>
@@ -638,43 +607,33 @@ namespace YAT.Model
 		/// be stored in the new location.
 		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
-		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
+		private bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
-			if (!doAutoSave)
+			if (!isAutoSave)
 				OnFixedStatusTextRequest("Saving workspace...");
 
 			bool success = false;
 
 			try
 			{
-				this.settingsHandler.Settings.AutoSaved = doAutoSave;
+				this.settingsHandler.Settings.AutoSaved = isAutoSave;
 				this.settingsHandler.Save();
 				success = true;
 
-				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
 
-				if (!doAutoSave)
+				if (!isAutoSave)
 				{
 					SetRecent(this.settingsHandler.SettingsFilePath);
 					OnTimedStatusTextRequest("Workspace saved.");
 				}
 
-				// ---------------------------------------------------------------------------------
-				// Try to delete existing auto save file.
-				// ---------------------------------------------------------------------------------
-
-				try
-				{
-					// No need to check whether string is valid, File.Exists() returns <c>false</c>
-					// in such cases.
-					if (File.Exists(autoSaveFilePathToDelete))
-						File.Delete(autoSaveFilePathToDelete);
-				}
-				catch { }
+				// Try to delete existing auto save file:
+				FileEx.TryDelete(autoSaveFilePathToDelete);
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				if (!doAutoSave)
+				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
@@ -691,7 +650,7 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				if (!doAutoSave)
+				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
@@ -746,94 +705,188 @@ namespace YAT.Model
 		///   - auto,   existing file, auto save    => auto save, if it fails => delete   : (m2a)
 		///   - auto,   existing file, no auto save => delete                             : (m2b)
 		///   - normal, no file                     => N/A (normal files have been saved) : (m3)
+		///   - normal, no file anymore             => question                           :  --
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (m4a)
 		///   - normal, existing file, no auto save => question                           : (m4b)
 		/// - Workspace close
 		///   - auto,   no file                     => nothing                            : (w1)
 		///   - auto,   existing file               => delete                             : (w2)
 		///   - normal, no file                     => N/A (normal files have been saved) : (w3)
+		///   - normal, no file anymore             => question                           :  --
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (w4a)
 		///   - normal, existing file, no auto save => question                           : (w4b)
+		///
+		/// Save and close must be done sequentially:
+		/// 1. Save terminals and workspace
+		/// 2. Close terminals and workspace, but only if save was successful
 		/// </remarks>
 		public virtual bool Close(bool isMainExit)
 		{
-			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
-
-			// Do not try to auto save if there is no existing file (w1):
-			if (tryAutoSave && !isMainExit && !this.settingsHandler.SettingsFileExists)
-				tryAutoSave = false;
+			AssertNotDisposed();
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			bool success = false;
+			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
-			// Try to save without user interaction:
-			success = TryNonInteractiveSave(tryAutoSave);
+			// Keep info of existing former auto file:
+			bool formerExistingAutoFileAutoSaved = this.settingsRoot.AutoSaved;
+			string formerExistingAutoFilePath = null;
+			if (this.settingsRoot.AutoSaved && this.settingsHandler.SettingsFileExists)
+				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
 
-			// No success on non-interactive save.
-			if (!success)
+			// -------------------------------------------------------------------------------------
+			// Evaluate save requirements for terminals.
+			// -------------------------------------------------------------------------------------
+
+			bool saveIsRequired = true;
+
+			// Do not neither try to auto save nor manually save if there is no existing file (m1, m3, w1, w3),
+			// except in case of m1a, i.e. when the file has never been loaded so far.
+			if (tryAutoSave && !this.settingsHandler.SettingsFileExists)
 			{
-				// No file to save (m1, m3, w1, w3).
-				if (!this.settingsHandler.SettingsFilePathIsDefined)
+				if (!isMainExit || this.settingsHandler.SettingsFileSuccessfullyLoaded)
 				{
-					success = true; // Consider it successful if there was no file to save.
+					tryAutoSave = false;
+					saveIsRequired = false;
 				}
-				else // Existing file
-				{
-					if (this.settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2).
-					{
-						this.settingsHandler.TryDelete();
-						success = true; // Don't care if auto file not successfully deleted.
-					}
+			}
 
-					// Existing normal file (m4a/b, w4a/b) will be handled below.
-				}
+			// -------------------------------------------------------------------------------------
+			// First, save all contained terminals.
+			// -------------------------------------------------------------------------------------
 
-				// Normal (m4a/b, w4a/b).
-				if (!success && this.settingsRoot.ExplicitHaveChanged)
-				{
-					DialogResult dr = OnMessageInputRequest
-						(
-						"Save workspace?",
-						AutoName,
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-						);
+			bool successWithTerminals;
+			if (tryAutoSave)
+				successWithTerminals = SaveAllTerminals();
+			else
+				successWithTerminals = true;
 
-					switch (dr)
-					{
-						case DialogResult.Yes:    success = Save(); break;
-						case DialogResult.No:     success = true;   break;
+			// -------------------------------------------------------------------------------------
+			// Evaluate save requirements for workspace.
+			// -------------------------------------------------------------------------------------
 
-						case DialogResult.Cancel:
-						default:
-							OnTimedStatusTextRequest("Workspace not closed.");
-							return (false);
-					}
-				}
-				else // Else means settings have not changed.
-				{
-					success = true; // Consider it successful if there was nothing to save.
-				}
-			} // End of if no success on auto save or auto save disabled.
-
-			// Then, close all contained terminals signaling them a workspace close, but do not save
-			// again:
-			if (success)
-				success = CloseAllTerminals(true, false, false);
-
-			if (success)
+			bool successWithWorkspace = false;
+			if (isMainExit)
 			{
-				// Status text request must be before closed event, closed event may close the view.
-				OnTimedStatusTextRequest("Workspace successfully closed.");
-				OnClosed(new ClosedEventArgs(isMainExit));
+				if (!this.settingsRoot.HaveChanged)
+				{
+					// Nothing has changed, no need to do anything.
+					tryAutoSave = false;
+					saveIsRequired = false;
+					successWithWorkspace = true;
+				}
+				else if (!this.settingsRoot.ExplicitHaveChanged)
+				{
+					// Implicit have changed, try to auto save but save is not required.
+					saveIsRequired = false;
+				}
+				else
+				{
+					// Explicit have changed, try to auto save and save is required if auto save is desired.
+					saveIsRequired = tryAutoSave;
+				}
 			}
 			else
 			{
-				OnFixedStatusTextRequest("Workspace not closed!");
+				if (!this.settingsRoot.HaveChanged)
+				{
+					// Nothing has changed, no need to do anything.
+					tryAutoSave = false;
+					saveIsRequired = false;
+					successWithWorkspace = true;
+				}
+				else if (!this.settingsRoot.ExplicitHaveChanged)
+				{
+					// Implicit have changed, but do not try to auto save since user intended to close.
+					tryAutoSave = false;
+					saveIsRequired = false;
+				}
+				else
+				{
+					// Explicit have changed, try to auto save and save is required if auto save is desired.
+					saveIsRequired = tryAutoSave;
+				}
 			}
 
-			return (success);
+			// -------------------------------------------------------------------------------------
+			// Try auto save workspace itself, if allowed.
+			// -------------------------------------------------------------------------------------
+
+			if (successWithTerminals && !successWithWorkspace && tryAutoSave)
+				successWithWorkspace = SaveDependentOnState(true, false);
+
+			// -------------------------------------------------------------------------------------
+			// If not successfully saved so far, evaluate next step according to rules above.
+			// -------------------------------------------------------------------------------------
+
+			// Normal file (m3, m4, w3, w4):
+			if (successWithTerminals && !successWithWorkspace && saveIsRequired && !this.settingsRoot.AutoSaved)
+			{
+				DialogResult dr = OnMessageInputRequest
+					(
+					"Save workspace?",
+					AutoName,
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question
+					);
+
+				switch (dr)
+				{
+					case DialogResult.Yes: successWithWorkspace = SaveDependentOnState(true, true); break;
+					case DialogResult.No:  successWithWorkspace = true;                             break;
+
+					default:
+						successWithWorkspace = false;  break; // Also covers 'DialogResult.Cancel'.
+				}
+			}
+
+			// Delete existing former auto file which has been saved to a normal file (m2, w2):
+			if (successWithTerminals && successWithWorkspace && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
+				FileEx.TryDelete(formerExistingAutoFilePath);
+
+			// Delete existing former auto file which is no longer needed (m2):
+			if (isMainExit && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && !successWithWorkspace)
+				FileEx.TryDelete(formerExistingAutoFilePath);
+
+			// Delete existing former auto file which is no longer needed (w2):
+			if (!isMainExit && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null))
+				FileEx.TryDelete(formerExistingAutoFilePath);
+
+			// No file (m1, w1):
+			if (!successWithWorkspace && !this.settingsHandler.SettingsFileExists)
+				successWithWorkspace = true; // Consider it successful if there was no file to save.
+
+			// -------------------------------------------------------------------------------------
+			// Finally, close the terminals and signal state.
+			// -------------------------------------------------------------------------------------
+
+			if (successWithTerminals && successWithWorkspace)
+			{
+				// Close all contained terminals signaling them a workspace close to ensure that the
+				// workspace is not modified when the terminals get closed, but do not save anymore:
+				successWithTerminals = CloseAllTerminals(true, false, false);
+			}
+
+			if (successWithTerminals && successWithWorkspace)
+			{
+				// Status text request must be before closed event, closed event may close the view.
+				if (isMainExit)
+					OnTimedStatusTextRequest("Workspace successfully closed, exiting.");
+				else
+					OnTimedStatusTextRequest("Workspace successfully closed.");
+
+				OnClosed(new ClosedEventArgs(isMainExit));
+				return (true);
+			}
+			else
+			{
+				if (isMainExit)
+					OnTimedStatusTextRequest("Exit cancelled, workspace not closed.");
+				else
+					OnTimedStatusTextRequest("Close cancelled, workspace not closed.");
+
+				return (false);
+			}
 		}
 
 		/// <summary>
@@ -1443,7 +1496,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool SaveAllTerminals(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
+		private bool SaveAllTerminals(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
 		{
 			AssertNotDisposed();
 
@@ -1461,11 +1514,14 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool, bool)"/> below
-		///  must be called with the first argument set to <c>true</c>.
+		/// must be called with the first argument set to <c>true</c>.
+		/// 
+		/// In case of intended close of one or all terminals, the user intentionally wants to close
+		/// the terminals, thus, this method will not try to auto save.
 		/// </remarks>
 		public virtual bool CloseAllTerminals()
 		{
-			return (CloseAllTerminals(false, true, false));
+			return (CloseAllTerminals(false, true, false)); // See remarks above.
 		}
 
 		/// <remarks>
@@ -1579,6 +1635,11 @@ namespace YAT.Model
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
 			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+
+			// Ensure that the request is processed!
+			if (e.Result == DialogResult.None)
+				throw (new InvalidOperationException("A 'Message Input' request by the workspace was not processed by the application!"));
+
 			return (e.Result);
 		}
 
@@ -1587,6 +1648,11 @@ namespace YAT.Model
 		{
 			DialogEventArgs e = new DialogEventArgs();
 			EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
+
+			// Ensure that the request is processed!
+			if (e.Result == DialogResult.None)
+				throw (new InvalidOperationException("A 'Save As' request by the workspace was not processed by the application!"));
+
 			return (e.Result);
 		}
 

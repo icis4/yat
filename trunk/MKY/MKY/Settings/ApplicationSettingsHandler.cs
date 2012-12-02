@@ -648,7 +648,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// Returns whether common settings have successfully been loaded, <c>false</c> if
-		/// they was no valid settings file and they were set to their defaults.
+		/// there was no valid settings file and they were set to their defaults.
 		/// </summary>
 		public virtual bool CommonSettingsSuccessfullyLoadedFromFile
 		{
@@ -661,7 +661,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// Returns whether local user settings have successfully been loaded, <c>false</c> if
-		/// they was no valid settings file and they were set to their defaults.
+		/// there was no valid settings file and they were set to their defaults.
 		/// </summary>
 		public virtual bool LocalUserSettingsSuccessfullyLoadedFromFile
 		{
@@ -674,7 +674,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// Returns whether roaming user settings have successfully been loaded, <c>false</c> if
-		/// they was no valid settings file and they were set to their defaults.
+		/// there was no valid settings file and they were set to their defaults.
 		/// </summary>
 		public virtual bool RoamingUserSettingsSuccessfullyLoadedFromFile
 		{

@@ -131,6 +131,14 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
+		/// Returns whether the settings were loaded from a file but that doesn't exist anymore.
+		/// </summary>
+		public virtual bool FileExistsNoMore
+		{
+			get { return (FileSuccessfullyLoaded && !FileExists); }
+		}
+
+		/// <summary>
 		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
 		/// no valid settings file available.
 		/// </summary>
@@ -349,15 +357,7 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual bool TryDelete()
 		{
-			try
-			{
-				File.Delete(this.filePath);
-				return (true);
-			}
-			catch
-			{
-				return (false);
-			}
+			return (FileEx.TryDelete(this.filePath));
 		}
 
 		#endregion

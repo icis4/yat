@@ -92,12 +92,6 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public virtual void SetFilePath(string filePath)
-		{
-			FilePath = filePath;
-		}
-
-		/// <summary></summary>
 		public virtual void ResetFilePath()
 		{
 			FilePath = "";

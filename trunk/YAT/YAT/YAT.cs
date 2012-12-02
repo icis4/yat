@@ -51,33 +51,33 @@ namespace YAT
 		/// <returns>
 		/// The application's exit code according to <see cref="Controller.MainResult"/>.
 		/// </returns>
-        /// <remarks>
-        /// There must separate Windows.Forms application and console application projects to
-        /// properly support running YAT from console as well as with GUI.
-        /// 
-        /// Windows.Forms application:
-        /// In case of a Windows.Forms application, console output is not routed back to the
-        /// console. Thus, the command line result, help text or errors are not visible.
-        /// 
-        /// Windows.Forms application with MKY.Win32.Console.Attach/Detach();
-        /// Calling Console.Attach/Detach() solves the issue stated above, but only in case of
-        /// directly calling YAT from the command line. It does not solve the issue when calling
-        /// YAT from PowerShell. In case of PowerShell, an exception is thrown! Also, when
-        /// requsting the command line help, it is output after another command line prompt.
-        /// 
-        /// Console application:
-        /// In case of a console application, console output is properly handled but a console
-        /// window appears when starting the application. That console window is not acceptable
-        /// in normal (i.e. GUI) operation. What other application opens with a console window
-        /// in the background?
-        /// 
-        /// None of the three approaches above is good enough for YAT. And no other approaches
-        /// have been found, even after investing quite some time into online research and
-        /// asking other .NET developers.
-        /// 
-        /// Note that this remark can also be found at YAT.YAT.Main().
-        /// </remarks>
-        [STAThread]
+		/// <remarks>
+		/// There must separate Windows.Forms application and console application projects to
+		/// properly support running YAT from console as well as with GUI.
+		/// 
+		/// Windows.Forms application:
+		/// In case of a Windows.Forms application, console output is not routed back to the
+		/// console. Thus, the command line result, help text or errors are not visible.
+		/// 
+		/// Windows.Forms application with MKY.Win32.Console.Attach/Detach();
+		/// Calling Console.Attach/Detach() solves the issue stated above, but only in case of
+		/// directly calling YAT from the command line. It does not solve the issue when calling
+		/// YAT from PowerShell. In case of PowerShell, an exception is thrown! Also, when
+		/// requsting the command line help, it is output after another command line prompt.
+		/// 
+		/// Console application:
+		/// In case of a console application, console output is properly handled but a console
+		/// window appears when starting the application. That console window is not acceptable
+		/// in normal (i.e. GUI) operation. What other application opens with a console window
+		/// in the background?
+		/// 
+		/// None of the three approaches above is good enough for YAT. And no other approaches
+		/// have been found, even after investing quite some time into online research and
+		/// asking other .NET developers.
+		/// 
+		/// Note that this remark can also be found at YAT.YAT.Main().
+		/// </remarks>
+		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
 			Controller.Main main = new Controller.Main(commandLineArgs);
