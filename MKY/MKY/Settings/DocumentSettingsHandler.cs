@@ -104,6 +104,12 @@ namespace MKY.Settings
 			set { this.fileHandler.FilePath = value;  }
 		}
 
+		/// <summary></summary>
+		public virtual void ResetSettingsFilePath()
+		{
+			SettingsFilePath = "";
+		}
+
 		/// <summary>
 		/// Returns whether the settings file path is defined.
 		/// </summary>
@@ -126,6 +132,23 @@ namespace MKY.Settings
 		public virtual bool SettingsFileExists
 		{
 			get { return (this.fileHandler.FileExists); }
+		}
+
+		/// <summary>
+		/// Returns whether the settings were loaded from a file but that doesn't exist anymore.
+		/// </summary>
+		public virtual bool SettingsFileExistsNoMore
+		{
+			get { return (this.fileHandler.FileExistsNoMore); }
+		}
+
+		/// <summary>
+		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
+		/// no valid settings file available.
+		/// </summary>
+		public virtual bool SettingsFileSuccessfullyLoaded
+		{
+			get { return (this.fileHandler.FileSuccessfullyLoaded); }
 		}
 
 		/// <summary>
