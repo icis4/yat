@@ -282,6 +282,16 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool SettingsFileHasAlreadyBeenNormallySaved
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+			}
+		}
+
 		/// <summary>
 		/// Returns number of terminals within workspace.
 		/// </summary>
@@ -475,7 +485,7 @@ namespace YAT.Model
 			bool success = false;
 
 			if (this.settingsHandler.SettingsFilePathIsValid && this.settingsRoot.AutoSaved)
-				success = SaveDependentOnState(true, false);
+				success = SaveDependentOnState(true, false); // Try auto save, i.e. no user interaction.
 
 			return (success);
 		}
@@ -492,7 +502,7 @@ namespace YAT.Model
 				return (false);
 
 			// Then, save the workspace itself:
-			return (SaveDependentOnState(true, true));
+			return (SaveDependentOnState(true, true)); // Do normal/manual save.
 		}
 
 		/// <summary>
@@ -628,8 +638,9 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Workspace saved.");
 				}
 
-				// Try to delete existing auto save file:
-				FileEx.TryDelete(autoSaveFilePathToDelete);
+				// Try to delete existing auto save file, but ensure that this is not the current file:
+				if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
+					FileEx.TryDelete(autoSaveFilePathToDelete);
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -726,7 +737,7 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			bool tryAutoSave = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+			bool autoSaveIsAllowed = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
 			// Keep info of existing former auto file:
 			bool formerExistingAutoFileAutoSaved = this.settingsRoot.AutoSaved;
@@ -735,55 +746,59 @@ namespace YAT.Model
 				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
 
 			// -------------------------------------------------------------------------------------
-			// Evaluate save requirements for terminals.
-			// -------------------------------------------------------------------------------------
-
-			bool saveIsRequired = true;
-
-			// Do not neither try to auto save nor manually save if there is no existing file (m1, m3, w1, w3),
-			// except in case of m1a, i.e. when the file has never been loaded so far.
-			if (tryAutoSave && !this.settingsHandler.SettingsFileExists)
-			{
-				if (!isMainExit || this.settingsHandler.SettingsFileSuccessfullyLoaded)
-				{
-					tryAutoSave = false;
-					saveIsRequired = false;
-				}
-			}
-
-			// -------------------------------------------------------------------------------------
 			// First, save all contained terminals.
 			// -------------------------------------------------------------------------------------
 
-			bool successWithTerminals;
-			if (tryAutoSave)
-				successWithTerminals = SaveAllTerminals();
-			else
-				successWithTerminals = true;
+			bool successWithTerminals = false;
+			if (SettingsFileHasAlreadyBeenNormallySaved) // Normally saved.
+			{
+				// Enforce normal save if workspace has already been normally saved:
+				successWithTerminals = SaveAllTerminals(false, true);
+			}
+			else // Auto saved, no file, or no file yet.
+			{
+				if (autoSaveIsAllowed)
+					successWithTerminals = SaveAllTerminals(true, false);
+				else
+					successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved();
+			}
 
 			// -------------------------------------------------------------------------------------
 			// Evaluate save requirements for workspace.
 			// -------------------------------------------------------------------------------------
 
+			bool doSaveWorkspace = true;
 			bool successWithWorkspace = false;
+
+			// Do neither try to auto save nor manually save if there is no existing file (m1, m3)
+			// or (w1, w3), except in case of m1a, i.e. when the file has never been loaded so far.
+			if (autoSaveIsAllowed && !this.settingsHandler.SettingsFileExists)
+			{
+				if (!isMainExit || this.settingsHandler.SettingsFileSuccessfullyLoaded)
+				{
+					doSaveWorkspace = false;
+					autoSaveIsAllowed = false;
+				}
+			}
+
 			if (isMainExit)
 			{
 				if (!this.settingsRoot.HaveChanged)
 				{
 					// Nothing has changed, no need to do anything.
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSaveWorkspace = false;
+					autoSaveIsAllowed = false;
 					successWithWorkspace = true;
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, try to auto save but save is not required.
-					saveIsRequired = false;
+					doSaveWorkspace = false;
 				}
 				else
 				{
 					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					saveIsRequired = tryAutoSave;
+					doSaveWorkspace = autoSaveIsAllowed;
 				}
 			}
 			else
@@ -791,20 +806,20 @@ namespace YAT.Model
 				if (!this.settingsRoot.HaveChanged)
 				{
 					// Nothing has changed, no need to do anything.
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSaveWorkspace = false;
+					autoSaveIsAllowed = false;
 					successWithWorkspace = true;
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, but do not try to auto save since user intended to close.
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSaveWorkspace = false;
+					autoSaveIsAllowed = false;
 				}
 				else
 				{
 					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					saveIsRequired = tryAutoSave;
+					doSaveWorkspace = autoSaveIsAllowed;
 				}
 			}
 
@@ -812,7 +827,7 @@ namespace YAT.Model
 			// Try auto save workspace itself, if allowed.
 			// -------------------------------------------------------------------------------------
 
-			if (successWithTerminals && !successWithWorkspace && tryAutoSave)
+			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace && autoSaveIsAllowed)
 				successWithWorkspace = SaveDependentOnState(true, false);
 
 			// -------------------------------------------------------------------------------------
@@ -820,7 +835,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			// Normal file (m3, m4, w3, w4):
-			if (successWithTerminals && !successWithWorkspace && saveIsRequired && !this.settingsRoot.AutoSaved)
+			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace && !this.settingsRoot.AutoSaved)
 			{
 				DialogResult dr = OnMessageInputRequest
 					(
@@ -887,25 +902,6 @@ namespace YAT.Model
 
 				return (false);
 			}
-		}
-
-		/// <summary>
-		/// Method to check wheter auto save is really desired. Needed because of the MDI issue
-		/// on close described in YAT.Gui.Forms.Main/Terminal.
-		/// </summary>
-		public virtual bool TryTerminalAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
-		{
-			// Do not auto save if no file exists anymore.
-			// Applies when settings were e.g. loaded from a memory stick but the stick was removed.
-			if (tryAutoSave && !SettingsFileExists && !terminal.SettingsFileExists)
-				return (false);
-
-			// Do not auto save if terminal file already exists but workspace doesn't.
-			// Applies to terminal use case w4a/b.
-			if (tryAutoSave && !SettingsFileExists && terminal.SettingsFileExists)
-				return (false);
-
-			return (tryAutoSave);
 		}
 
 		#endregion
@@ -1492,23 +1488,42 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool SaveAllTerminals()
 		{
+			AssertNotDisposed();
+
 			return (SaveAllTerminals(true, true));
 		}
 
 		/// <summary></summary>
 		private bool SaveAllTerminals(bool autoSaveIsAllowed, bool userInteractionIsAllowed)
 		{
-			AssertNotDisposed();
-
 			bool success = true;
 
-			// Calling Close() on a terminal will modify the list, therefore clone it first
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				if (!t.Save(autoSaveIsAllowed, userInteractionIsAllowed))
+				bool autoSaveIsAllowedForThisTerminal = EvaluateWhetherAutoSaveIsAllowedForThisTerminal(autoSaveIsAllowed, t);
+				if (!t.Save(autoSaveIsAllowedForThisTerminal, userInteractionIsAllowed))
 					success = false;
 			}
+
+			return (success);
+		}
+
+		/// <summary></summary>
+		private bool SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved()
+		{
+			bool success = true;
+
+			List<Terminal> clone = new List<Terminal>(this.terminals);
+			foreach (Terminal t in clone)
+			{
+				if (t.SettingsFileHasAlreadyBeenNormallySaved)
+				{
+					if (!t.Save(false, true))
+						success = false;
+				}
+			}
+
 			return (success);
 		}
 
@@ -1521,16 +1536,16 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool CloseAllTerminals()
 		{
+			AssertNotDisposed();
+
 			return (CloseAllTerminals(false, true, false)); // See remarks above.
 		}
 
 		/// <remarks>
 		/// See remarks of <see cref="Terminal.Close(bool, bool, bool)"/> for details on 'WorkspaceClose'.
 		/// </remarks>
-		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool tryAutoSave)
+		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed)
 		{
-			AssertNotDisposed();
-
 			bool success = true;
 
 			// Calling Close() on a terminal will modify 'this.terminals' in the terminal_Closed()
@@ -1538,15 +1553,29 @@ namespace YAT.Model
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				bool tryAutoSaveThisTerminal = false;
+				bool autoSaveIsAllowedForThisTerminal = false;
 				if (doSave)
-					tryAutoSaveThisTerminal = TryTerminalAutoSaveIsDesired(tryAutoSave, t);
+					autoSaveIsAllowedForThisTerminal = EvaluateWhetherAutoSaveIsAllowedForThisTerminal(autoSaveIsAllowed, t);
 
-				if (!t.Close(isWorkspaceClose, doSave, tryAutoSaveThisTerminal))
+				if (!t.Close(isWorkspaceClose, doSave, autoSaveIsAllowedForThisTerminal))
 					success = false;
 			}
 
 			return (success);
+		}
+
+		/// <summary>
+		/// Method to check whether auto save is really desired. Needed because of the MDI issue
+		/// on close described in YAT.Gui.Forms.Main/Terminal.
+		/// </summary>
+		protected virtual bool EvaluateWhetherAutoSaveIsAllowedForThisTerminal(bool autoSaveIsAllowed, Terminal terminal)
+		{
+			// Do not auto save if workspace file already exists but isn't auto saved.
+			// Ensures that normal workspaces do not refer to auto terminals.
+			if (autoSaveIsAllowed && SettingsFileHasAlreadyBeenNormallySaved)
+				return (false);
+
+			return (autoSaveIsAllowed);
 		}
 
 		#endregion

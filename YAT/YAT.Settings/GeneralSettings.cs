@@ -93,7 +93,10 @@ namespace YAT.Settings
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Auto save of workspace means that the last open workspace will tried to be automatically
+		/// opened when starting the application.
+		/// </summary>
 		[XmlElement("AutoOpenWorkspace")]
 		public virtual bool AutoOpenWorkspace
 		{
@@ -109,8 +112,9 @@ namespace YAT.Settings
 		}
 
 		/// <summary>
-		/// Auto save means that the settings have been saved at an automatically chosen location,
-		/// without telling the user anything about it.
+		/// Auto save of workspace means that the workspace and terminal settings are tried to be
+		/// automatically saved, either at an automatically chosen location, or at the current file
+		/// location.
 		/// </summary>
 		[XmlElement("AutoSaveWorkspace")]
 		public virtual bool AutoSaveWorkspace

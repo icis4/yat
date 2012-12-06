@@ -65,8 +65,8 @@ namespace MKY.IO.Serial.Socket
 	/// YAT.Domain.RawTerminal.Stop() Line 298
 	/// YAT.Domain.Terminal.Stop() Line 314
 	/// YAT.Model.Terminal.StopIO(bool saveStatus = false) Line 1488
-	/// YAT.Model.Terminal.Close(bool isWorkspaceClose = true, bool tryAutoSave = true) Line 1155
-	/// YAT.Model.Workspace.CloseAllTerminals(bool isWorkspaceClose = true, bool tryAutoSave = true) Line 1215
+	/// YAT.Model.Terminal.Close(bool isWorkspaceClose = true, bool autoSaveIsAllowed = true) Line 1155
+	/// YAT.Model.Workspace.CloseAllTerminals(bool isWorkspaceClose = true, bool autoSaveIsAllowed = true) Line 1215
 	/// YAT.Model.Workspace.Close(bool isMainExit = false) Line 665
 	/// YAT.Model.Workspace.Close() Line 625
 	/// YAT.Gui.Forms.Main.toolStripMenuItem_MainMenu_File_Workspace_Close_Click(object sender = {System.Windows.Forms.ToolStripMenuItem}, System.EventArgs e = {System.EventArgs}) Line 332

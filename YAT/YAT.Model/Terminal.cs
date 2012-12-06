@@ -953,6 +953,16 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public virtual string SettingsFilePath
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.settingsHandler.SettingsFilePath);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool SettingsFileExists
 		{
 			get
@@ -963,12 +973,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual string SettingsFilePath
+		public virtual bool SettingsFileHasAlreadyBeenNormallySaved
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFilePath);
+				return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
 			}
 		}
 
@@ -1145,8 +1155,9 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Terminal saved.");
 				}
 
-				// Try to delete existing auto save file:
-				FileEx.TryDelete(autoSaveFilePathToDelete);
+				// Try to delete existing auto save file, but ensure that this is not the current file:
+				if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
+					FileEx.TryDelete(autoSaveFilePathToDelete);
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -1237,7 +1248,7 @@ namespace YAT.Model
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (t4a)
 		///   - normal, existing file, no auto save => question                           : (t4b)
 		/// </remarks>
-		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool tryAutoSave)
+		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed)
 		{
 			AssertNotDisposed();
 
@@ -1253,21 +1264,20 @@ namespace YAT.Model
 			// Evaluate save requirements.
 			// -------------------------------------------------------------------------------------
 
-			bool saveIsRequired = doSave;
 			bool success = false;
 
 			// Do not try to auto save if save is not inteded at all.
-			if (tryAutoSave && !doSave)
-				tryAutoSave = false;
+			if (autoSaveIsAllowed && !doSave)
+				autoSaveIsAllowed = false;
 
 			// Do not neither try to auto save nor manually save if there is no existing file (w1, w3, t1, t3),
 			// except in case of w1a, i.e. when the file has never been loaded so far.
-			if (tryAutoSave && !this.settingsHandler.SettingsFileExists)
+			if (autoSaveIsAllowed && !this.settingsHandler.SettingsFileExists)
 			{
 				if (!isWorkspaceClose || this.settingsHandler.SettingsFileSuccessfullyLoaded)
 				{
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSave = false;
+					autoSaveIsAllowed = false;
 				}
 			}
 
@@ -1276,19 +1286,19 @@ namespace YAT.Model
 				if (!this.settingsRoot.HaveChanged)
 				{
 					// Nothing has changed, no need to do anything.
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSave = false;
+					autoSaveIsAllowed = false;
 					success = true;
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, try to auto save but save is not required.
-					saveIsRequired = false;
+					doSave = false;
 				}
 				else
 				{
 					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					saveIsRequired = tryAutoSave;
+					doSave = autoSaveIsAllowed;
 				}
 			}
 			else
@@ -1296,20 +1306,20 @@ namespace YAT.Model
 				if (!this.settingsRoot.HaveChanged)
 				{
 					// Nothing has changed, no need to do anything.
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSave = false;
+					autoSaveIsAllowed = false;
 					success = true;
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
 					// Implicit have changed, but do not try to auto save since user intended to close.
-					tryAutoSave = false;
-					saveIsRequired = false;
+					doSave = false;
+					autoSaveIsAllowed = false;
 				}
 				else
 				{
 					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					saveIsRequired = tryAutoSave;
+					doSave = autoSaveIsAllowed;
 				}
 			}
 
@@ -1317,15 +1327,15 @@ namespace YAT.Model
 			// Try auto save if allowed.
 			// -------------------------------------------------------------------------------------
 
-			if (!success && tryAutoSave)
-				success = SaveDependentOnState(true, false);
+			if (!success && autoSaveIsAllowed)
+				success = SaveDependentOnState(true, false); // Try auto save, i.e. no user interaction.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above.
 			// -------------------------------------------------------------------------------------
 
 			// Normal file (w3, w4, t3, t4):
-			if (!success && saveIsRequired && !this.settingsRoot.AutoSaved)
+			if (!success && doSave && !this.settingsRoot.AutoSaved)
 			{
 				DialogResult dr = OnMessageInputRequest
 					(
@@ -1336,7 +1346,7 @@ namespace YAT.Model
 					);
 
 				switch (dr)
-				{
+				{                                    // Do normal/manual save.
 					case DialogResult.Yes: success = SaveDependentOnState(true, true); break;
 					case DialogResult.No:  success = true;                             break;
 
