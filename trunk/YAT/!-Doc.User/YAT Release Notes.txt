@@ -71,6 +71,7 @@ Important changes:
 - Serial COM port, USB as well as TCP/IP and UDP/IP socket functionality of MKY.IO.Serial has been
   split into separate assemblies to allow dedicated use of one of the new assemblies without
   unnecessary dependencies to the other parts (feature request #3388950)
+- Additional help content on serial port errors added (feature requests #2213647 and #3440986)
 - Error message in case a serial port cannot be opened has been improved (bug #3565648)
 - The ALAZ socket library has been replaced by SuperSocket, due to some issues with ALAZ and the
   fact that ALAZ is no longer maintained, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
@@ -86,7 +87,6 @@ Important changes:
 - All projects explicitly set to warning level 4, already used to be level 4 but implicitly
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)
-- Additional help content on serial port errors added (feature requests #2213647 and #3440986)
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
