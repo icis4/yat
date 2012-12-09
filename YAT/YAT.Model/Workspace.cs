@@ -282,16 +282,6 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		public virtual bool SettingsFileHasAlreadyBeenNormallySaved
-		{
-			get
-			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
-			}
-		}
-
 		/// <summary>
 		/// Returns number of terminals within workspace.
 		/// </summary>
@@ -737,8 +727,6 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			bool autoSaveIsAllowed = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
-
 			// Keep info of existing former auto file:
 			bool formerExistingAutoFileAutoSaved = this.settingsRoot.AutoSaved;
 			string formerExistingAutoFilePath = null;
@@ -746,80 +734,106 @@ namespace YAT.Model
 				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
 
 			// -------------------------------------------------------------------------------------
+			// Evaluate save requirements for terminals.
+			// -------------------------------------------------------------------------------------
+
+			bool doSaveTerminals = true;
+			bool successWithTerminals = false;
+			bool autoSaveIsAllowedForTerminals = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+
+			bool doSaveWorkspace = true;
+			bool successWithWorkspace = false;
+			bool autoSaveIsAllowedForWorkspace = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+
+			// Do neither try to auto save nor manually save if there is no existing file (m1, m3)
+			// or (w1, w3), except in case of m1a, i.e. when the file has never been loaded so far.
+			if (autoSaveIsAllowedForWorkspace && !this.settingsHandler.SettingsFileExists)
+			{
+				if (!isMainExit || this.settingsHandler.SettingsFileSuccessfullyLoaded)
+				{
+					doSaveWorkspace = false;
+					autoSaveIsAllowedForWorkspace = false;
+				}
+			}
+
+			// Enforce normal save if workspace has already been normally saved. This applies to
+			// workspace as well as terminals. This ensures that normal workspaces do not refer
+			// to auto terminals.
+			// Note that SaveAllTerminals() already ensures that terminals are not auto saved if
+			// workspace file already exists but isn't auto saved.
+			bool workspaceHasBeenNormallySaved = (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+			if (workspaceHasBeenNormallySaved)
+			{
+				autoSaveIsAllowedForTerminals = false;
+				autoSaveIsAllowedForWorkspace = false;
+			}
+
+			// -------------------------------------------------------------------------------------
 			// First, save all contained terminals.
 			// -------------------------------------------------------------------------------------
 
-			bool successWithTerminals = false;
-			if (SettingsFileHasAlreadyBeenNormallySaved) // Normally saved.
+			if (doSaveTerminals)
 			{
-				// Enforce normal save if workspace has already been normally saved:
-				successWithTerminals = SaveAllTerminals(false, true);
-			}
-			else // Auto saved, no file, or no file yet.
-			{
-				if (autoSaveIsAllowed)
-					successWithTerminals = SaveAllTerminals(true, false);
+				if (doSaveWorkspace)
+				{
+					if (autoSaveIsAllowedForTerminals)
+						successWithTerminals = SaveAllTerminals(true, false);
+					else
+						successWithTerminals = SaveAllTerminals(false, true);
+				}
 				else
-					successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved();
+				{
+					// Save normally saved terminals even if workspace was or will not auto saved!
+					if (autoSaveIsAllowedForTerminals)
+						successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved();
+					else
+						successWithTerminals = SaveAllTerminals(false, true);
+				}
 			}
 
 			// -------------------------------------------------------------------------------------
 			// Evaluate save requirements for workspace.
 			// -------------------------------------------------------------------------------------
 
-			bool doSaveWorkspace = true;
-			bool successWithWorkspace = false;
-
-			// Do neither try to auto save nor manually save if there is no existing file (m1, m3)
-			// or (w1, w3), except in case of m1a, i.e. when the file has never been loaded so far.
-			if (autoSaveIsAllowed && !this.settingsHandler.SettingsFileExists)
-			{
-				if (!isMainExit || this.settingsHandler.SettingsFileSuccessfullyLoaded)
-				{
-					doSaveWorkspace = false;
-					autoSaveIsAllowed = false;
-				}
-			}
-
 			if (isMainExit)
 			{
 				if (!this.settingsRoot.HaveChanged)
 				{
-					// Nothing has changed, no need to do anything.
+					// Nothing has changed, no need to do anything with workspace.
 					doSaveWorkspace = false;
-					autoSaveIsAllowed = false;
+					autoSaveIsAllowedForWorkspace = false;
 					successWithWorkspace = true;
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
-					// Implicit have changed, try to auto save but save is not required.
-					doSaveWorkspace = false;
+					// Implicit have changed, save is not required but try to auto save if desired.
+					doSaveWorkspace = autoSaveIsAllowedForWorkspace;
 				}
 				else
 				{
-					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					doSaveWorkspace = autoSaveIsAllowed;
+					// Explicit have changed, save is required, but only if desired.
+					if (!ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace && !workspaceHasBeenNormallySaved)
+						doSaveWorkspace = false;
 				}
 			}
 			else
 			{
 				if (!this.settingsRoot.HaveChanged)
 				{
-					// Nothing has changed, no need to do anything.
+					// Nothing has changed, no need to do anything with workspace.
 					doSaveWorkspace = false;
-					autoSaveIsAllowed = false;
+					autoSaveIsAllowedForWorkspace = false;
 					successWithWorkspace = true;
 				}
 				else if (!this.settingsRoot.ExplicitHaveChanged)
 				{
-					// Implicit have changed, but do not try to auto save since user intended to close.
+					// Implicit have changed, but do not try to auto save since user intends to close.
 					doSaveWorkspace = false;
-					autoSaveIsAllowed = false;
+					autoSaveIsAllowedForWorkspace = false;
 				}
 				else
 				{
-					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					doSaveWorkspace = autoSaveIsAllowed;
+					// Explicit have changed, save is required.
 				}
 			}
 
@@ -827,8 +841,8 @@ namespace YAT.Model
 			// Try auto save workspace itself, if allowed.
 			// -------------------------------------------------------------------------------------
 
-			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace && autoSaveIsAllowed)
-				successWithWorkspace = SaveDependentOnState(true, false);
+			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace)
+				successWithWorkspace = SaveDependentOnState(autoSaveIsAllowedForWorkspace, false); // Try auto save, i.e. no user interaction.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above.
@@ -856,7 +870,7 @@ namespace YAT.Model
 			}
 
 			// Delete existing former auto file which has been saved to a normal file (m2, w2):
-			if (successWithTerminals && successWithWorkspace && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
+			if (doSaveWorkspace && successWithWorkspace && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
 				FileEx.TryDelete(formerExistingAutoFilePath);
 
 			// Delete existing former auto file which is no longer needed (m2):
@@ -1572,7 +1586,7 @@ namespace YAT.Model
 		{
 			// Do not auto save if workspace file already exists but isn't auto saved.
 			// Ensures that normal workspaces do not refer to auto terminals.
-			if (autoSaveIsAllowed && SettingsFileHasAlreadyBeenNormallySaved)
+			if (autoSaveIsAllowed && this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved)
 				return (false);
 
 			return (autoSaveIsAllowed);

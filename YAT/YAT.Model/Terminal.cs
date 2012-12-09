@@ -1327,8 +1327,8 @@ namespace YAT.Model
 			// Try auto save if allowed.
 			// -------------------------------------------------------------------------------------
 
-			if (!success && autoSaveIsAllowed)
-				success = SaveDependentOnState(true, false); // Try auto save, i.e. no user interaction.
+			if (!success && doSave)
+				success = SaveDependentOnState(autoSaveIsAllowed, false); // Try auto save, i.e. no user interaction.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above.
@@ -1355,20 +1355,17 @@ namespace YAT.Model
 				}
 			}
 
-			if (doSave)
-			{
-				// Delete existing former auto file which has been saved to a normal file (w2, t2):
-				if (success && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
-					FileEx.TryDelete(formerExistingAutoFilePath);
+			// Delete existing former auto file which has been saved to a normal file (w2, t2):
+			if (doSave && success && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
+				FileEx.TryDelete(formerExistingAutoFilePath);
 
-				// Delete existing former auto file which is no longer needed (w2):
-				if (isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && !success)
-					FileEx.TryDelete(formerExistingAutoFilePath);
+			// Delete existing former auto file which is no longer needed (w2):
+			if (isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && !success)
+				FileEx.TryDelete(formerExistingAutoFilePath);
 
-				// Delete existing former auto file which is no longer needed (t2):
-				if (!isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null))
-					FileEx.TryDelete(formerExistingAutoFilePath);
-			}
+			// Delete existing former auto file which is no longer needed (t2):
+			if (!isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null))
+				FileEx.TryDelete(formerExistingAutoFilePath);
 
 			// No file (w1, t1):
 			if (!success && !this.settingsHandler.SettingsFileExists)
