@@ -107,6 +107,11 @@ namespace YAT.Model.Test
 		[SetUp]
 		public virtual void SetUp()
 		{
+			// By default, reset the application settings to their defaults before running any test.
+			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
+
 			Temp.MakeTempPath(GetType());
 		}
 
@@ -227,6 +232,59 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Tests > TestAutoDeleteOnClose
+		//------------------------------------------------------------------------------------------
+		// Tests > TestAutoDeleteOnClose
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Condition: No files existing.
+		/// Expected:  Auto save of terminal and workspace.
+		/// </summary>
+		[Test]
+		public virtual void TestAutoDeleteOnClose()
+		{
+			bool success = false;
+
+			Main main;
+			Workspace workspace;
+			Terminal terminal;
+
+			// Initial start with auto save on exit.
+
+			StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+
+			using (main)
+			{
+				main.Exit();
+				VerifyFiles(workspace, true, terminal, true);
+			}
+
+			// Consecutive start with auto delete on close of workspace.
+
+			using (main = new Main())
+			{
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be started!");
+
+				workspace = main.Workspace;
+				Assert.IsNotNull(workspace, "Workspace not opened from file!");
+				Assert.AreEqual(1, workspace.TerminalCount, "Workspace doesn't contain 1 terminal!");
+
+				terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, "Terminal not opened from file!");
+
+				VerifyFiles(workspace, true, terminal, true);
+
+				workspace.Close();
+				VerifyFiles(workspace, false, terminal, false);
+				main.Exit();
+				VerifyFiles(workspace, false, terminal, false);
+			}
+		}
+
+		#endregion
+
 		#region Tests > TestSequenceOfUseCases_1_through_5a_
 		//------------------------------------------------------------------------------------------
 		// Tests > TestSequenceOfUseCases_1_through_5a_
@@ -240,10 +298,6 @@ namespace YAT.Model.Test
 		{
 			bool success = false;
 			string uc = "";
-
-			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
 
 			#region Use case 1
 			// - Initial start
@@ -676,10 +730,6 @@ namespace YAT.Model.Test
 			bool success = false;
 			string uc = "";
 
-			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
-
 			#region Preparation
 			// - Initial start
 			// - Create two new terminals
@@ -1050,10 +1100,6 @@ namespace YAT.Model.Test
 			bool success = false;
 			string step = "";
 
-			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
-
 			#region Step 1
 			// - Initial start
 			// - Create new terminal
@@ -1213,10 +1259,6 @@ namespace YAT.Model.Test
 
 		private void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
-			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = false;
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = "";
-
 			main = new Main();
 			main.Start();              // Creates empty workspace
 			workspace = main.Workspace;

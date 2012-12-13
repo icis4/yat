@@ -1208,7 +1208,7 @@ namespace YAT.Model
 		/// Closes the terminal and prompts if needed if settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a workspace close, <see cref="Close(bool, bool, bool)"/> below must be called
+		/// In case of a workspace close, <see cref="Close(bool, bool, bool, bool)"/> below must be called
 		/// with the first argument set to <c>true</c>.
 		/// 
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
@@ -1216,7 +1216,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool Close()
 		{
-			return (Close(false, true, false)); // See remarks above.
+			return (Close(false, true, false, true)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1248,7 +1248,7 @@ namespace YAT.Model
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (t4a)
 		///   - normal, existing file, no auto save => question                           : (t4b)
 		/// </remarks>
-		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed)
+		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
 			AssertNotDisposed();
 
@@ -1355,16 +1355,16 @@ namespace YAT.Model
 				}
 			}
 
-			// Delete existing former auto file which has been saved to a normal file (w2, t2):
-			if (doSave && success && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
-				FileEx.TryDelete(formerExistingAutoFilePath);
-
-			// Delete existing former auto file which is no longer needed (w2):
+			// Delete existing former auto file which is no longer needed (w2a):
 			if (isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && !success)
 				FileEx.TryDelete(formerExistingAutoFilePath);
 
+			// Delete existing former auto file which is no longer needed (w2b):
+			if (isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && autoDeleteIsRequested)
+				FileEx.TryDelete(formerExistingAutoFilePath);
+
 			// Delete existing former auto file which is no longer needed (t2):
-			if (!isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null))
+			if (!isWorkspaceClose && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && autoDeleteIsRequested)
 				FileEx.TryDelete(formerExistingAutoFilePath);
 
 			// No file (w1, t1):

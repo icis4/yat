@@ -734,16 +734,16 @@ namespace YAT.Model
 				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
 
 			// -------------------------------------------------------------------------------------
-			// Evaluate save requirements for terminals.
+			// Evaluate save requirements for workspace and terminals.
 			// -------------------------------------------------------------------------------------
-
-			bool doSaveTerminals = true;
-			bool successWithTerminals = false;
-			bool autoSaveIsAllowedForTerminals = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
 			bool doSaveWorkspace = true;
 			bool successWithWorkspace = false;
 			bool autoSaveIsAllowedForWorkspace = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+
+			bool doSaveTerminals = true;
+			bool successWithTerminals = false;
+			bool autoSaveIsAllowedForTerminals = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 
 			// Do neither try to auto save nor manually save if there is no existing file (m1, m3)
 			// or (w1, w3), except in case of m1a, i.e. when the file has never been loaded so far.
@@ -792,7 +792,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Evaluate save requirements for workspace.
+			// Finalize save requirements for workspace.
 			// -------------------------------------------------------------------------------------
 
 			if (isMainExit)
@@ -869,11 +869,7 @@ namespace YAT.Model
 				}
 			}
 
-			// Delete existing former auto file which has been saved to a normal file (m2, w2):
-			if (doSaveWorkspace && successWithWorkspace && (formerExistingAutoFilePath != null) && (formerExistingAutoFilePath != this.settingsHandler.SettingsFilePath))
-				FileEx.TryDelete(formerExistingAutoFilePath);
-
-			// Delete existing former auto file which is no longer needed (m2):
+			// Delete existing former auto file which is no longer needed (m2a):
 			if (isMainExit && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && !successWithWorkspace)
 				FileEx.TryDelete(formerExistingAutoFilePath);
 
@@ -893,7 +889,10 @@ namespace YAT.Model
 			{
 				// Close all contained terminals signaling them a workspace close to ensure that the
 				// workspace is not modified when the terminals get closed, but do not save anymore:
-				successWithTerminals = CloseAllTerminals(true, false, false);
+				if (this.settingsHandler.SettingsFileExists)
+					successWithTerminals = CloseAllTerminals(true, false, false, false);
+				else
+					successWithTerminals = CloseAllTerminals(true, false, false, true);
 			}
 
 			if (successWithTerminals && successWithWorkspace)
@@ -975,7 +974,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.Close(bool, bool, bool)"/> for details on why
+		/// See remarks of <see cref="Terminal.Close(bool, bool, bool, bool)"/> for details on why
 		/// this event handler needs to treat the Closed event differently in case of a parent
 		/// (i.e. workspace) close.
 		/// </remarks>
@@ -1512,11 +1511,12 @@ namespace YAT.Model
 		{
 			bool success = true;
 
+			autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowed(autoSaveIsAllowed);
+
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				bool autoSaveIsAllowedForThisTerminal = EvaluateWhetherAutoSaveIsAllowedForThisTerminal(autoSaveIsAllowed, t);
-				if (!t.Save(autoSaveIsAllowedForThisTerminal, userInteractionIsAllowed))
+				if (!t.Save(autoSaveIsAllowed, userInteractionIsAllowed))
 					success = false;
 			}
 
@@ -1542,7 +1542,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool, bool)"/> below
+		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool, bool, bool)"/> below
 		/// must be called with the first argument set to <c>true</c>.
 		/// 
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
@@ -1552,37 +1552,35 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (CloseAllTerminals(false, true, false)); // See remarks above.
+			return (CloseAllTerminals(false, true, false, true)); // See remarks above.
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.Close(bool, bool, bool)"/> for details on 'WorkspaceClose'.
+		/// See remarks of <see cref="Terminal.Close(bool, bool, bool, bool)"/> for details on 'WorkspaceClose'.
 		/// </remarks>
-		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed)
+		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
 			bool success = true;
+
+			if (doSave)
+				autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowed(autoSaveIsAllowed);
+			else
+				autoSaveIsAllowed = false;
 
 			// Calling Close() on a terminal will modify 'this.terminals' in the terminal_Closed()
 			// event, therefore clone the list first.
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				bool autoSaveIsAllowedForThisTerminal = false;
-				if (doSave)
-					autoSaveIsAllowedForThisTerminal = EvaluateWhetherAutoSaveIsAllowedForThisTerminal(autoSaveIsAllowed, t);
-
-				if (!t.Close(isWorkspaceClose, doSave, autoSaveIsAllowedForThisTerminal))
+				if (!t.Close(isWorkspaceClose, doSave, autoSaveIsAllowed, autoDeleteIsRequested))
 					success = false;
 			}
 
 			return (success);
 		}
 
-		/// <summary>
-		/// Method to check whether auto save is really desired. Needed because of the MDI issue
-		/// on close described in YAT.Gui.Forms.Main/Terminal.
-		/// </summary>
-		protected virtual bool EvaluateWhetherAutoSaveIsAllowedForThisTerminal(bool autoSaveIsAllowed, Terminal terminal)
+		/// <summary></summary>
+		protected virtual bool EvaluateWhetherAutoSaveIsAllowed(bool autoSaveIsAllowed)
 		{
 			// Do not auto save if workspace file already exists but isn't auto saved.
 			// Ensures that normal workspaces do not refer to auto terminals.
