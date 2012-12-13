@@ -78,8 +78,8 @@ Important changes:
 - Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323)
    > Implemented by use of a named mutex as suggested in the respective comments
    > Also fixes use of same setting file by concurrent YAT instances (bug #3540438)
-- Proper handling if a .yaw or .yat was located on a storage that has been removed (bug #2455825)
-   > Minor refactoring of the save/close/exit procedure
+- Proper handling if a .yaw or .yat was located on a storage that has been removed
+   > Fixed including a refactoring of the save/close/exit procedure (bugs #2455825 and #3595185)
 - Schemas and defaults of all former settings filed and versioned, version of settings added to all
   three types of settings (related to bugs #3450553 and #3535709)
 - .NET/Microsoft XML serialization infrastructure extended by schema for GUID items (bug #3535709)
