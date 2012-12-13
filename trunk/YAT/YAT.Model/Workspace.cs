@@ -263,6 +263,16 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual string SettingsFilePath
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.settingsHandler.SettingsFilePath);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool SettingsFileExists
 		{
 			get
@@ -273,12 +283,22 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual string SettingsFilePath
+		public virtual bool SettingsFileHasAlreadyBeenNormallySaved
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFilePath);
+				return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool SettingsFileNoLongerExists
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (SettingsFileHasAlreadyBeenNormallySaved && !SettingsFileExists);
 			}
 		}
 
@@ -549,12 +569,42 @@ namespace YAT.Model
 			}
 			else // SettingsFilePathIsValid
 			{
-				// Ensure that existing former auto files are 'Saved As' if auto save is not allowed.
-				if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+				if (userInteractionIsAllowed)
 				{
-					// This Save As... request will request the file path from the user and then
-					// call the 'SaveAs()' method below.
-					return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+					// Ensure that existing former auto files are 'Saved As' if auto save is not allowed.
+					if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+					{
+						// This Save As... request will request the file path from the user and then
+						// call the 'SaveAs()' method below.
+						return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+					}
+
+					// Ensure that normal files which no longer exist are 'Saved As'.
+					if (SettingsFileNoLongerExists)
+					{
+						DialogResult dr = OnMessageInputRequest
+							(
+							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+							"The file no longer exists. Would you like to save the file at another location or cancel the operation?",
+							"File Error",
+							MessageBoxButtons.YesNoCancel,
+							MessageBoxIcon.Question
+							);
+
+						switch (dr)
+						{
+							case DialogResult.Yes:
+								return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+
+							case DialogResult.No:
+								OnTimedStatusTextRequest("Workspace not saved!");
+								return (true);
+
+							default:
+								OnTimedStatusTextRequest("Cancelled!");
+								return (false);
+						}
+					}
 				}
 			}
 
@@ -761,8 +811,7 @@ namespace YAT.Model
 			// to auto terminals.
 			// Note that SaveAllTerminals() already ensures that terminals are not auto saved if
 			// workspace file already exists but isn't auto saved.
-			bool workspaceHasBeenNormallySaved = (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
-			if (workspaceHasBeenNormallySaved)
+			if (SettingsFileHasAlreadyBeenNormallySaved)
 			{
 				autoSaveIsAllowedForTerminals = false;
 				autoSaveIsAllowedForWorkspace = false;
@@ -812,7 +861,7 @@ namespace YAT.Model
 				else
 				{
 					// Explicit have changed, save is required, but only if desired.
-					if (!ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace && !workspaceHasBeenNormallySaved)
+					if (!ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace && !SettingsFileHasAlreadyBeenNormallySaved)
 						doSaveWorkspace = false;
 				}
 			}
@@ -871,15 +920,26 @@ namespace YAT.Model
 
 			// Delete existing former auto file which is no longer needed (m2a):
 			if (isMainExit && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null) && !successWithWorkspace)
+			{
 				FileEx.TryDelete(formerExistingAutoFilePath);
+				this.settingsHandler.ResetSettingsFilePath();
+				successWithWorkspace = true;
+			}
 
 			// Delete existing former auto file which is no longer needed (w2):
 			if (!isMainExit && formerExistingAutoFileAutoSaved && (formerExistingAutoFilePath != null))
+			{
 				FileEx.TryDelete(formerExistingAutoFilePath);
+				this.settingsHandler.ResetSettingsFilePath();
+				successWithWorkspace = true;
+			}
 
 			// No file (m1, w1):
 			if (!successWithWorkspace && !this.settingsHandler.SettingsFileExists)
+			{
+				this.settingsHandler.ResetSettingsFilePath();
 				successWithWorkspace = true; // Consider it successful if there was no file to save.
+			}
 
 			// -------------------------------------------------------------------------------------
 			// Finally, close the terminals and signal state.
@@ -1516,11 +1576,44 @@ namespace YAT.Model
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
-				if (!t.Save(autoSaveIsAllowed, userInteractionIsAllowed))
-					success = false;
+				bool saveIsRequiredForThisTerminal = true;
+				if (!EvaluateWhetherSaveIsFeasibleForThisTerminal(t))
+					saveIsRequiredForThisTerminal = EvaluateWhetherSaveIsRequiredForThisTerminal(t);
+
+				if (saveIsRequiredForThisTerminal)
+				{
+					if (!t.Save(autoSaveIsAllowed, userInteractionIsAllowed))
+						success = false;
+				}
+
+				// Consider it successful if save is not required.
 			}
 
 			return (success);
+		}
+
+		/// <summary></summary>
+		private bool EvaluateWhetherSaveIsFeasibleForThisTerminal(Terminal t)
+		{
+			// Save is not feasible in case of files which have been successfully loaded but do
+			// not exist anymore.
+
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileExists)
+				return (false);
+
+			return (true);
+		}
+
+		/// <summary></summary>
+		private bool EvaluateWhetherSaveIsRequiredForThisTerminal(Terminal t)
+		{
+			// Save is not required if file does no longer exist and no or only implicit changes
+			// would have to be saved.
+
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileExists)
+				return (t.SettingsRoot.ExplicitHaveChanged);
+
+			return (true);
 		}
 
 		/// <summary></summary>

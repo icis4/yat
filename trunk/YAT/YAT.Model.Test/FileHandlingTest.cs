@@ -1368,6 +1368,7 @@ namespace YAT.Model.Test
 				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath, prefix + "Workspace file path not set!");
 			else
 				// Note that the application settings may still contain a former workspace file path.
+				// This is required to test certain use cases with normal and command line execution.
 				// Therefore, do not check the local user settings, instead, check that the workspace file path is reset.
 				StringAssert.AreEqualIgnoringCase("", workspace.SettingsFilePath, prefix + "Workspace file path not reset!");
 
