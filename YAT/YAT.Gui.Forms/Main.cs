@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -579,15 +579,6 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.ReleaseNotes f = new Gui.Forms.ReleaseNotes();
-			f.StartPosition = FormStartPosition.Manual;
-			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
-			f.Show(this);
-		}
-
-		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
-		{
-			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Support);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
