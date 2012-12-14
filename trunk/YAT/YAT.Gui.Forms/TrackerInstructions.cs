@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -36,9 +36,6 @@ namespace YAT.Gui.Forms
 		public enum Tracker
 		{
 			/// <summary></summary>
-			Support,
-
-			/// <summary></summary>
 			Feature,
 
 			/// <summary></summary>
@@ -57,7 +54,6 @@ namespace YAT.Gui.Forms
 			sb.Append(Application.ProductName);
 			switch (tracker)
 			{
-				case Tracker.Support: sb.Append(" Support Request"); break;
 				case Tracker.Feature: sb.Append(" Feature Request"); break;
 				case Tracker.Bug:     sb.Append(" Bug Submission");  break;
 			}
@@ -67,7 +63,6 @@ namespace YAT.Gui.Forms
 			sb = new StringBuilder();
 			switch (tracker)
 			{
-				case Tracker.Support: sb.Append("Support for YAT can be requested online.");  break;
 				case Tracker.Feature: sb.Append("Features for YAT can be requested online."); break;
 				case Tracker.Bug:     sb.Append("Bugs for YAT can be submitted online.");     break;
 			}
@@ -80,7 +75,6 @@ namespace YAT.Gui.Forms
 			sb.Append(" you proceed. You will then get email notifications about the progress");
 			switch (tracker)
 			{
-				case Tracker.Support: sb.Append(" of the support request."); break;
 				case Tracker.Feature: sb.Append(" of the feature request."); break;
 				case Tracker.Bug:     sb.Append(" of the bug submission.");  break;
 			}
@@ -94,22 +88,16 @@ namespace YAT.Gui.Forms
 			string plainLink = "";
 			switch (tracker)
 			{
-				case Tracker.Support:
-				{
-					filteredAndSortedLink = "http://sourceforge.net/tracker/?words=tracker_browse&sort=priority&sortdir=desc&offset=0&group_id=193033&atid=943798&assignee=&status=1&category=&artgroup=&keyword=&submitter=&artifact_id=";
-					plainLink             = "http://sourceforge.net/tracker/?group_id=193033&atid=943798";
-					break;
-				}
 				case Tracker.Feature:
 				{
-					filteredAndSortedLink = "http://sourceforge.net/tracker/?words=tracker_browse&sort=priority&sortdir=desc&offset=0&group_id=193033&atid=943800&assignee=&status=1&category=&artgroup=&keyword=&submitter=&artifact_id=";
-					plainLink             = "http://sourceforge.net/tracker/?group_id=193033&atid=943800";
+					filteredAndSortedLink = "http://sourceforge.net/p/y-a-terminal/feature-requests/search/?q=!status%3Aclosed-rejected+%26%26+!status%3Aclosed-duplicate+%26%26+!status%3Awont-fix+%26%26+!status%3Aclosed-fixed+%26%26+!status%3Aclosed&limit=25&page=0&sort=_priority_s%20desc";
+					plainLink             = "http://sourceforge.net/p/y-a-terminal/feature-requests/";
 					break;
 				}
 				case Tracker.Bug:
 				{
-					filteredAndSortedLink = "http://sourceforge.net/tracker/?words=tracker_browse&sort=priority&sortdir=desc&offset=0&group_id=193033&atid=943797&assignee=&status=1&category=&artgroup=&keyword=&submitter=&artifact_id=";
-					plainLink             = "http://sourceforge.net/tracker/?group_id=193033&atid=943797";
+					filteredAndSortedLink = "http://sourceforge.net/p/y-a-terminal/bugs/?q={%22status%22%3A+{%22%24nin%22%3A+[%22closed-rejected%22%2C+%22closed-duplicate%22%2C+%22wont-fix%22%2C+%22closed-fixed%22%2C+%22closed%22]}}&limit=25&page=0&sort=_priority%20desc";
+					plainLink             = "http://sourceforge.net/p/y-a-terminal/bugs/";
 					break;
 				}
 			}

@@ -6,7 +6,7 @@
                               Operate and debug serial communications.
      Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID.
  --------------------------------------------------------------------------------------------------
-                     Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+                     Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
                      Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
  --------------------------------------------------------------------------------------------------
                     Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
