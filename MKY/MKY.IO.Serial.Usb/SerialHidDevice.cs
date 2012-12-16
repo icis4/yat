@@ -35,6 +35,7 @@ using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
+using MKY.Diagnostics;
 using MKY.Event;
 
 #endregion
@@ -44,6 +45,15 @@ namespace MKY.IO.Serial.Usb
 	/// <summary></summary>
 	public class SerialHidDevice : IIOProvider, IDisposable
 	{
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -347,13 +357,26 @@ namespace MKY.IO.Serial.Usb
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag)
+			while (this.sendThreadRunFlag && !IsDisposed)
 			{
-				this.sendThreadEvent.WaitOne();
+				try
+				{
+					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// therefore, only wait for a certain period and then poll the run flag again.
+					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+					break;
+				}
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend)
+				while (this.sendThreadRunFlag && IsReadyToSend && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -489,7 +512,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			// Ensure that threads have stopped after the last stop request.
 			while ((this.receiveThread != null) && (this.sendThread != null))
-				Thread.Sleep(1);
+				Thread.Sleep(1); // Allow some time to stop.
 
 			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
@@ -509,11 +532,21 @@ namespace MKY.IO.Serial.Usb
 			this.sendThreadRunFlag = false;
 			this.receiveThreadRunFlag = false;
 
+			// Ensure that the thread has ended.
 			while (this.sendThread != null)
+			{
 				this.sendThreadEvent.Set();
+				Thread.Sleep(TimeSpan.Zero);
+			}
+			this.sendThreadEvent.Close();
 
+			// Ensure that the thread has ended.
 			while (this.receiveThread != null)
+			{
 				this.receiveThreadEvent.Set();
+				Thread.Sleep(TimeSpan.Zero);
+			}
+			this.receiveThreadEvent.Close();
 		}
 
 		#endregion
@@ -580,16 +613,29 @@ namespace MKY.IO.Serial.Usb
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.receiveThreadRunFlag)
+			while (this.receiveThreadRunFlag && !IsDisposed)
 			{
-				this.receiveThreadEvent.WaitOne();
+				try
+				{
+					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// therefore, only wait for a certain period and then poll the run flag again.
+					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()");
+					break;
+				}
 
 				// Inner loop, runs as long as there is data to be received. Must be done to
 				// ensure that events are fired even for data that was enqueued above while the
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.receiveThreadRunFlag && IsOpen)
+				while (this.receiveThreadRunFlag && IsOpen && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.receiveQueue)

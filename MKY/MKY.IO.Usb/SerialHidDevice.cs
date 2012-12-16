@@ -62,6 +62,15 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		#endregion
+
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
@@ -604,7 +613,7 @@ namespace MKY.IO.Usb
 		{
 			// Ensure that threads have stopped after the last stop request.
 			while (this.receiveThread != null)
-				Thread.Sleep(1);
+				Thread.Sleep(1); // Allow some time to stop.
 
 			this.receiveThreadRunFlag = true;
 			this.receiveThreadEvent = new AutoResetEvent(false);
@@ -616,8 +625,13 @@ namespace MKY.IO.Usb
 		{
 			this.receiveThreadRunFlag = false;
 
+			// Ensure that the thread has ended.
 			while (this.receiveThread != null)
+			{
 				this.receiveThreadEvent.Set();
+				Thread.Sleep(TimeSpan.Zero);
+			}
+			this.receiveThreadEvent.Close();
 		}
 
 		#endregion
@@ -715,16 +729,29 @@ namespace MKY.IO.Usb
 			Debug.WriteLine(GetType() + " '" + ToString() + "': ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.receiveThreadRunFlag)
+			while (this.receiveThreadRunFlag && !IsDisposed)
 			{
-				this.receiveThreadEvent.WaitOne();
+				try
+				{
+					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// therefore, only wait for a certain period and then poll the run flag again.
+					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()");
+					break;
+				}
 
 				// Inner loop, runs as long as there is data to be received. Must be done to
 				// ensure that events are fired even for data that was enqueued above while the
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.receiveThreadRunFlag && IsOpen && (BytesAvailable > 0))
+				while (this.receiveThreadRunFlag && IsOpen && (BytesAvailable > 0) && !IsDisposed)
 				{
 					OnDataReceived(new EventArgs());
 

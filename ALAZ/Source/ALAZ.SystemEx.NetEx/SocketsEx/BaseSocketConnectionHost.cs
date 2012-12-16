@@ -1876,8 +1876,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 connection.Active = false;
                 connection.Socket.Shutdown(SocketShutdown.Send);
 
-                lock (connection.WriteQueue)
+                if (connection.WriteQueue != null)
                 {
+
+                  lock (connection.WriteQueue)
+                  {
 
                     if (connection.WriteQueue.Count > 0)
                     {
@@ -1896,10 +1899,12 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                     }
 
+                  }
+
                 }
 
               }
-              catch (ObjectDisposedException ex)
+              catch (Exception ex)
               {
                 MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
               }

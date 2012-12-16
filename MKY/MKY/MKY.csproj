@@ -107,6 +107,7 @@
     <Compile Include="IO\StreamEx.cs" />
     <Compile Include="IO\Temp.cs" />
     <Compile Include="Net\IPResolver.cs" />
+    <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
     <Compile Include="Text\Ascii.cs" />
     <Compile Include="Text\Escape.cs" />

@@ -35,6 +35,7 @@ using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Event;
 using MKY.Text;
 
@@ -56,6 +57,15 @@ namespace YAT.Domain
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Terminal : IDisposable
 	{
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -211,7 +221,7 @@ namespace YAT.Domain
 		{
 			// Ensure that thread has stopped after the last stop request.
 			while (this.sendThread != null)
-				Thread.Sleep(1);
+				Thread.Sleep(1); // Allow some time to stop.
 
 			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
@@ -223,8 +233,13 @@ namespace YAT.Domain
 		{
 			this.sendThreadRunFlag = false;
 
+			// Ensure that the thread has ended.
 			while (this.sendThread != null)
+			{
 				this.sendThreadEvent.Set();
+				Thread.Sleep(TimeSpan.Zero);
+			}
+			this.sendThreadEvent.Close();
 		}
 
 		#endregion
@@ -490,13 +505,26 @@ namespace YAT.Domain
 			Debug.WriteLine(GetType() + " '" + ToIOString() + "': SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag)
+			while (this.sendThreadRunFlag && !IsDisposed)
 			{
-				this.sendThreadEvent.WaitOne();
+				try
+				{
+					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// therefore, only wait for a certain period and then poll the run flag again.
+					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+					break;
+				}
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend)
+				while (this.sendThreadRunFlag && IsReadyToSend && !IsDisposed)
 				{
 					SendItem[] pendingItems;
 					lock (this.sendQueue)
