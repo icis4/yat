@@ -97,6 +97,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 
@@ -550,6 +551,8 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void StopAndDisposeSocketAndConnectionAndThreadWithoutFiringEvents()
 		{
+			StopDataSentThread();
+
 			if (this.socket != null)
 			{
 				try
@@ -577,8 +580,6 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			this.socketConnection = null;
-
-			StopDataSentThread();
 		}
 
 		#endregion
@@ -592,7 +593,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// Ensure that thread has stopped after the last stop request.
 			while (this.dataSentThread != null)
-				Thread.Sleep(1);
+				Thread.Sleep(1); // Allow some time to stop.
 
 			this.dataSentThreadRunFlag = true;
 			this.dataSentThreadEvent = new AutoResetEvent(false);
@@ -604,8 +605,13 @@ namespace MKY.IO.Serial.Socket
 		{
 			this.dataSentThreadRunFlag = false;
 
+			// Ensure that the thread has ended.
 			while (this.dataSentThread != null)
+			{
 				this.dataSentThreadEvent.Set();
+				Thread.Sleep(TimeSpan.Zero);
+			}
+			this.dataSentThreadEvent.Close();
 		}
 
 		#endregion
@@ -688,16 +694,29 @@ namespace MKY.IO.Serial.Socket
 			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.dataSentThreadRunFlag)
+			while (this.dataSentThreadRunFlag && !IsDisposed)
 			{
-				this.dataSentThreadEvent.WaitOne();
+				try
+				{
+					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// therefore, only wait for a certain period and then poll the run flag again.
+					if (!this.dataSentThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in DataSentThread()");
+					break;
+				}
 
 				// Inner loop, runs as long as there is data to be handled. Must be done to
 				// ensure that events are fired even for data that was enqueued above while the
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.dataSentThreadRunFlag && IsOpen)
+				while (this.dataSentThreadRunFlag && IsOpen && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.dataSentQueue)

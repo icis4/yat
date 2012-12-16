@@ -34,6 +34,7 @@ using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
+using MKY.Diagnostics;
 using MKY.Event;
 
 #endregion
@@ -77,6 +78,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 
@@ -400,13 +402,26 @@ namespace MKY.IO.Serial.Socket
 			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag)
+			while (this.sendThreadRunFlag && !IsDisposed)
 			{
-				this.sendThreadEvent.WaitOne();
+				try
+				{
+					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// therefore, only wait for a certain period and then poll the run flag again.
+					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+						continue;
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+					break;
+				}
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend)
+				while (this.sendThreadRunFlag && IsReadyToSend && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -494,7 +509,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// Ensure that thread has stopped after the last stop request.
 			while (this.sendThread != null)
-				Thread.Sleep(1);
+				Thread.Sleep(1); // Allow some time to stop.
 
 			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
@@ -512,7 +527,14 @@ namespace MKY.IO.Serial.Socket
 		private void DisposeSocketAndThreads()
 		{
 			this.sendThreadRunFlag = false;
-			this.sendThreadEvent.Set();
+
+			// Ensure that the thread has ended.
+			while (this.sendThreadEvent != null)
+			{
+				this.sendThreadEvent.Set();
+				Thread.Sleep(TimeSpan.Zero);
+			}
+			this.sendThreadEvent.Close();
 
 			this.socket.Close();
 			this.socket = null;

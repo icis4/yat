@@ -69,7 +69,7 @@ namespace MKY.IO.Serial.Socket.Test
 			}
 
 			// Randomly connect another large numer of auto sockets to the existing sockets.
-			Random r = new Random();
+			Random r = new Random(RandomEx.NextPseudoRandomSeed());
 			for (int i = 0; i < 500; i++)
 			{
 				int j = r.Next(99);
