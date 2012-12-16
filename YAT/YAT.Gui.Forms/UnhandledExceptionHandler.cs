@@ -112,7 +112,7 @@ namespace YAT.Gui.Forms
 			else
 			{
 				MessageBox.Show(owner,
-								title +Environment.NewLine +
+								title + Environment.NewLine +
 								originMessage,
 								productName,
 								MessageBoxButtons.OK,

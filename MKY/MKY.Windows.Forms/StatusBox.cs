@@ -239,7 +239,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		/// <remarks>Default constructor needed for designer support</remarks>
+		/// <remarks>Default constructor needed for designer support.</remarks>
 		public StatusBox()
 		{
 			InitializeComponent();

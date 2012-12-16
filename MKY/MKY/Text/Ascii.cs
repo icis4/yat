@@ -38,7 +38,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Converts an ascii code into according mnemonic.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F</exception>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>
 		public static string ConvertToMnemonic(byte code)
 		{
 			switch (code)
@@ -83,7 +83,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Converts an ascii code into according description.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F</exception>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>
 		public static string ConvertToDescription(byte code)
 		{
 			switch (code)
@@ -128,7 +128,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Converts an ascii mnemonic into according code. Case-insensitive.
 		/// </summary>
-		/// <exception cref="FormatException">Thrown if mnemonic unknown</exception>
+		/// <exception cref="FormatException">Thrown if mnemonic unknown.</exception>
 		public static byte Parse(string mnemonic)
 		{
 			byte result;

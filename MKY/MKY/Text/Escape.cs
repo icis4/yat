@@ -66,7 +66,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Converts an escape sequence into according character code. Case-insensitive.
 		/// </summary>
-		/// <exception cref="FormatException">Thrown if escape sequence unknown</exception>
+		/// <exception cref="FormatException">Thrown if escape sequence unknown.</exception>
 		public static byte Parse(string escape)
 		{
 			byte result;

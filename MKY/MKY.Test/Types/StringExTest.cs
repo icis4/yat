@@ -210,19 +210,19 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData(@"""""a""", 1, new char[] { '"' }));
 				yield return (new TestCaseData(@"""""a""""", 1, new char[] { '"' }));
 
-			//	yield return (new TestCaseData(@"\""", 0, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"\""a", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"\""a""", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"\""""a""", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"\""""a""""", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"\""\""a""""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"\""", 0, new char[] { '"' }));
+			////yield return (new TestCaseData(@"\""a", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"\""a""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"\""""a""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"\""""a""""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"\""\""a""""", 1, new char[] { '"' }));
 
 				yield return (new TestCaseData(@"""", 0, new char[] { '"' }));
 				yield return (new TestCaseData(@"""a", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"""a\""", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"""""a\""", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"""""a""\""", 1, new char[] { '"' }));
-			//	yield return (new TestCaseData(@"""""a\""\""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"""a\""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"""""a\""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"""""a""\""", 1, new char[] { '"' }));
+			////yield return (new TestCaseData(@"""""a\""\""", 1, new char[] { '"' }));
 			}
 		}
 

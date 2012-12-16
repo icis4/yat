@@ -666,9 +666,9 @@ namespace MKY.IO
 				// Explicitly implemented to emphasize logic and order of the operation below.
 				// Do not use A, B and C because they have a dedicated meaning on Windows.
 				// Implemented as const string to improve performance when calling this method.
-				const string rootLetters = @"Z Y X W V U T S R Q P O N M L K J I H G F E D";
+				const string RootLetters = @"Z Y X W V U T S R Q P O N M L K J I H G F E D";
 				List<string> existingPathRoots = new List<string>(Directory.GetLogicalDrives());
-				foreach (string rootLetter in rootLetters.Split())
+				foreach (string rootLetter in RootLetters.Split())
 				{
 					string currentPathRoot = rootLetter + Path.VolumeSeparatorChar + Path.DirectorySeparatorChar;
 					if (!existingPathRoots.Contains(currentPathRoot))

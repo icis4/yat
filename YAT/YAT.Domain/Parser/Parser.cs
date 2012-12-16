@@ -1080,7 +1080,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		/// <remarks>Radix: public get, private set</remarks>
+		/// <remarks>Radix: public get, private set.</remarks>
 		public virtual Radix Radix
 		{
 			get { return (this.defaultRadix); }

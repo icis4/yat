@@ -425,7 +425,7 @@ namespace YAT.Controller
 				Application.Restart();
 			else if (result == Gui.Forms.UnhandledExceptionResult.Exit)
 				Application.Exit();
-			// else do nothing.
+			//// else do nothing.
 		}
 
 		/// <remarks>
@@ -735,14 +735,14 @@ namespace YAT.Controller
 		{
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.WriteLine(new String('=', (Console.WindowWidth - 1))); // ==========...
+			Console.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 			Console.WriteLine();
 
 			foreach (string line in Logo)
 				Console.WriteLine(line);
 
 			Console.WriteLine();
-			Console.WriteLine(new String('-', (Console.WindowWidth - 1))); // ----------...
+			Console.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
 			Console.WriteLine();
 		}
 
@@ -768,7 +768,7 @@ namespace YAT.Controller
 				Console.WriteLine(line);
 
 			Console.WriteLine();
-			Console.WriteLine(new String('=', (Console.WindowWidth - 1))); // ==========...
+			Console.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 		}
 
 		#endregion
