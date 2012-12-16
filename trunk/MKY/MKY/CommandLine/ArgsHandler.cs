@@ -803,7 +803,7 @@ namespace MKY.CommandLine
 			{
 				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 				{
-					if(!SupportOptionArgs)
+					if (!SupportOptionArgs)
 					{
 						string message = "Option argument defined, but support for option arguments in not enabled in constructor call";
 						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);

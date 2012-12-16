@@ -214,7 +214,7 @@ namespace MKY.Settings
 				AssertNotDisposed();
 
 				// Try to open existing file of current version.
-				object settings = base.LoadFromFile(typeof(TSettings), this.alternateXmlElements);
+				object settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
 				if (settings != null)
 				{
 					this.settings = (TSettings)settings;
@@ -245,7 +245,7 @@ namespace MKY.Settings
 					for (int i = oldDirectories.Count - 1; i >= 0; i--)
 					{
 						string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
-						settings = base.LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
+						settings = LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
 						if (settings != null)
 						{
 							this.settings = (TSettings)settings;

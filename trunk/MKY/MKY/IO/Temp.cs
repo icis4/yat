@@ -162,7 +162,6 @@ namespace MKY.IO
 					throw (new OverflowException("Failed to create a temporary file name because there already are " + istr + " files in the directory"));
 			}
 
-
 			// Optionally output the file path for debugging purposes.
 			if (outputFilePathToDebug)
 				Debug.WriteLine(@"Temporary file path is """ + filePath + @""".");

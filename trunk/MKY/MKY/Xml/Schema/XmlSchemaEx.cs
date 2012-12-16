@@ -22,11 +22,11 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Xml.Schema
 {
@@ -71,7 +71,7 @@ namespace MKY.Xml.Schema
 			GuidSchema = XmlSchema.Read(sr, ValidationCallback);
 		}
 
-		static private void ValidationCallback(object sender, ValidationEventArgs args)
+		private static void ValidationCallback(object sender, ValidationEventArgs args)
 		{
 			if (args.Severity == XmlSeverityType.Error)
 				throw (new InvalidOperationException("Validation of the XML schema for a GUID should never have failed"));

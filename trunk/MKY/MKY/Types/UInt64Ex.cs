@@ -37,7 +37,7 @@ namespace MKY
 	public static class UInt64Ex
 	{
 		/// <summary>
-		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
+		/// Converts the value into a binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
@@ -47,7 +47,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
+		/// Converts the value into a binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]

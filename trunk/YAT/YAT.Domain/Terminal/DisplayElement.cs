@@ -376,7 +376,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[XmlIgnore()]
+		[XmlIgnore]
 		public virtual int OriginCount
 		{
 			get { return (this.origin.Count); }

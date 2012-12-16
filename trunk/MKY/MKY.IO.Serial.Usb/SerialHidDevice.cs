@@ -432,7 +432,7 @@ namespace MKY.IO.Serial.Usb
 					this.device.Opened       += new EventHandler(device_Opened);
 					this.device.Closed       += new EventHandler(device_Closed);
 					this.device.DataReceived += new EventHandler(device_DataReceived);
-				//	this.device.DataSent is not used, see remarks above.
+				////this.device.DataSent is not used, see remarks above.
 					this.device.Error        += new EventHandler<IO.Usb.ErrorEventArgs>(device_Error);
 				}
 				return (true);

@@ -117,7 +117,7 @@ namespace YAT.Model.Settings
 			IOType                  = Domain.IOType.SerialPort;
 
 			SerialPortId            = MKY.IO.Ports.SerialPortId.FirstStandardPort;
-			// SerialPortCommunication is attached as settings object.
+			//// SerialPortCommunication is attached as settings object.
 			SerialPortAutoReopen    = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 			SocketRemoteHost        = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;

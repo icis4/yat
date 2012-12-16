@@ -87,6 +87,7 @@ Important changes:
 - All projects explicitly set to warning level 4, already used to be level 4 but implicitly
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)
+- YAT on SourceForge has been upgraded to the new SourceForge 'Allura' platform
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)

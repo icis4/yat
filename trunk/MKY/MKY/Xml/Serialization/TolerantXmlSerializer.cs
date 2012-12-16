@@ -422,8 +422,6 @@ namespace MKY.Xml.Serialization
 		/// <summary>
 		/// Tries to copy a complete node.
 		/// </summary>
-		/// <remarks>
-		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private bool TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{

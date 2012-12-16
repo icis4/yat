@@ -689,10 +689,10 @@ namespace YAT.Gui.Controls
 					ListBox lb = fastListBox_LineNumbers;
 					SizeF requestedSize;
 
-					// e.DrawBackground(); is not needed and actually draws a white background.
+				////e.DrawBackground(); is not needed and actually draws a white background.
 					Drawing.DrawAndMeasureLineNumberString(lineNumberString, this.formatSettings,
 					                                       e.Graphics, e.Bounds, out requestedSize);
-					// e.DrawFocusRectangle(); is not needed.
+				////e.DrawFocusRectangle(); is not needed.
 
 					// Only handle the item width.
 					// The item height is set in SetFormatDependentControls().

@@ -81,7 +81,7 @@ namespace MKY.Win32
 			public enum DIGCF : uint
 			{
 				/// <remarks>
-				/// Only valid with DIGCF_DEVICEINTERFACE
+				/// Only valid with DIGCF_DEVICEINTERFACE.
 				/// </remarks>
 				DEFAULT         = 0x00000001,
 				PRESENT         = 0x00000002,
@@ -440,7 +440,7 @@ namespace MKY.Win32
 			try
 			{
 				NativeMethods.UnregisterDeviceNotification(deviceNotificationHandle);
-				// Ignore failures.
+				//// Ignore failures.
 			}
 			catch { }
 		}

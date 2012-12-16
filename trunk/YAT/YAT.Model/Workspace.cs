@@ -1364,7 +1364,6 @@ namespace YAT.Model
 			// Replace terminal in terminal list.
 			this.terminals.ReplaceGuidItem(terminal);
 			this.activeTerminal = terminal;
-			// Keep index constant.
 
 			// Replace terminal in workspace settings if the settings have indeed changed.
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal, GetFixedIndexByTerminal(terminal));

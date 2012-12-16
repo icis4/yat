@@ -1941,7 +1941,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<DateTime>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType(objToCompareAgainst, objEqual, objNotEqual);
-			// Operator ==/!= cannot be used on System.ValueType itself.
+			//// Operator ==/!= cannot be used on System.ValueType itself.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDateTime (objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfDateTime     (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -1958,9 +1958,9 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.ValueTypeWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType(objToCompareAgainst, objEqual, objNotEqual);
-			// Operator ==/!= cannot be used on System.ValueType itself.
-			// Operator ==/!= cannot be directly applied to value types without operators,
-			//   neither to evaluate reference nor value equality.
+			//// Operator ==/!= cannot be used on System.ValueType itself.
+			//// Operator ==/!= cannot be directly applied to value types without operators,
+			////   neither to evaluate reference nor value equality.
 		}
 
 		/// <summary></summary>
@@ -1975,7 +1975,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.ValueTypeWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType             (objToCompareAgainst, objEqual, objNotEqual);
-			// Operator ==/!= cannot be used on System.ValueType itself.
+			//// Operator ==/!= cannot be used on System.ValueType itself.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueTypeWithOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfValueTypeWithOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2008,9 +2008,9 @@ namespace MKY.Test
 			// List<int>.Equals() doesn't exist, and object.Equals() only evaluates reference equality.
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfList  (objToCompareAgainst, objEqual, objNotEqual);
-			// List<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
+			//// List<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
 		}
 
 		/// <summary></summary>
@@ -2029,9 +2029,9 @@ namespace MKY.Test
 			// EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>.Equals() doesn't exist, and List<int>.Equals() only evaluates reference equality.
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfList  (objToCompareAgainst, objEqual, objNotEqual);
-			// EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
+			//// EqualityTestData.OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
 		}
 
 		/// <summary></summary>
@@ -2050,9 +2050,9 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfList  (objToCompareAgainst, objEqual, objNotEqual);
-			// EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
+			//// EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<int>.operators ==/!= don't exist, and object.operators ==/!= only evaluate reference equality.
 		}
 
 		/// <summary></summary>
@@ -2067,9 +2067,9 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= are called, thus only reference equality is evaluated too.
+			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		/// <summary></summary>
@@ -2084,9 +2084,9 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= are called, thus only reference equality is evaluated too.
+			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		/// <summary></summary>
@@ -2101,9 +2101,9 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= are called, thus only reference equality is evaluated too.
+			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		/// <summary></summary>
@@ -2118,9 +2118,9 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= are called, thus only reference equality is evaluated too.
+			//// object.operators ==/!= are called, thus only reference equality is evaluated too.
 		}
 
 		#endregion
@@ -2147,11 +2147,10 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<Version>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject (objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfVersion(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfVersion    (objToCompareAgainst, objEqual, objNotEqual);
 		}
-
 
 		/// <summary></summary>
 		[Test]
@@ -2169,7 +2168,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int>>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2186,7 +2185,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2203,7 +2202,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2220,7 +2219,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2237,7 +2236,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2254,7 +2253,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2271,7 +2270,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}
@@ -2288,7 +2287,7 @@ namespace MKY.Test
 			EqualityTestMethods.TestEquals<EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfObject(objToCompareAgainst, objEqual, objNotEqual);
-			// object.operators ==/!= only evaluate reference equality.
+			//// object.operators ==/!= only evaluate reference equality.
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators    (objToCompareAgainst, objEqual, objNotEqual);
 		}

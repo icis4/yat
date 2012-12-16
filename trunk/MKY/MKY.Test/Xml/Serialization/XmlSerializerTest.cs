@@ -90,7 +90,7 @@ namespace MKY.Test.Xml.Serialization
 		public virtual void TestBooleanSerialization()
 		{
 			string filePath = "";
-			System.Boolean b;
+			bool b;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanFalse", FileExtension);
 			b = false;

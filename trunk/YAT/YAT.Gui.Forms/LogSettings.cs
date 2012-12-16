@@ -484,7 +484,7 @@ namespace YAT.Gui.Forms
 				StringWriter invalidPrintable = new StringWriter(CultureInfo.InvariantCulture);
 				foreach (char c in invalid.ToString().ToCharArray())
 				{
-					if (!Char.IsControl(c))
+					if (!char.IsControl(c))
 						invalidPrintable.Write(c);
 				}
 
