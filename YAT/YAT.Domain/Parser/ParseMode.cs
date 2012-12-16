@@ -38,13 +38,13 @@ namespace YAT.Domain.Parser
 		Ascii = 2,
 
 		/// <summary></summary>
-		AllByteArrayResults = 3,
+		AllByteArrayResults = Radix | Ascii,
 
 		/// <summary></summary>
 		Keywords = 128,
 
 		/// <summary></summary>
-		All = 131,
+		All = AllByteArrayResults | Keywords,
 	}
 }
 
