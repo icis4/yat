@@ -42,12 +42,33 @@ using MKY.Xml;
 namespace MKY.Settings
 {
 	/// <summary>
+	/// Options to control access to the applications settings file(s).
+	/// </summary>
+	[Serializable]
+	public enum ApplicationSettingsFileAccess
+	{
+		/// <summary>Do no access the file at all, only use temporary settings.</summary>
+		/// <remarks>Can be used to prevent concurrent instances to write the settings file(s).</remarks>
+		None = 0,
+
+		/// <summary>Only read the settings.</summary>
+		/// <remarks>Can be used to prevent concurrent instances to write the settings file(s).</remarks>
+		ReadShared = 1,
+
+		/// <summary>Default, read and write the settings.</summary>
+		ReadSharedWriteIfOwned = 3,
+	}
+
+	/// <summary>
 	/// Generic class to handle standard application settings. It covers common, local user
 	/// as well as roaming user settings.
 	/// </summary>
 	/// <typeparam name="TCommonSettings">The type of the common settings.</typeparam>
 	/// <typeparam name="TLocalUserSettings">The type of the local user settings.</typeparam>
 	/// <typeparam name="TRoamingUserSettings">The type of the roaming user settings.</typeparam>
+	/// <remarks>
+	/// Pass <see cref="EmptySettingsItem"/> for those settings that shall not be used.
+	/// </remarks>
 	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : IDisposable
 		where TCommonSettings : SettingsItem, new()
 		where TLocalUserSettings : SettingsItem, new()
@@ -57,6 +78,16 @@ namespace MKY.Settings
 		//==========================================================================================
 		// Types
 		//==========================================================================================
+
+		[Serializable]
+		[Flags]
+		private enum FileAccessFlags
+		{
+			None = 0,
+			Read = 1,
+			Write = 2,
+			ReadWrite = Read | Write,
+		}
 
 		private class Handler<TSettings> : SettingsFileHandler, IDisposable
 			where TSettings : SettingsItem, new()
@@ -68,10 +99,13 @@ namespace MKY.Settings
 
 			private bool isDisposed;
 
+			private string name;
 			private TSettings settings = default(TSettings);
-			private AlternateXmlElement[] alternateXmlElements = null;
+			private AlternateXmlElement[] alternateXmlElements;
+
+			private ApplicationSettingsFileAccess desiredFileAccess;
+			private FileAccessFlags effectiveFileAccess;
 			private Mutex mutex;
-			private bool areCurrentlyOwnedByThisInstance = false;
 
 			#endregion
 
@@ -80,22 +114,52 @@ namespace MKY.Settings
 			// Object Lifetime
 			//==========================================================================================
 
-			/// <summary></summary>
-			public Handler(string name, string filePath, Type parentType)
+			/// <param name="name">The name of the settings.</param>
+			/// <param name="filePath">The file path to the settings file.</param>
+			/// <param name="desiredFileAccess">The file access of the settings file.</param>
+			/// <param name="parentType">Use for debug/trace output only.</param>
+			public Handler(string name, string filePath, ApplicationSettingsFileAccess desiredFileAccess, Type parentType)
 				: base(filePath, parentType)
 			{
+				this.name = name;
 				this.settings = new TSettings();
 
 				IAlternateXmlElementProvider aep = this.settings as IAlternateXmlElementProvider;
 				if (aep != null)
 					this.alternateXmlElements = aep.AlternateXmlElements;
 
-				// Create named mutex and try to acquire it. Note that the mutex must be acquired
-				// immediately, and once only, and the success is stored in a boolean variable. This
-				// mechanism ensures that once an instance 'owns' the settings, it keeps it. And does
-				// so until it exits. Then the mutex is released by the destructor of this class.
-				this.mutex = new Mutex(false, Application.ProductName + "." + name);
-				this.areCurrentlyOwnedByThisInstance = this.mutex.WaitOne(TimeSpan.Zero);
+				this.desiredFileAccess = desiredFileAccess;
+				switch (this.desiredFileAccess)
+				{
+					case ApplicationSettingsFileAccess.ReadSharedWriteIfOwned:
+					{
+						// Create named mutex and try to acquire it. Note that the mutex must be acquired
+						// immediately, and once only, and the success is stored in a boolean variable. This
+						// mechanism ensures that once an instance 'owns' the settings, it keeps it. And does
+						// so until it exits. Then the mutex is released by the destructor of this class.
+						bool createdNew;
+						this.mutex = new Mutex(true, Application.ProductName + "." + this.name, out createdNew);
+
+						if (createdNew)
+							this.effectiveFileAccess = FileAccessFlags.ReadWrite;
+						else
+							this.effectiveFileAccess = FileAccessFlags.Read;
+						
+						break;
+					}
+
+					case ApplicationSettingsFileAccess.ReadShared:
+					{
+						this.effectiveFileAccess = FileAccessFlags.Read;
+						break;
+					}
+
+					default: // Default also covers 'ApplicationSettingsFileAccess.None'.
+					{
+						this.effectiveFileAccess = FileAccessFlags.None;
+						break;
+					}
+				}
 			}
 
 			#region Disposal
@@ -191,7 +255,7 @@ namespace MKY.Settings
 				get
 				{
 					AssertNotDisposed();
-					return (this.areCurrentlyOwnedByThisInstance);
+					return ((this.effectiveFileAccess & FileAccessFlags.Write) == FileAccessFlags.Write);
 				}
 			}
 
@@ -213,43 +277,46 @@ namespace MKY.Settings
 			{
 				AssertNotDisposed();
 
-				// Try to open existing file of current version.
-				object settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
-				if (settings != null)
+				if ((this.effectiveFileAccess & FileAccessFlags.Read) == FileAccessFlags.Read)
 				{
-					this.settings = (TSettings)settings;
-					return (true);
-				}
-
-				// Alternatively, try to open an existing file of an older version.
-				{
-					// Find all valid directories of older versions.
-					string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(FilePath));
-					string[] allDirectories = Directory.GetDirectories(productSettingsPath);
-					List<string> oldDirectories = new List<string>();
-					Version currentVersion = new Version(Application.ProductVersion);
-					foreach (string directory in allDirectories)
+					// Try to open existing file of current version.
+					object settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
+					if (settings != null)
 					{
-						try
-						{
-							Version version = new Version(Path.GetFileName(directory));
-							if (version < currentVersion)
-								oldDirectories.Add(directory);
-						}
-						catch { }
+						this.settings = (TSettings)settings;
+						return (true);
 					}
 
-					// Iterate through the directories, start with most recent.
-					string fileName = Path.GetFileName(FilePath);
-					oldDirectories.Sort();
-					for (int i = oldDirectories.Count - 1; i >= 0; i--)
+					// Alternatively, try to open an existing file of an older version.
 					{
-						string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
-						settings = LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
-						if (settings != null)
+						// Find all valid directories of older versions.
+						string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(FilePath));
+						string[] allDirectories = Directory.GetDirectories(productSettingsPath);
+						List<string> oldDirectories = new List<string>();
+						Version currentVersion = new Version(Application.ProductVersion);
+						foreach (string directory in allDirectories)
 						{
-							this.settings = (TSettings)settings;
-							return (true);
+							try
+							{
+								Version version = new Version(Path.GetFileName(directory));
+								if (version < currentVersion)
+									oldDirectories.Add(directory);
+							}
+							catch { }
+						}
+
+						// Iterate through the directories, start with most recent.
+						string fileName = Path.GetFileName(FilePath);
+						oldDirectories.Sort();
+						for (int i = oldDirectories.Count - 1; i >= 0; i--)
+						{
+							string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
+							settings = LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
+							if (settings != null)
+							{
+								this.settings = (TSettings)settings;
+								return (true);
+							}
 						}
 					}
 				}
@@ -274,19 +341,11 @@ namespace MKY.Settings
 			{
 				AssertNotDisposed();
 
-				SaveToFile(typeof(TSettings), this.settings);
-				this.settings.ClearChanged();
-			}
-
-			/// <summary>
-			/// Force that settings are currently owned by this instance, i.e. on the next
-			/// save request the settings will indeed be saved.
-			/// </summary>
-			public virtual void ForceThatSettingsAreCurrentlyOwnedByThisInstance()
-			{
-				AssertNotDisposed();
-
-				this.areCurrentlyOwnedByThisInstance = true;
+				if ((this.effectiveFileAccess & FileAccessFlags.Write) == FileAccessFlags.Write)
+				{
+					SaveToFile(typeof(TSettings), this.settings);
+					this.settings.ClearChanged();
+				}
 			}
 
 			/// <summary>
@@ -350,31 +409,40 @@ namespace MKY.Settings
 		/// <see cref="Application.LocalUserAppDataPath"/>, user settings in
 		/// <see cref="Application.UserAppDataPath"/>.
 		/// </summary>
-		public ApplicationSettingsHandler(bool hasCommonSettings, bool hasLocalUserSettings, bool hasRoamingUserSettings)
+		public ApplicationSettingsHandler(ApplicationSettingsFileAccess commonSettingsFileAccess, ApplicationSettingsFileAccess localUserSettingsFileAccess, ApplicationSettingsFileAccess roamingUserSettingsFileAccess)
 		{
-			if (hasCommonSettings)
+			if (typeof(TCommonSettings) != typeof(EmptySettingsItem))
+			{
 				this.commonSettings = new Handler<TCommonSettings>
 					(
 					CommonName,
 					Application.CommonAppDataPath + Path.DirectorySeparatorChar + CommonFileName,
+					commonSettingsFileAccess,
 					GetType()
 					);
+			}
 
-			if (hasLocalUserSettings)
+			if (typeof(TLocalUserSettings) != typeof(EmptySettingsItem))
+			{
 				this.localUserSettings = new Handler<TLocalUserSettings>
 					(
 					LocalUserName,
 					Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + LocalUserFileName,
+					localUserSettingsFileAccess,
 					GetType()
 					);
-			
-			if (hasRoamingUserSettings)
+			}
+
+			if (typeof(TRoamingUserSettings) != typeof(EmptySettingsItem))
+			{
 				this.roamingUserSettings = new Handler<TRoamingUserSettings>
 					(
 					RoamingUserName,
 					Application.UserAppDataPath + Path.DirectorySeparatorChar + RoamingUserFileName,
+					roamingUserSettingsFileAccess,
 					GetType()
 					);
+			}
 		}
 
 		#region Disposal
@@ -945,42 +1013,6 @@ namespace MKY.Settings
 
 			if (HasRoamingUserSettings && RoamingUserSettingsAreCurrentlyOwnedByThisInstance)
 				this.roamingUserSettings.Save();
-		}
-
-		/// <summary>
-		/// Force that common settings are currently owned by this instance, i.e. on the next
-		/// save request the settings will indeed be saved.
-		/// </summary>
-		public virtual void ForceThatCommonSettingsAreCurrentlyOwnedByThisInstance()
-		{
-			// AssertNotDisposed() is called by 'Has...' below.
-
-			if (HasCommonSettings)
-				this.commonSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();
-		}
-
-		/// <summary>
-		/// Force that local user settings are currently owned by this instance, i.e. on the next
-		/// save request the settings will indeed be saved.
-		/// </summary>
-		public virtual void ForceThatLocalUserSettingsAreCurrentlyOwnedByThisInstance()
-		{
-			// AssertNotDisposed() is called by 'Has...' below.
-
-			if (HasLocalUserSettings)
-				this.localUserSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();
-		}
-
-		/// <summary>
-		/// Force that roaming user settings are currently owned by this instance, i.e. on the next
-		/// save request the settings will indeed be saved.
-		/// </summary>
-		public virtual void ForceThatRoamingUserSettingsAreCurrentlyOwnedByThisInstance()
-		{
-			// AssertNotDisposed() is called by 'Has...' below.
-
-			if (HasRoamingUserSettings)
-				this.roamingUserSettings.ForceThatSettingsAreCurrentlyOwnedByThisInstance();
 		}
 
 		/// <summary>

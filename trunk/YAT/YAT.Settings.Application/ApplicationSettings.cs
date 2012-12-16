@@ -50,8 +50,7 @@ namespace YAT.Settings.Application
 		// Static Fields
 		//==========================================================================================
 
-		private static ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem> staticSettingsHandler =
-			new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>(false, true, false);
+		private static ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem> staticSettingsHandler;
 
 		#endregion
 
@@ -63,25 +62,49 @@ namespace YAT.Settings.Application
 		/// <summary></summary>
 		public static LocalUserSettingsRoot LocalUserSettings
 		{
-			get { return (staticSettingsHandler.LocalUserSettings); }
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.LocalUserSettings);
+				else
+					return (null);
+			}
 		}
 
 		/// <summary></summary>
 		public static bool LocalUserSettingsSuccessfullyLoadedFromFile
 		{
-			get { return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoadedFromFile); }
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.LocalUserSettingsSuccessfullyLoadedFromFile);
+				else
+					return (false);
+			}
 		}
 
 		/// <summary></summary>
 		public static bool LocalUserSettingsAreCurrentlyOwnedByThisInstance
 		{
-			get { return (staticSettingsHandler.LocalUserSettingsAreCurrentlyOwnedByThisInstance); }
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.LocalUserSettingsAreCurrentlyOwnedByThisInstance);
+				else
+					return (false);
+			}
 		}
 
 		/// <summary></summary>
 		public static string LocalUserSettingsFilePath
 		{
-			get { return (staticSettingsHandler.LocalUserSettingsFilePath); }
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.LocalUserSettingsFilePath);
+				else
+					return ("");
+			}
 		}
 
 		#endregion
@@ -92,27 +115,40 @@ namespace YAT.Settings.Application
 		//==========================================================================================
 
 		/// <summary>
-		/// Create settings. So far, there are only local user settings.
+		/// Create settings.
 		/// </summary>
-		public static bool Create()
+		/// <remarks>
+		/// So far, there are only local user settings.
+		/// </remarks>
+		public static bool Create(ApplicationSettingsFileAccess fileAccess)
 		{
 			try
 			{
-				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>(false, true, false);
+				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>
+					(
+					ApplicationSettingsFileAccess.None,
+					fileAccess,
+					ApplicationSettingsFileAccess.None
+					);
+
 				return (true);
 			}
 			catch
 			{
 				staticSettingsHandler = null;
+
 				return (false);
 			}
 		}
 
 		/// <summary>
-		/// Load settings. So far, there are only local user settings.
+		/// Load settings.
 		/// </summary>
+		/// <remarks>
+		/// So far, there are only local user settings.
+		/// </remarks>
 		/// <returns>
-		/// Returns <c>true</c> if settings could be loaded from teh respective file paths,
+		/// Returns <c>true</c> if settings could be loaded from the respective file paths,
 		/// return <c>false</c> if they could not be loaded and were set to defaults instead.
 		/// </returns>
 		public static bool Load()
@@ -124,9 +160,11 @@ namespace YAT.Settings.Application
 		}
 
 		/// <summary>
-		/// Save settings. So far, there are only local user settings.
-		/// To improved performance, settings are only saved if they have changed.
+		/// Save settings. To improved performance, settings are only saved if they have changed.
 		/// </summary>
+		/// <remarks>
+		/// So far, there are only local user settings.
+		/// </remarks>
 		public static bool Save()
 		{
 			if (staticSettingsHandler != null)
@@ -150,8 +188,11 @@ namespace YAT.Settings.Application
 		}
 
 		/// <summary>
-		/// Close settings. So far, there are only local user settings.
+		/// Close settings.
 		/// </summary>
+		/// <remarks>
+		/// So far, there are only local user settings.
+		/// </remarks>
 		public static bool Close()
 		{
 			if (staticSettingsHandler != null)

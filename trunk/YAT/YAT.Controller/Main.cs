@@ -35,6 +35,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Event;
+using MKY.Settings;
 using MKY.Windows.Forms;
 
 using YAT.Settings;
@@ -364,7 +365,7 @@ namespace YAT.Controller
 				{
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit.
-					if (!ApplicationSettings.Create())
+					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
 						return (MainResult.ApplicationSettingsError);
 				
 					// ApplicationSettings are loaded while showing the welcome screen, and will
@@ -467,7 +468,7 @@ namespace YAT.Controller
 				{
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit.
-					if (!ApplicationSettings.Create())
+					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
 						return (MainResult.ApplicationSettingsError);
 
 					// ApplicationSettings are loaded while showing the welcome screen, and will
@@ -567,7 +568,7 @@ namespace YAT.Controller
 			{
 				try
 				{
-					if (ApplicationSettings.Create())
+					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						// Don't care about result,
 						//   either settings have been loaded or settings have been set to defaults.
@@ -642,7 +643,7 @@ namespace YAT.Controller
 			{
 				try
 				{
-					if (ApplicationSettings.Create())
+					if (ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadShared))
 					{
 						// Don't care about result,
 						// either settings have been loaded or settings have been set to defaults.
