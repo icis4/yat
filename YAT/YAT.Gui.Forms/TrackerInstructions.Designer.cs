@@ -45,7 +45,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(282, 320);
+			this.button_Close.Location = new System.Drawing.Point(282, 347);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -66,7 +66,7 @@
 			this.groupBox_Instructions.Controls.Add(this.linkLabel_Intro);
 			this.groupBox_Instructions.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Instructions.Name = "groupBox_Instructions";
-			this.groupBox_Instructions.Size = new System.Drawing.Size(345, 296);
+			this.groupBox_Instructions.Size = new System.Drawing.Size(345, 323);
 			this.groupBox_Instructions.TabIndex = 1;
 			this.groupBox_Instructions.TabStop = false;
 			// 
@@ -113,16 +113,13 @@
 			// 
 			// linkLabel_Instructions
 			// 
-			this.linkLabel_Instructions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Instructions.AutoSize = true;
 			this.linkLabel_Instructions.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Instructions.Location = new System.Drawing.Point(6, 198);
+			this.linkLabel_Instructions.Location = new System.Drawing.Point(6, 199);
 			this.linkLabel_Instructions.Name = "linkLabel_Instructions";
-			this.linkLabel_Instructions.Size = new System.Drawing.Size(265, 78);
+			this.linkLabel_Instructions.Size = new System.Drawing.Size(25, 117);
 			this.linkLabel_Instructions.TabIndex = 6;
-			this.linkLabel_Instructions.Text = "1. Choose \"Add New\"\r\n2. Select a \"Category\"\r\n3. Select a \"Group\", i.e. the YAT ve" +
-				"rsion you are using\r\n4. Fill in \"Summary\"\r\n5. Fill in \"Detailed Description\"\r\n6." +
-				" Choose \"Add\"";
+			this.linkLabel_Instructions.Text = "1.\r\n2.\r\n3.\r\n    >\r\n    >\r\n    >\r\n4.\r\n5.\r\n6.";
 			// 
 			// linkLabel_SourceForgeRemark
 			// 
@@ -149,7 +146,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(369, 355);
+			this.ClientSize = new System.Drawing.Size(369, 382);
 			this.Controls.Add(this.groupBox_Instructions);
 			this.Controls.Add(this.button_Close);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
