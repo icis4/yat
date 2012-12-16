@@ -328,8 +328,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         {
                             if (FWaitCreatorsDisposing != null)
                                 FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
-                            else
-                                MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
+
+                            // Do not write the stack in the 'normal' case.
                         }
                         catch (NullReferenceException ex)
                         {
@@ -1777,8 +1777,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   {
                       if (FSocketConnections != null)
                           FSocketConnections.Remove(socketConnection.ConnectionId);
-                      else
-                          MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
+
+                      // Do not write the stack in the 'normal' case.
                   }
                   catch (NullReferenceException ex)
                   {

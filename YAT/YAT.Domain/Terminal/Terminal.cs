@@ -239,7 +239,6 @@ namespace YAT.Domain
 				this.sendThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.sendThreadEvent.Close();
 		}
 
 		#endregion

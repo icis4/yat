@@ -399,7 +399,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		private void SendThread()
 		{
-			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has started.");
+			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): SendThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.sendThreadRunFlag && !IsDisposed)
@@ -447,7 +447,7 @@ namespace MKY.IO.Serial.Socket
 			// Do not Close() and de-reference the corresponding event as it may be Set() again
 			// right now by another thread, e.g. during closing.
 
-			Debug.WriteLine(GetType() + " '" + ToShortEndPointString() + "': SendThread() has terminated.");
+			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): SendThread() has terminated.");
 		}
 
 		#endregion
@@ -526,18 +526,19 @@ namespace MKY.IO.Serial.Socket
 
 		private void DisposeSocketAndThreads()
 		{
+			this.socket.Close();
+			this.socket = null;
+
+			// Finally, stop the thread. Must be done AFTER the socket got closed to ensure that
+			// the last socket callbacks can still be properly processed.
 			this.sendThreadRunFlag = false;
 
 			// Ensure that the thread has ended.
-			while (this.sendThreadEvent != null)
+			while (this.sendThread != null)
 			{
 				this.sendThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.sendThreadEvent.Close();
-
-			this.socket.Close();
-			this.socket = null;
 		}
 
 		private void SocketError()

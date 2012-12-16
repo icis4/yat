@@ -631,7 +631,6 @@ namespace MKY.IO.Usb
 				this.receiveThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.receiveThreadEvent.Close();
 		}
 
 		#endregion

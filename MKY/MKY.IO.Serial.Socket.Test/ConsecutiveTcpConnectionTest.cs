@@ -50,10 +50,10 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		/// <remarks>
-		/// A cycle takes around 5 seconds. 10 cycles around a minute.
+		/// A cycle takes around 15 seconds. 4 cycles around a minute.
 		/// </remarks>
 		[Test]
-		[Repeat(10)]
+		[Repeat(4)]
 		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
@@ -104,10 +104,10 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		/// <remarks>
-		/// A cycle takes around 15 seconds. 10 cycles around 3 minutes.
+		/// A cycle takes around 15 seconds. 4 cycles around a minute.
 		/// </remarks>
 		[Test]
-		[Repeat(10)]
+		[Repeat(4)]
 		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute()
 		{
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[Repeat(3)]
+		[Repeat(10)]
 		[EnduranceCategory, MinuteDurationCategory(10)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance10Minutes()
 		{
