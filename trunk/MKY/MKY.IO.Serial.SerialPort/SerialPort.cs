@@ -1053,7 +1053,6 @@ namespace MKY.IO.Serial.SerialPort
 				this.sendThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.sendThreadEvent.Close();
 
 			// Ensure that the thread has ended.
 			while (this.receiveThread != null)
@@ -1061,7 +1060,6 @@ namespace MKY.IO.Serial.SerialPort
 				this.receiveThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.receiveThreadEvent.Close();
 		}
 
 		#endregion

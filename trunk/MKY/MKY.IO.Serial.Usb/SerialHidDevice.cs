@@ -538,7 +538,6 @@ namespace MKY.IO.Serial.Usb
 				this.sendThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.sendThreadEvent.Close();
 
 			// Ensure that the thread has ended.
 			while (this.receiveThread != null)
@@ -546,7 +545,6 @@ namespace MKY.IO.Serial.Usb
 				this.receiveThreadEvent.Set();
 				Thread.Sleep(TimeSpan.Zero);
 			}
-			this.receiveThreadEvent.Close();
 		}
 
 		#endregion

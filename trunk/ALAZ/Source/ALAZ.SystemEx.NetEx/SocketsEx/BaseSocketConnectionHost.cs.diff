@@ -33,8 +33,8 @@
 +                        {
 +                            if (FWaitCreatorsDisposing != null)
 +                                FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
-+                            else
-+                                MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
++
++                            // Do not write the stack in the 'normal' case.
 +                        }
 +                        catch (NullReferenceException ex)
 +                        {
@@ -146,13 +146,12 @@
  
                    try
                    {
--
--                      FSocketConnections.Remove(socketConnection.ConnectionId);
--
 +                      if (FSocketConnections != null)
 +                          FSocketConnections.Remove(socketConnection.ConnectionId);
-+                      else
-+                          MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
+ 
+-                      FSocketConnections.Remove(socketConnection.ConnectionId);
+-
++                      // Do not write the stack in the 'normal' case.
                    }
 +                  catch (NullReferenceException ex)
 +                  {
@@ -196,7 +195,7 @@
          }
  
          #endregion
-@@ -1788,6 +1866,13 @@
+@@ -1788,12 +1866,22 @@
              if (!Disposed)
              {
  
@@ -210,13 +209,26 @@
                  connection.Active = false;
                  connection.Socket.Shutdown(SocketShutdown.Send);
  
-@@ -1812,6 +1897,15 @@
+-                lock (connection.WriteQueue)
++                if (connection.WriteQueue != null)
+                 {
+ 
++                  lock (connection.WriteQueue)
++                  {
++
+                     if (connection.WriteQueue.Count > 0)
+                     {
+ 
+@@ -1811,7 +1899,18 @@
+ 
                      }
  
++                  }
++
                  }
 +
 +              }
-+              catch (ObjectDisposedException ex)
++              catch (Exception ex)
 +              {
 +                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
 +              }

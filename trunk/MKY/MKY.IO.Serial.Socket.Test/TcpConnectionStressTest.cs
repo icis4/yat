@@ -50,7 +50,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[StressCategory, MinuteDurationCategory(1)]
+		[StressCategory, MinuteDurationCategory(5)]
 		public virtual void Stress100AutoSocketServersWith500AutoSocketClients()
 		{
 			List<int> serverPorts = new List<int>();
