@@ -108,12 +108,25 @@ namespace YAT.Gui.Forms
 
 			// Instructions.
 			sb = new StringBuilder();
-			sb.AppendLine("1. Choose 'Add New'");
-			sb.AppendLine("2. Select a 'Category'");
-			sb.AppendLine("3. Select a 'Group', i.e. the YAT version you are using");
-			sb.AppendLine("4. Fill in 'Summary'");
-			sb.AppendLine("5. Fill in 'Description'");
-			sb.AppendLine("6. Choose 'Add'");
+			sb.AppendLine("1. Select 'Create Ticket'");
+			sb.AppendLine("2. Fill in a 'Title'");
+			sb.AppendLine("3. Fill in as much information as possible into 'Description'");
+			switch (tracker)
+			{
+				case Tracker.Feature:
+					sb.AppendLine("    > YAT version you are using");
+					sb.AppendLine("    > Expected behaviour of the new feature");
+					sb.AppendLine("    > Use case(s) of the new feature");
+					break;
+				case Tracker.Bug:
+					sb.AppendLine("    > YAT version you are using");
+					sb.AppendLine("    > Procedure to reproduce the bug");
+					sb.AppendLine("    > Any additional useful information");
+					break;
+			}
+			sb.AppendLine("4. Optionally add one or more labels");
+			sb.AppendLine("5. Optionally add one or more attachments");
+			sb.AppendLine("6. Select 'Save'");
 			linkLabel_Instructions.Text = sb.ToString();
 		}
 
