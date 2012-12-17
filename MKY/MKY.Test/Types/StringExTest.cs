@@ -92,7 +92,7 @@ namespace MKY.Test.Types
 
 				yield return (new TestCaseData(@"""",   1, new char[] { '"' }));
 				yield return (new TestCaseData(@"""""", 2, new char[] { '"' }));
-				yield return (new TestCaseData(@"\\""", 1, new char[] { '"' }));
+				yield return (new TestCaseData(@"\\""", 0, new char[] { '"' }));
 			}
 		}
 

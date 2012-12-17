@@ -49,23 +49,7 @@ namespace YAT.Settings.Test
 		// Fields
 		//==========================================================================================
 
-		private bool autoSaveWorkspaceToRestore;
 		private MKY.IO.Ports.SerialPortCollection serialPorts;
-
-		#endregion
-
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		public FileVersionsTest()
-		{
-			// Serial ports.
-			this.serialPorts = new MKY.IO.Ports.SerialPortCollection();
-			this.serialPorts.FillWithAvailablePorts(false);
-		}
 
 		#endregion
 
@@ -79,9 +63,15 @@ namespace YAT.Settings.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
 			// Prevent auto-save of workspace settings.
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+
+			// Serial ports.
+			this.serialPorts = new MKY.IO.Ports.SerialPortCollection();
+			this.serialPorts.FillWithAvailablePorts(false);
 		}
 
 		#endregion
@@ -96,7 +86,8 @@ namespace YAT.Settings.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
 		}
 
 		#endregion

@@ -30,7 +30,7 @@ using MKY.Settings;
 namespace YAT.Settings.Application
 {
 	/// <remarks>
-	/// Should these application settings be static? Well, there's pro and con as often:
+	/// Should these application settings be static? Well, there's pro and con as so often:
 	/// Pro:
 	///  > Easier to access throughout the application.
 	///  > Easier to load, and they can be loaded before any application 'Main' is created.

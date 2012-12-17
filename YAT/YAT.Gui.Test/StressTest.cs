@@ -54,15 +54,6 @@ namespace YAT.Gui.Test
 	[TestFixture]
 	public class StressTest
 	{
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool autoSaveWorkspaceToRestore;
-
-		#endregion
-
 		#region Set Up Fixture
 		//==========================================================================================
 		// Set Up Fixture
@@ -73,8 +64,10 @@ namespace YAT.Gui.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
 			// Prevent auto-save of workspace settings.
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
@@ -90,7 +83,9 @@ namespace YAT.Gui.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
+
 			Temp.CleanTempPath(GetType());
 		}
 
