@@ -31,6 +31,8 @@ using System.Diagnostics.CodeAnalysis;
 using NUnit;
 using NUnit.Framework;
 
+using MKY.Settings;
+
 using YAT.Settings.Application;
 
 #endregion
@@ -54,15 +56,6 @@ namespace YAT.Controller.Test
 
 		#endregion
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool autoSaveWorkspaceToRestore;
-
-		#endregion
-
 		#region Set Up Fixture
 		//==========================================================================================
 		// Set Up Fixture
@@ -73,8 +66,10 @@ namespace YAT.Controller.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
 			// Prevent auto-save of workspace settings.
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
@@ -90,7 +85,8 @@ namespace YAT.Controller.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
 		}
 
 		#endregion

@@ -50,15 +50,28 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[StressCategory, MinuteDurationCategory(5)]
-		public virtual void Stress100AutoSocketServersWith500AutoSocketClients()
+		[StressCategory, MinuteDurationCategory(1)]
+		public virtual void Stress10AutoSocketServersWith100AutoSocketClients()
+		{
+			StressAutoSocketServersWithAutoSocketClients(10, 100);
+		}
+
+		/// <summary></summary>
+		[Test]
+		[StressCategory, MinuteDurationCategory(10)]
+		public virtual void Stress100AutoSocketServersWith1000AutoSocketClients()
+		{
+			StressAutoSocketServersWithAutoSocketClients(100, 1000);
+		}
+
+		private void StressAutoSocketServersWithAutoSocketClients(int numberOfServers, int numberOfClients)
 		{
 			List<int> serverPorts = new List<int>();
 			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>();
 			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>();
 
 			// Create a large number of auto sockets.
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < numberOfServers; i++)
 			{
 				int p;
 				TcpAutoSocket s;
@@ -70,9 +83,9 @@ namespace MKY.IO.Serial.Socket.Test
 
 			// Randomly connect another large numer of auto sockets to the existing sockets.
 			Random r = new Random(RandomEx.NextPseudoRandomSeed());
-			for (int i = 0; i < 500; i++)
+			for (int i = 0; i < numberOfClients; i++)
 			{
-				int j = r.Next(99);
+				int j = r.Next(0, (numberOfServers - 1));
 				int p = serverPorts[j];
 				TcpAutoSocket s = serverSockets[j];
 				TcpAutoSocket c;

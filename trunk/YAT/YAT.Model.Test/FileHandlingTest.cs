@@ -33,6 +33,7 @@ using System.IO;
 using NUnit.Framework;
 
 using MKY.IO;
+using MKY.Settings;
 
 using YAT.Model.Settings;
 using YAT.Settings.Application;
@@ -72,10 +73,17 @@ namespace YAT.Model.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// Allow modification of auto save setting.
+			// Create 'normal' file-based application settings for this test run.
+			// The 'normal' application settings allow easy check of the settings file.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned);
+			ApplicationSettings.Load();
+
+			// Allow modification of auto-save setting.
 			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace;
 			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			this.workspaceFilePathToRestore = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
+
+			ApplicationSettings.Save();
 		}
 
 		#endregion
@@ -90,9 +98,16 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
+			// Restore auto-save of workspace settings.
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath    = this.workspaceFilePathToRestore;
+
+			// Restore 'normal' file-based application settings.
+			ApplicationSettings.Save();
+			ApplicationSettings.Close();
+
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion
@@ -111,6 +126,8 @@ namespace YAT.Model.Test
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
+
+			ApplicationSettings.Save();
 
 			Temp.MakeTempPath(GetType());
 		}

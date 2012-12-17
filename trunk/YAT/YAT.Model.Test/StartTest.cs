@@ -34,6 +34,7 @@ using NUnit;
 using NUnit.Framework;
 
 using MKY;
+using MKY.Settings;
 using MKY.Collections.Generic;
 
 using YAT.Settings.Application;
@@ -59,16 +60,6 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private bool autoSaveWorkspaceToRestore;
-		private Model.Settings.RecentFileSettings recentsToRestore;
-
-		#endregion
-
 		#region Set Up Fixture
 		//==========================================================================================
 		// Set Up Fixture
@@ -79,12 +70,13 @@ namespace YAT.Model.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
 			// Prevent auto-save of workspace settings.
-			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 
 			// Ensure that recents contains files.
-			recentsToRestore = ApplicationSettings.LocalUserSettings.RecentFiles;
 			ApplicationSettings.LocalUserSettings.RecentFiles = new Model.Settings.RecentFileSettings();
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(TerminalFilePath);
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(WorkspaceFilePath);
@@ -102,8 +94,8 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
-			ApplicationSettings.LocalUserSettings.RecentFiles               = this.recentsToRestore;
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
 		}
 
 		#endregion
