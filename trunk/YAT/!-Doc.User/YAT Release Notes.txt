@@ -57,6 +57,7 @@ New:
   'cmd' as well as 'PowerShell' (bug #3482103)
 
 Important changes:
+- Update to DejaVu fonts 2.33
 - 'File > Open' now also allows to select workspace files (feature request #1917388)
 - Monitors automatically start vertical scrolling again if the last item gets selected
 - Massive refactoring of the send data/event path, implementation is now fully asynchronous
@@ -73,8 +74,8 @@ Important changes:
   unnecessary dependencies to the other parts (feature request #3388950)
 - Additional help content on serial port errors added (feature requests #2213647 and #3440986)
 - Error message in case a serial port cannot be opened has been improved (bug #3565648)
-- The ALAZ socket library has been replaced by SuperSocket, due to some issues with ALAZ and the
-  fact that ALAZ is no longer maintained, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
+- The ALAZ socket library was considered to be replaced by a different library, but then decided to
+  be kept and instead partially reverted to 2.0, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
 - Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323)
    > Implemented by use of a named mutex as suggested in the respective comments
    > Also fixes use of same setting file by concurrent YAT instances (bug #3540438)
