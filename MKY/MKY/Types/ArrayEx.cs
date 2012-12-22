@@ -41,12 +41,12 @@ namespace MKY
 		/// Creates an array using <see cref="Array.CreateInstance(Type, int)"/> and initializes
 		/// the given number of array elements with the given initial value.
 		/// </summary>
-		public static T[] CreateAndInitializeInstance<T>(int length, T initalValue)
+		public static T[] CreateAndInitializeInstance<T>(int length, T initialValue)
 		{
 			T[] a = (T[])Array.CreateInstance(typeof(T), length);
 
 			for (int i = 0; i < length; i++)
-				a[i] = initalValue;
+				a[i] = initialValue;
 
 			return (a);
 		}

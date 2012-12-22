@@ -44,7 +44,8 @@ using MKY.IO;
 namespace MKY.Test.Settings
 {
 	/// <summary></summary>
-	public static class SettingsTreeTestData
+	[SuppressMessage("Microsoft.Design", "?!?", Justification = "Only non-static classes are permitted as test data provider for the serialization tests.")]
+	public class SettingsTreeTestTypeAndData
 	{
 		#region IDs
 		//==========================================================================================
@@ -449,7 +450,8 @@ namespace MKY.Test.Settings
 	}
 
 	/// <summary></summary>
-	public static class SettingsEvolutionTestData
+	[SuppressMessage("Microsoft.Design", "?!?", Justification = "Only non-static classes are permitted as test data provider for the serialization tests.")]
+	public class SettingsEvolutionTestTypeAndData
 	{
 		#region Test Case Id
 		//==========================================================================================
@@ -583,46 +585,46 @@ namespace MKY.Test.Settings
 		[Test]
 		public virtual void TestSettingsTreeLevel2()
 		{
-			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel2();
-			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestData.TestTreeChildLevel2();
-			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestTypeAndData.TestTreeChildLevel2();
+			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestTypeAndData.TestTreeChildLevel2();
+			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestTypeAndData.TestTreeChildLevel2(SettingsTreeTestTypeAndData.SimpleValueNotEqual);
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
 
 			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-			             (SettingsTreeTestData.TestTreeChildLevel2)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeChildLevel2)settingsEqual, (SettingsTreeTestData.TestTreeChildLevel2)settingsNotEqual);
+			             (SettingsTreeTestTypeAndData.TestTreeChildLevel2)settingsToCompareAgainst, (SettingsTreeTestTypeAndData.TestTreeChildLevel2)settingsEqual, (SettingsTreeTestTypeAndData.TestTreeChildLevel2)settingsNotEqual);
 		}
 
 		/// <summary></summary>
 		[Test]
 		public virtual void TestSettingsTreeLevel1()
 		{
-			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel1();
-			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestData.TestTreeChildLevel1();
-			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestData.TestTreeChildLevel1(SettingsTreeTestData.SimpleValueNotEqual);
+			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestTypeAndData.TestTreeChildLevel1();
+			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestTypeAndData.TestTreeChildLevel1();
+			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestTypeAndData.TestTreeChildLevel1(SettingsTreeTestTypeAndData.SimpleValueNotEqual);
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
 
 			VerifyLevel1(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-			             (SettingsTreeTestData.TestTreeChildLevel1)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeChildLevel1)settingsEqual, (SettingsTreeTestData.TestTreeChildLevel1)settingsNotEqual);
+			             (SettingsTreeTestTypeAndData.TestTreeChildLevel1)settingsToCompareAgainst, (SettingsTreeTestTypeAndData.TestTreeChildLevel1)settingsEqual, (SettingsTreeTestTypeAndData.TestTreeChildLevel1)settingsNotEqual);
 		}
 
 		/// <summary></summary>
 		[Test]
 		public virtual void TestSettingsTreeRoot()
 		{
-			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestData.TestTreeRoot();
-			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestData.TestTreeRoot();
-			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestData.TestTreeRoot(SettingsTreeTestData.SimpleValueNotEqual);
+			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestTypeAndData.TestTreeRoot();
+			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestTypeAndData.TestTreeRoot();
+			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestTypeAndData.TestTreeRoot(SettingsTreeTestTypeAndData.SimpleValueNotEqual);
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
 
 			VerifyRoot(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-			           (SettingsTreeTestData.TestTreeRoot)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeRoot)settingsEqual, (SettingsTreeTestData.TestTreeRoot)settingsNotEqual);
+			           (SettingsTreeTestTypeAndData.TestTreeRoot)settingsToCompareAgainst, (SettingsTreeTestTypeAndData.TestTreeRoot)settingsEqual, (SettingsTreeTestTypeAndData.TestTreeRoot)settingsNotEqual);
 		}
 
 		private static void VerifyRoot(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual,
-		                               SettingsTreeTestData.TestTreeRoot castedToCompareAgainst, SettingsTreeTestData.TestTreeRoot castedEqual, SettingsTreeTestData.TestTreeRoot castedNotEqual)
+		                               SettingsTreeTestTypeAndData.TestTreeRoot castedToCompareAgainst, SettingsTreeTestTypeAndData.TestTreeRoot castedEqual, SettingsTreeTestTypeAndData.TestTreeRoot castedNotEqual)
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
 
@@ -634,22 +636,22 @@ namespace MKY.Test.Settings
 
 			// Modify simple value and verify base again.
 
-			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueNotEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
+			castedEqual.SimpleValue    = SettingsTreeTestTypeAndData.SimpleValueNotEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestTypeAndData.SimpleValueEqual;
 
 			VerifyBase(settingsToCompareAgainst, null, settingsEqual, 0);
 			VerifyBase(settingsToCompareAgainst, null, settingsNotEqual, 0);
 
 			// Undo modifications and verify base again.
 
-			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
+			castedEqual.SimpleValue    = SettingsTreeTestTypeAndData.SimpleValueEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestTypeAndData.SimpleValueNotEqual;
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 0);
 		}
 
 		private static void VerifyLevel1(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual,
-		                                 SettingsTreeTestData.TestTreeChildLevel1 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel1 castedEqual, SettingsTreeTestData.TestTreeChildLevel1 castedNotEqual)
+		                                 SettingsTreeTestTypeAndData.TestTreeChildLevel1 castedToCompareAgainst, SettingsTreeTestTypeAndData.TestTreeChildLevel1 castedEqual, SettingsTreeTestTypeAndData.TestTreeChildLevel1 castedNotEqual)
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
 
@@ -663,23 +665,23 @@ namespace MKY.Test.Settings
 
 			// Modify simple value and verify base again.
 
-			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueNotEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
+			castedEqual.SimpleValue    = SettingsTreeTestTypeAndData.SimpleValueNotEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestTypeAndData.SimpleValueEqual;
 
 			VerifyBase(settingsToCompareAgainst, null, settingsEqual, 1);
 			VerifyBase(settingsToCompareAgainst, null, settingsNotEqual, 1);
 
 			// Undo modifications and verify base again.
 
-			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
+			castedEqual.SimpleValue    = SettingsTreeTestTypeAndData.SimpleValueEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestTypeAndData.SimpleValueNotEqual;
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 1);
 
 			// Replace child nodes and verify base again.
 			{
-				SettingsTreeTestData.TestTreeChildLevel2 replacementEqual    = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueEqual);
-				SettingsTreeTestData.TestTreeChildLevel2 replacementNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+				SettingsTreeTestTypeAndData.TestTreeChildLevel2 replacementEqual    = new SettingsTreeTestTypeAndData.TestTreeChildLevel2(SettingsTreeTestTypeAndData.SimpleValueEqual);
+				SettingsTreeTestTypeAndData.TestTreeChildLevel2 replacementNotEqual = new SettingsTreeTestTypeAndData.TestTreeChildLevel2(SettingsTreeTestTypeAndData.SimpleValueNotEqual);
 
 				castedEqual.ChildLevel2B    = replacementNotEqual;
 				castedNotEqual.ChildLevel2B = replacementEqual;
@@ -690,8 +692,8 @@ namespace MKY.Test.Settings
 
 			// Undo modifications and verify base again.
 			{
-				SettingsTreeTestData.TestTreeChildLevel2 replacementEqual    = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueEqual);
-				SettingsTreeTestData.TestTreeChildLevel2 replacementNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+				SettingsTreeTestTypeAndData.TestTreeChildLevel2 replacementEqual    = new SettingsTreeTestTypeAndData.TestTreeChildLevel2(SettingsTreeTestTypeAndData.SimpleValueEqual);
+				SettingsTreeTestTypeAndData.TestTreeChildLevel2 replacementNotEqual = new SettingsTreeTestTypeAndData.TestTreeChildLevel2(SettingsTreeTestTypeAndData.SimpleValueNotEqual);
 
 				castedEqual.ChildLevel2B    = replacementEqual;
 				castedNotEqual.ChildLevel2B = replacementNotEqual;
@@ -701,7 +703,7 @@ namespace MKY.Test.Settings
 		}
 
 		private static void VerifyLevel2(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual,
-		                                 SettingsTreeTestData.TestTreeChildLevel2 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel2 castedEqual, SettingsTreeTestData.TestTreeChildLevel2 castedNotEqual)
+		                                 SettingsTreeTestTypeAndData.TestTreeChildLevel2 castedToCompareAgainst, SettingsTreeTestTypeAndData.TestTreeChildLevel2 castedEqual, SettingsTreeTestTypeAndData.TestTreeChildLevel2 castedNotEqual)
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
 
@@ -710,8 +712,8 @@ namespace MKY.Test.Settings
 
 			// Modify simple value and verify base again.
 
-			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueNotEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
+			castedEqual.SimpleValue    = SettingsTreeTestTypeAndData.SimpleValueNotEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestTypeAndData.SimpleValueEqual;
 
 			if (settingsToCompareAgainst.GetType() == castedToCompareAgainst.GetType())
 			{
@@ -725,8 +727,8 @@ namespace MKY.Test.Settings
 
 			// Undo modifications and verify base again.
 
-			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
+			castedEqual.SimpleValue    = SettingsTreeTestTypeAndData.SimpleValueEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestTypeAndData.SimpleValueNotEqual;
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 2);
 		}
@@ -758,7 +760,7 @@ namespace MKY.Test.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(SettingsEvolutionTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(SettingsEvolutionTestTypeAndData), "TestCases")]
 		public virtual void TestSettingsEvolution(int testCase, string fileName, Type typeToSerialize, Type typeToDeserialize)
 		{
 			string filePath = Temp.MakeTempFilePath(GetType(), fileName, ".xml");
@@ -771,90 +773,90 @@ namespace MKY.Test.Settings
 
 			object objToTestAgainst = typeToDeserialize.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 
-			SettingsEvolutionTestData.TestClassV1 v1a = null;
-			SettingsEvolutionTestData.TestClassV1 v1b = null;
-			SettingsEvolutionTestData.TestClassV2 v2a = null;
-			SettingsEvolutionTestData.TestClassV2 v2b = null;
-			SettingsEvolutionTestData.TestClassV3 v3a = null;
-			SettingsEvolutionTestData.TestClassV3 v3b = null;
+			SettingsEvolutionTestTypeAndData.TestClassV1 v1a = null;
+			SettingsEvolutionTestTypeAndData.TestClassV1 v1b = null;
+			SettingsEvolutionTestTypeAndData.TestClassV2 v2a = null;
+			SettingsEvolutionTestTypeAndData.TestClassV2 v2b = null;
+			SettingsEvolutionTestTypeAndData.TestClassV3 v3a = null;
+			SettingsEvolutionTestTypeAndData.TestClassV3 v3b = null;
 
 			switch (testCase)
 			{
-				case SettingsEvolutionTestData.TestCaseId._11:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._11:
 				{
-					v1a = (SettingsEvolutionTestData.TestClassV1)objToSerialize;
-					v1b = (SettingsEvolutionTestData.TestClassV1)objToDeserialize;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
+					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objToDeserialize;
 					Assert.AreEqual(v1a.Data1, v1b.Data1); // Data 1 must be the one from V1.
 					Assert.AreEqual(v1a.Data2, v1b.Data2); // Data 2 must be the one from V1.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._12:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._12:
 				{
-					v1a = (SettingsEvolutionTestData.TestClassV1)objToSerialize;
-					v2a = (SettingsEvolutionTestData.TestClassV2)objToDeserialize;
-					v2b = (SettingsEvolutionTestData.TestClassV2)objToTestAgainst;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToDeserialize;
+					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToTestAgainst;
 					Assert.AreEqual(v2a.Data1, v1a.Data1); // Data 1 must be the one from V1.
 					Assert.AreEqual(v2a.Data2, v1a.Data2); // Data 2 must be the one from V1.
 					Assert.AreEqual(v2a.Data3, v2b.Data3); // Data 3 can only be the one from V2.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._13:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._13:
 				{
-					v1a = (SettingsEvolutionTestData.TestClassV1)objToSerialize;
-					v3a = (SettingsEvolutionTestData.TestClassV3)objToDeserialize;
-					v3b = (SettingsEvolutionTestData.TestClassV3)objToTestAgainst;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToDeserialize;
+					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objToTestAgainst;
 					Assert.AreEqual(v3a.Data1, v1a.Data1); // Data 1 must be the one from V1.
 					Assert.AreEqual(v3a.Data3, v3b.Data3); // Data 3 can only be the one from V3.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._21:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._21:
 				{
-					v2a = (SettingsEvolutionTestData.TestClassV2)objToSerialize;
-					v1a = (SettingsEvolutionTestData.TestClassV1)objToDeserialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToDeserialize;
 					Assert.AreEqual(v1a.Data1, v2a.Data1); // Data 1 must be the one from V2.
 					Assert.AreEqual(v1a.Data2, v2a.Data2); // Data 2 must be the one from V2.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._22:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._22:
 				{
-					v2a = (SettingsEvolutionTestData.TestClassV2)objToSerialize;
-					v2b = (SettingsEvolutionTestData.TestClassV2)objToDeserialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
+					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToDeserialize;
 					Assert.AreEqual(v2a.Data1, v2b.Data1); // Data 1 must be the one from V2.
 					Assert.AreEqual(v2a.Data2, v2b.Data2); // Data 2 must be the one from V2.
 					Assert.AreEqual(v2a.Data3, v2b.Data3); // Data 3 must be the one from V2.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._23:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._23:
 				{
-					v2a = (SettingsEvolutionTestData.TestClassV2)objToSerialize;
-					v3a = (SettingsEvolutionTestData.TestClassV3)objToDeserialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToDeserialize;
 					Assert.AreEqual(v3a.Data1, v2a.Data1); // Data 1 must be the one from V2.
 					Assert.AreEqual(v3a.Data3, v2a.Data3); // Data 3 must be the one from V2.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._31:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._31:
 				{
-					v3a = (SettingsEvolutionTestData.TestClassV3)objToSerialize;
-					v1a = (SettingsEvolutionTestData.TestClassV1)objToDeserialize;
-					v1b = (SettingsEvolutionTestData.TestClassV1)objToTestAgainst;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToDeserialize;
+					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objToTestAgainst;
 					Assert.AreEqual(v1a.Data1, v3a.Data1); // Data 1 must be the one from V3.
 					Assert.AreEqual(v1a.Data2, v1b.Data2); // Data 2 can only be the one from V1.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._32:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._32:
 				{
-					v3a = (SettingsEvolutionTestData.TestClassV3)objToSerialize;
-					v2a = (SettingsEvolutionTestData.TestClassV2)objToDeserialize;
-					v2b = (SettingsEvolutionTestData.TestClassV2)objToTestAgainst;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToDeserialize;
+					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToTestAgainst;
 					Assert.AreEqual(v2a.Data1, v3a.Data1); // Data 1 must be the one from V3.
 					Assert.AreEqual(v2a.Data2, v2b.Data2); // Data 2 can only be the one from V2.
 					Assert.AreEqual(v2a.Data3, v3a.Data3); // Data 3 must be the one from V3.
 					break;
 				}
-				case SettingsEvolutionTestData.TestCaseId._33:
+				case SettingsEvolutionTestTypeAndData.TestCaseId._33:
 				{
-					v3a = (SettingsEvolutionTestData.TestClassV3)objToSerialize;
-					v3b = (SettingsEvolutionTestData.TestClassV3)objToDeserialize;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
+					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objToDeserialize;
 					Assert.AreEqual(v3a.Data1, v3b.Data1); // Data 1 must be the one from V3.
 					Assert.AreEqual(v3a.Data3, v3b.Data3); // Data 3 must be the one from V3.
 					break;

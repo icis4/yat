@@ -93,6 +93,7 @@ Important changes:
 
 Fixed bugs:
 - 4 data bits are invalid for serial COM ports, 4 has been removed from list (bug #3454543)
+- Issues with maximum USB Ser/HID report size fixed (bugs #3463404, #3464116 and #3584852)
 - Empty lines are no longer skipped when not showing EOL (bug #2898163)
 - Edit shortcuts such as Ctrl-A and Ctrl-C reenabled in 'Send Command' box (bug #3459888)
 - Recent 'Send Command' items are again properly loaded from saved settings (bug #3450553)
