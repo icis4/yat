@@ -218,7 +218,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <remarks>
 		/// In case of manual RTS/CTS + DTR/DSR, DTR is disabled after initialization.
 		/// </remarks>
-		private bool manualDtrWasEnabled = false;
+		private bool manualDtrWasEnabled; // = false
 
 		/// <summary>
 		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
@@ -1237,6 +1237,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "cts", Justification = "Local variable 'cts' is required to force access to port to check whether it's still alive.")]
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,

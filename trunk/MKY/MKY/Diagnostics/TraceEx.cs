@@ -111,6 +111,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		[Conditional("TRACE")]
 		public static void WriteWindowsFormsMessage(Type type, Message m)
 		{
@@ -120,6 +121,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		[Conditional("TRACE")]
 		public static void WriteWindowsFormsMessage(Type type, Message m, string additionalMessage)
 		{

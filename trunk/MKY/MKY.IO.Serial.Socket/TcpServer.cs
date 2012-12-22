@@ -520,6 +520,7 @@ namespace MKY.IO.Serial.Socket
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void StopAndDisposeSocketAndConnectionsAndThreadWithoutFiringEvents()
 		{
 			if (this.socket != null)
@@ -741,7 +742,7 @@ namespace MKY.IO.Serial.Socket
 					switch (state)
 					{
 						case SocketState.Accepted: SetStateSynchronizedAndNotify(SocketState.Listening); break;
-						case SocketState.Stopping: SetStateSynchronizedAndNotify(SocketState.Reset); break;
+						case SocketState.Stopping: SetStateSynchronizedAndNotify(SocketState.Reset);     break;
 						default: break; // No state change in all other cases.
 					}
 				}

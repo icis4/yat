@@ -40,22 +40,22 @@ namespace MKY.Windows.Forms
 		/// Convert a menu index into a prependable string, e.g. "1: ".
 		/// Indices 1 through 10 will be accessible via ALT + nummeric key using the ampersand.
 		/// </summary>
-		public static string PrependIndex(int i, string text)
+		public static string PrependIndex(int index, string text)
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if ((i >= 1) && (i <= 9))
+			if ((index >= 1) && (index <= 9))
 			{
 				sb.Append("&");
-				sb.Append(i);
+				sb.Append(index);
 			}
-			else if (i == 10)
+			else if (index == 10)
 			{
 				sb.Append("1&0");
 			}
 			else
 			{
-				sb.Append(i);
+				sb.Append(index);
 			}
 			sb.Append(": ");
 			sb.Append(text);

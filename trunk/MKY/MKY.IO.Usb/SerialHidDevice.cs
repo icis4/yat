@@ -100,7 +100,7 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static int    staticDeviceNotificationCounter = 0;
+		private static int    staticDeviceNotificationCounter;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
 

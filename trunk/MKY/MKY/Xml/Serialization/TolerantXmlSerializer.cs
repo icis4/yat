@@ -234,7 +234,7 @@ namespace MKY.Xml.Serialization
 		/// <summary>
 		/// Reads XML input stream into a document.
 		/// </summary>
-		private XmlDocument CreateDocumentFromInput(TextReader inputReader)
+		private static XmlDocument CreateDocumentFromInput(TextReader inputReader)
 		{
 			XmlDocument document = new XmlDocument();
 			using (XmlReader reader = XmlReader.Create(inputReader))
@@ -397,7 +397,7 @@ namespace MKY.Xml.Serialization
 		/// Tries to copy the value if both navigators are pointing to an element with a compatible type.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
+		private static bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			// Navigate to parents to set typed value.
 			XPathNavigator outputParentNavigator;
@@ -423,7 +423,7 @@ namespace MKY.Xml.Serialization
 		/// Tries to copy a complete node.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private bool TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
+		private static bool TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			try
 			{

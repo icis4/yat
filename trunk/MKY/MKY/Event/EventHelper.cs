@@ -54,6 +54,7 @@ namespace MKY.Event
 		/// the event is invoked on that thread. Otherwise, the event is
 		/// invoked on the current thread.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static void FireSync(Delegate eventDelegate, params object[] args)
 		{
@@ -78,6 +79,8 @@ namespace MKY.Event
 		/// the event is invoked on that thread. Otherwise, the event is invoked on the current thread.
 		/// </summary>
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
@@ -107,6 +110,8 @@ namespace MKY.Event
 		/// </remarks>
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 		/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 		public static void FireSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
@@ -140,6 +145,7 @@ namespace MKY.Event
 		/// the event is invoked on that thread. Otherwise, the event is invoked on a thread from the
 		/// thread pool.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 		public static void FireAsync(Delegate eventDelegate, params object[] args)
 		{
 			if (eventDelegate == null)
@@ -169,6 +175,8 @@ namespace MKY.Event
 		/// thread pool.
 		/// </summary>
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Haven't found any alternative way to implement a generic event helper.")]
+		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static void FireAsync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs

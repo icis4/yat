@@ -132,7 +132,7 @@ namespace MKY.Xml.Serialization
 		// Private Methods
 		//==========================================================================================
 
-		private string[] GetXmlPath(XmlNode node)
+		private static string[] GetXmlPath(XmlNode node)
 		{
 			XmlNode parent = node.ParentNode;
 			List<string> xmlPath = new List<string>();
@@ -145,7 +145,7 @@ namespace MKY.Xml.Serialization
 			return (xmlPath.ToArray());
 		}
 
-		private string GetLocalNameAlternateTolerant(string[] standardXmlPath, string localName, AlternateXmlElement[] alternates)
+		private static string GetLocalNameAlternateTolerant(string[] standardXmlPath, string localName, AlternateXmlElement[] alternates)
 		{
 			if (alternates != null)
 			{

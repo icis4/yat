@@ -29,7 +29,7 @@ namespace MKY.Text
 	/// <summary>
 	/// Escape code conversions.
 	/// </summary>
-	public class Escape
+	public static class Escape
 	{
 		//------------------------------------------------------------------------------------------
 		// Static Methods

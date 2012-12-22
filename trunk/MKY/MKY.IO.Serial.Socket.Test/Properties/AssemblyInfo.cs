@@ -3,10 +3,10 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial.Test/Properties/AssemblyInfo.cs $
-// $Author: maettu_this $
-// $Date: 2012-01-08 13:34:52 +0100 (So, 08 Jan 2012) $
-// $Revision: 508 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // MKY Development Version 1.0.8
 // ------------------------------------------------------------------------------------------------
@@ -53,9 +53,9 @@ using System.Runtime.InteropServices;
 
 // Assembly-level FxCop suppressions.
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MKY", Justification = "MKY is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.IO.Serial.Test.Socket", MessageId = "MKY", Justification = "MKY is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.IO.Serial.Socket.Test", MessageId = "MKY", Justification = "MKY is a name.")]
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial.Test/Properties/AssemblyInfo.cs $
+// $URL$
 //==================================================================================================

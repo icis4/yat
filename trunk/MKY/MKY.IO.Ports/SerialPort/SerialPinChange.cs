@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Ports
@@ -33,13 +34,10 @@ namespace MKY.IO.Ports
 	/// <remarks>
 	/// This enum adds RTS and DTR pin changes to <see cref="System.IO.Ports.SerialPinChange"/>.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "The name resembles 'System.IO.Ports.SerialPinChange'")]
+	[Flags]
 	public enum SerialPinChange
 	{
-		/// <summary>
-		/// Indicates that it's unknown which pin changed it's state.
-		/// </summary>
-		Unknown = 0,
-
 		/// <summary>
 		/// The Ready to Send (RTS) signal changed state. This signal is used to indicate
 		/// whether data can be received over the serial port.

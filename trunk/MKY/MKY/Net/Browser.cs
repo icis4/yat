@@ -22,6 +22,8 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Net
 {
@@ -36,13 +38,14 @@ namespace MKY.Net
 		/// <param name="uri">URI to browse.</param>
 		public static void BrowseUri(string uri)
 		{
-			System.Diagnostics.Process.Start(uri);
+			Process.Start(uri);
 		}
 
 		/// <summary>
 		/// Opens the system default browser and browses uri.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
+		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Quite funny suggestion by FxCop...")]
 		public static void BrowseUri(Uri uri)
 		{
 			BrowseUri(uri.AbsoluteUri);

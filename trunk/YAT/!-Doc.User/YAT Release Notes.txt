@@ -85,6 +85,7 @@ Important changes:
   three types of settings (related to bugs #3450553 and #3535709)
 - .NET/Microsoft XML serialization infrastructure extended by schema for GUID items (bug #3535709)
 - BoolEx renamed to BooleanEx for consistency with the .NET type Boolean (bug #3533831)
+- Code further improved using StyleCop and FxCop (feature requests #2970222 and #2970221)
 - All projects explicitly set to warning level 4, already used to be level 4 but implicitly
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248)

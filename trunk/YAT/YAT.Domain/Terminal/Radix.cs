@@ -104,6 +104,22 @@ namespace YAT.Domain
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public override string ToString()
+		{
+			switch ((Radix)UnderlyingEnum)
+			{
+				case Radix.Bin:    return (Bin_string);
+				case Radix.Oct:    return (Oct_string);
+				case Radix.Dec:    return (Dec_string);
+				case Radix.Hex:    return (Hex_string);
+				case Radix.Char:   return (Char_string);
+				case Radix.String: return (String_string);
+			}
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+		}
+
+		/// <summary></summary>
 		public virtual string ToShortString()
 		{
 			switch ((Radix)UnderlyingEnum)
@@ -115,7 +131,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringShort);
 				case Radix.String: return (String_stringShort);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		/// <summary></summary>
@@ -130,22 +146,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringMiddle);
 				case Radix.String: return (String_stringMiddle);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
-		}
-
-		/// <summary></summary>
-		public override string ToString()
-		{
-			switch ((Radix)UnderlyingEnum)
-			{
-				case Radix.Bin:    return (Bin_string);
-				case Radix.Oct:    return (Oct_string);
-				case Radix.Dec:    return (Dec_string);
-				case Radix.Hex:    return (Hex_string);
-				case Radix.Char:   return (Char_string);
-				case Radix.String: return (String_string);
-			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

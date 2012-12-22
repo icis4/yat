@@ -37,6 +37,7 @@ namespace MKY.Win32
 	/// <summary>
 	/// Encapsulates parts of the Win32 security API.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Type name is given by the Win32 API.")]
 	public static class Security
 	{
 		#region Native

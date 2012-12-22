@@ -29,7 +29,7 @@ namespace MKY.Text
 	/// <summary>
 	/// Ascii code conversions. Source: http://www.asciitable.com.
 	/// </summary>
-	public class Ascii
+	public static class Ascii
 	{
 		//------------------------------------------------------------------------------------------
 		// Static Methods

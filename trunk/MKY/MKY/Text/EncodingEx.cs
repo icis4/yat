@@ -529,7 +529,8 @@ namespace MKY.Text
 			}
 		}
 
-		private static EncodingInfoEx[] infos;
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Must be initialized in static constructor because it uses a list object.")]
+		private static EncodingInfoEx[] staticInfos;
 
 		static EncodingEx()
 		{
@@ -541,11 +542,11 @@ namespace MKY.Text
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
-			infos = l.ToArray(); 
+			staticInfos = l.ToArray(); 
 		}
 
 		/// <summary>
-		/// Default is <see cref="Encoding.Default"/>.
+		/// Default is <see cref="System.Text.Encoding.Default"/>.
 		/// </summary>
 		public EncodingEx()
 			: base((SupportedEncoding)Encoding.Default.CodePage)
@@ -583,7 +584,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.Name);
 				}
-				throw (new NotImplementedException(UnderlyingEnum.ToString()));
+				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 			}
 		}
 
@@ -594,7 +595,7 @@ namespace MKY.Text
 		{
 			get
 			{
-				foreach (EncodingInfoEx info in infos)
+				foreach (EncodingInfoEx info in staticInfos)
 				{
 					if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
 						return (info.BetterDisplayName);
@@ -604,33 +605,36 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.DisplayName);
 				}
-				throw (new NotImplementedException(UnderlyingEnum.ToString()));
+				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 			}
 		}
 
 		/// <summary>
 		/// Returns encoding object.
 		/// </summary>
-		public virtual Encoding GetEncoding()
+		public virtual Encoding Encoding
 		{
-			// default encoding
-			if (IsDefault)
-				return (Encoding.Default);
-
-			// cached encodings
-			foreach (EncodingInfoEx info in infos)
+			get
 			{
-				if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
-				{
-					if (info.Encoding != null)
-						return (info.Encoding);
-					else
-						break;
-				}
-			}
+				// Default encoding:
+				if (IsDefault)
+					return (Encoding.Default);
 
-			// other encodings
-			return (Encoding.GetEncoding(CodePage));
+				// Cached encodings:
+				foreach (EncodingInfoEx info in staticInfos)
+				{
+					if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
+					{
+						if (info.Encoding != null)
+							return (info.Encoding);
+						else
+							break;
+					}
+				}
+
+				// Other encodings:
+				return (Encoding.GetEncoding(CodePage));
+			}
 		}
 
 		/// <summary>
@@ -900,7 +904,7 @@ namespace MKY.Text
 		/// <summary></summary>
 		public static bool TryParse(string encoding, out EncodingEx result)
 		{
-			foreach (EncodingInfoEx info in infos)
+			foreach (EncodingInfoEx info in staticInfos)
 			{
 				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.BetterDisplayName))
 				{
@@ -947,7 +951,7 @@ namespace MKY.Text
 		/// <summary></summary>
 		public static implicit operator Encoding(EncodingEx encoding)
 		{
-			return (encoding.GetEncoding());
+			return (encoding.Encoding);
 		}
 
 		/// <summary></summary>

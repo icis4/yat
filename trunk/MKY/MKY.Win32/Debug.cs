@@ -86,6 +86,7 @@ namespace MKY.Win32
 		/// Get code that describes the error of an API call.
 		/// </summary>
 		/// <returns>The resulting code.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
 		public static int GetLastErrorCode()
 		{
 			// Get the error code for the last API call.
@@ -96,6 +97,7 @@ namespace MKY.Win32
 		/// Get message that describes the error of an API call.
 		/// </summary>
 		/// <returns>The resulting message.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
 		public static string GetLastErrorMessage()
 		{
 			// Get the error code for the last API call.
@@ -118,6 +120,7 @@ namespace MKY.Win32
 		/// Get string that describes the error of an API call.
 		/// </summary>
 		/// <returns>The resulting string.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming according to naming in the Win32 API.")]
 		public static string GetLastError()
 		{
 			StringBuilder sb = new StringBuilder();

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace MKY.Net
@@ -110,7 +111,7 @@ namespace MKY.Net
 					case IPNetworkInterfaceType.IPv6Loopback: return (IPAddress.IPv6Loopback);
 					case IPNetworkInterfaceType.Other:        return (this.otherAddress);
 				}
-				throw (new NotImplementedException(UnderlyingEnum.ToString()));
+				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 			}
 		}
 
@@ -171,6 +172,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((IPNetworkInterfaceType)UnderlyingEnum)
@@ -198,7 +200,7 @@ namespace MKY.Net
 					}
 				}
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

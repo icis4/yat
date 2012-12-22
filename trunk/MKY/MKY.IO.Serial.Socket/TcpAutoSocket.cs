@@ -167,7 +167,7 @@ namespace MKY.IO.Serial.Socket
 		private SocketState state = SocketState.Reset;
 		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
-		private int startCycleCounter = 0;
+		private int startCycleCounter; // = 0;
 		private object startCycleCounterSyncObj = new object();
 
 		private TcpClient client;
@@ -455,7 +455,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			AssertNotDisposed();
 
-			switch (GetStateSynchronized())
+			SocketState state = GetStateSynchronized();
+			switch (state)
 			{
 				case SocketState.Reset:
 				case SocketState.Error:
@@ -477,7 +478,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			AssertNotDisposed();
 
-			switch (GetStateSynchronized())
+			SocketState state = GetStateSynchronized();
+			switch (state)
 			{
 				case SocketState.Reset:
 				{

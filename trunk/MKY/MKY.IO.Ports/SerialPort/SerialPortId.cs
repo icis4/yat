@@ -78,36 +78,39 @@ namespace MKY.IO.Ports
 		public const string DefaultSeparator = " - ";
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNumberRegex;
+		public static readonly Regex StandardPortNumberRegex = new Regex
+			(
+			@"(?<portNumber>\d+)",
+			RegexOptions.Compiled
+			);
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNameRegex;
+		public static readonly Regex StandardPortNameRegex = new Regex
+			(
+			StandardPortNamePrefix + @"(?<portNumber>\d+)",
+			RegexOptions.IgnoreCase | RegexOptions.Compiled
+			);
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNameWithParenthesesRegex;
+		public static readonly Regex StandardPortNameWithParenthesesRegex = new Regex
+			(
+			@"\(" + StandardPortNamePrefix + @"(?<portNumber>\d+)\)",
+			RegexOptions.IgnoreCase | RegexOptions.Compiled
+			);
 
 		/// <summary></summary>
-		public static readonly Regex StandardPortNameOnlyRegex;
+		public static readonly Regex StandardPortNameOnlyRegex = new Regex
+			(
+			@"^" + StandardPortNamePrefix + @"(?<portNumber>\d+)$",
+			RegexOptions.IgnoreCase | RegexOptions.Compiled
+			);
 
 		/// <summary></summary>
-		public static readonly Regex UserPortNameRegex;
-
-		#endregion
-
-		#region Static Lifetime
-		//==========================================================================================
-		// Static Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		static SerialPortId()
-		{
-			StandardPortNumberRegex              = new Regex(@"(?<portNumber>\d+)",                                                              RegexOptions.Compiled);
-			StandardPortNameRegex                = new Regex(StandardPortNamePrefix + @"(?<portNumber>\d+)",           RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			StandardPortNameWithParenthesesRegex = new Regex(@"\(" + StandardPortNamePrefix + @"(?<portNumber>\d+)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			StandardPortNameOnlyRegex            = new Regex(@"^" + StandardPortNamePrefix + @"(?<portNumber>\d+)$",   RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			UserPortNameRegex                    = new Regex(@"(?<portName>\w+)\x20?",                                                           RegexOptions.Compiled);
-		}
+		public static readonly Regex UserPortNameRegex = new Regex
+			(
+			@"(?<portName>\w+)\x20?",
+			RegexOptions.Compiled
+			);
 
 		#endregion
 
@@ -816,6 +819,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "port", Justification = "Local variable 'port' is required for object instantiation to check for exception.")]
 		public override bool IsValid(ITypeDescriptorContext context, object value)
 		{
 			if (value is int)

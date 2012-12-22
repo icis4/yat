@@ -49,6 +49,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Emphasizes that this is a call to underlying system functions.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static Dictionary<string, string> GetDescriptionsFromSystem()
 		{

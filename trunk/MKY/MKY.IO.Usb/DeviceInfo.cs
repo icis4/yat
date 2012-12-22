@@ -29,12 +29,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 #endregion
+
+// Module-level FxCop suppressions.
+[module: SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Scope = "member", Target = "MKY.IO.Usb.DeviceInfo.#.ctor()", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 
 namespace MKY.IO.Usb
 {
@@ -80,26 +84,11 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public const string DefaultSeparator = " - ";
 
-		/// <summary></summary>
-		public static readonly Regex VendorIdRegex;
+		/// <remarks>"VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"</remarks>
+		public static readonly Regex VendorIdRegex = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-		/// <summary></summary>
-		public static readonly Regex ProductIdRegex;
-
-		#endregion
-
-		#region Static Lifetime
-		//==========================================================================================
-		// Static Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		static DeviceInfo()
-		{
-			// "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
-			VendorIdRegex  = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)",  RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-		}
+		/// <remarks>"VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"</remarks>
+		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		#endregion
 
@@ -571,6 +560,30 @@ namespace MKY.IO.Usb
 		public static bool operator !=(DeviceInfo lhs, DeviceInfo rhs)
 		{
 			return (!(lhs == rhs));
+		}
+
+		/// <summary></summary>
+		public static bool operator <(DeviceInfo lhs, DeviceInfo rhs)
+		{
+			return (Compare(lhs, rhs) < 0);
+		}
+
+		/// <summary></summary>
+		public static bool operator >(DeviceInfo lhs, DeviceInfo rhs)
+		{
+			return (Compare(lhs, rhs) > 0);
+		}
+
+		/// <summary></summary>
+		public static bool operator <=(DeviceInfo lhs, DeviceInfo rhs)
+		{
+			return (Compare(lhs, rhs) <= 0);
+		}
+
+		/// <summary></summary>
+		public static bool operator >=(DeviceInfo lhs, DeviceInfo rhs)
+		{
+			return (Compare(lhs, rhs) >= 0);
 		}
 
 		#endregion

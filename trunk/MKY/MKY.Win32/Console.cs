@@ -64,7 +64,7 @@ namespace MKY.Win32
 			// makes the code less readable.
 			#pragma warning disable 1591
 
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			public enum STD_HANDLE : uint
 			{
 				STD_INPUT_HANDLE  = 0xFFFFFFF6,

@@ -73,7 +73,7 @@ namespace MKY.IO.Ports
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class BaudRateEx : EnumEx
 	{
-		private int userDefinedBaudRate = 0;
+		private int userDefinedBaudRate;
 
 		/// <summary>Default is <see cref="BaudRate.Baud009600"/>.</summary>
 		public BaudRateEx()

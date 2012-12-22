@@ -48,6 +48,7 @@ namespace MKY.Xml.Schema
 		/// </remarks>
 		public static readonly XmlSchema GuidSchema;
 
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Must be readonly because it refers to Environment.NewLine.")]
 		private static readonly string GuidSchemaString =
 			@"<?xml version=""1.0"" encoding=""utf-8""?>"                                    + Environment.NewLine +
 			@"<xs:schema xmlns:xs=""http://www.w3.org/2001/XMLSchema"""                      + Environment.NewLine +

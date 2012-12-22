@@ -28,8 +28,11 @@ namespace MKY.Contracts
 	/// <summary>
 	/// Attribute to indicate the nature of a function call.
 	/// </summary>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Event | AttributeTargets.Delegate)]
-	public class CallingContractAttribute : Attribute
+	public sealed class CallingContractAttribute : Attribute
 	{
 		private bool isMainThread;
 		private bool isSequential;

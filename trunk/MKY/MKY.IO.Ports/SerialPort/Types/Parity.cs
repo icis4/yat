@@ -64,6 +64,7 @@ namespace MKY.IO.Ports
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((Parity)UnderlyingEnum)
@@ -74,7 +75,7 @@ namespace MKY.IO.Ports
 				case Parity.Mark:  return (Mark_string);
 				case Parity.Space: return (Space_string);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		/// <summary></summary>
@@ -88,7 +89,7 @@ namespace MKY.IO.Ports
 				case Parity.Mark: return (Mark_stringShort);
 				case Parity.Space: return (Space_stringShort);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

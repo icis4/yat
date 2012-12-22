@@ -71,6 +71,7 @@ namespace MKY.IO.Ports
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((Handshake)UnderlyingEnum)
@@ -80,7 +81,7 @@ namespace MKY.IO.Ports
 				case Handshake.XOnXOff:              return (XOnXOff_string);
 				case Handshake.RequestToSendXOnXOff: return (RtsCtsXOnXOff_string);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		/// <summary></summary>
@@ -93,7 +94,7 @@ namespace MKY.IO.Ports
 				case Handshake.XOnXOff:              return (XOnXOff_stringShort);
 				case Handshake.RequestToSendXOnXOff: return (RtsCtsXOnXOff_stringShort);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

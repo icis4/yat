@@ -654,44 +654,47 @@ namespace MKY.IO
 
 		#endregion
 
-		#region GetInvalidPathRoot()
+		#region InvalidPathRoot
 
 		/// <summary>
-		/// Returns a unique file name for a file specified by path, unique part is separated by separator string.
+		/// Returns an invalid path root.
 		/// </summary>
-		public static string GetInvalidPathRoot()
+		public static string InvalidPathRoot
 		{
-			if (EnvironmentEx.IsWindows)
+			get
 			{
-				// Explicitly implemented to emphasize logic and order of the operation below.
-				// Do not use A, B and C because they have a dedicated meaning on Windows.
-				// Implemented as const string to improve performance when calling this method.
-				const string RootLetters = @"Z Y X W V U T S R Q P O N M L K J I H G F E D";
-				List<string> existingPathRoots = new List<string>(Directory.GetLogicalDrives());
-				foreach (string rootLetter in RootLetters.Split())
+				if (EnvironmentEx.IsWindows)
 				{
-					string currentPathRoot = rootLetter + Path.VolumeSeparatorChar + Path.DirectorySeparatorChar;
-					if (!existingPathRoots.Contains(currentPathRoot))
-						return (currentPathRoot);
-				}
+					// Explicitly implemented to emphasize logic and order of the operation below.
+					// Do not use A, B and C because they have a dedicated meaning on Windows.
+					// Implemented as const string to improve performance when calling this method.
+					const string RootLetters = @"Z Y X W V U T S R Q P O N M L K J I H G F E D";
+					List<string> existingPathRoots = new List<string>(Directory.GetLogicalDrives());
+					foreach (string rootLetter in RootLetters.Split())
+					{
+						string currentPathRoot = rootLetter + Path.VolumeSeparatorChar + Path.DirectorySeparatorChar;
+						if (!existingPathRoots.Contains(currentPathRoot))
+							return (currentPathRoot);
+					}
 
-				// All local path roots seem valid, create a random remote path root:
-				while (true)
-				{
-					// E.g. \\SomeRandName\
-					string randomPathRoot = Path.DirectorySeparatorChar + Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
-					if (!Directory.Exists(randomPathRoot))
-						return (randomPathRoot);
+					// All local path roots seem valid, create a random remote path root:
+					while (true)
+					{
+						// E.g. \\SomeRandName\
+						string randomPathRoot = Path.DirectorySeparatorChar + Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
+						if (!Directory.Exists(randomPathRoot))
+							return (randomPathRoot);
+					}
 				}
-			}
-			else
-			{
-				while (true)
+				else
 				{
-					// E.g. /SomeRandName/
-					string randomPathRoot = Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
-					if (!Directory.Exists(randomPathRoot))
-						return (randomPathRoot);
+					while (true)
+					{
+						// E.g. /SomeRandName/
+						string randomPathRoot = Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
+						if (!Directory.Exists(randomPathRoot))
+							return (randomPathRoot);
+					}
 				}
 			}
 		}

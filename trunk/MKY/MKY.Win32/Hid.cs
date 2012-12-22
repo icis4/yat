@@ -126,7 +126,8 @@ namespace MKY.Win32
 			/// <summary>
 			/// The HIDP_REPORT_TYPE enumeration type is used to specify a HID report type.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[CLSCompliant(false)]
 			public enum HIDP_STATUS : uint
 			{
@@ -201,7 +202,7 @@ namespace MKY.Win32
 			/// Public via <see cref="FlushQueue"/>.
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to the device.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_FlushQueue([In] SafeFileHandle HidDeviceObject);
@@ -210,7 +211,7 @@ namespace MKY.Win32
 			/// Frees the buffer reserved by HidD_GetPreparsedData.
 			/// </summary>
 			/// <param name="PreparsedData">A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_FreePreparsedData([In] IntPtr PreparsedData);
@@ -227,7 +228,7 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="HidDeviceObject">A handle to an HID.</param>
 			/// <param name="ReportBuffer">A pointer to a buffer containing the report ID and report.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			public static bool HidD_GetFeature(SafeFileHandle HidDeviceObject, byte[] ReportBuffer)
 			{
 				return (HidD_GetFeature(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
@@ -268,7 +269,7 @@ namespace MKY.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to an HID.</param>
 			/// <param name="ReportBuffer">A pointer to a buffer containing the report ID and report.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			public static bool HidD_GetInputReport(SafeFileHandle HidDeviceObject, byte[] ReportBuffer)
 			{
 				return (HidD_GetInputReport(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
@@ -304,7 +305,7 @@ namespace MKY.Win32
 			/// Public via <see cref="GetNumberOfInputBuffers"/>.
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to a device and an integer to hold the number of buffers.</param>
-			/// <param name="NumberBuffers">True on success, false on failure.</param>
+			/// <param name="NumberBuffers"><c>true</c> on success, <c>false</c> on failure.</param>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -325,7 +326,7 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="HidDeviceObject">A handle returned by CreateFile.</param>
 			/// <param name="PreparsedData">A pointer to a buffer.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_GetPreparsedData([In] SafeFileHandle HidDeviceObject, [Out] out IntPtr PreparsedData);
@@ -369,7 +370,7 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="HidDeviceObject">A handle to a HID.</param>
 			/// <param name="ReportBuffer">A pointer to a buffer containing the report ID and report.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			public static bool HidD_SetFeature(SafeFileHandle HidDeviceObject, byte[] ReportBuffer)
 			{
 				return (HidD_SetFeature(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
@@ -387,7 +388,7 @@ namespace MKY.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to an HID.</param>
 			/// <param name="NumberBuffers">An integer to hold the number of buffers.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -402,7 +403,7 @@ namespace MKY.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to an HID.</param>
 			/// <param name="ReportBuffer">A pointer to a buffer containing the report ID and report.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			public static bool HidD_SetOutputReport(SafeFileHandle HidDeviceObject, byte[] ReportBuffer)
 			{
 				return (HidD_SetOutputReport(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
@@ -418,7 +419,7 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="PreparsedData">A pointer returned by HidD_GetPreparsedData.</param>
 			/// <param name="Capabilities">A pointer to a HIDP_CAPS structure.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 HidP_GetCaps([In] IntPtr PreparsedData, [In, Out] ref NativeTypes.HIDP_CAPS Capabilities);
@@ -430,7 +431,7 @@ namespace MKY.Win32
 			/// <param name="ReportType">A report type enumerator from hidpi.h.</param>
 			/// <param name="ValueCaps">A pointer to a buffer for the returned array.</param>
 			/// <param name="PreparsedData"> A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[CLSCompliant(false)]
 			public static NativeTypes.HIDP_STATUS HidP_GetValueCaps(NativeTypes.HIDP_REPORT_TYPE ReportType, ref NativeTypes.HIDP_VALUE_CAPS ValueCaps, IntPtr PreparsedData)
 			{
@@ -482,6 +483,7 @@ namespace MKY.Win32
 		/// <summary>
 		/// Returns the GUID associated with USB HID.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Emphasizes that this is a call to underlying system functions.")]
 		public static Guid GetHidGuid()
 		{
 			Guid hidGuid = new Guid();
@@ -626,7 +628,7 @@ namespace MKY.Win32
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="numberOfInputBuffers">An integer to hold the returned value.</param>
-		/// <returns>True on success, false on failure.</returns>
+		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		public static bool GetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
 		{
 			bool success = false;
@@ -674,7 +676,7 @@ namespace MKY.Win32
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to an HID.</param>
 		/// <param name="reportBuffer">A pointer to a buffer containing the report ID and report.</param>
-		/// <returns>True on success, false on failure.</returns>
+		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		public static bool GetInputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
 			if (!Version.IsWindowsXpOrLater)
@@ -692,7 +694,7 @@ namespace MKY.Win32
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to an HID.</param>
 		/// <param name="reportBuffer">A pointer to a buffer containing the report ID and report.</param>
-		/// <returns>True on success, false on failure.</returns>
+		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		public static bool SetOutputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
 			if (!Version.IsWindowsXpOrLater)
@@ -705,7 +707,7 @@ namespace MKY.Win32
 		/// Remove any input reports waiting in the buffer.
 		/// </summary>
 		/// <param name="deviceHandle">A handle to a device.</param>
-		/// <returns> True on success, false on failure.</returns>
+		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		public static bool FlushQueue(SafeFileHandle deviceHandle)
 		{
 			bool success = NativeMethods.HidD_FlushQueue(deviceHandle);
@@ -716,46 +718,46 @@ namespace MKY.Win32
 		/// Retrieves a structure with information about a device's capabilities. 
 		/// </summary>
 		/// <param name="deviceHandle">A handle to a device.</param>
-		/// <returns>An HIDP_CAPS structure.</returns>
-		public static NativeTypes.HIDP_CAPS GetDeviceCapabilities(SafeFileHandle deviceHandle)
+		/// <param name="capabilities">An HIDP_CAPS structure.</param>
+		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+		public static bool GetDeviceCapabilities(SafeFileHandle deviceHandle, ref NativeTypes.HIDP_CAPS capabilities)
 		{
-			NativeTypes.HIDP_CAPS capabilities = new NativeTypes.HIDP_CAPS();
 			IntPtr pPreparsedData = new IntPtr();
-			bool success = false;
 
-			success = NativeMethods.HidD_GetPreparsedData(deviceHandle, out pPreparsedData);
-			Int32 result = NativeMethods.HidP_GetCaps(pPreparsedData, ref capabilities);
-			if ((result != 0))
-			{
-				System.Diagnostics.Debug.WriteLine("USB device capabilities:");
-				System.Diagnostics.Debug.Indent();
-				System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage    .ToString("X2", NumberFormatInfo.InvariantInfo));
-				System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2", NumberFormatInfo.InvariantInfo));
-				System.Diagnostics.Debug.WriteLine("Input Report byte Length:        " + capabilities.InputReportByteLength);
-				System.Diagnostics.Debug.WriteLine("Output Report byte Length:       " + capabilities.OutputReportByteLength);
-				System.Diagnostics.Debug.WriteLine("Feature Report byte Length:      " + capabilities.FeatureReportByteLength);
-				System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
-				System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
-				System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
-				System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
-				System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
-				System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
-				System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
-				System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
-				System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
-				System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
-				System.Diagnostics.Debug.Unindent();
+			if (!NativeMethods.HidD_GetPreparsedData(deviceHandle, out pPreparsedData))
+				return (false);
 
-				// \remind (2010-03-21 / mky):
-				// The following two lines demonstrate how the devices value capabilities can be retrieved.
-				// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
-				// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
-				//
-				//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
-				//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
-			}
+			if ((NativeMethods.HidP_GetCaps(pPreparsedData, ref capabilities) == 0))
+				return (false);
 
-			return (capabilities);
+			System.Diagnostics.Debug.WriteLine("USB device capabilities:");
+			System.Diagnostics.Debug.Indent();
+			System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage    .ToString("X2", NumberFormatInfo.InvariantInfo));
+			System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2", NumberFormatInfo.InvariantInfo));
+			System.Diagnostics.Debug.WriteLine("Input Report byte Length:        " + capabilities.InputReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Output Report byte Length:       " + capabilities.OutputReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Feature Report byte Length:      " + capabilities.FeatureReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
+			System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
+			System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
+			System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
+			System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
+			System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
+			System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
+			System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
+			System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
+			System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
+			System.Diagnostics.Debug.Unindent();
+
+			// \remind (2010-03-21 / mky):
+			// The following two lines demonstrate how the devices value capabilities can be retrieved.
+			// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
+			// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
+			//
+			//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
+			//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
+
+			return (true);
 		}
 
 		#endregion

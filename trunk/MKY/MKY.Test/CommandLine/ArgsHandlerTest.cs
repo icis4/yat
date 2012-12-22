@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 
@@ -818,6 +819,7 @@ namespace MKY.Test.CommandLine
 
 		private Type TestRuntimeValidation_type;
 
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "obj", Justification = "Local variable 'obj' is required for object instantiation to check for exception.")]
 		private void TestRuntimeValidation_GetConstructorAndCreateObject()
 		{
 			try

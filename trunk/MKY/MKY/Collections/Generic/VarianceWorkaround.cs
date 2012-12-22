@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.Collections.Generic
@@ -49,16 +50,20 @@ namespace MKY.Collections.Generic
 			where S : D
 		{
 			foreach (S sourceElement in source)
-			{
 				destination.Add(sourceElement);
-			}
 		}
+
+		#region IEnumerable
+		//==========================================================================================
+		// IEnumerable
+		//==========================================================================================
 
 		/// <summary>
 		/// Variance for enummerator, variance in one direction only so type expressinos are natural.
 		/// </summary>
 		/// <typeparam name="S">IEnumerable source.</typeparam>
 		/// <typeparam name="D">IEnumerable destination.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Well, this is the nature of this variance method...")]
 		public static IEnumerable<D> Convert<S, D>(IEnumerable<S> source)
 			where S : D
 		{
@@ -109,7 +114,19 @@ namespace MKY.Collections.Generic
 
 				public void Dispose()
 				{
-					this.source.Dispose();
+					Dispose(true);
+					GC.SuppressFinalize(this);
+				}
+
+				protected virtual void Dispose(bool disposing)
+				{
+					if (disposing)
+						this.source.Dispose();
+				}
+
+				~EnumeratorWrapper()
+				{
+					Dispose(false);
 				}
 
 				object System.Collections.IEnumerator.Current
@@ -129,11 +146,19 @@ namespace MKY.Collections.Generic
 			}
 		}
 
+		#endregion
+
+		#region ICollection
+		//==========================================================================================
+		// ICollection
+		//==========================================================================================
+
 		/// <summary>
 		/// Variance for collection, variance in both directions, causes issues similar to existing array variance.
 		/// </summary>
 		/// <typeparam name="S">ICollection source.</typeparam>
 		/// <typeparam name="D">ICollection destination.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Well, this is the nature of this variance method...")]
 		public static ICollection<D> Convert<S, D>(ICollection<S> source)
 			where S : D
 		{
@@ -166,7 +191,7 @@ namespace MKY.Collections.Generic
 				if (item is S)
 					this.source.Add((S)item);
 				else
-					throw (new Exception("Type mismatch due to type hole introduced by variance!"));
+					throw (new ArgumentException("The given item of type " + item.GetType() + " is not variance compatible with type " + typeof(S), "item"));
 			}
 
 			/// <summary></summary>
@@ -182,13 +207,9 @@ namespace MKY.Collections.Generic
 			public virtual bool Contains(D item)
 			{
 				if (item is S)
-				{
 					return (this.source.Contains((S)item));
-				}
 				else
-				{
 					return (false);
-				}
 			}
 
 			/// <summary>
@@ -197,9 +218,7 @@ namespace MKY.Collections.Generic
 			public virtual void CopyTo(D[] array, int arrayIndex)
 			{
 				foreach (S src in this.source)
-				{
 					array[arrayIndex++] = src;
-				}
 			}
 
 			/// <summary></summary>
@@ -221,21 +240,25 @@ namespace MKY.Collections.Generic
 			public virtual bool Remove(D item)
 			{
 				if (item is S)
-				{
 					return (this.source.Remove((S)item));
-				}
 				else
-				{
 					return (false);
-				}
 			}
 		}
+
+		#endregion
+
+		#region IList
+		//==========================================================================================
+		// IList
+		//==========================================================================================
 
 		/// <summary>
 		/// Variance for collection, variance in both directions, causes issues similar to existing array variance.
 		/// </summary>
 		/// <typeparam name="S">IList source.</typeparam>
 		/// <typeparam name="D">IList destination.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Well, this is the nature of this variance method...")]
 		public static IList<D> Convert<S, D>(IList<S> source)
 			where S : D
 		{
@@ -263,13 +286,9 @@ namespace MKY.Collections.Generic
 			public virtual int IndexOf(D item)
 			{
 				if (item is S)
-				{
 					return (this.source.IndexOf((S)item));
-				}
 				else
-				{
 					return (InvalidIndex);
-				}
 			}
 
 			/// <summary>
@@ -279,13 +298,9 @@ namespace MKY.Collections.Generic
 			public virtual void Insert(int index, D item)
 			{
 				if (item is S)
-				{
 					this.source.Insert(index, (S)item);
-				}
 				else
-				{
-					throw (new Exception("Invalid type!"));
-				}
+					throw (new ArgumentException("The given item of type " + item.GetType() + " is not variance compatible with type " + typeof(S), "item"));
 			}
 
 			/// <summary></summary>
@@ -306,10 +321,12 @@ namespace MKY.Collections.Generic
 					if (value is S)
 						this.source[index] = (S)value;
 					else
-						throw (new Exception("Invalid type!"));
+						throw (new ArgumentException("The given value of type " + value.GetType() + " is not variance compatible with type " + typeof(S), "value"));
 				}
 			}
 		}
+
+		#endregion
 	}
 }
 

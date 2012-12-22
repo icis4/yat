@@ -71,7 +71,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Descriptor types.
 	/// </summary>
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by USB.")]
 	public enum DescriptorType
 	{
 		Device    = 0x01,
@@ -88,7 +88,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Descriptor sizes per descriptor type.
 	/// </summary>
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by USB.")]
 	public enum DescriptorTypeSize
 	{
 		Device        = 18,
@@ -110,13 +110,15 @@ namespace MKY.IO.Usb
 		SerialNumber = 3,
 	}
 
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by USB.")]
+	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by USB.")]
+	[Flags]
 	public enum EndpointDirection
 	{
 		In  = 0x80,
 		Out = 0x00,
 	}
 
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
 	public enum TransferType
 	{
 		Control     = 0,
@@ -125,11 +127,16 @@ namespace MKY.IO.Usb
 		Interrupt   = 3,
 	}
 
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by USB.")]
+	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by USB.")]
+	[Flags]
 	public enum RequestType
 	{
 		Standard = (0x00 << 5),
 		Class    = (0x01 << 5),
 		Vendor   = (0x02 << 5),
+
+		[SuppressMessage("Microsoft.Naming", "CA1700:DoNotNameEnumValuesReserved", Justification = "Item name is given by USB.")]
 		Reserved = (0x03 << 5),
 	}
 
@@ -173,7 +180,9 @@ namespace MKY.IO.Usb
 		Implicit = 2,
 	}
 
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by USB.")]
+	[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Type name is given by USB.")]
+	[Flags]
 	public enum TransferFlags
 	{
 		ShortNotOk   = 1 << 0,

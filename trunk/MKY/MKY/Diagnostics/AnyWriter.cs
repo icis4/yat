@@ -21,10 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
+
+#endregion
 
 namespace MKY.Diagnostics
 {
@@ -92,6 +100,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m)
 		{
 			WriteWindowsFormsMessage(writer, type, m, "");
@@ -100,6 +109,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string additionalMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
