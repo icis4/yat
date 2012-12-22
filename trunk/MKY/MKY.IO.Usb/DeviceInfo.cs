@@ -84,10 +84,10 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public const string DefaultSeparator = " - ";
 
-		/// <remarks>"VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"</remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"]]></remarks>
 		public static readonly Regex VendorIdRegex = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-		/// <remarks>"VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"</remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"]]></remarks>
 		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		#endregion

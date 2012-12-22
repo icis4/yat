@@ -112,14 +112,14 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public void CreateDataFromReport(byte[] report)
 		{
-			// Ensure that report length matches
+			// Ensure that report length matches:
 			if (report.Length < Device.InputReportLength)
-				throw (new ArgumentException("Length of input report doesn't match the device's capabilities", "report"));
+				throw (new ArgumentException("Length of input report exceeds the device's capabilities", "report"));
 
-			// Get report ID which is located in the first byte
+			// Get report ID which is located in the first byte:
 			SetReportId(report[0]);
 
-			// Get report data without the report ID
+			// Get report data without the report ID:
 			List<byte> data = new List<byte>();
 			for (int i = 1; i < report.Length; i++)
 			{
@@ -162,26 +162,54 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public void CreateReportsFromData(byte reportId, byte[] data)
 		{
-			List<byte[]> reports = new List<byte[]>();
 			int usableLength = ReportLength - 1; // 1 byte is used by the report ID.
-			
-			int offset = 0;
-			while (offset < (data.Length))
+
+			List<byte[]> reports = new List<byte[]>();
+			bool reportIsFull = false;
+
+			int accumulatedLength = 0;
+			while (accumulatedLength < (data.Length))
 			{
-				// Create the report.
+				// Evaluate the required report length:
+				int remainingLength = data.Length - accumulatedLength;
+				int dataLength = ((remainingLength <= usableLength) ? remainingLength : usableLength);
+				reportIsFull = (dataLength == usableLength);
+
+				// Create the report, 1 byte is used by the report ID, an additional byte may be needed
+				// for the terminating zero:
+				int effectiveLength = (reportIsFull ? (dataLength + 1) : (dataLength + 1 + 1));
+
+				// Always create a full report, some devices do not work otherwise:
 				byte[] report = new byte[ReportLength];
 
-				// Set the report ID.
+				// Copy the report ID into the beginning of the report:
 				report[0] = reportId;
 
-				// Copy as much as possible into remaining usable bytes of the report.
-				int lengthToCopy = (data.Length - offset) % usableLength;
-				Array.Copy(data, offset, report, 1, lengthToCopy);
+				// Copy the data into the remaining space of the report:
+				Array.Copy(data, accumulatedLength, report, 1, dataLength);
+
+				// Add the terminating zero:
+				if (!reportIsFull)
+					report[effectiveLength - 1] = 0;
+
+				// Add the report to the list:
 				reports.Add(report);
 
-				offset += usableLength;
+				// Forward to next report:
+				accumulatedLength += dataLength;
 			}
 
+			// According to the USB specifications, HID must add a terminating report in case the
+			// last report was full:
+			if ((reports.Count > 0) && reportIsFull)
+			{
+				byte[] emptyReport = new byte[2];
+				emptyReport[0] = reportId;
+				emptyReport[1] = 0;
+				reports.Add(emptyReport);
+			}
+
+			// Return the reports, or <c>null</c> if there are no reports at all:
 			this.reports = reports.ToArray();
 		}
 	}
