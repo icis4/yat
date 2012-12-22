@@ -502,10 +502,16 @@ namespace MKY
 		{
 			if (trimChars != null)
 			{
+				// Count the number of trim characters at both ends:
 				int countLeft = CountLeft(str, trimChars);
 				int countRight = CountRight(str, trimChars);
-				int trimMaxLength = Math.Min(countLeft, countRight);
 
+				// Limit the number of trim characters at both ends:
+				countLeft = Math.Min(countLeft, maxLength);
+				countRight = Math.Min(countRight, maxLength);
+
+				// Evaluate the symmetrical portion and trim it:
+				int trimMaxLength = Math.Min(countLeft, countRight);
 				return (TrimMaxLength(str, trimMaxLength, trimChars));
 			}
 			else

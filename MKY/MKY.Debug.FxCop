@@ -22,9 +22,17 @@
   <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
+  <AssemblyReferenceDirectories>
+   <Directory>$(ProjectDir)/MKY.IO/bin/Debug/</Directory>
+  </AssemblyReferenceDirectories>
   <Target Name="$(ProjectDir)/MKY.IO.Ports.Test/bin/Debug/MKY.IO.Ports.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Ports/bin/Debug/MKY.IO.Ports.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.IO.Serial.Test/bin/Debug/MKY.IO.Serial.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.SerialPort.Test/bin/Debug/MKY.IO.Serial.SerialPort.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.SerialPort/bin/Debug/MKY.IO.Serial.SerialPort.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.Socket.Test/bin/Debug/MKY.IO.Serial.Socket.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.Socket/bin/Debug/MKY.IO.Serial.Socket.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb.Test/bin/Debug/MKY.IO.Serial.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb/bin/Debug/MKY.IO.Serial.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial/bin/Debug/MKY.IO.Serial.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb.Demo/bin/Debug/MKY.IO.Usb.Demo.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb.Test/bin/Debug/MKY.IO.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />

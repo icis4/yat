@@ -28,11 +28,11 @@ namespace MKY.CommandLine
 	/// Attribute to mark a value argument.
 	/// </summary>
 	/// <remarks>
-	/// This class is based on the NUnit command line infrastructure.
-	/// See <see cref="ArgsHandler"/> for details.
+	/// This class is based on the NUnit command line infrastructure. See <see cref="ArgsHandler"/> for details.
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Field)]
-	public class ValueArgAttribute : Attribute
+	public sealed class ValueArgAttribute : Attribute
 	{
 		private string description;
 

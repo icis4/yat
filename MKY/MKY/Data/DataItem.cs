@@ -40,8 +40,8 @@ namespace MKY.Data
 	public abstract class DataItem : IEquatable<DataItem>
 	{
 		private List<DataItem> nodes;
-		private bool haveChanged = false;
-		private int changeEventSuspendedCount = 0;
+		private bool haveChanged; // = false;
+		private int changeEventSuspendedCount; // = 0;
 
 		/// <summary></summary>
 		public event EventHandler<DataEventArgs> Changed;

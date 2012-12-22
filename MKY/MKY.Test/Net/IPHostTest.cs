@@ -45,15 +45,15 @@ namespace MKY.Test.Net
 		// Constants
 		//==========================================================================================
 
-		private static readonly string LocalhostString = "localhost";
-		private static readonly string IPv4LocalhostString = "IPv4 localhost";
-		private static readonly string IPv6LocalhostString = "IPv6 localhost";
+		private const string LocalhostString = "localhost";
+		private const string IPv4LocalhostString = "IPv4 localhost";
+		private const string IPv6LocalhostString = "IPv6 localhost";
 
 		private static readonly IPAddress SomeIPv4Address = new IPAddress(new byte[] { 1, 2, 3, 4 });
-		private static readonly string SomeIPv4AddressString = "1.2.3.4";
+		private const string SomeIPv4AddressString = "1.2.3.4";
 
 		private static readonly IPAddress SomeIPv6Address = new IPAddress(new byte[] { 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8 });
-		private static readonly string SomeIPv6AddressString = "1:2:3:4:5:6:7:8";
+		private const string SomeIPv6AddressString = "1:2:3:4:5:6:7:8";
 
 		#endregion
 

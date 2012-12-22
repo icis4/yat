@@ -61,8 +61,8 @@ namespace MKY.Win32
 			// makes the code less readable.
 			#pragma warning disable 1591
 
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum Options : uint
@@ -93,7 +93,7 @@ namespace MKY.Win32
 			/// Closes an open object handle.
 			/// </summary>
 			/// <param name="hObject">A valid handle to an open object.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool CloseHandle([In] SafeFileHandle hObject);

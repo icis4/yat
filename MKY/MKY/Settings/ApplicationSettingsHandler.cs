@@ -69,6 +69,7 @@ namespace MKY.Settings
 	/// <remarks>
 	/// Pass <see cref="EmptySettingsItem"/> for those settings that shall not be used.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes", Justification = "Three type parameters are given by the nature of application settings.")]
 	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : IDisposable
 		where TCommonSettings : SettingsItem, new()
 		where TLocalUserSettings : SettingsItem, new()
@@ -273,6 +274,7 @@ namespace MKY.Settings
 			/// Returns <c>true</c> if settings could be loaded from the given file path,
 			/// return <c>false</c> if they could not be loaded and were set to defaults instead.
 			/// </returns>
+			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 			public virtual bool Load()
 			{
 				AssertNotDisposed();

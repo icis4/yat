@@ -79,6 +79,7 @@ namespace YAT.Domain
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((CharSubstitution)UnderlyingEnum)
@@ -87,7 +88,7 @@ namespace YAT.Domain
 				case CharSubstitution.ToUpper: return (ToUpper_string);
 				case CharSubstitution.ToLower: return (ToLower_string);
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

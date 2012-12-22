@@ -59,6 +59,7 @@ namespace MKY.IO.Ports
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((StopBits)UnderlyingEnum)
@@ -68,7 +69,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(NumberFormatInfo.InvariantInfo));
 				case StopBits.Two:          return (Two_double         .ToString(NumberFormatInfo.InvariantInfo));
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion
@@ -150,6 +151,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The value is intended to be limited ")]
 		public static implicit operator double(StopBitsEx bits)
 		{
 			switch ((StopBits)bits.UnderlyingEnum)
@@ -159,7 +161,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 			}
-			throw (new ArgumentOutOfRangeException("bits", bits, "Invalid bits value"));
+			throw (new InvalidOperationException("Code execution should never get here, please report this bug"));
 		}
 
 		/// <summary></summary>

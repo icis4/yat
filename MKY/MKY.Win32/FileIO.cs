@@ -65,8 +65,8 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 GENERIC_ file access flags into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum Access : uint
@@ -84,8 +84,9 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_SHARE_ file share mode flags into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum ShareMode : uint
@@ -102,7 +103,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Replicates Win32 creation disposition selectors into a C# enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
 			public enum CreationDisposition
 			{
 				CREATE_NEW        = System.IO.FileMode.CreateNew,
@@ -116,7 +117,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_ATTRIBUTE_ and FILE_FLAG_ values into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum AttributesAndFlags : uint
@@ -199,7 +200,7 @@ namespace MKY.Win32
 			/// Cancels a call to ReadFile.
 			/// </summary>
 			/// <param name="hFile">The device handle.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool CancelIo([In] SafeFileHandle hFile);
@@ -294,7 +295,7 @@ namespace MKY.Win32
 			/// <param name="lpBuffer">A pointer to a buffer containing the report.</param>
 			/// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
-			/// <returns>True on success, false on failure.</returns>
+			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			public static bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, out int lpNumberOfBytesWritten, ref NativeOverlapped lpOverlapped)
 			{
 				UInt32 bytesWritten;

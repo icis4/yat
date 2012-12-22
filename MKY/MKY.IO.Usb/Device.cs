@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -135,6 +136,8 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns VID and PID of a given path.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static bool GetVidAndPidFromPath(string path, out int vendorId, out int productId)
 		{
 			SafeFileHandle deviceHandle;
@@ -261,6 +264,8 @@ namespace MKY.IO.Usb
 		/// If multiple devices with the same VID and PID are connected to the sytem, the first device is returned.
 		/// </remarks>
 		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static DeviceInfo GetDeviceInfoFromVidAndPid(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serialNumber;
@@ -283,6 +288,8 @@ namespace MKY.IO.Usb
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
 		/// <param name="serialNumber">Retrieved serial number, or "" if no valable device found.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serialNumber)
 		{
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
@@ -311,6 +318,8 @@ namespace MKY.IO.Usb
 		/// or <c>null</c> if no device could be found on the give path.
 		/// </summary>
 		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber)
 		{
 			string path, manufacturer, product;
@@ -330,6 +339,8 @@ namespace MKY.IO.Usb
 		/// <param name="path">Retrieved system path, or "" if no valable device found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber, out string path, out string manufacturer, out string product)
 		{
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
@@ -359,7 +370,7 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static int    staticDeviceNotificationCounter = 0;
+		private static int    staticDeviceNotificationCounter; // = 0;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
 
@@ -488,6 +499,7 @@ namespace MKY.IO.Usb
 
 		private bool isDisposed;
 
+		private Guid classGuid;
 		private DeviceInfo deviceInfo;
 
 		private bool isConnected;
@@ -524,9 +536,12 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected Device(Guid classGuid, string path)
 		{
+			this.classGuid = classGuid;
+
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
 			GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serialNumber);
+
 			this.deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber);
 			Initialize();
 		}
@@ -534,6 +549,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected Device(Guid classGuid, int vendorId, int productId)
 		{
+			this.classGuid = classGuid;
 			this.deviceInfo = new DeviceInfo(vendorId, productId);
 			Initialize();
 		}
@@ -541,6 +557,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected Device(Guid classGuid, int vendorId, int productId, string serialNumber)
 		{
+			this.classGuid = classGuid;
 			this.deviceInfo = new DeviceInfo(vendorId, productId, serialNumber);
 			Initialize();
 		}
@@ -548,6 +565,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
+			this.classGuid = classGuid;
 			this.deviceInfo = new DeviceInfo(deviceInfo);
 			Initialize();
 		}

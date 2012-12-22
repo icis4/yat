@@ -37,7 +37,7 @@ namespace MKY.Diagnostics
 		// Writer
 		//==========================================================================================
 
-		private TextWriter writer = null;
+		private TextWriter writer;
 
 		/// <summary>
 		/// Sets a writer to write to. Set <param name="writer"></param> to <c>null</c> after writing.
@@ -54,7 +54,7 @@ namespace MKY.Diagnostics
 		// Indent
 		//==========================================================================================
 
-		private int indentLevel = 0;
+		private int indentLevel; // = 0;
 		private int indentSize = 4;
 		private string indentString = "    ";
 

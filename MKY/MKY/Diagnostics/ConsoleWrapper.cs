@@ -38,7 +38,7 @@ namespace MKY.Diagnostics
 		// Indent
 		//==========================================================================================
 
-		private int indentLevel = 0;
+		private int indentLevel; // = 0;
 		private int indentSize = 4;
 		private string indentString = "    ";
 

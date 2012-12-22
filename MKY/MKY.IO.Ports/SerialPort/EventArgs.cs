@@ -74,12 +74,15 @@ namespace MKY.IO.Ports
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances", Justification = "Type is given by System.IO.Ports.SerialPort which unfortunately doesn't use proper event types.")]
 	public delegate void SerialDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e);
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances", Justification = "Type is given by System.IO.Ports.SerialPort which unfortunately doesn't use proper event types.")]
 	public delegate void SerialErrorReceivedEventHandler(object sender, SerialErrorReceivedEventArgs e);
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances", Justification = "Type is given by System.IO.Ports.SerialPort which unfortunately doesn't use proper event types.")]
 	public delegate void SerialPinChangedEventHandler(object sender, SerialPinChangedEventArgs e);
 }
 

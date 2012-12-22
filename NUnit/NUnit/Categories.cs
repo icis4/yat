@@ -48,9 +48,10 @@ namespace NUnit
 	}
 
 	/// <summary></summary>
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class InteractiveCategoryAttribute : CategoryAttribute
+	public sealed class InteractiveCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public InteractiveCategoryAttribute()
@@ -60,9 +61,10 @@ namespace NUnit
 	}
 
 	/// <summary></summary>
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class EnduranceCategoryAttribute : CategoryAttribute
+	public sealed class EnduranceCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public EnduranceCategoryAttribute()
@@ -72,9 +74,10 @@ namespace NUnit
 	}
 
 	/// <summary></summary>
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class StressCategoryAttribute : CategoryAttribute
+	public sealed class StressCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public StressCategoryAttribute()

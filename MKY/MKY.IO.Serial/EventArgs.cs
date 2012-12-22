@@ -45,7 +45,7 @@ namespace MKY.IO.Serial
 		private DateTime timeStamp;
 
 		/// <summary></summary>
-		public DataEventArgs(byte[] data)
+		protected DataEventArgs(byte[] data)
 		{
 			this.data = data;
 			this.timeStamp = DateTime.Now;

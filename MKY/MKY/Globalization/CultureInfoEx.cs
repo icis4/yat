@@ -36,10 +36,10 @@ namespace MKY.Globalization
 		/// <summary>
 		/// Returns the most appropriate culture info from a collection of culture infos.
 		/// </summary>
-		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> cultureInfos)
+		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> items)
 		{
 			CultureInfo ci;
-			List<CultureInfo> l = new List<CultureInfo>(cultureInfos);
+			List<CultureInfo> l = new List<CultureInfo>(items);
 
 			// Verify that list contains items
 			if (l.Count <= 0)

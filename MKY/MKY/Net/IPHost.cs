@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace MKY.Net
@@ -99,7 +100,7 @@ namespace MKY.Net
 					case IPHostType.IPv6Localhost: return (IPAddress.IPv6Loopback);
 					case IPHostType.Other:         return (this.otherAddress);
 				}
-				throw (new NotImplementedException(UnderlyingEnum.ToString()));
+				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 			}
 		}
 
@@ -108,6 +109,7 @@ namespace MKY.Net
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((IPHostType)UnderlyingEnum)
@@ -117,7 +119,7 @@ namespace MKY.Net
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (this.otherAddress.ToString());
 			}
-			throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

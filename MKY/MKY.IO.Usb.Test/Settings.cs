@@ -209,9 +209,10 @@ namespace MKY.IO.Usb.Test
 	}
 
 	/// <summary></summary>
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "DeviceA and DeviceB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class SerialHidDeviceAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class SerialHidDeviceAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialHidDeviceAIsAvailableCategoryAttribute()
@@ -221,9 +222,10 @@ namespace MKY.IO.Usb.Test
 	}
 
 	/// <summary></summary>
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "DeviceA and DeviceB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class SerialHidDeviceBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class SerialHidDeviceBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialHidDeviceBIsAvailableCategoryAttribute()

@@ -28,6 +28,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
@@ -136,7 +137,7 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static int    staticDeviceNotificationCounter = 0;
+		private static int    staticDeviceNotificationCounter; // = 0;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
 
@@ -322,30 +323,31 @@ namespace MKY.IO.Usb
 		private void GetDeviceCapabilities()
 		{
 			SafeFileHandle deviceHandle;
-			if (!string.IsNullOrEmpty(Path) &&
-				Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
+			if (!string.IsNullOrEmpty(Path) && Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
 			{
 				try
 				{
-					Win32.Hid.NativeTypes.HIDP_CAPS caps = Win32.Hid.GetDeviceCapabilities(deviceHandle);
+					Win32.Hid.NativeTypes.HIDP_CAPS capabilities = new Win32.Hid.NativeTypes.HIDP_CAPS();
+					if (Win32.Hid.GetDeviceCapabilities(deviceHandle, ref capabilities))
+					{
+						this.usagePage = (HidUsagePageEx)capabilities.UsagePage;
+						this.usage     = (HidUsageEx)capabilities.Usage;
 
-					this.usagePage = (HidUsagePageEx)caps.UsagePage;
-					this.usage     = (HidUsageEx)caps.Usage;
+						this.inputReportLength   = capabilities.InputReportByteLength;
+						this.outputReportLength  = capabilities.OutputReportByteLength;
+						this.featureReportLength = capabilities.FeatureReportByteLength;
 
-					this.inputReportLength   = caps.InputReportByteLength;
-					this.outputReportLength  = caps.OutputReportByteLength;
-					this.featureReportLength = caps.FeatureReportByteLength;
-
-					this.linkCollectionNodes = caps.NumberLinkCollectionNodes;
-					this.inputButtonCaps     = caps.NumberInputButtonCaps;
-					this.inputValueCaps      = caps.NumberInputValueCaps;
-					this.inputDataIndices    = caps.NumberInputDataIndices;
-					this.outputButtonCaps    = caps.NumberOutputButtonCaps;
-					this.outputValueCaps     = caps.NumberOutputValueCaps;
-					this.outputDataIndices   = caps.NumberOutputDataIndices;
-					this.featureButtonCaps   = caps.NumberFeatureButtonCaps;
-					this.featureValueCaps    = caps.NumberFeatureValueCaps;
-					this.featureDataIndices  = caps.NumberFeatureDataIndices;
+						this.linkCollectionNodes = capabilities.NumberLinkCollectionNodes;
+						this.inputButtonCaps     = capabilities.NumberInputButtonCaps;
+						this.inputValueCaps      = capabilities.NumberInputValueCaps;
+						this.inputDataIndices    = capabilities.NumberInputDataIndices;
+						this.outputButtonCaps    = capabilities.NumberOutputButtonCaps;
+						this.outputValueCaps     = capabilities.NumberOutputValueCaps;
+						this.outputDataIndices   = capabilities.NumberOutputDataIndices;
+						this.featureButtonCaps   = capabilities.NumberFeatureButtonCaps;
+						this.featureValueCaps    = capabilities.NumberFeatureValueCaps;
+						this.featureDataIndices  = capabilities.NumberFeatureDataIndices;
+					}
 				}
 				finally
 				{
@@ -444,6 +446,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 		public virtual int InputDataIndices
 		{
 			get { return (this.inputDataIndices); }
@@ -462,6 +465,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 		public virtual int OutputDataIndices
 		{
 			get { return (this.outputDataIndices); }
@@ -480,6 +484,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 		public virtual int FeatureDataIndices
 		{
 			get { return (this.featureDataIndices); }

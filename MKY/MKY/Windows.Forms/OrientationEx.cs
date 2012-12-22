@@ -56,14 +56,15 @@ namespace MKY.Windows.Forms
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((Orientation)UnderlyingEnum)
 			{
 				case Orientation.Horizontal: return (Horizontal_string);
 				case Orientation.Vertical:   return (Vertical_string);
-				default: throw (new NotImplementedException(UnderlyingEnum.ToString()));
 			}
+			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
 
 		#endregion

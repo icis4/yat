@@ -50,8 +50,11 @@ namespace MKY.Windows.Forms
 	/// method is always or sometimes shown modal. The attribute can then be used to find all modal
 	/// and potentially modal locations within a the application.
 	/// </summary>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Method)]
-	public class ModalBehaviorAttribute : Attribute
+	public sealed class ModalBehaviorAttribute : Attribute
 	{
 		private ModalBehavior behavior;
 		private string approval;
@@ -66,7 +69,6 @@ namespace MKY.Windows.Forms
 		public ModalBehavior Behavior
 		{
 			get { return (this.behavior); }
-			set { this.behavior = value;  }
 		}
 
 		/// <summary></summary>

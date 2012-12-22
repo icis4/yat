@@ -128,7 +128,7 @@ namespace MKY.Windows.Forms
 		[ModalBehavior(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
 		{
-			return (Show(owner, status1, caption, status2, "", ref setting, true));
+			return (Show(owner, status1, caption, status2, settingText, ref setting, true));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]

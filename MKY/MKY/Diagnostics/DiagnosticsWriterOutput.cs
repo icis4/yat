@@ -28,6 +28,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
@@ -122,6 +123,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Type type, Message m, string additionalMessage)
 		{
 			if (type != null)

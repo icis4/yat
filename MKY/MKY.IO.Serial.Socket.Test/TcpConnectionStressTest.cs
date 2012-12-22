@@ -64,7 +64,7 @@ namespace MKY.IO.Serial.Socket.Test
 			StressAutoSocketServersWithAutoSocketClients(100, 1000);
 		}
 
-		private void StressAutoSocketServersWithAutoSocketClients(int numberOfServers, int numberOfClients)
+		private static void StressAutoSocketServersWithAutoSocketClients(int numberOfServers, int numberOfClients)
 		{
 			List<int> serverPorts = new List<int>();
 			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>();

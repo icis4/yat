@@ -40,7 +40,7 @@ namespace MKY.IO.Ports
 			public readonly SerialPortId Port;
 
 			/// <summary></summary>
-			private bool cancel = false;
+			private bool cancel;
 
 			/// <summary></summary>
 			public PortChangedAndCancelEventArgs(SerialPortId port)

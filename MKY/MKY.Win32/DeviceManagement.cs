@@ -76,6 +76,8 @@ namespace MKY.Win32
 			#pragma warning disable 1591
 
 			/// <remarks>dbt.h</remarks>
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum DIGCF : uint
@@ -91,7 +93,8 @@ namespace MKY.Win32
 			}
 
 			/// <remarks>dbt.h</remarks>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[CLSCompliant(false)]
 			public enum DBT : uint
 			{
@@ -100,7 +103,8 @@ namespace MKY.Win32
 			}
 
 			/// <remarks>dbt.h</remarks>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[CLSCompliant(false)]
 			public enum DBT_DEVTYP : uint
 			{
@@ -108,7 +112,9 @@ namespace MKY.Win32
 				HANDLE          = 0x00000006,
 			}
 
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum DEVICE_NOTIFY : uint
@@ -161,7 +167,7 @@ namespace MKY.Win32
 				public Guid InterfaceClassGuid;
 				public UInt32 Flags;
 
-				[SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible", Justification = "Structure given by Win32.")]
+				[SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible", Justification = "Structure is given by the Win32 API.")]
 				public IntPtr Reserved;
 			}
 
@@ -322,6 +328,7 @@ namespace MKY.Win32
 		/// </summary>
 		/// <param name="classGuid">An interface class GUID.</param>
 		/// <returns>An array containing the path names of the devices currently available on the system.</returns>
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "MKY.Win32.DeviceManagement+NativeMethods.SetupDiDestroyDeviceInfoList(System.IntPtr)", Justification = "Don't care about the result.")]
 		public static string[] GetDevicesFromGuid(Guid classGuid)
 		{
 			int bufferSize = 0;

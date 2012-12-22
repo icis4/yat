@@ -29,11 +29,11 @@ namespace MKY.CommandLine
 	/// Attribute to mark an option argument.
 	/// </summary>
 	/// <remarks>
-	/// This class is based on the NUnit command line infrastructure.
-	/// See <see cref="ArgsHandler"/> for details.
+	/// This class is based on the NUnit command line infrastructure. See <see cref="ArgsHandler"/> for details.
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Field)]
-	public class OptionArgAttribute : Attribute
+	public sealed class OptionArgAttribute : Attribute
 	{
 		private string[] names;
 		private string[] shortNames;

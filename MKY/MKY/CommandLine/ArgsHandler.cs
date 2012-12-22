@@ -89,7 +89,8 @@ namespace MKY.CommandLine
 
 	#if (DEBUG)
 		/// <summary></summary>
-		public class RuntimeValidationException : ApplicationException
+		[Serializable]
+		public class RuntimeValidationException : Exception
 		{
 			/// <summary></summary>
 			public RuntimeValidationException(string message)
@@ -187,10 +188,10 @@ namespace MKY.CommandLine
 								nextArg = this.args[i + 1];
 
 							// Store option argument:
-							bool nextArgHasBeenConsumedToo = false;
-							object value = null;
-							FieldInfo field = null;
-							if (ParseOption(thisArg.Substring(pos), nextArg, ref nextArgHasBeenConsumedToo, ref value, ref field))
+							bool nextArgHasBeenConsumedToo;
+							object value;
+							FieldInfo field;
+							if (ParseOption(thisArg.Substring(pos), nextArg, out nextArgHasBeenConsumedToo, out value, out field))
 							{
 								string arg;
 								if (!nextArgHasBeenConsumedToo)
@@ -584,11 +585,16 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Initializes an option argument.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "The args handler implementation intentionally doesn't use generics.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		protected virtual bool ParseOption(string optionArgWithoutIndicator, string nextArg, ref bool nextArgHasBeenConsumedToo, ref object value, ref FieldInfo field)
+		protected virtual bool ParseOption(string optionArgWithoutIndicator, string nextArg, out bool nextArgHasBeenConsumedToo, out object value, out FieldInfo field)
 		{
 			try
 			{
+				nextArgHasBeenConsumedToo = false;
+				value = null;
+				field = null;
+
 				// The option can be written as "-o=value" or "-o:value" or "-o value".
 				// If given arg is written "-o value", the first argument only contains
 				// the option name, and the next argument contains the value.
@@ -651,7 +657,12 @@ namespace MKY.CommandLine
 			}
 			catch (Exception ex)
 			{
+				nextArgHasBeenConsumedToo = false;
+				value = null;
+				field = null;
+
 				DebugEx.WriteException(GetType(), ex);
+
 				return (false);
 			}
 		}
@@ -795,6 +806,7 @@ namespace MKY.CommandLine
 		/// Processes the command line options and validates them.
 		/// Override this method to implement application specific validation logic.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "att", Justification = "Local variable 'att' is required for 'foreach'.")]
 		protected virtual bool Validate()
 		{
 		#if (DEBUG)

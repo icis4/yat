@@ -33,7 +33,7 @@ namespace MKY.Recent
 	/// </summary>
 	/// <typeparam name="T">The underlying type of the recent item.</typeparam>
 	[Serializable]
-	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable
+	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable<RecentItem<T>>
 		where T : IEquatable<T>
 	{
 		private T item;
@@ -176,18 +176,17 @@ namespace MKY.Recent
 
 		#endregion
 
-		#region IComparable Members
+		#region IComparable<T> Members
 		//------------------------------------------------------------------------------------------
-		// IComparable Members
+		// IComparable<T> Members
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Compares this instance to a specified object and returns an indication
 		/// of their relative values.
 		/// </summary>
-		public virtual int CompareTo(object obj)
+		public virtual int CompareTo(RecentItem<T> other)
 		{
-			RecentItem<T> other = obj as RecentItem<T>;
 			if (other != null)
 				return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
 			else
@@ -197,22 +196,29 @@ namespace MKY.Recent
 		#endregion
 
 		#region Comparison Methods
+		//------------------------------------------------------------------------------------------
+		// Comparison Methods
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public static int Compare(object objA, object objB)
+		public static int Compare<MT>(RecentItem<MT> otherA, RecentItem<MT> otherB)
+			where MT : IEquatable<MT>
 		{
-			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is RecentItem<T>)
-			{
-				RecentItem<T> casted = (RecentItem<T>)objA;
-				return (casted.CompareTo(objB));
-			}
-			return (-1);
+			if (ReferenceEquals(otherA, otherB))
+				return (0);
+
+			if (otherA != null)
+				return (otherA.CompareTo(otherB));
+			else
+				return (-1);
 		}
 
 		#endregion
 
 		#region Comparison Operators
+		//------------------------------------------------------------------------------------------
+		// Comparison Operators
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
@@ -243,30 +249,33 @@ namespace MKY.Recent
 		/// <summary></summary>
 		public static bool operator <(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
-			return (Compare(lhs, rhs) < 0);
+			return (Compare<T>(lhs, rhs) < 0);
 		}
 
 		/// <summary></summary>
 		public static bool operator >(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
-			return (Compare(lhs, rhs) > 0);
+			return (Compare<T>(lhs, rhs) > 0);
 		}
 
 		/// <summary></summary>
 		public static bool operator <=(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
-			return (Compare(lhs, rhs) <= 0);
+			return (Compare<T>(lhs, rhs) <= 0);
 		}
 
 		/// <summary></summary>
 		public static bool operator >=(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
-			return (Compare(lhs, rhs) >= 0);
+			return (Compare<T>(lhs, rhs) >= 0);
 		}
 
 		#endregion
 
 		#region Conversion Operators
+		//------------------------------------------------------------------------------------------
+		// Conversion Operators
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public static implicit operator T(RecentItem<T> item)
