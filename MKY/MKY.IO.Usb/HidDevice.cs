@@ -141,6 +141,12 @@ namespace MKY.IO.Usb
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
 
+		/// <summary>
+		/// This method registers for static device notifications. These notifications will report
+		/// whenever a device is physically connected or disconnected to the computer. Only one
+		/// handler for these notifications is needed, therefore, only the first call to this
+		/// method does have any effect.
+		/// </summary>
 		/// <remarks>
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
