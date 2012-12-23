@@ -374,8 +374,14 @@ namespace MKY.IO.Usb
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
 
+		/// <summary>
+		/// This method registers for static device notifications. These notifications will report
+		/// whenever a device is physically connected or disconnected to the computer. Only one
+		/// handler for these notifications is needed, therefore, only the first call to this
+		/// method does have any effect.
+		/// </summary>
 		/// <remarks>
-		/// \todo: Don't know how the GUID for any USB device class. So only HID devices are detected.
+		/// \todo: Don't know the GUID for any USB device class. So only HID devices are detected.
 		/// 
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
@@ -603,12 +609,10 @@ namespace MKY.IO.Usb
 		private void GetDeviceConnect()
 		{
 			SafeFileHandle deviceHandle;
-			if (!string.IsNullOrEmpty(Path) &&
-				Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
+			if (!string.IsNullOrEmpty(Path) && Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
 			{
+				// Getting a handle means the device is connected to the computer.
 				deviceHandle.Close();
-
-				// Getting a handle means that the device is connected to the computer.
 				this.isConnected = true;
 			}
 		}
