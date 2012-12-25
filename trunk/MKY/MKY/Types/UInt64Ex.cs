@@ -315,7 +315,7 @@ namespace MKY
 			{
 				int i = from.Length - power - 1;
 				int multiplier;
-				if (int.TryParse(from[i].ToString(), out multiplier) && (multiplier < numericBase))
+				if (int.TryParse(from[i].ToString(CultureInfo.InvariantCulture), out multiplier) && (multiplier < numericBase))
 				{
 					result += (ulong)multiplier * (ulong)Math.Pow(numericBase, power);
 				}

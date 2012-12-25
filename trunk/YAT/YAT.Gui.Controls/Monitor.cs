@@ -36,7 +36,6 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
@@ -684,7 +683,7 @@ namespace YAT.Gui.Controls
 			{
 				if (e.Index >= 0)
 				{
-					string lineNumberString = ((e.Index + 1).ToString(NumberFormatInfo.InvariantInfo));
+					string lineNumberString = ((e.Index + 1).ToString(CultureInfo.InvariantCulture));
 
 					ListBox lb = fastListBox_LineNumbers;
 					SizeF requestedSize;

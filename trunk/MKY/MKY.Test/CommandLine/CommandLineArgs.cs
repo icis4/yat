@@ -92,14 +92,14 @@ namespace MKY.Test.CommandLine
 		public CommandLineEnum EnumValueOption;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Name = "StringArrayOption", ShortNames = new string[] { "sao" }, Description = "A string array option.")]
 		public string[] StringArrayOption;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Name = "IntArrayOption", ShortNames = new string[] { "iao" }, Description = "An int array option.")]
 		public int[] IntArrayOption;
 
@@ -113,8 +113,8 @@ namespace MKY.Test.CommandLine
 		public string LongDescription;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Help", "HelpText" }, ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
 		public bool HelpIsRequested;
 

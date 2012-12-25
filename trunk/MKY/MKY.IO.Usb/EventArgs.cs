@@ -28,30 +28,44 @@ namespace MKY.IO.Usb
 	/// <summary></summary>
 	public class DeviceEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		public readonly DeviceClass DeviceClass;
-
-		/// <summary></summary>
-		public readonly DeviceInfo DeviceInfo;
+		private DeviceClass deviceClass;
+		private DeviceInfo deviceInfo;
 
 		/// <summary></summary>
 		public DeviceEventArgs(DeviceClass deviceClass, DeviceInfo deviceInfo)
 		{
-			DeviceClass = deviceClass;
-			DeviceInfo = deviceInfo;
+			this.deviceClass = deviceClass;
+			this.deviceInfo  = deviceInfo;
+		}
+
+		/// <summary></summary>
+		public DeviceClass DeviceClass
+		{
+			get { return (this.deviceClass); }
+		}
+
+		/// <summary></summary>
+		public DeviceInfo DeviceInfo
+		{
+			get { return (this.deviceInfo); }
 		}
 	}
 
 	/// <summary></summary>
 	public class ErrorEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		public readonly string Message;
+		private string message;
 
 		/// <summary></summary>
 		public ErrorEventArgs(string message)
 		{
-			Message = message;
+			this.message = message;
+		}
+
+		/// <summary></summary>
+		public string Message
+		{
+			get { return (this.message); }
 		}
 	}
 }

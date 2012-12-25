@@ -562,7 +562,7 @@ namespace YAT.Domain
 			sb.Append(indent); sb.Append("- Direction: "); sb.AppendLine(this.direction.ToString());
 			sb.Append(indent); sb.Append("- Origin:    "); sb.AppendLine(this.origin.ToString());
 			sb.Append(indent); sb.Append("- Text:      "); sb.AppendLine(this.text);
-			sb.Append(indent); sb.Append("- DataCount: "); sb.AppendLine(this.dataCount.ToString(NumberFormatInfo.InvariantInfo));
+			sb.Append(indent); sb.Append("- DataCount: "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
 			sb.Append(indent); sb.Append("- IsData:    "); sb.AppendLine(this.isData.ToString());
 			sb.Append(indent); sb.Append("- IsEol:     "); sb.AppendLine(this.isEol.ToString());
 

@@ -108,8 +108,8 @@ namespace YAT.Model
 		public int SerialPort;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Baud", "BaudRate" }, ShortName = "br", Description =
 			"The desired baud rate. Must be a positive integral value that is supported by the selected serial COM port on the current machine. " +
 			"Typical values are 2400, 4800, 9600, 19200, 38400, 57600 and 115200. The default value is 9600." + EnvironmentEx.NewLineConstWorkaround +
@@ -237,8 +237,8 @@ namespace YAT.Model
 		public bool OpenTerminal;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Log", "BeginLog" }, ShortName = "bl", Description = "Begin logging.")]
 		public bool BeginLog;
 
@@ -274,14 +274,14 @@ namespace YAT.Model
 		public bool KeepOpenOnError;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Horizontal", "TileHorizontal" }, ShortName = "th", Description = "Tile the terminals horizontal after having openend a workspace.")]
 		public bool TileHorizontal;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertical after having openend a workspace.")]
 		public bool TileVertical;
 

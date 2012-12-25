@@ -26,7 +26,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 
-using MKY.Event;
+using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Domain.Settings;

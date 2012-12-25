@@ -35,7 +35,7 @@ using System.Text;
 
 #endregion
 
-namespace MKY.Event
+namespace MKY
 {
 	/// <summary>
 	/// Events helper methods to defensivly publish events.

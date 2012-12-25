@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -527,13 +528,13 @@ namespace MKY.IO
 						pathInfoParent = pathInfoParent.Parent;
 
 						// ".." or "..\".
-						if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString())))
+						if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))))
 						{
 							return (pathInfoParent.FullName);
 						}
 
 						// "..\<.. or Path>".
-						if ((s.Length >= 1) && (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString())))
+						if ((s.Length >= 1) && (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))))
 							s = s.Remove(0, 1);
 						else
 							break;
@@ -550,13 +551,13 @@ namespace MKY.IO
 					s = s.Remove(0, 1);
 
 					// "." or ".\".
-					if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString())))
+					if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))))
 					{
 						return (dirPathA);
 					}
 
 					// ".\<Path>".
-					if (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString()))
+					if (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)))
 					{
 						string combined = dirPathA + s.Substring(1);
 						DoPrepareDirectoryPath(combined, out pathInfoResult, out dirPathResult, out dirInfoResult);
@@ -710,27 +711,35 @@ namespace MKY.IO
 	public struct PathCompareResult
 	{
 		/// <summary>True if directories share a common path, i.e. also a common root.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public bool HaveCommon;
 
 		/// <summary>Common path, e.g. "C:\MyDir".</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public string CommonPath;
 
 		/// <summary>Number of common directories, e.g. "C:\MyDir" results in 1.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public int CommonDirectoryCount;
 
 		/// <summary>True if directories are relative, e.g. "C:\MyDir\MySubDir1" and "C:\MyDir\MySubDir2".</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public bool AreRelative;
 
 		/// <summary>Number of relative directories, e.g. "C:\MyDir\MySubDir1" and "C:\MyDir\MySubDir2" results in 2.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public int RelativeDirectoryCount;
 
 		/// <summary>True if directories are near relative, e.g. "C:\MyDir" and "C:\MyDir\MySubDir".</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public bool AreNearRelative;
 
 		/// <summary>Number of near relative directories, e.g. "C:\MyDir" and "C:\MyDir\MySubDir" results in 1.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public int NearRelativeDirectoryCount;
 
 		/// <summary>Relative path between the two.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public string RelativePath;
 
 		/// <summary>Creates a directory info compare result structure.</summary>

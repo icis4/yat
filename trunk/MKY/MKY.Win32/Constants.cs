@@ -24,6 +24,23 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Constants+NativeConstants.#WAIT_OBJECT_0")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Constants+NativeConstants.#WAIT_TIMEOUT")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Constants+NativeConstants.#WAIT_OBJECT_0", MessageId = "OBJECT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Constants+NativeConstants.#WAIT_OBJECT_0", MessageId = "WAIT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Constants+NativeConstants.#WAIT_TIMEOUT", MessageId = "TIMEOUT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Constants+NativeConstants.#WAIT_TIMEOUT", MessageId = "WAIT")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -42,6 +59,7 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeConstants
 		{
 			/// <summary></summary>

@@ -30,7 +30,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using MKY.Event;
+using MKY;
 using MKY.IO.Usb;
 using MKY.Windows.Forms;
 

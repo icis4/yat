@@ -31,8 +31,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using MKY.Event;
-
 #endregion
 
 namespace MKY.Windows.Forms

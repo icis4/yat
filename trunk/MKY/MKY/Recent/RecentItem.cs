@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -201,6 +202,7 @@ namespace MKY.Recent
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Any better idea to implement Compare() for generic types?")]
 		public static int Compare<MT>(RecentItem<MT> otherA, RecentItem<MT> otherB)
 			where MT : IEquatable<MT>
 		{
@@ -209,8 +211,8 @@ namespace MKY.Recent
 
 			if (otherA != null)
 				return (otherA.CompareTo(otherB));
-			else
-				return (-1);
+
+			return (-1);
 		}
 
 		#endregion

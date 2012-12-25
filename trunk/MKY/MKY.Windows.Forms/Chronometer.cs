@@ -28,9 +28,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using MKY;
-using MKY.Event;
-
 namespace MKY.Windows.Forms
 {
 	/// <summary></summary>

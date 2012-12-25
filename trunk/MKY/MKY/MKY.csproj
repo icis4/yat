@@ -103,7 +103,7 @@
     <Compile Include="Data\EventArgs.cs" />
     <Compile Include="Data\DataItem.cs" />
     <Compile Include="IDisposableEx.cs" />
-    <Compile Include="Event\EventHelper.cs" />
+    <Compile Include="EventHelper.cs" />
     <Compile Include="IO\StreamEx.cs" />
     <Compile Include="IO\Temp.cs" />
     <Compile Include="Net\IPResolver.cs" />

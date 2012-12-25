@@ -278,6 +278,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(IndexOfOutsideDoubleQuotesTestData), "TestCases")]
 		public virtual void TestIndexOfOutsideDoubleQuotes(string testString, string outString, int outIndex, string inString, int inIndex)
 		{
@@ -293,6 +294,8 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(CountLeftRightTestData), "TestCasesLeft")]
 		public virtual void CountLeft(string testString, int expectedCount, char[] countChars)
 		{
@@ -308,6 +311,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(CountLeftRightTestData), "TestCasesRight")]
 		public virtual void CountRight(string testString, int expectedCount, char[] countChars)
 		{
@@ -323,6 +327,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesLeft")]
 		public virtual void SplitLeft(string testString, int desiredSplitLength, string[] expectedChunks)
 		{
@@ -345,6 +350,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesRight")]
 		public virtual void SplitRight(string testString, int desiredSplitLength, string[] expectedChunks)
 		{
@@ -367,6 +373,8 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(TrimTestData), "QuoteTestCases")]
 		public virtual void TestTrimOfQuotes(string testString, int expectedLength, char[] trimChars)
 		{
@@ -382,6 +390,8 @@ namespace MKY.Test.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(TrimTestData), "EndWhiteSpaceTestCases")]
 		public virtual void TestTrimEndOfWhiteSpaces(string testString, int expectedLength, char[] trimChars)
 		{
@@ -404,6 +414,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(SplitLexicallyTestData), "TestCases")]
 		public virtual void TestSplitLexically(string testString, int desiredChunkLength, string[] expectedChunks)
 		{

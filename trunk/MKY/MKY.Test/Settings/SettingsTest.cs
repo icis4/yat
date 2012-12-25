@@ -44,7 +44,7 @@ using MKY.IO;
 namespace MKY.Test.Settings
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Design", "?!?", Justification = "Only non-static classes are permitted as test data provider for the serialization tests.")]
+	[SuppressMessage("Microsoft.Design", "CA1053:StaticHolderTypesShouldNotHaveConstructors", Justification = "Only non-static classes are permitted as test data provider for the serialization tests.")]
 	public class SettingsTreeTestTypeAndData
 	{
 		#region IDs
@@ -53,6 +53,7 @@ namespace MKY.Test.Settings
 		//==========================================================================================
 
 		/// <remarks>Haven't cared for a better implementation yet...</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public enum TestCase
 		{
 			/// <summary></summary>
@@ -79,10 +80,12 @@ namespace MKY.Test.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int SimpleValue = SimpleValueEqual;
 
 			/// <summary></summary>
@@ -102,7 +105,7 @@ namespace MKY.Test.Settings
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "        2:SimpleValue = " + SimpleValue.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "        2:SimpleValue = " + SimpleValue.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -155,10 +158,12 @@ namespace MKY.Test.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int SimpleValue = SimpleValueEqual;
 
 			/// <summary></summary>
@@ -249,7 +254,7 @@ namespace MKY.Test.Settings
 			{
 				return
 					(
-					Environment.NewLine + "      1:SimpleValue = "  + SimpleValue.ToString(NumberFormatInfo.InvariantInfo) +
+					Environment.NewLine + "      1:SimpleValue = "  + SimpleValue.ToString(CultureInfo.InvariantCulture) +
 					Environment.NewLine + "      1:ChildLevel2A = " + ChildLevel2A.ToString() +
 					Environment.NewLine + "      1:ChildLevel2B = " + ChildLevel2B.ToString()
 					);
@@ -305,11 +310,13 @@ namespace MKY.Test.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestTreeRoot")]
 		public class TestTreeRoot : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int SimpleValue = SimpleValueEqual;
 
 			/// <summary></summary>
@@ -369,7 +376,7 @@ namespace MKY.Test.Settings
 			{
 				return
 					(
-					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString(NumberFormatInfo.InvariantInfo) +
+					Environment.NewLine + "    0:SimpleValue = " + SimpleValue.ToString(CultureInfo.InvariantCulture) +
 					Environment.NewLine + "    0:ChildLevel1 = " + ChildLevel1.ToString()
 					);
 			}
@@ -450,7 +457,7 @@ namespace MKY.Test.Settings
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Design", "?!?", Justification = "Only non-static classes are permitted as test data provider for the serialization tests.")]
+	[SuppressMessage("Microsoft.Design", "CA1053:StaticHolderTypesShouldNotHaveConstructors", Justification = "Only non-static classes are permitted as test data provider for the serialization tests.")]
 	public class SettingsEvolutionTestTypeAndData
 	{
 		#region Test Case Id
@@ -483,45 +490,55 @@ namespace MKY.Test.Settings
 		/// The following classes serve to test what happens if different versions of a type are
 		/// serialized/deserialized.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestSettings")]
 		public class TestClassV1
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data1 = TestCaseId._11;
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data2 = TestCaseId._12;
 		}
 
 		/// <summary>
 		/// V2 adds a third element.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestSettings")]
 		public class TestClassV2
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data1 = TestCaseId._21;
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data2 = TestCaseId._22;
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data3 = TestCaseId._23;
 		}
 
 		/// <summary>
 		/// V3 removes the second element.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestSettings")]
 		public class TestClassV3
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data1 = TestCaseId._31;
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data3 = TestCaseId._33;
 		}
 
@@ -760,6 +777,7 @@ namespace MKY.Test.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		[Test, TestCaseSource(typeof(SettingsEvolutionTestTypeAndData), "TestCases")]
 		public virtual void TestSettingsEvolution(int testCase, string fileName, Type typeToSerialize, Type typeToDeserialize)
 		{

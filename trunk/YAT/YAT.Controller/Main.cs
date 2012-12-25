@@ -34,7 +34,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.Settings;
 using MKY.Windows.Forms;
 

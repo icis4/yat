@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Usb
@@ -48,9 +49,9 @@ namespace MKY.IO.Usb
 		event EventHandler Disconnected;
 
 		/// <summary>
-		/// Fired after an error has occurred.
+		/// Fired after an I/O error has occurred.
 		/// </summary>
-		event EventHandler<ErrorEventArgs> Error;
+		event EventHandler<ErrorEventArgs> IOError;
 
 		#endregion
 

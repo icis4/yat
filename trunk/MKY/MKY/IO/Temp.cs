@@ -152,7 +152,7 @@ namespace MKY.IO
 				int i = 0;
 				for (i = 0; i <= Max; i++)
 				{
-					istr = i.ToString(NumberFormatInfo.InvariantInfo);
+					istr = i.ToString(CultureInfo.InvariantCulture);
 					filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, istr, extension, false);
 					if (!File.Exists(filePath))
 						break;

@@ -39,6 +39,7 @@ namespace MKY
 		/// <summary>
 		/// Toggles a boolean value.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "This function exists for the sake of better readability.")]
 		public static void Toggle(ref bool value)
 		{
 			value = (!value);
@@ -52,6 +53,7 @@ namespace MKY
 		/// Thus, this function has been created to improve readability of the code and
 		/// reduce potential errors.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "This function exists for the sake of better readability.")]
 		public static bool SetIfCleared(ref bool value)
 		{
 			if (!value)
@@ -73,6 +75,7 @@ namespace MKY
 		/// Thus, this function has been created to improve readability of the code and
 		/// reduce potential errors.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "This function exists for the sake of better readability.")]
 		public static bool ClearIfSet(ref bool value)
 		{
 			if (value)

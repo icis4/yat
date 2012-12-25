@@ -32,7 +32,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
-using MKY.Event;
+using MKY;
 using MKY.IO.Serial;
 
 #endregion

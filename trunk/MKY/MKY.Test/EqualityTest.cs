@@ -39,6 +39,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 using NUnit.Framework;
@@ -65,9 +66,11 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public struct ValueTypeWithOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -81,7 +84,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return ("A = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return ("A = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -220,9 +223,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public struct ValueTypeWithoutOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -236,7 +241,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return ("A = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return ("A = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -315,12 +320,14 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<T> : List<T>
 			where T : IEquatable<T>
 		{
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>>
 			where T : IEquatable<T>
 		{
@@ -350,6 +357,7 @@ namespace MKY.Test
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
+			[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Required for this equality test.")]
 			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -399,6 +407,7 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>>
 			where T : IEquatable<T>
 		{
@@ -428,6 +437,7 @@ namespace MKY.Test
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
+			[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Required for this equality test.")]
 			public bool Equals(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> other)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -480,6 +490,7 @@ namespace MKY.Test
 			/// <summary>
 			/// Determines whether the two specified objects have reference or value equality.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Required for this equality test.")]
 			public static bool operator ==(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> lhs, OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> rhs)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -532,6 +543,7 @@ namespace MKY.Test
 			/// <summary>
 			/// Determines whether the two specified objects have reference and value inequality.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Required for this equality test.")]
 			public static bool operator !=(OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> lhs, OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> rhs)
 			{
 				return (!(lhs == rhs));
@@ -541,9 +553,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class BaseReferenceTypeNotIEquatableWithoutOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -557,7 +571,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -629,9 +643,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class DerivedReferenceTypeNotIEquatableWithoutOperators : BaseReferenceTypeNotIEquatableWithoutOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int B;
 
 			/// <summary></summary>
@@ -649,7 +665,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 					);
 			}
 
@@ -712,9 +728,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class BaseReferenceTypeIEquatableWithoutOperators : IEquatable<BaseReferenceTypeIEquatableWithoutOperators>
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -728,7 +746,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -806,9 +824,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class DerivedReferenceTypeIEquatableWithoutOperators : BaseReferenceTypeIEquatableWithoutOperators, IEquatable<DerivedReferenceTypeIEquatableWithoutOperators>
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int B;
 
 			/// <summary></summary>
@@ -826,7 +846,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 					);
 			}
 
@@ -885,9 +905,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class BaseReferenceTypeNotIEquatableWithOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -901,7 +923,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -1038,9 +1060,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class DerivedReferenceTypeNotIEquatableWithOperators : BaseReferenceTypeNotIEquatableWithOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int B;
 
 			/// <summary></summary>
@@ -1058,7 +1082,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 					);
 			}
 
@@ -1185,9 +1209,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class DerivedReferenceTypeNotIEquatableWithDerivedOperators : DerivedReferenceTypeNotIEquatableWithOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int C;
 
 			/// <summary></summary>
@@ -1205,7 +1231,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "        2:Base = " + base.ToString() +
-					Environment.NewLine + "        2:C    = " + this.C.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "        2:C    = " + this.C.ToString(CultureInfo.InvariantCulture)
 					);
 			}
 
@@ -1268,9 +1294,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class BaseReferenceTypeNotIEquatableWithBaseOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -1284,7 +1312,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -1428,9 +1456,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class DerivedReferenceTypeNotIEquatableWithBaseOperators : BaseReferenceTypeNotIEquatableWithBaseOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int B;
 
 			/// <summary></summary>
@@ -1448,7 +1478,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 					);
 			}
 
@@ -1511,9 +1541,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class BaseReferenceTypeIEquatableWithBaseOperators : IEquatable<BaseReferenceTypeIEquatableWithBaseOperators>
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int A;
 
 			/// <summary></summary>
@@ -1527,7 +1559,7 @@ namespace MKY.Test
 			/// <summary></summary>
 			public override string ToString()
 			{
-				return (Environment.NewLine + "    0:A    = " + A.ToString(NumberFormatInfo.InvariantInfo));
+				return (Environment.NewLine + "    0:A    = " + A.ToString(CultureInfo.InvariantCulture));
 			}
 
 			/// <summary>
@@ -1677,9 +1709,11 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		public class DerivedReferenceTypeDerivedIEquatableWithBaseOperators : BaseReferenceTypeIEquatableWithBaseOperators
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public readonly int B;
 
 			/// <summary></summary>
@@ -1697,7 +1731,7 @@ namespace MKY.Test
 				return
 					(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
-					Environment.NewLine + "      1:B    = " + B.ToString(NumberFormatInfo.InvariantInfo)
+					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
 					);
 			}
 
@@ -2364,6 +2398,8 @@ namespace MKY.Test
 		// Static Test Methods > Operators for Value Types
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfValueType(ValueType objToCompareAgainst, ValueType objEqual, ValueType objNotEqual)
 		{
 			Trace.Indent();
@@ -2407,6 +2443,8 @@ namespace MKY.Test
 
 		//                 TestOperatorsForValueEqualityOfValueType is useless since it never succeeds.
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDateTime(DateTime objToCompareAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
 			Trace.Indent();
@@ -2502,6 +2540,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfValueTypeWithOperators(EqualityTestData.ValueTypeWithOperators objToCompareAgainst, EqualityTestData.ValueTypeWithOperators objEqual, EqualityTestData.ValueTypeWithOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -2604,6 +2644,8 @@ namespace MKY.Test
 		// Static Test Methods > Operators for Reference Types
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfObject(object objToCompareAgainst, object objEqual, object objNotEqual)
 		{
 			Trace.Indent();
@@ -2647,6 +2689,8 @@ namespace MKY.Test
 
 		//                 TestOperatorsForValueEqualityOfObject is useless since it never succeeds.
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfVersion(Version objToCompareAgainst, Version objEqual, Version objNotEqual)
 		{
 			Trace.Indent();
@@ -2742,6 +2786,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfList(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
 		{
 			Trace.Indent();
@@ -2783,6 +2829,7 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
 		public static void TestOperatorsForValueEqualityOfList(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
 		{
 			Trace.Indent();
@@ -2837,6 +2884,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
 		{
 			Trace.Indent();
@@ -2932,6 +2981,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -2973,6 +3024,7 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3027,6 +3079,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3068,6 +3122,7 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3122,6 +3177,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3163,6 +3220,7 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3217,6 +3275,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3258,6 +3318,7 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method exists for the sake of completeness.")]
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3312,6 +3373,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3407,6 +3470,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3502,6 +3567,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3597,6 +3664,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3692,6 +3761,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3787,6 +3858,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3882,6 +3955,8 @@ namespace MKY.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();

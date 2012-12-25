@@ -137,6 +137,7 @@ namespace MKY.IO.Usb
 		/// An array of type System.Byte that is the storage location for the received data.
 		/// </param>
 		/// <returns>The number of bytes received.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		int Receive(out byte[] data);
 
 		/// <summary>

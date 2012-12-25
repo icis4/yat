@@ -38,6 +38,175 @@ using MKY.Diagnostics;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberInputDataIndices")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberFeatureDataIndices")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#Reserved")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#FeatureReportByteLength")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#Usage")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberOutputValueCaps")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberInputValueCaps")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#InputReportByteLength")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberFeatureValueCaps")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberFeatureButtonCaps")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberInputButtonCaps")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberOutputDataIndices")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#OutputReportByteLength")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberOutputButtonCaps")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#NumberLinkCollectionNodes")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS.#UsagePage")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#ReportID")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved5")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved4")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#StringMin")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#DataIndexMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#LinkCollection")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#UsageMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#HasNull")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#LogicalMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#DesignatorMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved2")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#LinkUsagePage")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#IsAlias")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#IsAbsolute")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#PhysicalMin")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#UsagePage")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#IsDesignatorRange")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#DataIndexMin")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#BitSize")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#BitField")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#IsStringRange")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#StringMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved3")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#ReportCount")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#LinkUsage")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#Reserved6")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#DesignatorMin")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#PhysicalMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#IsRange")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#UsageMin")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS.#LogicalMin")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#VendorID")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#ProductID")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#VersionNumber")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES.#Size")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32&)", MessageId = "Num")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetCaps(System.IntPtr,MKY.Win32.Hid+NativeTypes+HIDP_CAPS&)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPreparsedData(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr&)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_FreePreparsedData(System.IntPtr)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32)", MessageId = "Num")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetValueCaps(MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE,MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS&,System.IntPtr)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_STATUS.#HidP_InvalidPreparsedData", MessageId = "Preparsed")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE.#HidP_Input")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE.#HidP_Feature")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE.#HidP_Output")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetAttributes(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetCaps(System.IntPtr,MKY.Win32.Hid+NativeTypes+HIDP_CAPS&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetManufacturerString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetOutputReport(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPreparsedData(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetFeature(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPhysicalDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetProductString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_FreePreparsedData(System.IntPtr)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetHidGuid(System.Guid&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_FlushQueue(Microsoft.Win32.SafeHandles.SafeFileHandle)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetIndexedString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Int32,System.String&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetFeature(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetSerialNumberString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetInputReport(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetValueCaps(MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE,MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS&,System.IntPtr)")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_STATUS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_STATUS.#HidP_Success")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Hid+NativeTypes+HIDP_STATUS.#HidP_InvalidPreparsedData")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES", MessageId = "ATTRIBUTES")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES", MessageId = "HIDD")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS", MessageId = "CAPS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_CAPS", MessageId = "HIDP")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE", MessageId = "HIDP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE", MessageId = "TYPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE", MessageId = "REPORT")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32&)", MessageId = "Number")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetAttributes(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES&)", MessageId = "Attributes")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetAttributes(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.Hid+NativeTypes+HIDD_ATTRIBUTES&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetCaps(System.IntPtr,MKY.Win32.Hid+NativeTypes+HIDP_CAPS&)", MessageId = "Capabilities")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetCaps(System.IntPtr,MKY.Win32.Hid+NativeTypes+HIDP_CAPS&)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetManufacturerString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)", MessageId = "Manufacturer")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetManufacturerString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetOutputReport(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetOutputReport(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Report")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPreparsedData(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPreparsedData(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr&)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetFeature(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetFeature(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Report")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPhysicalDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Buffer")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetPhysicalDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetProductString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)", MessageId = "Product")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetProductString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_FreePreparsedData(System.IntPtr)", MessageId = "Preparsed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetHidGuid(System.Guid&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_FlushQueue(Microsoft.Win32.SafeHandles.SafeFileHandle)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetIndexedString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Int32,System.String&)", MessageId = "String")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetIndexedString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Int32,System.String&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetIndexedString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Int32,System.String&)", MessageId = "Indexed")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_SetNumInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.UInt32)", MessageId = "Number")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetFeature(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetFeature(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Report")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetSerialNumberString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetSerialNumberString(Microsoft.Win32.SafeHandles.SafeFileHandle,System.String&)", MessageId = "Serial")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetInputReport(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Hid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidD_GetInputReport(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[])", MessageId = "Report")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetValueCaps(MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE,MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS&,System.IntPtr)", MessageId = "Value")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetValueCaps(MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE,MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS&,System.IntPtr)", MessageId = "Report")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Hid+NativeMethods.#HidP_GetValueCaps(MKY.Win32.Hid+NativeTypes+HIDP_REPORT_TYPE,MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS&,System.IntPtr)", MessageId = "Preparsed")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_STATUS", MessageId = "HIDP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_STATUS", MessageId = "STATUS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS", MessageId = "CAPS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS", MessageId = "HIDP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Hid+NativeTypes+HIDP_VALUE_CAPS", MessageId = "VALUE")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -66,6 +235,7 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -75,6 +245,7 @@ namespace MKY.Win32
 			#pragma warning disable 1591
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDD_ATTRIBUTES
 			{
@@ -90,6 +261,7 @@ namespace MKY.Win32
 			// HIDD_CONFIGURATION is reserved for internal system use
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Not performance critical.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_CAPS
@@ -104,18 +276,22 @@ namespace MKY.Win32
 				public Int16 NumberLinkCollectionNodes;
 				public Int16 NumberInputButtonCaps;
 				public Int16 NumberInputValueCaps;
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 				public Int16 NumberInputDataIndices;
 				public Int16 NumberOutputButtonCaps;
 				public Int16 NumberOutputValueCaps;
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 				public Int16 NumberOutputDataIndices;
 				public Int16 NumberFeatureButtonCaps;
 				public Int16 NumberFeatureValueCaps;
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
 				public Int16 NumberFeatureDataIndices;
 			}
 
 			/// <summary>
 			/// The HIDP_REPORT_TYPE enumeration type is used to specify a HID report type.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			public enum HIDP_REPORT_TYPE
 			{
 				HidP_Input   = 0,
@@ -128,6 +304,7 @@ namespace MKY.Win32
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			public enum HIDP_STATUS : uint
 			{
@@ -140,6 +317,7 @@ namespace MKY.Win32
 			/// If IsStringRange is false, StringMin is the String index and StringMax is unused.
 			/// If IsDesignatorRange is false, DesignatorMin is the designator index and DesignatorMax is unused.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_VALUE_CAPS
 			{
@@ -191,6 +369,7 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
 			private const string HID_DLL = "hid.dll";
@@ -205,6 +384,7 @@ namespace MKY.Win32
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool HidD_FlushQueue([In] SafeFileHandle HidDeviceObject);
 
 			/// <summary>
@@ -214,11 +394,14 @@ namespace MKY.Win32
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool HidD_FreePreparsedData([In] IntPtr PreparsedData);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool HidD_GetAttributes([In] SafeFileHandle HidDeviceObject, [In, Out] ref NativeTypes.HIDD_ATTRIBUTES Attributes);
 
 			// HidD_GetConfiguration() is reserved for internal system use
@@ -235,16 +418,19 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetFeature([In] SafeFileHandle HidDeviceObject, [Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <remarks>
 			/// Public via <see cref="GetHidGuid()"/>.
 			/// </remarks>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern void HidD_GetHidGuid([In, Out] ref Guid HidGuid);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
@@ -258,6 +444,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetIndexedString([In] SafeFileHandle HidDeviceObject, [In] UInt32 StringIndex, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 
 			/// <summary>
@@ -276,9 +463,11 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetInputReport([In] SafeFileHandle HidDeviceObject, [In, Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
@@ -292,6 +481,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetManufacturerString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 
 			// HidD_GetMsGenreDescriptor() is reserved for internal system use
@@ -306,9 +496,11 @@ namespace MKY.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to a device and an integer to hold the number of buffers.</param>
 			/// <param name="NumberBuffers"><c>true</c> on success, <c>false</c> on failure.</param>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool HidD_GetNumInputBuffers([In] SafeFileHandle HidDeviceObject, [Out] out UInt32 NumberBuffers);
 
 			/// <summary></summary>
@@ -318,6 +510,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetPhysicalDescriptor([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 
 			/// <summary>
@@ -327,11 +520,14 @@ namespace MKY.Win32
 			/// <param name="HidDeviceObject">A handle returned by CreateFile.</param>
 			/// <param name="PreparsedData">A pointer to a buffer.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool HidD_GetPreparsedData([In] SafeFileHandle HidDeviceObject, [Out] out IntPtr PreparsedData);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
@@ -345,9 +541,11 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetProductString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetSerialNumberString(SafeFileHandle HidDeviceObject, out string SerialNumber)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
@@ -361,6 +559,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_GetSerialNumberString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 
 			// HidD_SetConfiguration() is reserved for internal system use
@@ -377,6 +576,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_SetFeature([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <summary>
@@ -392,6 +592,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool HidD_SetNumInputBuffers([In] SafeFileHandle HidDeviceObject, [In] UInt32 NumberBuffers);
 
 			/// <summary>
@@ -410,6 +611,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool HidD_SetOutputReport([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <summary>
@@ -420,6 +622,7 @@ namespace MKY.Win32
 			/// <param name="PreparsedData">A pointer returned by HidD_GetPreparsedData.</param>
 			/// <param name="Capabilities">A pointer to a HIDP_CAPS structure.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 HidP_GetCaps([In] IntPtr PreparsedData, [In, Out] ref NativeTypes.HIDP_CAPS Capabilities);
@@ -432,6 +635,7 @@ namespace MKY.Win32
 			/// <param name="ValueCaps">A pointer to a buffer for the returned array.</param>
 			/// <param name="PreparsedData"> A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[CLSCompliant(false)]
 			public static NativeTypes.HIDP_STATUS HidP_GetValueCaps(NativeTypes.HIDP_REPORT_TYPE ReportType, ref NativeTypes.HIDP_VALUE_CAPS ValueCaps, IntPtr PreparsedData)
 			{
@@ -494,6 +698,7 @@ namespace MKY.Win32
 		/// <summary>
 		/// Creates a device handle of the HID device at the given device path.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool CreateSharedQueryOnlyDeviceHandle(string devicePath, out SafeFileHandle deviceHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
@@ -526,6 +731,7 @@ namespace MKY.Win32
 		/// <summary>
 		/// Creates a device handle of the HID device at the given system path.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool CreateSharedReadWriteHandle(string devicePath, out SafeFileHandle readHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
@@ -556,18 +762,21 @@ namespace MKY.Win32
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetManufacturerString(SafeFileHandle deviceHandle, out string manufacturer)
 		{
 			return (GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetProductString(SafeFileHandle deviceHandle, out string product)
 		{
 			return (GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetSerialNumberString(SafeFileHandle deviceHandle, out string serialNumber)
 		{
 			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialNumberString, out serialNumber));
@@ -629,6 +838,7 @@ namespace MKY.Win32
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="numberOfInputBuffers">An integer to hold the returned value.</param>
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
 		{
 			bool success = false;
@@ -720,6 +930,7 @@ namespace MKY.Win32
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="capabilities">An HIDP_CAPS structure.</param>
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetDeviceCapabilities(SafeFileHandle deviceHandle, ref NativeTypes.HIDP_CAPS capabilities)
 		{
 			IntPtr pPreparsedData = new IntPtr();

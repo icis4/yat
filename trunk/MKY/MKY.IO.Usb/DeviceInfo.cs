@@ -37,9 +37,6 @@ using System.Xml.Serialization;
 
 #endregion
 
-// Module-level FxCop suppressions.
-[module: SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Scope = "member", Target = "MKY.IO.Usb.DeviceInfo.#.ctor()", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
@@ -114,11 +111,15 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo()
 		{
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(string path)
 		{
 			int vendorId, productId;
@@ -128,6 +129,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serialNumber;
@@ -136,6 +139,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(int vendorId, int productId, string serialNumber)
 		{
 			string path, manufacturer, product;
@@ -144,6 +149,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serialNumber)
 		{
 			Initialize(path, vendorId, productId, manufacturer, product, serialNumber);
@@ -167,6 +174,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(DeviceInfo rhs)
 		{
 			this.path = rhs.path;
@@ -520,12 +529,13 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static int Compare(object objA, object objB)
 		{
-			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is DeviceInfo)
-			{
-				DeviceInfo casted = (DeviceInfo)objA;
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			DeviceInfo casted = objA as DeviceInfo;
+			if (casted != null)
 				return (casted.CompareTo(objB));
-			}
+
 			return (-1);
 		}
 

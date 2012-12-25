@@ -51,12 +51,6 @@ using System.Runtime.InteropServices;
 // CLS compliance.
 [assembly: CLSCompliant(true)]
 
-// Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "YAT", Justification = "YAT is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "YAT.Domain.Test", MessageId = "YAT", Justification = "YAT is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "YAT.Domain.Test.Parser", MessageId = "YAT", Justification = "YAT is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "YAT.Domain.Test.TextTerminal", MessageId = "YAT", Justification = "YAT is a name.")]
-
 //==================================================================================================
 // End of
 // $URL$

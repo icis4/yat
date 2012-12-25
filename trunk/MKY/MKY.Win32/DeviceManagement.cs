@@ -38,6 +38,172 @@ using MKY.IO;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_size")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_devicetype")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_reserved")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_name")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_classguid")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_reserved")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_size")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_devicetype")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#InterfaceClassGuid")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#Reserved")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#cbSize")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#Flags")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#DevInst")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#ClassGuid")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#Reserved")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#cbSize")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope="member", Target="MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#DevicePath")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope="member", Target="MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#cbSize")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_size", MessageId = "dbch")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_devicetype", MessageId = "dbch")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_devicetype", MessageId = "devicetype")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_reserved", MessageId = "dbch")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_name", MessageId = "dbcc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_classguid", MessageId = "dbcc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_classguid", MessageId = "classguid")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_reserved", MessageId = "dbcc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_size", MessageId = "dbcc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_devicetype", MessageId = "dbcc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE.#dbcc_devicetype", MessageId = "devicetype")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA.#cbSize", MessageId = "cb")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#cbSize", MessageId = "cb")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#cbSize", MessageId = "cb")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.Int32)", MessageId = "hwnd")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#RegisterDeviceNotification(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE,MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "Devs")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "hwnd")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#ALL_INTERFACE_CLASSES")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#WINDOW_HANDLE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#SERVICE_HANDLE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeConstants.#WM_DEVICECHANGE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT_DEVTYP")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY", MessageId = "DEVICE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY", MessageId = "NOTIFY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#ALL_INTERFACE_CLASSES", MessageId = "INTERFACE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#ALL_INTERFACE_CLASSES", MessageId = "ALL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#ALL_INTERFACE_CLASSES", MessageId = "CLASSES")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#WINDOW_HANDLE", MessageId = "HANDLE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#WINDOW_HANDLE", MessageId = "WINDOW")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#SERVICE_HANDLE", MessageId = "SERVICE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY.#SERVICE_HANDLE", MessageId = "HANDLE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR", MessageId = "DEV")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR", MessageId = "HDR")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR", MessageId = "BROADCAST")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DIGCF", MessageId = "DIGCF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DIGCF.#PRESENT", MessageId = "PRESENT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DIGCF.#ALLCLASSES", MessageId = "ALLCLASSES")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DIGCF.#PROFILE", MessageId = "PROFILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DIGCF.#DEFAULT", MessageId = "DEFAULT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DIGCF.#DEVICEINTERFACE", MessageId = "DEVICEINTERFACE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE", MessageId = "DEVICEINTERFACE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE", MessageId = "DEV")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE", MessageId = "BROADCAST")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeConstants.#WM_DEVICECHANGE", MessageId = "DEVICECHANGE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA", MessageId = "DEVICE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA", MessageId = "INTERFACE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA", MessageId = "DATA")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT_DEVTYP", MessageId = "DBT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT_DEVTYP", MessageId = "DEVTYP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT_DEVTYP.#HANDLE", MessageId = "HANDLE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT_DEVTYP.#DEVICEINTERFACE", MessageId = "DEVICEINTERFACE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA", MessageId = "DEVINFO")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA", MessageId = "DATA")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA", MessageId = "DEVICE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA", MessageId = "INTERFACE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA", MessageId = "DETAIL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA", MessageId = "DATA")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiDestroyDeviceInfoList(System.IntPtr)", MessageId = "Device")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiDestroyDeviceInfoList(System.IntPtr)", MessageId = "Di")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.Int32)", MessageId = "Class")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.Int32)", MessageId = "Di")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#UnregisterDeviceNotification(System.IntPtr)", MessageId = "Handle")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#RegisterDeviceNotification(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE,MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY)", MessageId = "Flags")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#RegisterDeviceNotification(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE,MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY)", MessageId = "Notification")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetDeviceInterfaceDetail(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&,System.IntPtr,System.Int32,System.Int32&,System.IntPtr)", MessageId = "Device")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetDeviceInterfaceDetail(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&,System.IntPtr,System.Int32,System.Int32&,System.IntPtr)", MessageId = "Required")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetDeviceInterfaceDetail(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&,System.IntPtr,System.Int32,System.Int32&,System.IntPtr)", MessageId = "Di")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "Class")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "Flags")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "Di")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "Enumerator")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiEnumDeviceInterfaces(System.IntPtr,System.IntPtr,System.Guid&,System.Int32,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&)", MessageId = "Device")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiEnumDeviceInterfaces(System.IntPtr,System.IntPtr,System.Guid&,System.Int32,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&)", MessageId = "Interface")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiEnumDeviceInterfaces(System.IntPtr,System.IntPtr,System.Guid&,System.Int32,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&)", MessageId = "Di")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiEnumDeviceInterfaces(System.IntPtr,System.IntPtr,System.Guid&,System.Int32,MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DATA&)", MessageId = "Member")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT", MessageId = "DBT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT.#DEVICEREMOVECOMPLETE", MessageId = "DEVICEREMOVECOMPLETE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DBT.#DEVICEARRIVAL", MessageId = "DEVICEARRIVAL")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -67,6 +233,7 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -77,9 +244,10 @@ namespace MKY.Win32
 
 			/// <remarks>dbt.h</remarks>
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
-			[Flags]
 			[CLSCompliant(false)]
+			[Flags]
 			public enum DIGCF : uint
 			{
 				/// <remarks>
@@ -95,6 +263,7 @@ namespace MKY.Win32
 			/// <remarks>dbt.h</remarks>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			public enum DBT : uint
 			{
@@ -105,6 +274,7 @@ namespace MKY.Win32
 			/// <remarks>dbt.h</remarks>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			public enum DBT_DEVTYP : uint
 			{
@@ -114,9 +284,10 @@ namespace MKY.Win32
 
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
-			[Flags]
 			[CLSCompliant(false)]
+			[Flags]
 			public enum DEVICE_NOTIFY : uint
 			{
 				WINDOW_HANDLE         = 0x00000000,
@@ -134,22 +305,24 @@ namespace MKY.Win32
 			/// <see cref="NativeMethods.RegisterDeviceNotification"/> require a reference type.
 			/// </remarks>
 			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public class DEV_BROADCAST_DEVICEINTERFACE
 			{
-				public UInt32      dbcc_size;
-				public DBT_DEVTYP  dbcc_devicetype;
-				public UInt32      dbcc_reserved;
-				public Guid        dbcc_classguid;
+				public UInt32     dbcc_size;
+				public DBT_DEVTYP dbcc_devicetype;
+				public UInt32     dbcc_reserved;
+				public Guid       dbcc_classguid;
 				[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-				public Byte[]      dbcc_name;
+				public Byte[]     dbcc_name;
 			}
 
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
 			/// </remarks>
 			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public class DEV_BROADCAST_HDR
@@ -159,18 +332,20 @@ namespace MKY.Win32
 				public UInt32     dbch_reserved;
 			}
 
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVICE_INTERFACE_DATA
 			{
 				public UInt32 cbSize;
-				public Guid InterfaceClassGuid;
+				public Guid   InterfaceClassGuid;
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Naming is given by the Win32 API.")]
 				public UInt32 Flags;
-
 				[SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible", Justification = "Structure is given by the Win32 API.")]
 				public IntPtr Reserved;
 			}
 
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVICE_INTERFACE_DETAIL_DATA
@@ -179,13 +354,14 @@ namespace MKY.Win32
 				public string DevicePath;
 			}
 
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Not performance critical.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVINFO_DATA
 			{
 				public UInt32 cbSize;
-				public Guid ClassGuid;
+				public Guid   ClassGuid;
 				public UInt32 DevInst;
 				public UInt32 Reserved;
 			}
@@ -202,6 +378,7 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeConstants
 		{
 			/// <remarks>dbt.h</remarks>
@@ -220,6 +397,7 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
 			private const string SETUP_DLL = "setupapi.dll";
@@ -235,14 +413,16 @@ namespace MKY.Win32
 			/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
 			/// <returns>Device notification handle or NULL on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Naming is given by the Win32 API.")]
 			[CLSCompliant(false)]
+			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] NativeTypes.DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] NativeTypes.DEVICE_NOTIFY Flags);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref Guid ClassGuid, [In] Int32 hwndParent);
 
 			/// <summary>
@@ -264,9 +444,12 @@ namespace MKY.Win32
 			/// <param name="MemberIndex">Index to specify a device in a device information set.</param>
 			/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
 			/// <returns>True on success.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 			/// <summary>
@@ -279,9 +462,11 @@ namespace MKY.Win32
 			/// <param name="Flags">Flags to limit the returned information to currently present devices
 			/// and devices that expose interfaces in the class specified by the GUID.</param>
 			/// <returns>Handle to a device information set for the devices.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Naming is given by the Win32 API.")]
 			[CLSCompliant(false)]
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern IntPtr SetupDiGetClassDevs([In] ref Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] NativeTypes.DIGCF Flags);
 
 			/// <summary>
@@ -298,9 +483,14 @@ namespace MKY.Win32
 			/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
 			/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
 			/// <returns>True on success.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
-			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
 
 			/// <summary>
@@ -310,6 +500,7 @@ namespace MKY.Win32
 			/// <returns>True on success.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
 		}
 
@@ -328,6 +519,7 @@ namespace MKY.Win32
 		/// </summary>
 		/// <param name="classGuid">An interface class GUID.</param>
 		/// <returns>An array containing the path names of the devices currently available on the system.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "MKY.Win32.DeviceManagement+NativeMethods.SetupDiDestroyDeviceInfoList(System.IntPtr)", Justification = "Don't care about the result.")]
 		public static string[] GetDevicesFromGuid(Guid classGuid)
 		{
@@ -406,6 +598,8 @@ namespace MKY.Win32
 		/// <param name="classGuid">Device interface GUID.</param>
 		/// <param name="deviceNotificationHandle">Returned device notification handle.</param>
 		/// <returns>True on success.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public static bool RegisterDeviceNotificationHandle(IntPtr windowHandle, Guid classGuid, out IntPtr deviceNotificationHandle)
 		{
 			deviceNotificationHandle = IntPtr.Zero;
@@ -466,6 +660,7 @@ namespace MKY.Win32
 		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.
 		/// </param>
 		/// <returns>True if the conversion succeeded, False if not.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool DeviceChangeMessageToDevicePath(Message deviceChangeMessage, out string devicePath)
 		{
 			try

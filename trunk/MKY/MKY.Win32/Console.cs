@@ -65,6 +65,7 @@ namespace MKY.Win32
 			#pragma warning disable 1591
 
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			public enum STD_HANDLE : uint
 			{
 				STD_INPUT_HANDLE  = 0xFFFFFFF6,
@@ -102,6 +103,7 @@ namespace MKY.Win32
 			private const string KERNEL_DLL = "kernel32.dll";
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method implemented but then not needed, kept for potential future use.")]
 			public static bool AttachConsoleToProcess(int dwProcessId)
 			{
 				return (AttachConsole((UInt32)dwProcessId));
@@ -115,9 +117,11 @@ namespace MKY.Win32
 
 			/// <summary></summary>
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool AttachConsole([In] UInt32 dwProcessId);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method implemented but then not needed, kept for potential future use.")]
 			public static bool FreeConsoleFromProcess(int dwProcessId)
 			{
 				return (FreeConsole((UInt32)dwProcessId));
@@ -131,6 +135,7 @@ namespace MKY.Win32
 
 			/// <summary></summary>
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool FreeConsole([In] UInt32 dwProcessId);
 
 			/// <summary></summary>
@@ -216,6 +221,7 @@ namespace MKY.Win32
 			/// CONOUT$ value to get a handle to the console's active screen buffer.
 			/// </remarks>
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool SetStdHandle([In] NativeTypes.STD_HANDLE nStdHandle, [In] SafeFileHandle hHandle);
 		}
 

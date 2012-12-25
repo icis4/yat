@@ -27,7 +27,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Event;
+using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;

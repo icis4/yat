@@ -27,7 +27,6 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.Windows.Forms;
 
 using YAT.Model.Types;

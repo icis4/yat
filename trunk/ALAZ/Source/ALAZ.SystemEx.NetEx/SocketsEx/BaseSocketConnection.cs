@@ -313,7 +313,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 // ----- \remind BEGIN -----
 
                 // 2011-04-25 / Matthias Klaey
-                // Work-around to an issue described in the headers of MKY AutoSocket/TcpClient/TcpServer.
+                // Workaround to an issue described in the headers of MKY AutoSocket/TcpClient/TcpServer.
 
 //              lock (FSyncActive)
 //              {

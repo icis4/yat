@@ -39,6 +39,7 @@ namespace MKY.Drawing
 		/// </summary>
 		/// <param name="contentAlignment">ContentAlignment to be converted.</param>
 		/// <returns>Converted TextFormatFlags.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Emphasize that the text format is stored as flags.")]
 		public static TextFormatFlags ConvertContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment)
 		{
 			return (ApplyContentAlignmentToTextFormatFlags(contentAlignment, TextFormatFlags.Default));
@@ -51,6 +52,7 @@ namespace MKY.Drawing
 		/// <param name="contentAlignment">ContentAlignment to be converted.</param>
 		/// <param name="textFormatFlags">TextFormatFlags to be changed.</param>
 		/// <returns>Changed TextFormatFlags.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Emphasize that the text format is stored as flags.")]
 		public static TextFormatFlags ApplyContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment, TextFormatFlags textFormatFlags)
 		{
 			// ATTENTION

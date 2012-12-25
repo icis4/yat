@@ -34,7 +34,6 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.Recent;
 using MKY.Windows.Forms;
 

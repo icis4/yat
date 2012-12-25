@@ -37,7 +37,6 @@ using System.Windows.Forms;
 using Microsoft.Win32.SafeHandles;
 
 using MKY.Diagnostics;
-using MKY.Event;
 using MKY.Windows.Forms;
 
 #endregion
@@ -711,7 +710,7 @@ namespace MKY.IO.Usb
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex); // Includes Close().
-					OnError(new ErrorEventArgs("Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString()));
+					OnIOError(new ErrorEventArgs("Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString()));
 				}
 			}
 		}
@@ -793,7 +792,7 @@ namespace MKY.IO.Usb
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex); // Includes Close().
-				OnError(new ErrorEventArgs("Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString()));
+				OnIOError(new ErrorEventArgs("Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString()));
 			}
 		}
 
@@ -901,10 +900,10 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected override void OnError(ErrorEventArgs e)
+		protected override void OnIOError(ErrorEventArgs e)
 		{
 			Close();
-			base.OnError(e);
+			base.OnIOError(e);
 		}
 
 		/// <summary></summary>

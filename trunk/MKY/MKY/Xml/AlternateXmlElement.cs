@@ -26,21 +26,34 @@ namespace MKY.Xml
 	/// <summary></summary>
 	public struct AlternateXmlElement
 	{
-		/// <summary></summary>
-		public string[] XmlPath;
-
-		/// <summary></summary>
-		public string LocalName;
-
-		/// <summary></summary>
-		public string[] AlternateLocalNames;
+		private string[] xmlPath;
+		private string   localName;
+		private string[] alternateLocalNames;
 
 		/// <summary></summary>
 		public AlternateXmlElement(string[] xmlPath, string localName, string[] alternateLocalNames)
 		{
-			XmlPath = xmlPath;
-			LocalName = localName;
-			AlternateLocalNames = alternateLocalNames;
+			this.xmlPath = xmlPath;
+			this.localName = localName;
+			this.alternateLocalNames = alternateLocalNames;
+		}
+
+		/// <summary></summary>
+		public string[] XmlPath
+		{
+			get { return (this.xmlPath); }
+		}
+
+		/// <summary></summary>
+		public string LocalName
+		{
+			get { return (this.localName); }
+		}
+
+		/// <summary></summary>
+		public string[] AlternateLocalNames
+		{
+			get { return (this.alternateLocalNames); }
 		}
 
 		#region Object Members

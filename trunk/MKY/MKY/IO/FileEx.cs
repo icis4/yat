@@ -63,7 +63,7 @@ namespace MKY.IO
 				do
 				{
 					index++; // No need to check for overflow, that is checked by the .NET runtime.
-					unique = index.ToString(NumberFormatInfo.InvariantInfo);
+					unique = index.ToString(CultureInfo.InvariantCulture);
 				}
 				while (File.Exists(dir + name + separator + unique + ext));
 

@@ -36,7 +36,6 @@ using System.Threading;
 
 using MKY.Contracts;
 using MKY.Diagnostics;
-using MKY.Event;
 
 #endregion
 
@@ -456,7 +455,7 @@ namespace MKY.IO.Serial.Usb
 					this.device.Closed       += new EventHandler(device_Closed);
 					this.device.DataReceived += new EventHandler(device_DataReceived);
 				////this.device.DataSent is not used, see remarks above.
-					this.device.Error        += new EventHandler<IO.Usb.ErrorEventArgs>(device_Error);
+					this.device.IOError        += new EventHandler<IO.Usb.ErrorEventArgs>(device_IOError);
 				}
 				return (true);
 			}
@@ -661,7 +660,7 @@ namespace MKY.IO.Serial.Usb
 			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': ReceiveThread() has terminated.");
 		}
 
-		private void device_Error(object sender, IO.Usb.ErrorEventArgs e)
+		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
 		{
 			OnIOError(new IOErrorEventArgs(e.Message));
 		}

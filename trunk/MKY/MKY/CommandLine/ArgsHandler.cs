@@ -89,12 +89,30 @@ namespace MKY.CommandLine
 
 	#if (DEBUG)
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize that this exception type shall only be used by the ArgsHandler class. Anyway, it is only used for DEBUG.")]
 		[Serializable]
 		public class RuntimeValidationException : Exception
 		{
 			/// <summary></summary>
+			public RuntimeValidationException()
+			{
+			}
+
+			/// <summary></summary>
 			public RuntimeValidationException(string message)
 				: base(message)
+			{
+			}
+
+			/// <summary></summary>
+			public RuntimeValidationException(string message, Exception innerException)
+				: base(message, innerException)
+			{
+			}
+
+			/// <summary></summary>
+			protected RuntimeValidationException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+				: base(info, context)
 			{
 			}
 		}
@@ -117,6 +135,7 @@ namespace MKY.CommandLine
 		/// Gets a value indicating whether forward slashes are allowed as option indicator.
 		/// This applies to Windows systems.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Must be readonly to allow evaluation of system specific path chars.")]
 		public readonly bool AllowForwardSlash = (Array.IndexOf(System.IO.Path.GetInvalidPathChars(), '/') < 0);
 
 		#endregion
@@ -151,163 +170,11 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected ArgsHandler(string[] args, bool supportValueArgs, bool supportOptionArgs, bool supportArrayOptionArgs)
 		{
+			this.args = args;
+
 			this.supportValueArgs = supportValueArgs;
 			this.supportOptionArgs = supportOptionArgs;
 			this.supportArrayOptionArgs = supportArrayOptionArgs;
-
-			Initialize(args);
-			Validate();
-		}
-
-		/// <summary>
-		/// Initializes the specified args.
-		/// </summary>
-		private void Initialize(string[] args)
-		{
-			this.args = args;
-			if (this.args != null)
-			{
-				for (int i = 0; i < this.args.Length; i++)
-				{
-					string thisArg = this.args[i];
-
-					int pos;
-					if (string.IsNullOrEmpty(thisArg))
-					{
-						// Ignore empty strings within the array.
-					}
-					else if (IsOption(thisArg, out pos))
-					{
-						EndArrayOption();
-
-						if (SupportOptionArgs)
-						{
-							// Prepare next argument:
-							string nextArg = null;
-							if ((i + 1) < this.args.Length)
-								nextArg = this.args[i + 1];
-
-							// Store option argument:
-							bool nextArgHasBeenConsumedToo;
-							object value;
-							FieldInfo field;
-							if (ParseOption(thisArg.Substring(pos), nextArg, out nextArgHasBeenConsumedToo, out value, out field))
-							{
-								string arg;
-								if (!nextArgHasBeenConsumedToo)
-									arg = thisArg;
-								else
-									arg = thisArg + " " + nextArg;
-
-								if (field.FieldType.IsArray)
-								{
-									BeginArrayOption(field, value, arg);
-								}
-								else
-								{
-									if (InitializeOption(field, value))
-										this.optionArgs.Add(arg);
-									else
-										this.invalidArgs.Add(arg);
-								}
-							}
-							else
-							{
-								this.invalidArgs.Add(thisArg);
-							}
-
-							if (nextArgHasBeenConsumedToo)
-								i++; // Advance index.
-						}
-						else // !SupportOptionArgs
-						{
-							Debug.WriteLine(@"Option arg """ + thisArg + @""" detected but " + GetType() + " doesn't support option args");
-							this.invalidArgs.Add(thisArg);
-						}
-					}
-					else if (IsValue(thisArg))
-					{
-						if (ArrayOptionIsBeingComposed)   // No need to check 'SupportOptionArgs',
-						{                                 // array option would never be began with
-							ContinueArrayOption(thisArg); // if 'SupportOptionArgs' was false.
-						}
-						else
-						{
-							EndArrayOption();
-
-							if (SupportValueArgs)
-							{
-								if (InitializeValue(thisArg, this.valueArgs.Count))
-									this.valueArgs.Add(thisArg);
-								else
-									this.invalidArgs.Add(thisArg);
-							}
-							else
-							{
-								Debug.WriteLine(@"Value arg """ + thisArg + @""" detected but " + GetType() + " doesn't support value args");
-								this.invalidArgs.Add(thisArg);
-							}
-						}
-					}
-					else
-					{
-						EndArrayOption();
-
-						Debug.WriteLine(@"Invalid arg """ + thisArg + @""" detected in " + GetType());
-						this.invalidArgs.Add(thisArg);
-					}
-				}
-
-				EndArrayOption();
-			}
-		}
-
-		private FieldInfo arrayOptionField;
-		private List<object> arrayOptionValues;
-		private List<string> arrayOptionStrings;
-
-		private bool ArrayOptionIsBeingComposed
-		{
-			get { return (this.arrayOptionField != null); }
-		}
-
-		private void BeginArrayOption(FieldInfo field, object value, string arg)
-		{
-			this.arrayOptionField = field;
-
-			this.arrayOptionValues = new List<object>();
-			this.arrayOptionValues.Add(value);
-
-			this.arrayOptionStrings = new List<string>();
-			this.arrayOptionStrings.Add(arg);
-		}
-
-		private void ContinueArrayOption(string arg)
-		{
-			this.arrayOptionValues.Add(arg);
-			this.arrayOptionStrings.Add(arg);
-		}
-
-		private void EndArrayOption()
-		{
-			if ((this.arrayOptionField != null) && (this.arrayOptionValues != null) &&
-				(this.arrayOptionStrings != null) && (this.arrayOptionStrings.Count > 0))
-			{
-				if (this.arrayOptionValues.Count > 0)
-				{
-					InitializeArrayOption(this.arrayOptionField, this.arrayOptionValues.ToArray());
-					this.arrayOptionArgs.Add(this.arrayOptionStrings.ToArray());
-				}
-				else
-				{
-					foreach (string arg in this.arrayOptionStrings)
-						this.invalidArgs.Add(arg);
-				}
-			}
-
-			this.arrayOptionField = null;
-			this.arrayOptionValues = null;
-			this.arrayOptionStrings = null;
 		}
 
 		#endregion
@@ -336,6 +203,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the value arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public string[] ValueArgs
 		{
 			get { return (this.valueArgs.ToArray()); }
@@ -352,6 +220,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the option arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public string[] OptionArgs
 		{
 			get { return (this.optionArgs.ToArray()); }
@@ -368,6 +237,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the array option arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public string[][] ArrayOptionArgs
 		{
 			get { return (this.arrayOptionArgs.ToArray()); }
@@ -384,6 +254,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the invalid arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public string[] InvalidArgs
 		{
 			get { return (this.invalidArgs.ToArray()); }
@@ -527,6 +398,7 @@ namespace MKY.CommandLine
 		/// Determines whether the specified argument is an option and returns the position of
 		/// the first character of the option name. An option starts with "/", "-" or "--".
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool IsOption(string arg, out int pos)
 		{
 			int totalLength = arg.Length;
@@ -568,6 +440,7 @@ namespace MKY.CommandLine
 		/// returns the position of the first character of the option name. An option starts
 		/// with "/", "-" or "--".
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool IsOptionStart(string arg, out int pos)
 		{
 			if      (arg.StartsWith("--", StringComparison.OrdinalIgnoreCase)) // Attention: "--" must be tested before "-" because
@@ -586,6 +459,9 @@ namespace MKY.CommandLine
 		/// Initializes an option argument.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "The args handler implementation intentionally doesn't use generics.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		protected virtual bool ParseOption(string optionArgWithoutIndicator, string nextArg, out bool nextArgHasBeenConsumedToo, out object value, out FieldInfo field)
 		{
@@ -713,24 +589,26 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Splits the option and value.
 		/// </summary>
-		protected virtual bool SplitOptionAndValue(string optionArgWithoutIndicator, out string option, out string value)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual bool SplitOptionAndValue(string optionArgWithoutIndicator, out string optionStr, out string valueStr)
 		{
 			// Look for ":" or "=" separator in the option:
 			int pos = optionArgWithoutIndicator.IndexOfAny(new char[] { ':', '=' });
 			if (pos >= 1)
 			{
-				option = optionArgWithoutIndicator.Substring(0, pos);
-				option = option.Trim();
+				optionStr = optionArgWithoutIndicator.Substring(0, pos);
+				optionStr = optionStr.Trim();
 
-				value = optionArgWithoutIndicator.Substring(pos + 1);
-				value = value.Trim();
+				valueStr = optionArgWithoutIndicator.Substring(pos + 1);
+				valueStr = valueStr.Trim();
 
 				return (true);
 			}
 			else
 			{
-				option = null;
-				value = null;
+				optionStr = null;
+				valueStr = null;
 
 				return (false);
 			}
@@ -894,9 +772,174 @@ namespace MKY.CommandLine
 		// Methods
 		//==========================================================================================
 
+		/// <summary>
+		/// Processes and validates the specified args.
+		/// </summary>
+		/// <returns>
+		/// Returns <c>true</c> if the specified args could successfully be processed and validated,
+		/// otherwise <c>false</c>.
+		/// </returns>
+		/// <remarks>
+		/// This method intentionally is public, and not called by the constructor, because it
+		/// calls virtual methods. If a derived class has overridden such a method, the derived
+		/// class version will be called before the derived class constructor is called. Finding
+		/// using FxCop.
+		/// </remarks>
+		public virtual bool ProcessAndValidate()
+		{
+			if (this.args != null)
+			{
+				for (int i = 0; i < this.args.Length; i++)
+				{
+					string thisArg = this.args[i];
+
+					int pos;
+					if (string.IsNullOrEmpty(thisArg))
+					{
+						// Ignore empty strings within the array.
+					}
+					else if (IsOption(thisArg, out pos))
+					{
+						EndArrayOption();
+
+						if (SupportOptionArgs)
+						{
+							// Prepare next argument:
+							string nextArg = null;
+							if ((i + 1) < this.args.Length)
+								nextArg = this.args[i + 1];
+
+							// Store option argument:
+							bool nextArgHasBeenConsumedToo;
+							object value;
+							FieldInfo field;
+							if (ParseOption(thisArg.Substring(pos), nextArg, out nextArgHasBeenConsumedToo, out value, out field))
+							{
+								string arg;
+								if (!nextArgHasBeenConsumedToo)
+									arg = thisArg;
+								else
+									arg = thisArg + " " + nextArg;
+
+								if (field.FieldType.IsArray)
+								{
+									BeginArrayOption(field, value, arg);
+								}
+								else
+								{
+									if (InitializeOption(field, value))
+										this.optionArgs.Add(arg);
+									else
+										this.invalidArgs.Add(arg);
+								}
+							}
+							else
+							{
+								this.invalidArgs.Add(thisArg);
+							}
+
+							if (nextArgHasBeenConsumedToo)
+								i++; // Advance index.
+						}
+						else // !SupportOptionArgs
+						{
+							Debug.WriteLine(@"Option arg """ + thisArg + @""" detected but " + GetType() + " doesn't support option args");
+							this.invalidArgs.Add(thisArg);
+						}
+					}
+					else if (IsValue(thisArg))
+					{
+						if (ArrayOptionIsBeingComposed)   // No need to check 'SupportOptionArgs',
+						{                                 // array option would never be began with
+							ContinueArrayOption(thisArg); // if 'SupportOptionArgs' was false.
+						}
+						else
+						{
+							EndArrayOption();
+
+							if (SupportValueArgs)
+							{
+								if (InitializeValue(thisArg, this.valueArgs.Count))
+									this.valueArgs.Add(thisArg);
+								else
+									this.invalidArgs.Add(thisArg);
+							}
+							else
+							{
+								Debug.WriteLine(@"Value arg """ + thisArg + @""" detected but " + GetType() + " doesn't support value args");
+								this.invalidArgs.Add(thisArg);
+							}
+						}
+					}
+					else
+					{
+						EndArrayOption();
+
+						Debug.WriteLine(@"Invalid arg """ + thisArg + @""" detected in " + GetType());
+						this.invalidArgs.Add(thisArg);
+					}
+				}
+
+				EndArrayOption();
+			}
+
+			return (Validate());
+		}
+
+		private FieldInfo arrayOptionField;
+		private List<object> arrayOptionValues;
+		private List<string> arrayOptionStrings;
+
+		private bool ArrayOptionIsBeingComposed
+		{
+			get { return (this.arrayOptionField != null); }
+		}
+
+		private void BeginArrayOption(FieldInfo field, object value, string arg)
+		{
+			this.arrayOptionField = field;
+
+			this.arrayOptionValues = new List<object>();
+			this.arrayOptionValues.Add(value);
+
+			this.arrayOptionStrings = new List<string>();
+			this.arrayOptionStrings.Add(arg);
+		}
+
+		private void ContinueArrayOption(string arg)
+		{
+			this.arrayOptionValues.Add(arg);
+			this.arrayOptionStrings.Add(arg);
+		}
+
+		private void EndArrayOption()
+		{
+			if ((this.arrayOptionField != null) && (this.arrayOptionValues != null) &&
+				(this.arrayOptionStrings != null) && (this.arrayOptionStrings.Count > 0))
+			{
+				if (this.arrayOptionValues.Count > 0)
+				{
+					InitializeArrayOption(this.arrayOptionField, this.arrayOptionValues.ToArray());
+					this.arrayOptionArgs.Add(this.arrayOptionStrings.ToArray());
+				}
+				else
+				{
+					foreach (string arg in this.arrayOptionStrings)
+						this.invalidArgs.Add(arg);
+				}
+			}
+
+			this.arrayOptionField = null;
+			this.arrayOptionValues = null;
+			this.arrayOptionStrings = null;
+		}
+
 		/// <summary></summary>
 		public virtual bool OptionIsGiven(string name)
 		{
+			if (this.args == null)
+				throw (new InvalidOperationException("ProcessAndValidate() must be called first"));
+
 			if (this.supportOptionArgs || this.supportArrayOptionArgs)
 			{
 				FieldInfo fi = GetMemberField(name);
@@ -929,6 +972,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the help text.
 		/// </summary>
+		[SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Well, if FxCop knows better about how the help text should look like...")]
 		public virtual string GetHelpText(int maxWidth)
 		{
 			// Must be reduced to ensure that lines that exactly match the number of characters
@@ -1000,7 +1044,7 @@ namespace MKY.CommandLine
 					{
 						foreach (string shortName in att.ShortNames)
 						{
-							string option = shortName.ToLowerInvariant();
+							string option = shortName.ToLowerInvariant(); // Short names shall be lower case.
 
 							if (names.Length > 0)
 								names.Append(", ");
@@ -1021,7 +1065,7 @@ namespace MKY.CommandLine
 					{
 						foreach (string name in att.Names)
 						{
-							string option = name;
+							string option = name; // 'Normal' names shall be case-sensitive.
 
 							if (names.Length > 0)
 								names.Append(", ");
@@ -1031,7 +1075,7 @@ namespace MKY.CommandLine
 						}
 					}
 
-					// Long name, only if there is no short nor standard name:
+					// Long name, only if there is no short nor 'normal' name:
 					if (names.Length <= 0)
 					{
 						names.Append("--" + field.Name.ToLowerInvariant());

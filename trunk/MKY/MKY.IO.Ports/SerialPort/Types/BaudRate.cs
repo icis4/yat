@@ -111,7 +111,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString(NumberFormatInfo.InvariantInfo));
+			return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
 		}
 
 		#endregion

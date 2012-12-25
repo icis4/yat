@@ -36,7 +36,6 @@ using System.Threading;
 
 using MKY.Contracts;
 using MKY.Diagnostics;
-using MKY.Event;
 
 #endregion
 
@@ -46,7 +45,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// <remarks>
 	/// There is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
 	/// Google for [UnauthorizedAccessException "Access to the port"] for more information and
-	/// work-arounds suggestions.
+	/// workarounds suggestions.
 	/// 
 	/// ============================================================================================
 	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
@@ -108,7 +107,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// ============================================================================================
 	/// (from above)
 	/// 
-	/// Use cases 1 through 3 work fine. But use case 4 results in an exception. Work-arounds tried
+	/// Use cases 1 through 3 work fine. But use case 4 results in an exception. Workarounds tried
 	/// in May 2008:
 	/// - Async close
 	/// - Async DataReceived event

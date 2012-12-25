@@ -43,12 +43,14 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
 		public static readonly IPHost DefaultRemoteHost = new IPHost(IPHostType.Localhost);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
 		public static readonly IPNetworkInterface DefaultLocalInterface = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 
 		/// <summary></summary>

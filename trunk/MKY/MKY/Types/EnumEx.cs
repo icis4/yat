@@ -509,6 +509,7 @@ namespace MKY
 		/// <exception cref="FormatException">
 		/// The format parameter contains an invalid value.
 		/// </exception>
+		[SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "2#", Justification = "Just using the same parameter name as .NET Enum.Format()...")]
 		public static string Format(System.Type enumExType, object value, string format)
 		{
 			return (Enum.Format(EnumExTypeToUnderlyingEnumType(enumExType), value, format));
@@ -522,12 +523,13 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static int Compare(object objA, object objB)
 		{
-			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is EnumEx)
-			{
-				EnumEx casted = (EnumEx)objA;
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			EnumEx casted = objA as EnumEx;
+			if (casted != null)
 				return (casted.CompareTo(objB));
-			}
+
 			return (-1);
 		}
 

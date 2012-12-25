@@ -44,8 +44,6 @@ using System.Drawing;
 using System.Text;
 using System.Threading;
 
-using MKY.Event;
-
 #endregion
 
 namespace MKY.IO.Ports

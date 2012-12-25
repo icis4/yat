@@ -32,8 +32,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
-using MKY.Event;
-
 #endregion
 
 namespace MKY.Windows.Forms

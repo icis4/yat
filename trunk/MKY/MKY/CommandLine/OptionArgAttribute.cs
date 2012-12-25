@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.CommandLine
@@ -42,6 +43,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets or sets one or more names.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public string[] Names
 		{
 			get { return (this.names); }
@@ -83,6 +85,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets or sets one or more short names.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public string[] ShortNames
 		{
 			get { return (this.shortNames); }

@@ -34,6 +34,30 @@ using Microsoft.Win32.SafeHandles;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#DuplicateHandle(System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle&,System.UInt32,System.Boolean,MKY.Win32.Handle+NativeTypes+Options)", MessageId = "dw")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#DuplicateHandle(System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,Microsoft.Win32.SafeHandles.SafeFileHandle&,System.UInt32,System.Boolean,MKY.Win32.Handle+NativeTypes+Options)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeMethods.#CloseHandle(Microsoft.Win32.SafeHandles.SafeFileHandle)", MessageId = "h")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_CLOSE_SOURCE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_SAME_ACCESS")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_CLOSE_SOURCE", MessageId = "DUPLICATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_CLOSE_SOURCE", MessageId = "CLOSE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_CLOSE_SOURCE", MessageId = "SOURCE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_SAME_ACCESS", MessageId = "DUPLICATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_SAME_ACCESS", MessageId = "ACCESS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Handle+NativeTypes+Options.#DUPLICATE_SAME_ACCESS", MessageId = "SAME")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -53,6 +77,7 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -63,8 +88,9 @@ namespace MKY.Win32
 
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
-			[Flags]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
+			[Flags]
 			public enum Options : uint
 			{
 				DUPLICATE_CLOSE_SOURCE = 0x00000001,
@@ -85,6 +111,7 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
 			private const string KERNEL_DLL = "kernel32.dll";
@@ -96,6 +123,7 @@ namespace MKY.Win32
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool CloseHandle([In] SafeFileHandle hObject);
 
 			/// <summary>
@@ -130,10 +158,12 @@ namespace MKY.Win32
 			/// <returns> If the function succeeds, the return value is nonzero.
 			/// If the function fails, the return value is zero.
 			/// To get extended error information, call GetLastError.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern bool DuplicateHandle(IntPtr hSourceProcessHandle, SafeFileHandle hSourceHandle, IntPtr hTargetProcessHandle, out SafeFileHandle lpTargetHandle, UInt32 dwDesiredAccess, Boolean bInheritHandle, NativeTypes.Options dwOptions);
+			[return: MarshalAs(UnmanagedType.Bool)]
+			public static extern bool DuplicateHandle([In] IntPtr hSourceProcessHandle, [In] SafeFileHandle hSourceHandle, [In] IntPtr hTargetProcessHandle, [Out] out SafeFileHandle lpTargetHandle, [In] UInt32 dwDesiredAccess, [In, MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, [In] NativeTypes.Options dwOptions);
 		}
 
 		#endregion
