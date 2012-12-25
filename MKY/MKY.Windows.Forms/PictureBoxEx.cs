@@ -51,13 +51,13 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		public float ImageWidthHeigthRatio
+		public float ImageWidthHeightRatio
 		{
 			get { return ((float)Image.Width / Image.Height); }
 		}
 
 		/// <summary></summary>
-		public float WidthHeigthRatio
+		public float WidthHeightRatio
 		{
 			get { return ((float)this.Width / this.Height); }
 		}
@@ -65,13 +65,13 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public bool WidthHasScaled
 		{
-			get { return (ImageWidthHeigthRatio < WidthHeigthRatio); }
+			get { return (ImageWidthHeightRatio < WidthHeightRatio); }
 		}
 
 		/// <summary></summary>
 		public bool HeightHasScaled
 		{
-			get { return (ImageWidthHeigthRatio > WidthHeigthRatio); }
+			get { return (ImageWidthHeightRatio > WidthHeightRatio); }
 		}
 
 		/// <summary>
@@ -142,10 +142,10 @@ namespace MKY.Windows.Forms
 						int scaledHeight = Height;
 
 						if (WidthHasScaled)
-							scaledWidth = (int)((float)Width / WidthHeigthRatio * ImageWidthHeigthRatio);
+							scaledWidth = (int)((float)Width / WidthHeightRatio * ImageWidthHeightRatio);
 
 						if (HeightHasScaled)
-							scaledHeight = (int)((float)Height * WidthHeigthRatio / ImageWidthHeigthRatio);
+							scaledHeight = (int)((float)Height * WidthHeightRatio / ImageWidthHeightRatio);
 
 						return (new Size(scaledWidth, scaledHeight));
 					}

@@ -38,6 +38,7 @@ namespace MKY.IO.Ports
 
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "There is no setting with 0 data bits.")]
+	[SuppressMessage("Microsoft.Naming", "CA1717:OnlyFlagsEnumsShouldHavePluralNames", Justification = "Well, five/six/seven/eight are plural...")]
 	public enum DataBits
 	{
 		Five  = 5,
@@ -73,7 +74,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString(NumberFormatInfo.InvariantInfo));
+			return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
 		}
 
 		#endregion

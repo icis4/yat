@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -29,6 +30,8 @@ namespace MKY.Collections.Generic
 	/// <summary>
 	/// Value pair.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1", Justification = "T1 relates to Value1.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
 	[Serializable]
 	public struct Pair<T1, T2>
 	{

@@ -46,9 +46,9 @@ namespace MKY.Xml.Schema
 		/// The code has be taken from the following link:
 		/// http://stackoverflow.com/questions/687884/what-is-the-correct-way-of-using-the-guid-type-in-a-xsd-file
 		/// </remarks>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
 		public static readonly XmlSchema GuidSchema;
 
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Must be readonly because it refers to Environment.NewLine.")]
 		private static readonly string GuidSchemaString =
 			@"<?xml version=""1.0"" encoding=""utf-8""?>"                                    + Environment.NewLine +
 			@"<xs:schema xmlns:xs=""http://www.w3.org/2001/XMLSchema"""                      + Environment.NewLine +
@@ -66,6 +66,7 @@ namespace MKY.Xml.Schema
 			@"</xs:schema>";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "'GuidSchemaString' must be readonly because it refers to Environment.NewLine.")]
 		static XmlSchemaEx()
 		{
 			StringReader sr = new StringReader(GuidSchemaString);

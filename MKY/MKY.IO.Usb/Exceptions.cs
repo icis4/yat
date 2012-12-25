@@ -53,22 +53,35 @@ namespace MKY.IO.Usb
 	[Serializable]
 	public class NativeMethodCallUsbException : UsbException
 	{
-		/// <summary></summary>
-		public readonly string Method;
-
-		/// <summary></summary>
-		public readonly int ErrorCode;
-
-		/// <summary></summary>
-		public readonly string NativeMessage;
+		private string method;
+		private int errorCode;
+		private string nativeMessage;
 
 		/// <summary></summary>
 		public NativeMethodCallUsbException(string method, string message)
 			: base(message)
 		{
-			Method        = method;
-			ErrorCode     = Win32.Debug.GetLastErrorCode();
-			NativeMessage = Win32.Debug.GetLastErrorMessage();
+			this.method        = method;
+			this.errorCode     = Win32.Debug.GetLastErrorCode();
+			this.nativeMessage = Win32.Debug.GetLastErrorMessage();
+		}
+
+		/// <summary></summary>
+		public string Method
+		{
+			get { return (this.method); }
+		}
+
+		/// <summary></summary>
+		public int ErrorCode
+		{
+			get { return (this.errorCode); }
+		}
+
+		/// <summary></summary>
+		public string NativeMessage
+		{
+			get { return (this.nativeMessage); }
 		}
 
 		/// <summary></summary>
@@ -83,7 +96,7 @@ namespace MKY.IO.Usb
 			sb.AppendLine(Message);
 
 			sb.Append("  Error code: ");
-			sb.AppendLine(ErrorCode.ToString(NumberFormatInfo.InvariantInfo));
+			sb.AppendLine(ErrorCode.ToString(CultureInfo.InvariantCulture));
 
 			sb.Append("  Native message: ");
 			sb.AppendLine(NativeMessage);

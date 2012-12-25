@@ -101,8 +101,9 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and number parameters.")]
 		[CLSCompliant(false)]
+		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]
 		public virtual void TestToString(ulong data, int boundary, ulong max, bool expandNegative, bool useBigEndian, string binString, string octString, string decString, string hexString, byte[] byteArray)
 		{
 			string decFormat = "D" + decString.Length;
@@ -122,8 +123,9 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and number parameters.")]
 		[CLSCompliant(false)]
+		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]
 		public virtual void TestToByteArray(ulong data, int boundary, ulong max, bool expandNegative, bool useBigEndian, string binString, string octString, string decString, string hexString, byte[] byteArray)
 		{
 			byte[] convertedByteArray = UInt64Ex.ConvertToByteArray(data, boundary, expandNegative, useBigEndian);
@@ -138,8 +140,9 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and number parameters.")]
 		[CLSCompliant(false)]
+		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]
 		public virtual void TestTryParse(ulong data, int boundary, ulong max, bool expandNegative, bool useBigEndian, string binString, string octString, string decString, string hexString, byte[] byteArray)
 		{
 			if (!UInt64Ex.TryParseBinary(binString, out data))

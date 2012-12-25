@@ -70,12 +70,12 @@ namespace MKY.Test.Types
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(ByteExTestData), "TestCases")]
-		public virtual void TestToString(byte data, string binString, string octString, string decString, string hexString)
+		public virtual void TestToString(byte data, string bin, string oct, string dec, string hex)
 		{
-			Assert.AreEqual(binString, ByteEx.ConvertToBinaryString(data));
-			Assert.AreEqual(octString, ByteEx.ConvertToOctalString(data));
-			Assert.AreEqual(decString, data.ToString("D3", NumberFormatInfo.InvariantInfo));
-			Assert.AreEqual(hexString, data.ToString("X2", NumberFormatInfo.InvariantInfo));
+			Assert.AreEqual(bin, ByteEx.ConvertToBinaryString(data));
+			Assert.AreEqual(oct, ByteEx.ConvertToOctalString(data));
+			Assert.AreEqual(dec, data.ToString("D3", NumberFormatInfo.InvariantInfo));
+			Assert.AreEqual(hex, data.ToString("X2", NumberFormatInfo.InvariantInfo));
 		}
 
 		#endregion

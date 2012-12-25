@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Ports
@@ -35,30 +36,35 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Request To Send.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("RTS")]
 		public bool Rts;
 
 		/// <summary>
 		/// Clear To Send.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("CTS")]
 		public bool Cts;
 
 		/// <summary>
 		/// Data Terminal Ready.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("DTR")]
 		public bool Dtr;
 
 		/// <summary>
 		/// Data Set Ready.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("DSR")]
 		public bool Dsr;
 
 		/// <summary>
 		/// Data Carrier Detect.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("DCD")]
 		public bool Dcd;
 

@@ -37,7 +37,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.IO;
 using MKY.Recent;
 using MKY.Settings;
@@ -237,7 +236,7 @@ namespace YAT.Model
 			// Set ID and user name.
 			this.sequencialIndex = ++staticSequenciallIndexCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.autoName = TerminalText + this.sequencialIndex.ToString(NumberFormatInfo.InvariantInfo);
+				this.autoName = TerminalText + this.sequencialIndex.ToString(CultureInfo.InvariantCulture);
 			else
 				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
@@ -510,7 +509,7 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
-							sb.Append(s.RemotePort.ToString(NumberFormatInfo.InvariantInfo));
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture));
 							sb.Append(" - ");
 
 							if (IsConnected)
@@ -529,7 +528,7 @@ namespace YAT.Model
 
 							sb.Append(" - ");
 							sb.Append("Server:");
-							sb.Append(s.LocalPort.ToString(NumberFormatInfo.InvariantInfo));
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture));
 							sb.Append(" - ");
 
 							if (IsStarted)
@@ -684,7 +683,7 @@ namespace YAT.Model
 
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString(NumberFormatInfo.InvariantInfo));
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture));
 							break;
 						}
 

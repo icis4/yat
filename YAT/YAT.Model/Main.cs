@@ -35,7 +35,6 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Diagnostics;
-using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
 
@@ -350,13 +349,10 @@ namespace YAT.Model
 			// Always create start requests to ensure that object exists.
 			this.startArgs = new StartArgs();
 
-			// Prio 0 = Invalid:
-			if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
-			{
-				return (false);
-			}
+			// Process command line args, but do not care about result, it will be evaluated below.
+			this.commandLineArgs.ProcessAndValidate();
 
-			// Prio 1 = None:
+			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
 			{
 				this.startArgs.ShowNewTerminalDialog = true;
@@ -364,6 +360,12 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError       = true;
 
 				return (true);
+			}
+
+			// Prio 1 = Invalid:
+			if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
+			{
+				return (false);
 			}
 
 			// Prio 2 = Empty:

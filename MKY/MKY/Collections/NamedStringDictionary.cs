@@ -70,6 +70,8 @@ namespace MKY.Collections
 		/// Gets or sets the settings.
 		/// </summary>
 		/// <value>The settings.</value>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("Settings")]
 		public List<StringKeyValuePair> Settings
 		{

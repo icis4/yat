@@ -30,6 +30,7 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Utilities;
@@ -337,7 +338,7 @@ namespace YAT.Gui.Forms
 			ExecuteManualTest3Event += new EventHandler(exceptionSource.Execute);
 
 			// Fire event synchronously.
-			MKY.Event.EventHelper.FireSync(ExecuteManualTest3Event, this, new EventArgs());
+			EventHelper.FireSync(ExecuteManualTest3Event, this, new EventArgs());
 		}
 
 		private class ExecuteManualTest3Class

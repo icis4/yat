@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Win32
 {
@@ -51,6 +52,7 @@ namespace MKY.Win32
 		/// <summary>
 		/// Find out if the current operating system is Windows XP or later.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Xp", Justification = "Would 'IsWindowsXPOrLater' be better? Not really...")]
 		public static bool IsWindowsXpOrLater
 		{
 			get

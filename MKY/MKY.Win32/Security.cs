@@ -32,6 +32,21 @@ using System.Runtime.InteropServices;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.Security+NativeTypes+SECURITY_IMPERSONATION_LEVEL")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Security+NativeTypes+SECURITY_IMPERSONATION_LEVEL", MessageId = "SECURITY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Security+NativeTypes+SECURITY_IMPERSONATION_LEVEL", MessageId = "IMPERSONATION")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Security+NativeTypes+SECURITY_IMPERSONATION_LEVEL", MessageId = "LEVEL")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -51,9 +66,11 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			public enum SECURITY_IMPERSONATION_LEVEL
 			{
 				/// <summary>
@@ -99,12 +116,15 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
 			private const string ADVANCED_DLL = "advapi32.dll";
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method implemented but then not needed, kept for potential future use.")]
 			[DllImport(ADVANCED_DLL, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool ImpersonateSelf([In] NativeTypes.SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
 		}
 

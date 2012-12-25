@@ -98,14 +98,25 @@ namespace MKY.Settings
 			// Fields
 			//==========================================================================================
 
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private bool isDisposed;
 
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private string name;
+
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private TSettings settings = default(TSettings);
+
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private AlternateXmlElement[] alternateXmlElements;
 
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private ApplicationSettingsFileAccess desiredFileAccess;
+
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private FileAccessFlags effectiveFileAccess;
+
+			[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "This is a bug in FxCop 1.36.")]
 			private Mutex mutex;
 
 			#endregion

@@ -28,7 +28,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
-using MKY.Event;
+using MKY;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;

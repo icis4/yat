@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace MKY.Windows.Forms
 {
 	/// <remarks>
@@ -29,18 +31,23 @@ namespace MKY.Windows.Forms
 	public class LayoutInfo
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public float Left;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public float Top;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public float Width;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public float Height;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		public float FontSize;
 
 		/// <summary></summary>

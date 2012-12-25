@@ -150,6 +150,7 @@ namespace MKY.Test.Net
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and number parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestSerialization(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{

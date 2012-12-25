@@ -473,7 +473,7 @@ namespace YAT.Model.Types
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append("<");
-					sb.Append(MultiLineText.Length.ToString(NumberFormatInfo.InvariantInfo));
+					sb.Append(MultiLineText.Length.ToString(CultureInfo.InvariantCulture));
 					sb.Append(" lines...>");
 					for (int i = 0; i < MultiLineText.Length; i++)
 					{
@@ -668,12 +668,13 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public static int Compare(object objA, object objB)
 		{
-			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is Command)
-			{
-				Command casted = (Command)objA;
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			Command casted = objA as Command;
+			if (casted != null)
 				return (casted.CompareTo(objB));
-			}
+
 			return (-1);
 		}
 

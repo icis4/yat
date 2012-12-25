@@ -28,7 +28,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.IO.Ports;
 using MKY.Windows.Forms;
 

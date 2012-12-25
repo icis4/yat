@@ -35,6 +35,242 @@ using Microsoft.Win32.SafeHandles;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#LastAccessTime")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileAttributes")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#VolumeSerialNumber")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileSizeLow")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#NumberOfLinks")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#CreationTime")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#LastWriteTime")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileSizeHigh")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileIndexHigh")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION.#FileIndexLow")]
+
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES.#bInheritHandle")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES.#lpSecurityDescriptor")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES.#nLength")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#GetOverlappedResult(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,System.Int32&,System.Boolean)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CancelIo(Microsoft.Win32.SafeHandles.SafeFileHandle)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#WaitForSingleObject(System.IntPtr,System.UInt32)", MessageId = "dw")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#WaitForSingleObject(System.IntPtr,System.UInt32)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#WriteFile(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte[],System.Int32&,System.Threading.NativeOverlapped&)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#ReadFile(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,System.Int32,System.Int32&,System.Threading.NativeOverlapped&)", MessageId = "n")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#ReadFile(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr,System.Int32,System.Int32&,System.Threading.NativeOverlapped&)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CreateFile(System.String,MKY.Win32.FileIO+NativeTypes+Access,MKY.Win32.FileIO+NativeTypes+ShareMode,System.IntPtr,MKY.Win32.FileIO+NativeTypes+CreationDisposition,MKY.Win32.FileIO+NativeTypes+AttributesAndFlags,System.IntPtr)", MessageId = "dw")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CreateFile(System.String,MKY.Win32.FileIO+NativeTypes+Access,MKY.Win32.FileIO+NativeTypes+ShareMode,System.IntPtr,MKY.Win32.FileIO+NativeTypes+CreationDisposition,MKY.Win32.FileIO+NativeTypes+AttributesAndFlags,System.IntPtr)", MessageId = "h")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#GetFileInformationByHandle(Microsoft.Win32.SafeHandles.SafeFileHandle,MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION&)", MessageId = "h")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_EXECUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#QUERY_ONLY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ_WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_ALL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#CREATE_ALWAYS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#CREATE_NEW")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#OPEN_EXISTING")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#OPEN_ALWAYS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#TRUNCATE_EXISTING")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_DELETE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_NONE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ_WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_ALL")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_HIDDEN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_COMPRESSED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_RANDOM_ACCESS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_SEQUENTIAL_SCAN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_OFFLINE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_REPARSE_POINT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_NO_RECALL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_ARCHIVE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_TEMPORARY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SYSTEM")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NOT_CONTENT_INDEXED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NORMAL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_FIRST_PIPE_INSTANCE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SPARSE_FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_READONLY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OVERLAPPED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_DEVICE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_REPARSE_POINT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_VIRTUAL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_DELETE_ON_CLOSE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_POSIX_SEMANTICS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_DIRECTORY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_ENCRYPTED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_WRITE_THROUGH")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_NO_BUFFERING")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_BACKUP_SEMANTICS")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_EXECUTE", MessageId = "EXECUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_EXECUTE", MessageId = "GENERIC")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#QUERY_ONLY", MessageId = "QUERY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#QUERY_ONLY", MessageId = "ONLY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ_WRITE", MessageId = "READ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ_WRITE", MessageId = "WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ_WRITE", MessageId = "GENERIC")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_WRITE", MessageId = "WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_WRITE", MessageId = "GENERIC")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_ALL", MessageId = "ALL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_ALL", MessageId = "GENERIC")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ", MessageId = "READ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+Access.#GENERIC_READ", MessageId = "GENERIC")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_HIDDEN", MessageId = "HIDDEN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_HIDDEN", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_COMPRESSED", MessageId = "COMPRESSED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_COMPRESSED", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_RANDOM_ACCESS", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_RANDOM_ACCESS", MessageId = "RANDOM")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_RANDOM_ACCESS", MessageId = "ACCESS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_SEQUENTIAL_SCAN", MessageId = "SEQUENTIAL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_SEQUENTIAL_SCAN", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_SEQUENTIAL_SCAN", MessageId = "SCAN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_OFFLINE", MessageId = "OFFLINE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_OFFLINE", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_REPARSE_POINT", MessageId = "REPARSE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_REPARSE_POINT", MessageId = "POINT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_REPARSE_POINT", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_NO_RECALL", MessageId = "RECALL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_NO_RECALL", MessageId = "OPEN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_NO_RECALL", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#NONE", MessageId = "NONE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_ARCHIVE", MessageId = "ARCHIVE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_ARCHIVE", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_TEMPORARY", MessageId = "TEMPORARY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_TEMPORARY", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SYSTEM", MessageId = "SYSTEM")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SYSTEM", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NOT_CONTENT_INDEXED", MessageId = "INDEXED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NOT_CONTENT_INDEXED", MessageId = "NOT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NOT_CONTENT_INDEXED", MessageId = "CONTENT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NOT_CONTENT_INDEXED", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NORMAL", MessageId = "NORMAL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_NORMAL", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_FIRST_PIPE_INSTANCE", MessageId = "INSTANCE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_FIRST_PIPE_INSTANCE", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_FIRST_PIPE_INSTANCE", MessageId = "PIPE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_FIRST_PIPE_INSTANCE", MessageId = "FIRST")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SPARSE_FILE", MessageId = "SPARSE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SPARSE_FILE", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_SPARSE_FILE", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_READONLY", MessageId = "READONLY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_READONLY", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OVERLAPPED", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OVERLAPPED", MessageId = "OVERLAPPED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_DEVICE", MessageId = "DEVICE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_DEVICE", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_REPARSE_POINT", MessageId = "REPARSE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_REPARSE_POINT", MessageId = "POINT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_REPARSE_POINT", MessageId = "OPEN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_REPARSE_POINT", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_VIRTUAL", MessageId = "VIRTUAL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_VIRTUAL", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_DELETE_ON_CLOSE", MessageId = "DELETE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_DELETE_ON_CLOSE", MessageId = "CLOSE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_DELETE_ON_CLOSE", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_POSIX_SEMANTICS", MessageId = "POSIX")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_POSIX_SEMANTICS", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_POSIX_SEMANTICS", MessageId = "SEMANTICS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_DIRECTORY", MessageId = "DIRECTORY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_DIRECTORY", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_ENCRYPTED", MessageId = "ATTRIBUTE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#ATTRIBUTE_ENCRYPTED", MessageId = "ENCRYPTED")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_WRITE_THROUGH", MessageId = "WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_WRITE_THROUGH", MessageId = "THROUGH")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_WRITE_THROUGH", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_NO_BUFFERING", MessageId = "BUFFERING")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_NO_BUFFERING", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_BACKUP_SEMANTICS", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_BACKUP_SEMANTICS", MessageId = "SEMANTICS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_BACKUP_SEMANTICS", MessageId = "BACKUP")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#CREATE_ALWAYS", MessageId = "CREATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#CREATE_ALWAYS", MessageId = "ALWAYS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#CREATE_NEW", MessageId = "NEW")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#CREATE_NEW", MessageId = "CREATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#OPEN_EXISTING", MessageId = "EXISTING")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#OPEN_EXISTING", MessageId = "OPEN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#OPEN_ALWAYS", MessageId = "ALWAYS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#OPEN_ALWAYS", MessageId = "OPEN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#TRUNCATE_EXISTING", MessageId = "EXISTING")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#TRUNCATE_EXISTING", MessageId = "TRUNCATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+CreationDisposition.#APPEND", MessageId = "APPEND")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_DELETE", MessageId = "DELETE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_DELETE", MessageId = "SHARE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_NONE", MessageId = "NONE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_NONE", MessageId = "SHARE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ_WRITE", MessageId = "READ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ_WRITE", MessageId = "SHARE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ_WRITE", MessageId = "WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ", MessageId = "READ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_READ", MessageId = "SHARE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_WRITE", MessageId = "SHARE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_WRITE", MessageId = "WRITE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_ALL", MessageId = "ALL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+ShareMode.#SHARE_ALL", MessageId = "SHARE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION", MessageId = "INFORMATION")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION", MessageId = "FILE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+BY_HANDLE_FILE_INFORMATION", MessageId = "HANDLE")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES", MessageId = "SECURITY")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+SECURITY_ATTRIBUTES", MessageId = "ATTRIBUTES")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CreateEvent(System.IntPtr,System.Boolean,System.Boolean,System.String)", MessageId = "Security")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CancelIo(Microsoft.Win32.SafeHandles.SafeFileHandle)", MessageId = "Io")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeMethods.#CreateFile(System.String,MKY.Win32.FileIO+NativeTypes+Access,MKY.Win32.FileIO+NativeTypes+ShareMode,System.IntPtr,MKY.Win32.FileIO+NativeTypes+CreationDisposition,MKY.Win32.FileIO+NativeTypes+AttributesAndFlags,System.IntPtr)", MessageId = "Flags")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "type", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags", MessageId = "Flags")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_RANDOM_ACCESS", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_SEQUENTIAL_SCAN", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_NO_RECALL", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_FIRST_PIPE_INSTANCE", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OVERLAPPED", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_OPEN_REPARSE_POINT", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_DELETE_ON_CLOSE", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_POSIX_SEMANTICS", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_WRITE_THROUGH", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_NO_BUFFERING", MessageId = "FLAG")]
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope = "member", Target = "MKY.Win32.FileIO+NativeTypes+AttributesAndFlags.#FLAG_BACKUP_SEMANTICS", MessageId = "FLAG")]
+
+#endregion
+
 namespace MKY.Win32
 {
 	/// <summary>
@@ -54,6 +290,7 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -67,8 +304,9 @@ namespace MKY.Win32
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
-			[Flags]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
+			[Flags]
 			public enum Access : uint
 			{
 				GENERIC_READ       = 0x80000000,
@@ -86,9 +324,10 @@ namespace MKY.Win32
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
-			[Flags]
 			[CLSCompliant(false)]
+			[Flags]
 			public enum ShareMode : uint
 			{
 				SHARE_NONE       = 0x00000000,
@@ -104,6 +343,7 @@ namespace MKY.Win32
 			/// Replicates Win32 creation disposition selectors into a C# enum.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			public enum CreationDisposition
 			{
 				CREATE_NEW        = System.IO.FileMode.CreateNew,
@@ -118,12 +358,14 @@ namespace MKY.Win32
 			/// Encapsulates Win32 FILE_ATTRIBUTE_ and FILE_FLAG_ values into a C# flag enum.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
-			[Flags]
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
+			[Flags]
 			public enum AttributesAndFlags : uint
 			{
 				NONE                          = System.IO.FileOptions.None,
 
+				[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "READONLY", Justification = "Item name is given by the Win32 API.")]
 				ATTRIBUTE_READONLY            = System.IO.FileAttributes.ReadOnly,
 				ATTRIBUTE_HIDDEN              = System.IO.FileAttributes.Hidden,
 				ATTRIBUTE_SYSTEM              = System.IO.FileAttributes.System,
@@ -154,6 +396,7 @@ namespace MKY.Win32
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SECURITY_ATTRIBUTES
 			{
@@ -162,6 +405,7 @@ namespace MKY.Win32
 				public Int32 bInheritHandle;
 			}
 
+			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct BY_HANDLE_FILE_INFORMATION
@@ -192,6 +436,7 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
 			private const string KERNEL_DLL = "kernel32.dll";
@@ -203,6 +448,7 @@ namespace MKY.Win32
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool CancelIo([In] SafeFileHandle hFile);
 
 			/// <summary>
@@ -216,7 +462,7 @@ namespace MKY.Win32
 			/// <returns>A handle to the event object.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern IntPtr CreateEvent([In] IntPtr SecurityAttributes, [In] bool bManualReset, [In] bool bInitialState, [In] string lpName);
+			public static extern IntPtr CreateEvent([In] IntPtr SecurityAttributes, [In, MarshalAs(UnmanagedType.Bool)] bool bManualReset, [In, MarshalAs(UnmanagedType.Bool)] bool bInitialState, [In] string lpName);
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
@@ -225,9 +471,11 @@ namespace MKY.Win32
 			public static extern SafeFileHandle CreateFile([In] string lpFileName, [In] NativeTypes.Access dwDesiredAccess, [In] NativeTypes.ShareMode dwShareMode, [In] IntPtr lpSecurityAttributes, [In] NativeTypes.CreationDisposition dwCreationDisposition, [In] NativeTypes.AttributesAndFlags dwFlagsAndAttributes, [In] IntPtr hTemplateFile);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool GetFileInformationByHandle([In] SafeFileHandle hFile, [Out] out NativeTypes.BY_HANDLE_FILE_INFORMATION lpFileInformation);
 
 			/// <summary>
@@ -238,6 +486,7 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesTransferred">A pointer to a variable to hold the number of bytes read.</param>
 			/// <param name="bWait">False to return immediately.</param>
 			/// <returns>Non-zero on success and the number of bytes read.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, out int lpNumberOfBytesTransferred, bool bWait)
 			{
 				UInt32 bytesTransferred;
@@ -247,7 +496,8 @@ namespace MKY.Win32
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool GetOverlappedResult([In] SafeFileHandle hFile, [In] IntPtr lpOverlapped, [Out] out UInt32 lpNumberOfBytesTransferred, [In] bool bWait);
+			[return: MarshalAs(UnmanagedType.Bool)]
+			private static extern bool GetOverlappedResult([In] SafeFileHandle hFile, [In] IntPtr lpOverlapped, [Out] out UInt32 lpNumberOfBytesTransferred, [In, MarshalAs(UnmanagedType.Bool)] bool bWait);
 
 			/// <summary>
 			/// Attempts to read an Input report from the device.
@@ -265,6 +515,8 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesRead">A pointer to a variable that will hold the number of bytes read.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns>The report in ReadBuffer.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, ref NativeOverlapped lpOverlapped)
 			{
 				UInt32 bytesRead;
@@ -274,6 +526,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] ref NativeOverlapped lpOverlapped);
 
 			/// <summary>
@@ -296,6 +549,8 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 			public static bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, out int lpNumberOfBytesWritten, ref NativeOverlapped lpOverlapped)
 			{
 				UInt32 bytesWritten;
@@ -305,6 +560,7 @@ namespace MKY.Win32
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern bool WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] ref NativeOverlapped lpOverlapped);
 		}
 

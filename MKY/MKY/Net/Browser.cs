@@ -36,6 +36,7 @@ namespace MKY.Net
 		/// Opens the system default browser and browses uri.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
+		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Quite funny suggestion by FxCop...")]
 		public static void BrowseUri(string uri)
 		{
 			Process.Start(uri);

@@ -34,6 +34,7 @@ namespace MKY.Windows.Forms
 	/// <param name="m">
 	/// A System.Windows.Forms.Message that is associated with the current Windows message.
 	/// </param>
+	[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "This design is given by the Windows.Forms message handling design.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 	public delegate void NativeMessageHandlerCallback(ref Message m);
 

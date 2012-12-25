@@ -602,7 +602,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static string StandardPortNumberToString(int standardPortNumber)
 		{
-			return (StandardPortNamePrefix + standardPortNumber.ToString(NumberFormatInfo.InvariantInfo));
+			return (StandardPortNamePrefix + standardPortNumber.ToString(CultureInfo.InvariantCulture));
 		}
 
 		#endregion
@@ -633,12 +633,13 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static int Compare(object objA, object objB)
 		{
-			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is SerialPortId)
-			{
-				SerialPortId casted = (SerialPortId)objA;
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			SerialPortId casted = objA as SerialPortId;
+			if (casted != null)
 				return (casted.CompareTo(objB));
-			}
+
 			return (-1);
 		}
 
@@ -783,6 +784,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
 			if (value is int)    return (new SerialPortId((int)value));
@@ -803,6 +805,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
 		{
 			if (destinationType == typeof(int))    return (((SerialPortId)value).StandardPortNumber);
@@ -819,6 +822,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "port", Justification = "Local variable 'port' is required for object instantiation to check for exception.")]
 		public override bool IsValid(ITypeDescriptorContext context, object value)
 		{

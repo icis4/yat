@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -202,6 +203,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// Returns <c>true</c> if the RTS/CTS lines are use, i.e. if one or the other kind of RTS/CTS
 		/// flow control is active.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
 		public virtual bool FlowControlUsesRtsCts
 		{
 			get
@@ -216,6 +219,10 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Returns <c>true</c> if the RTS/CTS and/or DTR/DSR lines are managed manually.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
 		public virtual bool FlowControlManagesRtsCtsDtrDsrManually
 		{
 			get

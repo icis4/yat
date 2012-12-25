@@ -46,11 +46,11 @@ namespace MKY
 		/// Tries to create and return a GUID from the file path if possible.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		public static bool TryParse(string s, out Guid guid)
+		public static bool TryParse(string str, out Guid guid)
 		{
 			try
 			{
-				guid = new Guid(s);
+				guid = new Guid(str);
 				return (true);
 			}
 			catch

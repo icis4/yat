@@ -201,12 +201,13 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public static int Compare(object objA, object objB)
 		{
-			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is PredefinedCommandPage)
-			{
-				PredefinedCommandPage casted = (PredefinedCommandPage)objA;
+			if (ReferenceEquals(objA, objB))
+				return (0);
+
+			PredefinedCommandPage casted = objA as PredefinedCommandPage;
+			if (casted != null)
 				return (casted.CompareTo(objB));
-			}
+
 			return (-1);
 		}
 

@@ -55,10 +55,6 @@ using System.Runtime.InteropServices;
 // Resources.
 [assembly: NeutralResourcesLanguageAttribute("en")]
 
-// Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "YAT", Justification = "YAT is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "YAT", MessageId = "YAT", Justification = "YAT is a name.")]
-
 //==================================================================================================
 // End of
 // $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT/Properties/AssemblyInfo.cs $

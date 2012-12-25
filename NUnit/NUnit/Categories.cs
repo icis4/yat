@@ -22,6 +22,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 using NUnit.Framework;
 
@@ -31,25 +32,20 @@ namespace NUnit
 	public static class CategoryStrings
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 		public static readonly string Interactive = "Interactive";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 		public static readonly string Endurance = "Endurance";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 		public static readonly string Stress = "Stress";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 		public static readonly string Duration = "Duration";
 	}
 
 	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class InteractiveCategoryAttribute : CategoryAttribute
 	{
@@ -62,7 +58,6 @@ namespace NUnit
 
 	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class EnduranceCategoryAttribute : CategoryAttribute
 	{
@@ -75,7 +70,6 @@ namespace NUnit
 
 	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class StressCategoryAttribute : CategoryAttribute
 	{
@@ -87,13 +81,13 @@ namespace NUnit
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
 	[CLSCompliant(false)]
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class DurationCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
-		public readonly TimeSpan Duration;
+		private readonly TimeSpan duration;
 
 		/// <summary></summary>
 		public DurationCategoryAttribute(int days, int hours, int minutes, int seconds, int milliseconds, string name)
@@ -105,41 +99,88 @@ namespace NUnit
 		public DurationCategoryAttribute(TimeSpan duration, string name)
 			: base(name)
 		{
-			Duration = duration;
+			this.duration = duration;
+		}
+
+		/// <summary></summary>
+		public virtual TimeSpan Duration
+		{
+			get { return (this.duration); }
+		}
+
+		/// <summary></summary>
+		public virtual int Days
+		{
+			get { return (this.duration.Days); }
+		}
+
+		/// <summary></summary>
+		public virtual int Hours
+		{
+			get { return (this.duration.Hours); }
+		}
+
+		/// <summary></summary>
+		public virtual int Minutes
+		{
+			get { return (this.duration.Minutes); }
+		}
+
+		/// <summary></summary>
+		public virtual int Seconds
+		{
+			get { return (this.duration.Seconds); }
+		}
+
+		/// <summary></summary>
+		public virtual int Milliseconds
+		{
+			get { return (this.duration.Milliseconds); }
 		}
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
 	[CLSCompliant(false)]
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class MinuteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public MinuteDurationCategoryAttribute(int minutes)
-			: base(0, 0, minutes, 0, 0, CategoryStrings.Duration + " is approx. " + minutes.ToString() + " minute(s)")
+			: base(0, 0, minutes, 0, 0, CategoryStrings.Duration + " is approx. " + minutes.ToString(CultureInfo.InvariantCulture) + " minute(s)")
 		{
+		}
+
+		/// <summary></summary>
+		public virtual int Minutes
+		{
+			get { return ((int)Duration.TotalMinutes); }
 		}
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
 	[CLSCompliant(false)]
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class SecondDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public SecondDurationCategoryAttribute(int seconds)
-			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is approx. " + seconds.ToString() + " second(s)")
+			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is approx. " + seconds.ToString(CultureInfo.InvariantCulture) + " second(s)")
 		{
+		}
+
+		/// <summary></summary>
+		public virtual int Seconds
+		{
+			get { return ((int)Duration.TotalSeconds); }
 		}
 	}
 
 	/// <summary></summary>
 	[CLSCompliant(false)]
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
+	public sealed class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public InfiniteDurationCategoryAttribute()

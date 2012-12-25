@@ -44,6 +44,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx.NetEx", "ALAZ
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-8299-493A-9A21-B9A1B5C5BA5C}"
 	ProjectSection(SolutionItems) = preProject
+		MKY\CustomDictionary.xml = MKY\CustomDictionary.xml
 		MKY\MKY.Version.cs = MKY\MKY.Version.cs
 	EndProjectSection
 EndProject
@@ -87,6 +88,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "M
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
 	ProjectSection(SolutionItems) = preProject
+		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
 		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
 	EndProjectSection
 EndProject
@@ -94,6 +96,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
 	ProjectSection(SolutionItems) = preProject
+		YAT\CustomDictionary.xml = YAT\CustomDictionary.xml
 		YAT\YAT.Version.cs = YAT\YAT.Version.cs
 	EndProjectSection
 EndProject

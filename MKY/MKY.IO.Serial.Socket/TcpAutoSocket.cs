@@ -34,7 +34,6 @@ using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
-using MKY.Event;
 
 #endregion
 
@@ -77,21 +76,21 @@ namespace MKY.IO.Serial.Socket
 	/// b) As a result, the first AutoSocket shuts down, the second changes from 'Accepted' to
 	///    'Listening' and tries to sychronize from the ALAZ socket event to the GUI/main thread:
 	/// 
-	/// MKY.Event.EventHelper.InvokeSynchronized(System.ComponentModel.ISynchronizeInvoke sinkTarget = {YAT.Gui.Forms.Terminal}, System.Delegate sink = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 319
-	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 163
+	/// MKY.EventHelper.InvokeSynchronized(System.ComponentModel.ISynchronizeInvoke sinkTarget = {YAT.Gui.Forms.Terminal}, System.Delegate sink = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 319
+	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 163
 	/// YAT.Model.Terminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 2195
 	/// YAT.Model.Terminal.terminal_IOChanged(object sender = {YAT.Domain.TextTerminal}, System.EventArgs e = {System.EventArgs}) Line 1261
-	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
 	/// YAT.Domain.Terminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 1049
 	/// YAT.Domain.Terminal.rawTerminal_IOChanged(object sender = {YAT.Domain.RawTerminal}, System.EventArgs e = {System.EventArgs}) Line 978
-	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
 	/// YAT.Domain.RawTerminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 601
 	/// YAT.Domain.RawTerminal.io_IOChanged(object sender = {MKY.IO.Serial.TcpAutoSocket}, System.EventArgs e = {System.EventArgs}) Line 557
 	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
 	/// MKY.IO.Serial.TcpAutoSocket.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 854
 	/// MKY.IO.Serial.TcpAutoSocket.SetStateSynchronizedAndNotify(MKY.IO.Serial.TcpAutoSocket.SocketState state = Listening) Line 476
 	/// MKY.IO.Serial.TcpAutoSocket.server_IOChanged(object sender = {MKY.IO.Serial.TcpServer}, System.EventArgs e = {System.EventArgs}) Line 804
-	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
 	/// MKY.IO.Serial.TcpServer.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 556
 	/// MKY.IO.Serial.TcpServer.SetStateSynchronizedAndNotify(MKY.IO.Serial.TcpServer.SocketState state = Listening) Line 395
 	/// MKY.IO.Serial.TcpServer.OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e = {ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs}) Line 525

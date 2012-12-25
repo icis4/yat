@@ -113,8 +113,8 @@ namespace MKY.Test.CommandLine
 		public string AAA;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Name = "BBB", ShortNames = new string[] { "b", "a" })]
 		public string BBB;
 
@@ -136,8 +136,8 @@ namespace MKY.Test.CommandLine
 		public string AAA;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Name = "BBB", ShortNames = new string[] { "a", "b" })]
 		public string BBB;
 
@@ -159,8 +159,8 @@ namespace MKY.Test.CommandLine
 		public string AAA;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "BBB", "AAA" }, ShortName = "b")]
 		public string BBB;
 
@@ -182,8 +182,8 @@ namespace MKY.Test.CommandLine
 		public string AAA;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "AAA", "BBB" }, ShortName = "b")]
 		public string BBB;
 
@@ -205,8 +205,8 @@ namespace MKY.Test.CommandLine
 		public string AAA;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "BBB", "AAA" }, ShortNames = new string[] { "b", "a" })]
 		public string BBB;
 
@@ -228,8 +228,8 @@ namespace MKY.Test.CommandLine
 		public string AAA;
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "AAA", "BBB" }, ShortNames = new string[] { "a", "b" })]
 		public string BBB;
 

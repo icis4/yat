@@ -21,13 +21,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Ports;
 using System.Reflection;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace MKY.IO.Ports
 {
@@ -337,6 +345,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
 			if (value is string) return (SerialPortSettings.Parse((string)value));
@@ -355,6 +364,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
 		{
 			if (destinationType == typeof(string)) return (((SerialPortSettings)value).ToString());

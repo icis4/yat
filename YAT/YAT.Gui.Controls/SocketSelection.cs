@@ -34,7 +34,6 @@ using System.Net;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.IO.Serial.Socket;
 using MKY.Net;
 using MKY.Windows.Forms;
@@ -393,8 +392,8 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"Remote port is invalid, valid values are numbers from " +
-							System.Net.IPEndPoint.MinPort.ToString(NumberFormatInfo.InvariantInfo) + " to " +
-							System.Net.IPEndPoint.MaxPort.ToString(NumberFormatInfo.InvariantInfo) + ".",
+							System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+							System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -440,8 +439,8 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"Local port is invalid, valid values are numbers from " +
-							System.Net.IPEndPoint.MinPort.ToString(NumberFormatInfo.InvariantInfo) + " to " +
-							System.Net.IPEndPoint.MaxPort.ToString(NumberFormatInfo.InvariantInfo) + ".",
+							System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+							System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -584,12 +583,12 @@ namespace YAT.Gui.Controls
 			if (Enabled && ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket)))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localTcpPort.ToString(NumberFormatInfo.InvariantInfo);
+				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture);
 			}
 			else if (Enabled && (this.hostType == SocketHostType.Udp))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localUdpPort.ToString(NumberFormatInfo.InvariantInfo);
+				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture);
 			}
 			else
 			{

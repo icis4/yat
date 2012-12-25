@@ -36,16 +36,19 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public class PortChangedAndCancelEventArgs : EventArgs
 		{
-			/// <summary></summary>
-			public readonly SerialPortId Port;
-
-			/// <summary></summary>
+			private SerialPortId port;
 			private bool cancel;
 
 			/// <summary></summary>
 			public PortChangedAndCancelEventArgs(SerialPortId port)
 			{
-				Port = port;
+				this.port = port;
+			}
+
+			/// <summary></summary>
+			public SerialPortId Port
+			{
+				get { return (this.port); }
 			}
 
 			/// <summary></summary>

@@ -68,12 +68,15 @@ namespace MKY.Win32
 			private const string WINUSB_DLL = "winusb.dll";
 
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool WinUsb_Initialize([In] SafeFileHandle DeviceHandle, [Out] out SafeFileHandle InterfaceHandle);
 
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 		}
 
@@ -112,6 +115,7 @@ namespace MKY.Win32
 		/// <summary>
 		/// Retrieves the device handle of the HID device at the given system path.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetUsbHandle(string devicePath, out SafeFileHandle usbHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
@@ -153,6 +157,7 @@ namespace MKY.Win32
 		/// can retrieve the logged error by calling <see cref="Debug.GetLastErrorCode"/> or
 		/// <see cref="Debug.GetLastErrorMessage"/>.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool InitializeInterfaceHandle(SafeFileHandle deviceHandle, out SafeFileHandle interfaceHandle)
 		{
 			return (NativeMethods.WinUsb_Initialize(deviceHandle, out interfaceHandle));
@@ -164,6 +169,7 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetDeviceDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
@@ -193,6 +199,7 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetConfigurationDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
@@ -222,6 +229,8 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string buffer, out int lengthTransferred)
 		{
 			try

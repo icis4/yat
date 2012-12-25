@@ -26,7 +26,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-using MKY.Event;
+using MKY;
 using MKY.Windows.Forms;
 
 namespace YAT.Gui.Controls

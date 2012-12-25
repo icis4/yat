@@ -52,8 +52,6 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MKY", Justification = "MKY is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.IO.Serial.Usb.Test", MessageId = "MKY", Justification = "MKY is a name.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.IO.Serial.Usb.Test", Justification = "Namespace for orthogonality of test and testee namespaces.")]
 
 //==================================================================================================

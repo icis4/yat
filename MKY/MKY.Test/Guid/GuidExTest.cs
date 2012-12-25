@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
@@ -72,6 +73,7 @@ namespace MKY.Test.Guid
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		[Test, TestCaseSource(typeof(GuidExTestData), "TestCases")]
 		public virtual void TestTryCreateGuidFromFilePath(bool isValid, string filePath, string prefix, string postfix, System.Guid expectedGuid)
 		{

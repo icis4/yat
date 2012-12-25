@@ -64,10 +64,10 @@ namespace MKY.IO.Ports
 		{
 			switch ((StopBits)UnderlyingEnum)
 			{
-				case StopBits.None:         return (None_double        .ToString(NumberFormatInfo.InvariantInfo));
-				case StopBits.One:          return (One_double         .ToString(NumberFormatInfo.InvariantInfo));
-				case StopBits.OnePointFive: return (OnePointFive_double.ToString(NumberFormatInfo.InvariantInfo));
-				case StopBits.Two:          return (Two_double         .ToString(NumberFormatInfo.InvariantInfo));
+				case StopBits.None:         return (None_double        .ToString(CultureInfo.InvariantCulture));
+				case StopBits.One:          return (One_double         .ToString(CultureInfo.InvariantCulture));
+				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
+				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 			}
 			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}

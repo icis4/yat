@@ -52,8 +52,6 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MKY", Justification = "MKY is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.Test", MessageId = "MKY", Justification = "MKY is a name.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Test.IO", Justification = "Name of namespaces is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Test.Guid", Justification = "Name of namespaces is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Test.Net", Justification = "Name of namespaces is given by the .NET framework.")]

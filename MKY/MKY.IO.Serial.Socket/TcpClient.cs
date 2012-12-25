@@ -35,7 +35,6 @@ using System.Threading;
 
 using MKY.Contracts;
 using MKY.Diagnostics;
-using MKY.Event;
 
 #endregion
 

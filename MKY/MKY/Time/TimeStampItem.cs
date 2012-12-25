@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System;
+using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -130,7 +131,7 @@ namespace MKY.Time
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(TimeStamp.ToString());
+			sb.Append(TimeStamp.ToString(CultureInfo.InvariantCulture));
 			sb.Append(" / ");
 			sb.Append(Item.ToString());
 
