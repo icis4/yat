@@ -65,19 +65,19 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode parseMode)
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode mode)
 		{
 			string parsedText;
-			return (ValidateSequence(owner, description, textToValidate, parseMode, out parsedText));
+			return (ValidateSequence(owner, description, textToValidate, mode, out parsedText));
 		}
 
 		/// <summary></summary>
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode parseMode, out string parsedText)
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode mode, out string parsedText)
 		{
 			Domain.Parser.Parser p = new Domain.Parser.Parser();
 			Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
-			if (p.TryParse(textToValidate, parseMode, out parsedText, ref formatException))
+			if (p.TryParse(textToValidate, mode, out parsedText, ref formatException))
 			{
 				return (true);
 			}

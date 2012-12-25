@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 #endregion
@@ -63,6 +64,7 @@ namespace MKY.Usb
 		/// <summary>
 		/// Retrieves available culture infos from language string.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The parameter shall clearly state what it represents.")]
 		public static CultureInfo[] GetCultureInfoFromLanguageString(string languageString)
 		{
 			List<CultureInfo> l = new List<CultureInfo>();

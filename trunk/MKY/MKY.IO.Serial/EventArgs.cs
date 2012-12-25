@@ -21,17 +21,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-
-#endregion
 
 namespace MKY.IO.Serial
 {
@@ -52,6 +44,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public virtual byte[] Data
 		{
 			get { return (this.data); }
@@ -88,7 +81,7 @@ namespace MKY.IO.Serial
 	{
 		/// <summary></summary>
 		public DataReceivedEventArgs(byte[] data)
-			: base (data)
+			: base(data)
 		{
 		}
 	}
@@ -109,17 +102,9 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly ErrorSeverity Severity;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly Direction Direction;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly string Message;
+		private ErrorSeverity severity;
+		private Direction direction;
+		private string message;
 
 		/// <summary></summary>
 		public IOErrorEventArgs(string message)
@@ -136,24 +121,46 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, Direction direction, string message)
 		{
-			Severity  = severity;
-			Direction = direction;
-			Message   = message;
+			this.severity = severity;
+			this.direction = direction;
+			this.message = message;
+		}
+
+		/// <summary></summary>
+		public ErrorSeverity Severity
+		{
+			get { return (this.severity); }
+		}
+
+		/// <summary></summary>
+		public Direction Direction
+		{
+			get { return (this.direction); }
+		}
+
+		/// <summary></summary>
+		public string Message
+		{
+			get { return (this.message); }
 		}
 	}
 
 	/// <summary></summary>
 	public class SerialPortErrorEventArgs : IOErrorEventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly System.IO.Ports.SerialError SerialPortError;
+		private System.IO.Ports.SerialError serialPortError;
 
 		/// <summary></summary>
 		public SerialPortErrorEventArgs(string message, System.IO.Ports.SerialError serialPortError)
 			: base(message)
 		{
-			SerialPortError = serialPortError;
+			this.serialPortError = serialPortError;
+		}
+
+		/// <summary></summary>
+		public System.IO.Ports.SerialError SerialPortError
+		{
+			get { return (this.serialPortError); }
 		}
 	}
 }

@@ -22,9 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace MKY.IO.Ports
 {
@@ -32,14 +30,18 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public class SerialDataReceivedEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly System.IO.Ports.SerialData EventType;
+		private System.IO.Ports.SerialData eventType;
 
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs(System.IO.Ports.SerialData eventType)
 		{
-			EventType = eventType;
+			this.eventType = eventType;
+		}
+
+		/// <summary></summary>
+		public System.IO.Ports.SerialData EventType
+		{
+			get { return (this.eventType); }
 		}
 	}
 
@@ -47,14 +49,18 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public class SerialErrorReceivedEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly System.IO.Ports.SerialError EventType;
+		private System.IO.Ports.SerialError eventType;
 
 		/// <summary></summary>
 		public SerialErrorReceivedEventArgs(System.IO.Ports.SerialError eventType)
 		{
-			EventType = eventType;
+			this.eventType = eventType;
+		}
+
+		/// <summary></summary>
+		public System.IO.Ports.SerialError EventType
+		{
+			get { return (this.eventType); }
 		}
 	}
 
@@ -62,14 +68,18 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public class SerialPinChangedEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly MKY.IO.Ports.SerialPinChange EventType;
+		private MKY.IO.Ports.SerialPinChange eventType;
 
 		/// <summary></summary>
 		public SerialPinChangedEventArgs(MKY.IO.Ports.SerialPinChange eventType)
 		{
-			EventType = eventType;
+			this.eventType = eventType;
+		}
+
+		/// <summary></summary>
+		public MKY.IO.Ports.SerialPinChange EventType
+		{
+			get { return (this.eventType); }
 		}
 	}
 

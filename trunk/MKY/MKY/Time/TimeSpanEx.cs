@@ -86,14 +86,18 @@ namespace MKY
 	/// <summary></summary>
 	public class TimeSpanEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly TimeSpan TimeSpan;
+		private TimeSpan timeSpan;
 
 		/// <summary></summary>
 		public TimeSpanEventArgs(TimeSpan timeSpan)
 		{
-			TimeSpan = timeSpan;
+			this.timeSpan = timeSpan;
+		}
+
+		/// <summary></summary>
+		public TimeSpan TimeSpan
+		{
+			get { return (this.timeSpan); }
 		}
 	}
 }

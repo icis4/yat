@@ -51,7 +51,7 @@ namespace MKY.IO.Usb
 		MassStorage         = 0x08,
 		Hub                 = 0x09,
 		CdcData             = 0x0A,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SmartCard", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SmartCard", Justification = "Item names are given by USB.")]
 		SmartCard           = 0x0B,
 		//// Reserved         0x0C
 		ContentSecurity     = 0x0D,
@@ -79,7 +79,7 @@ namespace MKY.IO.Usb
 		Config    = 0x02,
 		String    = 0x03,
 		Interface = 0x04,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 		EndPoint  = 0x05,
 		Hid       = 0x21,
 		Report    = 0x22,
@@ -96,9 +96,9 @@ namespace MKY.IO.Usb
 		Device        = 18,
 		Config        = 9,
 		Interface     = 9,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 		EndPoint      = 7,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 		EndPointAudio = 9, // Audio extension
 		HubNonVar     = 7,
 	}
@@ -114,8 +114,8 @@ namespace MKY.IO.Usb
 		SerialNumber = 3,
 	}
 
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by USB.")]
-	[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Value names are given by USB.")]
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by USB.")]
+	[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by USB.")]
 	[Flags]
 	public enum EndPointDirection
@@ -132,7 +132,7 @@ namespace MKY.IO.Usb
 		Interrupt   = 3,
 	}
 
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by USB.")]
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by USB.")]
 	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by USB.")]
 	[Flags]
 	public enum RequestType
@@ -165,7 +165,7 @@ namespace MKY.IO.Usb
 	{
 		Device    = 0x00,
 		Interface = 0x01,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Item names are given by USB.")]
 		EndPoint  = 0x02,
 		Other     = 0x03,
 	}
@@ -216,6 +216,8 @@ namespace MKY.IO.Usb
 		GameControls                 = 0x05,
 		GenericDeviceControls        = 0x06,
 		KeyboardKeypad               = 0x07,
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "LEDs", Justification = "Item names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LEDs", Justification = "Item names are given by USB.")]
 		LEDs                         = 0x08,
 		Button                       = 0x09,
 		Ordinal                      = 0x0A,
@@ -223,6 +225,7 @@ namespace MKY.IO.Usb
 		Consumer                     = 0x0C,
 		Digitizer                    = 0x0D,
 		//// Reserved                  0x0E
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "PID", Justification = "Item names are given by USB.")]
 		PID                          = 0x0F,
 		Unicode                      = 0x10,
 		//// Reserved                  0x11..0x13
@@ -230,24 +233,24 @@ namespace MKY.IO.Usb
 		//// Reserved                  0x15..0x3F
 		MedicalInstruments           = 0x40,
 		//// Reserved                  0x41..0x7F
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Monitor_1                    = 0x80,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Monitor_2                    = 0x81,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Monitor_3                    = 0x82,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Monitor_4                    = 0x83,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Power_1                      = 0x84,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Power_2                      = 0x85,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Power_3                      = 0x86,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Power_4                      = 0x87,
 		//// Reserved                  0x88..0x8B
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BarCode", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BarCode", Justification = "Item names are given by USB.")]
 		BarCodeScanner               = 0x8C,
 		Scale                        = 0x8D,
 		MagneticStripeReadingDevices = 0x8E,
@@ -369,10 +372,11 @@ namespace MKY.IO.Usb
 		Mouse       = 0x02,
 		//// Reserved 0x03,
 		Joystick    = 0x04,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "GamePad", Justification = "Value names are given by USB.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "GamePad", Justification = "Item names are given by USB.")]
 		GamePad     = 0x05,
 		Keyboard    = 0x06,
 		Keypad      = 0x07,
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "Item names are given by USB.")]
 		MultiAxis   = 0x08,
 		TabletPC    = 0x09,
 		//// See document above.

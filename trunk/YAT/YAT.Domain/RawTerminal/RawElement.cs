@@ -51,7 +51,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public RawElement(byte[] data, SerialDirection direction)
-			: this (data, direction, DateTime.Now)
+			: this(data, direction, DateTime.Now)
 		{
 		}
 

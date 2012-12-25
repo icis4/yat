@@ -22,34 +22,38 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Data
 {
 	/// <summary></summary>
 	public class DataEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of use.")]
-		public readonly DataItem Source;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of use.")]
-		public readonly DataEventArgs Inner;
+		private DataItem source;
+		private DataEventArgs inner;
 
 		/// <summary></summary>
 		public DataEventArgs(DataItem source)
 		{
-			Source = source;
+			this.source = source;
 		}
 
 		/// <summary></summary>
 		public DataEventArgs(DataItem source, DataEventArgs inner)
 		{
-			Source = source;
-			Inner = inner;
+			this.source = source;
+			this.inner = inner;
+		}
+
+		/// <summary></summary>
+		public DataItem Source
+		{
+			get { return (this.source); }
+		}
+
+		/// <summary></summary>
+		public DataEventArgs Inner
+		{
+			get { return (this.inner); }
 		}
 	}
 }

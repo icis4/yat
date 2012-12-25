@@ -36,6 +36,8 @@ namespace MKY.Collections.Generic
 	/// </remarks>
 	public static class VarianceWorkaround
 	{
+		private const string NamingSuppressionJustification = "S and D is used to clearly indicate the source and destination type.";
+
 		/// <summary>
 		/// An invalid index is represented by -1.
 		/// </summary>
@@ -46,8 +48,8 @@ namespace MKY.Collections.Generic
 		/// </summary>
 		/// <typeparam name="S">IList source.</typeparam>
 		/// <typeparam name="D">IList destination.</typeparam>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		public static void Add<S, D>(IList<S> source, IList<D> destination)
 			where S : D
 		{
@@ -66,8 +68,8 @@ namespace MKY.Collections.Generic
 		/// <typeparam name="S">IEnumerable source.</typeparam>
 		/// <typeparam name="D">IEnumerable destination.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Well, this is the nature of this variance method...")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		public static IEnumerable<D> Convert<S, D>(IEnumerable<S> source)
 			where S : D
 		{
@@ -80,8 +82,8 @@ namespace MKY.Collections.Generic
 		/// <typeparam name="S">IEnumerable source.</typeparam>
 		/// <typeparam name="D">IEnumerable destination.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Required for this variance workaround.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Wrapper is used to clearly indicate that this is a workaround.")]
 		public class EnumerableWrapper<S, D> : IEnumerable<D>
 			where S : D
@@ -167,8 +169,8 @@ namespace MKY.Collections.Generic
 		/// <typeparam name="S">ICollection source.</typeparam>
 		/// <typeparam name="D">ICollection destination.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Well, this is the nature of this variance method...")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		public static ICollection<D> Convert<S, D>(ICollection<S> source)
 			where S : D
 		{
@@ -181,8 +183,8 @@ namespace MKY.Collections.Generic
 		/// <typeparam name="S">ICollection source.</typeparam>
 		/// <typeparam name="D">ICollection destination.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Required for this variance workaround.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Wrapper is used to clearly indicate that this is a workaround.")]
 		public class CollectionWrapper<S, D> : EnumerableWrapper<S, D>, ICollection<D>
 			where S : D
@@ -273,8 +275,8 @@ namespace MKY.Collections.Generic
 		/// <typeparam name="S">IList source.</typeparam>
 		/// <typeparam name="D">IList destination.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "Well, this is the nature of this variance method...")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		public static IList<D> Convert<S, D>(IList<S> source)
 			where S : D
 		{
@@ -287,8 +289,8 @@ namespace MKY.Collections.Generic
 		/// <typeparam name="S">IList source.</typeparam>
 		/// <typeparam name="D">IList destination.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Required for this variance workaround.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = "S and D is used to clearly indicate the source and destination type.")]
-		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "S and D is used to clearly indicate the source and destination type.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "D", Justification = NamingSuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = NamingSuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Wrapper is used to clearly indicate that this is a workaround.")]
 		public class ListWrapper<S, D> : CollectionWrapper<S, D>, IList<D>
 			where S : D

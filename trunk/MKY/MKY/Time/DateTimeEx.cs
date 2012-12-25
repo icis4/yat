@@ -86,14 +86,18 @@ namespace MKY
 	/// <summary></summary>
 	public class DateTimeEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly DateTime DateTime;
+		private DateTime dateTime;
 
 		/// <summary></summary>
 		public DateTimeEventArgs(DateTime dateTime)
 		{
-			DateTime = dateTime;
+			this.dateTime = dateTime;
+		}
+
+		/// <summary></summary>
+		public DateTime DateTime
+		{
+			get { return (this.dateTime); }
 		}
 	}
 }
