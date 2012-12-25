@@ -527,6 +527,7 @@ namespace MKY.IO.Usb
 		#region Comparison Methods
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static int Compare(object objA, object objB)
 		{
 			if (ReferenceEquals(objA, objB))

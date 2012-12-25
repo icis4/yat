@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Ports
 {
@@ -74,11 +75,13 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Toggles the RTS (Request To Send) control line.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
 		void ToggleRts();
 
 		/// <summary>
 		/// Toggles the DTR (Data Terminal Ready) control line.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
 		void ToggleDtr();
 
 		/// <summary>

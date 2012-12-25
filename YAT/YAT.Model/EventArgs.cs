@@ -22,9 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Windows.Forms;
 
 namespace YAT.Model
@@ -32,151 +29,195 @@ namespace YAT.Model
 	/// <summary></summary>
 	public class WorkspaceEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly Workspace Workspace;
+		private Workspace workspace;
 
 		/// <summary></summary>
 		public WorkspaceEventArgs(Workspace workspace)
 		{
-			Workspace = workspace;
+			this.workspace = workspace;
+		}
+
+		/// <summary></summary>
+		public Workspace Workspace
+		{
+			get { return (this.workspace); }
 		}
 	}
 
 	/// <summary></summary>
 	public class TerminalEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly Terminal Terminal;
+		private Terminal terminal;
 
 		/// <summary></summary>
 		public TerminalEventArgs(Terminal terminal)
 		{
-			Terminal = terminal;
+			this.terminal = terminal;
+		}
+
+		/// <summary></summary>
+		public Terminal Terminal
+		{
+			get { return (this.terminal); }
 		}
 	}
 
 	/// <summary></summary>
 	public class SavedEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly string FilePath;
-
-		/// <summary>
-		/// Auto save means that the settings have been saved at an automatically chosen location,
-		/// without telling the user anything about it.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly bool IsAutoSave;
+		private string filePath;
+		private bool isAutoSave;
 
 		/// <summary></summary>
 		public SavedEventArgs(string filePath)
+			: this(filePath, false)
 		{
-			FilePath = filePath;
-			IsAutoSave = false;
 		}
 
 		/// <summary></summary>
 		public SavedEventArgs(string filePath, bool isAutoSave)
 		{
-			FilePath = filePath;
-			IsAutoSave = isAutoSave;
+			this.filePath = filePath;
+			this.isAutoSave = isAutoSave;
+		}
+
+		/// <summary></summary>
+		public string FilePath
+		{
+			get { return (this.filePath); }
+		}
+
+		/// <summary>
+		/// Auto save means that the settings have been saved at an automatically chosen location,
+		/// without telling the user anything about it.
+		/// </summary>
+		public bool IsAutoSave
+		{
+			get { return (this.isAutoSave); }
 		}
 	}
 
 	/// <summary></summary>
 	public class ClosedEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly bool IsParentClose;
+		private bool isParentClose;
 
 		/// <summary></summary>
 		public ClosedEventArgs()
+			: this(false)
 		{
-			IsParentClose = false;
 		}
 
 		/// <summary></summary>
 		public ClosedEventArgs(bool isParentClose)
 		{
-			IsParentClose = isParentClose;
+			this.isParentClose = isParentClose;
+		}
+
+		/// <summary></summary>
+		public bool IsParentClose
+		{
+			get { return (this.isParentClose); }
 		}
 	}
 
 	/// <summary></summary>
 	public class StatusTextEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly string Text;
+		private string text;
 
 		/// <summary></summary>
 		public StatusTextEventArgs(string text)
 		{
-			Text = text;
+			this.text = text;
+		}
+
+		/// <summary></summary>
+		public string Text
+		{
+			get { return (this.text); }
 		}
 	}
 
 	/// <summary></summary>
 	public class MessageInputEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly string Text = "";
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly string Caption = "";
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly MessageBoxButtons Buttons = MessageBoxButtons.OK;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly MessageBoxIcon Icon = MessageBoxIcon.Information;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly MessageBoxDefaultButton DefaultButton = MessageBoxDefaultButton.Button1;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public DialogResult Result;
+		private string text;
+		private string caption;
+		private MessageBoxButtons buttons;
+		private MessageBoxIcon icon;
+		private MessageBoxDefaultButton defaultButton;
+		private DialogResult result;
 
 		/// <summary></summary>
 		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+			: this(text, caption, buttons, icon, MessageBoxDefaultButton.Button1)
 		{
-			Text = text;
-			Caption = caption;
-			Buttons = buttons;
-			Icon = icon;
 		}
 
 		/// <summary></summary>
 		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
 		{
-			Text = text;
-			Caption = caption;
-			Buttons = buttons;
-			Icon = icon;
-			DefaultButton = defaultButton;
+			this.text = text;
+			this.caption = caption;
+			this.buttons = buttons;
+			this.icon = icon;
+			this.defaultButton = defaultButton;
+		}
+
+		/// <summary></summary>
+		public string Text
+		{
+			get { return (this.text); }
+		}
+
+		/// <summary></summary>
+		public string Caption
+		{
+			get { return (this.caption); }
+		}
+
+		/// <summary></summary>
+		public MessageBoxButtons Buttons
+		{
+			get { return (this.buttons); }
+		}
+
+		/// <summary></summary>
+		public MessageBoxIcon Icon
+		{
+			get { return (this.icon); }
+		}
+
+		/// <summary></summary>
+		public MessageBoxDefaultButton DefaultButton
+		{
+			get { return (this.defaultButton); }
+		}
+
+		/// <summary></summary>
+		public DialogResult Result
+		{
+			get { return (this.result); }
+			set { this.result = value;  }
 		}
 	}
 
 	/// <summary></summary>
 	public class DialogEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public DialogResult Result;
+		private DialogResult result;
 
 		/// <summary></summary>
 		public DialogEventArgs()
 		{
+		}
+
+		/// <summary></summary>
+		public DialogResult Result
+		{
+			get { return (this.result); }
+			set { this.result = value;  }
 		}
 	}
 }

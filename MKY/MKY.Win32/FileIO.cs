@@ -302,7 +302,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 GENERIC_ file access flags into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
@@ -322,7 +322,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_SHARE_ file share mode flags into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
@@ -342,7 +342,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Replicates Win32 creation disposition selectors into a C# enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			public enum CreationDisposition
 			{
@@ -397,6 +397,7 @@ namespace MKY.Win32
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SECURITY_ATTRIBUTES
 			{
@@ -406,6 +407,7 @@ namespace MKY.Win32
 			}
 
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct BY_HANDLE_FILE_INFORMATION

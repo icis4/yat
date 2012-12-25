@@ -60,6 +60,8 @@ namespace MKY.Test
 	/// </summary>
 	public static class EqualityTestData
 	{
+		private const string UnusedParameterSuppressionJustification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.";
+
 		#region Value Types
 		//==========================================================================================
 		// Value Types
@@ -224,6 +226,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "This test class intentionally doesn't have equality operators.")]
 		public struct ValueTypeWithoutOperators
 		{
 			/// <summary></summary>
@@ -251,6 +254,7 @@ namespace MKY.Test
 			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 			/// properties, i.e. properties with some logic, are also properly handled.
 			/// </remarks>
+			[SuppressMessage("Microsoft.Usage", "CA2231:OverloadOperatorEqualsOnOverridingValueTypeEquals", Justification = "This test class intentionally doesn't have equality operators.")]
 			public override bool Equals(object obj)
 			{
 			#if (OUTPUT_CALLING_SEQUENCE)
@@ -321,6 +325,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent thoughout this test module.")]
 		public class OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<T> : List<T>
 			where T : IEquatable<T>
 		{
@@ -328,6 +333,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent thoughout this test module.")]
 		public class OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>>
 			where T : IEquatable<T>
 		{
@@ -408,6 +414,7 @@ namespace MKY.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent thoughout this test module.")]
 		public class OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>>
 			where T : IEquatable<T>
 		{
@@ -2331,6 +2338,8 @@ namespace MKY.Test
 
 	internal static class EqualityTestMethods
 	{
+		private const string UnusedParameterSuppressionJustification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.";
+
 		#region Static Test Methods
 		//==========================================================================================
 		// Static Test Methods
@@ -2398,8 +2407,8 @@ namespace MKY.Test
 		// Static Test Methods > Operators for Value Types
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfValueType(ValueType objToCompareAgainst, ValueType objEqual, ValueType objNotEqual)
 		{
 			Trace.Indent();
@@ -2443,8 +2452,8 @@ namespace MKY.Test
 
 		//                 TestOperatorsForValueEqualityOfValueType is useless since it never succeeds.
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDateTime(DateTime objToCompareAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
 			Trace.Indent();
@@ -2540,8 +2549,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfValueTypeWithOperators(EqualityTestData.ValueTypeWithOperators objToCompareAgainst, EqualityTestData.ValueTypeWithOperators objEqual, EqualityTestData.ValueTypeWithOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -2644,8 +2653,8 @@ namespace MKY.Test
 		// Static Test Methods > Operators for Reference Types
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfObject(object objToCompareAgainst, object objEqual, object objNotEqual)
 		{
 			Trace.Indent();
@@ -2689,8 +2698,8 @@ namespace MKY.Test
 
 		//                 TestOperatorsForValueEqualityOfObject is useless since it never succeeds.
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfVersion(Version objToCompareAgainst, Version objEqual, Version objNotEqual)
 		{
 			Trace.Indent();
@@ -2786,8 +2795,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfList(List<int> objToCompareAgainst, List<int> objEqual, List<int> objNotEqual)
 		{
 			Trace.Indent();
@@ -2884,8 +2893,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfOwnDerivedCollectionReferenceTypeIEquatableWithOperators(EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objToCompareAgainst, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objEqual, EqualityTestData.OwnDerivedCollectionReferenceTypeIEquatableWithOperators<int> objNotEqual)
 		{
 			Trace.Indent();
@@ -2981,8 +2990,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3079,8 +3088,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3177,8 +3186,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3275,8 +3284,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3373,8 +3382,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3470,8 +3479,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3567,8 +3576,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3664,8 +3673,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3761,8 +3770,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3858,8 +3867,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();
@@ -3955,8 +3964,8 @@ namespace MKY.Test
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
-		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = "These test methods all have the same three parameters: Testee, Equal and NotEqual counterpart.")]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objEqual", Justification = UnusedParameterSuppressionJustification)]
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "objNotEqual", Justification = UnusedParameterSuppressionJustification)]
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
 		{
 			Trace.Indent();

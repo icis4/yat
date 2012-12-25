@@ -33,6 +33,7 @@ namespace MKY
 	/// List with additional methods to handle items providing a <see cref="Guid"/>.
 	/// </summary>
 	/// <typeparam name="T">Type that implements <see cref="IGuidProvider"/>.</typeparam>
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This actually IS a list, not just any kind of collection.")]
 	public class GuidList<T> : List<T>
 		where T : IGuidProvider
 	{

@@ -195,11 +195,11 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected override bool TryParseContiguousRadixToken(string token, Radix parseRadix, out byte[] result, ref FormatException formatException)
+		protected override bool TryParseContiguousRadixToken(string token, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixToken()'.
 
-			return (base.TryParseContiguousRadixToken(Substitute(token), parseRadix, out result, ref formatException));
+			return (base.TryParseContiguousRadixToken(Substitute(token), radix, out result, ref formatException));
 		}
 
 		private string Substitute(string token)

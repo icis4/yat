@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Ports
@@ -202,6 +203,7 @@ namespace MKY.IO.Ports
 		/// the underlying port failed. For example, the parameters passed from this
 		/// <see cref="System.IO.Ports.SerialPort"/> object were invalid.
 		/// </exception>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
 		bool RtsEnable { get; set; }
 
 		/// <summary>
@@ -221,6 +223,7 @@ namespace MKY.IO.Ports
 		/// underlying port failed. For example, the parameters passed from this
 		/// <see cref="System.IO.Ports.SerialPort"/> object were invalid.
 		/// </exception>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
 		bool CtsHolding { get; }
 
 		/// <summary>
@@ -239,6 +242,7 @@ namespace MKY.IO.Ports
 		/// the underlying port failed. For example, the parameters passed from this
 		/// <see cref="System.IO.Ports.SerialPort"/> object were invalid.
 		/// </exception>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
 		bool DtrEnable { get; set; }
 
 		/// <summary>
@@ -259,6 +263,7 @@ namespace MKY.IO.Ports
 		/// underlying port failed. For example, the parameters passed from this
 		/// <see cref="System.IO.Ports.SerialPort"/> object were invalid.
 		/// </exception>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
 		bool DsrHolding { get; }
 
 		/// <summary>

@@ -37,6 +37,7 @@ namespace MKY.IO.Ports
 		/// Request To Send.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
 		[XmlElement("RTS")]
 		public bool Rts;
 
@@ -44,6 +45,7 @@ namespace MKY.IO.Ports
 		/// Clear To Send.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
 		[XmlElement("CTS")]
 		public bool Cts;
 
@@ -51,6 +53,7 @@ namespace MKY.IO.Ports
 		/// Data Terminal Ready.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
 		[XmlElement("DTR")]
 		public bool Dtr;
 
@@ -58,6 +61,7 @@ namespace MKY.IO.Ports
 		/// Data Set Ready.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
 		[XmlElement("DSR")]
 		public bool Dsr;
 
@@ -65,6 +69,7 @@ namespace MKY.IO.Ports
 		/// Data Carrier Detect.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "DCD is a common term for serial ports.")]
 		[XmlElement("DCD")]
 		public bool Dcd;
 

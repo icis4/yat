@@ -143,6 +143,7 @@ namespace MKY
 		/// <summary>
 		/// Returns whether <paramref name="str"/> contains any of the <paramref name="searchChars"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static bool ContainsAny(string str, char[] searchChars)
 		{
 			return (str.IndexOfAny(searchChars) >= 0);
@@ -160,6 +161,7 @@ namespace MKY
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
 		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, StringComparison comparisonType)
 		{
 			return (IndexOfOutsideDoubleQuotes(str, searchString, 0, str.Length, comparisonType));
@@ -183,6 +185,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException">searchString is null.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>
 		/// <exception cref="ArgumentException">comparisonType is not a valid <see cref="StringComparison"/> value.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
 		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
 		{
 			string substring = str.Substring(startIndex, count); // Crop the string as desired.
@@ -218,6 +221,7 @@ namespace MKY
 		/// <summary>
 		/// Counts the number of <paramref name="countChars"/> to the left of <paramref name="str"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static int CountLeft(string str, params char[] countChars)
 		{
 			if (str == null)
@@ -255,6 +259,7 @@ namespace MKY
 		/// <summary>
 		/// Counts the number of <paramref name="countChars"/> to the right of <paramref name="str"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static int CountRight(string str, params char[] countChars)
 		{
 			if (str == null)
@@ -459,6 +464,7 @@ namespace MKY
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimMaxLength(string str, int maxLength, params char[] trimChars)
 		{
 			if (trimChars != null)
@@ -498,6 +504,7 @@ namespace MKY
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimMaxLengthSymmetrical(string str, int maxLength, params char[] trimChars)
 		{
 			if (trimChars != null)
@@ -533,6 +540,7 @@ namespace MKY
 		/// object. If <paramref name="trimChars"/> is null, white-space characters are removed
 		/// instead.
 		/// </returns>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimSymmetrical(string str, params char[] trimChars)
 		{
 			if (trimChars != null)

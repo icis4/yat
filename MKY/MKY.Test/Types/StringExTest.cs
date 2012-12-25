@@ -280,9 +280,9 @@ namespace MKY.Test.Types
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(IndexOfOutsideDoubleQuotesTestData), "TestCases")]
-		public virtual void TestIndexOfOutsideDoubleQuotes(string testString, string outString, int outIndex, string inString, int inIndex)
+		public virtual void TestIndexOfOutsideDoubleQuotes(string str, string outString, int outIndex, string inString, int inIndex)
 		{
-			int index = StringEx.IndexOfOutsideDoubleQuotes(testString, outString, StringComparison.Ordinal);
+			int index = StringEx.IndexOfOutsideDoubleQuotes(str, outString, StringComparison.Ordinal);
 			Assert.AreEqual(outIndex, index);
 		}
 
@@ -294,12 +294,11 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Why not?")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(CountLeftRightTestData), "TestCasesLeft")]
-		public virtual void CountLeft(string testString, int expectedCount, char[] countChars)
+		public virtual void CountLeft(string str, int expectedCount, char[] countChars)
 		{
-			int actualCount = StringEx.CountLeft(testString, countChars);
+			int actualCount = StringEx.CountLeft(str, countChars);
 			Assert.AreEqual(expectedCount, actualCount);
 		}
 
@@ -311,11 +310,11 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(CountLeftRightTestData), "TestCasesRight")]
-		public virtual void CountRight(string testString, int expectedCount, char[] countChars)
+		public virtual void CountRight(string str, int expectedCount, char[] countChars)
 		{
-			int actualCount = StringEx.CountRight(testString, countChars);
+			int actualCount = StringEx.CountRight(str, countChars);
 			Assert.AreEqual(expectedCount, actualCount);
 		}
 
@@ -327,11 +326,10 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesLeft")]
-		public virtual void SplitLeft(string testString, int desiredSplitLength, string[] expectedChunks)
+		public virtual void SplitLeft(string str, int desiredSplitLength, string[] expectedChunks)
 		{
-			string[] actualChunks = StringEx.SplitLeft(testString, desiredSplitLength);
+			string[] actualChunks = StringEx.SplitLeft(str, desiredSplitLength);
 
 			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
 
@@ -350,11 +348,10 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesRight")]
-		public virtual void SplitRight(string testString, int desiredSplitLength, string[] expectedChunks)
+		public virtual void SplitRight(string str, int desiredSplitLength, string[] expectedChunks)
 		{
-			string[] actualChunks = StringEx.SplitRight(testString, desiredSplitLength);
+			string[] actualChunks = StringEx.SplitRight(str, desiredSplitLength);
 
 			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
 
@@ -373,16 +370,15 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Why not?")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(TrimTestData), "QuoteTestCases")]
-		public virtual void TestTrimOfQuotes(string testString, int expectedLength, char[] trimChars)
+		public virtual void TestTrimOfQuotes(string str, int expectedLength, char[] trimChars)
 		{
-			string trim = testString.Trim(trimChars);
+			string trim = str.Trim(trimChars);
 
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine("Test string was:");
-			sb.AppendLine(testString);
+			sb.AppendLine(str);
 			sb.AppendLine("Which was trimmed to:");
 			sb.AppendLine(trim);
 
@@ -390,16 +386,15 @@ namespace MKY.Test.Types
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Why not?")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(TrimTestData), "EndWhiteSpaceTestCases")]
-		public virtual void TestTrimEndOfWhiteSpaces(string testString, int expectedLength, char[] trimChars)
+		public virtual void TestTrimEndOfWhiteSpaces(string str, int expectedLength, char[] trimChars)
 		{
-			string trim = testString.TrimEnd(trimChars);
+			string trim = str.TrimEnd(trimChars);
 
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine("Test string was:");
-			sb.AppendLine(testString);
+			sb.AppendLine(str);
 			sb.AppendLine("Which was trimmed to:");
 			sb.AppendLine(trim);
 

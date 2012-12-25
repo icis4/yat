@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
@@ -102,6 +103,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the data that was received via input reports.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public byte[] Data
 		{
 			get { return (this.data); }
@@ -151,6 +153,8 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the output reports that were created from any amount of data.
 		/// </summary>
+
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
 		public byte[][] Reports
 		{
 			get { return (this.reports); }

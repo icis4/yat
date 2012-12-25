@@ -345,7 +345,7 @@ namespace YAT.Domain.Parser
 
 					case '!':
 					{
-						if ((parser.parseMode & ParseMode.Keywords) == ParseMode.Keywords)
+						if ((parser.mode & ParseMode.Keywords) == ParseMode.Keywords)
 						{
 							parser.IsKeywordParser = true;
 							ChangeState(parser, new OpeningState());
@@ -641,17 +641,17 @@ namespace YAT.Domain.Parser
 			}
 
 			/// <summary>
-			/// Parses "parseString" for ascii mnemonics.
+			/// Parses <paramref name="value"/> for ascii mnemonics.
 			/// </summary>
 			/// <param name="parser">Parser to retrieve settings.</param>
-			/// <param name="parseString">String to be parsed.</param>
+			/// <param name="value">String to be parsed.</param>
 			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
 			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
-			public static bool TryParseAsciiMnemonic(Parser parser, string parseString, out byte[] result, ref FormatException formatException)
+			public static bool TryParseAsciiMnemonic(Parser parser, string value, out byte[] result, ref FormatException formatException)
 			{
 				MemoryStream bytes = new MemoryStream();
-				string[] tokens = parseString.Split(' ');
+				string[] tokens = value.Split(' ');
 				foreach (string t in tokens)
 				{
 					if (t.Length == 0)
@@ -784,43 +784,43 @@ namespace YAT.Domain.Parser
 			}
 
 			/// <summary>
-			/// Parses "parseString" for ascii mnemonics.
+			/// Parses <paramref name="value"/> for ascii mnemonics.
 			/// </summary>
 			/// <param name="parser">Parser to retrieve settings.</param>
-			/// <param name="parseString">String to be parsed.</param>
+			/// <param name="value">String to be parsed.</param>
 			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
 			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
-			public static bool TryParseNumericValue(Parser parser, string parseString, out byte[] result, ref FormatException formatException)
+			public static bool TryParseNumericValue(Parser parser, string value, out byte[] result, ref FormatException formatException)
 			{
 				switch (parser.Radix)
 				{
 					case Radix.Oct:
 					{
-						UInt64 value;
-						if (UInt64Ex.TryParseOctal(parseString, out value))
+						UInt64 tempResult;
+						if (UInt64Ex.TryParseOctal(value, out tempResult))
 						{
-							result = UInt64Ex.ConvertToByteArray(value);
+							result = UInt64Ex.ConvertToByteArray(tempResult);
 							return (true);
 						}
 						else
 						{
-							formatException = new FormatException(@"""" + parseString + @""" is no valid octal value!");
+							formatException = new FormatException(@"""" + value + @""" is no valid octal value!");
 						}
 						break;
 					}
 
 					case Radix.Dec:
 					{
-						UInt64 value;
-						if (UInt64.TryParse(parseString, out value))
+						UInt64 tempResult;
+						if (UInt64.TryParse(value, out tempResult))
 						{
-							result = UInt64Ex.ConvertToByteArray(value);
+							result = UInt64Ex.ConvertToByteArray(tempResult);
 							return (true);
 						}
 						else
 						{
-							formatException = new FormatException(@"""" + parseString + @""" is no valid decimal value!");
+							formatException = new FormatException(@"""" + value + @""" is no valid decimal value!");
 						}
 						break;
 					}
@@ -829,7 +829,7 @@ namespace YAT.Domain.Parser
 					{
 						MemoryStream bytes = new MemoryStream();
 						string errorString = null;
-						foreach (string s in StringEx.SplitFixedLength(parseString, 2))
+						foreach (string s in StringEx.SplitFixedLength(value, 2))
 						{
 							byte b;
 							if (byte.TryParse(s, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out b))
@@ -844,7 +844,7 @@ namespace YAT.Domain.Parser
 						}
 						else
 						{
-							formatException = new FormatException(@"Substring """ + errorString + @""" of """ + parseString + @""" is no valid hexadecimal value!");
+							formatException = new FormatException(@"Substring """ + errorString + @""" of """ + value + @""" is no valid hexadecimal value!");
 						}
 						break;
 					}
@@ -883,7 +883,7 @@ namespace YAT.Domain.Parser
 		private Endianess endianess = Endianess.BigEndian;
 		private Encoding encoding = Encoding.Default;
 		private Radix defaultRadix = Radix.String;
-		private ParseMode parseMode = ParseMode.All;
+		private ParseMode mode = ParseMode.All;
 
 		private StringReader reader;
 		private MemoryStream byteArrayWriter;
@@ -1306,19 +1306,19 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryParseContiguousRadixToken(string token, Radix parseRadix, out byte[] result, ref FormatException formatException)
+		protected virtual bool TryParseContiguousRadixToken(string token, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			AssertNotDisposed();
 
 			// String.
-			if (parseRadix == Radix.String)
+			if (radix == Radix.String)
 			{
 				result = this.encoding.GetBytes(token);
 				return (true);
 			}
 
 			// Char.
-			if (parseRadix == Radix.Char)
+			if (radix == Radix.Char)
 			{
 				char c;
 				if (char.TryParse(token, out c))
@@ -1345,13 +1345,13 @@ namespace YAT.Domain.Parser
 
 			ulong value;
 			bool success;
-			switch (parseRadix)
+			switch (radix)
 			{
 				case Radix.Bin: success = UInt64Ex.TryParseBinary(tokenValue, out value); break;
 				case Radix.Oct: success = UInt64Ex.TryParseOctal (tokenValue, out value); break;
 				case Radix.Dec: success = ulong.TryParse         (tokenValue, out value); break;
 				case Radix.Hex: success = ulong.TryParse         (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
-				default: throw (new ArgumentOutOfRangeException("parseRadix", parseRadix, @"Unknown radix """ + parseRadix + @""""));
+				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @""""));
 			}
 			if (success)
 			{
@@ -1362,13 +1362,13 @@ namespace YAT.Domain.Parser
 
 			// FormatException.
 			string readable = "";
-			switch (parseRadix)
+			switch (radix)
 			{
 				case Radix.Bin: readable = "binary value";      break;
 				case Radix.Oct: readable = "octal value";       break;
 				case Radix.Dec: readable = "decimal value";     break;
 				case Radix.Hex: readable = "hexadecimal value"; break;
-				default: throw (new ArgumentOutOfRangeException("parseRadix", parseRadix, @"Unknown radix """ + parseRadix + @""""));
+				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @""""));
 			}
 			formatException = new FormatException(@"Substring """ + token + @""" contains no valid " + readable);
 			result = new byte[] { };
@@ -1382,11 +1382,11 @@ namespace YAT.Domain.Parser
 		// Private Methods
 		//==========================================================================================
 
-		private void InitializeTopLevelParse(string parseString, ParseMode parseMode)
+		private void InitializeTopLevelParse(string value, ParseMode mode)
 		{
-			this.parseMode       = parseMode;
+			this.mode            = mode;
 
-			this.reader          = new StringReader(parseString);
+			this.reader          = new StringReader(value);
 			this.byteArrayWriter = new MemoryStream();
 			this.resultList      = new List<Result>();
 			this.state           = new DefaultState();
@@ -1400,7 +1400,7 @@ namespace YAT.Domain.Parser
 		{
 			this.encoding        = parent.encoding;
 			this.defaultRadix    = parent.defaultRadix;
-			this.parseMode       = parent.parseMode;
+			this.mode       = parent.mode;
 
 			this.reader          = parent.reader;
 			this.byteArrayWriter = new MemoryStream();
@@ -1414,22 +1414,22 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses "parseString" for one or more values in the specified base
-		/// "parseRadix", separated with spaces.
+		/// Parses <paramref name="value"/> for one or more values in the specified base
+		/// <paramref name="radix"/>, separated with spaces.
 		/// </summary>
-		/// <param name="parseString">String to be parsed.</param>
-		/// <param name="parseRadix">Numeric radix.</param>
+		/// <param name="value">String to be parsed.</param>
+		/// <param name="radix">Numeric radix.</param>
 		/// <param name="result">Array containing the resulting bytes.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
-		private bool TryParseContiguousRadix(string parseString, Radix parseRadix, out byte[] result, ref FormatException formatException)
+		private bool TryParseContiguousRadix(string value, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			MemoryStream bytes = new MemoryStream();
-			if (parseRadix == Radix.String)
+			if (radix == Radix.String)
 			{
 				byte[] b;
-				if (TryParseContiguousRadixToken(parseString, Radix.String, out b, ref formatException))
+				if (TryParseContiguousRadixToken(value, Radix.String, out b, ref formatException))
 				{
 					bytes.Write(b, 0, b.Length);
 				}
@@ -1441,13 +1441,13 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				string[] tokens = parseString.Split(' ');
+				string[] tokens = value.Split(' ');
 				foreach (string token in tokens)
 				{
 					if (token.Length > 0)
 					{
 						byte[] b;
-						if (TryParseContiguousRadixToken(token, parseRadix, out b, ref formatException))
+						if (TryParseContiguousRadixToken(token, radix, out b, ref formatException))
 						{
 							bytes.Write(b, 0, b.Length);
 						}
@@ -1464,16 +1464,16 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses "parseString" for keywords.
+		/// Parses <paramref name="value"/> for keywords.
 		/// </summary>
-		/// <param name="parseString">String to be parsed.</param>
+		/// <param name="value">String to be parsed.</param>
 		/// <param name="result">Array containing the results.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
-		private bool TryParseContiguousKeywords(string parseString, out Result[] result, ref FormatException formatException)
+		private bool TryParseContiguousKeywords(string value, out Result[] result, ref FormatException formatException)
 		{
 			List<Result> resultList = new List<Result>();
-			string[] tokens = parseString.Split(' ');
+			string[] tokens = value.Split(' ');
 			foreach (string t in tokens)
 			{
 				if (t.Length == 0)

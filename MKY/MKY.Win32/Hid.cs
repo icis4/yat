@@ -246,6 +246,7 @@ namespace MKY.Win32
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDD_ATTRIBUTES
 			{
@@ -318,6 +319,7 @@ namespace MKY.Win32
 			/// If IsDesignatorRange is false, DesignatorMin is the designator index and DesignatorMax is unused.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_VALUE_CAPS
 			{

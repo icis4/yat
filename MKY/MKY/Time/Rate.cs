@@ -29,7 +29,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 #endregion
@@ -44,14 +43,18 @@ namespace MKY.Time
 	/// <summary></summary>
 	public class RateEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly int Rate;
+		private int rate;
 
 		/// <summary></summary>
 		public RateEventArgs(int rate)
 		{
-			Rate = rate;
+			this.rate = rate;
+		}
+
+		/// <summary></summary>
+		public int Rate
+		{
+			get { return (this.rate); }
 		}
 	}
 

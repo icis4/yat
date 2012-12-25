@@ -22,34 +22,38 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Settings
 {
 	/// <summary></summary>
 	public class SettingsEventArgs : EventArgs
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of use.")]
-		public readonly SettingsItem Source;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of use.")]
-		public readonly SettingsEventArgs Inner;
+		private SettingsItem source;
+		private SettingsEventArgs inner;
 
 		/// <summary></summary>
 		public SettingsEventArgs(SettingsItem source)
 		{
-			Source = source;
+			this.source = source;
 		}
 
 		/// <summary></summary>
 		public SettingsEventArgs(SettingsItem source, SettingsEventArgs inner)
 		{
-			Source = source;
-			Inner = inner;
+			this.source = source;
+			this.inner = inner;
+		}
+
+		/// <summary></summary>
+		public SettingsItem Source
+		{
+			get { return (this.source); }
+		}
+
+		/// <summary></summary>
+		public SettingsEventArgs Inner
+		{
+			get { return (this.inner); }
 		}
 	}
 }

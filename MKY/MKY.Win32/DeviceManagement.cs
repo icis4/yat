@@ -282,7 +282,7 @@ namespace MKY.Win32
 				HANDLE          = 0x00000006,
 			}
 
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Value names are given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
@@ -333,6 +333,7 @@ namespace MKY.Win32
 			}
 
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVICE_INTERFACE_DATA
@@ -346,6 +347,7 @@ namespace MKY.Win32
 			}
 
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVICE_INTERFACE_DETAIL_DATA
