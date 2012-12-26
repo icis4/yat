@@ -21,13 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Utilities
 {
@@ -37,10 +44,12 @@ namespace YAT.Gui.Utilities
 		/// <summary></summary>
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate)
 		{
-			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.ParseMode.All));
+			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.Modes.All));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength)
 		{
 			string parsedText;
@@ -59,25 +68,27 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out string parsedText)
 		{
-			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.ParseMode.All, out parsedText));
+			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.Modes.All, out parsedText));
 		}
 
 		/// <summary></summary>
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode mode)
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes)
 		{
 			string parsedText;
-			return (ValidateSequence(owner, description, textToValidate, mode, out parsedText));
+			return (ValidateSequence(owner, description, textToValidate, modes, out parsedText));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode mode, out string parsedText)
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, out string parsedText)
 		{
 			Domain.Parser.Parser p = new Domain.Parser.Parser();
 			Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
-			if (p.TryParse(textToValidate, mode, out parsedText, ref formatException))
+			if (p.TryParse(textToValidate, modes, out parsedText, ref formatException))
 			{
 				return (true);
 			}
@@ -104,7 +115,7 @@ namespace YAT.Gui.Utilities
 					sb.Append(formatException.Message);
 				}
 
-				MessageBox.Show
+				MessageBoxEx.Show
 					(
 					owner,
 					sb.ToString(),

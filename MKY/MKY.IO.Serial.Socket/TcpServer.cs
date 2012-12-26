@@ -83,16 +83,6 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		#region Delegates
-		//==========================================================================================
-		// Delegates
-		//==========================================================================================
-
-		/// <summary></summary>
-		public delegate void AsyncStopSocketCaller();
-
-		#endregion
-
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields

@@ -39,8 +39,8 @@
 			this.groupBox_Communication_Break = new System.Windows.Forms.GroupBox();
 			this.checkBox_OutputBreakModifiable = new System.Windows.Forms.CheckBox();
 			this.checkBox_IndicateBreakStates = new System.Windows.Forms.CheckBox();
-			this.comboBox_Endianess = new System.Windows.Forms.ComboBox();
-			this.label_Endianess = new System.Windows.Forms.Label();
+			this.comboBox_Endianness = new System.Windows.Forms.ComboBox();
+			this.label_Endianness = new System.Windows.Forms.Label();
 			this.groupBox_ReceiveSettings = new System.Windows.Forms.GroupBox();
 			this.checkBox_NoSendOnInputBreak = new System.Windows.Forms.CheckBox();
 			this.groupBox_SendSettings = new System.Windows.Forms.GroupBox();
@@ -176,8 +176,8 @@
 			// groupBox_CommunicationSettings
 			// 
 			this.groupBox_CommunicationSettings.Controls.Add(this.groupBox_Communication_Break);
-			this.groupBox_CommunicationSettings.Controls.Add(this.comboBox_Endianess);
-			this.groupBox_CommunicationSettings.Controls.Add(this.label_Endianess);
+			this.groupBox_CommunicationSettings.Controls.Add(this.comboBox_Endianness);
+			this.groupBox_CommunicationSettings.Controls.Add(this.label_Endianness);
 			this.groupBox_CommunicationSettings.Location = new System.Drawing.Point(275, 13);
 			this.groupBox_CommunicationSettings.Name = "groupBox_CommunicationSettings";
 			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(263, 118);
@@ -218,25 +218,25 @@
 			this.checkBox_IndicateBreakStates.UseVisualStyleBackColor = true;
 			this.checkBox_IndicateBreakStates.CheckedChanged += new System.EventHandler(this.checkBox_IndicateBreakStates_CheckedChanged);
 			// 
-			// comboBox_Endianess
+			// comboBox_Endianness
 			// 
-			this.comboBox_Endianess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.comboBox_Endianness.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Endianess.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_Endianess.Location = new System.Drawing.Point(70, 18);
-			this.comboBox_Endianess.Name = "comboBox_Endianess";
-			this.comboBox_Endianess.Size = new System.Drawing.Size(182, 21);
-			this.comboBox_Endianess.TabIndex = 1;
-			this.comboBox_Endianess.SelectedIndexChanged += new System.EventHandler(this.comboBox_Endianess_SelectedIndexChanged);
+			this.comboBox_Endianness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Endianness.Location = new System.Drawing.Point(70, 18);
+			this.comboBox_Endianness.Name = "comboBox_Endianness";
+			this.comboBox_Endianness.Size = new System.Drawing.Size(182, 21);
+			this.comboBox_Endianness.TabIndex = 1;
+			this.comboBox_Endianness.SelectedIndexChanged += new System.EventHandler(this.comboBox_Endianness_SelectedIndexChanged);
 			// 
-			// label_Endianess
+			// label_Endianness
 			// 
-			this.label_Endianess.AutoSize = true;
-			this.label_Endianess.Location = new System.Drawing.Point(9, 21);
-			this.label_Endianess.Name = "label_Endianess";
-			this.label_Endianess.Size = new System.Drawing.Size(59, 13);
-			this.label_Endianess.TabIndex = 0;
-			this.label_Endianess.Text = "&Endianess:";
+			this.label_Endianness.AutoSize = true;
+			this.label_Endianness.Location = new System.Drawing.Point(9, 21);
+			this.label_Endianness.Name = "label_Endianness";
+			this.label_Endianness.Size = new System.Drawing.Size(59, 13);
+			this.label_Endianness.TabIndex = 0;
+			this.label_Endianness.Text = "&Endianness:";
 			// 
 			// groupBox_ReceiveSettings
 			// 
@@ -787,8 +787,8 @@
 		private System.Windows.Forms.ComboBox comboBox_TxRadix;
 		private System.Windows.Forms.Label label_TxRadix;
 		private System.Windows.Forms.GroupBox groupBox_CommunicationSettings;
-		private System.Windows.Forms.ComboBox comboBox_Endianess;
-		private System.Windows.Forms.Label label_Endianess;
+		private System.Windows.Forms.ComboBox comboBox_Endianness;
+		private System.Windows.Forms.Label label_Endianness;
 		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxRadix;
 		private System.Windows.Forms.ComboBox comboBox_RxRadix;
 		private System.Windows.Forms.Label label_RxRadix;

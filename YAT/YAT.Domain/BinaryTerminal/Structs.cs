@@ -22,8 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY;
@@ -38,12 +37,14 @@ namespace YAT.Domain
 	public struct BinaryLengthLineBreak
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary></summary>
-		[XmlElement("LineLength", typeof(int))]
-		public int LineLength; // In chars/bytes.
+		/// <summary>In chars or bytes.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
+		[XmlElement("LineLength")]
+		public int LineLength;
 
 		/// <summary></summary>
 		public BinaryLengthLineBreak(bool enabled, int lineLength)
@@ -128,10 +129,12 @@ namespace YAT.Domain
 	public struct BinarySequenceLineBreak
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Sequence")]
 		public string Sequence;
 
@@ -218,10 +221,12 @@ namespace YAT.Domain
 	public struct BinaryTimedLineBreak
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
 		/// <summary>Timeout in ms.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Timeout")]
 		public int Timeout;
 

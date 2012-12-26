@@ -28,6 +28,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
@@ -42,26 +43,29 @@ namespace YAT.Model.Test
 	// TransmissionType
 	//==========================================================================================
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum TransmissionType
 	{
-		/// <summary></summary>
 		SerialPort,
-
-		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
 		TcpAutoSocketOnIPv4Loopback,
-
-		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		TcpAutoSocketOnIPv6Loopback,
-
-		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
 		TcpAutoSocketOnSpecificIPv4Interface,
-
-		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		TcpAutoSocketOnSpecificIPv6Interface,
 
 		// USB Ser/HID not possible since YAT only implements the host side.
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -74,13 +78,14 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		public static IEnumerable<KeyValuePair<TransmissionType, string>> GetItems
 		{
 			get
 			{
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.SerialPort, MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortsAreInterconnected));
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv4Loopback, MKY.Net.Test.SettingsCategoryStrings.IPv4LoopbackIsAvailable));
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv6Loopback, MKY.Net.Test.SettingsCategoryStrings.IPv6LoopbackIsAvailable));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.SerialPort,                           MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortsAreInterconnected));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          MKY.Net.Test.SettingsCategoryStrings.IPv4LoopbackIsAvailable));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          MKY.Net.Test.SettingsCategoryStrings.IPv6LoopbackIsAvailable));
 				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, MKY.Net.Test.SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable));
 				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, MKY.Net.Test.SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable));
 			}
@@ -139,6 +144,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static OneWayTransmissionTestData()
 		{
 			SingleLineCommand   = new Utilities.TestSet(new Types.Command(TestCommandLines[0]));
@@ -252,7 +258,7 @@ namespace YAT.Model.Test
 		// Transmission
 		//==========================================================================================
 
-		private void PerformTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		private static void PerformTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// Create terminals from settings and check whether B receives from A:
 			using (Terminal terminalA = new Terminal(settingsA))
@@ -300,6 +306,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static TwoWayTransmissionTestData()
 		{
 			PingPongCommand = new Utilities.TestSet(new Types.Command(@"ABC DE F"), 1, new int[] { 2 }, new int[] { 8 }, true);
@@ -375,7 +382,7 @@ namespace YAT.Model.Test
 		// Transmission
 		//==========================================================================================
 
-		private void PerformTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		private static void PerformTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// Create terminals from settings and check whether B receives from A:
 			using (Terminal terminalA = new Terminal(settingsA))

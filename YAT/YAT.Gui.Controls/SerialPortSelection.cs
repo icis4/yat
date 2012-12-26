@@ -79,7 +79,7 @@ namespace YAT.Gui.Controls
 			private SerialPortCollection ports;
 			private bool isScanning = true;
 			private string status2 = "";
-			private bool cancelScanning = false;
+			private bool cancelScanning; // = false;
 
 			public MarkPortsInUseThread(SerialPortCollection ports)
 			{
@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 				this.cancelScanning = true;
 			}
 
-			private void ports_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
+			private void ports_MarkPortsInUseCallback(object sender, SerialPortChangedAndCancelEventArgs e)
 			{
 				this.status2 = "Scanning " + e.Port + "...";
 				StatusBox.UpdateStatus2(this.status2);
@@ -288,7 +288,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Serial port name is invalid",
@@ -406,7 +406,7 @@ namespace YAT.Gui.Controls
 					}
 					else
 					{
-						MessageBox.Show
+						MessageBoxEx.Show
 							(
 							this,
 							"There are no serial COM ports available." + Environment.NewLine +
@@ -419,7 +419,7 @@ namespace YAT.Gui.Controls
 				}
 				catch
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"There was an error while retrieving the serial COM ports!" + Environment.NewLine +

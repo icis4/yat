@@ -310,6 +310,9 @@ namespace YAT.Model.Test
 		/// <summary>
 		/// Use cases according to ufi.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Naming for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "through", Justification = "Naming for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "a", Justification = "Naming for improved readability.")]
 		[Test]
 		public virtual void TestSequenceOfUseCases_1_through_5a_()
 		{
@@ -741,6 +744,8 @@ namespace YAT.Model.Test
 		/// <summary>
 		/// Use cases according to ufi.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Naming for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "through", Justification = "Naming for improved readability.")]
 		[Test]
 		public virtual void TestSequenceOfUseCases_6_through_9_()
 		{
@@ -1111,6 +1116,7 @@ namespace YAT.Model.Test
 		/// <summary>
 		/// This test verifies the 'DynamicIndex', 'SequentialIndex' and 'FixedIndex' feature of a YAT workspace.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		[Test]
 		public virtual void TestIndicesFeatureOfWorkspace()
 		{
@@ -1123,7 +1129,7 @@ namespace YAT.Model.Test
 			// - Save terminal as
 			// - Save workspace as
 			//   => Workspace must contain 1 terminal with fixed index 1
-			Terminal.ResetSequenciallIndexCounter();
+			Terminal.ResetSequentialIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
@@ -1155,7 +1161,7 @@ namespace YAT.Model.Test
 			// - Save terminals as
 			// - Save workspace
 			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
-			Terminal.ResetSequenciallIndexCounter();
+			Terminal.ResetSequentialIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 2: ";
@@ -1168,7 +1174,7 @@ namespace YAT.Model.Test
 
 				Assert.AreEqual(Indices.FirstFixedIndex,   workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
 				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.AreEqual(1,                         workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
+				Assert.AreEqual(1,                         workspace.ActiveTerminalSequentialIndex, step + "Sequential index of terminal 1 isn't 1!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
@@ -1197,7 +1203,7 @@ namespace YAT.Model.Test
 			// - Close the second terminal
 			// - Save workspace
 			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
-			Terminal.ResetSequenciallIndexCounter();
+			Terminal.ResetSequentialIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 3: ";
@@ -1208,14 +1214,14 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(3, workspace.TerminalCount, step + "Workspace doesn't contain 3 terminals!");
 
-				int first = Indices.FirstSequencialIndex;
-				int last  = Indices.FirstSequencialIndex + workspace.TerminalCount - 1;
+				int first = Indices.FirstSequentialIndex;
+				int last  = Indices.FirstSequentialIndex + workspace.TerminalCount - 1;
 				for (int i = first; i <= last; i++)
 				{
 					workspace.ActivateTerminalBySequentialIndex(i);
 					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal "      + i + " isn't " + i + "!");
 					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal "    + i + " isn't " + i + "!");
-					Assert.AreEqual(i, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal " + i + " isn't " + i + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalSequentialIndex, step + "Sequential index of terminal " + i + " isn't " + i + "!");
 				}
 
 				workspace.ActivateTerminalBySequentialIndex(2);
@@ -1233,7 +1239,7 @@ namespace YAT.Model.Test
 			#region Step 4
 			// - Subsequent start
 			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
-			Terminal.ResetSequenciallIndexCounter();
+			Terminal.ResetSequentialIndexCounter();
 			using (Main main = new Main())
 			{
 				step = "Step 4: ";
@@ -1247,12 +1253,12 @@ namespace YAT.Model.Test
 				workspace.ActivateTerminalBySequentialIndex(1);
 				Assert.AreEqual(Indices.FirstFixedIndex,   workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 1 isn't "   + Indices.FirstFixedIndex + "!");
 				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
-				Assert.AreEqual(1,                         workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 1!");
+				Assert.AreEqual(1,                         workspace.ActiveTerminalSequentialIndex, step + "Sequential index of terminal 1 isn't 1!");
 
 				workspace.ActivateTerminalBySequentialIndex(2);
 				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex,      step + "Fixed index of terminal 3 isn't 3!");
 				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 3 isn't 2!");
-				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 3 isn't 2!");
+				Assert.AreEqual(2, workspace.ActiveTerminalSequentialIndex, step + "Sequential index of terminal 3 isn't 2!");
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
@@ -1274,7 +1280,7 @@ namespace YAT.Model.Test
 		// Private Methods > Start
 		//------------------------------------------------------------------------------------------
 
-		private void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
+		private static void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			main = new Main();
 			main.Start();              // Creates empty workspace
@@ -1290,62 +1296,62 @@ namespace YAT.Model.Test
 		// Private Methods > Verify
 		//------------------------------------------------------------------------------------------
 
-		private void VerifyFiles(               Workspace workspace, bool workspaceFileExpected)
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected)
 		{
 			VerifyFiles("", workspace, workspaceFileExpected, new Terminal[] { }, new bool[] { });
 		}
 
-		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected)
 		{
 			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { }, new bool[] { });
 		}
 
-		private void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
 		{
 			VerifyFiles("", workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected });
 		}
 
-		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
 		{
 			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected });
 		}
 
-		private void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
 		{
 			VerifyFiles("", workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
 		}
 
-		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
 		{
 			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
 		}
 
-		private void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
 		{
 			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileExpected);
 		}
 
-		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
 		{
 			VerifyFiles(prefix, workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileExpected);
 		}
 
-		private void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
 			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
 		}
 
-		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
 			VerifyFiles(prefix, workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
 		}
 
-		private void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
 			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileAutoExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
 		}
 
-		private void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
 			// Verify workspace file.
 			if (workspaceFileExpected)

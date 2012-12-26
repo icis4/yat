@@ -23,12 +23,14 @@
 
 using System;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace YAT.Gui.Utilities
 {
 	/// <summary></summary>
-	public class AsciiTable : DataSet
+	[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Justification = "No need to serialize/deserialize, not marking this class eliminates the requirement to implement the ISerialzable constructors.")]
+	public class AsciiTableDataSet : DataSet
 	{
 		private const string Dec = "Dec";
 		private const string Hex = "Hex";
@@ -37,7 +39,7 @@ namespace YAT.Gui.Utilities
 		private const string Description = "Description";
 
 		/// <summary></summary>
-		public AsciiTable()
+		public AsciiTableDataSet()
 		{
 			DataTable t = new DataTable("ASCII");
 			t.Locale = CultureInfo.InvariantCulture;

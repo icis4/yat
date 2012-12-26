@@ -138,7 +138,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Length must be at least 1 byte!",
@@ -210,7 +210,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Line break timeout must be a positive number!",

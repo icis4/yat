@@ -51,6 +51,10 @@ using System.Runtime.InteropServices;
 // CLS compliance.
 [assembly: CLSCompliant(true)]
 
+// Assembly-level FxCop suppressions.
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Domain.Test.Parser", Justification = "Namespace structure of test assembly is defined by testee assembly.")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Domain.Test.TextTerminal", Justification = "Namespace structure of test assembly is defined by testee assembly.")]
+
 //==================================================================================================
 // End of
 // $URL$

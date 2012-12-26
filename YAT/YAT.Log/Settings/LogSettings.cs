@@ -175,28 +175,28 @@ namespace YAT.Log.Settings
 			NameSeparator = FileNameSeparator.DefaultSeparator;
 		}
 
-		private string MakeFormat(LogFormat type)
+		private static string MakeFormat(LogFormat format)
 		{
-			switch (type)
+			switch (format)
 			{
 				case LogFormat.Raw:  return ("Raw");
 				case LogFormat.Neat: return ("Neat");
-				default: throw (new ArgumentException("LogFormat '" + type + "' unknown"));
+				default: throw (new ArgumentException("LogFormat '" + format + "' unknown"));
 			}
 		}
 
-		private string MakeChannel(LogStreamType type)
+		private static string MakeChannel(LogChannelType channelType)
 		{
-			switch (type)
+			switch (channelType)
 			{
-				case LogStreamType.Tx:    return ("Tx");
-				case LogStreamType.Bidir: return ("BiDir");
-				case LogStreamType.Rx:    return ("Rx");
-				default: throw (new ArgumentException("LogChannel '" + type + "' unknown"));
+				case LogChannelType.Tx:    return ("Tx");
+				case LogChannelType.Bidir: return ("BiDir");
+				case LogChannelType.Rx:    return ("Rx");
+				default: throw (new ArgumentException("LogChannelType '" + channelType + "' unknown"));
 			}
 		}
 
-		private string MakeSubdirectory(LogFormat format, LogStreamType channelType)
+		private string MakeSubdirectory(LogFormat format, LogChannelType channelType)
 		{
 			StringBuilder subdirectories = new StringBuilder();
 
@@ -213,7 +213,7 @@ namespace YAT.Log.Settings
 			return (subdirectories.ToString());
 		}
 
-		private string MakeFileNamePostFix(LogFormat format, LogStreamType channelType)
+		private string MakeFileNamePostFix(LogFormat format, LogChannelType channelType)
 		{
 			DateTime now = DateTime.Now;
 			StringBuilder postFix = new StringBuilder();
@@ -312,9 +312,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Raw, LogStreamType.Tx) +
+				return (MakeSubdirectory(LogFormat.Raw, LogChannelType.Tx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Raw, LogStreamType.Tx) +
+						MakeFileNamePostFix(LogFormat.Raw, LogChannelType.Tx) +
 						this.rawExtension);
 			}
 		}
@@ -347,9 +347,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Raw, LogStreamType.Bidir) +
+				return (MakeSubdirectory(LogFormat.Raw, LogChannelType.Bidir) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Raw, LogStreamType.Bidir) +
+						MakeFileNamePostFix(LogFormat.Raw, LogChannelType.Bidir) +
 						this.rawExtension);
 			}
 		}
@@ -382,9 +382,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Raw, LogStreamType.Rx) +
+				return (MakeSubdirectory(LogFormat.Raw, LogChannelType.Rx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Raw, LogStreamType.Rx) +
+						MakeFileNamePostFix(LogFormat.Raw, LogChannelType.Rx) +
 						this.rawExtension);
 			}
 		}
@@ -434,9 +434,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Neat, LogStreamType.Tx) +
+				return (MakeSubdirectory(LogFormat.Neat, LogChannelType.Tx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Neat, LogStreamType.Tx) +
+						MakeFileNamePostFix(LogFormat.Neat, LogChannelType.Tx) +
 						this.neatExtension);
 			}
 		}
@@ -469,9 +469,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Neat, LogStreamType.Bidir) +
+				return (MakeSubdirectory(LogFormat.Neat, LogChannelType.Bidir) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Neat, LogStreamType.Bidir) +
+						MakeFileNamePostFix(LogFormat.Neat, LogChannelType.Bidir) +
 						this.neatExtension);
 			}
 		}
@@ -504,9 +504,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Neat, LogStreamType.Rx) +
+				return (MakeSubdirectory(LogFormat.Neat, LogChannelType.Rx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Neat, LogStreamType.Rx) +
+						MakeFileNamePostFix(LogFormat.Neat, LogChannelType.Rx) +
 						this.neatExtension);
 			}
 		}

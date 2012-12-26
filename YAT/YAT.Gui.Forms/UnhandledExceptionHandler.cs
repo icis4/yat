@@ -98,7 +98,7 @@ namespace YAT.Gui.Forms
 
 			if (exception != null)
 			{
-				if (MessageBox.Show(owner,
+				if (MessageBoxEx.Show(owner,
 									originMessage + Environment.NewLine +
 									"Show detailed information?",
 									title,
@@ -111,7 +111,7 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				MessageBox.Show(owner,
+				MessageBoxEx.Show(owner,
 								title + Environment.NewLine +
 								originMessage,
 								productName,
@@ -122,7 +122,7 @@ namespace YAT.Gui.Forms
 			if (mayBeContinued)
 			{
 				UnhandledExceptionResult result;
-				switch (MessageBox.Show(owner,
+				switch (MessageBoxEx.Show(owner,
 										"After an unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
 										"Select cancel/abort to exit " + productName + " now." + Environment.NewLine +
 										"Or would you like to continue/retry anyway?" + Environment.NewLine +
@@ -137,7 +137,7 @@ namespace YAT.Gui.Forms
 				}
 				if (result == UnhandledExceptionResult.Exit)
 				{
-					switch (MessageBox.Show(owner,
+					switch (MessageBoxEx.Show(owner,
 											"Would you like to restart " + productName + " after exit?",
 											productName + " Restart",
 											MessageBoxButtons.YesNo,
@@ -152,7 +152,7 @@ namespace YAT.Gui.Forms
 			else
 			{
 				UnhandledExceptionResult result;
-				switch (MessageBox.Show(owner,
+				switch (MessageBoxEx.Show(owner,
 										"After this unhandled exception " + productName + " will have to exit." + Environment.NewLine +
 										"Would you like to restart " + productName + " after exit?",
 										productName + " Restart",

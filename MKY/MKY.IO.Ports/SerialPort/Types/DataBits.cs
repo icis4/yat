@@ -55,6 +55,7 @@ namespace MKY.IO.Ports
 	/// Extended enum DataBitsEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
+	[Serializable]
 	public class DataBitsEx : EnumEx
 	{
 		/// <summary>Default is <see cref="DataBits.Eight"/>.</summary>

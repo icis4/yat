@@ -22,8 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Domain.Settings
@@ -36,7 +35,8 @@ namespace YAT.Domain.Settings
 		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
 
 		/// <summary></summary>
-		public const Endianess EndianessDefault = Endianess.BigEndian;
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
+		public const Endianness EndiannessDefault = Endianness.BigEndian;
 
 		/// <summary></summary>
 		public const bool IndicateSerialPortBreakStatesDefault = false;
@@ -48,7 +48,7 @@ namespace YAT.Domain.Settings
 		private MKY.IO.Serial.SerialPort.SerialPortSettings serialPort;
 		private MKY.IO.Serial.Socket.SocketSettings socket;
 		private MKY.IO.Serial.Usb.SerialHidDeviceSettings usbSerialHidDevice;
-		private Endianess endianess;
+		private Endianness endianness;
 		private bool indicateSerialPortBreakStates;
 		private bool serialPortOutputBreakIsModifiable;
 
@@ -87,9 +87,9 @@ namespace YAT.Domain.Settings
 			SerialPort         = new MKY.IO.Serial.SerialPort.SerialPortSettings(rhs.SerialPort);
 			Socket             = new MKY.IO.Serial.Socket.SocketSettings(rhs.Socket);
 			UsbSerialHidDevice = new MKY.IO.Serial.Usb.SerialHidDeviceSettings(rhs.UsbSerialHidDevice);
-			Endianess          = rhs.Endianess;
+			Endianness         = rhs.Endianness;
 
-			IndicateSerialPortBreakStates = rhs.IndicateSerialPortBreakStates;
+			IndicateSerialPortBreakStates     = rhs.IndicateSerialPortBreakStates;
 			SerialPortOutputBreakIsModifiable = rhs.SerialPortOutputBreakIsModifiable;
 
 			ClearChanged();
@@ -102,10 +102,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			IOType    = IOTypeDefault;
-			Endianess = EndianessDefault;
+			IOType     = IOTypeDefault;
+			Endianness = EndiannessDefault;
 
-			IndicateSerialPortBreakStates = IndicateSerialPortBreakStatesDefault;
+			IndicateSerialPortBreakStates     = IndicateSerialPortBreakStatesDefault;
 			SerialPortOutputBreakIsModifiable = SerialPortOutputBreakIsModifiableDefault;
 		}
 
@@ -212,15 +212,16 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("Endianess")]
-		public virtual Endianess Endianess
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
+		[XmlElement("Endianness")]
+		public virtual Endianness Endianness
 		{
-			get { return (this.endianess); }
+			get { return (this.endianness); }
 			set
 			{
-				if (value != this.endianess)
+				if (value != this.endianness)
 				{
-					this.endianess = value;
+					this.endianness = value;
 					SetChanged();
 				}
 			}
@@ -280,10 +281,10 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(IOType    == other.IOType) &&
-				(Endianess == other.Endianess) &&
+				(IOType     == other.IOType) &&
+				(Endianness == other.Endianness) &&
 
-				(IndicateSerialPortBreakStates == other.IndicateSerialPortBreakStates) &&
+				(IndicateSerialPortBreakStates     == other.IndicateSerialPortBreakStates) &&
 				(SerialPortOutputBreakIsModifiable == other.SerialPortOutputBreakIsModifiable)
 			);
 		}
@@ -301,10 +302,10 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				IOType   .GetHashCode() ^
-				Endianess.GetHashCode() ^
+				IOType    .GetHashCode() ^
+				Endianness.GetHashCode() ^
 
-				IndicateSerialPortBreakStates.GetHashCode() ^
+				IndicateSerialPortBreakStates    .GetHashCode() ^
 				SerialPortOutputBreakIsModifiable.GetHashCode()
 			);
 		}

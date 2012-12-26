@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -127,6 +128,7 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Loads the application settings on a concurrent thread.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			try

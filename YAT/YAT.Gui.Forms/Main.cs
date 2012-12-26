@@ -48,6 +48,15 @@ using YAT.Settings.Terminal;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.Gui.Forms.Main.#toolTip", Justification = "This is a bug in FxCop 1.36.")]
+
+#endregion
+
 namespace YAT.Gui.Forms
 {
 	/// <summary>
@@ -215,7 +224,7 @@ namespace YAT.Gui.Forms
 					{
 						if (showErrorModally)
 						{
-							MessageBox.Show
+							MessageBoxEx.Show
 								(
 								this,
 								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
@@ -232,7 +241,7 @@ namespace YAT.Gui.Forms
 					{
 						if (showErrorModally)
 						{
-							MessageBox.Show
+							MessageBoxEx.Show
 								(
 								this,
 								@"YAT could not successfully be started with the given settings in the current environment!",
@@ -248,7 +257,7 @@ namespace YAT.Gui.Forms
 					{
 						if (showErrorModally)
 						{
-							MessageBox.Show
+							MessageBoxEx.Show
 								(
 								this,
 								@"YAT could not successfully execute the requested operation!",
@@ -586,7 +595,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
 		{
-			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Feature);
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerType.Feature);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -595,7 +604,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
 		{
-			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerType.Bug);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
@@ -1235,7 +1244,7 @@ namespace YAT.Gui.Forms
 		private void main_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			DialogResult dr;
-			dr = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			dr = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 			e.Result = dr;
 		}
 
@@ -1269,8 +1278,8 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
 				ApplicationSettings.Save();
 
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
-				this.main.CreateNewTerminalFromSettings(sh);
+				DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
+				this.main.CreateNewTerminalFromSettings(settingsHandler);
 			}
 			else
 			{
@@ -1492,7 +1501,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
-			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
 		private void workspace_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)

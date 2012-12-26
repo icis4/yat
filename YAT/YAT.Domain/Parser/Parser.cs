@@ -105,10 +105,11 @@ namespace YAT.Domain.Parser
 			private bool isDisposed;
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
 			public abstract bool TryParse(Parser parser, int parseChar, ref FormatException formatException);
 
 			/// <summary></summary>
-			protected void ChangeState(Parser parser, ParserState state)
+			protected static void ChangeState(Parser parser, ParserState state)
 			{
 				parser.State = state;
 			}
@@ -345,7 +346,7 @@ namespace YAT.Domain.Parser
 
 					case '!':
 					{
-						if ((parser.mode & ParseMode.Keywords) == ParseMode.Keywords)
+						if ((parser.modes & Modes.Keywords) == Modes.Keywords)
 						{
 							parser.IsKeywordParser = true;
 							ChangeState(parser, new OpeningState());
@@ -648,6 +649,8 @@ namespace YAT.Domain.Parser
 			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
 			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 			public static bool TryParseAsciiMnemonic(Parser parser, string value, out byte[] result, ref FormatException formatException)
 			{
 				MemoryStream bytes = new MemoryStream();
@@ -791,6 +794,8 @@ namespace YAT.Domain.Parser
 			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
 			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 			public static bool TryParseNumericValue(Parser parser, string value, out byte[] result, ref FormatException formatException)
 			{
 				switch (parser.Radix)
@@ -880,10 +885,10 @@ namespace YAT.Domain.Parser
 
 		private bool isDisposed;
 
-		private Endianess endianess = Endianess.BigEndian;
+		private Endianness endianness = Endianness.BigEndian;
 		private Encoding encoding = Encoding.Default;
 		private Radix defaultRadix = Radix.String;
-		private ParseMode mode = ParseMode.All;
+		private Modes modes = Modes.All;
 
 		private StringReader reader;
 		private MemoryStream byteArrayWriter;
@@ -909,9 +914,10 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public Parser(Endianess endianess)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public Parser(Endianness endianness)
 		{
-			this.endianess = endianess;
+			this.endianness = endianness;
 		}
 
 		/// <summary></summary>
@@ -921,10 +927,11 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public Parser(Endianess endianess, Encoding encoding)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public Parser(Endianness endianness, Encoding encoding)
 		{
-			this.endianess = endianess;
-			this.encoding = encoding;
+			this.endianness = endianness;
+			this.encoding   = encoding;
 		}
 
 		/// <summary></summary>
@@ -936,15 +943,16 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public Parser(Encoding encoding, Radix defaultRadix)
 		{
-			this.encoding = encoding;
+			this.encoding     = encoding;
 			this.defaultRadix = defaultRadix;
 		}
 
 		/// <summary></summary>
-		public Parser(Endianess endianess, Encoding encoding, Radix defaultRadix)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public Parser(Endianness endianness, Encoding encoding, Radix defaultRadix)
 		{
-			this.endianess = endianess;
-			this.encoding = encoding;
+			this.endianness   = endianness;
+			this.encoding     = encoding;
 			this.defaultRadix = defaultRadix;
 		}
 
@@ -1068,9 +1076,10 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public virtual Endianess Endianess
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
+		public virtual Endianness Endianness
 		{
-			get { return (this.endianess); }
+			get { return (this.endianness); }
 		}
 
 		/// <summary></summary>
@@ -1097,6 +1106,7 @@ namespace YAT.Domain.Parser
 			get { return (this.parentParser == null); }
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		private Parser Parent
 		{
 			get { return (this.parentParser); }
@@ -1137,17 +1147,19 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual byte[] Parse(string s, out string parsed)
 		{
 			// AssertNotDisposed() is called below.
 
-			Result[] resultResult = Parse(s, ParseMode.AllByteArrayResults, out parsed);
+			Result[] resultResult = Parse(s, Modes.AllByteArrayResults, out parsed);
 			MemoryStream byteResult = new MemoryStream();
 			foreach (Result r in resultResult)
 			{
-				if (r is ByteArrayResult)
+				ByteArrayResult bar = r as ByteArrayResult;
+				if (bar != null)
 				{
-					byte[] a = ((ByteArrayResult)r).ByteArray;
+					byte[] a = bar.ByteArray;
 					byteResult.Write(a, 0, a.Length);
 				}
 			}
@@ -1155,27 +1167,29 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public virtual Result[] Parse(string s, ParseMode mode)
+		public virtual Result[] Parse(string s, Modes modes)
 		{
 			// AssertNotDisposed() is called below.
 
 			string parsed;
-			return (Parse(s, mode, out parsed));
+			return (Parse(s, modes, out parsed));
 		}
 
 		/// <summary></summary>
-		public virtual Result[] Parse(string s, ParseMode mode, out string parsed)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual Result[] Parse(string s, Modes modes, out string parsed)
 		{
 			// AssertNotDisposed() is called below.
 
 			Result[] result;
 			FormatException formatException = new FormatException("");
-			if (!TryParse(s, mode, out result, out parsed, ref formatException))
+			if (!TryParse(s, modes, out result, out parsed, ref formatException))
 				throw (formatException);
 			return (result);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, out byte[] result)
 		{
 			// AssertNotDisposed() is called below.
@@ -1185,19 +1199,21 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, out byte[] result, out string parsed)
 		{
 			// AssertNotDisposed() is called below.
 
 			Result[] resultResult;
-			bool tryResult = TryParse(s, ParseMode.AllByteArrayResults, out resultResult, out parsed);
+			bool tryResult = TryParse(s, Modes.AllByteArrayResults, out resultResult, out parsed);
 
 			MemoryStream byteResult = new MemoryStream();
 			foreach (Result r in resultResult)
 			{
-				if (r is ByteArrayResult)
+				ByteArrayResult bar = r as ByteArrayResult;
+				if (bar != null)
 				{
-					byte[] a = ((ByteArrayResult)r).ByteArray;
+					byte[] a = bar.ByteArray;
 					byteResult.Write(a, 0, a.Length);
 				}
 			}
@@ -1211,60 +1227,69 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called below.
 
-			return (TryParse(s, ParseMode.All));
+			return (TryParse(s, Modes.All));
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, ParseMode mode)
+		public virtual bool TryParse(string s, Modes modes)
 		{
 			// AssertNotDisposed() is called below.
 
 			string parsed;
-			return (TryParse(s, mode, out parsed));
+			return (TryParse(s, modes, out parsed));
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, ParseMode mode, out Result[] result)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, Modes modes, out Result[] result)
 		{
 			// AssertNotDisposed() is called below.
 
 			string parsed;
-			return (TryParse(s, mode, out result, out parsed));
+			return (TryParse(s, modes, out result, out parsed));
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, ParseMode mode, out string parsed)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, Modes modes, out string parsed)
 		{
 			// AssertNotDisposed() is called below.
 
 			Result[] result;
-			return (TryParse(s, mode, out result, out parsed));
+			return (TryParse(s, modes, out result, out parsed));
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, ParseMode mode, out string parsed, ref FormatException formatException)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, Modes modes, out string parsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called below.
 
 			Result[] result;
-			return (TryParse(s, mode, out result, out parsed, ref formatException));
+			return (TryParse(s, modes, out result, out parsed, ref formatException));
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed)
 		{
 			// AssertNotDisposed() is called below.
 
 			FormatException formatException = new FormatException("");
-			return (TryParse(s, mode, out result, out parsed, ref formatException));
+			return (TryParse(s, modes, out result, out parsed, ref formatException));
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed, ref FormatException formatException)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed, ref FormatException formatException)
 		{
 			AssertNotDisposed();
 
-			InitializeTopLevelParse(s, mode);
+			InitializeTopLevelParse(s, modes);
 
 			while (!HasFinished)
 			{
@@ -1306,6 +1331,8 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		protected virtual bool TryParseContiguousRadixToken(string token, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			AssertNotDisposed();
@@ -1355,7 +1382,7 @@ namespace YAT.Domain.Parser
 			}
 			if (success)
 			{
-				bool useBigEndian = (this.endianess == Endianess.BigEndian);
+				bool useBigEndian = (this.endianness == Endianness.BigEndian);
 				result = UInt64Ex.ConvertToByteArray(value, negative, useBigEndian);
 				return (true);
 			}
@@ -1382,9 +1409,9 @@ namespace YAT.Domain.Parser
 		// Private Methods
 		//==========================================================================================
 
-		private void InitializeTopLevelParse(string value, ParseMode mode)
+		private void InitializeTopLevelParse(string value, Modes modes)
 		{
-			this.mode            = mode;
+			this.modes           = modes;
 
 			this.reader          = new StringReader(value);
 			this.byteArrayWriter = new MemoryStream();
@@ -1400,7 +1427,7 @@ namespace YAT.Domain.Parser
 		{
 			this.encoding        = parent.encoding;
 			this.defaultRadix    = parent.defaultRadix;
-			this.mode       = parent.mode;
+			this.modes       = parent.modes;
 
 			this.reader          = parent.reader;
 			this.byteArrayWriter = new MemoryStream();
@@ -1421,7 +1448,7 @@ namespace YAT.Domain.Parser
 		/// <param name="radix">Numeric radix.</param>
 		/// <param name="result">Array containing the resulting bytes.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
-		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
 		private bool TryParseContiguousRadix(string value, Radix radix, out byte[] result, ref FormatException formatException)
 		{
@@ -1469,7 +1496,8 @@ namespace YAT.Domain.Parser
 		/// <param name="value">String to be parsed.</param>
 		/// <param name="result">Array containing the results.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
-		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Non-static for orthogonality with other TryParse() methods.")]
 		private bool TryParseContiguousKeywords(string value, out Result[] result, ref FormatException formatException)
 		{
 			List<Result> resultList = new List<Result>();

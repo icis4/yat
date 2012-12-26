@@ -89,7 +89,7 @@
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinaryTerminal\Settings\BinaryDisplaySettings.cs" />
     <Compile Include="BinaryTerminal\Structs.cs" />
-    <Compile Include="Endianess.cs" />
+    <Compile Include="Endianness.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Eol.cs" />
     <Compile Include="EolQueue.cs" />
@@ -97,7 +97,7 @@
     <Compile Include="IOType.cs" />
     <Compile Include="Parser\Exceptions.cs" />
     <Compile Include="Parser\Keyword.cs" />
-    <Compile Include="Parser\ParseMode.cs" />
+    <Compile Include="Parser\Modes.cs" />
     <Compile Include="Parser\Result.cs" />
     <Compile Include="SerialDirection.cs" />
     <Compile Include="Settings\CharReplaceSettings.cs" />

@@ -38,7 +38,7 @@ using MKY.IO;
 namespace YAT.Model
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+	[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 	public static class Indices
 	{
 		/// <remarks>
@@ -72,19 +72,19 @@ namespace YAT.Model
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
-		public const int FirstSequencialIndex = 1;
+		public const int FirstSequentialIndex = 1;
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// Index 0 means 'default'.
 		/// </remarks>
-		public const int DefaultSequencialIndex = 0;
+		public const int DefaultSequentialIndex = 0;
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// Index -1 means 'invalid'.
 		/// </remarks>
-		public const int InvalidSequencialIndex = -1;
+		public const int InvalidSequentialIndex = -1;
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...

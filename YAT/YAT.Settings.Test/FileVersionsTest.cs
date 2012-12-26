@@ -44,6 +44,8 @@ namespace YAT.Settings.Test
 	[TestFixture]
 	public class FileVersionsTest
 	{
+		private const string UnderscoreSuppressionJustification = "As always, there are exceptions to the rules...";
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -103,6 +105,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase01()
 		{
@@ -120,6 +123,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
 		{
@@ -137,6 +141,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_12_TerminalSettingsCase03()
 		{
@@ -161,6 +166,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase01()
 		{
@@ -178,6 +184,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase02()
 		{
@@ -195,6 +202,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_13_TerminalSettingsCase03()
 		{
@@ -212,6 +220,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_13_WorkspaceSettingsCase04()
 		{
@@ -236,6 +245,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase01()
 		{
@@ -253,6 +263,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase02()
 		{
@@ -270,6 +281,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_17_TerminalSettingsCase03()
 		{
@@ -287,6 +299,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_17_WorkspaceSettingsCase04()
 		{
@@ -311,6 +324,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase01()
 		{
@@ -328,6 +342,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase02()
 		{
@@ -345,6 +360,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_18_TerminalSettingsCase03()
 		{
@@ -362,6 +378,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_18_WorkspaceSettingsCase04()
 		{
@@ -386,6 +403,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase01()
 		{
@@ -403,6 +421,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase02()
 		{
@@ -420,6 +439,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_19_TerminalSettingsCase03()
 		{
@@ -437,6 +457,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_19_WorkspaceSettingsCase04()
 		{
@@ -461,6 +482,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase01()
 		{
@@ -478,6 +500,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase02()
 		{
@@ -495,6 +518,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_20_TerminalSettingsCase03()
 		{
@@ -512,6 +536,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_20_WorkspaceSettingsCase04()
 		{
@@ -536,6 +561,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
 		{
@@ -553,6 +579,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
 		{
@@ -570,6 +597,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_22_TerminalSettingsCase03()
 		{
@@ -587,6 +615,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_22_WorkspaceSettingsCase04()
 		{
@@ -611,6 +640,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_24_TerminalSettingsCase01()
 		{
@@ -628,6 +658,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_24_TerminalSettingsCase02()
 		{
@@ -645,6 +676,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_24_TerminalSettingsCase03()
 		{
@@ -662,6 +694,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_24_WorkspaceSettingsCase04()
 		{
@@ -679,6 +712,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_24_TerminalSettingsCase05()
 		{
@@ -703,6 +737,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_25_TerminalSettingsCase01()
 		{
@@ -720,6 +755,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_25_TerminalSettingsCase02()
 		{
@@ -737,6 +773,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase03()
 		{
@@ -754,6 +791,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_25_WorkspaceSettingsCase04()
 		{
@@ -771,6 +809,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase05()
 		{
@@ -788,6 +827,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_25_WorkspaceSettingsCase06()
 		{
@@ -805,6 +845,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase07()
 		{
@@ -829,6 +870,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_26_TerminalSettingsCase01()
 		{
@@ -846,6 +888,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_26_TerminalSettingsCase02()
 		{
@@ -863,6 +906,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase03()
 		{
@@ -880,6 +924,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_WorkspaceSettingsCase04()
 		{
@@ -897,6 +942,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase05()
 		{
@@ -914,6 +960,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_WorkspaceSettingsCase06()
 		{
@@ -931,6 +978,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase07()
 		{
@@ -948,6 +996,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_WorkspaceSettingsCase08()
 		{
@@ -973,7 +1022,7 @@ namespace YAT.Settings.Test
 		// Set Up Settings
 		//==========================================================================================
 
-		private DocumentSettingsHandler<TerminalSettingsRoot> SetupTerminalSettingsFromFilePath(string filePath)
+		private static DocumentSettingsHandler<TerminalSettingsRoot> SetupTerminalSettingsFromFilePath(string filePath)
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			settingsHandler.SettingsFilePath = filePath;
@@ -984,7 +1033,7 @@ namespace YAT.Settings.Test
 			return (settingsHandler);
 		}
 
-		private DocumentSettingsHandler<WorkspaceSettingsRoot> SetupWorkspaceSettingsFromFilePath(string filePath)
+		private static DocumentSettingsHandler<WorkspaceSettingsRoot> SetupWorkspaceSettingsFromFilePath(string filePath)
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			settingsHandler.SettingsFilePath = filePath;
@@ -1050,7 +1099,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 03 :: Terminal :: COM1 / Closed / Predefined
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase03(Model.Terminal terminal)
+		private static void VerifySettingsCase03(Model.Terminal terminal)
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1!");
@@ -1100,7 +1149,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 04 :: Workspace :: 2 Terminals on COM1 / COM2
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase04(Model.Workspace workspace)
+		private static void VerifySettingsCase04(Model.Workspace workspace)
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 		}
@@ -1112,7 +1161,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 05 :: Terminal :: COM1 / Open / Recent
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase05(Model.Terminal terminal)
+		private static void VerifySettingsCase05(Model.Terminal terminal)
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
@@ -1128,7 +1177,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 06 :: Workspace :: 2 TCP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase06(Model.Workspace workspace)
+		private static void VerifySettingsCase06(Model.Workspace workspace)
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 
@@ -1143,7 +1192,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase07(Model.Terminal terminal)
+		private static void VerifySettingsCase07(Model.Terminal terminal)
 		{
 			Assert.AreEqual(Domain.IOType.UsbSerialHid, terminal.SettingsRoot.IOType, "Terminal isn't USB Ser/HID!");
 
@@ -1158,7 +1207,8 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase08(Model.Workspace workspace)
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "terminal2", Justification = "See ToDo's below.")]
+		private static void VerifySettingsCase08(Model.Workspace workspace)
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 

@@ -50,7 +50,7 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private DeviceInfo deviceInfo = null;
+		private DeviceInfo deviceInfo; // = null;
 
 		#endregion
 
@@ -145,7 +145,7 @@ namespace YAT.Gui.Controls
 		/// Only set device list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the ports takes quite some time.
 		/// </summary>
-		private bool deviceListIsInitialized = false;
+		private bool deviceListIsInitialized; // = false;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
@@ -236,7 +236,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"No Ser/HID capable USB devices available.",

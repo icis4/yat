@@ -180,11 +180,12 @@ namespace YAT.Domain.Test.Parser
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
-		public virtual void TestParser(string inputString, byte[] expectedBytes)
+		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
 			Domain.Parser.Parser parser = new Domain.Parser.Parser();
-			byte[] actualBytes = parser.Parse(inputString);
+			byte[] actualBytes = parser.Parse(s);
 			Assert.AreEqual(expectedBytes, actualBytes);
 		}
 
@@ -196,11 +197,12 @@ namespace YAT.Domain.Test.Parser
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesEncoding")]
-		public virtual void TestParserEncoding(Encoding encoding, string inputString, byte[] expectedBytes)
+		public virtual void TestParserEncoding(Encoding encoding, string s, byte[] expectedBytes)
 		{
 			Domain.Parser.Parser parser = new Domain.Parser.Parser(encoding);
-			byte[] actualBytes = parser.Parse(inputString);
+			byte[] actualBytes = parser.Parse(s);
 			Assert.AreEqual(expectedBytes, actualBytes);
 		}
 

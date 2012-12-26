@@ -22,22 +22,39 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
+	[Serializable]
 	public class FormatException : System.FormatException
 	{
 		/// <summary></summary>
+		public FormatException()
+		{
+		}
+
+		/// <summary></summary>
 		public FormatException(string message)
+			: this(message, null)
+		{
+		}
+
+		/// <summary></summary>
+		public FormatException(string message, Exception innerException)
 			: base
 			(
 			message + Environment.NewLine + Environment.NewLine +
 			Parser.FormatHelp + Environment.NewLine + Environment.NewLine +
-			Parser.KeywordHelp + Environment.NewLine + Environment.NewLine
+			Parser.KeywordHelp + Environment.NewLine + Environment.NewLine,
+			innerException
 			)
+		{
+		}
+
+		/// <summary></summary>
+		protected FormatException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
 		{
 		}
 	}

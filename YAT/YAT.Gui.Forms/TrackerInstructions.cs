@@ -25,25 +25,23 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
-using YAT.Utilities;
-
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
+	public enum TrackerType
+	{
+		/// <summary></summary>
+		Feature,
+
+		/// <summary></summary>
+		Bug
+	}
+
 	/// <summary></summary>
 	public partial class TrackerInstructions : Form
 	{
 		/// <summary></summary>
-		public enum Tracker
-		{
-			/// <summary></summary>
-			Feature,
-
-			/// <summary></summary>
-			Bug
-		}
-
-		/// <summary></summary>
-		public TrackerInstructions(Tracker tracker)
+		public TrackerInstructions(TrackerType tracker)
 		{
 			InitializeComponent();
 
@@ -54,8 +52,8 @@ namespace YAT.Gui.Forms
 			sb.Append(Application.ProductName);
 			switch (tracker)
 			{
-				case Tracker.Feature: sb.Append(" Feature Request"); break;
-				case Tracker.Bug:     sb.Append(" Bug Submission");  break;
+				case TrackerType.Feature: sb.Append(" Feature Request"); break;
+				case TrackerType.Bug:     sb.Append(" Bug Submission");  break;
 			}
 			Text = sb.ToString();
 
@@ -63,8 +61,8 @@ namespace YAT.Gui.Forms
 			sb = new StringBuilder();
 			switch (tracker)
 			{
-				case Tracker.Feature: sb.Append("Features for YAT can be requested online."); break;
-				case Tracker.Bug:     sb.Append("Bugs for YAT can be submitted online.");     break;
+				case TrackerType.Feature: sb.Append("Features for YAT can be requested online."); break;
+				case TrackerType.Bug:     sb.Append("Bugs for YAT can be submitted online.");     break;
 			}
 			sb.Append(" Follow the link below and proceed according to the instructions.");
 			linkLabel_Intro.Text = sb.ToString();
@@ -75,8 +73,8 @@ namespace YAT.Gui.Forms
 			sb.Append(" you proceed. You will then get email notifications about the progress");
 			switch (tracker)
 			{
-				case Tracker.Feature: sb.Append(" of the feature request."); break;
-				case Tracker.Bug:     sb.Append(" of the bug submission.");  break;
+				case TrackerType.Feature: sb.Append(" of the feature request."); break;
+				case TrackerType.Bug:     sb.Append(" of the bug submission.");  break;
 			}
 			sb.AppendLine();
 			sb.Append("If you don't have a SourceForge.net account,");
@@ -88,13 +86,13 @@ namespace YAT.Gui.Forms
 			string plainLink = "";
 			switch (tracker)
 			{
-				case Tracker.Feature:
+				case TrackerType.Feature:
 				{
 					filteredAndSortedLink = "http://sourceforge.net/p/y-a-terminal/feature-requests/search/?q=!status%3Aclosed-rejected+%26%26+!status%3Aclosed-duplicate+%26%26+!status%3Awont-fix+%26%26+!status%3Aclosed-fixed+%26%26+!status%3Aclosed&limit=25&page=0&sort=_priority_s%20desc";
 					plainLink             = "http://sourceforge.net/p/y-a-terminal/feature-requests/";
 					break;
 				}
-				case Tracker.Bug:
+				case TrackerType.Bug:
 				{
 					filteredAndSortedLink = "http://sourceforge.net/p/y-a-terminal/bugs/?q={%22status%22%3A+{%22%24nin%22%3A+[%22closed-rejected%22%2C+%22closed-duplicate%22%2C+%22wont-fix%22%2C+%22closed-fixed%22%2C+%22closed%22]}}&limit=25&page=0&sort=_priority%20desc";
 					plainLink             = "http://sourceforge.net/p/y-a-terminal/bugs/";
@@ -113,12 +111,12 @@ namespace YAT.Gui.Forms
 			sb.AppendLine("3. Fill in as much information as possible into 'Description'");
 			switch (tracker)
 			{
-				case Tracker.Feature:
+				case TrackerType.Feature:
 					sb.AppendLine("    > YAT version you are using");
 					sb.AppendLine("    > Expected behaviour of the new feature");
 					sb.AppendLine("    > Use case(s) of the new feature");
 					break;
-				case Tracker.Bug:
+				case TrackerType.Bug:
 					sb.AppendLine("    > YAT version you are using");
 					sb.AppendLine("    > Procedure to reproduce the bug");
 					sb.AppendLine("    > Any additional useful information");

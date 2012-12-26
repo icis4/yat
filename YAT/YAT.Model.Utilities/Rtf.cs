@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
@@ -38,12 +40,12 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public static string[] LinesFromRtfFile(string rtfFilePath)
 		{
-			RichTextBox rtb = new RichTextBox();
+			RichTextBox richTextProvider = new RichTextBox();
 			using (FileStream fs = File.OpenRead(rtfFilePath))
 			{
-				rtb.LoadFile(fs, RichTextBoxStreamType.RichText);
+				richTextProvider.LoadFile(fs, RichTextBoxStreamType.RichText);
 			}
-			return (rtb.Lines);
+			return (richTextProvider.Lines);
 		}
 	}
 
@@ -53,88 +55,89 @@ namespace YAT.Model.Utilities
 	public static class RtfWriter
 	{
 		/// <summary></summary>
-		public static void LinesToRtfFile(List<Domain.DisplayLine> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
+		public static void LinesToRtfFile(ReadOnlyCollection<Domain.DisplayLine> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
 		{
-			RichTextBox rtb = LinesToRichTextBox(lines, formatSettings);
-			rtb.SaveFile(rtfFilePath, rtfType);
+			RichTextBox richTextProvider = LinesToRichTextBox(lines, formatSettings);
+			richTextProvider.SaveFile(rtfFilePath, rtfType);
 		}
 
 		/// <summary></summary>
-		public static void LinesToClipboard(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
+		public static void LinesToClipboard(ReadOnlyCollection<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
-			RichTextBox rtb = LinesToRichTextBox(lines, formatSettings);
-			rtb.SelectAll();
-			rtb.Copy();
+			RichTextBox richTextProvider = LinesToRichTextBox(lines, formatSettings);
+			richTextProvider.SelectAll();
+			richTextProvider.Copy();
 		}
 
 		/// <summary></summary>
-		public static RichTextBox LinesToRichTextBox(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
+		public static RichTextBox LinesToRichTextBox(ReadOnlyCollection<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
-			RichTextBox rtb = new RichTextBox();
+			RichTextBox richTextProvider = new RichTextBox();
 			foreach (Domain.DisplayLine line in lines)
-				AppendDisplayLine(rtb, line, formatSettings);
+				AppendDisplayLine(richTextProvider, line, formatSettings);
 
-			return (rtb);
+			return (richTextProvider);
 		}
 
-		private static void AppendDisplayLine(RichTextBox rtb, Domain.DisplayLine line, Settings.FormatSettings formatSettings)
+		private static void AppendDisplayLine(RichTextBox richTextProvider, Domain.DisplayLine line, Settings.FormatSettings formatSettings)
 		{
-			AppendDisplayElements(rtb, line, formatSettings);
+			AppendDisplayElements(richTextProvider, line, formatSettings);
 		}
 
-		private static void AppendDisplayElements(RichTextBox rtb, List<Domain.DisplayElement> elements, Settings.FormatSettings formatSettings)
+		private static void AppendDisplayElements(RichTextBox richTextProvider, List<Domain.DisplayElement> elements, Settings.FormatSettings formatSettings)
 		{
 			foreach (Domain.DisplayElement de in elements)
-				AppendDisplayElement(rtb, de, formatSettings);
+				AppendDisplayElement(richTextProvider, de, formatSettings);
 		}
 
-		private static void AppendDisplayElement(RichTextBox rtb, Domain.DisplayElement element, Settings.FormatSettings formatSettings)
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Element is intentionally casted to LineBreak twice for implementation readability.")]
+		private static void AppendDisplayElement(RichTextBox richTextProvider, Domain.DisplayElement element, Settings.FormatSettings formatSettings)
 		{
 			string fontName = formatSettings.Font.Name;
 			float fontSize = formatSettings.Font.Size;
 
 			if (element is Domain.DisplayElement.TxData)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TxDataFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.TxDataFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.TxDataFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.TxDataFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TxControlFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.TxControlFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.TxControlFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.TxControlFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.RxDataFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.RxDataFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.RxDataFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.RxDataFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.RxControlFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.RxControlFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.RxControlFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.RxControlFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.TimeStamp)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TimeStampFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.TimeStampFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.TimeStampFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.TimeStampFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.LengthFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.LengthFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.LengthFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.LengthFormat.Color;
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
 					 (element is Domain.DisplayElement.Space) ||
 					 (element is Domain.DisplayElement.RightMargin) ||
 					 (element is Domain.DisplayElement.LineBreak))
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.WhiteSpacesFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.WhiteSpacesFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.WhiteSpacesFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.WhiteSpacesFormat.Color;
 			}
-			else if (element is Domain.DisplayElement.Error)
+			else if (element is Domain.DisplayElement.IOError)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.ErrorFormat.FontStyle);
-				rtb.SelectionColor = formatSettings.ErrorFormat.Color;
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.ErrorFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.ErrorFormat.Color;
 			}
 			else
 			{
@@ -143,9 +146,9 @@ namespace YAT.Model.Utilities
 
 			// Handle line break according to current system.
 			if (element is Domain.DisplayElement.LineBreak)
-				rtb.AppendText(Environment.NewLine);
+				richTextProvider.AppendText(Environment.NewLine);
 			else
-				rtb.AppendText(element.Text);
+				richTextProvider.AppendText(element.Text);
 		}
 	}
 
@@ -156,8 +159,8 @@ namespace YAT.Model.Utilities
 	{
 		private bool isDisposed;
 
-		private PrintDocument pd;
-		private RichTextBox rtb;
+		private PrintDocument document;
+		private RichTextBox richTextProvider;
 		private StringReader reader;
 
 		#region Object Lifetime
@@ -168,9 +171,9 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public RtfPrinter(PrinterSettings settings)
 		{
-			this.pd = new PrintDocument();
-			this.pd.PrintPage += new PrintPageEventHandler(pd_PrintPage);
-			this.pd.PrinterSettings = settings;
+			this.document = new PrintDocument();
+			this.document.PrintPage += new PrintPageEventHandler(document_PrintPage);
+			this.document.PrinterSettings = settings;
 		}
 
 		#region Disposal
@@ -191,15 +194,15 @@ namespace YAT.Model.Utilities
 			if (!this.isDisposed)
 			{
 				// In any case, dispose of the as they were created in the constructor:
-				if (this.pd != null)
+				if (this.document != null)
 				{
-					this.pd.Dispose();
-					this.pd = null;
+					this.document.Dispose();
+					this.document = null;
 				}
-				if (this.rtb != null)
+				if (this.richTextProvider != null)
 				{
-					this.rtb.Dispose();
-					this.rtb = null;
+					this.richTextProvider.Dispose();
+					this.richTextProvider = null;
 				}
 				if (this.reader != null)
 				{
@@ -243,13 +246,13 @@ namespace YAT.Model.Utilities
 		/// <exception cref="System.Drawing.Printing.InvalidPrinterException">
 		/// The printer named in the System.Drawing.Printing.PrinterSettings.PrinterName property does not exist.
 		/// </exception>
-		public virtual void Print(RichTextBox rtb)
+		public virtual void Print(RichTextBox richTextProvider)
 		{
-			this.rtb = rtb;
-			this.reader = new StringReader(this.rtb.Text);
+			this.richTextProvider = richTextProvider;
+			this.reader = new StringReader(this.richTextProvider.Text);
 			try
 			{
-				this.pd.Print();
+				this.document.Print();
 			}
 			finally
 			{
@@ -257,10 +260,10 @@ namespace YAT.Model.Utilities
 			}
 		}
 
-		private void pd_PrintPage(object sender, PrintPageEventArgs e)
+		private void document_PrintPage(object sender, PrintPageEventArgs e)
 		{
 			// Calculate the number of lines per page.
-			int linesPerPage = (int)(e.MarginBounds.Height / this.rtb.Font.GetHeight(e.Graphics));
+			int linesPerPage = (int)(e.MarginBounds.Height / this.richTextProvider.Font.GetHeight(e.Graphics));
 			int lineCount = 0;
 
 			// Print each line of the file.
@@ -268,8 +271,8 @@ namespace YAT.Model.Utilities
 			while ((lineCount < linesPerPage) && ((line = this.reader.ReadLine()) != null))
 			{
 				float yPos = 0;
-				yPos = e.MarginBounds.Top + (lineCount * this.rtb.Font.GetHeight(e.Graphics));
-				e.Graphics.DrawString(line, this.rtb.Font, Brushes.Black, e.MarginBounds.Left, yPos, new StringFormat());
+				yPos = e.MarginBounds.Top + (lineCount * this.richTextProvider.Font.GetHeight(e.Graphics));
+				e.Graphics.DrawString(line, this.richTextProvider.Font, Brushes.Black, e.MarginBounds.Left, yPos, new StringFormat());
 				lineCount++;
 			}
 

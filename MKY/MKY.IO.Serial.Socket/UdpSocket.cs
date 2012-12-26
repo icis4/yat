@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -433,7 +434,7 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					this.socket.Send(data, data.Length);
-					OnDataSent(new DataSentEventArgs(data));
+					OnDataSent(new DataSentEventArgs(new ReadOnlyCollection<byte>(data)));
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataSent' events are fired consecutively.

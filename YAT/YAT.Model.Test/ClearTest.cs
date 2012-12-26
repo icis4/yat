@@ -21,13 +21,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 using NUnit.Framework;
 
 using YAT.Settings.Terminal;
+
+#endregion
 
 namespace YAT.Model.Test
 {
@@ -105,7 +113,6 @@ namespace YAT.Model.Test
 				using (Terminal terminalB = new Terminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()))
 				{
 					Utilities.TestSet testSet;
-					List<Domain.DisplayLine> lines;
 
 					// Start and open terminals
 					terminalA.Start();
@@ -129,7 +136,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 					// Verify incomplete line
-					lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
+					ReadOnlyCollection<Domain.DisplayLine> lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
 						Assert.Fail("Incomplete line not received!");
 

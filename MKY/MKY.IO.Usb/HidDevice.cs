@@ -451,7 +451,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public virtual int InputDataIndices
 		{
 			get { return (this.inputDataIndices); }
@@ -470,7 +470,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public virtual int OutputDataIndices
 		{
 			get { return (this.outputDataIndices); }
@@ -489,7 +489,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public virtual int FeatureDataIndices
 		{
 			get { return (this.featureDataIndices); }

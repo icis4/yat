@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -40,6 +39,7 @@ namespace YAT.Model.Types
 	/// This class intentionally combines all three command types in a single class to allow
 	/// co-existence of a line and a file command.
 	/// </remarks>
+	[Serializable]
 	public class Command : IEquatable<Command>, IComparable
 	{
 		#region Constants
@@ -54,6 +54,7 @@ namespace YAT.Model.Types
 		public const string DefineCommandText = "<Define...>";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		public const string MultiLineCommandText = "<Multi line...>";
 
 		/// <summary></summary>
@@ -241,6 +242,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The command lines shall be serialized/deserialized as an array.")]
 		[XmlElement("CommandLines")]
 		public virtual string[] CommandLines
 		{
@@ -425,6 +427,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		[XmlIgnore]
 		public virtual bool IsMultiLineText
 		{
@@ -510,6 +513,8 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The multi line text shall be of the same type as the command lines, thus an array.")]
 		[XmlIgnore]
 		public virtual string[] MultiLineText
 		{

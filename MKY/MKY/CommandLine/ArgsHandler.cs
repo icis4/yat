@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -203,10 +204,9 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the value arguments.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
-		public string[] ValueArgs
+		public ReadOnlyCollection<string> ValueArgs
 		{
-			get { return (this.valueArgs.ToArray()); }
+			get { return (this.valueArgs.AsReadOnly()); }
 		}
 
 		/// <summary>
@@ -220,10 +220,9 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the option arguments.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
-		public string[] OptionArgs
+		public ReadOnlyCollection<string> OptionArgs
 		{
-			get { return (this.optionArgs.ToArray()); }
+			get { return (this.optionArgs.AsReadOnly()); }
 		}
 
 		/// <summary>
@@ -237,10 +236,9 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the array option arguments.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
-		public string[][] ArrayOptionArgs
+		public ReadOnlyCollection<string[]> ArrayOptionArgs
 		{
-			get { return (this.arrayOptionArgs.ToArray()); }
+			get { return (this.arrayOptionArgs.AsReadOnly()); }
 		}
 
 		/// <summary>
@@ -254,10 +252,9 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the invalid arguments.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
-		public string[] InvalidArgs
+		public ReadOnlyCollection<string> InvalidArgs
 		{
-			get { return (this.invalidArgs.ToArray()); }
+			get { return (this.invalidArgs.AsReadOnly()); }
 		}
 
 		/// <summary>

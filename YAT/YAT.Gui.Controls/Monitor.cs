@@ -28,7 +28,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -170,6 +172,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'showLineNumbers' is not unnecesary, it is based on a constant that contains a default value!")]
 		public Monitor()
 		{
 			InitializeComponent();
@@ -496,9 +499,17 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		public virtual void AddElements(ReadOnlyCollection<Domain.DisplayElement> elements)
+		{
+			Domain.DisplayElement[] elementsArray = new Domain.DisplayElement[elements.Count];
+			elements.CopyTo(elementsArray, 0);
+			AddElementsOrLines(elementsArray);
+		}
+
+		/// <summary></summary>
 		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
-			AddElementsOrLines(new List<Domain.DisplayElement>(elements));
+			AddElementsOrLines(elements);
 		}
 
 		/// <summary></summary>
@@ -510,7 +521,15 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
-			AddElementsOrLines(new List<Domain.DisplayLine>(lines));
+			AddElementsOrLines(lines);
+		}
+
+		/// <summary></summary>
+		public virtual void AddLines(ReadOnlyCollection<Domain.DisplayLine> lines)
+		{
+			Domain.DisplayLine[] linesArray = new Domain.DisplayLine[lines.Count];
+			lines.CopyTo(linesArray, 0);
+			AddElementsOrLines(linesArray);
 		}
 
 		/// <summary></summary>
@@ -606,7 +625,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual List<Domain.DisplayLine> SelectedLines
+		public virtual ReadOnlyCollection<Domain.DisplayLine> SelectedLines
 		{
 			get
 			{
@@ -623,7 +642,8 @@ namespace YAT.Gui.Controls
 					for (int i = 0; i < lb.Items.Count; i++)
 						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
 				}
-				return (selectedLines);
+
+				return (selectedLines.AsReadOnly());
 			}
 		}
 
@@ -696,7 +716,7 @@ namespace YAT.Gui.Controls
 					// Only handle the item width.
 					// The item height is set in SetFormatDependentControls().
 					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
-					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(fastListBox_LineNumbers.Width)))
+					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(lb.Width)))
 						ResizeAndRelocateListBoxes(requestedWidth);
 				}
 			}
@@ -918,11 +938,6 @@ namespace YAT.Gui.Controls
 			lb.ItemHeight = f.Height;
 			lb.Invalidate();
 			lb.EndUpdate();
-		}
-
-		private void SetCharReplaceDependentControls()
-		{
-			fastListBox_Monitor.Invalidate();
 		}
 
 		private void SetLineNumbersControls()
@@ -1170,17 +1185,17 @@ namespace YAT.Gui.Controls
 			this.currentLineNumberWidth = requestedWidth;
 		}
 
-		private int EffectiveWidthToRequestedWidth(int effectiveWidth)
+		private static int EffectiveWidthToRequestedWidth(int effectiveWidth)
 		{
 			return (effectiveWidth - (VerticalScrollBarWidth + AdditionalMargin));
 		}
 
-		private int TicksToTimeout(long ticks)
+		private static int TicksToTimeout(long ticks)
 		{
 			return ((int)(ticks / TimeSpan.TicksPerMillisecond));
 		}
 
-		private long TimeoutToTicks(int timeout)
+		private static long TimeoutToTicks(int timeout)
 		{
 			return ((long)timeout * TimeSpan.TicksPerMillisecond);
 		}

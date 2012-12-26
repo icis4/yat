@@ -195,7 +195,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval + " ms!",

@@ -58,6 +58,7 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum IPNetworkInterface.
 	/// </summary>
+	[Serializable]
 	public class IPNetworkInterface : EnumEx
 	{
 		#region String Definitions

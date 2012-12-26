@@ -163,7 +163,6 @@ namespace YAT.Settings.Workspace
 		public MKY.GuidList<TerminalSettingsItem> TerminalSettings
 		{
 			get { return (this.workspace.TerminalSettings); }
-			set { this.workspace.TerminalSettings = value; }
 		}
 
 		#endregion

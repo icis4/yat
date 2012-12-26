@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -55,8 +56,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public SubstitutionParser(Endianess endianess)
-			: base(endianess)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public SubstitutionParser(Endianness endianness)
+			: base(endianness)
 		{
 		}
 
@@ -67,8 +69,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public SubstitutionParser(Endianess endianess, Encoding encoding)
-			: base(endianess, encoding)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public SubstitutionParser(Endianness endianness, Encoding encoding)
+			: base(endianness, encoding)
 		{
 		}
 
@@ -85,8 +88,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public SubstitutionParser(Endianess endianess, Encoding encoding, Radix defaultRadix)
-			: base(endianess, encoding, defaultRadix)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
+		public SubstitutionParser(Endianness endianness, Encoding encoding, Radix defaultRadix)
+			: base(endianness, encoding, defaultRadix)
 		{
 		}
 
@@ -150,6 +154,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual byte[] Parse(string s, CharSubstitution substitution, out string parsed)
 		{
 			// AssertNotDisposed() is called by 'base.Parse()'.
@@ -159,21 +164,22 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode)
+		public virtual Result[] Parse(string s, CharSubstitution substitution, Modes modes)
 		{
 			// AssertNotDisposed() is called by 'base.Parse()'.
 
 			string parsed;
-			return (Parse(s, substitution, mode, out parsed));
+			return (Parse(s, substitution, modes, out parsed));
 		}
 
 		/// <summary></summary>
-		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode, out string parsed)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual Result[] Parse(string s, CharSubstitution substitution, Modes modes, out string parsed)
 		{
 			// AssertNotDisposed() is called by 'base.Parse()'.
 
 			this.substitution = substitution;
-			return (Parse(s, mode, out parsed));
+			return (Parse(s, modes, out parsed));
 		}
 
 		/// <summary></summary>
@@ -186,6 +192,8 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string parsed)
 		{
 			// AssertNotDisposed() is called by 'base.TryParse()'.

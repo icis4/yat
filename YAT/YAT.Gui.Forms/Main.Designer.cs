@@ -119,7 +119,6 @@
 			this.toolStripPanel_Top = new System.Windows.Forms.ToolStripPanel();
 			this.toolStripPanel_Right = new System.Windows.Forms.ToolStripPanel();
 			this.toolStripPanel_Left = new System.Windows.Forms.ToolStripPanel();
-			this.timer_Chrono = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
 			this.timer_PerformStartOperation = new System.Windows.Forms.Timer(this.components);
@@ -672,7 +671,7 @@
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.Name = "toolStripStatusLabel_MainStatus_TerminalInfo";
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.Size = new System.Drawing.Size(0, 19);
 			this.toolStripStatusLabel_MainStatus_TerminalInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripStatusLabel_MainStatus_TerminalInfo.ToolTipText = "Active Terminal (Auto Name / Sequencial ID / Dynamic Index / Fixed Index)";
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.ToolTipText = "Active Terminal (Auto Name / Sequential ID / Dynamic Index / Fixed Index)";
 			// 
 			// toolStripStatusLabel_MainStatus_Chrono
 			// 
@@ -1049,7 +1048,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_FileRecentContextMenu_8;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Status;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Chrono;
-		private System.Windows.Forms.Timer timer_Chrono;
 		private MKY.Windows.Forms.Chronometer chronometer_Main;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_File_Separator_5;

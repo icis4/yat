@@ -3,10 +3,10 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT/Properties/AssemblyInfo.cs $
-// $Author: maettu_this $
-// $Date: 2012-01-08 13:34:52 +0100 (So, 08 Jan 2012) $
-// $Revision: 508 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
 // ------------------------------------------------------------------------------------------------
@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -57,5 +56,5 @@ using System.Runtime.InteropServices;
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT/Properties/AssemblyInfo.cs $
+// $URL$
 //==================================================================================================

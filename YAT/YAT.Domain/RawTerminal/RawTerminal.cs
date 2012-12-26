@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -342,22 +343,20 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual List<RawElement> RepositoryToElements(RepositoryType repositoryType)
+		public virtual ReadOnlyCollection<RawElement> RepositoryToElements(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			List<RawElement> l = null;
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    l = this.txRepository.ToElements();    break;
-					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
-					case RepositoryType.Rx:    l = this.rxRepository.ToElements();    break;
+					case RepositoryType.Tx:    return (this.txRepository.ToElements());
+					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
+					case RepositoryType.Rx:    return (this.rxRepository.ToElements());
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 			}
-			return (l);
 		}
 
 		/// <remarks>
@@ -475,6 +474,7 @@ namespace YAT.Domain
 			this.ioSettings = null;
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "For potential future use.")]
 		private void ApplyIOSettings()
 		{
 			// Nothing to do.

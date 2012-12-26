@@ -303,7 +303,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Baud rate must be a positive number!",
@@ -364,7 +364,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Reconnect interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval + " ms!",

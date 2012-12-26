@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
@@ -74,6 +75,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Argb", Justification = "ARGB is a common term, and even used by the .NET framework itself.")]
 		[XmlElement("Color")]
 		public virtual int ColorAsArgb
 		{

@@ -222,7 +222,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"There must be at least 1 line displayed!",
@@ -259,10 +259,10 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
 		}
 
-		private void comboBox_Endianess_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_Endianness_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.Endianess = (Domain.EndianessEx)comboBox_Endianess.SelectedItem;
+				this.settings_Form.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
 		}
 
 		private void checkBox_IndicateBreakStates_CheckedChanged(object sender, EventArgs e)
@@ -310,7 +310,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Chunk size must be at least 1 byte!",
@@ -335,7 +335,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Delay must be at least 1 ms!",
@@ -360,7 +360,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Delay must be at least 1 ms!",
@@ -410,7 +410,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Reset all settings to default values?",
@@ -438,7 +438,7 @@ namespace YAT.Gui.Forms
 
 			comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
 			comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
-			comboBox_Endianess.Items.AddRange(Domain.EndianessEx.GetItems());
+			comboBox_Endianness.Items.AddRange(Domain.EndiannessEx.GetItems());
 
 			comboBox_ControlCharacterRadix.Items.Clear();
 			comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
@@ -485,7 +485,7 @@ namespace YAT.Gui.Forms
 			checkBox_ReplaceSpace.Checked               = this.settings_Form.Terminal.CharReplace.ReplaceSpace;
 
 			// Communication:
-			comboBox_Endianess.SelectedItem        = (Domain.EndianessEx)this.settings_Form.Terminal.IO.Endianess;
+			comboBox_Endianness.SelectedItem        = (Domain.EndiannessEx)this.settings_Form.Terminal.IO.Endianness;
 			checkBox_IndicateBreakStates.Checked   = this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates;
 			checkBox_OutputBreakModifiable.Checked = this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
@@ -498,10 +498,10 @@ namespace YAT.Gui.Forms
 			label_MaxSendChunkSizeUnit.Enabled   = isSerialPort;
 			label_MaxSendChunkSize.Enabled       = isSerialPort;
 			textBox_MaxSendChunkSize.Enabled     = isSerialPort;
-			textBox_MaxSendChunkSize.Text        = this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize.ToString();
+			textBox_MaxSendChunkSize.Text        = this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize.ToString(CultureInfo.InvariantCulture);
 
-			textBox_DefaultDelay.Text     = this.settings_Form.Terminal.Send.DefaultDelay.ToString();
-			textBox_DefaultLineDelay.Text = this.settings_Form.Terminal.Send.DefaultLineDelay.ToString();
+			textBox_DefaultDelay.Text     = this.settings_Form.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
+			textBox_DefaultLineDelay.Text = this.settings_Form.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
 
 			checkBox_NoSendOnOutputBreak.Enabled = isSerialPort;
 			checkBox_NoSendOnOutputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak;
@@ -548,7 +548,7 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 
 			// Communication:
-			this.settings_Form.Terminal.IO.Endianess                         = Domain.Settings.IOSettings.EndianessDefault;
+			this.settings_Form.Terminal.IO.Endianness                         = Domain.Settings.IOSettings.EndiannessDefault;
 			this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
 			this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 

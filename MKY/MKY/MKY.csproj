@@ -116,6 +116,7 @@
     <Compile Include="Time\Rate.cs" />
     <Compile Include="Types\BooleanEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
+    <Compile Include="Windows.Forms\MessageBoxEx.cs" />
     <Compile Include="Windows.Forms\ModalBehavior.cs" />
     <Compile Include="Windows.Forms\ListBoxEx.cs" />
     <Compile Include="Windows.Forms\LayoutInfo.cs" />

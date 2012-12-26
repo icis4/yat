@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -47,7 +48,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private int dataCount;
+		private int dataCount; // = 0;
 
 		#endregion
 
@@ -59,20 +60,17 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection()
 		{
-			this.dataCount = 0;
 		}
 
 		/// <summary></summary>
 		public DisplayElementCollection(int elementCapacity)
 			: base(elementCapacity)
 		{
-			this.dataCount = 0;
 		}
 
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
 		{
-			this.dataCount = 0;
 			foreach (DisplayElement item in collection)
 				Add(item);
 		}
@@ -80,7 +78,6 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElement displayElement)
 		{
-			this.dataCount = 0;
 			Add(displayElement);
 		}
 
@@ -254,6 +251,7 @@ namespace YAT.Domain
 	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
 	/// undefined behavior.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
 	[Serializable]
 	public class DisplayLine : DisplayElementCollection
 	{
@@ -317,6 +315,7 @@ namespace YAT.Domain
 	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
 	/// undefined behavior.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line part is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
 	[Serializable]
 	public class DisplayLinePart : DisplayLine
 	{

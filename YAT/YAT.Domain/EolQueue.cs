@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
 #endregion
@@ -69,7 +70,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private byte[] eol;
+		private ReadOnlyCollection<byte> eolSequence;
 		private Queue<byte> queue;
 		private State state;
 
@@ -81,10 +82,10 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public EolQueue(byte[] eol)
+		public EolQueue(byte[] eolSequence)
 		{
-			this.eol = eol;
-			this.queue = new Queue<byte>(this.eol.Length);
+			this.eolSequence = new ReadOnlyCollection<byte>(eolSequence);
+			this.queue = new Queue<byte>(this.eolSequence.Count);
 			Evaluate();
 		}
 
@@ -96,9 +97,9 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual byte[] Eol
+		public virtual ReadOnlyCollection<byte> EolSequence
 		{
-			get { return (this.eol); }
+			get { return (this.eolSequence); }
 		}
 
 		/// <summary></summary>
@@ -132,7 +133,7 @@ namespace YAT.Domain
 			{
 				case State.Armed:       // EOL not started yet
 				{
-					if (b == this.eol[0])   // Start of EOL detected
+					if (b == this.eolSequence[0])   // Start of EOL detected
 					{
 						this.queue.Enqueue(b);
 						Evaluate();
@@ -165,13 +166,13 @@ namespace YAT.Domain
 
 		private void Evaluate()
 		{
-			if (this.eol.Length <= 0)       // Empty EOL => Inactive.
+			if (this.eolSequence.Count <= 0) // Empty EOL => Inactive.
 			{
 				this.state = State.Inactive;
 				return;
 			}
 			
-			if (this.queue.Count <= 0)     // Empty queue => Armed.
+			if (this.queue.Count <= 0) // Empty queue => Armed.
 			{
 				this.state = State.Armed;
 				return;
@@ -193,9 +194,9 @@ namespace YAT.Domain
 					byte[] queue = this.queue.ToArray();
 					for (int i = 0; i < queue.Length; i++)
 					{
-						if (queue[i] == this.eol[i])
+						if (queue[i] == this.eolSequence[i])
 						{
-							if (i < (this.eol.Length - 1))
+							if (i < (this.eolSequence.Count - 1))
 								evaluatedState = State.PartlyMatch;
 							else
 								evaluatedState = State.CompleteMatch;

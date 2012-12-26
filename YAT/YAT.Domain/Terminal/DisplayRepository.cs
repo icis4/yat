@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -34,6 +36,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// DisplayRepository is a pseudo fixed-sized Queue holding DisplayElements.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "The repository is intentionally named without any indication of the underlying implementation.")]
 	public class DisplayRepository : Queue<DisplayLine>
 	{
 		#region Fields
@@ -41,9 +44,9 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private int capacity = 0;
-		private DisplayLine currentLine;
-		private int dataCount = 0;
+		private int capacity; // = 0;
+		private DisplayLine currentLine; // = null;
+		private int dataCount; // = 0;
 
 		#endregion
 
@@ -58,7 +61,7 @@ namespace YAT.Domain
 		{
 			this.capacity = capacity;
 			this.currentLine = new DisplayLine();
-			this.dataCount = 0;
+			// this.dataCount = 0;
 		}
 
 		/// <summary></summary>
@@ -127,6 +130,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "No clue why Queue<T>.Enqueue(T item) cannot be overridden...")]
 		public virtual void Enqueue(DisplayElement item)
 		{
 			// Add element to current line
@@ -148,6 +152,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "No clue why Queue<T>.Enqueue(T item) cannot be overridden...")]
 		public virtual void Enqueue(IEnumerable<DisplayElement> collection)
 		{
 			foreach (DisplayElement de in collection)
@@ -163,13 +168,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public new DisplayLine[] ToArray()
-		{
-			return (ToLines().ToArray());
-		}
-
-		/// <summary></summary>
-		public virtual List<DisplayLine> ToLines()
+		public virtual ReadOnlyCollection<DisplayLine> ToLines()
 		{
 			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray());
 
@@ -177,18 +176,18 @@ namespace YAT.Domain
 			if (this.currentLine.Count > 0)
 				lines.Add(new DisplayLine(this.currentLine));
 
-			return (lines);
+			return (lines.AsReadOnly());
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayElement> ToElements()
+		public virtual ReadOnlyCollection<DisplayElement> ToElements()
 		{
 			List<DisplayElement> elements = new List<DisplayElement>();
 
 			foreach (DisplayLine line in ToLines())
 				elements.AddRange(line.ToArray());
 
-			return (elements);
+			return (elements.AsReadOnly());
 		}
 
 		#endregion

@@ -51,6 +51,9 @@ using System.Runtime.InteropServices;
 // CLS compliance.
 [assembly: CLSCompliant(true)]
 
+// Assembly-level FxCop suppressions.
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "YAT.Log.Settings", Justification = "Namespace structure shall be the same as for terminals, i.e. the settings shall be in a separate namespace.")]
+
 //==================================================================================================
 // End of
 // $URL$

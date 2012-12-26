@@ -50,6 +50,7 @@ using YAT.Settings.Workspace;
 namespace YAT.Settings.Test
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Archiver", Justification = "'Archiver' is a correct English term.")]
 	[TestFixture, Explicit("This test fixture has the sole purpose to perform storing of settings schemas and defaults to the YAT settings archive")]
 	public class SettingsFilesArchiver
 	{
@@ -59,7 +60,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static readonly SettingsFilePaths Path = new SettingsFilePaths();
+		private static readonly SettingsFilePaths staticPaths = new SettingsFilePaths();
 
 		#endregion
 
@@ -78,8 +79,8 @@ namespace YAT.Settings.Test
 		public virtual void ArchiveLocalUserSettings()
 		{
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(LocalUserSettingsRoot));
-			ArchiveSchema (Path.Path, "LocalUserSettingsSchema",  document);
-			ArchiveDefault(Path.Path, "LocalUserSettingsDefault", document);
+			ArchiveSchema (staticPaths.Path, "LocalUserSettingsSchema",  document);
+			ArchiveDefault(staticPaths.Path, "LocalUserSettingsDefault", document);
 		}
 
 		#endregion
@@ -94,8 +95,8 @@ namespace YAT.Settings.Test
 		public virtual void ArchiveTerminalSettings()
 		{
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(TerminalSettingsRoot));
-			ArchiveSchema (Path.Path, "TerminalSettingsSchema",  document);
-			ArchiveDefault(Path.Path, "TerminalSettingsDefault", document);
+			ArchiveSchema (staticPaths.Path, "TerminalSettingsSchema",  document);
+			ArchiveDefault(staticPaths.Path, "TerminalSettingsDefault", document);
 		}
 
 		#endregion
@@ -110,8 +111,8 @@ namespace YAT.Settings.Test
 		public virtual void ArchiveWorkspaceSettings()
 		{
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(WorkspaceSettingsRoot));
-			ArchiveSchema (Path.Path, "WorkspaceSettingsSchema",  document);
-			ArchiveDefault(Path.Path, "WorkspaceSettingsDefault", document);
+			ArchiveSchema (staticPaths.Path, "WorkspaceSettingsSchema",  document);
+			ArchiveDefault(staticPaths.Path, "WorkspaceSettingsDefault", document);
 		}
 
 		#endregion
@@ -123,7 +124,7 @@ namespace YAT.Settings.Test
 		// Private Methods
 		//==========================================================================================
 
-		private XmlDocument CreateSchemaAndDefaultDocument(Type type)
+		private static XmlDocument CreateSchemaAndDefaultDocument(Type type)
 		{
 			ConstructorInfo ci = type.GetConstructor(new System.Type[] { });
 			object obj = ci.Invoke(new object[] { });

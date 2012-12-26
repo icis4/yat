@@ -348,7 +348,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Reset all settings to default values?",
@@ -488,7 +488,7 @@ namespace YAT.Gui.Forms
 						invalidPrintable.Write(c);
 				}
 
-				MessageBox.Show
+				MessageBoxEx.Show
 					(
 					this,
 					title + " contains invalid characters." + Environment.NewLine + Environment.NewLine +
@@ -506,7 +506,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ExtensionConflictMessage()
 		{
-			MessageBox.Show
+			MessageBoxEx.Show
 				(
 				this,
 				"To avoid naming conflicts, raw and neat log files must have different extensions. Choose a different extension.",
@@ -523,7 +523,7 @@ namespace YAT.Gui.Forms
 			if ((this.settings_Form.SameRawAndNeat) && (this.settings_Form.RawExtension == this.settings_Form.NeatExtension) &&
 				(!this.settings_Form.SubdirectoriesFormat && !this.settings_Form.NameFormat))
 			{
-				switch (MessageBox.Show
+				switch (MessageBoxEx.Show
 					(
 					this,
 					"To avoid naming conflicts, files must either be placed in format subdirectories or named by format (Raw/Neat). " +
@@ -543,7 +543,7 @@ namespace YAT.Gui.Forms
 			if ((this.settings_Form.MultipleRaw || this.settings_Form.MultipleNeat) &&
 				(!this.settings_Form.SubdirectoriesChannel && !this.settings_Form.NameChannel))
 			{
-				switch (MessageBox.Show
+				switch (MessageBoxEx.Show
 					(
 					this,
 					"To avoid naming conflicts, files must either be placed in channel " +

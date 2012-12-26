@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -187,7 +188,7 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-			this.eventsSuspendedForReload = false;
+			// this.eventsSuspendedForReload = false;
 
 			CreateAndStartSendThread();
 		}
@@ -550,12 +551,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessSendItem(SendItem item)
 		{
-			if (item is RawSendItem)
-				ProcessRawSendItem(item as RawSendItem);
-			else if (item is ParsableSendItem)
-				ProcessParsableSendItem(item as ParsableSendItem);
+			RawSendItem rsi = item as RawSendItem;
+			if (rsi != null)
+			{
+				ProcessRawSendItem(rsi);
+			}
 			else
-				throw (new InvalidOperationException("Invalid send item type " + item.GetType()));
+			{
+				ParsableSendItem psi = item as ParsableSendItem;
+				if (psi != null)
+					ProcessParsableSendItem(psi);
+				else
+					throw (new InvalidOperationException("Invalid send item type " + item.GetType()));
+			}
 		}
 
 		/// <summary></summary>
@@ -574,35 +582,39 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
 		protected virtual void ProcessParsableSendItem(ParsableSendItem item)
 		{
 			bool lineDelay = false;
 
-			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
-
-			foreach (Parser.Result result in p.Parse(item.Data, Parser.ParseMode.All))
+			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
+			foreach (Parser.Result r in p.Parse(item.Data, Parser.Modes.All))
 			{
-				if (result is Parser.ByteArrayResult)
+				Parser.ByteArrayResult bar = r as Parser.ByteArrayResult;
+				if (bar != null)
 				{
-					ForwardDataToRawTerminal(((Parser.ByteArrayResult)result).ByteArray);
+					ForwardDataToRawTerminal(bar.ByteArray);
 				}
-				else if (result is Parser.KeywordResult)
+				else
 				{
-					Parser.KeywordResult keywordResult = (Parser.KeywordResult)result;
-					switch (keywordResult.Keyword)
+					Parser.KeywordResult kr = r as Parser.KeywordResult;
+					if (kr != null)
 					{
-						// Process end-of-line keywords:
-						case Parser.Keyword.LineDelay:
+						switch (kr.Keyword)
 						{
-							lineDelay = true;
-							break;
-						}
+							// Process end-of-line keywords:
+							case Parser.Keyword.LineDelay:
+							{
+								lineDelay = true;
+								break;
+							}
 
-						// Process in-line keywords:
-						default:
-						{
-							ProcessInLineKeywords(keywordResult);
-							break;
+							// Process in-line keywords:
+							default:
+							{
+								ProcessInLineKeywords(kr);
+								break;
+							}
 						}
 					}
 				}
@@ -639,7 +651,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError("Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -653,7 +665,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError("Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -667,14 +679,14 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError("Break is only supported on serial COM ports"));
 					}
 					break;
 				}
 
 				default:
 				{
-					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + "is not yet supported"));
+					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + "is not yet supported"));
 					break;
 				}
 			}
@@ -688,6 +700,8 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d)
 		{
 			if (d == SerialDirection.Tx)
@@ -697,6 +711,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d, Radix r)
 		{
 			bool replaceToAscii = ((TerminalSettings.CharReplace.ReplaceControlChars) &&
@@ -787,11 +804,12 @@ namespace YAT.Domain
 			}
 			else
 			{
-				return (new DisplayElement.Error(d, text));
+				return (new DisplayElement.IOError(d, text));
 			}
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToAsciiString(byte b)
 		{
 			if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab)
@@ -801,6 +819,8 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToNumericRadixString(byte b, Radix r)
 		{
 			switch (r)
@@ -838,6 +858,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		protected virtual bool ElementsAreSeparate(SerialDirection d)
 		{
 			if (d == SerialDirection.Tx)
@@ -847,6 +868,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual bool ElementsAreSeparate(Radix r)
 		{
 			switch (r)
@@ -1026,7 +1048,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
+		public virtual ReadOnlyCollection<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -1043,7 +1065,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
+		public virtual ReadOnlyCollection<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -1083,7 +1105,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
+		public virtual ReadOnlyCollection<RawElement> RepositoryToRawElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
 			return (this.rawTerminal.RepositoryToElements(repository));
@@ -1221,21 +1243,21 @@ namespace YAT.Domain
 				// Handle serial port errors whenever possible.
 				switch (serialPortErrorEventArgs.SerialPortError)
 				{
-					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxFramingErrorString));        break;
-					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxBufferOverrunErrorString));  break;
-					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxBufferOverflowErrorString)); break;
-					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(RxParityErrorString));         break;
-					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error(TxBufferFullErrorString));     break;
+					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxFramingErrorString));        break;
+					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxBufferOverrunErrorString));  break;
+					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxBufferOverflowErrorString)); break;
+					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxParityErrorString));         break;
+					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(TxBufferFullErrorString));     break;
 					default:                                   OnIOError(e); break;
 				}
 			}
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Input))
 			{
-				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(e.Message));
+				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(e.Message));
 			}
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Output))
 			{
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error(e.Message));
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(e.Message));
 			}
 			else
 			{

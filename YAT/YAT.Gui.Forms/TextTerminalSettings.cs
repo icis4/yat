@@ -279,7 +279,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Delay must be at least 1 ms!",
@@ -315,7 +315,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Line interval must be at least 1 line!",
@@ -352,7 +352,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Timeout must be at least 1 ms!",
@@ -414,7 +414,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Reset all settings to default values?",

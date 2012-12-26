@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -45,8 +46,6 @@ using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
 
 using YAT.Model.Settings;
-
-using YAT.Utilities;
 
 #endregion
 
@@ -85,7 +84,7 @@ namespace YAT.Model
 
 		// Terminal list.
 		private GuidList<Terminal> terminals = new GuidList<Terminal>();
-		private Terminal activeTerminal = null;
+		private Terminal activeTerminal; // = null;
 		private Dictionary<int, Terminal> fixedIndices = new Dictionary<int, Terminal>();
 
 		#endregion
@@ -145,6 +144,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
 			if (guid != Guid.Empty)
@@ -338,14 +338,14 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the one based sequencial index of the active terminal.
+		/// Returns the one based sequential index of the active terminal.
 		/// </summary>
-		public virtual int ActiveTerminalSequencialIndex
+		public virtual int ActiveTerminalSequentialIndex
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.activeTerminal.SequencialIndex);
+				return (this.activeTerminal.SequentialIndex);
 			}
 		}
 
@@ -386,7 +386,7 @@ namespace YAT.Model
 				{
 					StringBuilder sb = new StringBuilder(ActiveTerminal.AutoName);
 					sb.Append("/Seq#");
-					sb.Append(ActiveTerminalSequencialIndex);
+					sb.Append(ActiveTerminalSequentialIndex);
 					sb.Append("/Dyn#");
 					sb.Append(ActiveTerminalDynamicIndex);
 					sb.Append("/Fix#");
@@ -987,7 +987,7 @@ namespace YAT.Model
 		/// Update recent entry.
 		/// </summary>
 		/// <param name="recentFile">Recent file.</param>
-		private void SetRecent(string recentFile)
+		private static void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.Save();
@@ -1053,7 +1053,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns settings file paths of the all the terminals in the workspace.
 		/// </summary>
-		public List<string> TerminalSettingsFilePaths
+		public ReadOnlyCollection<string> TerminalSettingsFilePaths
 		{
 			get
 			{
@@ -1065,7 +1065,8 @@ namespace YAT.Model
 					if (t.SettingsFileExists)
 						filePaths.Add(t.SettingsFilePath);
 				}
-				return (filePaths);
+
+				return (filePaths.AsReadOnly());
 			}
 		}
 
@@ -1211,11 +1212,6 @@ namespace YAT.Model
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings)
 		{
 			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null));
-		}
-
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid)
-		{
-			return (OpenTerminalFromSettings(settings, guid, Indices.DefaultFixedIndex, null));
 		}
 
 		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings)
@@ -1457,7 +1453,8 @@ namespace YAT.Model
 		/// Returns the terminal with the given GUID. If no terminal with this GUID exists,
 		/// <c>null</c> is returned.
 		/// </summary>
-		public virtual Terminal GetTerminalByGUID(Guid guid)
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		public virtual Terminal GetTerminalByGuid(Guid guid)
 		{
 			AssertNotDisposed();
 
@@ -1470,18 +1467,18 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the terminal with the given sequencial index. The sequencial index relates to the
+		/// Returns the terminal with the given sequential index. The sequential index relates to the
 		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The sequenical
 		/// index starts at 1 and is unique throughout the execution of the program. If no terminal
 		/// with this index exists, <c>null</c> is returned.
 		/// </summary>
-		public virtual Terminal GetTerminalBySequencialIndex(int sequencialIndex)
+		public virtual Terminal GetTerminalBySequentialIndex(int sequentialIndex)
 		{
 			AssertNotDisposed();
 
 			foreach (Terminal t in this.terminals)
 			{
-				if (t.SequencialIndex == sequencialIndex)
+				if (t.SequentialIndex == sequentialIndex)
 					return (t);
 			}
 			return (null);
@@ -1591,7 +1588,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		private bool EvaluateWhetherSaveIsFeasibleForThisTerminal(Terminal t)
+		private static bool EvaluateWhetherSaveIsFeasibleForThisTerminal(Terminal t)
 		{
 			// Save is not feasible in case of files which have been successfully loaded but do
 			// not exist anymore.
@@ -1603,7 +1600,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		private bool EvaluateWhetherSaveIsRequiredForThisTerminal(Terminal t)
+		private static bool EvaluateWhetherSaveIsRequiredForThisTerminal(Terminal t)
 		{
 			// Save is not required if file does no longer exist and no or only implicit changes
 			// would have to be saved.
@@ -1698,7 +1695,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ActivateTerminalBySequentialIndex(int index)
 		{
-			ActivateTerminal(GetTerminalBySequencialIndex(index));
+			ActivateTerminal(GetTerminalBySequentialIndex(index));
 		}
 
 		/// <summary></summary>

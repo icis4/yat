@@ -263,7 +263,7 @@ namespace MKY.Win32
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
-			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Not performance critical.")]
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_CAPS
 			{
@@ -277,15 +277,15 @@ namespace MKY.Win32
 				public Int16 NumberLinkCollectionNodes;
 				public Int16 NumberInputButtonCaps;
 				public Int16 NumberInputValueCaps;
-				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 				public Int16 NumberInputDataIndices;
 				public Int16 NumberOutputButtonCaps;
 				public Int16 NumberOutputValueCaps;
-				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 				public Int16 NumberOutputDataIndices;
 				public Int16 NumberFeatureButtonCaps;
 				public Int16 NumberFeatureValueCaps;
-				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "Indices is a correct English term and used throughout the .NET framework.")]
+				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 				public Int16 NumberFeatureDataIndices;
 			}
 

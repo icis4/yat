@@ -346,7 +346,7 @@ namespace YAT.Gui.Controls
 						}
 						catch (ArgumentException ex)
 						{
-							MessageBox.Show
+							MessageBoxEx.Show
 								(
 								this,
 								"Remote host name or address is invalid!" + Environment.NewLine + Environment.NewLine +
@@ -388,7 +388,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Remote port is invalid, valid values are numbers from " +
@@ -435,7 +435,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Local port is invalid, valid values are numbers from " +
@@ -497,7 +497,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"No local network interfaces available, check network system settings.",

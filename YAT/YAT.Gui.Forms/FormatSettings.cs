@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
@@ -48,7 +49,7 @@ namespace YAT.Gui.Forms
 		private Controls.TextFormat[] textFormats;
 
 		private List<Domain.DisplayLine> exampleLines;
-		private List<Domain.DisplayLine> exampleComplete;
+		private ReadOnlyCollection<Domain.DisplayLine> exampleComplete;
 
 		#endregion
 
@@ -143,7 +144,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Reset all settings to default values?",
@@ -176,7 +177,7 @@ namespace YAT.Gui.Forms
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStamp(DateTime.Now)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.LineLength(2)));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Error("Message")));
+			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOError("Message")));
 
 			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24);
 
@@ -200,7 +201,7 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.Error("Message"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.IOError("Message"));
 
 			/*exampleComplete.Enqueue(this.examples[4]);
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
@@ -321,7 +322,7 @@ namespace YAT.Gui.Forms
 					}
 					catch (ArgumentException)
 					{
-						DialogResult result = MessageBox.Show
+						DialogResult result = MessageBoxEx.Show
 							(
 							this,
 							"Font '" + fd.Font.Name + "' does not support regular style. Choose a different font.",

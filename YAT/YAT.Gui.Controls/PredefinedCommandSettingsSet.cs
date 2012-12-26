@@ -84,7 +84,7 @@ namespace YAT.Gui.Controls
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 
 		private FocusState focusState = FocusState.Inactive;
-		private bool isValidated = false;
+		private bool isValidated; // = false;
 
 		#endregion
 

@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -68,7 +69,7 @@ namespace YAT.Model
 		/// Static counter to number terminals. Counter is incremented before first use, first
 		/// terminal therefore is "Terminal1".
 		/// </summary>
-		private const int SequenciallIndexCounterDefault = (Indices.FirstSequencialIndex - 1);
+		private const int SequentialIndexCounterDefault = (Indices.FirstSequentialIndex - 1);
 
 		#endregion
 
@@ -77,7 +78,21 @@ namespace YAT.Model
 		// Static Fields
 		//==========================================================================================
 
-		private static int staticSequenciallIndexCounter = SequenciallIndexCounterDefault;
+		private static int staticSequentialIndexCounter = SequentialIndexCounterDefault;
+
+		#endregion
+
+		#region Static Lifetime
+		//==========================================================================================
+		// Static Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'staticSequentialIndexCounter' is not unnecesary, it is based on a constant that contains a default value!")]
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Well, kind of a code analysis deadlock ;-)")]
+		static Terminal()
+		{
+		}
 
 		#endregion
 
@@ -89,9 +104,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Needed to test the indices feature of terminals and workspace.
 		/// </remarks>
-		public static void ResetSequenciallIndexCounter()
+		public static void ResetSequentialIndexCounter()
 		{
-			staticSequenciallIndexCounter = SequenciallIndexCounterDefault;
+			staticSequentialIndexCounter = SequentialIndexCounterDefault;
 		}
 
 		#endregion
@@ -104,7 +119,7 @@ namespace YAT.Model
 		private bool isDisposed;
 
 		private Guid guid;
-		private int sequencialIndex;
+		private int sequentialIndex;
 		private string autoName;
 
 		// Settings:
@@ -220,6 +235,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
 			if (guid != Guid.Empty)
@@ -234,9 +250,9 @@ namespace YAT.Model
 			AttachSettingsEventHandlers();
 
 			// Set ID and user name.
-			this.sequencialIndex = ++staticSequenciallIndexCounter;
+			this.sequentialIndex = ++staticSequentialIndexCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.autoName = TerminalText + this.sequencialIndex.ToString(CultureInfo.InvariantCulture);
+				this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.InvariantCulture);
 			else
 				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
@@ -339,12 +355,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual int SequencialIndex
+		public virtual int SequentialIndex
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.sequencialIndex);
+				return (this.sequentialIndex);
 			}
 		}
 
@@ -1471,7 +1487,7 @@ namespace YAT.Model
 		/// Update recent entry.
 		/// </summary>
 		/// <param name="recentFile">Recent file.</param>
-		private void SetRecent(string recentFile)
+		private static void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.Save();
@@ -1573,18 +1589,18 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Sending...");
 
 			// Count.
-			this.txByteCount += e.Element.Data.Length;
+			this.txByteCount += e.Element.Data.Count;
 			OnIOCountChanged(new EventArgs());
 
 			// Rate.
-			if (this.txByteRate.Update(e.Element.Data.Length))
+			if (this.txByteRate.Update(e.Element.Data.Count))
 				OnIORateChanged(new EventArgs());
 
 			// Log.
 			if (this.log.IsStarted)
 			{
-				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawTx);
-				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawBidir);
+				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawTx);
+				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
 			}
 		}
 
@@ -1593,18 +1609,18 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Receiving...");
 
 			// Count.
-			this.rxByteCount += e.Element.Data.Length;
+			this.rxByteCount += e.Element.Data.Count;
 			OnIOCountChanged(new EventArgs());
 
 			// Rate.
-			if (this.rxByteRate.Update(e.Element.Data.Length))
+			if (this.rxByteRate.Update(e.Element.Data.Count))
 				OnIORateChanged(new EventArgs());
 
 			// Log.
 			if (this.log.IsStarted)
 			{
-				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawBidir);
-				this.log.WriteBytes(e.Element.Data, Log.LogStream.RawRx);
+				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
+				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawRx);
 			}
 		}
 
@@ -1620,13 +1636,13 @@ namespace YAT.Model
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
-						this.log.WriteEol(Log.LogStream.NeatTx);
-						this.log.WriteEol(Log.LogStream.NeatBidir);
+						this.log.WriteEol(Log.LogChannel.NeatTx);
+						this.log.WriteEol(Log.LogChannel.NeatBidir);
 					}
 					else
 					{
-						this.log.WriteString(de.Text, Log.LogStream.NeatTx);
-						this.log.WriteString(de.Text, Log.LogStream.NeatBidir);
+						this.log.WriteString(de.Text, Log.LogChannel.NeatTx);
+						this.log.WriteString(de.Text, Log.LogChannel.NeatBidir);
 					}
 				}
 			}
@@ -1644,13 +1660,13 @@ namespace YAT.Model
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
-						this.log.WriteEol(Log.LogStream.NeatBidir);
-						this.log.WriteEol(Log.LogStream.NeatRx);
+						this.log.WriteEol(Log.LogChannel.NeatBidir);
+						this.log.WriteEol(Log.LogChannel.NeatRx);
 					}
 					else
 					{
-						this.log.WriteString(de.Text, Log.LogStream.NeatBidir);
-						this.log.WriteString(de.Text, Log.LogStream.NeatRx);
+						this.log.WriteString(de.Text, Log.LogChannel.NeatBidir);
+						this.log.WriteString(de.Text, Log.LogChannel.NeatRx);
 					}
 				}
 			}
@@ -1828,6 +1844,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Toggles RTS line if current flow control settings allow this.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
 		public virtual void RequestToggleRts()
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually)
@@ -1840,6 +1857,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Toggles DTR line if current flow control settings allow this.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
 		public virtual void RequestToggleDtr()
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually)
@@ -2259,7 +2277,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public virtual List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
+		public virtual ReadOnlyCollection<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (this.terminal.RepositoryToDisplayElements(repositoryType));
@@ -2268,7 +2286,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public virtual List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		public virtual ReadOnlyCollection<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (this.terminal.RepositoryToDisplayLines(repositoryType));
@@ -2434,7 +2452,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.txByteRate);
+				return (this.txByteRate.Value);
 			}
 		}
 
@@ -2444,7 +2462,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.txLineRate);
+				return (this.txLineRate.Value);
 			}
 		}
 
@@ -2454,7 +2472,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.rxByteRate);
+				return (this.rxByteRate.Value);
 			}
 		}
 
@@ -2464,7 +2482,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.rxLineRate);
+				return (this.rxLineRate.Value);
 			}
 		}
 

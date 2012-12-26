@@ -231,7 +231,7 @@ namespace YAT.Gui.Forms
 			// bindingSource_AsciiTable
 			// 
 			this.bindingSource_AsciiTable.DataMember = "ASCII";
-			this.bindingSource_AsciiTable.DataSource = typeof(YAT.Gui.Utilities.AsciiTable);
+			this.bindingSource_AsciiTable.DataSource = typeof(YAT.Gui.Utilities.AsciiTableDataSet);
 			this.bindingSource_AsciiTable.Position = 0;
 			// 
 			// textBox_SerialPort

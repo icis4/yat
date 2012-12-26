@@ -6,6 +6,7 @@
       <Word>b</Word>
       <Word>c</Word>
       <Word>s</Word>
+      <Word>chr</Word>
       <Word>str</Word>
       <Word>strA</Word>
       <Word>strB</Word>
@@ -17,6 +18,8 @@
     </Recognized>
     <DiscreteExceptions>
       <Term>InCase</Term>
+      <Term>InLine</Term>
+      <Term>MultiLine</Term>
       <Term>NonUser</Term>
       <Term>TimeStamp</Term>
       <Term>PseudoRandom</Term>

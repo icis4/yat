@@ -22,14 +22,12 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
 	[Flags]
-	public enum ParseMode
+	public enum Modes
 	{
 		/// <summary></summary>
 		Radix = 1,
