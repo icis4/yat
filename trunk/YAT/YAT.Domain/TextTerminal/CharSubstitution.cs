@@ -54,7 +54,8 @@ namespace YAT.Domain
 	/// Extended enum CharSubstitutionEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class CharSubstitutionEx : MKY.EnumEx
+	[Serializable]
+	public class CharSubstitutionEx : EnumEx
 	{
 		#region String Definitions
 

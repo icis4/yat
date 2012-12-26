@@ -52,6 +52,7 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] alternateXmlElements =
 			{
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO",                               }, "Endianness",                                new string[] { "Endianess" } ),
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",                               new string[] { "Handshake" } ),
 			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal",                                     }, "Status",                                    new string[] { "Display" } ), */
 			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */

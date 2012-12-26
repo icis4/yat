@@ -72,6 +72,7 @@ namespace YAT.Model
 		public bool MostRecentIsRequested;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		public string MostRecentFilePath;
 
 		/// <summary></summary>

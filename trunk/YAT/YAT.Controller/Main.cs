@@ -121,6 +121,7 @@ namespace YAT.Controller
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "strings", Justification = "Emphasize the difference between the original strings and the resulting object.")]
 		public Main(string[] commandLineArgsStrings)
 		{
 			Initialize(commandLineArgsStrings);
@@ -701,7 +702,7 @@ namespace YAT.Controller
 			foreach (string line in Return)
 				sb.AppendLine(line);
 
-			MessageBox.Show
+			MessageBoxEx.Show
 				(
 				sb.ToString(),
 				ApplicationInfo.ProductNameLong,
@@ -731,7 +732,7 @@ namespace YAT.Controller
 		/// that exactly match the number of characters do not lead to an empty line (due to the
 		/// NewLine which is added).
 		/// </remarks>
-		private void WriteLogoToConsole()
+		private static void WriteLogoToConsole()
 		{
 			Console.WriteLine();
 			Console.WriteLine();
@@ -761,7 +762,7 @@ namespace YAT.Controller
 		/// that exactly match the number of characters do not lead to an empty line (due to the
 		/// NewLine which is added).
 		/// </remarks>
-		private void WriteReturnToConsole()
+		private static void WriteReturnToConsole()
 		{
 			Console.WriteLine();
 			foreach (string line in Return)
@@ -779,7 +780,7 @@ namespace YAT.Controller
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		private MainResult ConvertToMainResult(Model.MainResult result)
+		private static MainResult ConvertToMainResult(Model.MainResult result)
 		{
 			switch (result)
 			{
@@ -789,20 +790,6 @@ namespace YAT.Controller
 				case Model.MainResult.ApplicationRunError:   return (MainResult.ApplicationRunError);
 				case Model.MainResult.ApplicationExitError:  return (MainResult.ApplicationExitError);
 				default:                                     return (MainResult.UnhandledException); // Covers 'Model.MainResult.UnhandledException'.
-			}
-		}
-
-		/// <summary></summary>
-		private Model.MainResult ConvertToMainResult(MainResult result)
-		{
-			switch (result)
-			{
-				case MainResult.Success:               return (Model.MainResult.Success);
-				case MainResult.CommandLineError:      return (Model.MainResult.CommandLineError);
-				case MainResult.ApplicationStartError: return (Model.MainResult.ApplicationStartError);
-				case MainResult.ApplicationRunError:   return (Model.MainResult.ApplicationRunError);
-				case MainResult.ApplicationExitError:  return (Model.MainResult.ApplicationExitError);
-				default:                               return (Model.MainResult.UnhandledException); // Covers 'MainResult.UnhandledException'.
 			}
 		}
 

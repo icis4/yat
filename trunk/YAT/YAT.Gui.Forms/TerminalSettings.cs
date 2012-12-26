@@ -297,7 +297,7 @@ namespace YAT.Gui.Forms
 			}
 			text += " and extended";
 
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Reset all settings to default values?" + Environment.NewLine +
@@ -318,7 +318,7 @@ namespace YAT.Gui.Forms
 		private void button_Help_Click(object sender, EventArgs e)
 		{
 			// \fixme: Replace MessageBox with a real help.
-			MessageBox.Show
+			MessageBoxEx.Show
 				(
 				this,
 				YAT.Gui.Controls.TerminalSelection.NewTerminalHelpText,
@@ -491,7 +491,7 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 
 				// Communication:
-				this.settings_Form.Terminal.IO.Endianess                         = f.SettingsResult.Terminal.IO.Endianess;
+				this.settings_Form.Terminal.IO.Endianness                         = f.SettingsResult.Terminal.IO.Endianness;
 				this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates     = f.SettingsResult.Terminal.IO.IndicateSerialPortBreakStates;
 				this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
 

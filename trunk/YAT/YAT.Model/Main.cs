@@ -810,7 +810,7 @@ namespace YAT.Model
 		/// Update recent entry.
 		/// </summary>
 		/// <param name="recentFile">Recent file.</param>
-		private void SetRecent(string recentFile)
+		private static void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.Save();
@@ -824,6 +824,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
 		public virtual MainResult Exit()
 		{
 			bool cancel;
@@ -831,6 +832,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
 		public virtual MainResult Exit(out bool cancel)
 		{
 			bool success;
@@ -1116,21 +1119,21 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool CreateNewTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> sh)
+		public virtual bool CreateNewTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			if (this.workspace == null)
 				CreateNewWorkspace();
 
-			return (this.workspace.CreateNewTerminal(sh));
+			return (this.workspace.CreateNewTerminal(settingsHandler));
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> sh)
+		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			if (this.workspace == null)
 				CreateNewWorkspace();
 
-			return (this.workspace.OpenTerminalFromSettings(sh));
+			return (this.workspace.OpenTerminalFromSettings(settingsHandler));
 		}
 
 		#region Terminal > Private Methods

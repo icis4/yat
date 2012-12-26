@@ -178,7 +178,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Reset all settings to default values?",

@@ -48,7 +48,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DisplayElement.Space))]
 	[XmlInclude(typeof(DisplayElement.RightMargin))]
 	[XmlInclude(typeof(DisplayElement.LineBreak))]
-	[XmlInclude(typeof(DisplayElement.Error))]
+	[XmlInclude(typeof(DisplayElement.IOError))]
 	public class DisplayElement
 	{
 		#region Types
@@ -57,6 +57,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class NoData : DisplayElement
 		{
 			/// <summary></summary>
@@ -67,6 +68,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class TxData : DisplayElement
 		{
 			/// <summary></summary>
@@ -89,6 +91,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class TxControl : DisplayElement
 		{
 			/// <summary></summary>
@@ -111,6 +114,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class RxData : DisplayElement
 		{
 			/// <summary></summary>
@@ -133,6 +137,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class RxControl : DisplayElement
 		{
 			/// <summary></summary>
@@ -155,6 +160,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class TimeStamp : DisplayElement
 		{
 			/// <summary></summary>
@@ -183,6 +189,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class LineLength : DisplayElement
 		{
 			/// <summary></summary>
@@ -211,6 +218,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class LeftMargin : DisplayElement
 		{
 			/// <summary></summary>
@@ -221,6 +229,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class Space : DisplayElement
 		{
 			/// <summary></summary>
@@ -231,6 +240,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class RightMargin : DisplayElement
 		{
 			/// <summary></summary>
@@ -241,6 +251,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class LineBreak : DisplayElement
 		{
 			/// <summary></summary>
@@ -257,22 +268,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public class Error : DisplayElement
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class IOError : DisplayElement
 		{
 			/// <summary></summary>
-			public Error()
+			public IOError()
 				: base()
 			{
 			}
 
 			/// <summary></summary>
-			public Error(string message)
+			public IOError(string message)
 				: base('<' + message + '>')
 			{
 			}
 
 			/// <summary></summary>
-			public Error(SerialDirection direction, string message)
+			public IOError(SerialDirection direction, string message)
 				: base(direction, '<' + message + '>')
 			{
 			}
@@ -301,14 +313,14 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement()
+			: this("")
 		{
-			Initialize(SerialDirection.None, new List<Pair<byte[], string>>(), "", 0, false, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(string text)
+			: this(SerialDirection.None, text)
 		{
-			Initialize(SerialDirection.None, new List<Pair<byte[], string>>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
@@ -319,18 +331,14 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(SerialDirection direction, byte origin, string text)
+			: this(direction, new byte[] { origin }, text, 1)
 		{
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
-			l.Add(new Pair<byte[], string>(new byte[] { origin }, text));
-			Initialize(direction, l, text, 1, true, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount)
+			: this(direction, origin, text, dataCount, false)
 		{
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
-			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, dataCount, true, false);
 		}
 
 		/// <summary></summary>
@@ -368,6 +376,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlAttribute("Origin")]
 		public virtual List<Pair<byte[], string>> Origin
 		{
@@ -473,7 +482,7 @@ namespace YAT.Domain
 			else if (this is Space)       de = new Space();
 			else if (this is RightMargin) de = new RightMargin();
 			else if (this is LineBreak)   de = new LineBreak();
-			else if (this is Error)       de = new Error();
+			else if (this is IOError)     de = new IOError();
 			else throw (new TypeLoadException("Unknown display element type"));
 
 			de.direction = this.direction;

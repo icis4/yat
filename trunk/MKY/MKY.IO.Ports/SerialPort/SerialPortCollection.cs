@@ -34,32 +34,6 @@ namespace MKY.IO.Ports
 	public class SerialPortCollection : List<SerialPortId>
 	{
 		/// <summary></summary>
-		public class PortChangedAndCancelEventArgs : EventArgs
-		{
-			private SerialPortId port;
-			private bool cancel;
-
-			/// <summary></summary>
-			public PortChangedAndCancelEventArgs(SerialPortId port)
-			{
-				this.port = port;
-			}
-
-			/// <summary></summary>
-			public SerialPortId Port
-			{
-				get { return (this.port); }
-			}
-
-			/// <summary></summary>
-			public bool Cancel
-			{
-				get { return (this.cancel); }
-				set { this.cancel = value;  }
-			}
-		}
-
-		/// <summary></summary>
 		public SerialPortCollection()
 			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstStandardPortNumber + 1)
 		{
@@ -139,23 +113,22 @@ namespace MKY.IO.Ports
 		/// Checks all ports whether they are currently in use and marks them.
 		/// </summary>
 		/// <remarks>
-		/// In .NET 2.0, no class provides a method to retrieve whether a port is currently
-		/// in use or not. Therefore, this method actively tries to open every port. This
-		/// takes some time.
+		/// In .NET 2.0, no class provides a method to retrieve whether a port is currently in use
+		/// or not. Therefore, this method actively tries to open every port. This takes some time.
 		/// </remarks>
 		/// <param name="portChangedCallback">
-		/// Callback delegate, can be used to get an event each time a new port is being
-		/// tried to be opened. Set the <see cref="PortChangedAndCancelEventArgs.Cancel"/>
-		/// property to <c>true</c> to cancel port scanning.
+		/// Callback delegate, can be used to get an event each time a new port is being tried to
+		/// be opened. Set the <see cref="SerialPortChangedAndCancelEventArgs.Cancel"/> property
+		/// to <c>true</c> to cancel port scanning.
 		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		public virtual void MarkPortsInUse(EventHandler<PortChangedAndCancelEventArgs> portChangedCallback)
+		public virtual void MarkPortsInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback)
 		{
 			foreach (SerialPortId portId in this)
 			{
 				if (portChangedCallback != null)
 				{
-					PortChangedAndCancelEventArgs args = new PortChangedAndCancelEventArgs(portId);
+					SerialPortChangedAndCancelEventArgs args = new SerialPortChangedAndCancelEventArgs(portId);
 					portChangedCallback.Invoke(this, args);
 					if (args.Cancel)
 						break;

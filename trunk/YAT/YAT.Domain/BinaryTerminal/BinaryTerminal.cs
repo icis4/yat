@@ -48,7 +48,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public class LineBreakTimer : IDisposable
+		private class LineBreakTimer : IDisposable
 		{
 			private bool isDisposed;
 
@@ -100,6 +100,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Implemented the same as every other IDisposable implementation.")]
 			public bool IsDisposed
 			{
 				get { return (this.isDisposed); }
@@ -181,7 +182,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private class.")]
-		private class LineState
+		private class LineState : IDisposable
 		{
 			private bool isDisposed;
 
@@ -240,6 +241,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Implemented the same as every other IDisposable implementation.")]
 			public bool IsDisposed
 			{
 				get { return (this.isDisposed); }
@@ -318,10 +320,10 @@ namespace YAT.Domain
 			: base(settings, terminal)
 		{
 			AttachBinaryTerminalSettings(settings.BinaryTerminal);
-			if (terminal is BinaryTerminal)
-			{
-				BinaryTerminal casted = (BinaryTerminal)terminal;
 
+			BinaryTerminal casted = terminal as BinaryTerminal;
+			if (casted != null)
+			{
 				this.txLineState = casted.txLineState;
 				this.txLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
 				this.txLineState.LineBreakTimer.Timeout += new EventHandler(txTimer_Timeout);
@@ -410,7 +412,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
+			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
 			LineBreakTimer t;
 
 			// Tx.
@@ -507,7 +509,7 @@ namespace YAT.Domain
 			lineState.TimeStamp = ts;
 		}
 
-		private void EvaluateLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
+		private static void EvaluateLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
 		{
 			int lineLength = 0;
 			foreach (DisplayElement e in lineState.LineElements)
@@ -520,13 +522,16 @@ namespace YAT.Domain
 				lineState.LinePosition = LinePosition.End;
 		}
 
-		private void EvaluateSequenceLineBreak(LineState lineState, byte b)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		private static void EvaluateSequenceLineBreak(LineState lineState, byte b)
 		{
 			lineState.SequenceBreak.Enqueue(b);
 			if (lineState.SequenceBreak.IsCompleteMatch)
 				lineState.LinePosition = LinePosition.End;
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteData(SerialDirection d, LineState lineState, byte b, DisplayElementCollection elements)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
@@ -603,6 +608,7 @@ namespace YAT.Domain
 			}
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		private void ProcessAndSignalDirectionLineBreak(SerialDirection d)
 		{
 			LineState lineState;
@@ -635,6 +641,7 @@ namespace YAT.Domain
 			this.bidirLineState.Direction = d;
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		private void ProcessAndSignalTimedLineBreak(SerialDirection d)
 		{
 			LineState lineState;

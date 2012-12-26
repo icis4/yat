@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 
@@ -45,18 +46,18 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawElement
 	{
-		private byte[] data;
+		private ReadOnlyCollection<byte> data;
 		private SerialDirection direction;
 		private DateTime timeStamp;
 
 		/// <summary></summary>
-		public RawElement(byte[] data, SerialDirection direction)
+		public RawElement(ReadOnlyCollection<byte> data, SerialDirection direction)
 			: this(data, direction, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(byte[] data, SerialDirection direction, DateTime timeStamp)
+		public RawElement(ReadOnlyCollection<byte> data, SerialDirection direction, DateTime timeStamp)
 		{
 			this.data = data;
 			this.direction = direction;
@@ -64,7 +65,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual byte[] Data
+		public virtual ReadOnlyCollection<byte> Data
 		{
 			get { return (this.data); }
 		}

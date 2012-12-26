@@ -21,9 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace YAT.Domain.Parser
 {
@@ -35,26 +33,37 @@ namespace YAT.Domain.Parser
 	/// <summary></summary>
 	public class ByteArrayResult : Result
 	{
-		/// <summary></summary>
-		public readonly byte[] ByteArray;
+		private byte[] byteArray;
 
 		/// <summary></summary>
 		public ByteArrayResult(byte[] byteArray)
 		{
-			ByteArray = byteArray;
+			this.byteArray = byteArray;
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Source is an array, sink is an array, this class transports the array from source to sink, there's no purpose to use a ReadOnlyCollection here.")]
+		public byte[] ByteArray
+		{
+			get { return (this.byteArray); }
 		}
 	}
 
 	/// <summary></summary>
 	public class KeywordResult : Result
 	{
-		/// <summary></summary>
-		public readonly Keyword Keyword;
+		private Keyword keyword;
 
 		/// <summary></summary>
 		public KeywordResult(Keyword keyword)
 		{
-			Keyword = keyword;
+			this.keyword = keyword;
+		}
+
+		/// <summary></summary>
+		public Keyword Keyword
+		{
+			get { return (this.keyword); }
 		}
 	}
 }

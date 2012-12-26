@@ -54,6 +54,7 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum IPHost.
 	/// </summary>
+	[Serializable]
 	public class IPHost : EnumEx
 	{
 		#region String Definitions

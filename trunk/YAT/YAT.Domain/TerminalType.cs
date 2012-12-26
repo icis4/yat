@@ -51,7 +51,8 @@ namespace YAT.Domain
 	/// Extended enum TerminalTypeEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class TerminalTypeEx : MKY.EnumEx
+	[Serializable]
+	public class TerminalTypeEx : EnumEx
 	{
 		#region String Definitions
 

@@ -21,8 +21,14 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -30,6 +36,8 @@ using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Model.Types;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -88,6 +96,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'terminalIsReadyToSend' is not unnecesary, it is based on a constant that contains a default value!")]
 		public PredefinedCommands()
 		{
 			InitializeComponent();
@@ -102,6 +111,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual PredefinedCommandPageCollection Pages
@@ -188,18 +199,18 @@ namespace YAT.Gui.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromScreenPoint(Point p)
+		public virtual int GetCommandIdFromScreenPoint(Point point)
 		{
-			return (pageButtons.GetCommandIdFromScreenPoint(p));
+			return (pageButtons.GetCommandIdFromScreenPoint(point));
 		}
 
 		/// <summary>
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or not valid.
 		/// </summary>
-		public virtual Command GetCommandFromScreenPoint(Point p)
+		public virtual Command GetCommandFromScreenPoint(Point point)
 		{
-			return (pageButtons.GetCommandFromScreenPoint(p));
+			return (pageButtons.GetCommandFromScreenPoint(point));
 		}
 
 		#endregion
@@ -251,7 +262,7 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			pageButtons.TerminalIsReady = this.terminalIsReadyToSend;
+			pageButtons.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
 			if ((this.pages != null) && (this.pages.Count > 0) && (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
 			{

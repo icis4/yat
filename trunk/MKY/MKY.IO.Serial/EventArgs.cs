@@ -22,7 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace MKY.IO.Serial
@@ -33,19 +33,24 @@ namespace MKY.IO.Serial
 	/// </summary>
 	public abstract class DataEventArgs : EventArgs
 	{
-		private byte[] data;
+		private ReadOnlyCollection<byte> data;
 		private DateTime timeStamp;
 
 		/// <summary></summary>
 		protected DataEventArgs(byte[] data)
+			: this (new ReadOnlyCollection<byte>(data))
+		{
+		}
+
+		/// <summary></summary>
+		protected DataEventArgs(ReadOnlyCollection<byte> data)
 		{
 			this.data = data;
 			this.timeStamp = DateTime.Now;
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
-		public virtual byte[] Data
+		public virtual ReadOnlyCollection<byte> Data
 		{
 			get { return (this.data); }
 		}
@@ -81,6 +86,12 @@ namespace MKY.IO.Serial
 	{
 		/// <summary></summary>
 		public DataReceivedEventArgs(byte[] data)
+			: this (new ReadOnlyCollection<byte>(data))
+		{
+		}
+
+		/// <summary></summary>
+		public DataReceivedEventArgs(ReadOnlyCollection<byte> data)
 			: base(data)
 		{
 		}
@@ -94,6 +105,12 @@ namespace MKY.IO.Serial
 	{
 		/// <summary></summary>
 		public DataSentEventArgs(byte[] data)
+			: this (new ReadOnlyCollection<byte>(data))
+		{
+		}
+
+		/// <summary></summary>
+		public DataSentEventArgs(ReadOnlyCollection<byte> data)
 			: base(data)
 		{
 		}

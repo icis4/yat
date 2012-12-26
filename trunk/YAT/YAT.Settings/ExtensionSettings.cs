@@ -21,13 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 
 using MKY;
-using MKY.IO;
 
 namespace YAT.Settings
 {
@@ -132,7 +130,7 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static string[] TextFilesWithDot
+		public static ReadOnlyCollection<string> TextFilesWithDot
 		{
 			get
 			{
@@ -142,7 +140,7 @@ namespace YAT.Settings
 				l.Add(".log");
 				l.Add(".rtf");
 				l.Add(".xml");
-				return (l.ToArray());
+				return (l.AsReadOnly());
 			}
 		}
 
@@ -225,7 +223,7 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static string[] BinaryFilesWithDot
+		public static ReadOnlyCollection<string> BinaryFilesWithDot
 		{
 			get
 			{
@@ -233,7 +231,7 @@ namespace YAT.Settings
 				l.Add(".dat");
 				l.Add(".bin");
 				l.Add(".binary");
-				return (l.ToArray());
+				return (l.AsReadOnly());
 			}
 		}
 

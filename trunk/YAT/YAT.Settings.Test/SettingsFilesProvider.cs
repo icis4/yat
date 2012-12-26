@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
@@ -58,20 +59,46 @@ namespace YAT.Settings.Test
 	/// <summary></summary>
 	public enum TerminalSettingsTestCase
 	{
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM", Justification = "As always, there are exceptions to the rules...")]
 		T_00_COM1_Closed_Default,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM", Justification = "As always, there are exceptions to the rules...")]
 		T_00_COM2_Closed_Default,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM", Justification = "As always, there are exceptions to the rules...")]
 		T_01_COM1_Open_Default,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM", Justification = "As always, there are exceptions to the rules...")]
 		T_02_COM2_Open_Binary_115200,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM", Justification = "As always, there are exceptions to the rules...")]
 		T_03_COM1_Closed_Predefined,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "COM", Justification = "As always, there are exceptions to the rules...")]
 		T_05_COM1_Open_Recent,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "USB", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "HID", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "VID", Justification = "As always, there are exceptions to the rules...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "PID", Justification = "As always, there are exceptions to the rules...")]
 		T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed,
 	}
 
 	/// <summary></summary>
 	public enum WorkspaceSettingsTestCase
 	{
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_04_Matthias,
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_06_Matthias,
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_08_Matthias,
 	}
 
@@ -87,17 +114,10 @@ namespace YAT.Settings.Test
 	/// <summary></summary>
 	public class SettingsFilePaths
 	{
-		/// <summary></summary>
-		public readonly string Path;
-
-		/// <summary></summary>
-		public readonly Dictionary<LocalUserSettingsTestCase, string> LocalUserFilePaths;
-
-		/// <summary></summary>
-		public readonly Dictionary<TerminalSettingsTestCase, string> TerminalFilePaths;
-
-		/// <summary></summary>
-		public readonly Dictionary<WorkspaceSettingsTestCase, string> WorkspaceFilePaths;
+		private string path;
+		private Dictionary<LocalUserSettingsTestCase, string> localUserFilePaths;
+		private Dictionary<TerminalSettingsTestCase, string>  terminalFilePaths;
+		private Dictionary<WorkspaceSettingsTestCase, string> workspaceFilePaths;
 
 		/// <summary></summary>
 		public SettingsFilePaths()
@@ -115,31 +135,56 @@ namespace YAT.Settings.Test
 
 			// Set path to "<Root>\!-Settings\" or "<Root>\!-Settings\<Directory>\".
 			if (string.IsNullOrEmpty(directory))
-				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar;
+				this.path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar;
 			else
-				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
+				this.path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-Settings" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			LocalUserFilePaths = new Dictionary<LocalUserSettingsTestCase, string>();
-			TerminalFilePaths  = new Dictionary<TerminalSettingsTestCase,  string>();
-			WorkspaceFilePaths = new Dictionary<WorkspaceSettingsTestCase, string>();
+			this.localUserFilePaths = new Dictionary<LocalUserSettingsTestCase, string>();
+			this.terminalFilePaths  = new Dictionary<TerminalSettingsTestCase,  string>();
+			this.workspaceFilePaths = new Dictionary<WorkspaceSettingsTestCase, string>();
 		}
+
+		/// <summary></summary>
+		public string Path
+		{
+			get { return (this.path); }
+		}
+
+		/// <summary></summary>
+		public Dictionary<LocalUserSettingsTestCase, string> LocalUserFilePaths
+		{
+			get { return (this.localUserFilePaths); }
+		}
+
+		/// <summary></summary>
+		public Dictionary<TerminalSettingsTestCase, string> TerminalFilePaths
+		{
+			get { return (this.terminalFilePaths); }
+		}
+
+		/// <summary></summary>
+		public Dictionary<WorkspaceSettingsTestCase, string> WorkspaceFilePaths
+		{
+			get { return (this.workspaceFilePaths); }
+		}
+
 
 		/// <summary></summary>
 		public void AddLocalUserFileName(LocalUserSettingsTestCase fileKey, string fileName)
 		{
-			LocalUserFilePaths.Add(fileKey, Path + fileName);
+			this.localUserFilePaths.Add(fileKey, Path + fileName);
 		}
 
 		/// <summary></summary>
 		public void AddTerminalFileName(TerminalSettingsTestCase fileKey, string fileName)
 		{
-			TerminalFilePaths.Add(fileKey, Path + fileName);
+			this.terminalFilePaths.Add(fileKey, Path + fileName);
 		}
 
 		/// <summary></summary>
 		public void AddWorkspaceFileName(WorkspaceSettingsTestCase fileKey, string fileName)
 		{
-			WorkspaceFilePaths.Add(fileKey, Path + fileName);
+			this.workspaceFilePaths.Add(fileKey, Path + fileName);
 		}
 	}
 
@@ -150,42 +195,66 @@ namespace YAT.Settings.Test
 	/// <summary></summary>
 	public static class SettingsFilesProvider
 	{
+		private const string UnderscoreSuppressionJustification = "As always, there are exceptions to the rules...";
+
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_12;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_13;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_17;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_18;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_19;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_20;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_22;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_24;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_25;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_26;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of implementation, especially adding new settings.")]
 		public static readonly SettingsFilePaths FilePaths_V1_99_28;
 
 		#endregion
@@ -196,6 +265,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static SettingsFilesProvider()
 		{
 			// V1.99.12
@@ -309,6 +379,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		public static SettingsFilePaths FilePaths_Current
 		{
 			get { return (FilePaths_V1_99_28); }

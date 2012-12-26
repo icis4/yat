@@ -47,6 +47,12 @@ namespace MKY.IO.Usb
 			: base(message, innerException)
 		{
 		}
+
+		/// <summary></summary>
+		protected UsbException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
+		{
+		}
 	}
 
 	/// <summary></summary>
@@ -58,13 +64,58 @@ namespace MKY.IO.Usb
 		private string nativeMessage;
 
 		/// <summary></summary>
-		public NativeMethodCallUsbException(string method, string message)
-			: base(message)
+		public NativeMethodCallUsbException()
+			: this(null, null, null)
+		{
+		}
+
+		/// <summary></summary>
+		public NativeMethodCallUsbException(string message)
+			: this(message, null, null)
+		{
+		}
+
+		/// <summary></summary>
+		public NativeMethodCallUsbException(string message, string method)
+			: this(message, null, method)
+		{
+		}
+
+		/// <summary></summary>
+		public NativeMethodCallUsbException(string message, Exception innerException)
+			: this(message, innerException, null)
+		{
+		}
+
+		/// <summary></summary>
+		public NativeMethodCallUsbException(string message, Exception innerException, string method)
+			: base(message, innerException)
 		{
 			this.method        = method;
 			this.errorCode     = Win32.Debug.GetLastErrorCode();
 			this.nativeMessage = Win32.Debug.GetLastErrorMessage();
 		}
+
+		#region ISerializable Members
+
+		/// <summary></summary>
+		protected NativeMethodCallUsbException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
+		{
+		}
+
+		/// <summary></summary>
+		[System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Demand, SerializationFormatter = true)]
+		public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+
+			info.AddValue("Method", this.method);
+			info.AddValue("ErrorCode", this.errorCode);
+			info.AddValue("NativeMessage", this.nativeMessage);
+		}
+
+		#endregion
 
 		/// <summary></summary>
 		public string Method

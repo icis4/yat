@@ -21,9 +21,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
@@ -32,6 +38,8 @@ using MKY;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -45,7 +53,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool TerminalIsReadyDefault = false;
+		private const bool TerminalIsReadyToSendDefault = false;
 
 		#endregion
 
@@ -57,7 +65,7 @@ namespace YAT.Gui.Controls
 		private List<Button> buttons_commands;
 
 		private List<Command> commands;
-		private bool terminalIsReady = TerminalIsReadyDefault;
+		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 
 		#endregion
 
@@ -84,6 +92,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'terminalIsReadyToSend' is not unnecesary, it is based on a constant that contains a default value!")]
 		public PredefinedCommandPageButtons()
 		{
 			InitializeComponent();
@@ -99,6 +108,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual List<Command> Commands
@@ -113,11 +124,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReady
+		public virtual bool TerminalIsReadyToSend
 		{
 			set
 			{
-				this.terminalIsReady = value;
+				this.terminalIsReadyToSend = value;
 				SetControls();
 			}
 		}
@@ -155,9 +166,9 @@ namespace YAT.Gui.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromScreenPoint(Point p)
+		public virtual int GetCommandIdFromScreenPoint(Point point)
 		{
-			Point client = PointToClient(p);
+			Point client = PointToClient(point);
 
 			// ensure that location is within control
 			if ((client.X < 0) || (client.X > Width))
@@ -179,9 +190,9 @@ namespace YAT.Gui.Controls
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or not valid.
 		/// </summary>
-		public Command GetCommandFromScreenPoint(Point p)
+		public Command GetCommandFromScreenPoint(Point point)
 		{
-			return (GetCommandFromId(GetCommandIdFromScreenPoint(p)));
+			return (GetCommandFromId(GetCommandIdFromScreenPoint(point)));
 		}
 
 		#endregion
@@ -229,7 +240,7 @@ namespace YAT.Gui.Controls
 			for (int i = 0; i < commandCount; i++)
 			{
 				bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
-				bool isValid = (isDefined && this.terminalIsReady && this.commands[i].IsValid);
+				bool isValid = (isDefined && this.terminalIsReadyToSend && this.commands[i].IsValid);
 
 				if (isDefined)
 				{

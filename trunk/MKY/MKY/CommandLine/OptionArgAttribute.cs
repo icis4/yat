@@ -43,7 +43,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets or sets one or more names.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Public array getter/setter is required for ease of use of this argument handling infrastructure.")]
 		public string[] Names
 		{
 			get { return (this.names); }
@@ -85,7 +85,7 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets or sets one or more short names.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Public array getter/setter is required for ease of use of this argument handling infrastructure.")]
 		public string[] ShortNames
 		{
 			get { return (this.shortNames); }

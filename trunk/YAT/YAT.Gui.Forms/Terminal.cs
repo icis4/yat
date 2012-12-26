@@ -48,6 +48,15 @@ using YAT.Settings.Terminal;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.Gui.Forms.Terminal.#toolTip", Justification = "This is a bug in FxCop 1.36.")]
+
+#endregion
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -106,8 +115,8 @@ namespace YAT.Gui.Forms
 
 		// Settings:
 		private TerminalSettingsRoot settingsRoot;
-		private bool handlingTerminalSettingsIsSuspended = false; // A simple flag is sufficient as
-		                                                          // the form is ISynchronizeInvoke.
+		private bool handlingTerminalSettingsIsSuspended; // = false; // A simple flag is sufficient as
+		                                                              // the form is ISynchronizeInvoke.
 		#endregion
 
 		#region Events
@@ -1315,8 +1324,8 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Temporary reference to command to be copied.
 		/// </summary>
-		private int contextMenuStrip_Predefined_SelectedCommand = 0;
-		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendCommand = null;
+		private int contextMenuStrip_Predefined_SelectedCommand; // = 0;
+		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendCommand; // = null;
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
@@ -2150,12 +2159,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void SelectAllMonitorContents(Controls.Monitor monitor)
+		private static void SelectAllMonitorContents(Controls.Monitor monitor)
 		{
 			monitor.SelectAll();
 		}
 
-		private void SelectNoneMonitorContents(Controls.Monitor monitor)
+		private static void SelectNoneMonitorContents(Controls.Monitor monitor)
 		{
 			monitor.SelectNone();
 		}
@@ -2213,7 +2222,7 @@ namespace YAT.Gui.Forms
 			{
 				SetFixedStatusText("Error saving data!");
 
-				MessageBox.Show
+				MessageBoxEx.Show
 					(
 					this,
 					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
@@ -2267,7 +2276,7 @@ namespace YAT.Gui.Forms
 				{
 					SetFixedStatusText("Error printing data!");
 
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Unable to print data." + Environment.NewLine + Environment.NewLine +
@@ -2707,7 +2716,7 @@ namespace YAT.Gui.Forms
 
 				if (showErrorModally)
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						e.Message,
@@ -2723,7 +2732,7 @@ namespace YAT.Gui.Forms
 
 				if (showErrorModally)
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						e.Message,
@@ -2782,7 +2791,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
-			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
 		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
@@ -3147,6 +3156,8 @@ namespace YAT.Gui.Forms
 			Default
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "status", Justification = "Prepared for future use.")]
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Prepared for future use.")]
 		private string GetStatusText(Status status)
 		{
 			switch (status)

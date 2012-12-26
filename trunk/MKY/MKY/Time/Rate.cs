@@ -338,16 +338,6 @@ namespace MKY.Time
 
 		#endregion
 
-		#region Conversion Operators
-
-		/// <summary></summary>
-		public static implicit operator int(Rate rate)
-		{
-			return (rate.value);
-		}
-
-		#endregion
-
 		#region Timer Event Handlers
 		//==========================================================================================
 		// Timer Event Handlers

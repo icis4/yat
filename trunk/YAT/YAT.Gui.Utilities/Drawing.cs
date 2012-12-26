@@ -77,6 +77,7 @@ namespace YAT.Gui.Utilities
 		/// Use GenericTypographic format to be able to measure characters indiviually,
 		///   i.e. without a small margin before and after the character.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Hmm... How can the logic below be implemented in the initializer?")]
 		static Drawing()
 		{
 			// Line numbers shall be aligned right.
@@ -112,6 +113,7 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void DrawAndMeasureLineNumberString(string s, Model.Settings.FormatSettings formatSettings,
 		                                                  Graphics graphics, RectangleF bounds,
 		                                                  out SizeF requestedSize)
@@ -138,6 +140,8 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void DrawAndMeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
 		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
 		                                      out SizeF requestedSize, out SizeF drawnSize)
@@ -159,6 +163,8 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void DrawAndMeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
 		                                      out SizeF requestedSize, out SizeF drawnSize)
@@ -239,7 +245,7 @@ namespace YAT.Gui.Utilities
 				font  = SetFont (ref whiteSpaces.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref whiteSpaces.Brush, fontColor);
 			}
-			else if (element is Domain.DisplayElement.Error)
+			else if (element is Domain.DisplayElement.IOError)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;

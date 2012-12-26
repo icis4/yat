@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -36,26 +37,33 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public static string[] LinesFromXmlFile(string xmlFilePath)
 		{
-			object lines = null;
+			object deserializedLines = null;
 			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
 			{
 				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
-				lines = serializer.Deserialize(fs);
+				deserializedLines = serializer.Deserialize(fs);
 			}
 
-			StringBuilder sb;
-			List<string> linesString = new List<string>();
-			foreach (Domain.DisplayLine line in (List<Domain.DisplayLine>)lines)
+			List<Domain.DisplayLine> lines = deserializedLines as List<Domain.DisplayLine>;
+			if (lines != null)
 			{
-				sb = new StringBuilder();
-				foreach (Domain.DisplayElement de in line)
+				StringBuilder sb;
+				List<string> linesString = new List<string>();
+				foreach (Domain.DisplayLine line in (List<Domain.DisplayLine>)lines)
 				{
-					if (de.IsData)
-						sb.Append(de.Text);
+					sb = new StringBuilder();
+					foreach (Domain.DisplayElement de in line)
+					{
+						if (de.IsData)
+							sb.Append(de.Text);
+					}
+					linesString.Add(sb.ToString());
 				}
-				linesString.Add(sb.ToString());
+
+				return (linesString.ToArray());
 			}
-			return (linesString.ToArray());
+
+			return (null);
 		}
 	}
 
@@ -65,7 +73,7 @@ namespace YAT.Model.Utilities
 	public static class XmlWriter
 	{
 		/// <summary></summary>
-		public static void LinesToXmlFile(List<Domain.DisplayLine> lines, string xmlFilePath)
+		public static void LinesToXmlFile(ReadOnlyCollection<Domain.DisplayLine> lines, string xmlFilePath)
 		{
 			using (StreamWriter sw = new StreamWriter(xmlFilePath, false, Encoding.UTF8))
 			{

@@ -267,6 +267,7 @@ namespace MKY.IO.Usb
 	/// Extended enum HidUsagePageEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
+	[Serializable]
 	public class HidUsagePageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Unknown"/>.</summary>
@@ -388,6 +389,7 @@ namespace MKY.IO.Usb
 	/// Extended enum HidUsageEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
+	[Serializable]
 	public class HidUsageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsage.Unknown"/>.</summary>

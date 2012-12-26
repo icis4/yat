@@ -27,13 +27,22 @@
 //==================================================================================================
 
 using System;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Utilities;
+
+#endregion
+
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Naming", "CA1701:ResourceStringCompoundWordsShouldBeCasedCorrectly", Scope = "resource", Target = "YAT.Gui.Forms.About.resources", MessageId = "Toolbar", Justification = "What's wrong with 'Toolbar'? The web is full with this term!")]
 
 #endregion
 
@@ -247,10 +256,11 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Manual Testing
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
@@ -269,7 +279,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
@@ -285,6 +295,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		private void timer_ExecuteManualTest2_Tick(object sender, EventArgs e)
 		{
 			timer_ExecuteManualTest2.Stop();
@@ -306,7 +317,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
@@ -347,6 +358,7 @@ namespace YAT.Gui.Forms
 			{
 			}
 
+			[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 			public virtual void Execute(object sender, EventArgs e)
 			{
 				throw (new Exception("Unhandled asynchronous non-synchronized exception test :: Outer exception", new Exception("Inner exception")));

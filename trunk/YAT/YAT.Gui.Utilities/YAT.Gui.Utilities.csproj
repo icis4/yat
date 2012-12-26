@@ -91,7 +91,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
-    <Compile Include="AsciiTable.cs">
+    <Compile Include="AsciiTableDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Drawing.cs" />

@@ -23,6 +23,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY;
 
@@ -39,7 +41,7 @@ namespace YAT.Log
 	}
 
 	/// <summary></summary>
-	public enum LogStreamType
+	public enum LogChannelType
 	{
 		/// <summary></summary>
 		Tx,
@@ -49,6 +51,28 @@ namespace YAT.Log
 
 		/// <summary></summary>
 		Rx
+	}
+
+	/// <summary></summary>
+	public enum LogChannel
+	{
+		/// <summary></summary>
+		RawTx = 0,
+
+		/// <summary></summary>
+		RawBidir = 1,
+
+		/// <summary></summary>
+		RawRx = 2,
+
+		/// <summary></summary>
+		NeatTx = 3,
+
+		/// <summary></summary>
+		NeatBidir = 4,
+
+		/// <summary></summary>
+		NeatRx = 5
 	}
 
 	/// <summary></summary>
@@ -62,33 +86,41 @@ namespace YAT.Log
 	}
 
 	/// <summary></summary>
+	[Serializable]
 	public class FileNameSeparator : IEquatable<FileNameSeparator>
 	{
-		/// <summary></summary>
-		public readonly string Separator;
-
-		/// <summary></summary>
-		public readonly string Description;
+		private string separator;
+		private string description;
 
 		/// <summary></summary>
 		public FileNameSeparator()
+			: this(FileNameSeparator.DefaultSeparator.Separator, FileNameSeparator.DefaultSeparator.Description)
 		{
-			Separator = FileNameSeparator.DefaultSeparator.Separator;
-			Description = FileNameSeparator.DefaultSeparator.Description;
 		}
 
 		/// <summary></summary>
 		public FileNameSeparator(string separator)
+			: this(separator, separator)
 		{
-			Separator = separator;
-			Description = separator;
 		}
 
 		/// <summary></summary>
 		public FileNameSeparator(string separator, string description)
 		{
-			Separator = separator;
-			Description = description;
+			this.separator = separator;
+			this.description = description;
+		}
+
+		/// <summary></summary>
+		public string Separator
+		{
+			get { return (this.separator); }
+		}
+
+		/// <summary></summary>
+		public string Description
+		{
+			get { return (this.description); }
 		}
 
 		#region Object Members
@@ -164,25 +196,31 @@ namespace YAT.Log
 		public const string NoneToString = "None";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
 		public static readonly FileNameSeparator Underscore = new FileNameSeparator("_", UnderscoreToString);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
 		public static readonly FileNameSeparator Dash = new FileNameSeparator("-", DashToString);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
 		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(" - ", DashWithSpacesToString);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
 		public static readonly FileNameSeparator Ball = new FileNameSeparator("°", BallToString);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
 		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(" ° ", BallWithSpacesToString);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
 		public static readonly FileNameSeparator None = new FileNameSeparator("", NoneToString);
 
 		/// <summary></summary>
-		public static FileNameSeparator[] Items
+		public static ReadOnlyCollection<FileNameSeparator> Items
 		{
 			get
 			{
@@ -193,7 +231,7 @@ namespace YAT.Log
 				items.Add(Ball);
 				items.Add(BallWithSpaces);
 				items.Add(None);
-				return (items.ToArray());
+				return (items.AsReadOnly());
 			}
 		}
 

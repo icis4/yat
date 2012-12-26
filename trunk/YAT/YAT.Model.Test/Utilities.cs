@@ -21,8 +21,14 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -35,6 +41,8 @@ using MKY.Net;
 using MKY.Settings;
 
 using YAT.Settings.Terminal;
+
+#endregion
 
 namespace YAT.Model.Test
 {
@@ -53,49 +61,149 @@ namespace YAT.Model.Test
 		/// This test set class should be improved such that it can also handle expectations on the
 		/// sender side (i.e. terminal A). Rationale: Testing of \!(Clear) behavior.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This struct really belongs to these test utilities only.")]
 		public struct TestSet
 		{
-			/// <summary></summary>
-			public readonly Model.Types.Command Command;
-
-			/// <summary></summary>
-			public readonly int ExpectedLineCount;
-
-			/// <summary></summary>
-			public readonly int[] ExpectedElementCounts;
-
-			/// <summary></summary>
-			public readonly int[] ExpectedDataCounts;
-
-			/// <summary></summary>
-			public readonly bool ExpectedAlsoApplyToA;
+			private Model.Types.Command command;
+			private int   expectedLineCount;
+			private int[] expectedElementCounts;
+			private int[] expectedDataCounts;
+			private bool  expectedAlsoApplyToA;
 
 			/// <summary></summary>
 			public TestSet(Model.Types.Command command)
 			{
-				Command = command;
-				ExpectedLineCount = command.CommandLines.Length;
+				this.command = command;
+				this.expectedLineCount = command.CommandLines.Length;
 
-				ExpectedElementCounts = new int[ExpectedLineCount];
-				ExpectedDataCounts = new int[ExpectedLineCount];
-				for (int i = 0; i < ExpectedLineCount; i++)
+				this.expectedElementCounts = new int[this.expectedLineCount];
+				this.expectedDataCounts    = new int[this.expectedLineCount];
+				for (int i = 0; i < this.expectedLineCount; i++)
 				{
-					ExpectedElementCounts[i] = 2; // 1 data element + 1 Eol element.
-					ExpectedDataCounts[i]    = command.CommandLines[i].Length;
+					this.expectedElementCounts[i] = 2; // 1 data element + 1 Eol element.
+					this.expectedDataCounts[i]    = command.CommandLines[i].Length;
 				}
 
-				ExpectedAlsoApplyToA = false;
+				this.expectedAlsoApplyToA = false;
 			}
 
 			/// <summary></summary>
 			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
 			{
-				Command = command;
-				ExpectedLineCount     = expectedLineCount;
-				ExpectedElementCounts = expectedElementCounts;
-				ExpectedDataCounts    = expectedDataCounts;
-				ExpectedAlsoApplyToA  = expectedAlsoApplyToA;
+				this.command = command;
+				this.expectedLineCount     = expectedLineCount;
+				this.expectedElementCounts = expectedElementCounts;
+				this.expectedDataCounts    = expectedDataCounts;
+				this.expectedAlsoApplyToA  = expectedAlsoApplyToA;
 			}
+
+			/// <summary></summary>
+			public Model.Types.Command Command
+			{
+				get { return (this.command); }
+			}
+
+			/// <summary></summary>
+			public int ExpectedLineCount
+			{
+				get { return (this.expectedLineCount); }
+			}
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+			public int[] ExpectedElementCounts
+			{
+				get { return (this.expectedElementCounts); }
+			}
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
+			public int[] ExpectedDataCounts
+			{
+				get { return (this.expectedDataCounts); }
+			}
+
+			/// <summary></summary>
+			public bool ExpectedAlsoApplyToA
+			{
+				get { return (this.expectedAlsoApplyToA); }
+			}
+
+			#region Object Members
+
+			/// <summary>
+			/// Determines whether this instance and the specified object have value equality.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(obj, null))
+					return (false);
+
+				if (GetType() != obj.GetType())
+					return (false);
+
+				TestSet other = (TestSet)obj;
+				return
+				(
+					(Command               == other.Command) &&
+					(ExpectedLineCount     == other.ExpectedLineCount) &&
+					(ExpectedElementCounts == other.ExpectedElementCounts) &&
+					(ExpectedDataCounts    == other.ExpectedDataCounts) &&
+					(ExpectedAlsoApplyToA  == other.ExpectedAlsoApplyToA)
+				);
+			}
+
+			/// <summary>
+			/// Serves as a hash function for a particular type.
+			/// </summary>
+			/// <remarks>
+			/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+			/// properties, i.e. properties with some logic, are also properly handled.
+			/// </remarks>
+			public override int GetHashCode()
+			{
+				return
+				(
+					Command              .GetHashCode() ^
+					ExpectedLineCount    .GetHashCode() ^
+					ExpectedElementCounts.GetHashCode() ^
+					ExpectedDataCounts   .GetHashCode() ^
+					ExpectedAlsoApplyToA .GetHashCode()
+				);
+			}
+
+			#endregion
+
+			#region Comparison Operators
+
+			/// <summary>
+			/// Determines whether the two specified objects have reference or value equality.
+			/// </summary>
+			public static bool operator ==(TestSet lhs, TestSet rhs)
+			{
+				// Value type implementation of operator ==.
+				// See MKY.Test.EqualityTest for details.
+
+				if (ReferenceEquals(lhs, rhs))  return (true);
+				if (ReferenceEquals(lhs, null)) return (false);
+				if (ReferenceEquals(rhs, null)) return (false);
+
+				return (lhs.Equals(rhs));
+			}
+
+			/// <summary>
+			/// Determines whether the two specified objects have reference and value inequality.
+			/// </summary>
+			public static bool operator !=(TestSet lhs, TestSet rhs)
+			{
+				return (!(lhs == rhs));
+			}
+
+			#endregion
 		}
 
 		#endregion
@@ -127,6 +235,7 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortSettingsHandler(MKY.IO.Ports.SerialPortId portId)
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortSettings(portId)));
@@ -137,6 +246,7 @@ namespace YAT.Model.Test
 			return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA));
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortASettingsHandler()
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortASettings()));
@@ -147,6 +257,7 @@ namespace YAT.Model.Test
 			return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB));
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortBSettingsHandler()
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortBSettings()));
@@ -163,6 +274,7 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketSettingsHandler(IPNetworkInterface networkInterface)
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketSettings(networkInterface)));
@@ -183,6 +295,7 @@ namespace YAT.Model.Test
 			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)IPNetworkInterfaceType.IPv6Loopback));
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv6LoopbackSettingsHandler()
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()));
@@ -193,16 +306,19 @@ namespace YAT.Model.Test
 			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4Interface));
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettingsHandler()
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()));
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()
 		{
 			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6Interface));
 		}
 
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettingsHandler()
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()));
@@ -255,13 +371,13 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
+		internal static void VerifyLines(ReadOnlyCollection<Domain.DisplayLine> linesA, ReadOnlyCollection<Domain.DisplayLine> linesB,
 		                                 TestSet testSet)
 		{
 			VerifyLines(linesA, linesB, testSet, 1);
 		}
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
+		internal static void VerifyLines(ReadOnlyCollection<Domain.DisplayLine> linesA, ReadOnlyCollection<Domain.DisplayLine> linesB,
 		                                 TestSet testSet, int cycle)
 		{
 			// Compare the expected line count at the receiver side.

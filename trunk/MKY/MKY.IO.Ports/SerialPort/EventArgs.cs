@@ -84,6 +84,33 @@ namespace MKY.IO.Ports
 	}
 
 	/// <summary></summary>
+	[Serializable]
+	public class SerialPortChangedAndCancelEventArgs : EventArgs
+	{
+		private SerialPortId port;
+		private bool cancel;
+
+		/// <summary></summary>
+		public SerialPortChangedAndCancelEventArgs(SerialPortId port)
+		{
+			this.port = port;
+		}
+
+		/// <summary></summary>
+		public SerialPortId Port
+		{
+			get { return (this.port); }
+		}
+
+		/// <summary></summary>
+		public bool Cancel
+		{
+			get { return (this.cancel); }
+			set { this.cancel = value; }
+		}
+	}
+
+	/// <summary></summary>
 	[SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances", Justification = "Type is given by System.IO.Ports.SerialPort which unfortunately doesn't use proper event types.")]
 	public delegate void SerialDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e);
 

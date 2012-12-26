@@ -488,7 +488,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void DeletePage()
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Delete page '" + this.settings_Form.Pages[SelectedPageIndex].PageName + "'?",
@@ -526,7 +526,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void DeletePages()
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Delete all pages?",
@@ -561,7 +561,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ClearPage()
 		{
-			if (MessageBox.Show
+			if (MessageBoxEx.Show
 				(
 				this,
 				"Clear all commands of page '" + this.settings_Form.Pages[SelectedPageIndex].PageName + "'?",
@@ -582,7 +582,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowHelp()
 		{
-			MessageBox.Show
+			MessageBoxEx.Show
 				(
 				this,
 				"Command Format:" + Environment.NewLine + Environment.NewLine + Domain.Parser.Parser.FormatHelp,

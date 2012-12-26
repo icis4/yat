@@ -66,7 +66,8 @@ namespace YAT.Domain
 	/// CR:   Mac OS up to version 9, Apple II
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class EolEx : MKY.EnumEx
+	[Serializable]
+	public class EolEx : EnumEx
 	{
 		#region String Definitions
 

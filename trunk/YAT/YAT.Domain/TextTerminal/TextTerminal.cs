@@ -182,12 +182,13 @@ namespace YAT.Domain
 			: base(settings, terminal)
 		{
 			AttachTextTerminalSettings(settings.TextTerminal);
-			if (terminal is TextTerminal)
+
+			TextTerminal casted = terminal as TextTerminal;
+			if (casted != null)
 			{
-				TextTerminal casted = (TextTerminal)terminal;
 				this.rxDecodingStream = casted.rxDecodingStream;
-				this.txLineState = casted.txLineState;
-				this.rxLineState = casted.rxLineState;
+				this.txLineState      = casted.txLineState;
+				this.rxLineState      = casted.rxLineState;
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
@@ -282,18 +283,19 @@ namespace YAT.Domain
 			bool sendEol = item.IsLine;
 			bool performLineDelay = false;
 
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (EncodingEx)TextTerminalSettings.Encoding);
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
 
 			// Prepare EOL:
 			byte[] eolByteArray = new byte[] { };
 			if (item.IsLine)
 			{
 				MemoryStream eolWriter = new MemoryStream();
-				foreach (Parser.Result result in p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
+				foreach (Parser.Result r in p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults))
 				{
-					if (result is Parser.ByteArrayResult)
+					Parser.ByteArrayResult bar = r as Parser.ByteArrayResult;
+					if (bar != null)
 					{
-						byte[] a = ((Parser.ByteArrayResult)result).ByteArray;
+						byte[] a = bar.ByteArray;
 						eolWriter.Write(a, 0, a.Length);
 					}
 				}
@@ -317,42 +319,46 @@ namespace YAT.Domain
 			}
 
 			// Parse string and execute keywords:
-			foreach (Parser.Result result in p.Parse(data, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
+			foreach (Parser.Result r in p.Parse(data, TextTerminalSettings.CharSubstitution, Parser.Modes.All))
 			{
-				if      (result is Parser.ByteArrayResult)
+				Parser.ByteArrayResult bar = r as Parser.ByteArrayResult;
+				if (bar != null)
 				{
-					ForwardDataToRawTerminal(((Parser.ByteArrayResult)result).ByteArray);
+					ForwardDataToRawTerminal(bar.ByteArray);
 				}
-				else if (result is Parser.KeywordResult)
+				else
 				{
-					Parser.KeywordResult keywordResult = (Parser.KeywordResult)result;
-					switch (keywordResult.Keyword)
+					Parser.KeywordResult kr = r as Parser.KeywordResult;
+					if (kr != null)
 					{
-						// Process end-of-line keywords:
-						case Parser.Keyword.LineDelay:
+						switch (kr.Keyword)
 						{
-							performLineDelay = true;
-							break;
-						}
+							// Process end-of-line keywords:
+							case Parser.Keyword.LineDelay:
+							{
+								performLineDelay = true;
+								break;
+							}
 
-						case Parser.Keyword.NoEol:
-						{
-							sendEol = false;
-							break;
-						}
+							case Parser.Keyword.NoEol:
+							{
+								sendEol = false;
+								break;
+							}
 
-						// Process text terminal specific in-line keywords:
-						case Parser.Keyword.Eol:
-						{
-							ForwardDataToRawTerminal(eolByteArray);
-							break;
-						}
+							// Process text terminal specific in-line keywords:
+							case Parser.Keyword.Eol:
+							{
+								ForwardDataToRawTerminal(eolByteArray);
+								break;
+							}
 
-						// Process other in-line keywords:
-						default:
-						{
-							ProcessInLineKeywords(keywordResult);
-							break;
+							// Process other in-line keywords:
+							default:
+							{
+								ProcessInLineKeywords(kr);
+								break;
+							}
 						}
 					}
 				}
@@ -399,7 +405,7 @@ namespace YAT.Domain
 		{
 			this.rxDecodingStream = new List<byte>();
 
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (EncodingEx)TextTerminalSettings.Encoding);
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
 			byte[] txEol;
 			if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, out txEol))
 			{
@@ -516,6 +522,8 @@ namespace YAT.Domain
 			lineState.LinePosition = LinePosition.Data;
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void ExecuteData(LineState lineState, SerialDirection d, byte b, DisplayElementCollection elements)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
@@ -546,7 +554,7 @@ namespace YAT.Domain
 					lineState.EolElements.Add(de);
 
 				// Normal case, EOL consists of a single sequence of control characters.
-				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Eol.Length))
+				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.EolSequence.Count))
 				{
 					// Mark element as EOL.
 					DisplayElement item = lineState.EolElements[0];
@@ -556,7 +564,7 @@ namespace YAT.Domain
 				else
 				{
 					// Ensure that only as many elements as EOL contains are marked as EOL.
-					// Note that sequence mighty look like <CR><CR><LF>, only the last two are EOL!
+					// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
 					
 					// Unfold the elements into single elements for easier processing.
 					List<DisplayElement> l = new List<DisplayElement>();
@@ -572,7 +580,7 @@ namespace YAT.Domain
 						dataCount += item.DataCount;
 
 					// Mark only true EOL element as EOL.
-					int firstEolIndex = dataCount - lineState.Eol.Eol.Length;
+					int firstEolIndex = dataCount - lineState.Eol.EolSequence.Count;
 					int currentIndex = 0;
 					foreach (DisplayElement item in l)
 					{
@@ -619,7 +627,7 @@ namespace YAT.Domain
 		private void ExecuteLineEnd(LineState lineState, SerialDirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Process EOL.
-			int eolLength = lineState.Eol.Eol.Length;
+			int eolLength = lineState.Eol.EolSequence.Count;
 			DisplayLine line = new DisplayLine();
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))

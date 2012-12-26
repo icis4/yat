@@ -33,6 +33,7 @@ namespace MKY.IO.Ports
 	/// Extended enum StopBitsEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
+	[Serializable]
 	public class StopBitsEx : EnumEx
 	{
 		#region Double Definitions

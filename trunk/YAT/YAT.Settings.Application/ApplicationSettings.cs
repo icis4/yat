@@ -21,9 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Settings;
 
@@ -120,6 +118,7 @@ namespace YAT.Settings.Application
 		/// <remarks>
 		/// So far, there are only local user settings.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static bool Create(ApplicationSettingsFileAccess fileAccess)
 		{
 			try
@@ -165,6 +164,7 @@ namespace YAT.Settings.Application
 		/// <remarks>
 		/// So far, there are only local user settings.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static bool Save()
 		{
 			if (staticSettingsHandler != null)
@@ -193,6 +193,7 @@ namespace YAT.Settings.Application
 		/// <remarks>
 		/// So far, there are only local user settings.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static bool Close()
 		{
 			if (staticSettingsHandler != null)

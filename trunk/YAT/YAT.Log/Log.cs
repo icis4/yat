@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -32,28 +33,6 @@ using MKY.IO;
 
 namespace YAT.Log
 {
-	/// <summary></summary>
-	public enum LogStream
-	{
-		/// <summary></summary>
-		RawTx = 0,
-
-		/// <summary></summary>
-		RawBidir = 1,
-
-		/// <summary></summary>
-		RawRx = 2,
-
-		/// <summary></summary>
-		NeatTx = 3,
-
-		/// <summary></summary>
-		NeatBidir = 4,
-
-		/// <summary></summary>
-		NeatRx = 5
-	}
-
 	/// <summary></summary>
 	public class Logs : IDisposable
 	{
@@ -394,10 +373,12 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public virtual void WriteBytes(byte[] array)
+			public virtual void WriteBytes(ReadOnlyCollection<byte> values)
 			{
 				if (IsEnabled && IsStarted)
 				{
+					byte[] array = new byte[values.Count];
+					values.CopyTo(array, 0);
 					this.writer.Write(array);
 					RestartFlushTimer();
 				}
@@ -636,6 +617,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "End", Justification = "End() as method name is the obvious pair against Begin() and should be OK for other languages, .NET itself uses it in ArgIterator.End().")]
 		public virtual void End()
 		{
 			foreach (Log l in this.logs)
@@ -643,33 +625,33 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual void WriteByte(byte value, LogStream writeStream)
+		public virtual void WriteByte(byte value, LogChannel writeChannel)
 		{
-			((BinaryLog)GetLog(writeStream)).WriteByte(value);
+			((BinaryLog)GetLog(writeChannel)).WriteByte(value);
 		}
 
 		/// <summary></summary>
-		public virtual void WriteBytes(byte[] array, LogStream writeStream)
+		public virtual void WriteBytes(ReadOnlyCollection<byte> values, LogChannel writeChannel)
 		{
-			((BinaryLog)GetLog(writeStream)).WriteBytes(array);
+			((BinaryLog)GetLog(writeChannel)).WriteBytes(values);
 		}
 
 		/// <summary></summary>
-		public virtual void WriteString(string value, LogStream writeStream)
+		public virtual void WriteString(string value, LogChannel writeChannel)
 		{
-			((TextLog)GetLog(writeStream)).WriteString(value);
+			((TextLog)GetLog(writeChannel)).WriteString(value);
 		}
 
 		/// <summary></summary>
-		public virtual void WriteEol(LogStream writeStream)
+		public virtual void WriteEol(LogChannel writeChannel)
 		{
-			((TextLog)GetLog(writeStream)).WriteEol();
+			((TextLog)GetLog(writeChannel)).WriteEol();
 		}
 
 		/// <summary></summary>
-		private Log GetLog(LogStream stream)
+		private Log GetLog(LogChannel channel)
 		{
-			return (this.logs[stream.GetHashCode()]);
+			return (this.logs[channel.GetHashCode()]);
 		}
 
 		#endregion

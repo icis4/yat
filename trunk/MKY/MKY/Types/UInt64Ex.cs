@@ -238,7 +238,7 @@ namespace MKY
 				result[i - 1] = b;
 			}
 
-			// Swap endianess if needed.
+			// Swap endianness if needed.
 			if (useBigEndian)
 			{
 				int i = 0;

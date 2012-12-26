@@ -41,7 +41,7 @@ namespace MKY.Xml
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
 		public string[] XmlPath
 		{
 			get { return (this.xmlPath); }
@@ -54,7 +54,7 @@ namespace MKY.Xml
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
 		public string[] AlternateLocalNames
 		{
 			get { return (this.alternateLocalNames); }
@@ -142,7 +142,7 @@ namespace MKY.Xml
 		/// <summary>
 		/// Alternate XML elements. Applies to any kind of XML nodes.
 		/// </summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and future use is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Performance is not an issue here, flexibility and ease of use is...")]
 		AlternateXmlElement[] AlternateXmlElements { get; }
 	}
 }

@@ -115,7 +115,7 @@ namespace YAT.Gui.Forms
 				}
 				catch (ExternalException)
 				{
-					DialogResult userInput = MessageBox.Show
+					DialogResult userInput = MessageBoxEx.Show
 						(
 						this,
 						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
@@ -128,7 +128,7 @@ namespace YAT.Gui.Forms
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show
+					MessageBoxEx.Show
 						(
 						this,
 						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
@@ -148,7 +148,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Instructions_Click(object sender, EventArgs e)
 		{
-			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerType.Bug);
 			f.StartPosition = FormStartPosition.Manual;
 			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);

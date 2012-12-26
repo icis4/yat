@@ -99,6 +99,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'terminalIsReadyToSend' is not unnecesary, it is based on a constant that contains a default value!")]
 		public SendFile()
 		{
 			InitializeComponent();
@@ -133,6 +134,8 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands
@@ -323,7 +326,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.fileCommand.IsValidFilePath)
 			{
-				if (MessageBox.Show
+				if (MessageBoxEx.Show
 					(
 					this,
 					"File does not exist, set file?",
@@ -349,7 +352,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				MessageBox.Show
+				MessageBoxEx.Show
 					(
 					this,
 					"File does not exist, no data has been sent!",

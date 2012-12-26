@@ -21,9 +21,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Security.Permissions;
@@ -34,9 +40,12 @@ using MKY.Windows.Forms;
 using YAT.Gui.Utilities;
 using YAT.Model.Types;
 
+#endregion
+
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 	public partial class MultiLineBox : Form
 	{
 		#region Fields

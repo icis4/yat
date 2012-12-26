@@ -21,12 +21,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
+	[Serializable]
 	public class EolCommentSettings : MKY.Settings.SettingsItem
 	{
 		private bool skipComment;
@@ -110,6 +113,8 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("Indicators")]
 		public virtual List<string> Indicators
 		{

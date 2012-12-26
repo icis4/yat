@@ -22,8 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -36,14 +35,17 @@ namespace YAT.Domain
 	public struct TextLineSendDelay
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
 		/// <summary>Delay in ms.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Delay")]
 		public int Delay;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("LineInterval")]
 		public int LineInterval;
 
@@ -133,10 +135,12 @@ namespace YAT.Domain
 	public struct WaitForResponse
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
 		/// <summary>Wait timeout in ms.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Timeout")]
 		public int Timeout;
 

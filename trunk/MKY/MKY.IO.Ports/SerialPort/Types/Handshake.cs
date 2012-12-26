@@ -35,6 +35,7 @@ namespace MKY.IO.Ports
 	/// I think flow control would be the better term, no clue why .NET uses handshake.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
+	[Serializable]
 	public class HandshakeEx : EnumEx
 	{
 		#region String Definitions

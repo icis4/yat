@@ -21,10 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -104,18 +112,20 @@ namespace YAT.Domain
 				foreach (RawElement re in this.queue.ToArray())
 					to.AddRange(re.Data);
 			}
+
 			return (to.ToArray());
 		}
 
 		/// <summary></summary>
-		public virtual List<RawElement> ToElements()
+		public virtual ReadOnlyCollection<RawElement> ToElements()
 		{
 			List<RawElement> to;
 			lock (this.queue)
 			{
 				to = new List<RawElement>(this.queue);
 			}
-			return (to);
+
+			return (to.AsReadOnly());
 		}
 
 		/// <summary></summary>

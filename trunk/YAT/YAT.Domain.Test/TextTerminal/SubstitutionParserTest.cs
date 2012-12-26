@@ -65,11 +65,12 @@ namespace YAT.Domain.Test.TextTerminal
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
 		[Test, TestCaseSource(typeof(SubstitutionParserTestData), "TestCases")]
-		public virtual void TestSubstitutionParser(CharSubstitution substitution, string inputString, byte[] expectedBytes)
+		public virtual void TestSubstitutionParser(CharSubstitution substitution, string s, byte[] expectedBytes)
 		{
 			Domain.Parser.SubstitutionParser parser = new Domain.Parser.SubstitutionParser();
-			byte[] actualBytes = parser.Parse(inputString, substitution);
+			byte[] actualBytes = parser.Parse(s, substitution);
 			Assert.AreEqual(expectedBytes, actualBytes);
 		}
 

@@ -30,6 +30,7 @@ using MKY.Text;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
+	[Serializable]
 	public class TextTerminalSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>

@@ -112,13 +112,11 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo()
 		{
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(string path)
 		{
@@ -130,7 +128,6 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serialNumber;
@@ -140,7 +137,6 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(int vendorId, int productId, string serialNumber)
 		{
 			string path, manufacturer, product;
@@ -149,7 +145,6 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serialNumber)
 		{
@@ -174,7 +169,6 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(DeviceInfo rhs)
 		{

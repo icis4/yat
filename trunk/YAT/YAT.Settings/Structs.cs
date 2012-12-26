@@ -22,8 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Settings
@@ -33,10 +32,12 @@ namespace YAT.Settings
 	public struct SaveInfo
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("TimeStamp")]
 		public DateTime TimeStamp;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("UserName")]
 		public string UserName;
 
