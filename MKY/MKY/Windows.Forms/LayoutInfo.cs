@@ -28,6 +28,7 @@ namespace MKY.Windows.Forms
 	/// <remarks>
 	/// Must be a reference type to ease handling within the layout dictionary.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "The fields are public for the ease of the implementation.")]
 	public class LayoutInfo
 	{
 		/// <summary></summary>

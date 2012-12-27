@@ -36,10 +36,10 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-using NUnit.Framework;
-
 using MKY.Diagnostics;
 using MKY.Xml.Schema;
+
+using NUnit.Framework;
 
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -60,7 +60,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		private static readonly SettingsFilePaths staticPaths = new SettingsFilePaths();
+		private static readonly SettingsFilePaths StaticPaths = new SettingsFilePaths();
 
 		#endregion
 
@@ -79,8 +79,8 @@ namespace YAT.Settings.Test
 		public virtual void ArchiveLocalUserSettings()
 		{
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(LocalUserSettingsRoot));
-			ArchiveSchema (staticPaths.Path, "LocalUserSettingsSchema",  document);
-			ArchiveDefault(staticPaths.Path, "LocalUserSettingsDefault", document);
+			ArchiveSchema (StaticPaths.Path, "LocalUserSettingsSchema",  document);
+			ArchiveDefault(StaticPaths.Path, "LocalUserSettingsDefault", document);
 		}
 
 		#endregion
@@ -95,8 +95,8 @@ namespace YAT.Settings.Test
 		public virtual void ArchiveTerminalSettings()
 		{
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(TerminalSettingsRoot));
-			ArchiveSchema (staticPaths.Path, "TerminalSettingsSchema",  document);
-			ArchiveDefault(staticPaths.Path, "TerminalSettingsDefault", document);
+			ArchiveSchema (StaticPaths.Path, "TerminalSettingsSchema",  document);
+			ArchiveDefault(StaticPaths.Path, "TerminalSettingsDefault", document);
 		}
 
 		#endregion
@@ -111,8 +111,8 @@ namespace YAT.Settings.Test
 		public virtual void ArchiveWorkspaceSettings()
 		{
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(WorkspaceSettingsRoot));
-			ArchiveSchema (staticPaths.Path, "WorkspaceSettingsSchema",  document);
-			ArchiveDefault(staticPaths.Path, "WorkspaceSettingsDefault", document);
+			ArchiveSchema (StaticPaths.Path, "WorkspaceSettingsSchema",  document);
+			ArchiveDefault(StaticPaths.Path, "WorkspaceSettingsDefault", document);
 		}
 
 		#endregion
@@ -126,7 +126,7 @@ namespace YAT.Settings.Test
 
 		private static XmlDocument CreateSchemaAndDefaultDocument(Type type)
 		{
-			ConstructorInfo ci = type.GetConstructor(new System.Type[] { });
+			ConstructorInfo ci = type.GetConstructor(new Type[] { });
 			object obj = ci.Invoke(new object[] { });
 
 			// Serialize the empty object tree into a string.

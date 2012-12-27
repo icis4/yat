@@ -39,7 +39,7 @@ namespace MKY
 		/// <summary>
 		/// Converts the value into a binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value)
 		{
@@ -49,7 +49,7 @@ namespace MKY
 		/// <summary>
 		/// Converts the value into a binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value, ulong max)
 		{

@@ -202,6 +202,7 @@ namespace MKY.Recent
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		/// <typeparam name="MT">The underlying type of the recent item.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Any better idea to implement Compare() for generic types?")]
 		[SuppressMessage("Microsoft.Naming", "CA1715:IdentifiersShouldHaveCorrectPrefix", MessageId = "T", Justification = "MT is used to clearly show that this type only applies to this method.")]
 		public static int Compare<MT>(RecentItem<MT> otherA, RecentItem<MT> otherB)

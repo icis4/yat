@@ -27,10 +27,10 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 
+using MKY.IO.Serial.Socket;
+
 using NUnit;
 using NUnit.Framework;
-
-using MKY.IO.Serial.Socket;
 
 namespace MKY.IO.Serial.Socket.Test
 {

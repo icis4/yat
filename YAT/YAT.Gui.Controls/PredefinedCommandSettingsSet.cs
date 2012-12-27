@@ -233,6 +233,8 @@ namespace YAT.Gui.Controls
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. ComboBox.Leave()
 		/// 2. ComboBox.Validating()
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void textBox_Command_Leave(object sender, System.EventArgs e)
 		{
@@ -252,6 +254,8 @@ namespace YAT.Gui.Controls
 		/// Event sequence when focus is leaving, e.g. TAB is pressed.
 		/// 1. ComboBox.Leave()
 		/// 2. ComboBox.Validating()
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void textBox_Command_Validating(object sender, CancelEventArgs e)
 		{

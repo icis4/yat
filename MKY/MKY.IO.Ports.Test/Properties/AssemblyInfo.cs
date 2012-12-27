@@ -52,7 +52,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.IO.Ports.Test.SerialPort")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.IO.Ports.Test.SerialPort", Justification = "Namespace for orthogonality of test and testee namespaces.")]
 
 //==================================================================================================
 // End of

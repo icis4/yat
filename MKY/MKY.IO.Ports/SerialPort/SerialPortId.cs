@@ -124,7 +124,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		/// <remarks>
 		/// This property can be used as default port. Using <see cref="FirstAvailablePort"/>
-		/// below is way less performant since it needs to search for available ports. Searching
+		/// below is way worse performing since it needs to search for available ports. Searching
 		/// for available ports takes quite some time, especially if checking whether the ports
 		/// are in use.
 		/// </remarks>

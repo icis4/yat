@@ -38,6 +38,15 @@ using MKY.Diagnostics;
 
 #endregion
 
+#region Module-level StyleCop suppressions
+//==================================================================================================
+// Module-level StyleCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification", Justification = "Large blocks of module-level FxCop suppressions which were copy-pasted out of FxCop.")]
+
+#endregion
+
 #region Module-level FxCop suppressions
 //==================================================================================================
 // Module-level FxCop suppressions
@@ -215,12 +224,14 @@ namespace MKY.Win32
 	/// <remarks>
 	/// This class is partly based on GenericHid of Jan Axelson's Lakeview Research.
 	/// Visit GenericHid on http://www.lvr.com/hidpage.htm for details.
-	/// <see cref="MKY.Win32.Hid"/> needs to modify the structure and contents of
-	/// GenericHid due to the following reasons:
+	/// This class needed to modify the original structure and contents of GenericHid
+	/// due to the following reasons:
 	/// - Suboptimal structure of the original GenericHid project
 	/// - Missing features required for YAT
 	/// - Potential reuse of this class for other services directly using the Win32 API
+	/// DeviceManagement and Hid types and methods have been split into separate classes.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Don't care about suboptimal documentation of Win32 API items.")]
 	public static class Hid
 	{
 		#region Native
@@ -234,7 +245,8 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
@@ -368,9 +380,7 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
@@ -390,9 +400,9 @@ namespace MKY.Win32
 			public static extern bool HidD_FlushQueue([In] SafeFileHandle HidDeviceObject);
 
 			/// <summary>
-			/// Frees the buffer reserved by HidD_GetPreparsedData.
+			/// Frees the buffer reserved by <see cref="HidD_GetPreparsedData"/>.
 			/// </summary>
-			/// <param name="PreparsedData">A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
+			/// <param name="PreparsedData">A pointer to the pre-parsed data structure returned by <see cref="HidD_GetPreparsedData"/>.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -621,7 +631,7 @@ namespace MKY.Win32
 			/// out the specific capabilities of the device. For a custom device where the software
 			/// knows what the device is capable of, this call may be unneeded.
 			/// </summary>
-			/// <param name="PreparsedData">A pointer returned by HidD_GetPreparsedData.</param>
+			/// <param name="PreparsedData">A pointer returned by <see cref="HidD_GetPreparsedData"/>.</param>
 			/// <param name="Capabilities">A pointer to a HIDP_CAPS structure.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
@@ -635,7 +645,7 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="ReportType">A report type enumerator from hidpi.h.</param>
 			/// <param name="ValueCaps">A pointer to a buffer for the returned array.</param>
-			/// <param name="PreparsedData"> A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
+			/// <param name="PreparsedData"> A pointer to the pre-parsed data structure returned by <see cref="HidD_GetPreparsedData"/>.</param>
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[CLSCompliant(false)]
@@ -799,6 +809,7 @@ namespace MKY.Win32
 		/// - How can culture specific strings be accessed? There must be something like SetDescriptor()/GetDescriptor()
 		///   that takes an index and a text ID as argument.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with .dll?")]
 		private static bool GetString(SafeFileHandle deviceHandle, GetHidStringDelegate method, out string hidString)
 		{
 			if (!deviceHandle.IsInvalid)
@@ -834,8 +845,10 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Windows 98 Standard Edition does not support the following:
 		/// - Interrupt OUT transfers (WriteFile uses control transfers and Set_Report)
-		/// - HidD_GetNumInputBuffers and HidD_SetNumInputBuffers
+		/// - <see cref="NativeMethods.HidD_GetNumInputBuffers"/> and <see cref="NativeMethods.HidD_SetNumInputBuffers"/>
 		/// (Not yet tested on a Windows 98 Standard Edition system.)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="numberOfInputBuffers">An integer to hold the returned value.</param>
@@ -846,7 +859,7 @@ namespace MKY.Win32
 			bool success = false;
 			if (!Version.IsWindows98Standard)
 			{
-				UInt32 numberBuffers;
+				uint numberBuffers;
 				success = NativeMethods.HidD_GetNumInputBuffers(deviceHandle, out numberBuffers);
 				numberOfInputBuffers = (int)numberBuffers;
 			}
@@ -865,8 +878,10 @@ namespace MKY.Win32
 		/// <remarks>
 		/// Windows 98 Standard Edition does not support the following:
 		/// - Interrupt OUT transfers (WriteFile uses control transfers and Set_Report)
-		/// - HidD_GetNumInputBuffers and HidD_SetNumInputBuffers
+		/// - <see cref="NativeMethods.HidD_GetNumInputBuffers"/> and <see cref="NativeMethods.HidD_SetNumInputBuffers"/>
 		/// (Not yet tested on a Windows 98 Standard Edition system.)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to the device.</param>
 		/// <param name="numberOfInputBuffers">The requested number of input reports.</param>
@@ -874,7 +889,7 @@ namespace MKY.Win32
 		public static bool SetNumberOfInputBuffers(SafeFileHandle deviceHandle, int numberOfInputBuffers)
 		{
 			if (!Version.IsWindows98Standard)
-				return (NativeMethods.HidD_SetNumInputBuffers(deviceHandle, (UInt32)numberOfInputBuffers));
+				return (NativeMethods.HidD_SetNumInputBuffers(deviceHandle, (uint)numberOfInputBuffers));
 			else
 				return (false); // Not supported under Windows 98 Standard Edition.
 		}
@@ -932,6 +947,7 @@ namespace MKY.Win32
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="capabilities">An HIDP_CAPS structure.</param>
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native pointer.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetDeviceCapabilities(SafeFileHandle deviceHandle, ref NativeTypes.HIDP_CAPS capabilities)
 		{

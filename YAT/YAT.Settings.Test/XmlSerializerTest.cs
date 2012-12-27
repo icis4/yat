@@ -30,11 +30,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using NUnit.Framework;
-
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Recent;
+
+using NUnit.Framework;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;

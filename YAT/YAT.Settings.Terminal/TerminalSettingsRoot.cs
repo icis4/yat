@@ -33,37 +33,10 @@ namespace YAT.Settings.Terminal
 	[XmlRoot("Settings")]
 	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
 	{
-		/// <summary>
-		/// Alternate XML elements for backward compatibility with old settings.
-		/// </summary>
-		/// <remarks>
-		/// \remind (2008-06-07 / mky) (2 hours to the first Euro2008 game :-)
-		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
-		/// in a future version. Such approach would be benefitial in terms of modularity because the
-		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
-		/// not the case currently.
-		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
-		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
-		/// due to limitation described above.
-		/// \remind (2012-10-29 / mky)
-		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
-		/// alternate the depth of the path as well. Such alternate is required for the commented
-		/// case with 'EolComment' below.
-		/// </remarks>
-		private static readonly MKY.Xml.AlternateXmlElement[] alternateXmlElements =
-			{
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO",                               }, "Endianness",                                new string[] { "Endianess" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",                               new string[] { "Handshake" } ),
-			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal",                                     }, "Status",                                    new string[] { "Display" } ), */
-			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
-			};
-
-		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
+		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.3.1";
 
-		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
+		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
 
 		private bool autoSaved;
@@ -204,11 +177,38 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2008-06-07 / mky) (2 hours to the first Euro2008 game :-)
+		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
+		/// in a future version. Such approach would be beneficial in terms of modularity because the
+		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
+		/// not the case currently.
+		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
+		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
+		/// due to limitation described above.
+		/// \remind (2012-10-29 / mky)
+		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
+		/// alternate the depth of the path as well. Such alternate is required for the commented
+		/// case with 'EolComment' below.
+		/// </remarks>
+		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
+			{
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO",                               }, "Endianness",                                new string[] { "Endianess" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",                               new string[] { "Handshake" } ),
+			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal",                                     }, "Status",                                    new string[] { "Display" } ), */
+			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
+			};
+
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual MKY.Xml.AlternateXmlElement[] AlternateXmlElements
 		{
-			get { return (alternateXmlElements); }
+			get { return (StaticAlternateXmlElements); }
 		}
 
 		#endregion

@@ -61,7 +61,7 @@ namespace YAT.Domain
 		{
 			this.capacity = capacity;
 			this.currentLine = new DisplayLine();
-			// this.dataCount = 0;
+		////this.dataCount = 0;
 		}
 
 		/// <summary></summary>
@@ -170,7 +170,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual ReadOnlyCollection<DisplayLine> ToLines()
 		{
-			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray());
+			List<DisplayLine> lines = new List<DisplayLine>(ToArray());
 
 			// Add current line if it contains elements
 			if (this.currentLine.Count > 0)

@@ -42,6 +42,7 @@ namespace MKY
 		/// <summary>
 		/// Utility method that can be applied to unused events to prevent compiler warnings.
 		/// </summary>
+		/// <typeparam name="T">The type of the generic event handler.</typeparam>
 		public static void PreventCompilerWarning<T>(EventHandler<T> handler) where T : EventArgs
 		{
 			if (handler != null)
@@ -76,6 +77,7 @@ namespace MKY
 		/// <summary>
 		/// Utility method that can be applied to unused fields to prevent compiler warnings.
 		/// </summary>
+		/// <typeparam name="T">The type of the object.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "It is the goal of this method to modify a variable outside this method, and 'out' is better suited than 'ref' as it doesn't require the variable to be initialized.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning<T>(out T obj)

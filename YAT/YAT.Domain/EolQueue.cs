@@ -44,7 +44,7 @@ namespace YAT.Domain
 	/// <remarks>
 	/// Implementation used to evaluate match on request only. However, when adding
 	/// <see cref="IsPartlyMatch"/>, evaluation was moved to <see cref="Enqueue"/> and enqueue
-	/// was optimized. This implementation is far more performant if properties are regularly
+	/// was optimized. This implementation is far better performing if properties are regularly
 	/// read.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "This class indeed implements a queue, but not using inheritance.")]

@@ -34,6 +34,7 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[Serializable]
 	public class SocketSettings : MKY.Settings.SettingsItem
 	{

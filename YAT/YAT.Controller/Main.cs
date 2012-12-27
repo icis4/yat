@@ -309,7 +309,9 @@ namespace YAT.Controller
 		///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
 		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
 		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop doesn't seem to be able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)
 		{
 			MainResult mainResult = MainResult.Success;
@@ -702,13 +704,7 @@ namespace YAT.Controller
 			foreach (string line in Return)
 				sb.AppendLine(line);
 
-			MessageBoxEx.Show
-				(
-				sb.ToString(),
-				ApplicationInfo.ProductNameLong,
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Warning
-				);
+			MessageBoxEx.Show(sb.ToString(), ApplicationInfo.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
 		#endregion

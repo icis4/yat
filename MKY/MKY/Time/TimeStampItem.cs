@@ -30,6 +30,7 @@ namespace MKY.Time
 	/// <summary>
 	/// Value pair.
 	/// </summary>
+	/// <typeparam name="T">The type of the time stamped item.</typeparam>
 	[Serializable]
 	public struct TimeStampItem<T>
 	{

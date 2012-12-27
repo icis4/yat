@@ -53,9 +53,10 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class CommandLineArgs : ArgsHandler
 	{
-		private const string VisibilitySuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 		private const string NamingSuppressionJustification = "The field/property shall clearly state what it represents.";
 
 		/// <summary></summary>

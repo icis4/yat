@@ -26,14 +26,10 @@
 // Using
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
-
-using YAT.Settings.Terminal;
 
 #endregion
 
@@ -54,6 +50,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[Test]
 		public virtual void TestClearCompleteLine()
 		{
@@ -104,6 +101,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[Test]
 		public virtual void TestClearIncompleteLine()
 		{

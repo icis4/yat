@@ -153,6 +153,8 @@ namespace MKY.IO
 		/// Returns directoryPath2 if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryPaths(string directoryPath1, string directoryPath2)
 		{
@@ -172,6 +174,8 @@ namespace MKY.IO
 		/// Returns filePath if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
@@ -194,6 +198,8 @@ namespace MKY.IO
 		/// Returns directoryPath if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
@@ -213,6 +219,8 @@ namespace MKY.IO
 		/// Returns filePath2 if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static PathCompareResult CompareFilePaths(string filePath1, string filePath2)
 		{
@@ -239,6 +247,8 @@ namespace MKY.IO
 		/// Returns directoryPath2 if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineDirectoryPaths(string directoryPath1, string directoryPath2)
 		{
@@ -258,6 +268,8 @@ namespace MKY.IO
 		/// Returns filePath if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
@@ -281,6 +293,8 @@ namespace MKY.IO
 		/// Returns directoryPath if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
@@ -300,6 +314,8 @@ namespace MKY.IO
 		/// Returns filePath2 if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static string CombineFilePaths(string filePath1, string filePath2)
 		{

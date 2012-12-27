@@ -40,12 +40,12 @@ using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
 
+using YAT.Model.Settings;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
-
-using YAT.Model.Settings;
 
 #endregion
 
@@ -626,6 +626,8 @@ namespace YAT.Model
 		/// 3. Intentionally save the workspace as
 		/// => The user expects to save the terminal as well.
 		/// => No saving the terminal would lead to a normal file referring to an auto file!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual bool SaveAs(string filePath)
 		{
@@ -769,6 +771,8 @@ namespace YAT.Model
 		/// Save and close must be done sequentially:
 		/// 1. Save terminals and workspace
 		/// 2. Close terminals and workspace, but only if save was successful
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual bool Close(bool isMainExit)
 		{
@@ -1468,7 +1472,7 @@ namespace YAT.Model
 
 		/// <summary>
 		/// Returns the terminal with the given sequential index. The sequential index relates to the
-		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The sequenical
+		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The sequential
 		/// index starts at 1 and is unique throughout the execution of the program. If no terminal
 		/// with this index exists, <c>null</c> is returned.
 		/// </summary>

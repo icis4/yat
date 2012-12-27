@@ -127,7 +127,10 @@ namespace MKY.IO.Serial.SerialPort
 	/// 
 	/// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
 	/// ============================================================================================
+	/// 
+	/// Saying hello to StyleCop ;-.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
 	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable
 	{
@@ -147,26 +150,26 @@ namespace MKY.IO.Serial.SerialPort
 
 		#endregion
 
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int SendQueueInitialCapacity = 4096;
+		private const int ReceiveQueueInitialCapacity = 4096;
+
+		private const int AliveInterval = 500;
+
+		private const string Undefined = "<Undefined>";
+
+		#endregion
+
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
 		//==========================================================================================
 
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const int SendQueueInitialCapacity    = 4096;
-		private const int ReceiveQueueInitialCapacity = 4096;
-
-		private const int AliveInterval = 500;
-
-		private const string Undefined = "<Undefined>";
 
 		#endregion
 

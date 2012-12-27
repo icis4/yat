@@ -43,6 +43,7 @@ using MKY.Windows.Forms;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("HostNameOrAddressChanged")]
 	public partial class SocketSelection : UserControl
@@ -308,7 +309,7 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
@@ -346,16 +347,20 @@ namespace YAT.Gui.Controls
 						}
 						catch (ArgumentException ex)
 						{
+							string message =
+								"Remote host name or address is invalid!" + Environment.NewLine + Environment.NewLine +
+								"System error message:" + Environment.NewLine +
+								ex.Message;
+
 							MessageBoxEx.Show
 								(
 								this,
-								"Remote host name or address is invalid!" + Environment.NewLine + Environment.NewLine +
-								"System error message:" + Environment.NewLine +
-								ex.Message,
+								message,
 								"Invalid Input",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Error
 								);
+
 							e.Cancel = true;
 						}
 					}
@@ -363,7 +368,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
@@ -388,16 +393,20 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
+					string message =
+						"Remote port is invalid, valid values are numbers from " +
+						System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".";
+
 					MessageBoxEx.Show
 						(
 						this,
-						"Remote port is invalid, valid values are numbers from " +
-							System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-							System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".",
+						message,
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 						);
+
 					e.Cancel = true;
 				}
 			}
@@ -414,7 +423,7 @@ namespace YAT.Gui.Controls
 			SetLocalInterfaceList();
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
@@ -435,16 +444,20 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
+					string message =
+						"Local port is invalid, valid values are numbers from " +
+						System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".";
+
 					MessageBoxEx.Show
 						(
 						this,
-						"Local port is invalid, valid values are numbers from " +
-							System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-							System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".",
+						message,
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 						);
+
 					e.Cancel = true;
 				}
 			}

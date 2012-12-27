@@ -271,9 +271,9 @@ namespace MKY.IO.Usb
 		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
 		/// <remarks>
-		/// If multiple devices with the same VID and PID are connected to the sytem, the first device is returned.
+		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
 		/// </remarks>
-		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
+		/// <returns>Retrieved device info, or <c>null</c> if no appropriate device was found.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static DeviceInfo GetDeviceInfoFromVidAndPid(int vendorId, int productId)
@@ -290,14 +290,14 @@ namespace MKY.IO.Usb
 		/// Returns the information of the device with the given VID and PID.
 		/// </summary>
 		/// <remarks>
-		/// If multiple devices with the same VID and PID are connected to the sytem, the first device is returned.
+		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
 		/// </remarks>
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
-		/// <param name="path">Retrieved system path, or "" if no valable device found.</param>
-		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
-		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
-		/// <param name="serialNumber">Retrieved serial number, or "" if no valable device found.</param>
+		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
+		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
+		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
+		/// <param name="serialNumber">Retrieved serial number, or "" if no appropriate device was found.</param>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -331,7 +331,7 @@ namespace MKY.IO.Usb
 		/// Returns the information of the device with the given VID and PID and serial number.
 		/// or <c>null</c> if no device could be found on the give path.
 		/// </summary>
-		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
+		/// <returns>Retrieved device info, or <c>null</c> if no appropriate device was found.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber)
@@ -350,9 +350,9 @@ namespace MKY.IO.Usb
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
 		/// <param name="serialNumber">Given serial number.</param>
-		/// <param name="path">Retrieved system path, or "" if no valable device found.</param>
-		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
-		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
+		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
+		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
+		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -808,7 +808,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -823,7 +823,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

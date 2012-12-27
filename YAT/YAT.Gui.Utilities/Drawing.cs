@@ -37,10 +37,10 @@ using System.Windows.Forms;
 namespace YAT.Gui.Utilities
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
 	public static class Drawing
 	{
 		private struct DrawingElements
@@ -74,7 +74,7 @@ namespace YAT.Gui.Utilities
 		private static StringFormat monitorVirtualStringFormat;
 
 		/// <summary>
-		/// Use GenericTypographic format to be able to measure characters indiviually,
+		/// Use GenericTypographic format to be able to measure characters individually,
 		///   i.e. without a small margin before and after the character.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Hmm... How can the logic below be implemented in the initializer?")]

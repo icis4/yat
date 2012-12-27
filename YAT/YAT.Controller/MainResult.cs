@@ -30,7 +30,7 @@ namespace YAT.Controller
 	#pragma warning disable 1591
 
 	/// <summary>
-	/// Enummeration of all the main result return codes.
+	/// Enumeration of all the main result return codes.
 	/// </summary>
 	public enum MainResult
 	{

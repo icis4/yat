@@ -178,7 +178,7 @@ namespace YAT.Model.Settings
 		// Comparision ;-)
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
+		[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg! But unfortunately StyleCop doesn't allow a suppression at the constant itself. So what...")]
 		private const string EasterEggCommand = @"\easteregg";
 
 		/// <summary></summary>
@@ -190,10 +190,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public static string EasterEggCommandText
 		{
-			get
-			{
-				return (":-)");
-			}
+			get { return (":-)"); }
 		}
 
 		#endregion

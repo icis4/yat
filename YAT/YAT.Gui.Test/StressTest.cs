@@ -32,11 +32,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
+using MKY.IO;
+using MKY.Settings;
+
 using NUnit;
 using NUnit.Framework;
-
-using MKY.Settings;
-using MKY.IO;
 
 using YAT.Controller;
 using YAT.Domain;

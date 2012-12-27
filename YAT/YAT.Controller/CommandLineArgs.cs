@@ -36,17 +36,10 @@ using MKY.CommandLine;
 namespace YAT.Controller
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class CommandLineArgs : Model.CommandLineArgs
 	{
-		#region Constants
-
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string SuppressionJustification = "This is a simple container for command line args.";
-
-		#endregion
+		private const string SuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		#region Public Fields = Command Line Arguments
 		//==========================================================================================

@@ -29,15 +29,16 @@ using System.Net;
 using System.Text;
 using System.Xml.Serialization;
 
-using NUnit.Framework;
-
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Net;
 
+using NUnit.Framework;
+
 namespace MKY.Test.Net
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	public static class IPHostTestData
 	{
 		#region Constants
@@ -130,7 +131,6 @@ namespace MKY.Test.Net
 		}
 
 		/// <summary></summary>
-
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostAddressEqualsAddress(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)

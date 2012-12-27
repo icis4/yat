@@ -23,7 +23,7 @@
 namespace MKY
 {
 	/// <summary>
-	/// A default delegate that tkaes no argument and has no return value.
+	/// A default delegate that takes no argument and has no return value.
 	/// </summary>
 	public delegate void VoidDelegateVoid();
 }

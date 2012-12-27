@@ -41,6 +41,7 @@ namespace MKY
 		/// Creates an array using <see cref="Array.CreateInstance(Type, int)"/> and initializes
 		/// the given number of array elements with the given initial value.
 		/// </summary>
+		/// <typeparam name="T">The type of the array's items.</typeparam>
 		public static T[] CreateAndInitializeInstance<T>(int length, T initialValue)
 		{
 			T[] a = (T[])Array.CreateInstance(typeof(T), length);

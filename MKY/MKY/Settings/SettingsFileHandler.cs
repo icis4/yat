@@ -213,6 +213,8 @@ namespace MKY.Settings
 		///  > Creating an XSLT fully or partly automatically requires an (expensive) tool
 		///  > Current solution isn't perfect but good enough and easy to handle (no efforts)
 		///  > Current solution also works for other software that makes use of MKY or YAT code
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)

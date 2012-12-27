@@ -176,11 +176,11 @@ namespace YAT.Gui.Controls
 			if ((client.Y < 0) || (client.Y > Height))
 				return (0);
 
-			int ySum = 0;
+			int accumulatedHeight = 0;
 			for (int i = 0; i < this.buttons_commands.Count; i++)
 			{
-				ySum += this.buttons_commands[i].Height;
-				if (client.Y <= ySum)
+				accumulatedHeight += this.buttons_commands[i].Height;
+				if (client.Y <= accumulatedHeight)
 					return (i + 1); // commmand ID = 1..max
 			}
 			return (0);

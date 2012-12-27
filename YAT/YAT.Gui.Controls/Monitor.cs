@@ -33,8 +33,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Text;
 using System.Security.Permissions;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -697,6 +697,9 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Note that the 'MeasureItem' event measures the item height only and is not needed for 'OwnerDrawnFixed'.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		private void fastListBox_LineNumbers_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			unchecked
@@ -777,6 +780,10 @@ namespace YAT.Gui.Controls
 		///    the next update. See <see cref="UpdateHasToBePerformed()"/> for details.
 		/// 
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to deal with abbreviations or extensions such as 'ms'...")]
 		private void fastListBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			unchecked
@@ -992,7 +999,7 @@ namespace YAT.Gui.Controls
 			sb.Append(this.txLineCountStatus);
 			sb.Append(" @ ");
 			sb.Append(this.txByteRateStatus);
-			sb.Append("/s");  // " B/s" is not really readable, compare 1024/s vs 1024 B/s,
+			sb.Append("/s");  // " B/s" is not really readable, compare 1024/s vs. 1024 B/s,
 			sb.Append(" | "); //   and consider that the values may be flickering.
 			sb.Append(this.txLineRateStatus);
 			sb.Append("/s");
@@ -1204,7 +1211,7 @@ namespace YAT.Gui.Controls
 		/// The update rate is calculated on a non-linear basis that represents the typical speeds
 		/// of Rx/Tx data and the human eye. The function is defined as follows:
 		/// 
-		///       update interval in ms
+		///    update interval in milliseconds
 		///                 ^
 		/// max = 1000      | ------------ x
 		///                 |              |
@@ -1218,7 +1225,7 @@ namespace YAT.Gui.Controls
 		/// At 1000 bytes per second or more, the update is done once a second.
 		/// Linear inbetween, for ease of implementation the 1:1 value is used.
 		/// 
-		/// An alternativ solution would be to measure the effective duration of
+		/// An alternative solution would be to measure the effective duration of
 		/// an update and then adjust the rate on the duration.Could be tried if
 		/// the calculation applied now doesn't work well.
 		/// </summary>

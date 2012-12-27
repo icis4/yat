@@ -224,12 +224,15 @@ namespace YAT.Gui.Forms
 					{
 						if (showErrorModally)
 						{
+							string message =
+								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
+								@"Use ""YAT.exe /?"" for command line help.";
+
 							MessageBoxEx.Show
 								(
 								this,
-								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
-								@"Use ""YAT.exe /?"" for command line help.",
-								@"Invalid Command Line",
+								message,
+								"Invalid Command Line",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
 								);
@@ -244,8 +247,8 @@ namespace YAT.Gui.Forms
 							MessageBoxEx.Show
 								(
 								this,
-								@"YAT could not successfully be started with the given settings in the current environment!",
-								@"Start Warning",
+								"YAT could not successfully be started with the given settings in the current environment!",
+								"Start Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
 								);
@@ -260,8 +263,8 @@ namespace YAT.Gui.Forms
 							MessageBoxEx.Show
 								(
 								this,
-								@"YAT could not successfully execute the requested operation!",
-								@"Execution Warning",
+								"YAT could not successfully execute the requested operation!",
+								"Execution Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
 								);
@@ -876,11 +879,13 @@ namespace YAT.Gui.Forms
 
 		/// <summary>
 		/// Makes sure that context menus are at the right position upon first drop down. This is
-		/// a fix, it should be that way by default. However, due to some resaons, they somtimes
+		/// a fix, it should be that way by default. However, due to some reasons, they sometimes
 		/// appear somewhere at the top-left corner of the screen if this fix isn't done.
 		/// </summary>
 		/// <remarks>
 		/// Is this a .NET bug?
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void contextMenuStrip_FileRecent_Paint(object sender, PaintEventArgs e)
 		{

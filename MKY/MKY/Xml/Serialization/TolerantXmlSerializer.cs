@@ -95,7 +95,7 @@ namespace MKY.Xml.Serialization
 				}
 				else
 				{
-					ConstructorInfo ci = this.type.GetConstructor(new System.Type[] { });
+					ConstructorInfo ci = this.type.GetConstructor(new Type[] { });
 					if (ci != null)
 						obj = ci.Invoke(new object[] { });
 					else
@@ -148,7 +148,7 @@ namespace MKY.Xml.Serialization
 		/// <remarks>
 		/// For example, it allows that XML elements in the input have a different schema type than
 		/// the required output type. This is pretty handy if a settings file slightly changes over
-		/// time, e.g. an enummerated settings value is replaced by an integer value. In such case,
+		/// time, e.g. an enumerated settings value is replaced by an integer value. In such case,
 		/// <see cref="XmlSerializer.Deserialize(Stream)"/> throws an exception. In contrast, this
 		/// implementation handles the mismatch by simply setting the new value to its default.
 		/// </remarks>

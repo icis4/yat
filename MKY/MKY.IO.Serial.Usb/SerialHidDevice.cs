@@ -44,24 +44,24 @@ namespace MKY.IO.Serial.Usb
 	/// <summary></summary>
 	public class SerialHidDevice : IIOProvider, IDisposable
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int SendQueueInitialCapacity = 4096;
+		private const int ReceiveQueueInitialCapacity = 4096;
+
+		private const string Undefined = "<Undefined>";
+
+		#endregion
+
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
 		//==========================================================================================
 
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const int SendQueueInitialCapacity    = 4096;
-		private const int ReceiveQueueInitialCapacity = 4096;
-
-		private const string Undefined = "<Undefined>";
 
 		#endregion
 

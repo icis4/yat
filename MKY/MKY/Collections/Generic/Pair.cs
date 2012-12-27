@@ -30,6 +30,8 @@ namespace MKY.Collections.Generic
 	/// <summary>
 	/// Value pair.
 	/// </summary>
+	/// <typeparam name="T1">The first type of the pair.</typeparam>
+	/// <typeparam name="T2">The second type of the pair.</typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1", Justification = "T1 relates to Value1.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
 	[Serializable]

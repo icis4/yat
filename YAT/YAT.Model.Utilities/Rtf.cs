@@ -270,9 +270,8 @@ namespace YAT.Model.Utilities
 			string line = null;
 			while ((lineCount < linesPerPage) && ((line = this.reader.ReadLine()) != null))
 			{
-				float yPos = 0;
-				yPos = e.MarginBounds.Top + (lineCount * this.richTextProvider.Font.GetHeight(e.Graphics));
-				e.Graphics.DrawString(line, this.richTextProvider.Font, Brushes.Black, e.MarginBounds.Left, yPos, new StringFormat());
+				float y = e.MarginBounds.Top + (lineCount * this.richTextProvider.Font.GetHeight(e.Graphics));
+				e.Graphics.DrawString(line, this.richTextProvider.Font, Brushes.Black, e.MarginBounds.Left, y, new StringFormat());
 				lineCount++;
 			}
 

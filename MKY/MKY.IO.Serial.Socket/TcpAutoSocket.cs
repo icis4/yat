@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.Socket
 	/// YAT.YAT.Main(string[] commandLineArgs = {string[0]}) Line 63
 	/// 
 	/// b) As a result, the first AutoSocket shuts down, the second changes from 'Accepted' to
-	///    'Listening' and tries to sychronize from the ALAZ socket event to the GUI/main thread:
+	///    'Listening' and tries to synchronize from the ALAZ socket event to the GUI/main thread:
 	/// 
 	/// MKY.EventHelper.InvokeSynchronized(System.ComponentModel.ISynchronizeInvoke sinkTarget = {YAT.Gui.Forms.Terminal}, System.Delegate sink = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 319
 	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 163
@@ -97,7 +97,7 @@ namespace MKY.IO.Serial.Socket
 	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 535
 	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(object sender = {System.Net.Sockets.Socket}, System.Net.Sockets.SocketAsyncEventArgs e = null) Line 1501
 	/// 
-	/// Very simliar issues existed when stopping <see cref="TcpClient"/> or <see cref="TcpServer"/>
+	/// Very similar issues existed when stopping <see cref="TcpClient"/> or <see cref="TcpServer"/>
 	/// objects stand-alone. See remarks of these classes for how all these issues have been solved.
 	/// </remarks>
 	public class TcpAutoSocket : IIOProvider, IDisposable

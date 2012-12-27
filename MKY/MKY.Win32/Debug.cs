@@ -50,7 +50,7 @@ namespace MKY.Win32
 		// Native > Constants
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		private static class NativeConstants
 		{
 			public const Int32 FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
@@ -63,8 +63,7 @@ namespace MKY.Win32
 		// Native > External Functions
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		private static class NativeMethods
 		{
 			private const string KERNEL_DLL = "kernel32.dll";

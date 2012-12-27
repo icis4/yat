@@ -28,9 +28,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-using NUnit.Framework;
-
 using MKY.Settings;
+
+using NUnit.Framework;
 
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -41,6 +41,7 @@ using YAT.Settings.Workspace;
 namespace YAT.Settings.Test
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the test case identification/name.")]
 	[TestFixture]
 	public class FileVersionsTest
 	{

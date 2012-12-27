@@ -33,10 +33,10 @@ namespace YAT.Settings.Application
 	[XmlRoot("LocalUserSettings")]
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem
 	{
-		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
+		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.3.1";
 
-		/// <remarks>Is basically const, but must be a normal variable for automatic XML serialization.</remarks>
+		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
 
 		private Settings.GeneralSettings general;

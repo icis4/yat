@@ -37,17 +37,18 @@ using MKY.CommandLine;
 namespace MKY.Test.CommandLine
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs1 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "BBB", ShortName = "a")]
 		public string BBB;
 
@@ -59,17 +60,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs2 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "b")]
 		public string BBB;
 
@@ -81,17 +83,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs3 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string BBB;
 
@@ -103,17 +106,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs4 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Name = "BBB", ShortNames = new string[] { "b", "a" })]
 		public string BBB;
@@ -126,17 +130,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs5 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Name = "BBB", ShortNames = new string[] { "a", "b" })]
 		public string BBB;
@@ -149,17 +154,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs6 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "BBB", "AAA" }, ShortName = "b")]
 		public string BBB;
@@ -172,17 +178,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs7 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "AAA", "BBB" }, ShortName = "b")]
 		public string BBB;
@@ -195,17 +202,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs8 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "BBB", "AAA" }, ShortNames = new string[] { "b", "a" })]
 		public string BBB;
@@ -218,17 +226,18 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.")]
 	public class InvalidCommandLineArgs9 : ArgsHandler
 	{
-		private const string SuppressionJustification = "This is a simple container for command line args.";
+		private const string VisibilitySuppressionJustification = "Command line arguments based on 'MKY.CommandLine.ArgsHandler' must be public.";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "AAA", ShortName = "a")]
 		public string AAA;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "AAA", "BBB" }, ShortNames = new string[] { "a", "b" })]
 		public string BBB;

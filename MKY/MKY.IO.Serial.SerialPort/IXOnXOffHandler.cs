@@ -29,7 +29,7 @@ namespace MKY.IO.Serial.SerialPort
 	public interface IXOnXOffHandler
 	{
 		/// <summary>
-		/// Returens <c>true</c> is XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
+		/// Returns <c>true</c> is XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
 		/// flow control is active.
 		/// </summary>
 		bool XOnXOffIsInUse { get; }

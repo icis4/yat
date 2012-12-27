@@ -59,6 +59,7 @@ namespace MKY.IO.Serial.SerialPort
 	#endregion
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	[Serializable]
 	public class SerialFlowControlEx : MKY.IO.Ports.HandshakeEx
