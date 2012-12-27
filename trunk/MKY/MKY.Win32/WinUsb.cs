@@ -48,6 +48,7 @@ namespace MKY.Win32
 	/// The WinUSB API is only useful with devices that provide a WinUSB based driver.
 	/// See http://download.microsoft.com/download/9/C/5/9C5B2167-8017-4BAE-9FDE-D599BAC8184A/WinUsb_HowTo.docx for details.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Don't care about suboptimal documentation of Win32 API items.")]
 	public static class WinUsb
 	{
 		#region Native
@@ -61,8 +62,7 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		private static class NativeMethods
 		{
 			private const string WINUSB_DLL = "winusb.dll";
@@ -176,8 +176,8 @@ namespace MKY.Win32
 			{
 				if (Version.IsWindowsVistaOrLater)
 				{
-					UInt32 l;
-					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
+					uint l;
+					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (ushort)languageId, buffer, (uint)buffer.Length, out l))
 					{
 						lengthTransferred = (int)l;
 						return (true);
@@ -206,8 +206,8 @@ namespace MKY.Win32
 			{
 				if (Version.IsWindowsVistaOrLater)
 				{
-					UInt32 l;
-					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
+					uint l;
+					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (ushort)languageId, buffer, (uint)buffer.Length, out l))
 					{
 						lengthTransferred = (int)l;
 						return (true);
@@ -238,8 +238,8 @@ namespace MKY.Win32
 				if (Version.IsWindowsVistaOrLater)
 				{
 					StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
-					UInt32 l;
-					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, out l))
+					uint l;
+					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (ushort)languageId, s, (uint)s.Capacity, out l))
 					{
 						buffer = s.ToString();
 						lengthTransferred = (int)l;

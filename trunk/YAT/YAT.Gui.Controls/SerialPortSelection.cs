@@ -134,7 +134,7 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
 		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
-		/// is way more performant and good enough for most use cases.
+		/// is way better performing and good enough for most use cases.
 		/// </remarks>
 		private SerialPortId portId = SerialPortId.FirstStandardPort;
 
@@ -406,11 +406,14 @@ namespace YAT.Gui.Controls
 					}
 					else
 					{
+						string message =
+							"There are no serial COM ports available." + Environment.NewLine +
+							"Check the serial COM ports of your system.";
+
 						MessageBoxEx.Show
 							(
 							this,
-							"There are no serial COM ports available." + Environment.NewLine +
-							"Check the serial COM ports of your system.",
+							message,
 							"No serial COM ports",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
@@ -419,12 +422,15 @@ namespace YAT.Gui.Controls
 				}
 				catch
 				{
+					string message =
+						"There was an error while retrieving the serial COM ports!" + Environment.NewLine +
+						"You should check the serial COM ports in the system settings." + Environment.NewLine + Environment.NewLine +
+						"If you cannot solve the issue, tell YAT not to detect ports that are in use. To do so, go to 'File > Preferences...' and disable 'detect ports that are in use'.";
+
 					MessageBoxEx.Show
 						(
 						this,
-						"There was an error while retrieving the serial COM ports!" + Environment.NewLine +
-						"You should check the serial COM ports in the system settings." + Environment.NewLine + Environment.NewLine +
-						"If you cannot solve the issue, tell YAT not to detect ports that are in use. To do so, go to 'File > Preferences...' and disable 'detect ports that are in use'.",
+						message,
 						"Error with serial COM ports",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

@@ -55,7 +55,6 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		private static class NativeTypes
 		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -83,7 +82,7 @@ namespace MKY.Win32
 		// Native > Constants
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		private static class NativeConstants
 		{
 			public const UInt32 ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
@@ -96,8 +95,8 @@ namespace MKY.Win32
 		// Native > External Functions
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Don't care about suboptimal documentation of Win32 API items.")]
 		private static class NativeMethods
 		{
 			private const string KERNEL_DLL = "kernel32.dll";
@@ -236,6 +235,7 @@ namespace MKY.Win32
 		/// Attaches the input/output/error console handles to the current process.
 		/// Useful for windows applications since they do not support the console by default.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native handle.")]
 		public static bool Attach()
 		{
 			bool success = true;

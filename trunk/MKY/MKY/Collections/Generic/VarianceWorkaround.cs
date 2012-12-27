@@ -63,7 +63,7 @@ namespace MKY.Collections.Generic
 		//==========================================================================================
 
 		/// <summary>
-		/// Variance for enummerator, variance in one direction only so type expressinos are natural.
+		/// Variance for enumerator, variance in one direction only so type expressions are natural.
 		/// </summary>
 		/// <typeparam name="S">IEnumerable source.</typeparam>
 		/// <typeparam name="D">IEnumerable destination.</typeparam>
@@ -77,7 +77,7 @@ namespace MKY.Collections.Generic
 		}
 
 		/// <summary>
-		/// Wrapper for enummerator variance.
+		/// Wrapper for enumerator variance.
 		/// </summary>
 		/// <typeparam name="S">IEnumerable source.</typeparam>
 		/// <typeparam name="D">IEnumerable destination.</typeparam>

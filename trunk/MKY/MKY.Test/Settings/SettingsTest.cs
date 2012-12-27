@@ -34,10 +34,10 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-using NUnit.Framework;
-
 using MKY.Diagnostics;
 using MKY.IO;
+
+using NUnit.Framework;
 
 #endregion
 
@@ -85,6 +85,7 @@ namespace MKY.Test.Settings
 		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int SimpleValue = SimpleValueEqual;
 
@@ -163,6 +164,7 @@ namespace MKY.Test.Settings
 		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int SimpleValue = SimpleValueEqual;
 
@@ -316,6 +318,7 @@ namespace MKY.Test.Settings
 		public class TestTreeRoot : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int SimpleValue = SimpleValueEqual;
 
@@ -465,7 +468,8 @@ namespace MKY.Test.Settings
 		// Test Case Id
 		//==========================================================================================
 
-		/// <remarks>Haven't care for a better implementation yet...</remarks>
+		/// <remarks>Haven't cared for a better implementation yet...</remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1309:FieldNamesMustNotBeginWithUnderscore", Justification = "Haven't cared for a better implementation yet...")]
 		internal static class TestCaseId
 		{
 			public const int _11 = 11;
@@ -496,10 +500,12 @@ namespace MKY.Test.Settings
 		public class TestClassV1
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data1 = TestCaseId._11;
 
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data2 = TestCaseId._12;
 		}
@@ -513,14 +519,17 @@ namespace MKY.Test.Settings
 		public class TestClassV2
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data1 = TestCaseId._21;
 
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data2 = TestCaseId._22;
 
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data3 = TestCaseId._23;
 		}
@@ -534,10 +543,12 @@ namespace MKY.Test.Settings
 		public class TestClassV3
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data1 = TestCaseId._31;
 
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See below.")]
 			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 			public int Data3 = TestCaseId._33;
 		}
@@ -570,6 +581,9 @@ namespace MKY.Test.Settings
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 	[TestFixture]
 	public class SettingsTest
 	{
@@ -783,13 +797,13 @@ namespace MKY.Test.Settings
 		{
 			string filePath = Temp.MakeTempFilePath(GetType(), fileName, ".xml");
 
-			object objToSerialize = typeToSerialize.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
+			object objToSerialize = typeToSerialize.GetConstructor(new Type[] { }).Invoke(new object[] { });
 			SerializeTestObject(typeToSerialize, objToSerialize, filePath);
 
 			object objToDeserialize;
 			DeserializeTestObject(typeToDeserialize, out objToDeserialize, filePath);
 
-			object objToTestAgainst = typeToDeserialize.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
+			object objToTestAgainst = typeToDeserialize.GetConstructor(new Type[] { }).Invoke(new object[] { });
 
 			SettingsEvolutionTestTypeAndData.TestClassV1 v1a = null;
 			SettingsEvolutionTestTypeAndData.TestClassV1 v1b = null;

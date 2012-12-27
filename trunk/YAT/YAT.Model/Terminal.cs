@@ -43,12 +43,12 @@ using MKY.Recent;
 using MKY.Settings;
 using MKY.Time;
 
+using YAT.Model.Settings;
+using YAT.Model.Types;
+using YAT.Model.Utilities;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-using YAT.Model.Types;
-using YAT.Model.Settings;
-using YAT.Model.Utilities;
 
 #endregion
 
@@ -88,6 +88,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.Maintainability", "SA1409:RemoveUnnecessaryCode", Justification = "See below ;-) But unfortunately it seems that StyleCop doesn't allow a suppression at the constructor itself. So what...")]
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'staticSequentialIndexCounter' is not unnecesary, it is based on a constant that contains a default value!")]
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Well, kind of a code analysis deadlock ;-)")]
 		static Terminal()
@@ -1302,6 +1303,8 @@ namespace YAT.Model
 		///   - normal, no file anymore             => question                           :  --
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (t4a)
 		///   - normal, existing file, no auto save => question                           : (t4b)
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual bool Close(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{

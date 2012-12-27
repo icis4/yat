@@ -38,6 +38,15 @@ using MKY.IO;
 
 #endregion
 
+#region Module-level StyleCop suppressions
+//==================================================================================================
+// Module-level StyleCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification", Justification = "Large blocks of module-level FxCop suppressions which were copy-pasted out of FxCop.")]
+
+#endregion
+
 #region Module-level FxCop suppressions
 //==================================================================================================
 // Module-level FxCop suppressions
@@ -68,8 +77,8 @@ using MKY.IO;
 [module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVINFO_DATA.#cbSize")]
 
 // Justification = "The structure is defined by the Win32 API."
-[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope="member", Target="MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#DevicePath")]
-[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope="member", Target="MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#cbSize")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#DevicePath")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#cbSize")]
 
 // Justification = "Naming is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_HDR.#dbch_size", MessageId = "dbch")]
@@ -208,17 +217,19 @@ namespace MKY.Win32
 {
 	/// <summary>
 	/// Encapsulates parts of the Win32 API relating relating to device management
-	/// (SetupDixxx and RegisterDeviceNotification functions).
+	/// (SetupDi___ and RegisterDeviceNotification functions).
 	/// </summary>
 	/// <remarks>
 	/// This class is partly based on GenericHid of Jan Axelson's Lakeview Research.
 	/// Visit GenericHid on http://www.lvr.com/hidpage.htm for details.
-	/// <see cref="DeviceManagement"/> needs to modify the structure and contents of
-	/// GenericHid due to the following reasons:
+	/// This class needed to modify the original structure and contents of GenericHid
+	/// due to the following reasons:
 	/// - Suboptimal structure of the original GenericHid project
 	/// - Missing features required for YAT
 	/// - Potential reuse of this class for other services directly using the Win32 API
+	/// DeviceManagement and Hid types and methods have been split into separate classes.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Don't care about suboptimal documentation of Win32 API items.")]
 	public static class DeviceManagement
 	{
 		#region Native
@@ -232,7 +243,9 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeTypes
 		{
@@ -242,7 +255,7 @@ namespace MKY.Win32
 			// makes the code less readable.
 			#pragma warning disable 1591
 
-			/// <remarks>dbt.h</remarks>
+			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "Type name is given by the Win32 API.")]
@@ -260,7 +273,7 @@ namespace MKY.Win32
 				DEVICEINTERFACE = 0x00000010,
 			}
 
-			/// <remarks>dbt.h</remarks>
+			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
@@ -271,7 +284,7 @@ namespace MKY.Win32
 				DEVICEREMOVECOMPLETE = 0x00008004,
 			}
 
-			/// <remarks>dbt.h</remarks>
+			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
@@ -304,7 +317,7 @@ namespace MKY.Win32
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
 			/// <see cref="NativeMethods.RegisterDeviceNotification"/> require a reference type.
 			/// </remarks>
-			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
@@ -321,7 +334,7 @@ namespace MKY.Win32
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
 			/// </remarks>
-			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
+			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
@@ -379,11 +392,11 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeConstants
 		{
-			/// <remarks>dbt.h</remarks>
+			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
 			[CLSCompliant(false)]
 			public const UInt32 WM_DEVICECHANGE = 0x00000219;
 		}
@@ -396,9 +409,7 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{
@@ -521,6 +532,7 @@ namespace MKY.Win32
 		/// </summary>
 		/// <param name="classGuid">An interface class GUID.</param>
 		/// <returns>An array containing the path names of the devices currently available on the system.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native pointer.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "MKY.Win32.DeviceManagement+NativeMethods.SetupDiDestroyDeviceInfoList(System.IntPtr)", Justification = "Don't care about the result.")]
 		public static string[] GetDevicesFromGuid(Guid classGuid)
@@ -539,7 +551,7 @@ namespace MKY.Win32
 
 				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
-				deviceInterfaceData.cbSize = (UInt32)Marshal.SizeOf(deviceInterfaceData);
+				deviceInterfaceData.cbSize = (uint)Marshal.SizeOf(deviceInterfaceData);
 
 				do
 				{
@@ -612,7 +624,7 @@ namespace MKY.Win32
 				NativeTypes.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new NativeTypes.DEV_BROADCAST_DEVICEINTERFACE();
 
 				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure. Set the size.
-				devBroadcastDeviceInterface.dbcc_size = (UInt32)Marshal.SizeOf(devBroadcastDeviceInterface);
+				devBroadcastDeviceInterface.dbcc_size = (uint)Marshal.SizeOf(devBroadcastDeviceInterface);
 
 				// Request to receive notifications about a class of devices.
 				devBroadcastDeviceInterface.dbcc_devicetype = NativeTypes.DBT_DEVTYP.DEVICEINTERFACE;

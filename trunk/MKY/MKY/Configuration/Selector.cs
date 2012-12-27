@@ -29,7 +29,8 @@ namespace MKY.Configuration
 	/// </summary>
 	/// <remarks>
 	/// Debugging this configuration infrastructure may be a bit trickier than normal debugging.
-	/// E.g. if the configuration is used to parametrize NUnit test cases, the follow steps need to be taken:
+	/// E.g. if the configuration is used to parameterize NUnit test cases, the follow steps need
+	/// to be taken:
 	/// 1. Build the solution
 	/// 2. Start NUnit
 	/// 3. 'Debug > Attach' Visual Studio to NUnit

@@ -64,6 +64,8 @@ namespace YAT.Domain
 	/// LF:   Unix, Linux, Mac OS from version X, AmigaOS, BSD
 	/// CRLF: Windows, DOS, OS/2, CP/M
 	/// CR:   Mac OS up to version 9, Apple II
+	/// 
+	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	[Serializable]

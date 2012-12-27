@@ -152,7 +152,7 @@ namespace NUnit
 		}
 
 		/// <summary></summary>
-		public virtual int Minutes
+		public new int Minutes
 		{
 			get { return ((int)Duration.TotalMinutes); }
 		}
@@ -171,7 +171,7 @@ namespace NUnit
 		}
 
 		/// <summary></summary>
-		public virtual int Seconds
+		public new int Seconds
 		{
 			get { return ((int)Duration.TotalSeconds); }
 		}

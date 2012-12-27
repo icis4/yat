@@ -121,7 +121,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Compares wether the first <see cref="System.String"/> object matches any <see cref="System.String"/> object of the given array.
+		/// Compares whether the first <see cref="System.String"/> object matches any <see cref="System.String"/> object of the given array.
 		/// </summary>
 		public static bool EqualsAnyOrdinalIgnoreCase(string strA, string[] strB)
 		{

@@ -1,13 +1,47 @@
-﻿<StyleCopSettings Version="4.3">
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>azevedo</Value>
+      <Value>bool</Value>
+      <Value>dir</Value>
+      <Value>docx</Value>
+      <Value>endianness</Value>
+      <Value>enum</Value>
+      <Value>enums</Value>
+      <Value>fixme</Value>
+      <Value>fx</Value>
+      <Value>gui</Value>
+      <Value>hh</Value>
+      <Value>inbetween</Value>
+      <Value>infos</Value>
+      <Value>int</Value>
+      <Value>intelli</Value>
+      <Value>mky</Value>
+      <Value>pdf</Value>
+      <Value>prependable</Value>
+      <Value>ser</Value>
+      <Value>ss</Value>
+      <Value>symmetricity</Value>
+      <Value>tcp</Value>
+      <Value>todo</Value>
+      <Value>udp</Value>
+      <Value>ulong</Value>
+      <Value>unixoid</Value>
+      <Value>unixoids</Value>
+      <Value>usb</Value>
+      <Value>yat</Value>
+      <Value>yyyy-mm-dd</Value>
+    </CollectionProperty>
+  </GlobalSettings>
   <Parsers>
-    <Parser ParserId="Microsoft.StyleCop.CSharp.CsParser">
+    <Parser ParserId="StyleCop.CSharp.CsParser">
       <ParserSettings>
         <BooleanProperty Name="AnalyzeDesignerFiles">False</BooleanProperty>
       </ParserSettings>
     </Parser>
   </Parsers>
   <Analyzers>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.DocumentationRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
       <Rules>
         <Rule Name="DocumentationTextMustEndWithAPeriod">
           <RuleSettings>
@@ -87,7 +121,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.SpacingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.SpacingRules">
       <Rules>
         <Rule Name="TabsMustNotBeUsed">
           <RuleSettings>
@@ -119,10 +153,15 @@
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
+        <Rule Name="MemberAccessSymbolsMustBeSpacedCorrectly">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.MaintainabilityRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.MaintainabilityRules">
       <Rules>
         <Rule Name="StatementMustNotUseUnnecessaryParenthesis">
           <RuleSettings>
@@ -137,7 +176,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.LayoutRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.LayoutRules">
       <Rules>
         <Rule Name="CurlyBracketsMustNotBeOmitted">
           <RuleSettings>
@@ -177,7 +216,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.OrderingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.OrderingRules">
       <Rules>
         <Rule Name="UsingDirectivesMustBePlacedWithinNamespace">
           <RuleSettings>
@@ -202,7 +241,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.NamingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">
       <Rules>
         <Rule Name="ElementMustBeginWithUpperCaseLetter">
           <RuleSettings>
@@ -219,18 +258,12 @@
         <CollectionProperty Name="Hungarian">
           <Value>io</Value>
           <Value>ip</Value>
-          <Value>pc</Value>
-          <Value>rs</Value>
           <Value>rx</Value>
-          <Value>ts</Value>
           <Value>tx</Value>
-          <Value>x</Value>
-          <Value>y</Value>
-          <Value>z</Value>
         </CollectionProperty>
       </AnalyzerSettings>
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.ReadabilityRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.ReadabilityRules">
       <Rules>
         <Rule Name="PrefixLocalCallsWithThis">
           <RuleSettings>
@@ -258,6 +291,11 @@
           </RuleSettings>
         </Rule>
         <Rule Name="BlockStatementsMustNotContainEmbeddedComments">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="PrefixCallsCorrectly">
           <RuleSettings>
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>

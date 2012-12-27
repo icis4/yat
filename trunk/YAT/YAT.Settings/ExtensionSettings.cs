@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using MKY;
@@ -41,6 +42,7 @@ namespace YAT.Settings
 		/// Allows to alter the file extension used for terminal files,
 		/// e.g. ".ab1" instead of ".yat".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to deal with abbreviations or extensions such as '.ab1'...")]
 		public static string TerminalFile
 		{
 			get { return (terminalFile); }
@@ -70,6 +72,7 @@ namespace YAT.Settings
 		/// Allows to alter the file extension used for workspace files,
 		/// e.g. ".ab2" instead of ".yaw".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to deal with abbreviations or extensions such as '.ab1'...")]
 		public static string WorkspaceFile
 		{
 			get { return (workspaceFile); }

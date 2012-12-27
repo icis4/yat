@@ -115,11 +115,14 @@ namespace YAT.Gui.Forms
 				}
 				catch (ExternalException)
 				{
+					string message =
+						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
+						"Ensure that clipboard is not in use and try again.";
+
 					DialogResult userInput = MessageBoxEx.Show
 						(
 						this,
-						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
-						"Ensure that clipboard is not in use and try again.",
+						message,
 						"Clipboard Error",
 						MessageBoxButtons.RetryCancel,
 						MessageBoxIcon.Error
@@ -128,13 +131,16 @@ namespace YAT.Gui.Forms
 				}
 				catch (Exception ex)
 				{
-					MessageBoxEx.Show
-						(
-						this,
+					string message =
 						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
 						"Copy the information above manually to the bug description and add the system error message below." + Environment.NewLine + Environment.NewLine +
 						"System error message:" + Environment.NewLine +
-						ex.Message,
+						ex.Message;
+
+					MessageBoxEx.Show
+						(
+						this,
+						message,
 						"Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

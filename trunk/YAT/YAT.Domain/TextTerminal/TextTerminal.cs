@@ -44,9 +44,9 @@ namespace YAT.Domain
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class TextTerminal : Terminal
 	{
-		#region Help
+		#region Constant Help Text
 		//==========================================================================================
-		// Help
+		// Constant Help Text
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -81,7 +81,7 @@ namespace YAT.Domain
 			End
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineState
 		{
 			public LinePosition LinePosition;
@@ -106,7 +106,7 @@ namespace YAT.Domain
 			}
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
@@ -132,7 +132,7 @@ namespace YAT.Domain
 		// Line Send Delay
 		//==========================================================================================
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineSendDelayState
 		{
 			public int LineCount;

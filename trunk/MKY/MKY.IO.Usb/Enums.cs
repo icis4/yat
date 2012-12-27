@@ -205,6 +205,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// The USB usage page as described in http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	public enum HidUsagePage
 	{
 		Unknown                      =   -1,
@@ -365,6 +366,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// The USB HID usage as described in http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	public enum HidUsage
 	{
 		Unknown     =   -1,

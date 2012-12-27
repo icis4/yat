@@ -143,7 +143,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// 
 		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
 		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
-		/// is way more performant and good enough for most use cases.
+		/// is way better performing and good enough for most use cases.
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{

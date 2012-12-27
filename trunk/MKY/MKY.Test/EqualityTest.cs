@@ -324,6 +324,7 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		/// <typeparam name="T">The type the verify against.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent thoughout this test module.")]
 		public class OwnDerivedCollectionReferenceTypeWithIEquatableTypeWithoutOperators<T> : List<T>
@@ -332,6 +333,7 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		/// <typeparam name="T">The type the verify against.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent thoughout this test module.")]
 		public class OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithoutOperators<T>>
@@ -413,6 +415,7 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		/// <typeparam name="T">The type the verify against.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
 		[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Naming shall be consistent thoughout this test module.")]
 		public class OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T> : List<T>, IEquatable<OwnDerivedCollectionReferenceTypeIEquatableWithOperators<T>>
@@ -1971,6 +1974,7 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestSystemValueType()
 		{
@@ -1988,6 +1992,7 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestOwnValueTypeWithoutOperators()
 		{
@@ -1995,7 +2000,7 @@ namespace MKY.Test
 			EqualityTestData.ValueTypeWithoutOperators objEqual            = new EqualityTestData.ValueTypeWithoutOperators(1);
 			EqualityTestData.ValueTypeWithoutOperators objNotEqual         = new EqualityTestData.ValueTypeWithoutOperators(2);
 
-			EqualityTestMethods.TestEquals<object>                                  (objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<object>                                    (objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestEquals<EqualityTestData.ValueTypeWithoutOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType(objToCompareAgainst, objEqual, objNotEqual);
@@ -2005,6 +2010,7 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestOwnValueTypeWithOperators()
 		{
@@ -2012,7 +2018,7 @@ namespace MKY.Test
 			EqualityTestData.ValueTypeWithOperators objEqual            = new EqualityTestData.ValueTypeWithOperators(1);
 			EqualityTestData.ValueTypeWithOperators objNotEqual         = new EqualityTestData.ValueTypeWithOperators(2);
 
-			EqualityTestMethods.TestEquals<object>                               (objToCompareAgainst, objEqual, objNotEqual);
+			EqualityTestMethods.TestEquals<object>                                 (objToCompareAgainst, objEqual, objNotEqual);
 			EqualityTestMethods.TestEquals<EqualityTestData.ValueTypeWithOperators>(objToCompareAgainst, objEqual, objNotEqual);
 
 			EqualityTestMethods.TestOperatorsForReferenceEqualityOfValueType             (objToCompareAgainst, objEqual, objNotEqual);
@@ -2177,6 +2183,7 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestSystemBaseReferenceTypeIEquatableWithOperators()
 		{

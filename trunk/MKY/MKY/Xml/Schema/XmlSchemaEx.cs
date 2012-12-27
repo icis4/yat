@@ -45,7 +45,10 @@ namespace MKY.Xml.Schema
 		/// <remarks>
 		/// The code has be taken from the following link:
 		/// http://stackoverflow.com/questions/687884/what-is-the-correct-way-of-using-the-guid-type-in-a-xsd-file
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
 		public static readonly XmlSchema GuidSchema;
 

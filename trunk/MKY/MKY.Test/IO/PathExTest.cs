@@ -23,10 +23,11 @@
 
 using System.Collections;
 using System.Collections.Generic;
-
-using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.IO;
+
+using NUnit.Framework;
 
 namespace MKY.Test.IO
 {
@@ -43,6 +44,7 @@ namespace MKY.Test.IO
 		// Test Case Data Set
 		//==========================================================================================
 
+		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a private test data container.")]
 		private class TestCaseDataSet
 		{
 			public int TestSet;
@@ -433,8 +435,8 @@ namespace MKY.Test.IO
 			switch (testCase)
 			{
 				case 0:  result = PathEx.CombineDirectoryPaths       (absoluteA, relativeA); break;
-				case 1:  result = PathEx.CombineDirectoryAndFilePaths(absoluteA, relativeA); break; // DIR vs FILE.
-				case 2:  result = PathEx.CombineFileAndDirectoryPaths(absoluteA, relativeA); break; // FILE vs DIR.
+				case 1:  result = PathEx.CombineDirectoryAndFilePaths(absoluteA, relativeA); break; // DIR vs. FILE.
+				case 2:  result = PathEx.CombineFileAndDirectoryPaths(absoluteA, relativeA); break; // FILE vs. DIR.
 				default: result = PathEx.CombineFilePaths            (absoluteA, relativeA); break;
 			}
 			Assert.AreEqual(absoluteB, result, "A absolute combined with A relative doesn't result in B absolute");
@@ -453,8 +455,8 @@ namespace MKY.Test.IO
 			switch (testCase)
 			{
 				case 0:  result = PathEx.CombineDirectoryPaths       (absoluteB, relativeB); break;
-				case 1:  result = PathEx.CombineFileAndDirectoryPaths(absoluteB, relativeB); break; // FILE vs DIR.
-				case 2:  result = PathEx.CombineDirectoryAndFilePaths(absoluteB, relativeB); break; // DIR vs FILE.
+				case 1:  result = PathEx.CombineFileAndDirectoryPaths(absoluteB, relativeB); break; // FILE vs. DIR.
+				case 2:  result = PathEx.CombineDirectoryAndFilePaths(absoluteB, relativeB); break; // DIR vs. FILE.
 				default: result = PathEx.CombineFilePaths            (absoluteB, relativeB); break;
 			}
 			Assert.AreEqual(absoluteA, result, "B absolute combined with B relative doesn't result in A absolute");
@@ -480,8 +482,8 @@ namespace MKY.Test.IO
 			switch (testCase)
 			{
 				case 0:  result = PathEx.CompareDirectoryPaths       (absoluteA, absoluteB); break;
-				case 1:  result = PathEx.CompareDirectoryAndFilePaths(absoluteA, absoluteB); break; // DIR vs FILE.
-				case 2:  result = PathEx.CompareFileAndDirectoryPaths(absoluteA, absoluteB); break; // FILE vs DIR.
+				case 1:  result = PathEx.CompareDirectoryAndFilePaths(absoluteA, absoluteB); break; // DIR vs. FILE.
+				case 2:  result = PathEx.CompareFileAndDirectoryPaths(absoluteA, absoluteB); break; // FILE vs. DIR.
 				default: result = PathEx.CompareFilePaths            (absoluteA, absoluteB); break;
 			}
 			Assert.AreEqual(relativeA, result.RelativePath, "A absolute compared to B absolute doesn't result in A relative");
@@ -490,8 +492,8 @@ namespace MKY.Test.IO
 			switch (testCase)
 			{
 				case 0:  result = PathEx.CompareDirectoryPaths       (absoluteB, absoluteA); break;
-				case 1:  result = PathEx.CompareFileAndDirectoryPaths(absoluteB, absoluteA); break; // FILE vs DIR.
-				case 2:  result = PathEx.CompareDirectoryAndFilePaths(absoluteB, absoluteA); break; // DIR vs FILE.
+				case 1:  result = PathEx.CompareFileAndDirectoryPaths(absoluteB, absoluteA); break; // FILE vs. DIR.
+				case 2:  result = PathEx.CompareDirectoryAndFilePaths(absoluteB, absoluteA); break; // DIR vs. FILE.
 				default: result = PathEx.CompareFilePaths            (absoluteB, absoluteA); break;
 			}
 			Assert.AreEqual(relativeB, result.RelativePath, "B absolute compared to A absolute doesn't result in B relative");

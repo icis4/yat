@@ -344,6 +344,7 @@ namespace YAT.Model
 		/// Process the command line arguments according to their priority and translate them into
 		/// start requests.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private bool ProcessCommandLineArgsIntoStartRequests()
 		{
 			// Always create start requests to ensure that object exists.
@@ -878,6 +879,7 @@ namespace YAT.Model
 		// Workspace > Lifetime
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		private void AttachWorkspaceEventHandlers()
 		{
 			if (this.workspace != null)
@@ -887,6 +889,7 @@ namespace YAT.Model
 			}
 		}
 
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		private void DetachWorkspaceEventHandlers()
 		{
 			if (this.workspace != null)

@@ -72,6 +72,15 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int SendQueueInitialCapacity = 4096;
+
+		#endregion
+
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
@@ -79,15 +88,6 @@ namespace MKY.IO.Serial.Socket
 
 		private static int staticInstanceCounter;
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const int SendQueueInitialCapacity = 4096;
 
 		#endregion
 

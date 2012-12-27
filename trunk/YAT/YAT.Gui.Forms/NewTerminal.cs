@@ -22,9 +22,9 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
-using MKY.Net;
 using MKY.Windows.Forms;
 
 namespace YAT.Gui.Forms
@@ -337,6 +337,7 @@ namespace YAT.Gui.Forms
 		// Private Methods
 		//==========================================================================================
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'ioTypeOld' indeed starts with an lower case letter.")]
 		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
 
 		/// <remarks>

@@ -27,7 +27,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace MKY.IO.Ports
 {
 	/// <summary>
-	/// ISerialPort is based on the .NET standart serial port interface and adds some useful
+	/// ISerialPort is based on the .NET standard serial port interface and adds some useful
 	/// properties, events and methods.
 	/// </summary>
 	public interface ISerialPort : ISerialPortDotNet

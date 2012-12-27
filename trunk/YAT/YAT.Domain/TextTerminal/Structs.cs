@@ -39,7 +39,7 @@ namespace YAT.Domain
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary>Delay in ms.</summary>
+		/// <summary>Delay in milliseconds.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Delay")]
 		public int Delay;
@@ -139,7 +139,7 @@ namespace YAT.Domain
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary>Wait timeout in ms.</summary>
+		/// <summary>Wait timeout in milliseconds.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Timeout")]
 		public int Timeout;

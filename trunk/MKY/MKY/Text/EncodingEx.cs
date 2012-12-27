@@ -26,6 +26,15 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+#region Module-level StyleCop suppressions
+//==================================================================================================
+// Module-level StyleCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification", Justification = "Large blocks of module-level FxCop suppressions which were copy-pasted out of FxCop.")]
+
+#endregion
+
 #region Module-level FxCop suppressions
 //==================================================================================================
 // Module-level FxCop suppressions
@@ -194,10 +203,10 @@ namespace MKY.Text
 	/// <remarks>
 	/// Enum value corresponds to code page.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the MSDN.")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Text is given by the MSDN.")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1632:DocumentationTextMustMeetMinimumCharacterLength", Justification = "Text is given by the MSDN.")]
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "IDs of encodings are given by the according encoding standards.")]
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the MSDN.")]
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Text is given by the MSDN.")]
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1632:DocumentationTextMustMeetMinimumCharacterLength", Justification = "Text is given by the MSDN.")]
 	public enum SupportedEncoding
 	{
 		//------------------------------------------------------------------------------------------
@@ -575,13 +584,15 @@ namespace MKY.Text
 		/// <summary>Chinese Simplified (GB2312-80).</summary>
 		X_CP20936 = 20936,
 
-		/// <summary>Korean Wansung.</summary>
+		/// <summary>Korean (Wansung).</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Wansung' is 'Wansung'...")]
 		X_CP20949 = 20949,
 
 		/// <summary>Korean.</summary>
 		KS_C_5601_1987 = 949,
 
 		/// <summary>Korean (Johab).</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Johab' is 'Johab'...")]
 		Johab = 1361,
 
 		//------------------------------------------------------------------------------------------
@@ -595,6 +606,7 @@ namespace MKY.Text
 		X_ChineseCNS = 20000,
 
 		/// <summary>Chinese Traditional (Eten).</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Eten' is 'Eten'...")]
 		X_ChineseEten = 20002,
 
 		/// <summary>Western European (IA5).</summary>
@@ -635,6 +647,7 @@ namespace MKY.Text
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>ISCII Devanagari.</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't know 'Devanagari', what a shame! This is the character set used for Sanskrit!")]
 		X_ISCII_DE = 57002,
 
 		/// <summary>ISCII Bengali.</summary>

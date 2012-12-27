@@ -203,6 +203,7 @@ namespace YAT.Gui.Controls
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 						);
+
 					e.Cancel = true;
 				}
 			}

@@ -48,6 +48,33 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class SerialHidDevice : HidDevice, ISerial
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private enum State
+		{
+			Reset,
+			Started,
+			ConnectedAndClosed,
+			ConnectedAndOpened,
+			DisconnectedAndWaitingForReopen,
+			DisconnectedAndClosed,
+			Error,
+		}
+
+		#endregion
+
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int ReceiveQueueInitialCapacity = 4096;
+
+		#endregion
+
 		#region Static Events
 		//==========================================================================================
 		// Static Events
@@ -205,33 +232,6 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		private enum State
-		{
-			Reset,
-			Started,
-			ConnectedAndClosed,
-			ConnectedAndOpened,
-			DisconnectedAndWaitingForReopen,
-			DisconnectedAndClosed,
-			Error,
-		}
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const int ReceiveQueueInitialCapacity = 4096;
 
 		#endregion
 
@@ -853,7 +853,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -871,7 +871,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

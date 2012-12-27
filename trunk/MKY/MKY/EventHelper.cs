@@ -38,7 +38,7 @@ using System.Text;
 namespace MKY
 {
 	/// <summary>
-	/// Events helper methods to defensivly publish events.
+	/// Events helper methods to defensively publish events.
 	/// </summary>
 	public static class EventHelper
 	{

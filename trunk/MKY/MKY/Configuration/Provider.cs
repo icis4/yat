@@ -37,10 +37,10 @@ namespace MKY.Configuration
 	/// settings from a three-tier settings environment:
 	/// (1) Each setting must be hard-coded in a class that derives from <see cref="MergeableSettingsSection"/>.
 	///     This class must contain hard-coded default values for each setting.
-	/// (2) The default settings can be overriden by solution specific defaults in a file
+	/// (2) The default settings can be overridden by solution specific defaults in a file
 	///     'SolutionName'.config in the solution's root directory. These solution specific defaults
 	///     are to be checked in into the source code control system and are the same for all developers.
-	/// (3) The settings may be overriden again by machine specific configuration files
+	/// (3) The settings may be overridden again by machine specific configuration files
 	///     'TestProject'.config that can be located anywhere on the local file system. The location
 	///     of each file is resolved via a system variable 'TEST_PROJECT'_SETTINGS_FILE.
 	/// 
@@ -83,10 +83,13 @@ namespace MKY.Configuration
 	/// configuration file 'MKY.IO.Ports.Test.Settings.config':
 	///     MKY.IO.Ports.Test.Settings
 	///         Selection SelectedConfigurationName="UsingPhysicalDevices"
+	/// 
+	/// Saying hello to StyleCop ;-.
 	/// </summary>
 	/// <remarks>
 	/// Debugging this configuration infrastructure may be a bit trickier than normal debugging.
-	/// E.g. if the configuration is used to parametrize NUnit test cases, the follow steps need to be taken:
+	/// E.g. if the configuration is used to parameterize NUnit test cases, the follow steps need
+	/// to be taken:
 	/// 1. Build the solution
 	/// 2. Start NUnit
 	/// 3. 'Debug > Attach' Visual Studio to NUnit

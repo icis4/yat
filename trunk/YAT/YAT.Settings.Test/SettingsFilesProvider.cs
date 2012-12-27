@@ -168,7 +168,6 @@ namespace YAT.Settings.Test
 			get { return (this.workspaceFilePaths); }
 		}
 
-
 		/// <summary></summary>
 		public void AddLocalUserFileName(LocalUserSettingsTestCase fileKey, string fileName)
 		{

@@ -28,10 +28,10 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-using NUnit.Framework;
-
 using MKY.Diagnostics;
 using MKY.IO;
+
+using NUnit.Framework;
 
 namespace MKY.IO.Ports.Test.SerialPort
 {

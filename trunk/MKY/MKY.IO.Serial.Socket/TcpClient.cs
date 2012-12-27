@@ -57,12 +57,12 @@ namespace MKY.IO.Serial.Socket
 	/// 'OnException' events while stopping.
 	/// 
 	/// These two issues were also reported back to Andre Luis Azevedo. But unfortunately he doesn't
-	/// reply and ALAZ seems to have come to a deadend. An alternative to ALAZ might need to be
+	/// reply and ALAZ seems to have come to a dead end. An alternative to ALAZ might need to be
 	/// found in the future.
 	/// 
 	/// Note that the very same issue existed in <see cref="TcpServer"/>.
 	/// 
-	/// Also note that a very simliar issue existed when stopping two <see cref="TcpAutoSocket"/>
+	/// Also note that a very similar issue existed when stopping two <see cref="TcpAutoSocket"/>
 	/// that were interconnected with each other. See remarks of this class for details.
 	/// </remarks>
 	public class TcpClient : IIOProvider, IDisposable, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService
@@ -76,7 +76,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			/// <summary>
 			/// The reset state is necessary to differentiate between not yet started or stopped
-			/// sockets vs started but disconnected sockets.
+			/// sockets versus started but disconnected sockets.
 			/// </summary>
 			Reset,
 
@@ -90,6 +90,15 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int DataSentQueueInitialCapacity = 4096;
+
+		#endregion
+
 		#region Static Fields
 		//==========================================================================================
 		// Static Fields
@@ -97,15 +106,6 @@ namespace MKY.IO.Serial.Socket
 
 		private static int staticInstanceCounter;
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const int DataSentQueueInitialCapacity = 4096;
 
 		#endregion
 
@@ -789,7 +789,9 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		/// <remarks>
 		/// \attention:
-		/// This event is also fired on reconnect attempts of autor-reconnect!
+		/// This event is also fired on reconnect attempts of auto-reconnect!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="e">
 		/// Information about the exception and connection.

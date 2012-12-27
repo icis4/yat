@@ -1,5 +1,13 @@
 ﻿
-http://code.msdn.microsoft.com/sourceanalysis
+Currently to be found at http://stylecop.codeplex.com/
+Formerly  to be found at http://code.msdn.microsoft.com/sourceanalysis
+
+
+Inheritance
+-----------
+
+Note that StyleCop is capable to properly inherit settings and suppressions from the parent element, whereas FxCop isn't.
+Thus, suppressions may be placed at a parent element, not only at the very location of the rule violation.
 
 
 Filing
@@ -90,6 +98,8 @@ Disable the following rules
   > ?!?.
 - C# > Readability > Strings > UseStringEmptyForEmptyStrings (SA1122)
   > "" is way more obvious and readable then string.Empty. It's the task of the compiler to optimize this.
+- C# > Readability > Strings > PrefixCallsCorrectly (SA1126)
+  > Doesn't make any sense to me...
 - C# > Spacing > SingleLineCommentsMustBeginWithSingleSpace (SA1005)
   > Allow headers to be framed with '//===============...' or '//---------------...' or similar.
 - C# > Spacing > OpeningParenthesisMustBeSpacedCorrectly (SA1008)
@@ -97,9 +107,11 @@ Disable the following rules
 - C# > Spacing > ClosingParenthesisMustBeSpacedCorrectly (SA1009)
   > Prevents readable implementation of multi-argument methods.
 - C# > Spacing > ClosingCurlyBracketsMustBeSpacedCorrectly (SA1013)
-  > Prevents implementation of aligned table-style code.
+  > Prevents implementation of table-style aligned code.
+- C# > Spacing > MemberAccessSymbolsMustBeSpacedCorrectly (SA1019)
+  > Prevents implementation of table-style aligned code.
 - C# > Spacing > CodeMustNotContainMultipleWhitespaceInRow (SA1025)
-  > In many cases, aligned table-style code is more readable than not aligned code.
+  > In many cases, table-style aligned code is more readable than not aligned code.
 - C# > Spacing > TabsMustNotBeUsed (SA1027)
   > So far tabs have always been preferred, no reason why this shouldn't be the case anymore.
 
@@ -129,6 +141,10 @@ In-Code Suppressions
 --------------------
 
 If really needed, suppress rules in-code using the following attribute:
-[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "\fill-in")]
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "\fill-in")]
+
+Place StyleCop suppressions BEFORE FxCop suppressions, rationale:
+> Logical order: Style check should be performed BEFORE
+> Dependencies:  StyleCop also checks the suppression statements
 
 Such suppressions only work when CODE_ANALYSIS is defined as a conditional compilation symbol in each project, for all build configurations.

@@ -1209,6 +1209,8 @@ namespace YAT.Gui.Forms
 
 		private List<ToolStripMenuItem> menuItems_Predefined_Commands;
 		private List<ToolStripMenuItem> menuItems_Predefined_Pages;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1303:ConstFieldNamesMustBeginWithUpperCaseLetter", Justification = "'MaxPages' indeed starts with an upper case letter.")]
 		private const int menuItems_Predefined_MaxPages = 12;
 
 		private void contextMenuStrip_Predefined_Initialize()
@@ -1685,11 +1687,13 @@ namespace YAT.Gui.Forms
 
 		/// <summary>
 		/// Makes sure that context menus are at the right position upon first drop down. This is
-		/// a fix, it should be that way by default. However, due to some resaons, they somtimes
+		/// a fix, it should be that way by default. However, due to some reasons, they sometimes
 		/// appear somewhere at the top-left corner of the screen if this fix isn't done.
 		/// </summary>
 		/// <remarks>
 		/// Is this a .NET bug?
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void FixContextMenus()
 		{
@@ -1898,7 +1902,7 @@ namespace YAT.Gui.Forms
 
 		/// <summary>
 		/// Set requested preset. Currently, presets are fixed to those listed below.
-		/// For future versions, presets could be defined and managed similay to predefined
+		/// For future versions, presets could be defined and managed similarly to predefined
 		/// commands.
 		/// </summary>
 		private void RequestPreset(int preset)
@@ -2202,7 +2206,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
@@ -2222,12 +2226,15 @@ namespace YAT.Gui.Forms
 			{
 				SetFixedStatusText("Error saving data!");
 
+				string message =
+					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine +
+					e.Message;
+
 				MessageBoxEx.Show
 					(
 					this,
-					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine +
-					e.Message,
+					message,
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -2260,7 +2267,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void PrintMonitor(Controls.Monitor monitor, System.Drawing.Printing.PrinterSettings settings)
 		{
 			SetFixedStatusText("Printing data...");
@@ -2276,12 +2283,15 @@ namespace YAT.Gui.Forms
 				{
 					SetFixedStatusText("Error printing data!");
 
+					string message =
+						"Unable to print data." + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine +
+						ex.Message;
+
 					MessageBoxEx.Show
 						(
 						this,
-						"Unable to print data." + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine +
-						ex.Message,
+						message,
 						"Print Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning

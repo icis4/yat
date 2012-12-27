@@ -45,7 +45,7 @@ namespace MKY.IO
 		//==========================================================================================
 
 		/// <summary>
-		/// Starts Logfile.
+		/// Starts log file.
 		/// </summary>
 		/// <param name="filePath">Path of log file.</param>
 		/// <param name="append">true to append to file, false to replace file.</param>

@@ -27,18 +27,17 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
-using NUnit.Framework;
-
 using MKY;
 using MKY.Net;
 using MKY.Settings;
+
+using NUnit.Framework;
 
 using YAT.Settings.Terminal;
 
@@ -371,12 +370,18 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		internal static void VerifyLines(ReadOnlyCollection<Domain.DisplayLine> linesA, ReadOnlyCollection<Domain.DisplayLine> linesB,
 		                                 TestSet testSet)
 		{
 			VerifyLines(linesA, linesB, testSet, 1);
 		}
 
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		internal static void VerifyLines(ReadOnlyCollection<Domain.DisplayLine> linesA, ReadOnlyCollection<Domain.DisplayLine> linesB,
 		                                 TestSet testSet, int cycle)
 		{

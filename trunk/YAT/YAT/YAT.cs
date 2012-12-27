@@ -32,7 +32,7 @@ namespace YAT
 	/// <remarks>
 	/// This class is separated into its own .exe project for those who want to use YAT components
 	/// within their own application context.
-	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
+	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealed".
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public sealed class YAT
@@ -63,7 +63,7 @@ namespace YAT
 		/// Calling Console.Attach/Detach() solves the issue stated above, but only in case of
 		/// directly calling YAT from the command line. It does not solve the issue when calling
 		/// YAT from PowerShell. In case of PowerShell, an exception is thrown! Also, when
-		/// requsting the command line help, it is output after another command line prompt.
+		/// requesting the command line help, it is output after another command line prompt.
 		/// 
 		/// Console application:
 		/// In case of a console application, console output is properly handled but a console

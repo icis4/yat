@@ -45,9 +45,9 @@ namespace YAT.Domain.Parser
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Parser : IDisposable
 	{
-		#region Help
+		#region Constant Help Text
 		//==========================================================================================
-		// Help
+		// Constant Help Text
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -642,13 +642,13 @@ namespace YAT.Domain.Parser
 			}
 
 			/// <summary>
-			/// Parses <paramref name="value"/> for ascii mnemonics.
+			/// Parses <paramref name="value"/> for ASCII mnemonics.
 			/// </summary>
 			/// <param name="parser">Parser to retrieve settings.</param>
 			/// <param name="value">String to be parsed.</param>
 			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
-			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+			/// <returns>Byte array containing the values encoded in Encoding.Default.</returns>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 			public static bool TryParseAsciiMnemonic(Parser parser, string value, out byte[] result, ref FormatException formatException)
@@ -787,13 +787,14 @@ namespace YAT.Domain.Parser
 			}
 
 			/// <summary>
-			/// Parses <paramref name="value"/> for ascii mnemonics.
+			/// Parses <paramref name="value"/> for ASCII mnemonics.
 			/// </summary>
 			/// <param name="parser">Parser to retrieve settings.</param>
 			/// <param name="value">String to be parsed.</param>
 			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
-			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+			/// <returns>Byte array containing the values encoded in Encoding.Default.</returns>
+			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using UInt64 for orthogonality with UInt64Ex.")]
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 			public static bool TryParseNumericValue(Parser parser, string value, out byte[] result, ref FormatException formatException)

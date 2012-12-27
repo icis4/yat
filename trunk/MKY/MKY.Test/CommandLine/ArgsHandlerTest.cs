@@ -33,10 +33,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 
-using NUnit.Framework;
-
 using MKY.Collections.Generic;
 using MKY.CommandLine;
+
+using NUnit.Framework;
 
 #endregion
 
@@ -817,6 +817,7 @@ namespace MKY.Test.CommandLine
 		#endif
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'type' indeed starts with an lower case letter.")]
 		private Type TestRuntimeValidation_type;
 
 		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "obj", Justification = "Local variable 'obj' is required for object instantiation to check for exception.")]

@@ -36,7 +36,7 @@ using System.Windows.Forms;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Provides a list box including edit buttons to eidt a list of strings.
+	/// Provides a list box including edit buttons to edit a list of strings.
 	/// </summary>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("StringListChanged")]

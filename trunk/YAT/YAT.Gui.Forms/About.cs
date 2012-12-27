@@ -260,11 +260,14 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
 		{
+			string message =
+				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"Would you like to immediately throw an exception to test that unhandled synchronous exceptions are handled properly?";
+
 			if (MessageBoxEx.Show
 				(
 				this,
-				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
-				"Would you like to immediately throw an exception to test that unhandled synchronous exceptions are handled properly?",
+				message,
 				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -279,11 +282,14 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
 		{
+			string message =
+				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?";
+
 			if (MessageBoxEx.Show
 				(
 				this,
-				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
-				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?",
+				message,
 				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -311,17 +317,20 @@ namespace YAT.Gui.Forms
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.
 		/// 
 		/// Test case 3 doesn't work on a System.Threading timer callback directly.
-		/// Such execptions are not dispatched back onto main thread. Therefore, use
+		/// Such exceptions are not dispatched back onto main thread. Therefore, use
 		/// EventHelper and a separate exception class for this test case.
 		/// </summary>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
 		{
+			string message =
+				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?";
+
 			if (MessageBoxEx.Show
 				(
 				this,
-				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
-				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?",
+				message,
 				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,

@@ -140,6 +140,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using UInt64 for orthogonality of test and testee identifiers.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and number parameters.")]
 		[CLSCompliant(false)]
 		[Test, TestCaseSource(typeof(UInt64ExTestData), "TestCases")]

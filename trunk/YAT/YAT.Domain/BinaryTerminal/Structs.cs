@@ -225,7 +225,7 @@ namespace YAT.Domain
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary>Timeout in ms.</summary>
+		/// <summary>Timeout in milliseconds.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
 		[XmlElement("Timeout")]
 		public int Timeout;

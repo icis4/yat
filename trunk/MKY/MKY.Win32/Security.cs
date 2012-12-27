@@ -32,6 +32,15 @@ using System.Runtime.InteropServices;
 
 #endregion
 
+#region Module-level StyleCop suppressions
+//==================================================================================================
+// Module-level StyleCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification", Justification = "Large blocks of module-level FxCop suppressions which were copy-pasted out of FxCop.")]
+
+#endregion
+
 #region Module-level FxCop suppressions
 //==================================================================================================
 // Module-level FxCop suppressions
@@ -116,6 +125,7 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeMethods
 		{

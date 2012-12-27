@@ -287,6 +287,7 @@ namespace YAT.Gui.Forms
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 						);
+
 					e.Cancel = true;
 				}
 			}
@@ -360,6 +361,7 @@ namespace YAT.Gui.Forms
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 						);
+
 					e.Cancel = true;
 				}
 			}

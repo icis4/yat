@@ -57,15 +57,6 @@ namespace YAT.Domain
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Terminal : IDisposable
 	{
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -81,9 +72,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Help
+		#region Constant Help Text
 		//==========================================================================================
-		// Help
+		// Constant Help Text
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -104,6 +95,15 @@ namespace YAT.Domain
 			Environment.NewLine +
 			@"<" + TxBufferFullErrorString + ">" + Environment.NewLine +
 			@"An output buffer full error occurs when there is no more space in the output buffer, i.e. the serial driver, the operating system or YAT doesn't manage to send the data fast enough.";
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 
@@ -1005,9 +1005,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    this.txRepository.Clear();    break;
+					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-					case RepositoryType.Rx:    this.rxRepository.Clear();    break;
+					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}
@@ -1022,9 +1022,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.DataCount);
+					case RepositoryType.Tx:    return (this.txRepository   .DataCount);
 					case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
-					case RepositoryType.Rx:    return (this.rxRepository.DataCount);
+					case RepositoryType.Rx:    return (this.rxRepository   .DataCount);
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}
@@ -1039,9 +1039,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.Count);
+					case RepositoryType.Tx:    return (this.txRepository   .Count);
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
-					case RepositoryType.Rx:    return (this.rxRepository.Count);
+					case RepositoryType.Rx:    return (this.rxRepository   .Count);
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}
@@ -1056,9 +1056,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.ToElements());
+					case RepositoryType.Tx:    return (this.txRepository   .ToElements());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
-					case RepositoryType.Rx:    return (this.rxRepository.ToElements());
+					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}
@@ -1073,9 +1073,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.ToLines());
+					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
-					case RepositoryType.Rx:    return (this.rxRepository.ToLines());
+					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}
@@ -1096,9 +1096,9 @@ namespace YAT.Domain
 			{
 				switch (repository)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
+					case RepositoryType.Tx:    return (this.txRepository   .ToString(indent));
 					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
-					case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
+					case RepositoryType.Rx:    return (this.rxRepository   .ToString(indent));
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}

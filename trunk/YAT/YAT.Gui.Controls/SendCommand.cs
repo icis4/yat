@@ -335,6 +335,8 @@ namespace YAT.Gui.Controls
 		/// 1. ComboBox.Leave()
 		/// 2. UserControl.Leave()
 		/// 3. ComboBox.Validating()
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void SendCommand_Leave(object sender, EventArgs e)
 		{
@@ -381,6 +383,8 @@ namespace YAT.Gui.Controls
 		/// 1. ComboBox.Leave()
 		/// 2. UserControl.Leave()
 		/// 3. ComboBox.Validating()
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void comboBox_Command_Leave(object sender, EventArgs e)
 		{
@@ -418,6 +422,8 @@ namespace YAT.Gui.Controls
 		/// 1. ComboBox.Leave()
 		/// 2. UserControl.Leave()
 		/// 3. ComboBox.Validating()
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void comboBox_Command_Validating(object sender, CancelEventArgs e)
 		{

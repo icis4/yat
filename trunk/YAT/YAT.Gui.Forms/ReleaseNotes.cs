@@ -22,28 +22,29 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
 using MKY.IO;
 
-using YAT.Utilities;
-
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
 	public partial class ReleaseNotes : Form
 	{
-		private const string ReleaseNotesFileName = @"YAT Release Notes.txt";
+		private const string ReleaseNotesFileName = "YAT Release Notes.txt";
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
 		private readonly string ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
 		private readonly string ReleaseNotesDevelopmentRelativeFilePath =
-			@".." + Path.DirectorySeparatorChar +
-			@".." + Path.DirectorySeparatorChar +
-			@".." + Path.DirectorySeparatorChar +
-			@"Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
+			".." + Path.DirectorySeparatorChar +
+			".." + Path.DirectorySeparatorChar +
+			".." + Path.DirectorySeparatorChar +
+			"Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
 		/// <summary></summary>
 		public ReleaseNotes()

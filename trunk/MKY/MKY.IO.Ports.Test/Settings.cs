@@ -193,20 +193,20 @@ namespace MKY.IO.Ports.Test
 	/// <summary></summary>
 	public static class SettingsProvider
 	{
-		private static readonly SettingsSection staticSettings = new SettingsSection();
+		private static readonly SettingsSection StaticSettings = new SettingsSection();
 
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Settings need to be read during creation.")]
 		static SettingsProvider()
 		{
 			SettingsSection settings;
 			if (Provider.TryOpenAndMergeConfigurations<SettingsSection>(SettingsConstants.ConfigurationGroupName, SettingsConstants.ConfigurationsGroupName, SettingsConstants.UserSettingsEnvironmentVariableName, out settings))
-				staticSettings = settings;
+				StaticSettings = settings;
 		}
 
 		/// <summary></summary>
 		public static SettingsSection Settings
 		{
-			get { return (staticSettings); }
+			get { return (StaticSettings); }
 		}
 	}
 

@@ -30,10 +30,10 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using NUnit.Framework;
-
 using MKY.IO;
 using MKY.Settings;
+
+using NUnit.Framework;
 
 using YAT.Model.Settings;
 using YAT.Settings.Application;
@@ -43,7 +43,7 @@ using YAT.Settings.Application;
 namespace YAT.Model.Test
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1123:DoNotPlaceRegionsWithinElements", Justification = "Group use cases into regions.")]
+	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:DoNotPlaceRegionsWithinElements", Justification = "Group use cases into regions.")]
 	[TestFixture]
 	public class FileHandlingTest
 	{
@@ -310,6 +310,7 @@ namespace YAT.Model.Test
 		/// <summary>
 		/// Use cases according to ufi.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'ufi' is 'ufi', isn't he?")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Naming for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "through", Justification = "Naming for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "a", Justification = "Naming for improved readability.")]
@@ -744,6 +745,7 @@ namespace YAT.Model.Test
 		/// <summary>
 		/// Use cases according to ufi.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'ufi' is 'ufi', isn't he?")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Naming for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "through", Justification = "Naming for improved readability.")]
 		[Test]

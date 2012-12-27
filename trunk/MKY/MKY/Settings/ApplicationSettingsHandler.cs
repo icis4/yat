@@ -346,6 +346,8 @@ namespace MKY.Settings
 			/// Use of exception instead of boolean return value to ease handling of errors:
 			///  - Exception will contain the reason for the failure
 			///  - 'good-weather' case be easier implemented, kind of scripted
+			///  
+			/// Saying hello to StyleCop ;-.
 			/// </remarks>
 			/// <exception cref="Exception">
 			/// Thrown if settings could not be saved.
@@ -922,6 +924,8 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
+		///  
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
@@ -978,6 +982,8 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
+		///  
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
@@ -997,6 +1003,8 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
+		///  
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
@@ -1016,6 +1024,8 @@ namespace MKY.Settings
 		/// Use of exception instead of boolean return value to ease handling of errors:
 		///  - Exception will contain the reason for the failure
 		///  - 'good-weather' case be easier implemented, kind of scripted
+		///  
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.

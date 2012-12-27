@@ -36,7 +36,7 @@ namespace MKY.IO.Serial
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary>Interval of reconnect in ms.</summary>
+		/// <summary>Interval of reconnect in milliseconds.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[XmlElement("Interval")]
 		public int Interval;

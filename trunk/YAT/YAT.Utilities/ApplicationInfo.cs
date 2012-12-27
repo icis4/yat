@@ -21,11 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace YAT.Utilities
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	public static class ApplicationInfo
 	{
 		/// <summary>The product name.</summary>

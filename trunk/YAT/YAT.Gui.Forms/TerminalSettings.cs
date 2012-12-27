@@ -284,24 +284,26 @@ namespace YAT.Gui.Forms
 			// Do nothing.
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			string text;
+			string type;
 			switch (this.settings_Form.Terminal.TerminalType)
 			{
-				case Domain.TerminalType.Text:   text = "Text";   break;
-				case Domain.TerminalType.Binary: text = "Binary"; break;
+				case Domain.TerminalType.Text:   type = "Text";   break;
+				case Domain.TerminalType.Binary: type = "Binary"; break;
 				default: throw (new NotImplementedException("Invalid terminal type"));
 			}
-			text += " and extended";
+
+			string message =
+				"Reset all settings to default values?" + Environment.NewLine +
+				type + " and extended settings will also be reset!";
 
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Reset all settings to default values?" + Environment.NewLine +
-				text + " settings will also be reset!",
+				message,
 				"Defaults?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -337,6 +339,7 @@ namespace YAT.Gui.Forms
 		// Private Methods
 		//==========================================================================================
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'ioTypeOld' indeed starts with an lower case letter.")]
 		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
 
 		/// <remarks>

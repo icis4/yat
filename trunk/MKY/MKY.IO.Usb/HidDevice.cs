@@ -504,7 +504,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -519,7 +519,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

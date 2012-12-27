@@ -81,6 +81,7 @@ namespace MKY.CommandLine
 	/// used to deal with a variable number of additional argument, i.e. ellipsis. This feature is
 	/// optional.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	public abstract class ArgsHandler
 	{
 		#region Types
@@ -1095,28 +1096,34 @@ namespace MKY.CommandLine
 
 			if (this.supportOptionArgs || this.supportArrayOptionArgs)
 			{
-				helpText.AppendLine();
-				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+				string continuousText =
 					"Options that take values may use an equal sign '=', a colon ':' or a space" +
 					" to separate the name from its value. Option names are case-insensitive. " +
-					"Option values are also case-insensitive unless stated otherwise."));
+					"Option values are also case-insensitive unless stated otherwise.";
+
+				helpText.AppendLine();
+				helpText.Append(SplitIntoLines(maxWidth, MinorIndent, continuousText));
 			}
 
 			// Applies to any kind of args.
 			{
-				helpText.AppendLine();
-				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+				string continuousText =
 					@"Use quotes to pass string values ""including spaces"". " +
-					@"Use \"" to pass a quote."));
+					@"Use \"" to pass a quote.";
+
+				helpText.AppendLine();
+				helpText.Append(SplitIntoLines(maxWidth, MinorIndent, continuousText));
 			}
 
 			if (this.supportArrayOptionArgs)
 			{
-				helpText.AppendLine();
-				helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+				string continuousText =
 					"Array options start with the option name and continue until the next option. " +
 					"Typically an array option is used at the end of the command line to take" +
-					" a variable number of additional arguments, i.e. ellipsis."));
+					" a variable number of additional arguments, i.e. ellipsis.";
+
+				helpText.AppendLine();
+				helpText.Append(SplitIntoLines(maxWidth, MinorIndent, continuousText));
 			}
 
 			return (helpText.ToString());

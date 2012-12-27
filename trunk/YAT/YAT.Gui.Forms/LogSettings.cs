@@ -468,7 +468,7 @@ namespace YAT.Gui.Forms
 		// Validation
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ValidateFilenameChars(string filenameChars, string title)
 		{
@@ -488,11 +488,14 @@ namespace YAT.Gui.Forms
 						invalidPrintable.Write(c);
 				}
 
+				string message =
+					title + " contains invalid characters." + Environment.NewLine + Environment.NewLine +
+					invalidPrintable.ToString() + " are not allowed in file names.";
+
 				MessageBoxEx.Show
 					(
 					this,
-					title + " contains invalid characters." + Environment.NewLine + Environment.NewLine +
-					invalidPrintable.ToString() + " are not allowed in file names.",
+					message,
 					"Invalid Characters",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation
@@ -516,19 +519,22 @@ namespace YAT.Gui.Forms
 				);
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ResolveNamingConflicts()
 		{
 			if ((this.settings_Form.SameRawAndNeat) && (this.settings_Form.RawExtension == this.settings_Form.NeatExtension) &&
 				(!this.settings_Form.SubdirectoriesFormat && !this.settings_Form.NameFormat))
 			{
+				string message =
+					"To avoid naming conflicts, files must either be placed in format subdirectories or named by format (Raw/Neat). " +
+					"Do you want to place the files in subdirectories (Yes) or name them by format (No)? You can also press " +
+					"Cancel and set different extensions.";
+
 				switch (MessageBoxEx.Show
 					(
 					this,
-					"To avoid naming conflicts, files must either be placed in format subdirectories or named by format (Raw/Neat). " +
-						"Do you want to place the files in subdirectories (Yes) or name them by format (No)? You can also press " +
-						"Cancel and set different extensions.",
+					message,
 					"Naming Conflict",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
@@ -543,12 +549,15 @@ namespace YAT.Gui.Forms
 			if ((this.settings_Form.MultipleRaw || this.settings_Form.MultipleNeat) &&
 				(!this.settings_Form.SubdirectoriesChannel && !this.settings_Form.NameChannel))
 			{
+				string message =
+					"To avoid naming conflicts, files must either be placed in channel " +
+					"subdirectories or named by channel (Tx/Bidir/Rx). Do you want to place " +
+					"the files in subdirectories (Yes) or name them by channel (No)?";
+
 				switch (MessageBoxEx.Show
 					(
 					this,
-					"To avoid naming conflicts, files must either be placed in channel " +
-						"subdirectories or named by channel (Tx/Bidir/Rx). Do you want to place " +
-						"the files in subdirectories (Yes) or name them by channel (No)?",
+					message,
 					"Naming Conflict",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question

@@ -22,13 +22,15 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace MKY.Text
 {
 	/// <summary>
-	/// Ascii code conversions. Source: http://www.asciitable.com.
+	/// ASCII code conversions. Source: http://www.asciitable.com.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	public static class Ascii
 	{
 		//------------------------------------------------------------------------------------------
@@ -36,7 +38,7 @@ namespace MKY.Text
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Converts an ascii code into according mnemonic.
+		/// Converts an ASCII code into according mnemonic.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>
 		public static string ConvertToMnemonic(byte code)
@@ -81,7 +83,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Converts an ascii code into according description.
+		/// Converts an ASCII code into according description.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>
 		public static string ConvertToDescription(byte code)
@@ -126,7 +128,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Converts an ascii mnemonic into according code. Case-insensitive.
+		/// Converts an ASCII mnemonic into according code. Case-insensitive.
 		/// </summary>
 		/// <exception cref="FormatException">Thrown if mnemonic unknown.</exception>
 		public static byte Parse(string mnemonic)
@@ -139,7 +141,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Converts an ascii mnemonic into according code. Case-insensitive.
+		/// Converts an ASCII mnemonic into according code. Case-insensitive.
 		/// </summary>
 		public static bool TryParse(string mnemonic, out byte result)
 		{

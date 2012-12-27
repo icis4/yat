@@ -33,6 +33,8 @@ namespace MKY
 	/// <remarks>
 	/// Possible extensions:
 	/// - ParseInside: get integer values inside strings (e.g. "COM5 (Device123B)" returns {5;123})
+	/// 
+	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class Int32Ex
