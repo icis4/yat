@@ -3072,6 +3072,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback to show the RTS state for a longer period that it is actually active.")]
 		private void TriggerRtsLuminescence()
 		{
 			timer_RtsLuminescence.Enabled = false;

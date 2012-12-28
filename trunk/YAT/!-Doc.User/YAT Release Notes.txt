@@ -88,8 +88,9 @@ Important changes:
   three types of settings (related to bugs #3450553>#208 and #3535709>#231)
 - .NET XML serialization infrastructure extended by schema for GUID items (bug #3535709>#231)
 - BoolEx renamed to BooleanEx for consistency with the .NET type Boolean (bug #3533831>#229)
-- Code analysis using StyleCop/FxCop finalized (feature requests #2970221>#114 and #2970222>#115)
 - All projects explicitly set to warning level 4, already used to be level 4 but implicitly
+- Code analysis and improvements using StyleCop finalized (feature request #2970222>#115)
+- Code analysis and improvements using FxCop mostly finalized (feature request #2970221>#114)
 - x86 and x64 configurations added to all projects to enable inheriting projects to build dedicated
   x86 and x64 binaries (also see \!-Doc.Developer\ProjectSetup.txt) (feature request #3482248>#175)
 - YAT on SourceForge has been upgraded to the new SourceForge 'Allura' platform

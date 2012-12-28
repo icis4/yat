@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 
@@ -117,7 +116,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<RawElement> ToElements()
+		public virtual List<RawElement> ToElements()
 		{
 			List<RawElement> to;
 			lock (this.queue)
@@ -125,7 +124,7 @@ namespace YAT.Domain
 				to = new List<RawElement>(this.queue);
 			}
 
-			return (to.AsReadOnly());
+			return (to);
 		}
 
 		/// <summary></summary>

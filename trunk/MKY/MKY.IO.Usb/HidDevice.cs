@@ -383,11 +383,14 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
-			DetachAndUnregisterStaticDeviceEventHandlers();
-
-			if (disposing)
+			if (!IsDisposed)
 			{
-				// Dispose of unmanaged resources.
+				DetachAndUnregisterStaticDeviceEventHandlers();
+
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+				}
 			}
 
 			base.Dispose(disposing);

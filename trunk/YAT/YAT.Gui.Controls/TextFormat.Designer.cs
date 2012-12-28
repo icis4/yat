@@ -7,16 +7,35 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private bool isDisposed;
+
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			// Modified version of the designer generated Dispose() method:
+			if (!this.isDisposed)
 			{
-				components.Dispose();
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+					if (this.font != null)
+						this.font.Dispose();
+				}
+
+				// Dispose designer generated managed resources if requested:
+				if (disposing && (components != null))
+				{
+					components.Dispose();
+				}
+
+				// Set state to disposed:
+				this.font = null;
+				this.isDisposed = true;
 			}
+
 			base.Dispose(disposing);
 		}
 

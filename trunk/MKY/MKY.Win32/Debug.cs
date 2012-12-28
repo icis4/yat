@@ -68,6 +68,7 @@ namespace MKY.Win32
 		{
 			private const string KERNEL_DLL = "kernel32.dll";
 
+			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "4", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 FormatMessage([In] Int32 dwFlags, [In] ref Int64 lpSource, [In] Int32 dwMessageId, [In] Int32 dwLanguageId, [Out] StringBuilder lpBuffer, [In] Int32 nSize, [In] IntPtr Arguments);
 		}

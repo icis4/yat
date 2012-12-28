@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -295,9 +294,9 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		/// <remarks>A default value of TimeSpan.Zero is not possible because it is not constant.</remarks>
 		[Category("Monitor")]
 		[Description("The connect time.")]
-		[DefaultValue(0)]
 		public virtual TimeSpan ConnectTime
 		{
 			get { return (this.connectTime); }
@@ -312,9 +311,9 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		/// <remarks>A default value of TimeSpan.Zero is not possible because it is not constant.</remarks>
 		[Category("Monitor")]
 		[Description("The total connect time.")]
-		[DefaultValue(0)]
 		public virtual TimeSpan TotalConnectTime
 		{
 			get { return (this.totalConnectTime); }
@@ -499,17 +498,9 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void AddElements(ReadOnlyCollection<Domain.DisplayElement> elements)
-		{
-			Domain.DisplayElement[] elementsArray = new Domain.DisplayElement[elements.Count];
-			elements.CopyTo(elementsArray, 0);
-			AddElementsOrLines(elementsArray);
-		}
-
-		/// <summary></summary>
 		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
-			AddElementsOrLines(elements);
+			AddElementsOrLines(new List<Domain.DisplayElement>(elements));
 		}
 
 		/// <summary></summary>
@@ -521,15 +512,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
-			AddElementsOrLines(lines);
-		}
-
-		/// <summary></summary>
-		public virtual void AddLines(ReadOnlyCollection<Domain.DisplayLine> lines)
-		{
-			Domain.DisplayLine[] linesArray = new Domain.DisplayLine[lines.Count];
-			lines.CopyTo(linesArray, 0);
-			AddElementsOrLines(linesArray);
+			AddElementsOrLines(new List<Domain.DisplayLine>(lines));
 		}
 
 		/// <summary></summary>
@@ -625,7 +608,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<Domain.DisplayLine> SelectedLines
+		public virtual List<Domain.DisplayLine> SelectedLines
 		{
 			get
 			{
@@ -643,7 +626,7 @@ namespace YAT.Gui.Controls
 						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
 				}
 
-				return (selectedLines.AsReadOnly());
+				return (selectedLines);
 			}
 		}
 
@@ -910,15 +893,24 @@ namespace YAT.Gui.Controls
 				this.activityStateOld = this.activityState;
 
 				timer_Opacity.Enabled = (this.imageOpacityState != OpacityState.Inactive);
-				panel_Picture.Visible = true;
 
-				fastListBox_Monitor.BringToFront();
+				fastListBox_LineNumbers.Height = (Height - panel_Picture.Height);
+				fastListBox_LineNumbers.Top = panel_Picture.Height;
+
+				fastListBox_Monitor.Height = (Height - panel_Picture.Height);
 				fastListBox_Monitor.Top = panel_Picture.Height;
+
+				panel_Picture.Visible = true;
 			}
 			else
 			{
 				panel_Picture.Visible = false;
-				fastListBox_Monitor.SendToBack();
+
+				fastListBox_LineNumbers.Top = 0;
+				fastListBox_LineNumbers.Height = Height;
+
+				fastListBox_Monitor.Top = 0;
+				fastListBox_Monitor.Height = Height;
 			}
 
 			SetFormatDependentControls();
@@ -931,18 +923,18 @@ namespace YAT.Gui.Controls
 			ListBox lb;
 			Font f = this.formatSettings.Font;
 
+			lb = fastListBox_LineNumbers;
+			lb.BeginUpdate();
+			lb.Font = (Font)f.Clone();
+			lb.ItemHeight = f.Height;
+			lb.Invalidate();
+			lb.EndUpdate();
+
 			lb = fastListBox_Monitor;
 			lb.BeginUpdate();
 			lb.Font = (Font)f.Clone();
 			lb.ItemHeight = f.Height;
 			ListBoxEx.ScrollToBottomIfNoItemButTheLastIsSelected(lb);
-			lb.Invalidate();
-			lb.EndUpdate();
-
-			lb = fastListBox_LineNumbers;
-			lb.BeginUpdate();
-			lb.Font = (Font)f.Clone();
-			lb.ItemHeight = f.Height;
 			lb.Invalidate();
 			lb.EndUpdate();
 		}

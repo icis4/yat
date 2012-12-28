@@ -153,12 +153,12 @@ namespace MKY.CommandLine
 
 		private string[] args;
 
-		private List<string> valueArgs = new List<string>();
-		private List<string> optionArgs = new List<string>();
-		private List<string[]> arrayOptionArgs = new List<string[]>();
-		private List<string> invalidArgs = new List<string>();
+		private List<string> valueArgs;
+		private List<string> optionArgs;
+		private List<string[]> arrayOptionArgs;
+		private List<string> invalidArgs;
 
-		private List<FieldInfo> optionFields = new List<FieldInfo>();
+		private List<FieldInfo> optionFields;
 
 		#endregion
 
@@ -781,10 +781,27 @@ namespace MKY.CommandLine
 		/// This method intentionally is public, and not called by the constructor, because it
 		/// calls virtual methods. If a derived class has overridden such a method, the derived
 		/// class version will be called before the derived class constructor is called. Finding
-		/// using FxCop.
+		/// of FxCop.
 		/// </remarks>
 		public virtual bool ProcessAndValidate()
 		{
+			// Ensure to process the arguments only once in order to save time. However, it shall
+			// be allowed to call this method multiple times, e.g. if the application is started
+			// in different sequences. This especially may be the case when running test sequences
+			// at the application level.
+
+			if (this.valueArgs != null)
+				return (IsValid);
+
+			// Prepare the argument containers:
+			this.valueArgs       = new List<string>();
+			this.optionArgs      = new List<string>();
+			this.arrayOptionArgs = new List<string[]>();
+			this.invalidArgs     = new List<string>();
+
+			this.optionFields    = new List<FieldInfo>();
+
+			// Process the arguments:
 			if (this.args != null)
 			{
 				for (int i = 0; i < this.args.Length; i++)

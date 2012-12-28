@@ -7,16 +7,35 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private bool isDisposed;
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			// Modified version of the designer generated Dispose() method:
+			if (!this.isDisposed)
 			{
-				components.Dispose();
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+					if (this.finishedLoadingLock != null)
+						this.finishedLoadingLock.Dispose();
+				}
+
+				// Dispose designer generated managed resources if requested:
+				if (disposing && (components != null))
+				{
+					components.Dispose();
+				}
+
+				// Set state to disposed:
+				this.finishedLoadingLock = null;
+				this.isDisposed = true;
 			}
+
 			base.Dispose(disposing);
 		}
 
@@ -29,23 +48,23 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.pictureBox_Icon = new System.Windows.Forms.PictureBox();
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
 			this.label_Name = new System.Windows.Forms.Label();
 			this.label_Version = new System.Windows.Forms.Label();
 			this.label_Status = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Icon)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// pictureBox1
+			// pictureBox_Icon
 			// 
-			this.pictureBox1.Image = global::YAT.Gui.Forms.Properties.Resources.Image_YAT_64x64;
-			this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(64, 64);
-			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-			this.pictureBox1.TabIndex = 0;
-			this.pictureBox1.TabStop = false;
+			this.pictureBox_Icon.Image = global::YAT.Gui.Forms.Properties.Resources.Image_YAT_64x64;
+			this.pictureBox_Icon.Location = new System.Drawing.Point(12, 12);
+			this.pictureBox_Icon.Name = "pictureBox_Icon";
+			this.pictureBox_Icon.Size = new System.Drawing.Size(64, 64);
+			this.pictureBox_Icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.pictureBox_Icon.TabIndex = 0;
+			this.pictureBox_Icon.TabStop = false;
 			// 
 			// timer_Opacity
 			// 
@@ -102,7 +121,7 @@
 			this.Controls.Add(this.label_Status);
 			this.Controls.Add(this.label_Version);
 			this.Controls.Add(this.label_Name);
-			this.Controls.Add(this.pictureBox1);
+			this.Controls.Add(this.pictureBox_Icon);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "WelcomeScreen";
 			this.Opacity = 0.25;
@@ -110,7 +129,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "WelcomeScreen";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WelcomeScreen_FormClosing);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Icon)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -118,7 +137,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox pictureBox_Icon;
 		private System.Windows.Forms.Label label_Name;
 		private System.Windows.Forms.Label label_Version;
 		private System.Windows.Forms.Label label_Status;

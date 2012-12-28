@@ -81,14 +81,14 @@ namespace YAT.Domain
 			{
 				if (!this.isDisposed)
 				{
-					// Finalize managed resources.
-
+					// Dispose of managed resources if requested:
 					if (disposing)
 					{
 						// In the 'normal' case, the timer is stopped in Stop().
 						StopAndDisposeTimer();
 					}
 
+					// Set state to disposed:
 					this.isDisposed = true;
 				}
 			}
@@ -218,18 +218,16 @@ namespace YAT.Domain
 			{
 				if (!this.isDisposed)
 				{
-					// Finalize managed resources.
-
+					// Dispose of managed resources if requested:
 					if (disposing)
 					{
 						// In the 'normal' case, the timer is stopped in ExecuteLineEnd().
 						if (this.LineBreakTimer != null)
-						{
 							this.LineBreakTimer.Dispose();
-							this.LineBreakTimer = null;
-						}
 					}
 
+					// Set state to disposed:
+					this.LineBreakTimer = null;
 					this.isDisposed = true;
 				}
 			}
@@ -353,21 +351,23 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
-			// In any case, dispose of the state objects as they were created in the constructor.
-			if (this.txLineState != null)
+			if (!IsDisposed)
 			{
-				this.txLineState.Dispose();
-				this.txLineState = null;
-			}
-			if (this.rxLineState != null)
-			{
-				this.rxLineState.Dispose();
-				this.rxLineState = null;
-			}
+				// In any case, dispose of the state objects as they were created in the constructor.
+				if (this.txLineState != null)
+					this.txLineState.Dispose();
 
-			if (disposing)
-			{
-				// Dispose of unmanaged resources.
+				if (this.rxLineState != null)
+					this.rxLineState.Dispose();
+
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+				}
+
+				// Set state to disposed:
+				this.txLineState = null;
+				this.rxLineState = null;
 			}
 
 			base.Dispose(disposing);

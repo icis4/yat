@@ -21,11 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace YAT.Model.Utilities
 {
@@ -73,7 +79,7 @@ namespace YAT.Model.Utilities
 	public static class XmlWriter
 	{
 		/// <summary></summary>
-		public static void LinesToXmlFile(ReadOnlyCollection<Domain.DisplayLine> lines, string xmlFilePath)
+		public static void LinesToXmlFile(List<Domain.DisplayLine> lines, string xmlFilePath)
 		{
 			using (StreamWriter sw = new StreamWriter(xmlFilePath, false, Encoding.UTF8))
 			{

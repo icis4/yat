@@ -8,7 +8,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.IContainer components;
+		private System.ComponentModel.IContainer components = null;
 
 		private bool isDisposed;
 
@@ -18,22 +18,30 @@ namespace MKY.IO.Ports
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
+			// Modified version of the designer generated Dispose() method:
 			if (!this.isDisposed)
 			{
-				try
+				// Dispose of managed resources if requested:
+				if (disposing)
 				{
-					if (disposing && (components != null))
+					try
 					{
 						DisposeBaseStream_SerialPortBugFix();
-						components.Dispose();
 					}
-					this.isDisposed = true;
+					catch { }
 				}
-				finally
+
+				// Dispose designer generated managed resources if requested:
+				if (disposing && (components != null))
 				{
-					base.Dispose(disposing);
+					components.Dispose();
 				}
+
+				// Set state to disposed:
+				this.isDisposed = true;
 			}
+
+			base.Dispose(disposing);
 		}
 
 		#region Component Designer generated code

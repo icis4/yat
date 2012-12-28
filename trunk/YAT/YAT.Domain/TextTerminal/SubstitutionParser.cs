@@ -109,11 +109,12 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
-			// Finalize managed resources.
-
-			if (disposing)
+			if (!IsDisposed)
 			{
-				// Dispose of unmanaged resources.
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+				}
 			}
 
 			base.Dispose(disposing);

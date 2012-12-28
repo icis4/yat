@@ -176,8 +176,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the terminals have already been closed, otherwise...
@@ -198,10 +197,11 @@ namespace YAT.Model
 							t.Dispose();
 
 						this.terminals.Clear();
-						this.terminals = null;
 					}
 				}
 
+				// Set state to disposed:
+				this.terminals = null;
 				this.isDisposed = true;
 			}
 		}

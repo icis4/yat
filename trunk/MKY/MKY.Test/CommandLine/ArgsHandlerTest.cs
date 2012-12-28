@@ -533,6 +533,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.IsTrue(cla.ProcessAndValidate());
 			Assert.IsTrue(cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -558,6 +559,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.AreEqual(isValid, cla.HelpIsRequested);
 		}
@@ -575,6 +577,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -601,6 +604,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -624,6 +628,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -647,6 +652,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -670,6 +676,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -693,6 +700,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -716,6 +724,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -736,6 +745,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -759,6 +769,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -782,6 +793,7 @@ namespace MKY.Test.CommandLine
 		{
 			CommandLineArgs cla = new CommandLineArgs(commandLineArgs);
 
+			Assert.AreEqual(isValid, cla.ProcessAndValidate());
 			Assert.AreEqual(isValid, cla.IsValid);
 			Assert.IsFalse(cla.HelpIsRequested);
 
@@ -804,15 +816,19 @@ namespace MKY.Test.CommandLine
 		public virtual void TestRuntimeValidation(bool isValid, Type type)
 		{
 			TestRuntimeValidation_type = type;
+
+			// Must not throw an exception:
+			Assert.DoesNotThrow(new TestDelegate(TestRuntimeValidation_GetConstructorAndCreateObject));
+
+			// Must throw an exception in case of invalid arguments:
 			if (isValid)
 			{
-				// Must not throw an exception.
-				Assert.DoesNotThrow(new TestDelegate(TestRuntimeValidation_GetConstructorAndCreateObject));
+				Assert.DoesNotThrow(new TestDelegate(TestRuntimeValidation_ProcessAndValidate));
 			}
 		#if (DEBUG)
 			else
 			{
-				Assert.Throws<ArgsHandler.RuntimeValidationException>(new TestDelegate(TestRuntimeValidation_GetConstructorAndCreateObject));
+				Assert.Throws<ArgsHandler.RuntimeValidationException>(new TestDelegate(TestRuntimeValidation_ProcessAndValidate));
 			}
 		#endif
 		}
@@ -820,19 +836,18 @@ namespace MKY.Test.CommandLine
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'type' indeed starts with an lower case letter.")]
 		private Type TestRuntimeValidation_type;
 
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "obj", Justification = "Local variable 'obj' is required for object instantiation to check for exception.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'args' indeed starts with an lower case letter.")]
+		private ArgsHandler TestRuntimeValidation_args;
+
 		private void TestRuntimeValidation_GetConstructorAndCreateObject()
 		{
-			try
-			{
-				ConstructorInfo ci = TestRuntimeValidation_type.GetConstructor(new Type[] { typeof(string[]) });
-				object obj = ci.Invoke(new object[] { new string[] { "" } });
-			}
-			catch (TargetInvocationException ex)
-			{
-				// Re-throw the inner exception which will be the 'ArgsHandler.RuntimeValidationException'.
-				throw (ex.InnerException);
-			}
+			ConstructorInfo ci = TestRuntimeValidation_type.GetConstructor(new Type[] { typeof(string[]) });
+			TestRuntimeValidation_args = (ArgsHandler)ci.Invoke(new object[] { new string[] { "" } });
+		}
+
+		private void TestRuntimeValidation_ProcessAndValidate()
+		{
+			TestRuntimeValidation_args.ProcessAndValidate();
 		}
 
 		#endregion

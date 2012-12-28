@@ -192,14 +192,30 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					SuppressEventsAndThenStopAndDisposeSocket();
+
+					if (this.socket != null)
+						this.socket.Dispose();
+
+					if (this.eventHandlingIsSuppressedWhileStoppingLock != null)
+						this.eventHandlingIsSuppressedWhileStoppingLock.Dispose();
+
+					if (this.dataSentThreadEvent != null)
+						this.dataSentThreadEvent.Close();
+
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
 				}
 
+				// Set state to disposed:
+				this.socket = null;
+				this.eventHandlingIsSuppressedWhileStoppingLock = null;
+				this.dataSentThreadEvent = null;
+				this.stateLock = null;
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Disposed.");
@@ -392,7 +408,7 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsStarted)
 			{
-				// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
 				StopAndDisposeSocketWithoutSuppressingEvents();
 			}
 			else
@@ -480,7 +496,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+		/// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
 		/// 
 		/// \attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
@@ -495,7 +511,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+		/// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
 		/// 
 		/// \attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
@@ -555,10 +571,14 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartDataSentThread()
 		{
-			// Ensure that thread has stopped after the last stop request.
+			// Ensure that thread has stopped after the last stop request:
 			while (this.dataSentThread != null)
 				Thread.Sleep(1); // Allow some time to stop.
 
+			if (this.dataSentThreadEvent != null)
+				this.dataSentThreadEvent.Close();
+
+			// Start thread:
 			this.dataSentThreadRunFlag = true;
 			this.dataSentThreadEvent = new AutoResetEvent(false);
 			this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
@@ -663,8 +683,9 @@ namespace MKY.IO.Serial.Socket
 				try
 				{
 					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
 					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.dataSentThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+					if (!this.dataSentThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)
@@ -748,7 +769,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!EventHandlingIsSuppressedWhileStoppingSynchronized)
 			{
-				// Dispose ALAZ socket in any case. A new socket will be created on next Start().
+				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
 				SuppressEventsAndThenStopAndDisposeSocket();
 
 				SetStateSynchronizedAndNotify(SocketState.Error);

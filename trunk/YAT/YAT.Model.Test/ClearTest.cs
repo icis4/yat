@@ -26,7 +26,7 @@
 // Using
 //==================================================================================================
 
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
@@ -134,7 +134,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 					// Verify incomplete line
-					ReadOnlyCollection<Domain.DisplayLine> lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
+					List<Domain.DisplayLine> lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
 						Assert.Fail("Incomplete line not received!");
 

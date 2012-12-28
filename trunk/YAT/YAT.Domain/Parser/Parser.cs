@@ -131,13 +131,12 @@ namespace YAT.Domain.Parser
 			{
 				if (!this.isDisposed)
 				{
-					// Finalize managed resources.
-
+					// Dispose of managed resources if requested:
 					if (disposing)
 					{
-						// Dispose of unmanaged resources.
 					}
 
+					// Set state to disposed:
 					this.isDisposed = true;
 				}
 			}
@@ -185,16 +184,19 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			protected override void Dispose(bool disposing)
 			{
-				// In any case, dispose of the writer as it was created in the constructor:
-				if (this.contiguousWriter != null)
+				if (!IsDisposed)
 				{
-					this.contiguousWriter.Dispose();
-					this.contiguousWriter = null;
-				}
+					// In any case, dispose of the writer as it was created in the constructor:
+					if (this.contiguousWriter != null)
+						this.contiguousWriter.Dispose();
 
-				if (disposing)
-				{
-					// Dispose of unmanaged resources.
+					// Dispose of managed resources if requested:
+					if (disposing)
+					{
+					}
+
+					// Set state to disposed:
+					this.contiguousWriter = null;
 				}
 
 				base.Dispose(disposing);
@@ -597,16 +599,19 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			protected override void Dispose(bool disposing)
 			{
-				// In any case, dispose of the writer as it was created in the constructor:
-				if (this.mnemonicWriter != null)
+				if (!IsDisposed)
 				{
-					this.mnemonicWriter.Dispose();
-					this.mnemonicWriter = null;
-				}
+					// In any case, dispose of the writer as it was created in the constructor:
+					if (this.mnemonicWriter != null)
+						this.mnemonicWriter.Dispose();
 
-				if (disposing)
-				{
-					// Dispose of unmanaged resources.
+					// Dispose of managed resources if requested:
+					if (disposing)
+					{
+					}
+
+					// Set state to disposed:
+					this.mnemonicWriter = null;
 				}
 
 				base.Dispose(disposing);
@@ -705,16 +710,19 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			protected override void Dispose(bool disposing)
 			{
-				// In any case, dispose of the writer as it was created in the constructor:
-				if (this.numericWriter != null)
+				if (!IsDisposed)
 				{
-					this.numericWriter.Dispose();
-					this.numericWriter = null;
-				}
+					// In any case, dispose of the writer as it was created in the constructor:
+					if (this.numericWriter != null)
+						this.numericWriter.Dispose();
 
-				if (disposing)
-				{
-					// Dispose of unmanaged resources.
+					// Dispose of managed resources if requested:
+					if (disposing)
+					{
+					}
+
+					// Set state to disposed:
+					this.numericWriter = null;
 				}
 
 				base.Dispose(disposing);
@@ -982,31 +990,27 @@ namespace YAT.Domain.Parser
 			{
 				// In any case, dispose of the writers as they were created in the constructor:
 				if (this.reader != null)
-				{
 					this.reader.Dispose();
-					this.reader = null;
-				}
-				if (this.byteArrayWriter != null)
-				{
-					this.byteArrayWriter.Dispose();
-					this.byteArrayWriter = null;
-				}
-				if (this.state != null)
-				{
-					this.state.Dispose();
-					this.state = null;
-				}
-				if (this.nestedChildParser != null)
-				{
-					this.nestedChildParser.Dispose();
-					this.nestedChildParser = null;
-				}
 
+				if (this.byteArrayWriter != null)
+					this.byteArrayWriter.Dispose();
+
+				if (this.state != null)
+					this.state.Dispose();
+
+				if (this.nestedChildParser != null)
+					this.nestedChildParser.Dispose();
+
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// Dispose of unmanaged resources.
 				}
 
+				// Set state to disposed:
+				this.reader = null;
+				this.byteArrayWriter = null;
+				this.state = null;
+				this.nestedChildParser = null;
 				this.isDisposed = true;
 			}
 		}

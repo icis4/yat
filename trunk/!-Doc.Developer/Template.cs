@@ -111,6 +111,8 @@ namespace YAT/*.<TODO>*/
 		// Fields
 		//==========================================================================================
 
+		private bool isDisposed;
+
 		#endregion
 
 		#region Events
@@ -129,6 +131,75 @@ namespace YAT/*.<TODO>*/
 		//------------------------------------------------------------------------------------------
 		// Disposal
 		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+				}
+
+				// Release unmanaged resources:
+
+				// Set state to disposed:
+				this.isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~TODO()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		public bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void Dispose(bool disposing)
+		{
+			if (!IsDisposed)
+			{
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+				}
+
+				// Release unmanaged resources:
+
+				// Set state to disposed:
+
+			}
+
+			base.Dispose(disposing);
+		}
 
 		#endregion
 

@@ -23,7 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -168,26 +167,32 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<DisplayLine> ToLines()
+		public new DisplayLine[] ToArray()
 		{
-			List<DisplayLine> lines = new List<DisplayLine>(ToArray());
+			return (ToLines().ToArray());
+		}
+
+		/// <summary></summary>
+		public virtual List<DisplayLine> ToLines()
+		{
+			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray()); // Not using base.ToArray() result in stack overflow!
 
 			// Add current line if it contains elements
 			if (this.currentLine.Count > 0)
 				lines.Add(new DisplayLine(this.currentLine));
 
-			return (lines.AsReadOnly());
+			return (lines);
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<DisplayElement> ToElements()
+		public virtual List<DisplayElement> ToElements()
 		{
 			List<DisplayElement> elements = new List<DisplayElement>();
 
 			foreach (DisplayLine line in ToLines())
 				elements.AddRange(line.ToArray());
 
-			return (elements.AsReadOnly());
+			return (elements);
 		}
 
 		#endregion

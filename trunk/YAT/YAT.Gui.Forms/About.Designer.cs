@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace YAT.Gui.Forms
+﻿namespace YAT.Gui.Forms
 {
 	partial class About
 	{
@@ -11,16 +7,33 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private bool isDisposed;
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing && (components != null))
+			// Modified version of the designer generated Dispose() method:
+			if (!this.isDisposed)
 			{
-				components.Dispose();
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+					timer_ExecuteManualTest3_Dispose();
+				}
+
+				// Dispose designer generated managed resources if requested:
+				if (disposing && (components != null))
+				{
+					components.Dispose();
+				}
+
+				// Set state to disposed:
+				this.isDisposed = true;
 			}
+
 			base.Dispose(disposing);
 		}
 
