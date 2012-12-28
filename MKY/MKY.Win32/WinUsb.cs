@@ -75,6 +75,7 @@ namespace MKY.Win32
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 
+			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "4", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);

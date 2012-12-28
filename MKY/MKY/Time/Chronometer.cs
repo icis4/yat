@@ -90,16 +90,15 @@ namespace MKY.Time
 			{
 				// In any case, dispose of the timer as it was created in the constructor:
 				if (this.timer != null)
-				{
 					this.timer.Dispose();
-					this.timer = null;
-				}
 
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// Dispose of unmanaged resources.
 				}
 
+				// Set state to disposed:
+				this.timer = null;
 				this.isDisposed = true;
 			}
 		}

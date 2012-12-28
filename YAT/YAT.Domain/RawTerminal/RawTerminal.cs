@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -150,8 +149,7 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, Stop() will have already been called...
@@ -159,12 +157,11 @@ namespace YAT.Domain
 
 					// ...and the I/O provider will have stopped as well.
 					if (this.io != null)
-					{
 						this.io.Dispose();
-						this.io = null;
-					}
 				}
 
+				// Set state to disposed:
+				this.io = null;
 				this.isDisposed = true;
 			}
 		}
@@ -343,20 +340,23 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<RawElement> RepositoryToElements(RepositoryType repositoryType)
+		public virtual List<RawElement> RepositoryToElements(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
+			List<RawElement> l = null;
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    return (this.txRepository.ToElements());
-					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
-					case RepositoryType.Rx:    return (this.rxRepository.ToElements());
+					case RepositoryType.Tx:    l = this.txRepository   .ToElements(); break;
+					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
+					case RepositoryType.Rx:    l = this.rxRepository   .ToElements(); break;
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 			}
+
+			return (l);
 		}
 
 		/// <remarks>
@@ -374,9 +374,9 @@ namespace YAT.Domain
 				/* \todo:
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    this.txRepository.Clear();    break;
+					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-					case RepositoryType.Rx:    this.rxRepository.Clear();    break;
+					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
@@ -412,9 +412,9 @@ namespace YAT.Domain
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    s = this.txRepository.ToString(indent);    break;
+					case RepositoryType.Tx:    s = this.txRepository   .ToString(indent); break;
 					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
-					case RepositoryType.Rx:    s = this.rxRepository.ToString(indent);    break;
+					case RepositoryType.Rx:    s = this.rxRepository   .ToString(indent); break;
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 			}

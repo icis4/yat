@@ -27,7 +27,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -373,7 +373,7 @@ namespace YAT.Model.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
-		internal static void VerifyLines(ReadOnlyCollection<Domain.DisplayLine> linesA, ReadOnlyCollection<Domain.DisplayLine> linesB,
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
 		                                 TestSet testSet)
 		{
 			VerifyLines(linesA, linesB, testSet, 1);
@@ -382,7 +382,7 @@ namespace YAT.Model.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
-		internal static void VerifyLines(ReadOnlyCollection<Domain.DisplayLine> linesA, ReadOnlyCollection<Domain.DisplayLine> linesB,
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
 		                                 TestSet testSet, int cycle)
 		{
 			// Compare the expected line count at the receiver side.

@@ -669,13 +669,15 @@ namespace MKY.IO.Usb
 		{
 			if (!this.isDisposed)
 			{
+				// In any case, ensure that the static event handlers get detached:
 				DetachAndUnregisterStaticDeviceEventHandlers();
 
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// Dispose of unmanaged resources.
 				}
 
+				// Set state to disposed:
 				this.isDisposed = true;
 			}
 		}

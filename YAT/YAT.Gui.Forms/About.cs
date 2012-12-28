@@ -347,18 +347,27 @@ namespace YAT.Gui.Forms
 
 		private void timer_ExecuteManualTest3_Timeout(object obj)
 		{
-			lock (this.timer_ExecuteManualTest3SyncObj)
-			{
-				this.timer_ExecuteManualTest3.Dispose();
-				this.timer_ExecuteManualTest3 = null;
-			}
+			// Immediately dispose of the timer:
+			timer_ExecuteManualTest3_Dispose();
 
-			// Create event sink that acts as exception source.
+			// Create event sink that acts as exception source:
 			ExecuteManualTest3Class exceptionSource = new ExecuteManualTest3Class();
 			ExecuteManualTest3Event += new EventHandler(exceptionSource.Execute);
 
-			// Fire event synchronously.
+			// Fire event synchronously:
 			EventHelper.FireSync(ExecuteManualTest3Event, this, new EventArgs());
+		}
+
+		private void timer_ExecuteManualTest3_Dispose()
+		{
+			lock (this.timer_ExecuteManualTest3SyncObj)
+			{
+				if (this.timer_ExecuteManualTest3 != null)
+				{
+					this.timer_ExecuteManualTest3.Dispose();
+					this.timer_ExecuteManualTest3 = null;
+				}
+			}
 		}
 
 		private class ExecuteManualTest3Class

@@ -105,7 +105,7 @@ using MKY.IO;
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeTypes+SP_DEVICE_INTERFACE_DETAIL_DATA.#cbSize", MessageId = "cb")]
 
 // Justification = "Naming is defined by the Win32 API."
-[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.Int32)", MessageId = "hwnd")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.IntPtr)", MessageId = "hwnd")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#RegisterDeviceNotification(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE,MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY)", MessageId = "h")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "Devs")]
 [module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiGetClassDevs(System.Guid&,System.IntPtr,System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DIGCF)", MessageId = "hwnd")]
@@ -189,8 +189,8 @@ using MKY.IO;
 // Justification = "Naming is defined by the Win32 API."
 [module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiDestroyDeviceInfoList(System.IntPtr)", MessageId = "Device")]
 [module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiDestroyDeviceInfoList(System.IntPtr)", MessageId = "Di")]
-[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.Int32)", MessageId = "Class")]
-[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.Int32)", MessageId = "Di")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.IntPtr)", MessageId = "Class")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#SetupDiCreateDeviceInfoList(System.Guid&,System.IntPtr)", MessageId = "Di")]
 [module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#UnregisterDeviceNotification(System.IntPtr)", MessageId = "Handle")]
 [module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#RegisterDeviceNotification(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE,MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY)", MessageId = "Flags")]
 [module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.DeviceManagement+NativeMethods.#RegisterDeviceNotification(System.IntPtr,MKY.Win32.DeviceManagement+NativeTypes+DEV_BROADCAST_DEVICEINTERFACE,MKY.Win32.DeviceManagement+NativeTypes+DEVICE_NOTIFY)", MessageId = "Notification")]
@@ -436,7 +436,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref Guid ClassGuid, [In] Int32 hwndParent);
+			public static extern IntPtr SetupDiCreateDeviceInfoList([In] ref Guid ClassGuid, [In] IntPtr hwndParent);
 
 			/// <summary>
 			/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
@@ -444,7 +444,8 @@ namespace MKY.Win32
 			/// <returns>True on success.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern Int32 SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
+			[return: MarshalAs(UnmanagedType.Bool)]
+			public static extern bool SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
 
 			/// <summary>
 			/// Retrieves a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.

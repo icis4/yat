@@ -115,19 +115,8 @@ namespace YAT.Controller
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Main()
-		{
-			Initialize(null);
-		}
-
-		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "strings", Justification = "Emphasize the difference between the original strings and the resulting object.")]
 		public Main(string[] commandLineArgsStrings)
-		{
-			Initialize(commandLineArgsStrings);
-		}
-
-		private void Initialize(string[] commandLineArgsStrings)
 		{
 			this.commandLineArgsStrings = commandLineArgsStrings;
 			this.commandLineArgs = new CommandLineArgs(this.commandLineArgsStrings);
@@ -150,13 +139,12 @@ namespace YAT.Controller
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// Dispose of unmanaged resources.
 				}
 
+				// Set state to disposed:
 				this.isDisposed = true;
 			}
 		}
@@ -195,19 +183,19 @@ namespace YAT.Controller
 		/// <summary></summary>
 		public virtual bool CommandLineIsValid
 		{
-			get { return (this.commandLineArgs.IsValid); }
+			get { return ((this.commandLineArgs != null) && (this.commandLineArgs.IsValid)); }
 		}
 
 		/// <summary></summary>
 		public virtual bool CommandLineHelpIsRequested
 		{
-			get { return (this.commandLineArgs.HelpIsRequested); }
+			get { return ((this.commandLineArgs != null) && (this.commandLineArgs.HelpIsRequested)); }
 		}
 
 		/// <summary></summary>
 		public virtual bool CommandLineLogoIsRequested
 		{
-			get { return (!this.commandLineArgs.NoLogo); }
+			get { return ((this.commandLineArgs != null) && (!this.commandLineArgs.NoLogo)); }
 		}
 
 		#endregion
@@ -218,10 +206,37 @@ namespace YAT.Controller
 		//==========================================================================================
 
 		/// <summary>
+		/// This method is used to test the command line argument processing.
+		/// </summary>
+		public virtual MainResult PrepareRun()
+		{
+			AssertNotDisposed();
+
+			// Process command line arguments, and evaluate them:
+			// 
+			// Note that this is the location where the command line arguments are processed and
+			// validated in normal operation. In case of automated testing, they will be processed
+			// and validated in PrepareRun() below or in YAT.Model.Main.
+			if (this.commandLineArgs != null)
+			{
+				if (this.commandLineArgs.ProcessAndValidate())
+					return (MainResult.Success);
+				else
+					return (MainResult.CommandLineError);
+			}
+			else
+			{
+				return (MainResult.Success);
+			}
+		}
+
+		/// <summary>
 		/// This is the main run method for normal operation.
 		/// </summary>
 		public virtual MainResult RunNormally()
 		{
+			AssertNotDisposed();
+
 			return (Run(false));
 		}
 
@@ -230,24 +245,46 @@ namespace YAT.Controller
 		/// </summary>
 		public virtual MainResult RunFromConsole()
 		{
+			AssertNotDisposed();
+
 			return (Run(true));
 		}
 
 		private MainResult Run(bool runFromConsole)
 		{
-			bool showLogo = true;
-			bool showView = true;
-			bool showHelp = false;
-			MainResult mainResult = MainResult.Success;
+			MainResult mainResult;
+			bool showLogo;
+			bool showView;
+			bool showHelp;
 
-			// Check command line arguments.
-			if (!this.commandLineArgs.IsValid)
+			// Process command line arguments, and evaluate them:
+			// 
+			// Note that this is the location where the command line arguments are processed and
+			// validated in normal operation. In case of automated testing, they will be processed
+			// and validated in PrepareRun() above or in YAT.Model.Main.
+			if (this.commandLineArgs != null)
+				this.commandLineArgs.ProcessAndValidate();
+
+			// Prio 0 = None:
+			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
+			{
+				mainResult = MainResult.Success;
+				showLogo = true;
+				showView = !runFromConsole;
+				showHelp = false;
+			}
+			// Prio 1 = Invalid:
+			else if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
 			{
 				mainResult = MainResult.CommandLineError;
+				showLogo = true;
+				showView = !runFromConsole;
 				showHelp = true;
 			}
+			// Prio 2 = Valid:
 			else
 			{
+				mainResult = MainResult.Success;
 				showLogo = this.commandLineArgs.ShowLogo;
 				showView = this.commandLineArgs.ShowView;
 				showHelp = this.commandLineArgs.HelpIsRequested;
@@ -276,8 +313,8 @@ namespace YAT.Controller
 		/// testing purposes.
 		/// </summary>
 		/// <remarks>
-		/// There are the following use cases to run YAT. This YAT.Controller.Run() method
-		/// supports all these use cases as also shown below:
+		/// There are the following use cases to run YAT. This Run() method supports all these
+		/// use cases as also shown below:
 		/// 
 		/// 1. 'Normal' GUI operation
 		///    > Start YAT from the Windows start menu
@@ -314,6 +351,8 @@ namespace YAT.Controller
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop doesn't seem to be able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)
 		{
+			AssertNotDisposed();
+
 			MainResult mainResult = MainResult.Success;
 
 			if      (!runFromConsole &&  runWithView)
@@ -327,12 +366,10 @@ namespace YAT.Controller
 
 			if (mainResult == MainResult.CommandLineError)
 			{
-				bool showLogo = this.commandLineArgs.ShowLogo;
-
 				if (runWithView)
-					ShowMessageBoxHelp(showLogo);
+					ShowMessageBoxHelp(true);
 				else
-					ShowConsoleHelp(showLogo);
+					ShowConsoleHelp(true);
 			}
 
 			return (mainResult);

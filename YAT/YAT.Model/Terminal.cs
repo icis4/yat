@@ -28,13 +28,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -288,8 +285,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, terminal and log have already been closed, otherwise...
@@ -301,18 +297,18 @@ namespace YAT.Model
 					// ...then, dispose of objects.
 					DisposeRates();
 					DisposeChronos();
+
 					if (this.log != null)
-					{
 						this.log.Dispose();
-						this.log = null;
-					}
+
 					if (this.terminal != null)
-					{
 						this.terminal.Dispose();
-						this.terminal = null;
-					}
+
 				}
 
+				// Set state to disposed:
+				this.log = null;
+				this.terminal = null;
 				this.isDisposed = true;
 			}
 		}
@@ -2280,7 +2276,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public virtual ReadOnlyCollection<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
+		public virtual List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (this.terminal.RepositoryToDisplayElements(repositoryType));
@@ -2289,7 +2285,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public virtual ReadOnlyCollection<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		public virtual List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (this.terminal.RepositoryToDisplayLines(repositoryType));

@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -188,7 +187,7 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-			// this.eventsSuspendedForReload = false;
+		////this.eventsSuspendedForReload = false;
 
 			CreateAndStartSendThread();
 		}
@@ -219,10 +218,14 @@ namespace YAT.Domain
 
 		private void CreateAndStartSendThread()
 		{
-			// Ensure that thread has stopped after the last stop request.
+			// Ensure that thread has stopped after the last stop request:
 			while (this.sendThread != null)
 				Thread.Sleep(1); // Allow some time to stop.
 
+			if (this.sendThreadEvent != null)
+				this.sendThreadEvent.Close();
+
+			// Start thread:
 			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
 			this.sendThread = new Thread(new ThreadStart(SendThread));
@@ -260,21 +263,23 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the terminal will already have been stopped in Stop().
 					if (this.rawTerminal != null)
-					{
 						this.rawTerminal.Dispose();
-						this.rawTerminal = null;
-					}
 
 					// In the 'normal' case, the send thread will already have been stopped in Close().
 					StopSendThread();
+
+					if (this.sendThreadEvent != null)
+						this.sendThreadEvent.Close();
 				}
 
+				// Set state to disposed:
+				this.rawTerminal = null;
+				this.sendThreadEvent = null;
 				this.isDisposed = true;
 			}
 		}
@@ -509,8 +514,9 @@ namespace YAT.Domain
 				try
 				{
 					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
 					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)
@@ -1048,7 +1054,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
+		public virtual List<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -1065,7 +1071,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
+		public virtual List<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -1105,7 +1111,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<RawElement> RepositoryToRawElements(RepositoryType repository)
+		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
 			return (this.rawTerminal.RepositoryToElements(repository));

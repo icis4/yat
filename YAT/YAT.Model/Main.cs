@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -141,8 +142,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the workspace has already been closed, otherwise...
@@ -152,12 +152,11 @@ namespace YAT.Model
 
 					// ...then, dispose of objects.
 					if (this.workspace != null)
-					{
 						this.workspace.Dispose();
-						this.workspace = null;
-					}
 				}
 
+				// Set state to disposed:
+				this.workspace = null;
 				this.isDisposed = true;
 			}
 		}
@@ -350,8 +349,13 @@ namespace YAT.Model
 			// Always create start requests to ensure that object exists.
 			this.startArgs = new StartArgs();
 
-			// Process command line args, but do not care about result, it will be evaluated below.
-			this.commandLineArgs.ProcessAndValidate();
+			// Process command line arguments, and evaluate them:
+			// 
+			// Note that this is the location where the command line arguments are processed and
+			// validated in case of automated testing. In normal operation, they will be processed
+			// and validated in YAT.Controller.Main.Run().
+			if (this.commandLineArgs != null)
+				this.commandLineArgs.ProcessAndValidate();
 
 			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)

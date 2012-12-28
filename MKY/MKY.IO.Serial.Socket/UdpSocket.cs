@@ -31,7 +31,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
@@ -177,14 +176,22 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSocketAndThreads();
+
+					if (this.sendThreadEvent != null)
+						this.sendThreadEvent.Close();
+
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
 				}
 
+				// Set state to disposed:
+				this.sendThreadEvent = null;
+				this.stateLock = null;
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
@@ -407,8 +414,9 @@ namespace MKY.IO.Serial.Socket
 				try
 				{
 					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
 					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)
@@ -507,10 +515,14 @@ namespace MKY.IO.Serial.Socket
 
 		private void CreateAndStartSendThread()
 		{
-			// Ensure that thread has stopped after the last stop request.
+			// Ensure that thread has stopped after the last stop request:
 			while (this.sendThread != null)
 				Thread.Sleep(1); // Allow some time to stop.
 
+			if (this.sendThreadEvent != null)
+				this.sendThreadEvent.Close();
+
+			// Start thread:
 			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
 			this.sendThread = new Thread(new ThreadStart(SendThread));

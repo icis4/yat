@@ -72,18 +72,15 @@ namespace MKY.IO
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the writer is closed in Close().
 					if (this.writer != null)
-					{
 						this.writer.Dispose();
-						this.writer = null;
-					}
 				}
 
+				// Set state to disposed:
+				this.writer = null;
 				this.isDisposed = true;
 			}
 		}

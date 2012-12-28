@@ -59,6 +59,7 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The application settings timer just invokes an asynchronous thread that loads the settings.")]
 		public WelcomeScreen()
 		{
 			InitializeComponent();

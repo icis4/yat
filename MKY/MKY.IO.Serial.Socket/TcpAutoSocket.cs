@@ -231,14 +231,18 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of.
 					DisposeSockets();
+
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
 				}
 
+				// Set state to disposed:
+				this.stateLock = null;
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");

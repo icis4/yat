@@ -121,14 +121,16 @@ namespace YAT.Log
 			{
 				if (!this.isDisposed)
 				{
-					// Finalize managed resources.
-
+					// Dispose of managed resources if requested:
 					if (disposing)
 					{
+						StopFlushTimer();
+
 						// In the 'normal' case, Close() has already been called.
 						Close();
 					}
 
+					// Set state to disposed:
 					this.isDisposed = true;
 				}
 			}
@@ -269,6 +271,7 @@ namespace YAT.Log
 					CloseWriter();
 					this.fileStream.Close();
 				}
+
 				this.isStarted = false;
 			}
 
@@ -518,14 +521,14 @@ namespace YAT.Log
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, End() has already been called.
 					End();
 				}
 
+				// Set state to disposed:
 				this.isDisposed = true;
 			}
 		}

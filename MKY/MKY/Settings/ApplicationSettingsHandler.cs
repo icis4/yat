@@ -194,11 +194,12 @@ namespace MKY.Settings
 					// The mutex must be closed and released by the application because it would
 					// be called from the wrong process if it was closed by the garbage collector.
 
+					// Dispose of managed resources if requested:
 					if (disposing)
 					{
-						// Dispose of unmanaged resources.
 					}
 
+					// Set state to disposed:
 					this.isDisposed = true;
 				}
 			}
@@ -477,28 +478,24 @@ namespace MKY.Settings
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, all settings have already been closed in Close().
 					if (this.commonSettings != null)
-					{
 						this.commonSettings.Dispose();
-						this.commonSettings = null;
-					}
+
 					if (this.localUserSettings != null)
-					{
 						this.localUserSettings.Dispose();
-						this.localUserSettings = null;
-					}
+
 					if (this.roamingUserSettings != null)
-					{
 						this.roamingUserSettings.Dispose();
-						this.roamingUserSettings = null;
-					}
 				}
 
+				// Set state to disposed:
+				this.commonSettings = null;
+				this.localUserSettings = null;
+				this.roamingUserSettings = null;
 				this.isDisposed = true;
 			}
 		}

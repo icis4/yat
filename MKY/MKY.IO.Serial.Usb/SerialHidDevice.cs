@@ -151,14 +151,22 @@ namespace MKY.IO.Serial.Usb
 		{
 			if (!this.isDisposed)
 			{
-				// Finalize managed resources.
-
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeDeviceAndThreads();
+
+					if (this.sendThreadEvent != null)
+						this.sendThreadEvent.Close();
+
+					if (this.receiveThreadEvent != null)
+						this.receiveThreadEvent.Close();
 				}
 
+				// Set state to disposed:
+				this.sendThreadEvent = null;
+				this.receiveThreadEvent = null;
 				this.isDisposed = true;
 			}
 		}
@@ -361,8 +369,9 @@ namespace MKY.IO.Serial.Usb
 				try
 				{
 					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
 					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)
@@ -509,10 +518,17 @@ namespace MKY.IO.Serial.Usb
 
 		private void StartThreads()
 		{
-			// Ensure that threads have stopped after the last stop request.
-			while ((this.receiveThread != null) && (this.sendThread != null))
+			// Ensure that threads have stopped after the last stop request:
+			while ((this.sendThread != null) && (this.receiveThread != null))
 				Thread.Sleep(1); // Allow some time to stop.
 
+			if (this.sendThreadEvent != null)
+				this.sendThreadEvent.Close();
+
+			if (this.receiveThreadEvent != null)
+				this.receiveThreadEvent.Close();
+
+			// Start threads:
 			this.sendThreadRunFlag = true;
 			this.sendThreadEvent = new AutoResetEvent(false);
 			this.sendThread = new Thread(new ThreadStart(SendThread));
@@ -615,8 +631,9 @@ namespace MKY.IO.Serial.Usb
 				try
 				{
 					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
 					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)

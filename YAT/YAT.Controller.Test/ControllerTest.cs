@@ -113,6 +113,8 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
+				PrepareMainAndVerifyResult(main, MainResult.Success);
+
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
@@ -131,6 +133,8 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
+				PrepareMainAndVerifyResult(main, MainResult.Success);
+
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
@@ -149,6 +153,8 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{
+				PrepareMainAndVerifyResult(main, MainResult.Success);
+
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
@@ -303,6 +309,8 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(null))
 			{
+				PrepareMainAndVerifyResult(main, MainResult.Success);
+
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 				Assert.IsTrue (main.CommandLineLogoIsRequested);
@@ -322,7 +330,9 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(new string[] { "--NoLogo" }))
 			{
-				Assert.IsTrue(main.CommandLineIsValid);
+				PrepareMainAndVerifyResult(main, MainResult.Success);
+
+				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineLogoIsRequested);
 			}
 		}
@@ -335,6 +345,12 @@ namespace YAT.Controller.Test
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
+
+		private static void PrepareMainAndVerifyResult(Controller.Main main, MainResult expectedMainResult)
+		{
+			MainResult mainResult = main.PrepareRun();
+			Assert.AreEqual(expectedMainResult, mainResult);
+		}
 
 		private static void RunAndVerifyApplication(Controller.Main main)
 		{

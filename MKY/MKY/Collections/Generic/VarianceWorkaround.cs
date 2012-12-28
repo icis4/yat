@@ -130,8 +130,14 @@ namespace MKY.Collections.Generic
 
 				protected virtual void Dispose(bool disposing)
 				{
+					// Dispose of managed resources if requested:
 					if (disposing)
+					{
 						this.source.Dispose();
+					}
+
+					// Set state to disposed:
+					this.source = null;
 				}
 
 				~EnumeratorWrapper()

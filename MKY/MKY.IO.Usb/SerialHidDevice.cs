@@ -356,12 +356,24 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void Dispose(bool disposing)
 		{
-			DetachAndUnregisterStaticDeviceEventHandlers();
-			Stop();
-
-			if (disposing)
+			if (!IsDisposed)
 			{
-				// Dispose of unmanaged resources.
+				DetachAndUnregisterStaticDeviceEventHandlers();
+				Stop();
+
+				// Dispose of managed resources if requested:
+				if (disposing)
+				{
+					if (this.receiveThreadEvent != null)
+						this.receiveThreadEvent.Close();
+
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
+				}
+
+				// Set state to disposed:
+				this.receiveThreadEvent = null;
+				this.stateLock = null;
 			}
 
 			base.Dispose(disposing);
@@ -616,10 +628,14 @@ namespace MKY.IO.Usb
 
 		private void CreateAndStartReceiveThread()
 		{
-			// Ensure that threads have stopped after the last stop request.
+			// Ensure that thread has stopped after the last stop request:
 			while (this.receiveThread != null)
 				Thread.Sleep(1); // Allow some time to stop.
 
+			if (this.receiveThreadEvent != null)
+				this.receiveThreadEvent.Close();
+
+			// Start thread:
 			this.receiveThreadRunFlag = true;
 			this.receiveThreadEvent = new AutoResetEvent(false);
 			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
@@ -738,8 +754,9 @@ namespace MKY.IO.Usb
 				try
 				{
 					// WaitOne() might wait forever in case the underlying I/O provider crashes,
+					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
 					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(20, 100)))
+					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)

@@ -21,14 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
+
+#endregion
 
 namespace YAT.Model.Utilities
 {
@@ -55,14 +61,14 @@ namespace YAT.Model.Utilities
 	public static class RtfWriter
 	{
 		/// <summary></summary>
-		public static void LinesToRtfFile(ReadOnlyCollection<Domain.DisplayLine> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
+		public static void LinesToRtfFile(List<Domain.DisplayLine> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
 		{
 			RichTextBox richTextProvider = LinesToRichTextBox(lines, formatSettings);
 			richTextProvider.SaveFile(rtfFilePath, rtfType);
 		}
 
 		/// <summary></summary>
-		public static void LinesToClipboard(ReadOnlyCollection<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
+		public static void LinesToClipboard(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox richTextProvider = LinesToRichTextBox(lines, formatSettings);
 			richTextProvider.SelectAll();
@@ -70,7 +76,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public static RichTextBox LinesToRichTextBox(ReadOnlyCollection<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
+		public static RichTextBox LinesToRichTextBox(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox richTextProvider = new RichTextBox();
 			foreach (Domain.DisplayLine line in lines)
@@ -195,26 +201,24 @@ namespace YAT.Model.Utilities
 			{
 				// In any case, dispose of the as they were created in the constructor:
 				if (this.document != null)
-				{
 					this.document.Dispose();
-					this.document = null;
-				}
-				if (this.richTextProvider != null)
-				{
-					this.richTextProvider.Dispose();
-					this.richTextProvider = null;
-				}
-				if (this.reader != null)
-				{
-					this.reader.Dispose();
-					this.reader = null;
-				}
 
+				if (this.richTextProvider != null)
+					this.richTextProvider.Dispose();
+
+				if (this.reader != null)
+					this.reader.Dispose();
+
+
+				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// Dispose of unmanaged resources.
 				}
 
+				// Set state to disposed:
+				this.document = null;
+				this.richTextProvider = null;
+				this.reader = null;
 				this.isDisposed = true;
 			}
 		}
