@@ -219,11 +219,18 @@ namespace YAT.Domain
 		private void CreateAndStartSendThread()
 		{
 			// Ensure that thread has stopped after the last stop request:
+			int timeoutCounter = 0;
 			while (this.sendThread != null)
-				Thread.Sleep(1); // Allow some time to stop.
+			{
+				Thread.Sleep(1);
 
-			if (this.sendThreadEvent != null)
-				this.sendThreadEvent.Close();
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
+			}
+
+			// Do not yet enforce that thread events have been disposed because that may result in
+			// deadlock. Further investigation is required in order to further improve the behaviour
+			// on Stop()/Dispose().
 
 			// Start thread:
 			this.sendThreadRunFlag = true;
@@ -236,11 +243,16 @@ namespace YAT.Domain
 		{
 			this.sendThreadRunFlag = false;
 
-			// Ensure that the thread has ended.
+			// Ensure that thread has stopped after the stop request:
+			int timeoutCounter = 0;
 			while (this.sendThread != null)
 			{
 				this.sendThreadEvent.Set();
-				Thread.Sleep(TimeSpan.Zero);
+
+				Thread.Sleep(1);
+
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
 			}
 		}
 

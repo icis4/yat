@@ -237,12 +237,11 @@ namespace MKY.IO.Serial.Socket
 					// In the 'normal' case, the items have already been disposed of.
 					DisposeSockets();
 
-					if (this.stateLock != null)
-						this.stateLock.Dispose();
+					// Do not yet dispose of state lock because that may result in null ref exceptions
+					// during closing, due to the fact that ALAZ closes/disconnects asynchronously.
 				}
 
 				// Set state to disposed:
-				this.stateLock = null;
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
@@ -548,7 +547,10 @@ namespace MKY.IO.Serial.Socket
 			else
 				isClientOrServerString = "is neither client nor server";
 
-			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ", " + isClientOrServerString + ".");
+			if (this.state != oldState)
+				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ", " + isClientOrServerString + ".");
+			else
+				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State is still " + oldState + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}

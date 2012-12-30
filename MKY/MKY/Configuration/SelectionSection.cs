@@ -62,7 +62,7 @@ namespace MKY.Configuration
 		/// <value>The name of the selected configuration.</value>
 		public virtual string SelectedConfigurationName
 		{
-			get { return (string)this["SelectedConfigurationName"]; }
+			get { return ((string)this["SelectedConfigurationName"]); }
 			set
 			{
 				AssertNotReadOnly("SelectedConfigurationName");

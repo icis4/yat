@@ -76,8 +76,6 @@ Important changes:
   unnecessary dependencies to the other parts (feature request #3388950>#156)
 - Additional help content on serial port errors added (feature requests #2213647>#66, #3440986>#166)
 - Error message in case a serial port cannot be opened has been improved (bug #3565648>#239)
-- The ALAZ socket library was considered to be replaced by a different library, but then decided to
-  be kept and instead partially reverted to 2.0, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
 - Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323>#218)
    > Implemented by use of a named mutex as suggested in the respective comments
    > Also fixes use of same setting file by concurrent YAT instances (bug #3540438>#236)
@@ -88,6 +86,9 @@ Important changes:
   three types of settings (related to bugs #3450553>#208 and #3535709>#231)
 - .NET XML serialization infrastructure extended by schema for GUID items (bug #3535709>#231)
 - BoolEx renamed to BooleanEx for consistency with the .NET type Boolean (bug #3533831>#229)
+- The ALAZ socket library was considered to be replaced by a different library, but then decided to
+  be kept and instead partially reverted to 2.0, see "\MKY\MKY.IO.Serial.Socket\!-Doc" for details
+- Code re-use of the USB Ser/HID infrastructure somewhat documented (feature request #3577235>#185)
 - All projects explicitly set to warning level 4, already used to be level 4 but implicitly
 - Code analysis and improvements using StyleCop finalized (feature request #2970222>#115)
 - Code analysis and improvements using FxCop mostly finalized (feature request #2970221>#114)

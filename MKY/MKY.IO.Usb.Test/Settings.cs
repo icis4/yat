@@ -87,7 +87,7 @@ namespace MKY.IO.Usb.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "DeviceA and DeviceB")]
 		public virtual bool SerialHidDeviceAIsAvailable
 		{
-			get { return (bool)this["SerialHidDeviceAIsAvailable"]; }
+			get { return ((bool)this["SerialHidDeviceAIsAvailable"]); }
 			set
 			{
 				AssertNotReadOnly("SerialHidDeviceAIsAvailable");
@@ -99,7 +99,7 @@ namespace MKY.IO.Usb.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "DeviceA and DeviceB")]
 		public virtual bool SerialHidDeviceBIsAvailable
 		{
-			get { return (bool)this["SerialHidDeviceBIsAvailable"]; }
+			get { return ((bool)this["SerialHidDeviceBIsAvailable"]); }
 			set
 			{
 				AssertNotReadOnly("SerialHidDeviceBIsAvailable");
@@ -110,7 +110,7 @@ namespace MKY.IO.Usb.Test
 		/// <summary></summary>
 		public virtual string SerialHidDeviceA
 		{
-			get { return (string)this["SerialHidDeviceA"]; }
+			get { return ((string)this["SerialHidDeviceA"]); }
 			set
 			{
 				AssertNotReadOnly("SerialHidDeviceA");
@@ -121,7 +121,7 @@ namespace MKY.IO.Usb.Test
 		/// <summary></summary>
 		public virtual string SerialHidDeviceB
 		{
-			get { return (string)this["SerialHidDeviceB"]; }
+			get { return ((string)this["SerialHidDeviceB"]); }
 			set
 			{
 				AssertNotReadOnly("SerialHidDeviceB");

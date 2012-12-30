@@ -61,14 +61,16 @@ reserved for future use, it could be used for e.g. serve as a logical channel ID
 Requirements for USB Ser/HID Device developers
 ----------------------------------------------
 Either, implement the 3 pipes that are mandatory for HID devices:
-  > Control IN
-  > Control OUT
-  > Interrupt IN
+ > Control IN
+ > Control OUT
+ > Interrupt IN
+
 Or, implement 4 pipes:
-  > Control IN
-  > Control OUT
-  > Interrupt IN
-  > Interrupt OUT
+ > Control IN
+ > Control OUT
+ > Interrupt IN
+ > Interrupt OUT
+
 MKY.IO.Usb can handle both variants since it uses the Win32 'hid.dll' which itself is capable of
 handling both variants. For details about pipes of HID devices see [4], chapter 4.4. For an example
 implementation of Ser/HID on a device, see [5].

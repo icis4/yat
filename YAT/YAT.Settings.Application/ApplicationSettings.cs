@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.Settings;
@@ -65,7 +66,7 @@ namespace YAT.Settings.Application
 				if (staticSettingsHandler != null)
 					return (staticSettingsHandler.LocalUserSettings);
 				else
-					return (null);
+					throw (new InvalidOperationException("The settings have to be created before they can be accessed, ensure to call Create() and if needed als Load() before accessing the settings."));
 			}
 		}
 

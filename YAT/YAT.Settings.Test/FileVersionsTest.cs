@@ -47,15 +47,6 @@ namespace YAT.Settings.Test
 	{
 		private const string UnderscoreSuppressionJustification = "As always, there are exceptions to the rules...";
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private MKY.IO.Ports.SerialPortCollection serialPorts;
-
-		#endregion
-
 		#region Set Up Fixture
 		//==========================================================================================
 		// Set Up Fixture
@@ -71,10 +62,6 @@ namespace YAT.Settings.Test
 
 			// Prevent auto-save of workspace settings.
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
-
-			// Serial ports.
-			this.serialPorts = new MKY.IO.Ports.SerialPortCollection();
-			this.serialPorts.FillWithAvailablePorts(false);
 		}
 
 		#endregion
@@ -1061,10 +1048,17 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
-			if (this.serialPorts.Contains(1))
-				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
+			if (MKY.IO.Ports.SerialPortId.Equals(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA, "COM1"))
+			{
+				if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortAIsAvailable)
+					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
+				else
+					Assert.Ignore("'SerialPortA' is configured to 'COM1' but isn't available on this machine.");
+			}
 			else
-				Assert.Ignore("COM1 isn't supported on this machine.");
+			{
+				Assert.Fail("This test case requires that 'SerialPortA' is configured to 'COM1'!");
+			}
 		}
 
 		#endregion
@@ -1087,10 +1081,17 @@ namespace YAT.Settings.Test
 			if (!ignoreBaudRate)
 				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
-			if (this.serialPorts.Contains(2))
-				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");
+			if (MKY.IO.Ports.SerialPortId.Equals(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB, "COM2"))
+			{
+				if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortBIsAvailable)
+					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");
+				else
+					Assert.Ignore("'SerialPortB' is configured to 'COM2' but isn't available on this machine.");
+			}
 			else
-				Assert.Ignore("COM2 isn't supported on this machine.");
+			{
+				Assert.Fail("This test case requires that 'SerialPortB' is configured to 'COM2'!");
+			}
 		}
 
 		#endregion

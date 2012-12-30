@@ -89,7 +89,7 @@ namespace MKY.Net.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual bool SpecificIPv4InterfaceIsAvailable
 		{
-			get { return (bool)this["SpecificIPv4InterfaceIsAvailable"]; }
+			get { return ((bool)this["SpecificIPv4InterfaceIsAvailable"]); }
 			set
 			{
 				AssertNotReadOnly("SpecificIPv4InterfaceIsAvailable");
@@ -101,7 +101,7 @@ namespace MKY.Net.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual bool SpecificIPv6InterfaceIsAvailable
 		{
-			get { return (bool)this["SpecificIPv6InterfaceIsAvailable"]; }
+			get { return ((bool)this["SpecificIPv6InterfaceIsAvailable"]); }
 			set
 			{
 				AssertNotReadOnly("SpecificIPv6InterfaceIsAvailable");
@@ -113,7 +113,7 @@ namespace MKY.Net.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string SpecificIPv4Interface
 		{
-			get { return (string)this["SpecificIPv4Interface"]; }
+			get { return ((string)this["SpecificIPv4Interface"]); }
 			set
 			{
 				AssertNotReadOnly("SpecificIPv4Interface");
@@ -125,7 +125,7 @@ namespace MKY.Net.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string SpecificIPv6Interface
 		{
-			get { return (string)this["SpecificIPv6Interface"]; }
+			get { return ((string)this["SpecificIPv6Interface"]); }
 			set
 			{
 				AssertNotReadOnly("SpecificIPv6Interface");

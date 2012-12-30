@@ -195,7 +195,7 @@ namespace MKY.Windows.Forms
 				}
 				else
 				{
-					staticStatusBox.SetStatus1(status);
+					staticStatusBox.SetStatus2(status);
 				}
 			}
 		}

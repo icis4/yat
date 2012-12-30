@@ -221,24 +221,13 @@ namespace MKY.IO.Serial.Socket
 					StopAndDisposeReconnectTimer();
 					SuppressEventsAndThenStopAndDisposeSocket();
 
-					if (this.socket != null)
-						this.socket.Dispose();
-
-					if (this.eventHandlingIsSuppressedWhileStoppingLock != null)
-						this.eventHandlingIsSuppressedWhileStoppingLock.Dispose();
-
-					if (this.dataSentThreadEvent != null)
-						this.dataSentThreadEvent.Close();
-
-					if (this.stateLock != null)
-						this.stateLock.Dispose();
+					// Do not yet dispose of socket, event lock, thread event and state lock because
+					// that may result in null ref exceptions during closing, due to the fact that
+					// ALAZ closes/disconnects asynchronously. Further investigation is required
+					// in order to further improve the behaviour on Stop()/Dispose().
 				}
 
 				// Set state to disposed:
-				this.socket = null;
-				this.eventHandlingIsSuppressedWhileStoppingLock = null;
-				this.dataSentThreadEvent = null;
-				this.stateLock = null;
 				this.isDisposed = true;
 
 				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): Disposed.");
@@ -487,7 +476,10 @@ namespace MKY.IO.Serial.Socket
 			this.state = state;
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
-			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
+			if (this.state != oldState)
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
+			else
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): State is still " + oldState + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -609,11 +601,18 @@ namespace MKY.IO.Serial.Socket
 		private void StartDataSentThread()
 		{
 			// Ensure that thread has stopped after the last stop request:
+			int timeoutCounter = 0;
 			while (this.dataSentThread != null)
-				Thread.Sleep(1); // Allow some time to stop.
+			{
+				Thread.Sleep(1);
 
-			if (this.dataSentThreadEvent != null)
-				this.dataSentThreadEvent.Close();
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
+			}
+
+			// Do not yet enforce that thread events have been disposed because that may result in
+			// deadlock. Further investigation is required in order to further improve the behaviour
+			// on Stop()/Dispose().
 
 			// Start thread:
 			this.dataSentThreadRunFlag = true;
@@ -626,11 +625,16 @@ namespace MKY.IO.Serial.Socket
 		{
 			this.dataSentThreadRunFlag = false;
 
-			// Ensure that the thread has ended.
+			// Ensure that thread has stopped after the stop request:
+			int timeoutCounter = 0;
 			while (this.dataSentThread != null)
 			{
 				this.dataSentThreadEvent.Set();
-				Thread.Sleep(TimeSpan.Zero);
+
+				Thread.Sleep(1);
+
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
 			}
 		}
 
