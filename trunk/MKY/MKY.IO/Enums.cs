@@ -3,15 +3,15 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Enums.cs $
-// $Author: klaey-1 $
-// $Date: 2011/08/24 13:38:45MESZ $
-// $Revision: 1.1 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2012 Matthias Kläy.
+// Copyright © 2003-2013 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -56,5 +56,5 @@ namespace MKY.IO
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Enums.cs $
+// $URL$
 //==================================================================================================

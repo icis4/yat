@@ -1,9 +1,9 @@
 
 Search for the following expressions thoughout "*.sln;*csproj;*.vcproj;*.vdproj;*.ps1;*.bat;*.txt;*.cs" and update year:
-> "Copyright © 2003-2012 Matthias Kläy."
-> "Copyright © 2007-2012 Matthias Kläy."
-> "Copyright © 2010-2012 Matthias Kläy."
-> "2012, Matthias Kläy"
+> "Copyright © 2003-2013 Matthias Kläy."  => 370 replacements
+> "Copyright © 2007-2013 Matthias Kläy."  =>  12 replacements
+> "Copyright © 2010-2013 Matthias Kläy."  =>  50 replacements
+> "2013, Matthias Kläy"                   =>   2 replacements
 
 Then, verify throughtout all files and there should be no hits except within SVN and other explainable locations:
-> "2012<space>"
+> "2013<space>"
