@@ -91,7 +91,7 @@ namespace MKY.IO.Ports.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "PortA and PortB")]
 		public virtual bool SerialPortAIsAvailable
 		{
-			get { return (bool)this["SerialPortAIsAvailable"]; }
+			get { return ((bool)this["SerialPortAIsAvailable"]); }
 			set
 			{
 				AssertNotReadOnly("SerialPortAIsAvailable");
@@ -103,7 +103,7 @@ namespace MKY.IO.Ports.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "PortA and PortB")]
 		public virtual bool SerialPortBIsAvailable
 		{
-			get { return (bool)this["SerialPortBIsAvailable"]; }
+			get { return ((bool)this["SerialPortBIsAvailable"]); }
 			set
 			{
 				AssertNotReadOnly("SerialPortBIsAvailable");
@@ -114,7 +114,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary></summary>
 		public virtual string SerialPortA
 		{
-			get { return (string)this["SerialPortA"]; }
+			get { return ((string)this["SerialPortA"]); }
 			set
 			{
 				AssertNotReadOnly("SerialPortA");
@@ -125,7 +125,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary></summary>
 		public virtual string SerialPortB
 		{
-			get { return (string)this["SerialPortB"]; }
+			get { return ((string)this["SerialPortB"]); }
 			set
 			{
 				AssertNotReadOnly("SerialPortB");
@@ -139,7 +139,7 @@ namespace MKY.IO.Ports.Test
 			get
 			{
 				if (SerialPortAIsAvailable && SerialPortBIsAvailable)
-					return (bool)this["SerialPortsAreInterconnected"];
+					return ((bool)this["SerialPortsAreInterconnected"]);
 				else
 					return (false);
 			}
@@ -200,7 +200,21 @@ namespace MKY.IO.Ports.Test
 		{
 			SettingsSection settings;
 			if (Provider.TryOpenAndMergeConfigurations<SettingsSection>(SettingsConstants.ConfigurationGroupName, SettingsConstants.ConfigurationsGroupName, SettingsConstants.UserSettingsEnvironmentVariableName, out settings))
+			{
+				// Ensure that physical ports are not only configured in the settings configuration
+				// file but indeed available on the current machine:
+				MKY.IO.Ports.SerialPortCollection serialPorts = new MKY.IO.Ports.SerialPortCollection();
+				serialPorts.FillWithAvailablePorts(false);
+
+				if (!serialPorts.Contains(settings.SerialPortA))
+					settings.SerialPortAIsAvailable = false;
+
+				if (!serialPorts.Contains(settings.SerialPortB))
+					settings.SerialPortBIsAvailable = false;
+
+				// Activate the effective settings:
 				StaticSettings = settings;
+			}
 		}
 
 		/// <summary></summary>

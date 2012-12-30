@@ -519,14 +519,18 @@ namespace MKY.IO.Serial.Usb
 		private void StartThreads()
 		{
 			// Ensure that threads have stopped after the last stop request:
+			int timeoutCounter = 0;
 			while ((this.sendThread != null) && (this.receiveThread != null))
-				Thread.Sleep(1); // Allow some time to stop.
+			{
+				Thread.Sleep(1);
 
-			if (this.sendThreadEvent != null)
-				this.sendThreadEvent.Close();
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Threads havn't properly stopped"));
+			}
 
-			if (this.receiveThreadEvent != null)
-				this.receiveThreadEvent.Close();
+			// Do not yet enforce that thread events have been disposed because that may result in
+			// deadlock. Further investigation is required in order to further improve the behaviour
+			// on Stop()/Dispose().
 
 			// Start threads:
 			this.sendThreadRunFlag = true;
@@ -547,18 +551,17 @@ namespace MKY.IO.Serial.Usb
 			this.sendThreadRunFlag = false;
 			this.receiveThreadRunFlag = false;
 
-			// Ensure that the thread has ended.
-			while (this.sendThread != null)
+			// Ensure that threads have stopped after the stop request:
+			int timeoutCounter = 0;
+			while ((this.sendThread != null) && (this.receiveThread != null))
 			{
 				this.sendThreadEvent.Set();
-				Thread.Sleep(TimeSpan.Zero);
-			}
-
-			// Ensure that the thread has ended.
-			while (this.receiveThread != null)
-			{
 				this.receiveThreadEvent.Set();
-				Thread.Sleep(TimeSpan.Zero);
+
+				Thread.Sleep(1);
+
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Threads havn't properly stopped"));
 			}
 		}
 

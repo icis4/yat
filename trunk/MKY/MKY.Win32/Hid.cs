@@ -508,7 +508,7 @@ namespace MKY.Win32
 			// HidD_GetMsGenreDescriptor() is reserved for internal system use
 
 			/// <summary>
-			/// Retrieves the number of Input reports the host can store.
+			/// Retrieves the number of input reports the host can store.
 			/// </summary>
 			/// <remarks>
 			/// Not supported by Windows 98 Standard Edition.
@@ -593,7 +593,7 @@ namespace MKY.Win32
 			// HidD_SetConfiguration() is reserved for internal system use
 
 			/// <summary>
-			/// Attempts to send a Feature report to the device.
+			/// Attempts to send a feature report to the device.
 			/// </summary>
 			/// <param name="HidDeviceObject">A handle to a HID.</param>
 			/// <param name="ReportBuffer">A pointer to a buffer containing the report ID and report.</param>
@@ -609,7 +609,7 @@ namespace MKY.Win32
 			private static extern bool HidD_SetFeature([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <summary>
-			/// Sets the number of Input reports the host can store.
+			/// Sets the number of input reports the host can store.
 			/// </summary>
 			/// <remarks>
 			/// If the buffer is full and another report arrives, the host drops the oldest report.
@@ -859,7 +859,7 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Retrieves the number of Input reports the host can store.
+		/// Retrieves the number of input reports the host can store.
 		/// </summary>
 		/// <remarks>
 		/// Windows 98 Standard Edition does not support the following:

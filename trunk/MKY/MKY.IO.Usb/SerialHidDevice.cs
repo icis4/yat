@@ -364,16 +364,10 @@ namespace MKY.IO.Usb
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					if (this.receiveThreadEvent != null)
-						this.receiveThreadEvent.Close();
-
-					if (this.stateLock != null)
-						this.stateLock.Dispose();
+					// Do not yet dispose of thread event and state lock because that may result
+					// in null ref exceptions during closing. Further investigation is required
+					// in order to further improve the behaviour on Stop()/Dispose().
 				}
-
-				// Set state to disposed:
-				this.receiveThreadEvent = null;
-				this.stateLock = null;
 			}
 
 			base.Dispose(disposing);
@@ -629,11 +623,18 @@ namespace MKY.IO.Usb
 		private void CreateAndStartReceiveThread()
 		{
 			// Ensure that thread has stopped after the last stop request:
+			int timeoutCounter = 0;
 			while (this.receiveThread != null)
-				Thread.Sleep(1); // Allow some time to stop.
+			{
+				Thread.Sleep(1);
 
-			if (this.receiveThreadEvent != null)
-				this.receiveThreadEvent.Close();
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
+			}
+
+			// Do not yet enforce that thread events have been disposed because that may result in
+			// deadlock. Further investigation is required in order to further improve the behaviour
+			// on Stop()/Dispose().
 
 			// Start thread:
 			this.receiveThreadRunFlag = true;
@@ -646,11 +647,16 @@ namespace MKY.IO.Usb
 		{
 			this.receiveThreadRunFlag = false;
 
-			// Ensure that the thread has ended.
+			// Ensure that thread has stopped after the stop request:
+			int timeoutCounter = 0;
 			while (this.receiveThread != null)
 			{
 				this.receiveThreadEvent.Set();
-				Thread.Sleep(TimeSpan.Zero);
+
+				Thread.Sleep(1);
+
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
 			}
 		}
 
@@ -855,7 +861,10 @@ namespace MKY.IO.Usb
 			this.state = state;
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
-			Debug.WriteLine(GetType() + " '" + ToString() + "': State has changed from " + oldState + " to " + this.state + ".");
+			if (this.state != oldState)
+				Debug.WriteLine(GetType() + " '" + ToString() + "': State has changed from " + oldState + " to " + this.state + ".");
+			else
+				Debug.WriteLine(GetType() + " '" + ToString() + "': State is still " + oldState + ".");
 #endif
 		}
 

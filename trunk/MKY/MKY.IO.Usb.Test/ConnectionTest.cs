@@ -43,7 +43,7 @@ namespace MKY.IO.Usb.Test
 		public virtual void TestConnectDisconnectA()
 		{
 			if (!SettingsProvider.Settings.SerialHidDeviceAIsAvailable)
-				Assert.Fail();
+				Assert.Ignore();
 		}
 
 		/// <summary></summary>
@@ -51,7 +51,7 @@ namespace MKY.IO.Usb.Test
 		public virtual void TestConnectDisconnectB()
 		{
 			if (!SettingsProvider.Settings.SerialHidDeviceBIsAvailable)
-				Assert.Fail();
+				Assert.Ignore();
 		}
 
 		#endregion
