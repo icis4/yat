@@ -13,7 +13,7 @@
 // See SVN change log for revision details.
 // See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2010-2012 Matthias Kläy.
+// Copyright © 2010-2013 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
