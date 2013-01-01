@@ -60,7 +60,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		private static readonly SettingsFilePaths StaticPaths = new SettingsFilePaths();
+		private static readonly SettingsFilePaths StaticPaths = new SettingsFilePaths("!-Current");
 
 		#endregion
 
