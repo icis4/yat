@@ -81,6 +81,8 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public const int TcpClientAutoReconnectMinimumInterval = 100;
 
+		private const string Undefined = "<Undefined>";
+
 		#endregion
 
 		#region Fields
@@ -406,13 +408,27 @@ namespace MKY.IO.Serial.Socket
 			return
 			(
 				((SocketHostTypeEx)this.hostType) + ", " +
-				this.remoteHost                  + ", " +
-				this.remotePort                  + ", " +
-				this.localInterface              + ", " +
-				this.localTcpPort                + ", " +
-				this.localUdpPort                + ", " +
+				this.remoteHost                   + ", " +
+				this.remotePort                   + ", " +
+				this.localInterface               + ", " +
+				this.localTcpPort                 + ", " +
+				this.localUdpPort                 + ", " +
 				this.tcpClientAutoReconnect
 			);
+		}
+
+		/// <summary></summary>
+		public virtual string ToShortEndPointString()
+		{
+			switch (hostType)
+			{
+				case SocketHostType.TcpClient:     return (this.remoteHost + ":" + this.remotePort);
+				case SocketHostType.TcpServer:     return (this.localTcpPort.ToString());
+				case SocketHostType.TcpAutoSocket: return (this.localTcpPort + " / " + this.remoteHost + ":" + this.remotePort);
+				case SocketHostType.Udp:           return (this.localUdpPort + " / " + this.remoteHost + ":" + this.remotePort);
+
+				default:                           return (Undefined);
+			}
 		}
 
 		#endregion

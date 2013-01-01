@@ -23,11 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Threading;
-
-using MKY.IO.Serial.Socket;
 
 using NUnit;
 using NUnit.Framework;
@@ -47,6 +42,14 @@ namespace MKY.IO.Serial.Socket.Test
 		//------------------------------------------------------------------------------------------
 		// Tests > StressAutoSocket()
 		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		[StressCategory]
+		public virtual void Stress1AutoSocketServerWith10AutoSocketClients()
+		{
+			StressAutoSocketServersWithAutoSocketClients(1, 10);
+		}
 
 		/// <summary></summary>
 		[Test]
@@ -76,7 +79,7 @@ namespace MKY.IO.Serial.Socket.Test
 				int p;
 				TcpAutoSocket s;
 				Utilities.StartTcpAutoSocketAsServer(out s, out p);
-				Utilities.WaitForStart(s, "TCP auto socket " + i + " could not be started as server!");
+				Utilities.WaitForTcpAutoSocketToBeStartedAsServer(s, "TCP auto socket " + i + " could not be started as server!");
 				serverSockets.Add(s);
 				serverPorts.Add(p);
 			}
@@ -90,7 +93,7 @@ namespace MKY.IO.Serial.Socket.Test
 				TcpAutoSocket s = serverSockets[j];
 				TcpAutoSocket c;
 				Utilities.StartTcpAutoSocketAsClient(out c, p);
-				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started as client!");
+				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started!");
 				Utilities.WaitForConnect(c, s, "TCP auto socket " + i + " could not be connected to auto socket " + s);
 				clientSockets.Add(c);
 			}

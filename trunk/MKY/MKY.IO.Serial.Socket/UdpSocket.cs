@@ -190,7 +190,7 @@ namespace MKY.IO.Serial.Socket
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
+				WriteDebugMessageLine("Disposed.");
 			}
 		}
 
@@ -350,12 +350,13 @@ namespace MKY.IO.Serial.Socket
 
 			if (!IsStarted)
 			{
+				WriteDebugMessageLine("Starting...");
 				StartSocket();
 				return (true);
 			}
 			else
 			{
-				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
 				return (false);
 			}
 		}
@@ -367,7 +368,14 @@ namespace MKY.IO.Serial.Socket
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
+			{
+				WriteDebugMessageLine("Stopping...");
 				StopSocket();
+			}
+			else
+			{
+				WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
+			}
 		}
 
 		/// <summary></summary>
@@ -402,7 +410,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		private void SendThread()
 		{
-			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): SendThread() has started.");
+			WriteDebugMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.sendThreadRunFlag && !IsDisposed)
@@ -451,7 +459,7 @@ namespace MKY.IO.Serial.Socket
 			// Do not Close() and de-reference the corresponding event as it may be Set() again
 			// right now by another thread, e.g. during closing.
 
-			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): SendThread() has terminated.");
+			WriteDebugMessageLine("SendThread() has terminated.");
 		}
 
 		#endregion
@@ -482,9 +490,9 @@ namespace MKY.IO.Serial.Socket
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
 			else
-				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "): State is still " + oldState + ".");
+				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -679,6 +687,20 @@ namespace MKY.IO.Serial.Socket
 		public virtual string ToShortEndPointString()
 		{
 			return ("Receive:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(GetType() + "     (" + this.instanceId.ToString("D2", System.Globalization.NumberFormatInfo.InvariantInfo) + ")(" + ToShortEndPointString() + "): " + message);
 		}
 
 		#endregion

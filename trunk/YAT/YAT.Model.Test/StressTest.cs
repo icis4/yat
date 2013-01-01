@@ -21,8 +21,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using NUnit;
 using NUnit.Framework;
+
+#endregion
 
 namespace YAT.Model.Test
 {
@@ -48,6 +55,7 @@ namespace YAT.Model.Test
 		public virtual void HeavySimultaneousUsage()
 		{
 			// Nothing yet (waiting for PowerShell intro to build stress test script).
+			// Note that there already is a TcpConnectionStressTest in MKY.IO.Serial.Socket.Test.
 		}
 
 		#endregion

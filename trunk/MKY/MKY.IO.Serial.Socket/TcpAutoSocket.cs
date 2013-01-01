@@ -244,7 +244,7 @@ namespace MKY.IO.Serial.Socket
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
+				WriteDebugMessageLine("Disposed.");
 			}
 		}
 
@@ -463,12 +463,13 @@ namespace MKY.IO.Serial.Socket
 				case SocketState.Reset:
 				case SocketState.Error:
 				{
+					WriteDebugMessageLine("Starting...");
 					StartAutoSocket();
 					return (true);
 				}
 				default:
 				{
-					Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + this.state + ".");
+					WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
 					return (false);
 				}
 			}
@@ -485,11 +486,12 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.Reset:
 				{
-					Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Stop() requested but state is " + this.state + ".");
+					WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
 					return;
 				}
 				default:
 				{
+					WriteDebugMessageLine("Stopping...");
 					StopAutoSocket();
 					return;
 				}
@@ -548,9 +550,9 @@ namespace MKY.IO.Serial.Socket
 				isClientOrServerString = "is neither client nor server";
 
 			if (this.state != oldState)
-				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ", " + isClientOrServerString + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ", " + isClientOrServerString + ".");
 			else
-				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State is still " + oldState + ".");
+				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -600,9 +602,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartConnecting()
 		{
 			int delay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
-#if (FALSE)
-			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Delaying connecting by " + delay);
-#endif
+			WriteDebugMessageLine("Delaying connecting by " + delay + "ms.");
 			Thread.Sleep(delay);
 
 			SetStateSynchronizedAndNotify(SocketState.Connecting);
@@ -625,9 +625,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartListening()
 		{
 			int delay = staticRandom.Next(MinListenDelay, MaxListenDelay);
-#if (FALSE)
-			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Delaying listening by " + delay);
-#endif
+			WriteDebugMessageLine("Delaying listening by " + delay + "ms.");
 			Thread.Sleep(delay);
 
 			SetStateSynchronizedAndNotify(SocketState.StartingListening);
@@ -654,7 +652,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			if (tryAgain)
 			{
-				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Trying connect cycle " + this.startCycleCounter + ".");
+				WriteDebugMessageLine("Trying connect cycle #" + this.startCycleCounter + ".");
 				StartConnecting();
 			}
 			else
@@ -962,6 +960,20 @@ namespace MKY.IO.Serial.Socket
 		public virtual string ToShortEndPointString()
 		{
 			return ("Server:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(GetType() + " (" + this.instanceId.ToString("D2", System.Globalization.NumberFormatInfo.InvariantInfo) + ")(" + ToShortEndPointString() + "): " + message);
 		}
 
 		#endregion

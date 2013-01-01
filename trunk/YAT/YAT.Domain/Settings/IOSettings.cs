@@ -44,6 +44,8 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SerialPortOutputBreakIsModifiableDefault = false;
 
+		private const string Undefined = "<Undefined>";
+
 		private Domain.IOType ioType;
 		private MKY.IO.Serial.SerialPort.SerialPortSettings serialPort;
 		private MKY.IO.Serial.Socket.SocketSettings socket;
@@ -308,6 +310,28 @@ namespace YAT.Domain.Settings
 				IndicateSerialPortBreakStates    .GetHashCode() ^
 				SerialPortOutputBreakIsModifiable.GetHashCode()
 			);
+		}
+
+		/// <summary></summary>
+		public virtual string ToShortIOString()
+		{
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:
+					return (this.serialPort.ToShortPortString());
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.Udp:
+					return (this.socket.ToShortEndPointString());
+
+				case Domain.IOType.UsbSerialHid:
+					return (this.usbSerialHidDevice.ToShortDeviceInfoString());
+
+				default:
+					return (Undefined);
+			}
 		}
 
 		#endregion

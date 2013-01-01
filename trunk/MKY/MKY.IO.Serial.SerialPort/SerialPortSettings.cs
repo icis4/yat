@@ -73,6 +73,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public const bool NoSendOnInputBreakDefault = false;
 
+		private const string Undefined = "<Undefined>";
+
 		#endregion
 
 		#region Fields
@@ -323,6 +325,15 @@ namespace MKY.IO.Serial.SerialPort
 				NoSendOnOutputBreak.GetHashCode() ^
 				NoSendOnInputBreak .GetHashCode()
 			);
+		}
+
+		/// <summary></summary>
+		public virtual string ToShortPortString()
+		{
+			if (PortId != null)
+				return (PortId);
+			else
+				return (Undefined);
 		}
 
 		#endregion

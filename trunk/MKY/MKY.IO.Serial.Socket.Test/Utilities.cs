@@ -210,6 +210,20 @@ namespace MKY.IO.Serial.Socket.Test
 			while (!io.IsStarted);
 		}
 
+		internal static void WaitForTcpAutoSocketToBeStartedAsServer(TcpAutoSocket io, string message)
+		{
+			int timeout = 0;
+			do
+			{
+				Thread.Sleep(Interval);
+				timeout += Interval;
+
+				if (timeout >= Timeout)
+					Assert.Fail(message);
+			}
+			while (!(io.IsStarted && io.IsServer));
+		}
+
 		internal static void WaitForConnect(IO.Serial.IIOProvider ioA, IO.Serial.IIOProvider ioB, string message)
 		{
 			int timeout = 0;
