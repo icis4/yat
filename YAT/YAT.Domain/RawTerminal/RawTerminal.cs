@@ -669,10 +669,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string ToIOString()
+		public virtual string ToShortIOString()
 		{
-			if (this.io != null)
+			if      (this.io != null)
 				return (this.io.ToString());
+			else if (this.ioSettings != null)
+				return (this.ioSettings.ToShortIOString());
 			else
 				return (Undefined);
 		}

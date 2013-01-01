@@ -496,6 +496,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
+			WriteDebugMessageLine("Starting...");
 			SetStateSynchronized(State.Started);
 			Open();
 
@@ -512,6 +513,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
+			WriteDebugMessageLine("Stopping...");
 			Close();
 			SetStateSynchronized(State.Reset);
 		}
@@ -527,6 +529,7 @@ namespace MKY.IO.Usb
 			if (IsOpen)
 				return (true);
 
+			WriteDebugMessageLine("Opening...");
 			CreateAndStartReceiveThread();
 
 			// Create a new stream and begin to read data from the device.
@@ -553,6 +556,7 @@ namespace MKY.IO.Usb
 			if (!IsOpen)
 				return;
 
+			WriteDebugMessageLine("Closing...");
 			StopReceiveThread();
 			CloseStream();
 
@@ -726,7 +730,7 @@ namespace MKY.IO.Usb
 				}
 				catch (IOException)
 				{
-					Debug.WriteLine(GetType() + " '" + ToString() + "': Disconnect detected while reading from device.");
+					WriteDebugMessageLine("Disconnect detected while reading from device.");
 					OnDisconnected(new EventArgs()); // Includes Close().
 				}
 				catch (Exception ex)
@@ -752,7 +756,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private void ReceiveThread()
 		{
-			Debug.WriteLine(GetType() + " '" + ToString() + "': ReceiveThread() has started.");
+			WriteDebugMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.receiveThreadRunFlag && !IsDisposed)
@@ -793,7 +797,7 @@ namespace MKY.IO.Usb
 			// Do not Close() and de-reference the corresponding event as it may be Set() again
 			// right now by another thread, e.g. during closing.
 
-			Debug.WriteLine(GetType() + " '" + ToString() + "': ReceiveThread() has terminated.");
+			WriteDebugMessageLine("ReceiveThread() has terminated.");
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
@@ -862,9 +866,9 @@ namespace MKY.IO.Usb
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				Debug.WriteLine(GetType() + " '" + ToString() + "': State has changed from " + oldState + " to " + this.state + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
 			else
-				Debug.WriteLine(GetType() + " '" + ToString() + "': State is still " + oldState + ".");
+				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
 		}
 
@@ -954,6 +958,20 @@ namespace MKY.IO.Usb
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(GetType() + " '" + ToString() + "': " + message);
 		}
 
 		#endregion

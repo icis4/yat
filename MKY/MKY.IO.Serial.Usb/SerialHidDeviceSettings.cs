@@ -37,6 +37,8 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public const bool AutoOpenDefault = true;
 
+		private const string Undefined = "<Undefined>";
+
 		private DeviceInfo deviceInfo;
 		private bool autoOpen;
 
@@ -168,6 +170,15 @@ namespace MKY.IO.Serial.Usb
 				deviceInfoHashCode ^
 				AutoOpen.GetHashCode()
 			);
+		}
+
+		/// <summary></summary>
+		public virtual string ToShortDeviceInfoString()
+		{
+			if (DeviceInfo != null)
+				return (DeviceInfo.ToShortString());
+			else
+				return (Undefined);
 		}
 
 		#endregion

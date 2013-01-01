@@ -185,11 +185,6 @@ namespace MKY.IO.Serial.SerialPort
 		
 		private SerialPortSettings settings;
 
-		/// <remarks>
-		/// Separate string containing the port name. Used for diagnostics/debug purposes.
-		/// </remarks>
-		private string portName;
-
 		private Ports.ISerialPort port;
 
 		/// <remarks>
@@ -544,9 +539,16 @@ namespace MKY.IO.Serial.SerialPort
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (!IsStarted)
+			{
+				WriteDebugMessageLine("Starting...");
 				CreateAndOpenPort();
+			}
+			else
+			{
+				WriteDebugMessageLine("Start() requested but state already is " + this.state + ".");
+			}
 
-			return (true);
+			return (true); // Return 'true' in any case since port is open in the end.
 		}
 
 		/// <summary></summary>
@@ -555,7 +557,14 @@ namespace MKY.IO.Serial.SerialPort
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
+			{
+				WriteDebugMessageLine("Stopping...");
 				ResetPort();
+			}
+			else
+			{
+				WriteDebugMessageLine("Stop() requested but state already is " + this.state + ".");
+			}
 		}
 
 		/// <summary></summary>
@@ -638,7 +647,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		private void SendThread()
 		{
-			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': SendThread() has started.");
+			WriteDebugMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.sendThreadRunFlag && !IsDisposed)
@@ -756,7 +765,7 @@ namespace MKY.IO.Serial.SerialPort
 			// Do not Close() and de-reference the corresponding event as it may be Set() again
 			// right now by another thread, e.g. during closing.
 
-			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': SendThread() has terminated.");
+			WriteDebugMessageLine("SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -816,8 +825,6 @@ namespace MKY.IO.Serial.SerialPort
 
 			lock (this.port)
 			{
-				// Keep port name for diagnostics/debug purposes:
-				this.portName    = this.settings.PortId;
 				this.port.PortId = this.settings.PortId;
 
 				SerialCommunicationSettings s = this.settings.Communication;
@@ -857,9 +864,9 @@ namespace MKY.IO.Serial.SerialPort
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': State has changed from " + oldState + " to " + this.state + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
 			else
-				Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': State is still " + oldState + ".");
+				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
@@ -1164,7 +1171,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		private void ReceiveThread()
 		{
-			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': ReceiveThread() has started.");
+			WriteDebugMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.receiveThreadRunFlag && !IsDisposed)
@@ -1221,7 +1228,7 @@ namespace MKY.IO.Serial.SerialPort
 			// Do not Close() and de-reference the corresponding event as it may be Set() again
 			// right now by another thread, e.g. during closing.
 
-			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': ReceiveThread() has terminated.");
+			WriteDebugMessageLine("ReceiveThread() has terminated.");
 		}
 
 		// Additional information to the 'DataReceived' event
@@ -1494,12 +1501,26 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
-			if (this.port != null)
+			if      (this.port != null)
 				return (this.port.PortId);
-			else if (!string.IsNullOrEmpty(this.portName))
-				return (this.portName);
+			else if (this.settings != null)
+				return (this.settings.PortId);
 			else
 				return (Undefined);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': " + message);
 		}
 
 		#endregion

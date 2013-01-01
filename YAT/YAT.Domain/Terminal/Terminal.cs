@@ -518,7 +518,7 @@ namespace YAT.Domain
 		/// </remarks>
 		private void SendThread()
 		{
-			Debug.WriteLine(GetType() + " '" + ToIOString() + "': SendThread() has started.");
+			WriteDebugMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.sendThreadRunFlag && !IsDisposed)
@@ -563,7 +563,7 @@ namespace YAT.Domain
 			// Do not Close() and de-reference the corresponding event as it may be Set() again
 			// right now by another thread, e.g. during closing.
 
-			Debug.WriteLine(GetType() + " '" + ToIOString() + "': SendThread() has terminated.");
+			WriteDebugMessageLine("SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -1468,12 +1468,26 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string ToIOString()
+		public virtual string ToShortIOString()
 		{
 			if (this.rawTerminal != null)
-				return (this.rawTerminal.ToIOString());
+				return (this.rawTerminal.ToShortIOString());
 			else
 				return (Undefined);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(GetType() + " '" + ToShortIOString() + "': " + message);
 		}
 
 		#endregion
