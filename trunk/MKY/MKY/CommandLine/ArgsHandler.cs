@@ -195,14 +195,6 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Gets the total argument count.
-		/// </summary>
-		public int ArgsCount
-		{
-			get { return (ValueArgsCount + OptionArgsCount); }
-		}
-
-		/// <summary>
 		/// Gets the value arguments.
 		/// </summary>
 		public ReadOnlyCollection<string> ValueArgs
@@ -251,11 +243,35 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
+		/// Gets the total valid argument count.
+		/// </summary>
+		public int ValidArgsCount
+		{
+			get { return (ValueArgsCount + OptionArgsCount + ArrayOptionArgsCount); }
+		}
+
+		/// <summary>
 		/// Gets the invalid arguments.
 		/// </summary>
 		public ReadOnlyCollection<string> InvalidArgs
 		{
 			get { return (this.invalidArgs.AsReadOnly()); }
+		}
+
+		/// <summary>
+		/// Gets the total invalid argument count.
+		/// </summary>
+		public int InvalidArgsCount
+		{
+			get { return (this.invalidArgs.Count); }
+		}
+
+		/// <summary>
+		/// Gets the total argument count.
+		/// </summary>
+		public int ArgsCount
+		{
+			get { return (ValidArgsCount + InvalidArgsCount); }
 		}
 
 		/// <summary>

@@ -422,7 +422,8 @@
         <xs:sequence>
           <xs:element minOccurs="1" maxOccurs="1" name="HostType" type="SocketHostType" />
           <xs:element minOccurs="0" maxOccurs="1" name="RemoteHost" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" name="RemotePort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RemoteTcpPort" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RemoteUdpPort" type="xs:int" />
           <xs:element minOccurs="0" maxOccurs="1" name="LocalInterface" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="LocalTcpPort" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="LocalUdpPort" type="xs:int" />

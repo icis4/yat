@@ -1044,11 +1044,11 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 01 :: Terminal :: COM1 / Open / Default
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase01(Model.Terminal terminal)
+		private static void VerifySettingsCase01(Model.Terminal terminal)
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
-			if (MKY.IO.Ports.SerialPortId.Equals(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA, "COM1"))
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA == "COM1")
 			{
 				if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortAIsAvailable)
 					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
@@ -1068,12 +1068,12 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 02 :: Terminal :: COM2 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase02(Model.Terminal terminal)
+		private static void VerifySettingsCase02(Model.Terminal terminal)
 		{
 			VerifySettingsCase02(terminal, false);
 		}
 
-		private void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
+		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
 		{
 			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary!");
 			Assert.AreEqual(2, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM2!");
@@ -1081,7 +1081,7 @@ namespace YAT.Settings.Test
 			if (!ignoreBaudRate)
 				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
-			if (MKY.IO.Ports.SerialPortId.Equals(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB, "COM2"))
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB == "COM2")
 			{
 				if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortBIsAvailable)
 					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");

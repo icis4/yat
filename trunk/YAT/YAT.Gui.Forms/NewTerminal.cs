@@ -197,9 +197,14 @@ namespace YAT.Gui.Forms
 			this.newTerminalSettings_Form.SocketRemoteHost = socketSelection.RemoteHost;
 		}
 
-		private void socketSelection_RemotePortChanged(object sender, EventArgs e)
+		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketRemotePort = socketSelection.RemotePort;
+			this.newTerminalSettings_Form.SocketRemoteTcpPort = socketSelection.RemoteTcpPort;
+		}
+
+		private void socketSelection_RemoteUdpPortChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
@@ -263,7 +268,8 @@ namespace YAT.Gui.Forms
 
 			this.terminalSettings.Terminal.IO.Socket.RemoteHost              = this.newTerminalSettings.SocketRemoteHost;
 			this.terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
-			this.terminalSettings.Terminal.IO.Socket.RemotePort              = this.newTerminalSettings.SocketRemotePort;
+			this.terminalSettings.Terminal.IO.Socket.RemoteTcpPort           = this.newTerminalSettings.SocketRemoteTcpPort;
+			this.terminalSettings.Terminal.IO.Socket.RemoteUdpPort           = this.newTerminalSettings.SocketRemoteUdpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalInterface          = this.newTerminalSettings.SocketLocalInterface;
 			this.terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
 			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort            = this.newTerminalSettings.SocketLocalTcpPort;
@@ -362,7 +368,8 @@ namespace YAT.Gui.Forms
 			socketSelection.Visible        = isSocket;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettings_Form.SocketRemoteHost;
-			socketSelection.RemotePort     = this.newTerminalSettings_Form.SocketRemotePort;
+			socketSelection.RemoteTcpPort  = this.newTerminalSettings_Form.SocketRemoteTcpPort;
+			socketSelection.RemoteUdpPort  = this.newTerminalSettings_Form.SocketRemoteUdpPort;
 			socketSelection.LocalInterface = this.newTerminalSettings_Form.SocketLocalInterface;
 			socketSelection.LocalTcpPort   = this.newTerminalSettings_Form.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = this.newTerminalSettings_Form.SocketLocalUdpPort;

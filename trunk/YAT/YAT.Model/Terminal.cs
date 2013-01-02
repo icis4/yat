@@ -303,7 +303,6 @@ namespace YAT.Model
 
 					if (this.terminal != null)
 						this.terminal.Dispose();
-
 				}
 
 				// Set state to disposed:

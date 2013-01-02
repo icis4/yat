@@ -424,21 +424,6 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Determines whether the specified System.Object instances are considered equal.
-		/// </summary>
-		public static bool Equals(object objA, object objB)
-		{
-			if (ReferenceEquals(objA, objB))
-				return (true);
-
-			SerialPortId casted = objA as SerialPortId;
-			if (casted != null)
-				return (casted.Equals(objB));
-
-			return (false);
-		}
-
-		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
 		/// <remarks>

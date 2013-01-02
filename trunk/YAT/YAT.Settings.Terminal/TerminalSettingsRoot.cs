@@ -22,8 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace YAT.Settings.Terminal
@@ -196,9 +194,10 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
 			{
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO",                               }, "Endianness",                                new string[] { "Endianess" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                }, "Endianness",                                new string[] { "Endianess" } ),
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",                               new string[] { "Handshake" } ),
-			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal",                                     }, "Status",                                    new string[] { "Display" } ), */
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                      }, "RemoteTcpPort",                             new string[] { "RemotePort" } ),
+			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal"                                      }, "Status",                                    new string[] { "Display" } ), */
 			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                      }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),

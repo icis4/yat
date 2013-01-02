@@ -457,13 +457,14 @@ namespace YAT.Model.Test
 
 						Assert.Fail
 							(
-							"Line length mismatch: " +
+							"Length of line " + i + " mismatches:" + Environment.NewLine +
 							"Expected = " + expectedElementCount + " elements, " +
-							"A = " + lineA.Count + @" elements, " +
-							"B = " + lineB.Count + @" elements, " +
+							"A = " + lineA.Count + " elements, " +
+							"B = " + lineB.Count + " elements," + Environment.NewLine +
 							"Expected = " + expectedDataCount + " data, " +
-							"A = " + lineA.DataCount + @" data, " +
-							"B = " + lineB.DataCount + @" data. See ""Output"" for details."
+							"A = " + lineA.DataCount + " data, " +
+							"B = " + lineB.DataCount + " data." + Environment.NewLine +
+							@"See ""Output"" for details."
 							);
 					}
 				}
@@ -486,10 +487,11 @@ namespace YAT.Model.Test
 
 				Assert.Fail
 					(
-					"Line count mismatch: " +
+					"Line count mismatches: " + Environment.NewLine +
 					"Expected = " + expectedLineCount + " lines, " +
-					"A = " + linesA.Count + @" lines, " +
-					"B = " + linesB.Count + @" lines. See ""Output"" for details."
+					"A = " + linesA.Count + " lines, " +
+					"B = " + linesB.Count + " lines." + Environment.NewLine +
+					@"See ""Output"" for details."
 					);
 			}
 		}

@@ -32,11 +32,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using MKY.Diagnostics;
+using MKY.Settings;
+using MKY.Windows.Forms;
 using MKY.Xml.Schema;
 
 using NUnit.Framework;
@@ -61,6 +64,26 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		private static readonly SettingsFilePaths StaticPaths = new SettingsFilePaths("!-Current");
+
+		#endregion
+
+		#region Tear Down Fixture
+		//==========================================================================================
+		// Tear Down Fixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			string message =
+				@"Attention:" + Environment.NewLine +
+				@"The order of the archived schemas is random!" + Environment.NewLine +
+				@"Check the order of the .xsd files in ""\YAT\!-Settings\!-Current"" before committing!";
+
+			MessageBoxEx.Show(message, "Attention", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		}
 
 		#endregion
 
@@ -94,9 +117,14 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void ArchiveTerminalSettings()
 		{
+			// Terminal settings may rely on properly loaded applications settings.
+			SelectiveTestSetUp();
+
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(TerminalSettingsRoot));
 			ArchiveSchema (StaticPaths.Path, "TerminalSettingsSchema",  document);
 			ArchiveDefault(StaticPaths.Path, "TerminalSettingsDefault", document);
+
+			SelectiveTestTearDown();
 		}
 
 		#endregion
@@ -110,9 +138,14 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void ArchiveWorkspaceSettings()
 		{
+			// Workspace settings may rely on properly loaded applications settings.
+			SelectiveTestSetUp();
+
 			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(WorkspaceSettingsRoot));
 			ArchiveSchema (StaticPaths.Path, "WorkspaceSettingsSchema",  document);
 			ArchiveDefault(StaticPaths.Path, "WorkspaceSettingsDefault", document);
+
+			SelectiveTestTearDown();
 		}
 
 		#endregion
@@ -123,6 +156,21 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
+
+		private void SelectiveTestSetUp()
+		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
+			// Prevent auto-save of workspace settings.
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+		}
+
+		private void SelectiveTestTearDown()
+		{
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
+		}
 
 		private static XmlDocument CreateSchemaAndDefaultDocument(Type type)
 		{
@@ -148,8 +196,8 @@ namespace YAT.Settings.Test
 			schemaExporter.ExportTypeMapping(typeMapping);
 
 			// Set and compile default schema.
-			defaultDocument.Schemas.Add(schemas[0]);
 			defaultDocument.Schemas.Add(XmlSchemaEx.GuidSchema);
+			defaultDocument.Schemas.Add(schemas[0]);
 			defaultDocument.Schemas.Compile();
 			defaultDocument.Validate(null);
 
@@ -180,6 +228,7 @@ namespace YAT.Settings.Test
 						"For archiving purposes, schema written to" + Environment.NewLine +
 						@"""" + filePath + @""""
 					);
+
 					i++;
 				}
 			}

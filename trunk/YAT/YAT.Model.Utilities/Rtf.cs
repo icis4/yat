@@ -209,7 +209,6 @@ namespace YAT.Model.Utilities
 				if (this.reader != null)
 					this.reader.Dispose();
 
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{

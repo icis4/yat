@@ -57,7 +57,8 @@ namespace YAT.Gui.Controls
 
 		private static readonly IPHost DefaultRemoteHost                  = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
 		private static readonly IPAddress DefaultResolvedRemoteIPAddress  = MKY.IO.Serial.Socket.SocketSettings.DefaultResolvedRemoteIPAddress;
-		private const int DefaultRemotePort                               = MKY.IO.Serial.Socket.SocketSettings.DefaultRemotePort;
+		private const int DefaultRemoteTcpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
+		private const int DefaultRemoteUdpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
 
 		private static readonly IPNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
 		private static readonly IPAddress DefaultResolvedLocalIPAddress   = MKY.IO.Serial.Socket.SocketSettings.DefaultResolvedLocalIPAddress;
@@ -77,7 +78,8 @@ namespace YAT.Gui.Controls
 
 		private IPHost remoteHost                 = DefaultRemoteHost;
 		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
-		private int remotePort                    = DefaultRemotePort;
+		private int remoteTcpPort                 = DefaultRemoteTcpPort;
+		private int remoteUdpPort                 = DefaultRemoteUdpPort;
 
 		private IPNetworkInterface localInterface = DefaultLocalInterface;
 		private IPAddress resolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
@@ -98,8 +100,13 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the RemotePort property is changed.")]
-		public event EventHandler RemotePortChanged;
+		[Description("Event raised when the RemoteTcpPort property is changed.")]
+		public event EventHandler RemoteTcpPortChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the RemoteUdpPort property is changed.")]
+		public event EventHandler RemoteUdpPortChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -179,18 +186,36 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Socket")]
-		[Description("The remote TCP or UDP port.")]
-		[DefaultValue(DefaultRemotePort)]
-		public virtual int RemotePort
+		[Description("The remote TCP port.")]
+		[DefaultValue(DefaultRemoteTcpPort)]
+		public virtual int RemoteTcpPort
 		{
-			get { return (this.remotePort); }
+			get { return (this.remoteTcpPort); }
 			set
 			{
-				if (value != this.remotePort)
+				if (value != this.remoteTcpPort)
 				{
-					this.remotePort = value;
+					this.remoteTcpPort = value;
 					SetControls();
-					OnRemotePortChanged(new EventArgs());
+					OnRemoteTcpPortChanged(new EventArgs());
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Socket")]
+		[Description("The remote UDP port.")]
+		[DefaultValue(DefaultRemoteUdpPort)]
+		public virtual int RemoteUdpPort
+		{
+			get { return (this.remoteUdpPort); }
+			set
+			{
+				if (value != this.remoteUdpPort)
+				{
+					this.remoteUdpPort = value;
+					SetControls();
+					OnRemoteUdpPortChanged(new EventArgs());
 				}
 			}
 		}
@@ -378,7 +403,8 @@ namespace YAT.Gui.Controls
 				if (int.TryParse(textBox_RemotePort.Text, out port) &&
 					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
 				{
-					RemotePort = port;
+					RemoteTcpPort = port;
+					RemoteUdpPort = port;
 
 					// Also set local port to same number.
 					if ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp))
@@ -439,7 +465,7 @@ namespace YAT.Gui.Controls
 					// Also set remote port to same number
 					if (this.hostType == SocketHostType.TcpServer)
 					{
-						RemotePort = port;
+						RemoteTcpPort = port;
 					}
 				}
 				else
@@ -562,10 +588,15 @@ namespace YAT.Gui.Controls
 				label_RemotePort.Text = "Remote TCP port:";
 
 			// Remote port.
-			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
+			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket)))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remotePort.ToString(NumberFormatInfo.CurrentInfo);
+				textBox_RemotePort.Text = this.remoteTcpPort.ToString(NumberFormatInfo.CurrentInfo);
+			}
+			else if (!DesignMode && Enabled && (this.hostType == SocketHostType.Udp))
+			{
+				textBox_RemotePort.Enabled = true;
+				textBox_RemotePort.Text = this.remoteUdpPort.ToString(NumberFormatInfo.CurrentInfo);
 			}
 			else
 			{
@@ -626,9 +657,15 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRemotePortChanged(EventArgs e)
+		protected virtual void OnRemoteTcpPortChanged(EventArgs e)
 		{
-			EventHelper.FireSync(RemotePortChanged, this, e);
+			EventHelper.FireSync(RemoteTcpPortChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRemoteUdpPortChanged(EventArgs e)
+		{
+			EventHelper.FireSync(RemoteUdpPortChanged, this, e);
 		}
 
 		/// <summary></summary>

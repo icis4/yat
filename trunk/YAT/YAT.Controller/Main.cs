@@ -250,6 +250,7 @@ namespace YAT.Controller
 			return (Run(true));
 		}
 
+		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private MainResult Run(bool runFromConsole)
 		{
 			MainResult mainResult;
