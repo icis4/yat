@@ -355,7 +355,6 @@ namespace YAT.Domain
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 			}
-
 			return (l);
 		}
 
@@ -381,25 +380,15 @@ namespace YAT.Domain
 				}
 				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
 
-				switch (repositoryType)
-				{
-					case RepositoryType.Tx:
-					case RepositoryType.Bidir:
-					case RepositoryType.Rx:
-					{
-						this.txRepository.Clear();
-						this.bidirRepository.Clear();
-						this.rxRepository.Clear();
-
-						OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
-						OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
-						OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
-
-						break;
-					}
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
-				}
+				this.txRepository.Clear();
+				this.bidirRepository.Clear();
+				this.rxRepository.Clear();
 			} // lock (this.repositorySyncObj)
+
+			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
+			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
+			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
+			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
 		}
 
 		/// <summary></summary>
@@ -418,6 +407,7 @@ namespace YAT.Domain
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
 			}
+
 			return (s);
 		}
 
@@ -563,13 +553,16 @@ namespace YAT.Domain
 		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
+			RawElement re = new RawElement(e.Data, SerialDirection.Rx, e.TimeStamp);
+
 			lock (this.repositorySyncObj)
 			{
-				RawElement re = new RawElement(e.Data, SerialDirection.Rx, e.TimeStamp);
 				this.rxRepository.Enqueue(re);
 				this.bidirRepository.Enqueue(re);
-				OnRawElementReceived(new RawElementEventArgs(re));
 			}
+
+			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
+			OnRawElementReceived(new RawElementEventArgs(re));
 		}
 
 		/// <remarks>
@@ -579,13 +572,16 @@ namespace YAT.Domain
 		/// </remarks>
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
+			RawElement re = new RawElement(e.Data, SerialDirection.Tx, e.TimeStamp);
+
 			lock (this.repositorySyncObj)
 			{
-				RawElement re = new RawElement(e.Data, SerialDirection.Tx, e.TimeStamp);
 				this.txRepository.Enqueue(re);
 				this.bidirRepository.Enqueue(re);
-				OnRawElementSent(new RawElementEventArgs(re));
 			}
+
+			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
+			OnRawElementSent(new RawElementEventArgs(re));
 		}
 
 		#endregion

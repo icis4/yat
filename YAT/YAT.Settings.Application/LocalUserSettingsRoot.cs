@@ -22,8 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace YAT.Settings.Application
@@ -269,6 +267,20 @@ namespace YAT.Settings.Application
 				}
 			}
 		}
+
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2013-01-02 / mky)
+		/// There was the change in the NewTerminalSettings between 1.3.0 and 1.3.1 which was added
+		/// below but not made available public because it would have introduced alternate elements
+		/// to the local user settings, and the change is too minor to justify this.
+		/// </remarks>
+		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
+			{
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
+			};
 
 		#endregion
 

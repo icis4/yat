@@ -51,7 +51,7 @@ namespace YAT.Domain
 					return (new TcpClient
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
-						settings.Socket.RemotePort,
+						settings.Socket.RemoteTcpPort,
 						settings.Socket.TcpClientAutoReconnect
 						));
 				}
@@ -70,7 +70,7 @@ namespace YAT.Domain
 					return (new TcpAutoSocket
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
-						settings.Socket.RemotePort,
+						settings.Socket.RemoteTcpPort,
 						settings.Socket.ResolvedLocalIPAddress,
 						settings.Socket.LocalTcpPort
 						));
@@ -81,7 +81,7 @@ namespace YAT.Domain
 					return (new UdpSocket
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
-						settings.Socket.RemotePort,
+						settings.Socket.RemoteUdpPort,
 						settings.Socket.LocalUdpPort
 						));
 				}

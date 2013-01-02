@@ -22,12 +22,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 using YAT.Model.Settings;
-using YAT.Settings;
 
 namespace YAT.Settings.Workspace
 {

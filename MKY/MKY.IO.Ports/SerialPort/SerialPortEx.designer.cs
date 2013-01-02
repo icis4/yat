@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Ports
 {
@@ -16,6 +17,7 @@ namespace MKY.IO.Ports
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:

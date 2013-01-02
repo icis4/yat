@@ -22,13 +22,11 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
-using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Diagnostics;
 using MKY.Net;
 
 namespace MKY.IO.Serial.Socket
@@ -61,7 +59,10 @@ namespace MKY.IO.Serial.Socket
 		public const int DefaultPort = 10000;
 
 		/// <summary></summary>
-		public const int DefaultRemotePort = DefaultPort;
+		public const int DefaultRemoteTcpPort = DefaultPort;
+
+		/// <summary></summary>
+		public const int DefaultRemoteUdpPort = DefaultPort;
 
 		/// <summary></summary>
 		public const int DefaultLocalTcpPort = DefaultPort;
@@ -94,7 +95,8 @@ namespace MKY.IO.Serial.Socket
 
 		private string remoteHost;
 		private IPAddress resolvedRemoteIPAddress;
-		private int remotePort;
+		private int remoteTcpPort;
+		private int remoteUdpPort;
 
 		private string localInterface;
 		private IPAddress resolvedLocalIPAddress;
@@ -136,7 +138,8 @@ namespace MKY.IO.Serial.Socket
 
 			RemoteHost              = rhs.RemoteHost;
 			ResolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
-			RemotePort              = rhs.RemotePort;
+			RemoteTcpPort           = rhs.RemoteTcpPort;
+			RemoteUdpPort           = rhs.RemoteUdpPort;
 
 			LocalInterface          = rhs.LocalInterface;
 			ResolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
@@ -159,7 +162,8 @@ namespace MKY.IO.Serial.Socket
 
 			RemoteHost              = DefaultRemoteHost;
 			ResolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
-			RemotePort              = DefaultRemotePort;
+			RemoteTcpPort           = DefaultRemoteTcpPort;
+			RemoteUdpPort           = DefaultRemoteUdpPort;
 
 			LocalInterface          = DefaultLocalInterface;
 			ResolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
@@ -219,15 +223,67 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		[XmlElement("RemotePort")]
+		[XmlIgnore]
 		public virtual int RemotePort
 		{
-			get { return (this.remotePort); }
+			get
+			{
+				switch (this.hostType)
+				{
+					case SocketHostType.TcpClient:
+					case SocketHostType.TcpServer:
+					case SocketHostType.TcpAutoSocket:
+						return (RemoteTcpPort);
+
+					case SocketHostType.Udp:
+						return (RemoteUdpPort);
+
+					default:
+						return (0);
+				}
+			}
 			set
 			{
-				if (value != this.remotePort)
+				switch (this.hostType)
 				{
-					this.remotePort = value;
+					case SocketHostType.TcpClient:
+					case SocketHostType.TcpServer:
+					case SocketHostType.TcpAutoSocket:
+						RemoteTcpPort = value;
+						break;
+
+					case SocketHostType.Udp:
+						RemoteUdpPort = value;
+						break;
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RemoteTcpPort")]
+		public virtual int RemoteTcpPort
+		{
+			get { return (this.remoteTcpPort); }
+			set
+			{
+				if (value != this.remoteTcpPort)
+				{
+					this.remoteTcpPort = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RemoteUdpPort")]
+		public virtual int RemoteUdpPort
+		{
+			get { return (this.remoteUdpPort); }
+			set
+			{
+				if (value != this.remoteUdpPort)
+				{
+					this.remoteUdpPort = value;
 					SetChanged();
 				}
 			}
@@ -371,7 +427,8 @@ namespace MKY.IO.Serial.Socket
 
 				(HostType                                     == other.HostType) &&
 				StringEx.EqualsOrdinalIgnoreCase(RemoteHost,     other.RemoteHost) &&
-				(RemotePort                                   == other.RemotePort) &&
+				(RemoteTcpPort                                == other.RemoteTcpPort) &&
+				(RemoteUdpPort                                == other.RemoteUdpPort) &&
 				StringEx.EqualsOrdinalIgnoreCase(LocalInterface, other.LocalInterface) &&
 				(LocalTcpPort                                 == other.LocalTcpPort) &&
 				(LocalUdpPort                                 == other.LocalUdpPort) &&
@@ -394,7 +451,8 @@ namespace MKY.IO.Serial.Socket
 
 				this.hostType              .GetHashCode() ^
 				this.remoteHost            .GetHashCode() ^
-				this.remotePort            .GetHashCode() ^
+				this.remoteTcpPort         .GetHashCode() ^
+				this.remoteUdpPort         .GetHashCode() ^
 				this.localInterface        .GetHashCode() ^
 				this.localTcpPort          .GetHashCode() ^
 				this.localUdpPort          .GetHashCode() ^
@@ -409,7 +467,8 @@ namespace MKY.IO.Serial.Socket
 			(
 				((SocketHostTypeEx)this.hostType) + ", " +
 				this.remoteHost                   + ", " +
-				this.remotePort                   + ", " +
+				this.remoteTcpPort                + ", " +
+				this.remoteUdpPort                + ", " +
 				this.localInterface               + ", " +
 				this.localTcpPort                 + ", " +
 				this.localUdpPort                 + ", " +
@@ -418,14 +477,15 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
 			switch (hostType)
 			{
-				case SocketHostType.TcpClient:     return (this.remoteHost + ":" + this.remotePort);
-				case SocketHostType.TcpServer:     return (this.localTcpPort.ToString());
-				case SocketHostType.TcpAutoSocket: return (this.localTcpPort + " / " + this.remoteHost + ":" + this.remotePort);
-				case SocketHostType.Udp:           return (this.localUdpPort + " / " + this.remoteHost + ":" + this.remotePort);
+				case SocketHostType.TcpClient:     return (this.remoteHost + ":" + this.remoteTcpPort);
+				case SocketHostType.TcpServer:     return (this.localTcpPort.ToString(CultureInfo.InvariantCulture));
+				case SocketHostType.TcpAutoSocket: return (this.localTcpPort + " / " + this.remoteHost + ":" + this.remoteTcpPort);
+				case SocketHostType.Udp:           return (this.localUdpPort + " / " + this.remoteHost + ":" + this.remoteUdpPort);
 
 				default:                           return (Undefined);
 			}

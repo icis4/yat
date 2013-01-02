@@ -222,21 +222,18 @@ namespace MKY.Settings
 			bool success = false;
 			object result = null; // If not successful, return <c>null</c>.
 
-			// Try to open existing file of current version.
-			if (FileExists) // First check for file to minimize exceptions thrown.
+			// First check for file to minimize exceptions thrown.
+			if (FileExists)
 			{
-				// Try to open existing file with default deserialization.
-				// Always try this as this is the fastest way of deserialization.
-				try
+				if (alternateXmlElements == null)
 				{
-					result = XmlSerializerEx.DeserializeFromFile(filePath, type);
-					success = true;
-				}
-				catch { }
-
-				if (!success)
-				{
-					if (alternateXmlElements == null)
+					// Try to open existing file with default deserialization.
+					try
+					{
+						result = XmlSerializerEx.DeserializeFromFile(filePath, type);
+						success = true;
+					}
+					catch
 					{
 						// Try to open existing file with tolerant deserialization.
 						try
@@ -249,18 +246,20 @@ namespace MKY.Settings
 							DebugEx.WriteException(this.parentType, ex);
 						}
 					}
-					else
+				}
+				else
+				{
+					// If alternate elements are available, they MUST be considered in any case,
+					// otherwise, deserialization might succeed but with an outdated schema! So,
+					// try to open existing file with tolerant/alternate-tolerant deserialization.
+					try
 					{
-						// Try to open existing file with tolerant/alternate-tolerant deserialization.
-						try
-						{
-							result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
-							success = true;
-						}
-						catch (Exception ex)
-						{
-							DebugEx.WriteException(this.parentType, ex);
-						}
+						result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
+						success = true;
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(this.parentType, ex);
 					}
 				}
 			}

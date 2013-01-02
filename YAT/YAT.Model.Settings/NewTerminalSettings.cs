@@ -40,7 +40,8 @@ namespace YAT.Model.Settings
 		private MKY.IO.Serial.AutoRetry serialPortAutoReopen;
 
 		private IPHost socketRemoteHost;
-		private int socketRemotePort;
+		private int socketRemoteTcpPort;
+		private int socketRemoteUdpPort;
 		private IPNetworkInterface socketLocalInterface;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
@@ -88,7 +89,8 @@ namespace YAT.Model.Settings
 			SerialPortAutoReopen    = rhs.SerialPortAutoReopen;
 
 			SocketRemoteHost        = rhs.SocketRemoteHost;
-			SocketRemotePort        = rhs.SocketRemotePort;
+			SocketRemoteTcpPort     = rhs.SocketRemoteTcpPort;
+			SocketRemoteUdpPort     = rhs.SocketRemoteUdpPort;
 			SocketLocalInterface    = rhs.SocketLocalInterface;
 			SocketLocalTcpPort      = rhs.SocketLocalTcpPort;
 			SocketLocalUdpPort      = rhs.SocketLocalUdpPort;
@@ -121,7 +123,8 @@ namespace YAT.Model.Settings
 			SerialPortAutoReopen    = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 			SocketRemoteHost        = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
-			SocketRemotePort        = MKY.IO.Serial.Socket.SocketSettings.DefaultRemotePort;
+			SocketRemoteTcpPort     = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
+			SocketRemoteUdpPort     = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
 			SocketLocalInterface    = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
 			SocketLocalTcpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
 			SocketLocalUdpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
@@ -240,15 +243,30 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SocketRemotePort")]
-		public virtual int SocketRemotePort
+		[XmlElement("SocketRemoteTcpPort")]
+		public virtual int SocketRemoteTcpPort
 		{
-			get { return (this.socketRemotePort); }
+			get { return (this.socketRemoteTcpPort); }
 			set
 			{
-				if (value != this.socketRemotePort)
+				if (value != this.socketRemoteTcpPort)
 				{
-					this.socketRemotePort = value;
+					this.socketRemoteTcpPort = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SocketRemoteUdpPort")]
+		public virtual int SocketRemoteUdpPort
+		{
+			get { return (this.socketRemoteUdpPort); }
+			set
+			{
+				if (value != this.socketRemoteUdpPort)
+				{
+					this.socketRemoteUdpPort = value;
 					SetChanged();
 				}
 			}
@@ -428,7 +446,8 @@ namespace YAT.Model.Settings
 				(SerialPortAutoReopen    == other.SerialPortAutoReopen) &&
 
 				(SocketRemoteHost       == other.SocketRemoteHost) &&
-				(SocketRemotePort       == other.SocketRemotePort) &&
+				(SocketRemoteTcpPort    == other.SocketRemoteTcpPort) &&
+				(SocketRemoteUdpPort    == other.SocketRemoteUdpPort) &&
 				(SocketLocalInterface   == other.SocketLocalInterface) &&
 				(SocketLocalTcpPort     == other.SocketLocalTcpPort) &&
 				(SocketLocalUdpPort     == other.SocketLocalUdpPort) &&
@@ -470,7 +489,8 @@ namespace YAT.Model.Settings
 				SerialPortAutoReopen   .GetHashCode() ^
 
 				SocketRemoteHost      .GetHashCode() ^
-				SocketRemotePort      .GetHashCode() ^
+				SocketRemoteTcpPort   .GetHashCode() ^
+				SocketRemoteUdpPort   .GetHashCode() ^
 				SocketLocalInterface  .GetHashCode() ^
 				SocketLocalTcpPort    .GetHashCode() ^
 				SocketLocalUdpPort    .GetHashCode() ^

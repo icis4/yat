@@ -509,10 +509,13 @@ namespace YAT.Domain
 			if (GetType() != de.GetType())
 				return (false);
 
-			if (!this.isData || !de.isData)
+			if (!this.isData || !de.isData) // Disallow non-data elements.
 				return (false);
 
-			if (this.direction != de.direction)
+			if (this.direction != de.direction) // Self-explaining.
+				return (false);
+
+			if (this.isEol != de.isEol) // Check needed to deal with incomplete EOL sequences.
 				return (false);
 
 			return (true);
