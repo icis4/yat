@@ -16,7 +16,7 @@
         <IOType>TcpAutoSocket</IOType>
         <SerialPort>
           <PortId>
-            <Name>COM2</Name>
+            <Name>COM1</Name>
           </PortId>
           <Communication>
             <BaudRate>9600</BaudRate>
