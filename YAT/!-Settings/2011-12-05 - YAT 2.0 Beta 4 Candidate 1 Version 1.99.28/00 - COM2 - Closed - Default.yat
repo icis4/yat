@@ -35,10 +35,10 @@
         <Socket>
           <HostType>TcpAutoSocket</HostType>
           <RemoteHost>localhost</RemoteHost>
-          <RemotePort>55600</RemotePort>
+          <RemotePort>10000</RemotePort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
-          <LocalTcpPort>55600</LocalTcpPort>
-          <LocalUdpPort>55601</LocalUdpPort>
+          <LocalTcpPort>10000</LocalTcpPort>
+          <LocalUdpPort>10001</LocalUdpPort>
           <TcpClientAutoReconnect>
             <Enabled>false</Enabled>
             <Interval>500</Interval>

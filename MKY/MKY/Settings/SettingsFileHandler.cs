@@ -238,32 +238,33 @@ namespace MKY.Settings
 					result = XmlSerializerEx.DeserializeFromFile(filePath, type);
 					success = true;
 				}
-				catch { }
-
-				if (alternateXmlElements == null)
+				catch
 				{
-					// Try to open existing file with tolerant deserialization.
-					try
+					if (alternateXmlElements == null)
 					{
-						result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
-						success = true;
+						// Try to open existing file with tolerant deserialization.
+						try
+						{
+							result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+							success = true;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(this.parentType, ex);
+						}
 					}
-					catch (Exception ex)
+					else
 					{
-						DebugEx.WriteException(this.parentType, ex);
-					}
-				}
-				else
-				{
-					// Try to open existing file with alternate-tolerant deserialization.
-					try
-					{
-						result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
-						success = true;
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(this.parentType, ex);
+						// Try to open existing file with alternate-tolerant deserialization.
+						try
+						{
+							result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
+							success = true;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(this.parentType, ex);
+						}
 					}
 				}
 			}
