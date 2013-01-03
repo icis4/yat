@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 using MKY.Settings;
 
@@ -241,7 +242,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
-				RunAndVerifyApplication(main);
+				RunAndVerifyApplicationWithView(main);
 			}
 		}
 
@@ -258,7 +259,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
-				RunAndVerifyApplication(main);
+				RunAndVerifyApplicationWithView(main);
 			}
 		}
 
@@ -275,7 +276,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{
-				RunAndVerifyApplication(main);
+				RunAndVerifyApplicationWithView(main);
 			}
 		}
 
@@ -292,7 +293,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(SerialPortArgs))
 			{
-				RunAndVerifyApplication(main);
+				RunAndVerifyApplicationWithView(main);
 			}
 		}
 
@@ -352,12 +353,12 @@ namespace YAT.Controller.Test
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
-		private static void RunAndVerifyApplication(Controller.Main main)
+		private static void RunAndVerifyApplicationWithView(Controller.Main main)
 		{
-			RunAndVerifyApplication(main, MainResult.Success);
+			RunAndVerifyApplicationWithView(main, MainResult.Success);
 		}
 
-		private static void RunAndVerifyApplication(Controller.Main main, MainResult expectedMainResult)
+		private static void RunAndVerifyApplicationWithView(Controller.Main main, MainResult expectedMainResult)
 		{
 			MainResult mainResult = main.Run(false, true);
 			Assert.AreEqual(expectedMainResult, mainResult);

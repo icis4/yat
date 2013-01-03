@@ -26,6 +26,7 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.Settings;
@@ -92,58 +93,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 1 Version 1.99.12
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal, true); // Ignore baud rate because it changed from enum to int.
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_12_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		#endregion
@@ -153,58 +124,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_13_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -212,17 +153,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_13_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		#endregion
@@ -232,58 +163,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_17_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -291,17 +192,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_17_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		#endregion
@@ -311,58 +202,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_18_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -370,17 +231,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_18_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		#endregion
@@ -390,58 +241,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_19_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -449,17 +270,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_19_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_19.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_19.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		#endregion
@@ -469,58 +280,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_20_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -528,17 +309,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_20_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_20.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_20.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		#endregion
@@ -548,58 +319,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_22_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -607,17 +348,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_22_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_22.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_22.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		#endregion
@@ -627,58 +358,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 2 Version 1.99.24
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_24_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_24_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_24_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -686,17 +387,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_24_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_24.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_24.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -704,17 +395,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_24_TerminalSettingsCase05()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase05(terminal);
-			}
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
 		}
 
 		#endregion
@@ -724,58 +405,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 3 Version 1.99.25
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_25_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_25_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -783,17 +434,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_25_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -801,17 +442,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase05()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase05(terminal);
-			}
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -819,17 +450,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_25_WorkspaceSettingsCase06()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase06(workspace);
-			}
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -837,17 +458,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase07()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase07(terminal);
-			}
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
 		}
 
 		#endregion
@@ -857,58 +468,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 4 Version 1.99.26
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_26_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_26_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -916,17 +497,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_26_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -934,17 +505,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase05()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase05(terminal);
-			}
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -952,17 +513,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_26_WorkspaceSettingsCase06()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase06(workspace);
-			}
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -970,17 +521,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase07()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase07(terminal);
-			}
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -988,17 +529,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_26_WorkspaceSettingsCase08()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase08(workspace);
-			}
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
 		}
 
 		#endregion
@@ -1008,58 +539,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 4 Candidate 1 Version 1.99.28
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_28_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_28_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_28_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -1067,17 +568,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_28_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_28.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -1085,17 +576,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_28_TerminalSettingsCase05()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase05(terminal);
-			}
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -1103,17 +584,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_28_WorkspaceSettingsCase06()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase06(workspace);
-			}
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_28.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -1121,17 +592,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_28_TerminalSettingsCase07()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase07(terminal);
-			}
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -1139,17 +600,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_28_WorkspaceSettingsCase08()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_28.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase08(workspace);
-			}
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_28.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
 		}
 
 		#endregion
@@ -1159,58 +610,28 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_30_TerminalSettingsCase01()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase01(terminal);
-			}
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_30_TerminalSettingsCase02()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase02(terminal);
-			}
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
 		}
 
-		/// <summary>03_COM1_Closed_Predefined.</summary>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[Test]
 		public virtual void Test_V1_99_30_TerminalSettingsCase03()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase03(terminal);
-			}
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
 		}
 
 		/// <summary></summary>
@@ -1218,17 +639,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_30_WorkspaceSettingsCase04()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase04(workspace);
-			}
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_30.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -1236,17 +647,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_30_TerminalSettingsCase05()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase05(terminal);
-			}
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
 		}
 
 		/// <summary></summary>
@@ -1254,17 +655,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_30_WorkspaceSettingsCase06()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase06(workspace);
-			}
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_30.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
 		}
 
 		/// <summary></summary>
@@ -1272,17 +663,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_30_TerminalSettingsCase07()
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
-				);
-
-			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
-			{
-				terminal.Start();
-				VerifySettingsCase07(terminal);
-			}
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -1290,17 +671,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_30_WorkspaceSettingsCase08()
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_30.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]
-				);
-
-			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
-			{
-				workspace.OpenTerminals();
-				VerifySettingsCase08(workspace);
-			}
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_30.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
 		}
 
 		#endregion
@@ -1333,6 +704,189 @@ namespace YAT.Settings.Test
 			}
 			return (settingsHandler);
 		}
+
+		#endregion
+
+		#region Settings Cases
+		//==========================================================================================
+		// Settings Cases
+		//==========================================================================================
+
+		#region Settings Cases > 01 :: Terminal :: COM1 / Open / Default
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 01 :: Terminal :: COM1 / Open / Default
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase01(string filePath)
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				// Required if COM1 is not available.
+				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+
+				terminal.Start();
+				VerifySettingsCase01(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 02 :: Terminal :: COM2 / Open / Binary / 115200
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 02 :: Terminal :: COM2 / Open / Binary / 115200
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase02(string filePath)
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				// Required if COM2 is not available.
+				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+
+				terminal.Start();
+				VerifySettingsCase02(terminal, true); // Ignore baud rate because it changed from enum to int.
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 03 :: Terminal :: COM1 / Closed / Predefined
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 03 :: Terminal :: COM1 / Closed / Predefined
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase03(string filePath)
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase03(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 04 :: Workspace :: 2 Terminals on COM1 / COM2
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 04 :: Workspace :: 2 Terminals on COM1 / COM2
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase04(string filePath)
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase04(workspace);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 05 :: Terminal :: COM1 / Open / Recent
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 05 :: Terminal :: COM1 / Open / Recent
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase05(string filePath)
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				// Required if COM1 is not available.
+				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
+
+				terminal.Start();
+				VerifySettingsCase05(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase06(string filePath)
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
+				);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase06(workspace);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase07(string filePath)
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase07(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		//------------------------------------------------------------------------------------------
+
+		private void ExecuteSettingsCase08(string filePath)
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase08(workspace);
+			}
+		}
+
+		#endregion
+
+		#region Settings Cases > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Settings Cases > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.OK;
+		}
+
+		#endregion
 
 		#endregion
 

@@ -26,6 +26,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY.Diagnostics;
+
 namespace MKY.Windows.Forms
 {
 	/// <summary>
@@ -42,6 +44,15 @@ namespace MKY.Windows.Forms
 		private delegate void StringMethodDelegate(string value);
 		private delegate void DialogResultMethodDelegate(DialogResult value);
 		private delegate DialogResult ShowDialogDelegate(IWin32Window value);
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static StatusBox staticStatusBox;
 
 		#endregion
 
@@ -161,42 +172,70 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Updates the first status line of the status box.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static void UpdateStatus1(string status)
 		{
-			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
-			if (sinkTarget != null)
+			try
 			{
-				if (sinkTarget.InvokeRequired)
+				ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+				if (sinkTarget != null)
 				{
-					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus1);
-					object[] args = { status };
-					sinkTarget.Invoke(del, args);
+					if (sinkTarget.InvokeRequired)
+					{
+						StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus1);
+						object[] args = { status };
+						sinkTarget.Invoke(del, args);
+					}
+					else
+					{
+						staticStatusBox.SetStatus1(status);
+					}
 				}
-				else
-				{
-					staticStatusBox.SetStatus1(status);
-				}
+			}
+			catch (Exception ex)
+			{
+				// \fixme (2013-01-03 / mky)
+				// A better solution than this try/catch should be found to deal with infrequently
+				// happening invocation exceptions, but for the moment it is better to catch than
+				// do nothing...
+				// The proper solution would be to implement this status box without any static
+				// field. Maybe a good implementation can be found online.
+				DebugEx.WriteException(typeof(StatusBox), ex);
 			}
 		}
 
 		/// <summary>
 		/// Updates the second status line of the status box.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static void UpdateStatus2(string status)
 		{
-			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
-			if (sinkTarget != null)
+			try
 			{
-				if (sinkTarget.InvokeRequired)
+				ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+				if (sinkTarget != null)
 				{
-					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus2);
-					object[] args = { status };
-					sinkTarget.Invoke(del, args);
+					if (sinkTarget.InvokeRequired)
+					{
+						StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus2);
+						object[] args = { status };
+						sinkTarget.Invoke(del, args);
+					}
+					else
+					{
+						staticStatusBox.SetStatus2(status);
+					}
 				}
-				else
-				{
-					staticStatusBox.SetStatus2(status);
-				}
+			}
+			catch (Exception ex)
+			{
+				// \fixme (2013-01-03 / mky)
+				// A better solution than this try/catch should be found to deal with infrequently
+				// happening invocation exceptions, but for the moment it is better to catch than
+				// do nothing...
+				// The proper solution would be to implement this status box without any static
+				// field. Maybe a good implementation can be found online.
+				DebugEx.WriteException(typeof(StatusBox), ex);
 			}
 		}
 
@@ -221,15 +260,6 @@ namespace MKY.Windows.Forms
 				}
 			}
 		}
-
-		#endregion
-
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private static StatusBox staticStatusBox;
 
 		#endregion
 

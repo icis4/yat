@@ -742,7 +742,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Asynchronously manage incoming events to prevent potential dead-locks if close/dispose
+		/// Asynchronously manage incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of received data will generate many events

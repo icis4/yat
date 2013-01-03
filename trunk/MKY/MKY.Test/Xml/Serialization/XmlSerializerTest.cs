@@ -331,6 +331,7 @@ namespace MKY.Test.Xml.Serialization
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void TestSerializationChain(string filePath, Type type, object obj)
 		{
 			// Save:
@@ -344,6 +345,7 @@ namespace MKY.Test.Xml.Serialization
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void TestSerializeToFile(string filePath, Type type, object obj)
 		{
 			try

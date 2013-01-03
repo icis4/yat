@@ -1874,7 +1874,7 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
 			{
-				MKY.IO.Serial.SerialPort.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler;
+				MKY.IO.Serial.SerialPort.IXOnXOffHandler x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 				if (x != null)
 					x.ToggleInputXOnXOff();
 				else
@@ -1889,7 +1889,7 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable)
 			{
-				MKY.IO.Ports.ISerialPort p = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+				MKY.IO.Ports.ISerialPort p = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 				if (p != null)
 					p.ToggleOutputBreak();
 				else

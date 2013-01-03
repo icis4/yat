@@ -262,9 +262,13 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.TerminalType = this.newTerminalSettings.TerminalType;
 			this.terminalSettings.Terminal.IO.IOType    = this.newTerminalSettings.IOType;
 
-			this.terminalSettings.Terminal.IO.SerialPort.PortId        = this.newTerminalSettings.SerialPortId;
-			this.terminalSettings.Terminal.IO.SerialPort.Communication = this.newTerminalSettings.SerialPortCommunication;
-			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen    = this.newTerminalSettings.SerialPortAutoReopen;
+			this.terminalSettings.Terminal.IO.SerialPort.PortId                    = this.newTerminalSettings.SerialPortId;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.BaudRate    = this.newTerminalSettings.SerialPortCommunication.BaudRate;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.DataBits    = this.newTerminalSettings.SerialPortCommunication.DataBits;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.Parity      = this.newTerminalSettings.SerialPortCommunication.Parity;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.StopBits    = this.newTerminalSettings.SerialPortCommunication.StopBits;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication.FlowControl = this.newTerminalSettings.SerialPortCommunication.FlowControl;
+			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen                = this.newTerminalSettings.SerialPortAutoReopen;
 
 			this.terminalSettings.Terminal.IO.Socket.RemoteHost              = this.newTerminalSettings.SocketRemoteHost;
 			this.terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;

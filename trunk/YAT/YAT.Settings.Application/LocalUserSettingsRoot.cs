@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Settings.Application
@@ -277,6 +278,7 @@ namespace YAT.Settings.Application
 		/// below but not made available public because it would have introduced alternate elements
 		/// to the local user settings, and the change is too minor to justify this.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
 			{
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),

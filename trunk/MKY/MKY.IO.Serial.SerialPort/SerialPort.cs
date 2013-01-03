@@ -640,6 +640,10 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'isOutputBreakOld' indeed starts with an lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool SendThread_isOutputBreakOldAndErrorHasBeenSignaled;
+
 		/// <summary>
 		/// Asynchronously manage outgoing send requests to ensure that software and/or hardware
 		/// flow control is properly buffered and suspended if the communication counterpart
@@ -758,12 +762,19 @@ namespace MKY.IO.Serial.SerialPort
 					}
 					else
 					{
-						OnIOError(new IOErrorEventArgs
-							(
-							ErrorSeverity.Acceptable,
-							Direction.Output,
-							"No data can be sent while port is in output break state")
-							);
+						// If data is intended to be sent, and the output has changed to break,
+						// write an error message onto the terminal:
+						if ((this.sendQueue.Count > 0) && isOutputBreak && !SendThread_isOutputBreakOldAndErrorHasBeenSignaled)
+						{
+							OnIOError(new IOErrorEventArgs
+								(
+								ErrorSeverity.Acceptable,
+								Direction.Output,
+								"No data can be sent while port is in output break state")
+								);
+
+							SendThread_isOutputBreakOldAndErrorHasBeenSignaled = isOutputBreak;
+						}
 					}
 				}
 			}
@@ -1105,7 +1116,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
+			if (IsOpen) // Ensure not to forward any events during closing anymore.
 			{
 				// Immediately read data on this thread.
 				int bytesToRead;
@@ -1151,7 +1162,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (signalXOnXOff)
 				{
 					// Signal XOn/XOff change to send thread:
-					this.receiveThreadEvent.Set();
+					this.sendThreadEvent.Set();
 
 					// Immediately invoke the event, but invoke it asynchronously!
 					OnIOControlChangedAsync(new EventArgs());
@@ -1163,7 +1174,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Asynchronously manage incoming events to prevent potential dead-locks if close/dispose
+		/// Asynchronously manage incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of received data will generate many events
@@ -1257,14 +1268,14 @@ namespace MKY.IO.Serial.SerialPort
 		// Thus, the 3 bytes do not get shown until new data arrives. This is not acceptable.
 
 		/// <summary>
-		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
+		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </summary>
 		private delegate void port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
 
 		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
+			if (IsOpen) // Ensure not to forward any events during closing anymore.
 			{
 				port_PinChangedDelegate asyncInvoker = new port_PinChangedDelegate(port_PinChangedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -1272,23 +1283,27 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "cts", Justification = "Local variable 'cts' is required to force access to port to check whether it's still alive.")]
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "cts", Justification = "Local variable 'cts' is required to force access to port to check whether the port is still alive.")]
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
-			//   e.g. USB to serial converter disconnected.
+			//   e.g. USB to serial converter was disconnected.
 			try
 			{
-				// Force access to port to check whether it's still alive.
+				// Force access to port to check whether the port is still alive:
 				bool cts = this.port.CtsHolding;
 
-				if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
+				if (IsOpen) // Ensure not to forward any events during closing anymore.
 				{
 					if (this.settings.Communication.FlowControlManagesRtsCtsDtrDsrManually)
 					{
 						this.manualRtsWasEnabled = this.port.RtsEnable;
 						this.manualDtrWasEnabled = this.port.DtrEnable;
 					}
+
+					// Signal pin change to threads:
+					this.sendThreadEvent.Set();
+					this.receiveThreadEvent.Set();
 
 					switch (e.EventType)
 					{
@@ -1310,19 +1325,20 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch
 			{
+				WriteDebugMessageLine("PinChangedAsync() detected shutdown of port.");
 				RestartOrResetPortAndThreads();
 			}
 		}
 
 		/// <summary>
-		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
+		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </summary>
 		private delegate void port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
 
 		private void port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
+			if (IsOpen) // Ensure not to forward any events during closing anymore.
 			{
 				port_ErrorReceivedDelegate asyncInvoker = new port_ErrorReceivedDelegate(port_ErrorReceivedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -1383,10 +1399,14 @@ namespace MKY.IO.Serial.SerialPort
 					// If port isn't open anymore, or access to port throws exception,
 					//   port has been shut down, e.g. USB to serial converter disconnected.
 					if (!this.port.IsOpen)
+					{
+						WriteDebugMessageLine("AliveTimerElapsed() detected shutdown of port.");
 						RestartOrResetPortAndThreads();
+					}
 				}
 				catch
 				{
+					WriteDebugMessageLine("AliveTimerElapsed() detected shutdown of port.");
 					RestartOrResetPortAndThreads();
 				}
 			}
@@ -1433,6 +1453,7 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					// Try to re-open port.
 					CreateAndOpenPortAndThreads();
+					WriteDebugMessageLine("ReopenTimerElapsed() successfully reopend the port.");
 				}
 				catch
 				{

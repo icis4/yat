@@ -157,7 +157,7 @@ namespace YAT.Settings.Test
 		// Private Methods
 		//==========================================================================================
 
-		private void SelectiveTestSetUp()
+		private static void SelectiveTestSetUp()
 		{
 			// Create temporary in-memory application settings for this test run.
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
@@ -166,7 +166,7 @@ namespace YAT.Settings.Test
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
 
-		private void SelectiveTestTearDown()
+		private static void SelectiveTestTearDown()
 		{
 			// Close temporary in-memory application settings.
 			ApplicationSettings.Close();

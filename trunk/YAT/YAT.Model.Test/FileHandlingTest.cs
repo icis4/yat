@@ -735,6 +735,27 @@ namespace YAT.Model.Test
 			#endregion
 		}
 
+		#region Tests > TestSequenceOfUseCases_1_through_5a_ > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Tests > TestSequenceOfUseCases_1_through_5a_ > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void terminal2_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
+		{
+			Terminal terminal = sender as Terminal;
+			Assert.IsTrue(terminal.SaveAs(this.normalTerminal2FilePath), "Terminal 2 could not be saved as!");
+			e.Result = System.Windows.Forms.DialogResult.OK;
+		}
+
+		private void terminal3_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
+		{
+			Terminal terminal = sender as Terminal;
+			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as!");
+			e.Result = System.Windows.Forms.DialogResult.OK;
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Tests > TestSequenceOfUseCases_6_through_9_
@@ -1413,27 +1434,6 @@ namespace YAT.Model.Test
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Event Handlers
-		//==========================================================================================
-		// Event Handlers
-		//==========================================================================================
-
-		private void terminal2_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
-		{
-			Terminal terminal = sender as Terminal;
-			Assert.IsTrue(terminal.SaveAs(this.normalTerminal2FilePath), "Terminal 2 could not be saved as!");
-			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
-
-		private void terminal3_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
-		{
-			Terminal terminal = sender as Terminal;
-			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as!");
-			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
 
 		#endregion
 	}
