@@ -509,10 +509,8 @@ namespace YAT.Gui.Forms
 
 			checkBox_NoSendOnOutputBreak.Enabled = isSerialPort;
 			checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-
-			// Receive:
-			groupBox_ReceiveSettings.Enabled    = isSerialPort;
-			checkBox_NoSendOnInputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
+			checkBox_NoSendOnInputBreak.Enabled  = isSerialPort;
+			checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			// User:
 			textBox_UserName.Text = this.settingsInEdit.UserName;

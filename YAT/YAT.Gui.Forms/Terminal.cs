@@ -2996,7 +2996,7 @@ namespace YAT.Gui.Forms
 					bool inputBreak = false;
 					if (port != null)
 					{
-						pins = port.ControlPins;
+						pins        = port.ControlPins;
 						outputBreak = port.OutputBreak;
 						inputBreak  = port.InputBreak;
 					}
@@ -3058,8 +3058,8 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
-					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (outputBreak ? off : on);
+					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (inputBreak  ? off : on);
 
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;

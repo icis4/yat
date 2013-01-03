@@ -48,7 +48,7 @@ namespace MKY.IO.Serial.Socket
 	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks
 	/// 3. The 'OnDisconnected' event is fired
 	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main
-	///    thread and a dead-lock happens
+	///    thread and a deadlock happens
 	/// 
 	/// Further down the calling chain, 'BaseSocketConnection.Active.get()' was also blocking.
 	/// 
