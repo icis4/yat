@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
-  <ProductVersion>1.99.28</ProductVersion>
-  <Warning>Modifying this file may cause undefined behaviour!</Warning>
+  <SettingsVersion>1.3.1</SettingsVersion>
+  <ProductVersion>1.99.30</ProductVersion>
+  <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2011-12-03T17:56:38.9012979+01:00</TimeStamp>
+    <TimeStamp>2013-01-03T13:32:58.191895+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -29,13 +30,15 @@
             <Enabled>true</Enabled>
             <Interval>2000</Interval>
           </AutoReopen>
+          <MaxSendChunkSize>50</MaxSendChunkSize>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
           <RemoteHost>&lt;Localhost&gt;</RemoteHost>
-          <RemotePort>10000</RemotePort>
+          <RemoteTcpPort>10000</RemoteTcpPort>
+          <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
           <LocalTcpPort>10000</LocalTcpPort>
           <LocalUdpPort>10001</LocalUdpPort>
@@ -45,9 +48,14 @@
           </TcpClientAutoReconnect>
         </Socket>
         <UsbSerialHidDevice>
+          <DeviceInfo>
+            <VendorId>0</VendorId>
+            <ProductId>0</ProductId>
+            <SerialNumber />
+          </DeviceInfo>
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>
-        <Endianess>BigEndian</Endianess>
+        <Endianness>BigEndian</Endianness>
         <IndicateSerialPortBreakStates>false</IndicateSerialPortBreakStates>
         <SerialPortOutputBreakIsModifiable>false</SerialPortOutputBreakIsModifiable>
       </IO>
@@ -66,6 +74,7 @@
         <ShowRadix>true</ShowRadix>
         <ShowTimeStamp>false</ShowTimeStamp>
         <ShowLength>false</ShowLength>
+        <ShowLineNumbers>false</ShowLineNumbers>
         <TxMaxLineCount>1000</TxMaxLineCount>
         <RxMaxLineCount>1000</RxMaxLineCount>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
@@ -80,6 +89,8 @@
         <KeepCommand>true</KeepCommand>
         <CopyPredefined>false</CopyPredefined>
         <SendImmediately>false</SendImmediately>
+        <DefaultDelay>100</DefaultDelay>
+        <DefaultLineDelay>100</DefaultLineDelay>
       </Send>
       <TextTerminal>
         <SeparateTxRxEol>false</SeparateTxRxEol>
@@ -97,9 +108,12 @@
           <Timeout>500</Timeout>
         </WaitForResponse>
         <CharSubstitution>None</CharSubstitution>
-        <SkipEolComments>false</SkipEolComments>
-        <EolCommentIndicators>//</EolCommentIndicators>
-        <EolCommentIndicators>REM</EolCommentIndicators>
+        <EolComment>
+          <SkipComment>false</SkipComment>
+          <SkipWhiteSpace>true</SkipWhiteSpace>
+          <Indicators>//</Indicators>
+          <Indicators>REM</Indicators>
+        </EolComment>
       </TextTerminal>
       <BinaryTerminal>
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
