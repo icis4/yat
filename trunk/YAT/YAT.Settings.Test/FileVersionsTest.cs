@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -1131,17 +1131,17 @@ namespace YAT.Settings.Test
 			Assert.AreEqual("Second Page", page.PageName, "Second predefined command pages has wrong name!");
 			Assert.AreEqual(4, page.Commands.Count, "Second predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
-			Assert.AreEqual("2A", command.Description);
-			Assert.AreEqual("2A", command.CommandLines[0]);
+			Assert.AreEqual("21", command.Description); // Ensures that numbers are properly parsed as well.
+			Assert.AreEqual("21", command.CommandLines[0]);
 			command = page.Commands[1];
-			Assert.AreEqual("2B", command.Description);
-			Assert.AreEqual("2B", command.CommandLines[0]);
+			Assert.AreEqual("22", command.Description);
+			Assert.AreEqual("22", command.CommandLines[0]);
 			command = page.Commands[2];
-			Assert.AreEqual("2C", command.Description);
-			Assert.AreEqual("2C", command.CommandLines[0]);
+			Assert.AreEqual("23", command.Description);
+			Assert.AreEqual("23", command.CommandLines[0]);
 			command = page.Commands[3];
-			Assert.AreEqual("2D", command.Description);
-			Assert.AreEqual("2D", command.CommandLines[0]);
+			Assert.AreEqual("24", command.Description);
+			Assert.AreEqual("24", command.CommandLines[0]);
 		}
 
 		#endregion

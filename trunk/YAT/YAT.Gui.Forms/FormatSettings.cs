@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -49,7 +49,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.FormatSettings formatSettings;
-		private Model.Settings.FormatSettings formatSettings_Form;
+		private Model.Settings.FormatSettings formatSettingsInEdit;
 
 		private Controls.Monitor[] monitors;
 		private Controls.TextFormat[] textFormats;
@@ -70,7 +70,7 @@ namespace YAT.Gui.Forms
 			InitializeComponent();
 
 			this.formatSettings = formatSettings;
-			this.formatSettings_Form = new Model.Settings.FormatSettings(formatSettings);
+			this.formatSettingsInEdit = new Model.Settings.FormatSettings(formatSettings);
 
 			InitializeExamples();
 			InitializeControls();
@@ -139,7 +139,7 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.formatSettings = this.formatSettings_Form;
+			this.formatSettings = this.formatSettingsInEdit;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -161,7 +161,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.formatSettings_Form.SetDefaults();
+				this.formatSettingsInEdit.SetDefaults();
 				SetControls();
 			}
 		}
@@ -258,13 +258,13 @@ namespace YAT.Gui.Forms
 		{
 			switch (index)
 			{
-				case 0: return (this.formatSettings_Form.TxDataFormat);
-				case 1: return (this.formatSettings_Form.TxControlFormat);
-				case 2: return (this.formatSettings_Form.RxDataFormat);
-				case 3: return (this.formatSettings_Form.RxControlFormat);
-				case 4: return (this.formatSettings_Form.TimeStampFormat);
-				case 5: return (this.formatSettings_Form.LengthFormat);
-				case 6: return (this.formatSettings_Form.ErrorFormat);
+				case 0: return (this.formatSettingsInEdit.TxDataFormat);
+				case 1: return (this.formatSettingsInEdit.TxControlFormat);
+				case 2: return (this.formatSettingsInEdit.RxDataFormat);
+				case 3: return (this.formatSettingsInEdit.RxControlFormat);
+				case 4: return (this.formatSettingsInEdit.TimeStampFormat);
+				case 5: return (this.formatSettingsInEdit.LengthFormat);
+				case 6: return (this.formatSettingsInEdit.ErrorFormat);
 				default: throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index."));
 			}
 		}
@@ -282,12 +282,12 @@ namespace YAT.Gui.Forms
 
 			for (int i = 0; i < this.monitors.Length; i++)
 			{                          // Clone settings before assigning them to control
-				this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettings_Form);
+				this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 			}
 
 			for (int i = 0; i < this.textFormats.Length; i++)
 			{
-				this.textFormats[i].FormatFontWithoutStyle = this.formatSettings_Form.Font;
+				this.textFormats[i].FormatFontWithoutStyle = this.formatSettingsInEdit.Font;
 
 				Model.Types.TextFormat tf = GetFormatFromIndex(i);
 				this.textFormats[i].FormatFontStyle = tf.FontStyle;
@@ -295,7 +295,7 @@ namespace YAT.Gui.Forms
 			}
 
 			                           // Clone settings before assigning them to control
-			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettings_Form);
+			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
 			this.isSettingControls.Leave();
 		}
@@ -304,13 +304,13 @@ namespace YAT.Gui.Forms
 		private void ShowFontDialog()
 		{
 			FontDialog fd;
-			Font f = this.formatSettings_Form.Font;
+			Font f = this.formatSettingsInEdit.Font;
 			bool fontOK = false;
 			bool cancel = false;
 			do
 			{
 				fd = new FontDialog();
-				fd.Font = this.formatSettings_Form.Font;
+				fd.Font = this.formatSettingsInEdit.Font;
 				fd.ShowEffects = false;
 				if (fd.ShowDialog(this) != DialogResult.OK)
 				{
@@ -345,9 +345,9 @@ namespace YAT.Gui.Forms
 
 			if (fontOK)
 			{
-				if ((f.Name != this.formatSettings_Form.Font.Name) || (f.Size != this.formatSettings_Form.Font.Size))
+				if ((f.Name != this.formatSettingsInEdit.Font.Name) || (f.Size != this.formatSettingsInEdit.Font.Size))
 				{
-					this.formatSettings_Form.Font = f;
+					this.formatSettingsInEdit.Font = f;
 					SetControls();
 				}
 			}

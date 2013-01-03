@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -54,7 +54,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Log.Settings.LogSettings settings;
-		private Log.Settings.LogSettings settings_Form;
+		private Log.Settings.LogSettings settingsInEdit;
 
 		#endregion
 
@@ -97,14 +97,14 @@ namespace YAT.Gui.Forms
 		private void KeepAndCloneAndAttachSettings(Log.Settings.LogSettings settings)
 		{
 			this.settings = settings;
-			this.settings_Form = new Log.Settings.LogSettings(settings);
-			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settingsInEdit = new Log.Settings.LogSettings(settings);
+			this.settingsInEdit.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
-			this.settings = this.settings_Form;
+			this.settingsInEdit.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settingsInEdit;
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -157,34 +157,34 @@ namespace YAT.Gui.Forms
 		private void checkBox_Raw_Tx_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.RawLogTx = checkBox_Raw_Tx.Checked;
+				this.settingsInEdit.RawLogTx = checkBox_Raw_Tx.Checked;
 		}
 
 		private void pathLabel_Raw_Tx_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.RawLogTx = !this.settings_Form.RawLogTx;
+			this.settingsInEdit.RawLogTx = !this.settingsInEdit.RawLogTx;
 		}
 
 		private void checkBox_Raw_Bidir_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.RawLogBidir = checkBox_Raw_Bidir.Checked;
+				this.settingsInEdit.RawLogBidir = checkBox_Raw_Bidir.Checked;
 		}
 
 		private void pathLabel_Raw_Bidir_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.RawLogBidir = !this.settings_Form.RawLogBidir;
+			this.settingsInEdit.RawLogBidir = !this.settingsInEdit.RawLogBidir;
 		}
 
 		private void checkBox_Raw_Rx_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.RawLogRx = checkBox_Raw_Rx.Checked;
+				this.settingsInEdit.RawLogRx = checkBox_Raw_Rx.Checked;
 		}
 
 		private void pathLabel_Raw_Rx_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.RawLogRx = !this.settings_Form.RawLogRx;
+			this.settingsInEdit.RawLogRx = !this.settingsInEdit.RawLogRx;
 		}
 
 		private void comboBox_Raw_Extension_Validating(object sender, CancelEventArgs e)
@@ -194,7 +194,7 @@ namespace YAT.Gui.Forms
 				e.Cancel = true;
 				return;
 			}
-			if (this.settings_Form.BothRawAndNeat && (comboBox_Raw_Extension.Text == this.settings_Form.NeatExtension))
+			if (this.settingsInEdit.BothRawAndNeat && (comboBox_Raw_Extension.Text == this.settingsInEdit.NeatExtension))
 			{
 				ExtensionConflictMessage();
 				e.Cancel = true;
@@ -206,40 +206,40 @@ namespace YAT.Gui.Forms
 		private void comboBox_Raw_Extension_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.RawExtension = comboBox_Raw_Extension.Text;
+				this.settingsInEdit.RawExtension = comboBox_Raw_Extension.Text;
 		}
 
 		private void checkBox_Neat_Tx_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NeatLogTx = checkBox_Neat_Tx.Checked;
+				this.settingsInEdit.NeatLogTx = checkBox_Neat_Tx.Checked;
 		}
 
 		private void pathLabel_Neat_Tx_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.NeatLogTx = !this.settings_Form.NeatLogTx;
+			this.settingsInEdit.NeatLogTx = !this.settingsInEdit.NeatLogTx;
 		}
 
 		private void checkBox_Neat_Bidir_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NeatLogBidir = checkBox_Neat_Bidir.Checked;
+				this.settingsInEdit.NeatLogBidir = checkBox_Neat_Bidir.Checked;
 		}
 
 		private void pathLabel_Neat_Bidir_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.NeatLogBidir = !this.settings_Form.NeatLogBidir;
+			this.settingsInEdit.NeatLogBidir = !this.settingsInEdit.NeatLogBidir;
 		}
 
 		private void checkBox_Neat_Rx_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NeatLogRx = checkBox_Neat_Rx.Checked;
+				this.settingsInEdit.NeatLogRx = checkBox_Neat_Rx.Checked;
 		}
 
 		private void pathLabel_Neat_Rx_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.NeatLogRx = !this.settings_Form.NeatLogRx;
+			this.settingsInEdit.NeatLogRx = !this.settingsInEdit.NeatLogRx;
 		}
 
 		private void comboBox_Neat_Extension_Validating(object sender, CancelEventArgs e)
@@ -249,7 +249,7 @@ namespace YAT.Gui.Forms
 				e.Cancel = true;
 				return;
 			}
-			if (this.settings_Form.BothRawAndNeat && (comboBox_Neat_Extension.Text == this.settings_Form.RawExtension))
+			if (this.settingsInEdit.BothRawAndNeat && (comboBox_Neat_Extension.Text == this.settingsInEdit.RawExtension))
 			{
 				ExtensionConflictMessage();
 				e.Cancel = true;
@@ -261,16 +261,16 @@ namespace YAT.Gui.Forms
 		private void comboBox_Neat_Extension_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NeatExtension = comboBox_Neat_Extension.Text;
+				this.settingsInEdit.NeatExtension = comboBox_Neat_Extension.Text;
 		}
 
 		private void rad_Options_ModeCreate_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls && rad_Options_ModeCreate.Checked)
 			{
-				this.settings_Form.WriteMode = Log.LogFileWriteMode.Create;
-				this.settings_Form.NameDate = this.settings.NameDate;
-				this.settings_Form.NameTime = this.settings.NameTime;
+				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Create;
+				this.settingsInEdit.NameDate = this.settings.NameDate;
+				this.settingsInEdit.NameTime = this.settings.NameTime;
 			}
 		}
 
@@ -278,46 +278,46 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls && rad_Options_ModeAppend.Checked)
 			{
-				this.settings_Form.WriteMode = Log.LogFileWriteMode.Append;
-				this.settings_Form.NameDate = false;
-				this.settings_Form.NameTime = false;
+				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Append;
+				this.settingsInEdit.NameDate = false;
+				this.settingsInEdit.NameTime = false;
 			}
 		}
 
 		private void checkBox_Options_SubdirectoriesFormat_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.SubdirectoriesFormat = checkBox_Options_SubdirectoriesFormat.Checked;
+				this.settingsInEdit.SubdirectoriesFormat = checkBox_Options_SubdirectoriesFormat.Checked;
 		}
 
 		private void checkBox_Options_SubdirectoriesChannel_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.SubdirectoriesChannel = checkBox_Options_SubdirectoriesChannel.Checked;
+				this.settingsInEdit.SubdirectoriesChannel = checkBox_Options_SubdirectoriesChannel.Checked;
 		}
 
 		private void checkBox_Options_NameFormat_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NameFormat = checkBox_Options_NameFormat.Checked;
+				this.settingsInEdit.NameFormat = checkBox_Options_NameFormat.Checked;
 		}
 
 		private void checkBox_Options_NameChannel_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NameChannel = checkBox_Options_NameChannel.Checked;
+				this.settingsInEdit.NameChannel = checkBox_Options_NameChannel.Checked;
 		}
 
 		private void checkBox_Options_NameDate_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NameDate = checkBox_Options_NameDate.Checked;
+				this.settingsInEdit.NameDate = checkBox_Options_NameDate.Checked;
 		}
 
 		private void checkBox_Options_NameTime_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NameTime = checkBox_Options_NameTime.Checked;
+				this.settingsInEdit.NameTime = checkBox_Options_NameTime.Checked;
 		}
 
 		private void comboBox_Options_NameSeparator_Validating(object sender, CancelEventArgs e)
@@ -329,7 +329,7 @@ namespace YAT.Gui.Forms
 		private void comboBox_Options_NameSeparator_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.NameSeparator = (Log.FileNameSeparator)(string)comboBox_Options_NameSeparator.Text;
+				this.settingsInEdit.NameSeparator = (Log.FileNameSeparator)(string)comboBox_Options_NameSeparator.Text;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -359,7 +359,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settings_Form.SetDefaults();
+				this.settingsInEdit.SetDefaults();
 			}
 		}
 
@@ -393,44 +393,44 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			if (this.settings_Form.RootPath.Length > 0)
-				pathLabel_Root.Text = this.settings_Form.RootPath + Path.DirectorySeparatorChar + this.settings_Form.RootFileName;
+			if (this.settingsInEdit.RootPath.Length > 0)
+				pathLabel_Root.Text = this.settingsInEdit.RootPath + Path.DirectorySeparatorChar + this.settingsInEdit.RootFileName;
 			else
 				pathLabel_Root.Text = "<Set a root file...>";
 
-			checkBox_Raw_Tx.Checked    = this.settings_Form.RawLogTx;
-			checkBox_Raw_Bidir.Checked = this.settings_Form.RawLogBidir;
-			checkBox_Raw_Rx.Checked    = this.settings_Form.RawLogRx;
+			checkBox_Raw_Tx.Checked    = this.settingsInEdit.RawLogTx;
+			checkBox_Raw_Bidir.Checked = this.settingsInEdit.RawLogBidir;
+			checkBox_Raw_Rx.Checked    = this.settingsInEdit.RawLogRx;
 
-			pathLabel_Raw_Tx.Text    = this.settings_Form.RawTxRootRelativeFilePath;
-			pathLabel_Raw_Bidir.Text = this.settings_Form.RawBidirRootRelativeFilePath;
-			pathLabel_Raw_Rx.Text    = this.settings_Form.RawRxRootRelativeFilePath;
+			pathLabel_Raw_Tx.Text    = this.settingsInEdit.RawTxRootRelativeFilePath;
+			pathLabel_Raw_Bidir.Text = this.settingsInEdit.RawBidirRootRelativeFilePath;
+			pathLabel_Raw_Rx.Text    = this.settingsInEdit.RawRxRootRelativeFilePath;
 
-			comboBox_Raw_Extension.Text = this.settings_Form.RawExtension;
+			comboBox_Raw_Extension.Text = this.settingsInEdit.RawExtension;
 
-			checkBox_Neat_Tx.Checked    = this.settings_Form.NeatLogTx;
-			checkBox_Neat_Bidir.Checked = this.settings_Form.NeatLogBidir;
-			checkBox_Neat_Rx.Checked    = this.settings_Form.NeatLogRx;
+			checkBox_Neat_Tx.Checked    = this.settingsInEdit.NeatLogTx;
+			checkBox_Neat_Bidir.Checked = this.settingsInEdit.NeatLogBidir;
+			checkBox_Neat_Rx.Checked    = this.settingsInEdit.NeatLogRx;
 
-			pathLabel_Neat_Tx.Text    = this.settings_Form.NeatTxRootRelativeFilePath;
-			pathLabel_Neat_Bidir.Text = this.settings_Form.NeatBidirRootRelativeFilePath;
-			pathLabel_Neat_Rx.Text    = this.settings_Form.NeatRxRootRelativeFilePath;
+			pathLabel_Neat_Tx.Text    = this.settingsInEdit.NeatTxRootRelativeFilePath;
+			pathLabel_Neat_Bidir.Text = this.settingsInEdit.NeatBidirRootRelativeFilePath;
+			pathLabel_Neat_Rx.Text    = this.settingsInEdit.NeatRxRootRelativeFilePath;
 
-			comboBox_Neat_Extension.Text = this.settings_Form.NeatExtension;
+			comboBox_Neat_Extension.Text = this.settingsInEdit.NeatExtension;
 
-			rad_Options_ModeCreate.Checked = (this.settings_Form.WriteMode == Log.LogFileWriteMode.Create);
-			rad_Options_ModeAppend.Checked = (this.settings_Form.WriteMode == Log.LogFileWriteMode.Append);
+			rad_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
+			rad_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
 
-			checkBox_Options_SubdirectoriesFormat.Checked  = this.settings_Form.SubdirectoriesFormat;
-			checkBox_Options_SubdirectoriesChannel.Checked = this.settings_Form.SubdirectoriesChannel;
+			checkBox_Options_SubdirectoriesFormat.Checked  = this.settingsInEdit.SubdirectoriesFormat;
+			checkBox_Options_SubdirectoriesChannel.Checked = this.settingsInEdit.SubdirectoriesChannel;
 
-			checkBox_Options_NameFormat.Checked  = this.settings_Form.NameFormat;
-			checkBox_Options_NameChannel.Checked = this.settings_Form.NameChannel;
-			checkBox_Options_NameDate.Checked    = this.settings_Form.NameDate;
-			checkBox_Options_NameTime.Checked    = this.settings_Form.NameTime;
-			comboBox_Options_NameSeparator.Text  = this.settings_Form.NameSeparator;
+			checkBox_Options_NameFormat.Checked  = this.settingsInEdit.NameFormat;
+			checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
+			checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
+			checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
+			comboBox_Options_NameSeparator.Text  = this.settingsInEdit.NameSeparator;
 
-			bool dateTimeEnabled = (this.settings_Form.WriteMode == Log.LogFileWriteMode.Create);
+			bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			checkBox_Options_NameDate.Enabled = dateTimeEnabled;
 			checkBox_Options_NameTime.Enabled = dateTimeEnabled;
 
@@ -444,12 +444,12 @@ namespace YAT.Gui.Forms
 			ofd.Title = "Set Root";
 			ofd.Filter = ExtensionSettings.AllFilesFilter;
 
-			if (Directory.Exists(this.settings_Form.RootPath))
-				ofd.InitialDirectory = this.settings_Form.RootPath;
+			if (Directory.Exists(this.settingsInEdit.RootPath))
+				ofd.InitialDirectory = this.settingsInEdit.RootPath;
 			else
 				ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.LogFilesPath;
 
-			ofd.FileName = this.settings_Form.RootFileName;
+			ofd.FileName = this.settingsInEdit.RootFileName;
 			ofd.CheckPathExists = false;
 			ofd.CheckFileExists = false;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
@@ -459,8 +459,8 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUserSettings.Paths.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				this.settings_Form.RootPath = Path.GetDirectoryName(ofd.FileName);
-				this.settings_Form.RootFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
+				this.settingsInEdit.RootPath = Path.GetDirectoryName(ofd.FileName);
+				this.settingsInEdit.RootFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
 			}
 		}
 
@@ -523,8 +523,8 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private bool ResolveNamingConflicts()
 		{
-			if ((this.settings_Form.SameRawAndNeat) && (this.settings_Form.RawExtension == this.settings_Form.NeatExtension) &&
-				(!this.settings_Form.SubdirectoriesFormat && !this.settings_Form.NameFormat))
+			if ((this.settingsInEdit.SameRawAndNeat) && (this.settingsInEdit.RawExtension == this.settingsInEdit.NeatExtension) &&
+				(!this.settingsInEdit.SubdirectoriesFormat && !this.settingsInEdit.NameFormat))
 			{
 				string message =
 					"To avoid naming conflicts, files must either be placed in format subdirectories or named by format (Raw/Neat). " +
@@ -540,14 +540,14 @@ namespace YAT.Gui.Forms
 					MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: this.settings_Form.SubdirectoriesFormat = true; break;
-					case DialogResult.No: this.settings_Form.NameFormat = true; break;
+					case DialogResult.Yes: this.settingsInEdit.SubdirectoriesFormat = true; break;
+					case DialogResult.No: this.settingsInEdit.NameFormat = true; break;
 					default: return (false);
 				}
 			}
 
-			if ((this.settings_Form.MultipleRaw || this.settings_Form.MultipleNeat) &&
-				(!this.settings_Form.SubdirectoriesChannel && !this.settings_Form.NameChannel))
+			if ((this.settingsInEdit.MultipleRaw || this.settingsInEdit.MultipleNeat) &&
+				(!this.settingsInEdit.SubdirectoriesChannel && !this.settingsInEdit.NameChannel))
 			{
 				string message =
 					"To avoid naming conflicts, files must either be placed in channel " +
@@ -563,8 +563,8 @@ namespace YAT.Gui.Forms
 					MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: this.settings_Form.SubdirectoriesChannel = true; break;
-					case DialogResult.No: this.settings_Form.NameChannel = true; break;
+					case DialogResult.Yes: this.settingsInEdit.SubdirectoriesChannel = true; break;
+					case DialogResult.No: this.settingsInEdit.NameChannel = true; break;
 					default: return (false);
 				}
 			}

@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -68,7 +68,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.PredefinedCommandSettings settings;
-		private Model.Settings.PredefinedCommandSettings settings_Form;
+		private Model.Settings.PredefinedCommandSettings settingsInEdit;
 		private int selectedPage = 1;
 
 		private List<Label> predefinedCommandSettingsSetLabels;
@@ -89,7 +89,7 @@ namespace YAT.Gui.Forms
 			InitializeComponent();
 
 			this.settings = settings;
-			this.settings_Form = new Model.Settings.PredefinedCommandSettings(settings);
+			this.settingsInEdit = new Model.Settings.PredefinedCommandSettings(settings);
 			this.startupControl.RequestedPage = requestedPage;
 			this.startupControl.RequestedCommand = requestedCommand;
 			InitializeControls();
@@ -167,14 +167,14 @@ namespace YAT.Gui.Forms
 		private void PredefinedCommandSettings_Shown(object sender, EventArgs e)
 		{
 			// Create a page if no pages exist yet:
-			int pageCount = this.settings_Form.Pages.Count;
+			int pageCount = this.settingsInEdit.Pages.Count;
 			if (pageCount > 0)
 			{
 				this.selectedPage = Int32Ex.LimitToBounds(this.startupControl.RequestedPage, 1, pageCount);
 			}
 			else
 			{
-				this.settings_Form.CreateDefaultPage();
+				this.settingsInEdit.CreateDefaultPage();
 				this.selectedPage = 1;
 			}
 
@@ -254,7 +254,7 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.settings = this.settings_Form;
+			this.settings = this.settingsInEdit;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -326,7 +326,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			int pageCount = this.settings_Form.Pages.Count;
+			int pageCount = this.settingsInEdit.Pages.Count;
 			bool pageIsSelected = (this.selectedPage != 0);
 
 			// Page list.
@@ -335,7 +335,7 @@ namespace YAT.Gui.Forms
 				listBox_Pages.Enabled = true;
 				listBox_Pages.Items.Clear();
 
-				foreach (Model.Types.PredefinedCommandPage p in this.settings_Form.Pages)
+				foreach (Model.Types.PredefinedCommandPage p in this.settingsInEdit.Pages)
 					listBox_Pages.Items.Add(p.PageName);
 
 				if (pageIsSelected)
@@ -359,7 +359,7 @@ namespace YAT.Gui.Forms
 
 			// Selected page.
 			if (pageIsSelected)
-				groupBox_Page.Text = this.settings_Form.Pages[SelectedPageIndex].PageName;
+				groupBox_Page.Text = this.settingsInEdit.Pages[SelectedPageIndex].PageName;
 			else
 				groupBox_Page.Text = "<No Page Selected>";
 
@@ -374,13 +374,13 @@ namespace YAT.Gui.Forms
 			{
 				groupBox_Page.Enabled = true;
 
-				int pageCount = this.settings_Form.Pages.Count;
+				int pageCount = this.settingsInEdit.Pages.Count;
 				int commandCount = 0;
 				if (pageCount >= this.selectedPage)
-					commandCount = this.settings_Form.Pages[SelectedPageIndex].Commands.Count;
+					commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
 
 				for (int i = 0; i < commandCount; i++)
-					this.predefinedCommandSettingsSets[i].Command = this.settings_Form.Pages[SelectedPageIndex].Commands[i];
+					this.predefinedCommandSettingsSets[i].Command = this.settingsInEdit.Pages[SelectedPageIndex].Commands[i];
 
 				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 					this.predefinedCommandSettingsSets[i].Command = new Model.Types.Command();
@@ -411,12 +411,12 @@ namespace YAT.Gui.Forms
 				this,
 				"Enter page name:",
 				"Page Name",
-				this.settings_Form.Pages[SelectedPageIndex].PageName,
+				this.settingsInEdit.Pages[SelectedPageIndex].PageName,
 				out pageName
 				)
 				== DialogResult.OK)
 			{
-				this.settings_Form.Pages[SelectedPageIndex].PageName = pageName;
+				this.settingsInEdit.Pages[SelectedPageIndex].PageName = pageName;
 				SetPagesControls();
 			}
 		}
@@ -437,7 +437,7 @@ namespace YAT.Gui.Forms
 				== DialogResult.OK)
 			{
 				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
-				this.settings_Form.Pages.Insert(SelectedPageIndex, pcp);
+				this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 				SetControls();
 			}
 		}
@@ -445,7 +445,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void AddPage()
 		{
-			int pageNumber = this.settings_Form.Pages.Count + 1;
+			int pageNumber = this.settingsInEdit.Pages.Count + 1;
 			string pageName;
 			if (TextInputBox.Show
 				(
@@ -458,8 +458,8 @@ namespace YAT.Gui.Forms
 				== DialogResult.OK)
 			{
 				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage, pageName);
-				this.settings_Form.Pages.Add(pcp);
-				this.selectedPage = this.settings_Form.Pages.Count;
+				this.settingsInEdit.Pages.Add(pcp);
+				this.selectedPage = this.settingsInEdit.Pages.Count;
 				SetControls();
 			}
 		}
@@ -473,14 +473,14 @@ namespace YAT.Gui.Forms
 				this,
 				"Enter name of copy:",
 				"Page Name",
-				this.settings_Form.Pages[SelectedPageIndex].PageName + " (copy)",
+				this.settingsInEdit.Pages[SelectedPageIndex].PageName + " (copy)",
 				out pageName
 				)
 				== DialogResult.OK)
 			{
-				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(this.settings_Form.Pages[SelectedPageIndex]);
+				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(this.settingsInEdit.Pages[SelectedPageIndex]);
 				pcp.PageName = pageName;
-				this.settings_Form.Pages.Insert(SelectedPageIndex + 1, pcp);
+				this.settingsInEdit.Pages.Insert(SelectedPageIndex + 1, pcp);
 				SetControls();
 			}
 		}
@@ -491,7 +491,7 @@ namespace YAT.Gui.Forms
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Delete page '" + this.settings_Form.Pages[SelectedPageIndex].PageName + "'?",
+				"Delete page '" + this.settingsInEdit.Pages[SelectedPageIndex].PageName + "'?",
 				"Delete?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -499,27 +499,27 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settings_Form.Pages.RemoveAt(SelectedPageIndex);
-				this.selectedPage = Int32Ex.LimitToBounds(this.selectedPage, 1, this.settings_Form.Pages.Count);
+				this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
+				this.selectedPage = Int32Ex.LimitToBounds(this.selectedPage, 1, this.settingsInEdit.Pages.Count);
 				SetControls();
 			}
 		}
 
 		private void MovePageUp()
 		{
-			Model.Types.PredefinedCommandPage pcp = this.settings_Form.Pages[SelectedPageIndex];
-			this.settings_Form.Pages.RemoveAt(SelectedPageIndex);
+			Model.Types.PredefinedCommandPage pcp = this.settingsInEdit.Pages[SelectedPageIndex];
+			this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
 			this.selectedPage--;
-			this.settings_Form.Pages.Insert(SelectedPageIndex, pcp);
+			this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 			SetPagesControls();
 		}
 
 		private void MovePageDown()
 		{
-			Model.Types.PredefinedCommandPage pcp = this.settings_Form.Pages[SelectedPageIndex];
-			this.settings_Form.Pages.RemoveAt(SelectedPageIndex);
+			Model.Types.PredefinedCommandPage pcp = this.settingsInEdit.Pages[SelectedPageIndex];
+			this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
 			this.selectedPage++;
-			this.settings_Form.Pages.Insert(SelectedPageIndex, pcp);
+			this.settingsInEdit.Pages.Insert(SelectedPageIndex, pcp);
 			SetPagesControls();
 		}
 
@@ -537,7 +537,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settings_Form.CreateDefaultPage();
+				this.settingsInEdit.CreateDefaultPage();
 				this.selectedPage = 1;
 				SetControls();
 			}
@@ -554,7 +554,7 @@ namespace YAT.Gui.Forms
 		/// <param name="command">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		private void GetCommandFromSettingsSet(int command)
 		{
-			Model.Types.PredefinedCommandPage page = this.settings_Form.Pages[SelectedPageIndex];
+			Model.Types.PredefinedCommandPage page = this.settingsInEdit.Pages[SelectedPageIndex];
 			page.SetCommand(command - 1, this.predefinedCommandSettingsSets[command - 1].Command);
 		}
 
@@ -564,7 +564,7 @@ namespace YAT.Gui.Forms
 			if (MessageBoxEx.Show
 				(
 				this,
-				"Clear all commands of page '" + this.settings_Form.Pages[SelectedPageIndex].PageName + "'?",
+				"Clear all commands of page '" + this.settingsInEdit.Pages[SelectedPageIndex].PageName + "'?",
 				"Clear?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -572,7 +572,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settings_Form.Pages[SelectedPageIndex].Commands.Clear();
+				this.settingsInEdit.Pages[SelectedPageIndex].Commands.Clear();
 				SetControls();
 			}
 		}

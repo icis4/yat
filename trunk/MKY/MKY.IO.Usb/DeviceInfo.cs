@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -26,9 +26,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -74,19 +71,22 @@ namespace MKY.IO.Usb
 		public static readonly string LastProductIdString  = LastProductId .ToString("X4", NumberFormatInfo.InvariantInfo);
 
 		/// <summary></summary>
-		public const int DefaultVendorId = 0;
+		public const int DefaultVendorId = FirstVendorId;
 
 		/// <summary></summary>
-		public const int DefaultProductId = 0;
-
-		/// <summary></summary>
-		public const string DefaultSeparator = " - ";
+		public const int DefaultProductId = FirstProductId;
 
 		/// <remarks><![CDATA["VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"]]></remarks>
 		public static readonly Regex VendorIdRegex = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		/// <remarks><![CDATA["VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"]]></remarks>
 		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+		/// <summary></summary>
+		public const string DefaultSerialNumber = "";
+
+		/// <summary></summary>
+		public const string DefaultSeparator = " - ";
 
 		#endregion
 
@@ -102,7 +102,7 @@ namespace MKY.IO.Usb
 
 		private string manufacturer;
 		private string product;
-		private string serialNumber;
+		private string serialNumber = DefaultSerialNumber; // Required for XML serialization.
 
 		#endregion
 
@@ -314,8 +314,7 @@ namespace MKY.IO.Usb
 			if (GetType() != other.GetType())
 				return (false);
 
-			if (PathEx.Equals(this.path, other.path))
-				return (true);
+			// Do not care about path, the path is likely to be system dependent.
 
 			return
 			(

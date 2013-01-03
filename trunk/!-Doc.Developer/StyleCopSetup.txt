@@ -76,8 +76,6 @@ Disable the following rules
   > Simple types like Exceptions or EventArgs should be placed into a single file. Unfortunately, StyleCop suppression cannot be applied on file level.
 - C# > Naming > ElementMustBeginWithUpperCaseLetter (SA1300)
   > Control event handlers are prefixed by the control's name in Visual Studio.
-- C# > Naming > FieldNamesMustNotContainUnderscore (SA1310)
-  > In some cases this really makes sense.
 - C# > Ordering > Element Order > UsingDirectivesMustBePlacedWithinNamespace (SA1200)
   > Visual Studio places using directives outside namespace itself, looks like a Microsoft internal strife.
 - C# > Ordering > Element Order > ElementsMustAppearInTheCorrectOrder (SA1201)

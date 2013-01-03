@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -20,15 +20,24 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY.Test.Xml.Serialization;
+
 using NUnit.Framework;
+
+#endregion
 
 namespace MKY.IO.Usb.Test
 {
 	/// <summary></summary>
-	public static class UsbDeviceInfoTestData
+	public static class DeviceInfoTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -58,8 +67,23 @@ namespace MKY.IO.Usb.Test
 
 	/// <summary></summary>
 	[TestFixture]
-	public class UsbDeviceInfoTest
+	public class DeviceInfoTest
 	{
+		#region Tear Down Fixture
+		//==========================================================================================
+		// Tear Down Fixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			Temp.CleanTempPath(GetType());
+		}
+
+		#endregion
+
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -71,8 +95,8 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		[Test, TestCaseSource(typeof(UsbDeviceInfoTestData), "TestCases")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
 		public virtual void TestConstructorAndParse(bool isValid, int vendorId, int productId, string[] descriptions)
 		{
 			if (isValid)
@@ -106,7 +130,7 @@ namespace MKY.IO.Usb.Test
 				}
 				catch
 				{
-					// Invalid input must throw an exception.
+					// Invalid input must throw an exception before Assert.Fail() above.
 				}
 
 				foreach (string description in descriptions)
@@ -118,9 +142,45 @@ namespace MKY.IO.Usb.Test
 					}
 					catch
 					{
-						// Invalid input must throw an exception.
+						// Invalid input must throw an exception before Assert.Fail() above.
 					}
 				}
+			}
+		}
+
+		#endregion
+
+		#region Tests > Serialization
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
+		public virtual void TestSerialization(bool isValid, int vendorId, int productId, string[] descriptions)
+		{
+			if (isValid)
+			{
+				string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
+				DeviceInfo info = new DeviceInfo(vendorId, productId);
+				DeviceInfo infoDeserialized = null;
+
+				// Serialize to file:
+				XmlSerializerTest.TestSerializeToFile(filePath, typeof(DeviceInfo), info);
+
+				// Deserialize from file using different methods and verify the result:
+				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(DeviceInfo));
+				Assert.AreEqual(vendorId, infoDeserialized.VendorId);
+				Assert.AreEqual(productId, infoDeserialized.ProductId);
+
+				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
+				Assert.AreEqual(vendorId, infoDeserialized.VendorId);
+				Assert.AreEqual(productId, infoDeserialized.ProductId);
+
+				infoDeserialized = (DeviceInfo)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(DeviceInfo));
+				Assert.AreEqual(vendorId, infoDeserialized.VendorId);
+				Assert.AreEqual(productId, infoDeserialized.ProductId);
 			}
 		}
 

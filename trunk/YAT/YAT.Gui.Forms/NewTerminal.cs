@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -40,7 +40,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.NewTerminalSettings newTerminalSettings;
-		private Model.Settings.NewTerminalSettings newTerminalSettings_Form;
+		private Model.Settings.NewTerminalSettings newTerminalSettingsInEdit;
 
 		private Settings.Terminal.TerminalSettingsRoot terminalSettings;
 
@@ -57,7 +57,7 @@ namespace YAT.Gui.Forms
 			InitializeComponent();
 
 			this.newTerminalSettings = newTerminalSettings;
-			this.newTerminalSettings_Form = new Model.Settings.NewTerminalSettings(newTerminalSettings);
+			this.newTerminalSettingsInEdit = new Model.Settings.NewTerminalSettings(newTerminalSettings);
 
 			// SetControls() is initially called in the 'Paint' event handler.
 		}
@@ -123,7 +123,7 @@ namespace YAT.Gui.Forms
 			if (!this.isSettingControls)
 			{
 				Domain.TerminalType terminalType = terminalSelection.TerminalType;
-				this.newTerminalSettings_Form.TerminalType = terminalType;
+				this.newTerminalSettingsInEdit.TerminalType = terminalType;
 				SetControls();
 			}
 		}
@@ -133,14 +133,14 @@ namespace YAT.Gui.Forms
 			if (!this.isSettingControls)
 			{
 				Domain.IOType ioType = terminalSelection.IOType;
-				this.newTerminalSettings_Form.IOType = ioType;
+				this.newTerminalSettingsInEdit.IOType = ioType;
 				SetControls();
 			}
 		}
 
 		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.StartTerminal = checkBox_StartTerminal.Checked;
+			this.newTerminalSettingsInEdit.StartTerminal = checkBox_StartTerminal.Checked;
 		}
 
 		#endregion
@@ -152,37 +152,37 @@ namespace YAT.Gui.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortId = serialPortSelection.PortId;
+			this.newTerminalSettingsInEdit.SerialPortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortCommunication.BaudRate = serialPortSettings.BaudRate;
+			this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortCommunication.DataBits = serialPortSettings.DataBits;
+			this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortCommunication.Parity = serialPortSettings.Parity;
+			this.newTerminalSettingsInEdit.SerialPortCommunication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortCommunication.StopBits = serialPortSettings.StopBits;
+			this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
+			this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SerialPortAutoReopen = serialPortSettings.AutoReopen;
+			this.newTerminalSettingsInEdit.SerialPortAutoReopen = serialPortSettings.AutoReopen;
 		}
 
 		#endregion
@@ -194,37 +194,37 @@ namespace YAT.Gui.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketRemoteHost = socketSelection.RemoteHost;
+			this.newTerminalSettingsInEdit.SocketRemoteHost = socketSelection.RemoteHost;
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketRemoteTcpPort = socketSelection.RemoteTcpPort;
+			this.newTerminalSettingsInEdit.SocketRemoteTcpPort = socketSelection.RemoteTcpPort;
 		}
 
 		private void socketSelection_RemoteUdpPortChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
+			this.newTerminalSettingsInEdit.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketLocalInterface = socketSelection.LocalInterface;
+			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketLocalTcpPort = socketSelection.LocalTcpPort;
+			this.newTerminalSettingsInEdit.SocketLocalTcpPort = socketSelection.LocalTcpPort;
 		}
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.SocketLocalUdpPort = socketSelection.LocalUdpPort;
+			this.newTerminalSettingsInEdit.SocketLocalUdpPort = socketSelection.LocalUdpPort;
 		}
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
+			this.newTerminalSettingsInEdit.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		#endregion
@@ -236,12 +236,12 @@ namespace YAT.Gui.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.UsbSerialHidDeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
+			this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
+			this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
 
 		#endregion
@@ -254,7 +254,7 @@ namespace YAT.Gui.Forms
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			// New terminal settings.
-			this.newTerminalSettings = this.newTerminalSettings_Form;
+			this.newTerminalSettings = this.newTerminalSettingsInEdit;
 
 			// Create document settings and fill it with new terminal settings.
 			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
@@ -315,7 +315,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.newTerminalSettings_Form.SetDefaults();
+				this.newTerminalSettingsInEdit.SetDefaults();
 				SetControls();
 			}
 		}
@@ -344,6 +344,7 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'ioTypeOld' indeed starts with an lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
 
 		/// <remarks>
@@ -354,9 +355,9 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			terminalSelection.TerminalType = this.newTerminalSettings_Form.TerminalType;
+			terminalSelection.TerminalType = this.newTerminalSettingsInEdit.TerminalType;
 
-			Domain.IOType ioType = this.newTerminalSettings_Form.IOType;
+			Domain.IOType ioType = this.newTerminalSettingsInEdit.IOType;
 			terminalSelection.IOType = ioType;
 
 			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
@@ -367,35 +368,35 @@ namespace YAT.Gui.Forms
 			// the serial port list first (which takes time, which looks ulgy).
 			socketSelection.Visible        = isSocket;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
-			socketSelection.RemoteHost     = this.newTerminalSettings_Form.SocketRemoteHost;
-			socketSelection.RemoteTcpPort  = this.newTerminalSettings_Form.SocketRemoteTcpPort;
-			socketSelection.RemoteUdpPort  = this.newTerminalSettings_Form.SocketRemoteUdpPort;
-			socketSelection.LocalInterface = this.newTerminalSettings_Form.SocketLocalInterface;
-			socketSelection.LocalTcpPort   = this.newTerminalSettings_Form.SocketLocalTcpPort;
-			socketSelection.LocalUdpPort   = this.newTerminalSettings_Form.SocketLocalUdpPort;
+			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;
+			socketSelection.RemoteTcpPort  = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
+			socketSelection.RemoteUdpPort  = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
+			socketSelection.LocalInterface = this.newTerminalSettingsInEdit.SocketLocalInterface;
+			socketSelection.LocalTcpPort   = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
+			socketSelection.LocalUdpPort   = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
 
 			socketSettings.Visible                 = isSocket;
 			socketSettings.HostType                = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect  = this.newTerminalSettings_Form.TcpClientAutoReconnect;
+			socketSettings.TcpClientAutoReconnect  = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
 
 			usbSerialHidDeviceSelection.Visible    = isUsbSerialHid;
-			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbSerialHidDeviceInfo;
+			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
 			usbSerialHidDeviceSettings.Visible     = isUsbSerialHid;
-			usbSerialHidDeviceSettings.AutoOpen    = this.newTerminalSettings_Form.UsbSerialHidAutoOpen;
+			usbSerialHidDeviceSettings.AutoOpen    = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
 
 			serialPortSelection.Visible    = isSerialPort;
-			serialPortSelection.PortId     = this.newTerminalSettings_Form.SerialPortId;
+			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;
 
 			serialPortSettings.Visible     = isSerialPort;
-			serialPortSettings.BaudRate    = this.newTerminalSettings_Form.SerialPortCommunication.BaudRate;
-			serialPortSettings.DataBits    = this.newTerminalSettings_Form.SerialPortCommunication.DataBits;
-			serialPortSettings.Parity      = this.newTerminalSettings_Form.SerialPortCommunication.Parity;
-			serialPortSettings.StopBits    = this.newTerminalSettings_Form.SerialPortCommunication.StopBits;
-			serialPortSettings.FlowControl = this.newTerminalSettings_Form.SerialPortCommunication.FlowControl;
-			serialPortSettings.AutoReopen  = this.newTerminalSettings_Form.SerialPortAutoReopen;
+			serialPortSettings.BaudRate    = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
+			serialPortSettings.DataBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
+			serialPortSettings.Parity      = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
+			serialPortSettings.StopBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
+			serialPortSettings.FlowControl = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
+			serialPortSettings.AutoReopen  = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
 
-			checkBox_StartTerminal.Checked = this.newTerminalSettings_Form.StartTerminal;
+			checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
 
 			// Trigger refresh of ports/devices if selection of I/O type has changed.
 			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))

@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -72,9 +72,11 @@ namespace MKY.Win32
 		public static class NativeConstants
 		{
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 			public const int WAIT_TIMEOUT = 0x0102;
 		
 			/// <summary></summary>
+			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 			public const int WAIT_OBJECT_0 = 0;
 		}
 

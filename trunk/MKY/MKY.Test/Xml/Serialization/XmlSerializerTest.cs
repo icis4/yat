@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -94,11 +94,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanFalse", FileExtension);
 			b = false;
-			TestSerialization(filePath, typeof(bool), b);
+			TestSerializationChain(filePath, typeof(bool), b);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanTrue", FileExtension);
 			b = true;
-			TestSerialization(filePath, typeof(bool), b);
+			TestSerializationChain(filePath, typeof(bool), b);
 		}
 
 		#endregion
@@ -117,11 +117,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Guid", FileExtension);
 			guid = System.Guid.NewGuid();
-			TestSerialization(filePath, typeof(System.Guid), guid);
+			TestSerializationChain(filePath, typeof(System.Guid), guid);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "GuidEmpty", FileExtension);
 			guid = System.Guid.Empty;
-			TestSerialization(filePath, typeof(System.Guid), guid);
+			TestSerializationChain(filePath, typeof(System.Guid), guid);
 		}
 
 		#endregion
@@ -139,11 +139,11 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Array", FileExtension);
 			string[] a = new string[] { "A", "B" };
-			TestSerialization(filePath, typeof(string[]), a);
+			TestSerializationChain(filePath, typeof(string[]), a);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayEmpty", FileExtension);
 			string[] ae = new string[] { };
-			TestSerialization(filePath, typeof(string[]), ae);
+			TestSerializationChain(filePath, typeof(string[]), ae);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "MultiArray", FileExtension);
@@ -160,7 +160,7 @@ namespace MKY.Test.Xml.Serialization
 						new string[] { "A", "AA" },
 						new string[] { "B", "BB" },
 					};
-			TestSerialization(filePath, typeof(string[][]), aai);
+			TestSerializationChain(filePath, typeof(string[][]), aai);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ArrayOfArraysByCreate", FileExtension);
 			string[][] aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
@@ -172,7 +172,7 @@ namespace MKY.Test.Xml.Serialization
 			aac[0][1] = "AA";
 			aac[1][0] = "B";
 			aac[1][1] = "BB";
-			TestSerialization(filePath, typeof(string[][]), aac);
+			TestSerializationChain(filePath, typeof(string[][]), aac);
 		}
 
 		#endregion
@@ -192,11 +192,11 @@ namespace MKY.Test.Xml.Serialization
 			List<string> l = new List<string>();
 			l.Add("A");
 			l.Add("B");
-			TestSerialization(filePath, typeof(List<string>), l);
+			TestSerializationChain(filePath, typeof(List<string>), l);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ListEmpty", FileExtension);
 			List<string> le = new List<string>();
-			TestSerialization(filePath, typeof(List<string>), le);
+			TestSerializationChain(filePath, typeof(List<string>), le);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "ListOfArrays", FileExtension);
@@ -267,7 +267,7 @@ namespace MKY.Test.Xml.Serialization
 				i++;
 			}
 
-			TestSerialization(filePath, typeof(string[][]), aa);
+			TestSerializationChain(filePath, typeof(string[][]), aa);
 		}
 
 		#endregion
@@ -288,7 +288,7 @@ namespace MKY.Test.Xml.Serialization
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
 			nsd.Add("2", "B");
-			TestSerialization(filePath, typeof(NamedStringDictionary), nsd);
+			TestSerializationChain(filePath, typeof(NamedStringDictionary), nsd);
 		}
 
 		#endregion
@@ -306,17 +306,17 @@ namespace MKY.Test.Xml.Serialization
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
-			TestSerialization(filePath, typeof(RecentItem<string>), ri);
+			TestSerializationChain(filePath, typeof(RecentItem<string>), ri);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemList", FileExtension);
 			List<RecentItem<string>> ril = new List<RecentItem<string>>();
 			ril.Add(new RecentItem<string>("RIL1"));
 			ril.Add(new RecentItem<string>("RIL2"));
-			TestSerialization(filePath, typeof(List<RecentItem<string>>), ril);
+			TestSerializationChain(filePath, typeof(List<RecentItem<string>>), ril);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemArray", FileExtension);
 			RecentItem<string>[] ria = ril.ToArray();
-			TestSerialization(filePath, typeof(RecentItem<string>[]), ria);
+			TestSerializationChain(filePath, typeof(RecentItem<string>[]), ria);
 		}
 
 		#endregion
@@ -325,15 +325,27 @@ namespace MKY.Test.Xml.Serialization
 
 		#endregion
 
-		#region Private Methods
+		#region Public Test Methods
 		//==========================================================================================
-		// Private Methods
+		// Public Test Methods
 		//==========================================================================================
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
-		private static void TestSerialization(string filePath, Type type, object obj)
+		/// <summary></summary>
+		public static void TestSerializationChain(string filePath, Type type, object obj)
 		{
-			// Save.
+			// Save:
+			TestSerializeToFile(filePath, type, obj);
+
+			// Load:
+			TestDeserializeFromFile(filePath, type);
+			TestTolerantDeserializeFromFile(filePath, type);
+			TestAlternateTolerantDeserializeFromFile(filePath, type);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static void TestSerializeToFile(string filePath, Type type, object obj)
+		{
 			try
 			{
 				XmlSerializerEx.SerializeToFile(filePath, type, obj);
@@ -342,45 +354,65 @@ namespace MKY.Test.Xml.Serialization
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML serialize error: " + ex.Message);
+				// Attention: The following call throws an exception, code after the call will not be executed.
+				Assert.Fail("XML serialize error (using standard serialization): " + ex.Message);
 			}
+		}
 
-			// Load.
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static object TestDeserializeFromFile(string filePath, Type type)
+		{
 			try
 			{
-				XmlSerializerEx.DeserializeFromFile(filePath, type);
+				return (XmlSerializerEx.DeserializeFromFile(filePath, type));
 			}
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML deserialize error: " + ex.Message);
-			}
+				// Attention: The following call throws an exception, code after the call will not be executed.
+				Assert.Fail("XML deserialize error (using standard deserialization): " + ex.Message);
 
+				return (null);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static object TestTolerantDeserializeFromFile(string filePath, Type type)
+		{
 			try
 			{
-				XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+				return (XmlSerializerEx.TolerantDeserializeFromFile(filePath, type));
 			}
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML deserialize error: " + ex.Message);
-			}
+				// Attention: The following call throws an exception, code after the call will not be executed.
+				Assert.Fail("XML deserialize error (using tolerant deserialization): " + ex.Message);
 
+				return (null);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static object TestAlternateTolerantDeserializeFromFile(string filePath, Type type)
+		{
 			try
 			{
-				XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, null);
+				return (XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, null));
 			}
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML deserialize error: " + ex.Message);
+				// Attention: The following call throws an exception, code after the call will not be executed.
+				Assert.Fail("XML deserialize error (using alternate tolerant deserialization): " + ex.Message);
+
+				return (null);
 			}
 		}
 

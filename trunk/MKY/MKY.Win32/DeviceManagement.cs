@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -317,6 +317,7 @@ namespace MKY.Win32
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
 			/// <see cref="NativeMethods.RegisterDeviceNotification"/> require a reference type.
 			/// </remarks>
+			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field names are given by the Win32 API.")]
 			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
@@ -334,6 +335,7 @@ namespace MKY.Win32
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
 			/// </remarks>
+			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field names are given by the Win32 API.")]
 			[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[CLSCompliant(false)]
@@ -397,6 +399,7 @@ namespace MKY.Win32
 		public static class NativeConstants
 		{
 			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
+			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Name is given by the Win32 API.")]
 			[CLSCompliant(false)]
 			public const UInt32 WM_DEVICECHANGE = 0x00000219;
 		}
@@ -650,7 +653,7 @@ namespace MKY.Win32
 		/// is attached or removed.
 		/// </summary>
 		/// <param name="deviceNotificationHandle">Handle returned previously by RegisterDeviceNotification.</param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static void UnregisterDeviceNotificationHandle(IntPtr deviceNotificationHandle)
 		{
 			try
