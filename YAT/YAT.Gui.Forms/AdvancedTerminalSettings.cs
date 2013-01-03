@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -50,7 +50,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Settings.Terminal.ExplicitSettings settings;
-		private Settings.Terminal.ExplicitSettings settings_Form;
+		private Settings.Terminal.ExplicitSettings settingsInEdit;
 
 		#endregion
 
@@ -93,14 +93,14 @@ namespace YAT.Gui.Forms
 		private void KeepAndCloneAndAttachSettings(Settings.Terminal.ExplicitSettings settings)
 		{
 			this.settings = settings;
-			this.settings_Form = new Settings.Terminal.ExplicitSettings(settings);
-			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settingsInEdit = new Settings.Terminal.ExplicitSettings(settings);
+			this.settingsInEdit.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
-			this.settings = this.settings_Form;
+			this.settingsInEdit.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settingsInEdit;
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -143,61 +143,61 @@ namespace YAT.Gui.Forms
 		private void checkBox_SeparateTxRxRadix_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
+				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
 		}
 
 		private void comboBox_TxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.TxRadix = (Domain.RadixEx)comboBox_TxRadix.SelectedItem;
+				this.settingsInEdit.Terminal.Display.TxRadix = (Domain.RadixEx)comboBox_TxRadix.SelectedItem;
 		}
 
 		private void comboBox_RxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.RxRadix = (Domain.RadixEx)comboBox_RxRadix.SelectedItem;
+				this.settingsInEdit.Terminal.Display.RxRadix = (Domain.RadixEx)comboBox_RxRadix.SelectedItem;
 		}
 
 		private void checkBox_ShowRadix_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.ShowRadix = checkBox_ShowRadix.Checked;
+				this.settingsInEdit.Terminal.Display.ShowRadix = checkBox_ShowRadix.Checked;
 		}
 
 		private void checkBox_ShowLineNumbers_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.ShowLineNumbers = checkBox_ShowLineNumbers.Checked;
+				this.settingsInEdit.Terminal.Display.ShowLineNumbers = checkBox_ShowLineNumbers.Checked;
 		}
 
 		private void checkBox_ShowTimeStamp_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.ShowTimeStamp = checkBox_ShowTimeStamp.Checked;
+				this.settingsInEdit.Terminal.Display.ShowTimeStamp = checkBox_ShowTimeStamp.Checked;
 		}
 
 		private void checkBox_ShowLength_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
+				this.settingsInEdit.Terminal.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
 		private void checkBox_ShowConnectTime_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Status.ShowConnectTime = checkBox_ShowConnectTime.Checked;
+				this.settingsInEdit.Terminal.Status.ShowConnectTime = checkBox_ShowConnectTime.Checked;
 		}
 
 		private void checkBox_ShowCountAndRate_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Status.ShowCountAndRate = checkBox_ShowCountAndRate.Checked;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate = checkBox_ShowCountAndRate.Checked;
 		}
 
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
+				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
 		}
 
 		private void textBox_MaxLineCount_TextChanged(object sender, EventArgs e)
@@ -217,8 +217,8 @@ namespace YAT.Gui.Forms
 				int lineCount;
 				if (int.TryParse(textBox_MaxLineCount.Text, out lineCount) && (lineCount >= 1))
 				{
-					this.settings_Form.Terminal.Display.TxMaxLineCount = lineCount;
-					this.settings_Form.Terminal.Display.RxMaxLineCount = lineCount;
+					this.settingsInEdit.Terminal.Display.TxMaxLineCount = lineCount;
+					this.settingsInEdit.Terminal.Display.RxMaxLineCount = lineCount;
 				}
 				else
 				{
@@ -239,55 +239,55 @@ namespace YAT.Gui.Forms
 		private void checkBox_ReplaceControlCharacters_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
 		}
 
 		private void comboBox_ControlCharacterRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
+				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
 		private void checkBox_ReplaceTab_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
 		}
 
 		private void checkBox_ReplaceSpace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
 		}
 
 		private void comboBox_Endianness_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
+				this.settingsInEdit.Terminal.IO.Endianness = (Domain.EndiannessEx)comboBox_Endianness.SelectedItem;
 		}
 
 		private void checkBox_IndicateBreakStates_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates = checkBox_IndicateBreakStates.Checked;
+				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates = checkBox_IndicateBreakStates.Checked;
 		}
 
 		private void checkBox_OutputBreakModifiable_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
+				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
 		}
 
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Send.KeepCommand = checkBox_KeepCommand.Checked;
+				this.settingsInEdit.Terminal.Send.KeepCommand = checkBox_KeepCommand.Checked;
 		}
 
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
+				this.settingsInEdit.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 		}
 
 		private void textBox_MaxSendChunkSize_TextChanged(object sender, EventArgs e)
@@ -307,7 +307,7 @@ namespace YAT.Gui.Forms
 				int maxSendChunkSize;
 				if (int.TryParse(textBox_MaxSendChunkSize.Text, out maxSendChunkSize) && (maxSendChunkSize >= 1))
 				{
-					this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize = maxSendChunkSize;
+					this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize = maxSendChunkSize;
 				}
 				else
 				{
@@ -333,7 +333,7 @@ namespace YAT.Gui.Forms
 				int delay;
 				if (int.TryParse(textBox_DefaultDelay.Text, out delay) && (delay >= 1))
 				{
-					this.settings_Form.Terminal.Send.DefaultDelay = delay;
+					this.settingsInEdit.Terminal.Send.DefaultDelay = delay;
 				}
 				else
 				{
@@ -359,7 +359,7 @@ namespace YAT.Gui.Forms
 				int delay;
 				if (int.TryParse(textBox_DefaultLineDelay.Text, out delay) && (delay >= 1))
 				{
-					this.settings_Form.Terminal.Send.DefaultLineDelay = delay;
+					this.settingsInEdit.Terminal.Send.DefaultLineDelay = delay;
 				}
 				else
 				{
@@ -380,25 +380,25 @@ namespace YAT.Gui.Forms
 		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
+				this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
 		}
 
 		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
 		}
 
 		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
 		}
 
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)
 		{
 			// No need to validate the freely definable name.
-			this.settings_Form.UserName = textBox_UserName.Text;
+			this.settingsInEdit.UserName = textBox_UserName.Text;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -452,70 +452,70 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
-			bool isSerialPort = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.SerialPort);
 
 			this.isSettingControls.Enter();
 
 			// Radix:
-			bool separateRadix = this.settings_Form.Terminal.Display.SeparateTxRxRadix;
+			bool separateRadix = this.settingsInEdit.Terminal.Display.SeparateTxRxRadix;
 			if (!separateRadix)
 				label_TxRadix.Text = "R&adix:";
 			else
 				label_TxRadix.Text = "&Tx Radix:";
 
-			comboBox_TxRadix.SelectedItem      = (Domain.RadixEx)this.settings_Form.Terminal.Display.TxRadix;
+			comboBox_TxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.TxRadix;
 			checkBox_SeparateTxRxRadix.Checked = separateRadix;
 			label_RxRadix.Enabled              = separateRadix;
 			comboBox_RxRadix.Enabled           = separateRadix;
-			comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settings_Form.Terminal.Display.RxRadix;
+			comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.RxRadix;
 
 			// Display:
-			checkBox_ShowRadix.Checked        = this.settings_Form.Terminal.Display.ShowRadix;
-			checkBox_ShowLineNumbers.Checked  = this.settings_Form.Terminal.Display.ShowLineNumbers;
-			checkBox_ShowTimeStamp.Checked    = this.settings_Form.Terminal.Display.ShowTimeStamp;
-			checkBox_ShowLength.Checked       = this.settings_Form.Terminal.Display.ShowLength;
-			checkBox_ShowConnectTime.Checked  = this.settings_Form.Terminal.Status.ShowConnectTime;
-			checkBox_ShowCountAndRate.Checked = this.settings_Form.Terminal.Status.ShowCountAndRate;
+			checkBox_ShowRadix.Checked        = this.settingsInEdit.Terminal.Display.ShowRadix;
+			checkBox_ShowLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
+			checkBox_ShowTimeStamp.Checked    = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
+			checkBox_ShowLength.Checked       = this.settingsInEdit.Terminal.Display.ShowLength;
+			checkBox_ShowConnectTime.Checked  = this.settingsInEdit.Terminal.Status.ShowConnectTime;
+			checkBox_ShowCountAndRate.Checked = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
 
-			checkBox_DirectionLineBreak.Checked = this.settings_Form.Terminal.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = this.settings_Form.Terminal.Display.TxMaxLineCount.ToString(NumberFormatInfo.CurrentInfo);
+			checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
+			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString(NumberFormatInfo.CurrentInfo);
 
 			// Char replace:
-			bool replaceControlChars                    = this.settings_Form.Terminal.CharReplace.ReplaceControlChars;
+			bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
 			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
-			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settings_Form.Terminal.CharReplace.ControlCharRadix;
-			checkBox_ReplaceTab.Checked                 = this.settings_Form.Terminal.CharReplace.ReplaceTab;
-			checkBox_ReplaceSpace.Checked               = this.settings_Form.Terminal.CharReplace.ReplaceSpace;
+			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
+			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
+			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
 
 			// Communication:
-			comboBox_Endianness.SelectedItem        = (Domain.EndiannessEx)this.settings_Form.Terminal.IO.Endianness;
-			checkBox_IndicateBreakStates.Checked   = this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates;
-			checkBox_OutputBreakModifiable.Checked = this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable;
+			comboBox_Endianness.SelectedItem        = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
+			checkBox_IndicateBreakStates.Checked   = this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates;
+			checkBox_OutputBreakModifiable.Checked = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 			// Send:
-			checkBox_KeepCommand.Checked     = this.settings_Form.Terminal.Send.KeepCommand;
-			checkBox_CopyPredefined.Checked  = this.settings_Form.Terminal.Send.CopyPredefined;
-			checkBox_SendImmediately.Checked = this.settings_Form.Terminal.Send.SendImmediately;
+			checkBox_KeepCommand.Checked     = this.settingsInEdit.Terminal.Send.KeepCommand;
+			checkBox_CopyPredefined.Checked  = this.settingsInEdit.Terminal.Send.CopyPredefined;
+			checkBox_SendImmediately.Checked = this.settingsInEdit.Terminal.Send.SendImmediately;
 
 			label_MaxSendChunkSizeRemark.Enabled = isSerialPort;
 			label_MaxSendChunkSizeUnit.Enabled   = isSerialPort;
 			label_MaxSendChunkSize.Enabled       = isSerialPort;
 			textBox_MaxSendChunkSize.Enabled     = isSerialPort;
-			textBox_MaxSendChunkSize.Text        = this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize.ToString(CultureInfo.InvariantCulture);
+			textBox_MaxSendChunkSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize.ToString(CultureInfo.InvariantCulture);
 
-			textBox_DefaultDelay.Text     = this.settings_Form.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
-			textBox_DefaultLineDelay.Text = this.settings_Form.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
+			textBox_DefaultDelay.Text     = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
+			textBox_DefaultLineDelay.Text = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
 
 			checkBox_NoSendOnOutputBreak.Enabled = isSerialPort;
-			checkBox_NoSendOnOutputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+			checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
 			// Receive:
 			groupBox_ReceiveSettings.Enabled    = isSerialPort;
-			checkBox_NoSendOnInputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak;
+			checkBox_NoSendOnInputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			// User:
-			textBox_UserName.Text = this.settings_Form.UserName;
+			textBox_UserName.Text = this.settingsInEdit.UserName;
 
 			this.isSettingControls.Leave();
 		}
@@ -526,52 +526,52 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void SetDefaults()
 		{
-			this.settings_Form.SuspendChangeEvent();
+			this.settingsInEdit.SuspendChangeEvent();
 
 			// Radix:
-			this.settings_Form.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
-			this.settings_Form.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
-			this.settings_Form.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+			this.settingsInEdit.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
+			this.settingsInEdit.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+			this.settingsInEdit.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 
 			// Display:
-			this.settings_Form.Terminal.Display.ShowRadix       = Domain.Settings.DisplaySettings.ShowRadixDefault;
-			this.settings_Form.Terminal.Display.ShowTimeStamp   = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
-			this.settings_Form.Terminal.Display.ShowLength      = Domain.Settings.DisplaySettings.ShowLengthDefault;
-			this.settings_Form.Terminal.Display.ShowLineNumbers = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;
-			this.settings_Form.Terminal.Status.ShowConnectTime  = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
-			this.settings_Form.Terminal.Status.ShowCountAndRate = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
+			this.settingsInEdit.Terminal.Display.ShowRadix       = Domain.Settings.DisplaySettings.ShowRadixDefault;
+			this.settingsInEdit.Terminal.Display.ShowTimeStamp   = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
+			this.settingsInEdit.Terminal.Display.ShowLength      = Domain.Settings.DisplaySettings.ShowLengthDefault;
+			this.settingsInEdit.Terminal.Display.ShowLineNumbers = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;
+			this.settingsInEdit.Terminal.Status.ShowConnectTime  = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
+			this.settingsInEdit.Terminal.Status.ShowCountAndRate = Domain.Settings.StatusSettings.ShowCountAndRateDefault;
 
-			this.settings_Form.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
-			this.settings_Form.Terminal.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-			this.settings_Form.Terminal.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
+			this.settingsInEdit.Terminal.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			this.settingsInEdit.Terminal.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
 			// Char replace:
-			this.settings_Form.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
-			this.settings_Form.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
-			this.settings_Form.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
-			this.settings_Form.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
+			this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
+			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
+			this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
+			this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 
 			// Communication:
-			this.settings_Form.Terminal.IO.Endianness                         = Domain.Settings.IOSettings.EndiannessDefault;
-			this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
-			this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
+			this.settingsInEdit.Terminal.IO.Endianness                         = Domain.Settings.IOSettings.EndiannessDefault;
+			this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
+			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
 			// Send:
-			this.settings_Form.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
-			this.settings_Form.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
-			this.settings_Form.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
-			this.settings_Form.Terminal.IO.SerialPort.MaxSendChunkSize    = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendChunkSizeDefault;
-			this.settings_Form.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
-			this.settings_Form.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
-			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
+			this.settingsInEdit.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
+			this.settingsInEdit.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
+			this.settingsInEdit.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize    = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendChunkSizeDefault;
+			this.settingsInEdit.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
+			this.settingsInEdit.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 
 			// Receive:
-			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 
 			// User:
-			this.settings_Form.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
+			this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
 
-			this.settings_Form.ResumeChangeEvent();
+			this.settingsInEdit.ResumeChangeEvent();
 		}
 
 		#endregion

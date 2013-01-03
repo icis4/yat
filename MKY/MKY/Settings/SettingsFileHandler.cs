@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -197,7 +197,7 @@ namespace MKY.Settings
 		/// </summary>
 		/// <remarks>
 		/// There are some issues with tolerant XML interpretation in case of lists. See YAT bug
-		/// #3537940 "Issues with TolerantXmlSerializer" for details. The following solutions
+		/// #3537940>#232 "Issues with TolerantXmlSerializer" for details. The following solutions
 		/// could fix these issues:
 		///  > Fix these issues in <see cref="TolerantXmlSerializer"/>
 		///  > Implement a different variant of tolerant XML interpretation
@@ -216,7 +216,7 @@ namespace MKY.Settings
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
 		{
 			bool success = false;
@@ -225,33 +225,37 @@ namespace MKY.Settings
 			// First check for file to minimize exceptions thrown.
 			if (FileExists)
 			{
+				// First, always try standard deserialization:
+				//  > This is the fastest way of deserialization
+				//  > Tolerant deserialization has some severe issues (see comments above)
+				//
+				// However:
+				// Standard deserialization might succeed even with an outdated schema! Then,
+				// available alternate elements are not considered. But this issue is considered
+				// less severe than the issues described above.
+				try
+				{
+					result = XmlSerializerEx.DeserializeFromFile(filePath, type);
+					success = true;
+				}
+				catch { }
+
 				if (alternateXmlElements == null)
 				{
-					// Try to open existing file with default deserialization.
+					// Try to open existing file with tolerant deserialization.
 					try
 					{
-						result = XmlSerializerEx.DeserializeFromFile(filePath, type);
+						result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
 						success = true;
 					}
-					catch
+					catch (Exception ex)
 					{
-						// Try to open existing file with tolerant deserialization.
-						try
-						{
-							result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
-							success = true;
-						}
-						catch (Exception ex)
-						{
-							DebugEx.WriteException(this.parentType, ex);
-						}
+						DebugEx.WriteException(this.parentType, ex);
 					}
 				}
 				else
 				{
-					// If alternate elements are available, they MUST be considered in any case,
-					// otherwise, deserialization might succeed but with an outdated schema! So,
-					// try to open existing file with tolerant/alternate-tolerant deserialization.
+					// Try to open existing file with alternate-tolerant deserialization.
 					try
 					{
 						result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
@@ -283,14 +287,14 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public bool SaveToFile(Type type, object settings)
 		{
 			return (SaveToFile(this.filePath, type, settings));
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public bool SaveToFile(string filePath, Type type, object settings)
 		{
 			bool success = false;
@@ -355,7 +359,7 @@ namespace MKY.Settings
 		/// <returns>
 		/// Returns <c>true</c> if file successfully saved.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool TryDelete()
 		{
 			return (FileEx.TryDelete(this.filePath));

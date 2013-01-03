@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -39,7 +39,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Settings.Application.LocalUserSettingsRoot settings;
-		private Settings.Application.LocalUserSettingsRoot settings_Form;
+		private Settings.Application.LocalUserSettingsRoot settingsInEdit;
 
 		#endregion
 
@@ -82,14 +82,14 @@ namespace YAT.Gui.Forms
 		private void KeepAndCloneAndAttachSettings(Settings.Application.LocalUserSettingsRoot settings)
 		{
 			this.settings = settings;
-			this.settings_Form = new Settings.Application.LocalUserSettingsRoot(settings);
-			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settingsInEdit = new Settings.Application.LocalUserSettingsRoot(settings);
+			this.settingsInEdit.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
-			this.settings = this.settings_Form;
+			this.settingsInEdit.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settingsInEdit;
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -132,37 +132,37 @@ namespace YAT.Gui.Forms
 		private void checkBox_ShowTerminalInfo_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
+				this.settingsInEdit.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
 		}
 
 		private void checkBox_ShowChrono_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
+				this.settingsInEdit.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
 		}
 
 		private void checkBox_AutoOpenWorkspace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
+				this.settingsInEdit.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
 		}
 
 		private void checkBox_AutoSaveWorkspace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
+				this.settingsInEdit.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
 		}
 
 		private void checkBox_UseRelativePaths_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
+				this.settingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
 		}
 
 		private void checkBox_DetectSerialPortsInUse_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
+				this.settingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -189,7 +189,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settings_Form.SetDefaults();
+				this.settingsInEdit.SetDefaults();
 			}
 		}
 
@@ -213,14 +213,14 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			checkBox_ShowTerminalInfo.Checked = this.settings_Form.MainWindow.ShowTerminalInfo;
-			checkBox_ShowChrono.Checked       = this.settings_Form.MainWindow.ShowChrono;
+			checkBox_ShowTerminalInfo.Checked = this.settingsInEdit.MainWindow.ShowTerminalInfo;
+			checkBox_ShowChrono.Checked       = this.settingsInEdit.MainWindow.ShowChrono;
 
-			checkBox_AutoOpenWorkspace.Checked = this.settings_Form.General.AutoOpenWorkspace;
-			checkBox_AutoSaveWorkspace.Checked = this.settings_Form.General.AutoSaveWorkspace;
-			checkBox_UseRelativePaths.Checked  = this.settings_Form.General.UseRelativePaths;
+			checkBox_AutoOpenWorkspace.Checked = this.settingsInEdit.General.AutoOpenWorkspace;
+			checkBox_AutoSaveWorkspace.Checked = this.settingsInEdit.General.AutoSaveWorkspace;
+			checkBox_UseRelativePaths.Checked  = this.settingsInEdit.General.UseRelativePaths;
 
-			checkBox_DetectSerialPortsInUse.Checked = this.settings_Form.General.DetectSerialPortsInUse;
+			checkBox_DetectSerialPortsInUse.Checked = this.settingsInEdit.General.DetectSerialPortsInUse;
 
 			this.isSettingControls.Leave();
 		}

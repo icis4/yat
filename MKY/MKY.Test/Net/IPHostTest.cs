@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -21,19 +21,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Net;
-using System.Text;
-using System.Xml.Serialization;
 
-using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Net;
+using MKY.Test.Xml.Serialization;
 
 using NUnit.Framework;
+
+#endregion
 
 namespace MKY.Test.Net
 {
@@ -154,7 +157,7 @@ namespace MKY.Test.Net
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestSerialization(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
@@ -162,45 +165,29 @@ namespace MKY.Test.Net
 			string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
 			IPHost ipHostDeserialized = null;
 
-			// Serialize to file.
-			try
-			{
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					XmlSerializer serializer = new XmlSerializer(typeof(IPHost));
-					serializer.Serialize(sw, ipHost);
-				}
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(IPHostTest), ex);
-
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML serialize error: " + ex.Message);
-			}
+			// Serialize to file:
+			XmlSerializerTest.TestSerializeToFile(filePath, typeof(IPHost), ipHost);
 
 			// Serialization for this EnumEx cannot work. Therefore, only default case results in success.
 			// Anyway, tests are done to ensure that serialization doesn't throw exceptions.
 			if (ipHostType == IPHostType.Localhost)
 			{
-				// Deserialize from file.
-				try
-				{
-					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-					{
-						XmlSerializer serializer = new XmlSerializer(typeof(IPHost));
-						ipHostDeserialized = (IPHost)serializer.Deserialize(sr);
-					}
-				}
-				catch (Exception ex)
-				{
-					TraceEx.WriteException(typeof(IPHostTest), ex);
+				// Deserialize from file using different methods and verify the result:
+				ipHostDeserialized = (IPHost)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(IPHost));
+				Assert.AreEqual(ipHost, ipHostDeserialized);
+				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);
+				Assert.AreEqual(ipAddress, (IPAddress)ipHostDeserialized);
+				Assert.AreEqual(ipAddress, ipHostDeserialized.IPAddress);
+				Assert.AreEqual(hostString, (string)ipHostDeserialized);
 
-					// Attention: The following call throws an exception, code below that call won't be executed.
-					Assert.Fail("XML deserialize error: " + ex.Message);
-				}
+				ipHostDeserialized = (IPHost)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(IPHost));
+				Assert.AreEqual(ipHost, ipHostDeserialized);
+				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);
+				Assert.AreEqual(ipAddress, (IPAddress)ipHostDeserialized);
+				Assert.AreEqual(ipAddress, ipHostDeserialized.IPAddress);
+				Assert.AreEqual(hostString, (string)ipHostDeserialized);
 
-				// Verify deserialized object.
+				ipHostDeserialized = (IPHost)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(IPHost));
 				Assert.AreEqual(ipHost, ipHostDeserialized);
 				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);
 				Assert.AreEqual(ipAddress, (IPAddress)ipHostDeserialized);

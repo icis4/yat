@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -80,14 +80,14 @@ namespace YAT.Domain.Settings
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxEol          = rhs.SeparateTxRxEol;
-			TxEol                    = rhs.TxEol;
-			RxEol                    = rhs.RxEol;
-			Encoding                 = rhs.Encoding;
-			ShowEol                  = rhs.ShowEol;
-			LineSendDelay            = rhs.LineSendDelay;
-			WaitForResponse          = rhs.WaitForResponse;
-			CharSubstitution         = rhs.CharSubstitution;
+			SeparateTxRxEol  = rhs.SeparateTxRxEol;
+			TxEol            = rhs.TxEol;
+			RxEol            = rhs.RxEol;
+			Encoding         = rhs.Encoding;
+			ShowEol          = rhs.ShowEol;
+			LineSendDelay    = rhs.LineSendDelay;
+			WaitForResponse  = rhs.WaitForResponse;
+			CharSubstitution = rhs.CharSubstitution;
 
 			EolComment = new EolCommentSettings(rhs.EolComment);
 
@@ -101,14 +101,14 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxEol          = false;
-			TxEol                    = DefaultEol;
-			RxEol                    = DefaultEol;
-			Encoding                 = DefaultEncoding;
-			ShowEol                  = false;
-			LineSendDelay            = new TextLineSendDelay(false, 500, 1);
-			WaitForResponse          = new WaitForResponse(false, 500);
-			CharSubstitution         = CharSubstitution.None;
+			SeparateTxRxEol  = false;
+			TxEol            = DefaultEol;
+			RxEol            = DefaultEol;
+			Encoding         = DefaultEncoding;
+			ShowEol          = false;
+			LineSendDelay    = new TextLineSendDelay(false, 500, 1);
+			WaitForResponse  = new WaitForResponse(false, 500);
+			CharSubstitution = CharSubstitution.None;
 		}
 
 		/// <remarks>

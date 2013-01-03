@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -62,6 +62,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<Button> buttons_commands;
 
 		private List<Command> commands;

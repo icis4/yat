@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -48,7 +48,7 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool normal_UserPaint;
+		private bool normalUserPaintStyle;
 
 		#endregion
 
@@ -162,13 +162,13 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		protected virtual void StoreNormalPaintStyle()
 		{
-			this.normal_UserPaint = GetStyle(ControlStyles.UserPaint);
+			this.normalUserPaintStyle = GetStyle(ControlStyles.UserPaint);
 		}
 
 		/// <summary></summary>
 		protected virtual void RestoreNormalPaintStyle()
 		{
-			SetStyle(ControlStyles.UserPaint, this.normal_UserPaint);
+			SetStyle(ControlStyles.UserPaint, this.normalUserPaintStyle);
 		}
 
 		/// <summary></summary>

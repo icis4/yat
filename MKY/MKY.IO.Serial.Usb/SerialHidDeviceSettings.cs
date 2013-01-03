@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -22,8 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 using MKY.IO.Usb;
@@ -82,7 +80,8 @@ namespace MKY.IO.Serial.Usb
 		{
 			base.SetMyDefaults();
 
-			DeviceInfo = null;
+			DeviceInfo = new DeviceInfo(); // Required for XML serialization.
+
 			AutoOpen = AutoOpenDefault;
 		}
 

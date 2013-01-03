@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -46,7 +46,7 @@ namespace YAT.Gui.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private Domain.Settings.BinaryTerminalSettings settings;
-		private Domain.Settings.BinaryTerminalSettings settings_Form;
+		private Domain.Settings.BinaryTerminalSettings settingsInEdit;
 
 		#endregion
 
@@ -88,14 +88,14 @@ namespace YAT.Gui.Forms
 		private void KeepAndCloneAndAttachSettings(Domain.Settings.BinaryTerminalSettings settings)
 		{
 			this.settings = settings;
-			this.settings_Form = new Domain.Settings.BinaryTerminalSettings(settings);
-			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settingsInEdit = new Domain.Settings.BinaryTerminalSettings(settings);
+			this.settingsInEdit.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
-			this.settings = this.settings_Form;
+			this.settingsInEdit.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settingsInEdit;
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -138,19 +138,19 @@ namespace YAT.Gui.Forms
 		private void binaryTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
+				this.settingsInEdit.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
 		}
 
 		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
+				this.settingsInEdit.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
 		}
 
 		private void binaryTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
+				this.settingsInEdit.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -177,7 +177,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settings_Form.SetDefaults();
+				this.settingsInEdit.SetDefaults();
 			}
 		}
 
@@ -192,15 +192,15 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			if (this.settings_Form.SeparateTxRxDisplay)
+			if (this.settingsInEdit.SeparateTxRxDisplay)
 				groupBox_TxDisplay.Text = "&Tx and Rx";
 			else
 				groupBox_TxDisplay.Text = "&Tx";
-			binaryTerminalSettingsSet_Tx.Settings = this.settings_Form.TxDisplay;
+			binaryTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
 
-			checkBox_SeparateTxRxDisplay.Checked = this.settings_Form.SeparateTxRxDisplay;
-			groupBox_RxDisplay.Enabled = this.settings_Form.SeparateTxRxDisplay;
-			binaryTerminalSettingsSet_Rx.Settings = this.settings_Form.RxDisplay;
+			checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
+			groupBox_RxDisplay.Enabled = this.settingsInEdit.SeparateTxRxDisplay;
+			binaryTerminalSettingsSet_Rx.Settings = this.settingsInEdit.RxDisplay;
 
 			this.isSettingControls.Leave();
 		}

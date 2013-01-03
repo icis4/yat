@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -1181,7 +1181,7 @@ namespace YAT.Model
 		/// The path to the former auto saved file, it will be deleted if the file can successfully
 		/// be stored in the new location.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
 			if (!isAutoSave)
@@ -1368,6 +1368,7 @@ namespace YAT.Model
 					// Implicit have changed, but do not try to auto save since user intended to close.
 					doSave = false;
 					autoSaveIsAllowed = false;
+					success = true;
 				}
 				else
 				{
@@ -1552,6 +1553,7 @@ namespace YAT.Model
 		/// Local field to maintain connection state in order to be able to detect a change of the
 		/// connection state.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private bool terminal_IOChanged_isConnected;
 
 		private void terminal_IOChanged(object sender, EventArgs e)
@@ -1728,7 +1730,7 @@ namespace YAT.Model
 		/// Starts the terminal's I/O instance.
 		/// </summary>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool StartIO(bool saveStatus)
 		{
 			bool success = false;
@@ -1798,7 +1800,7 @@ namespace YAT.Model
 		/// Stops the terminal's I/O instance.
 		/// </summary>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool StopIO(bool saveStatus)
 		{
 			bool success = false;
@@ -2122,7 +2124,7 @@ namespace YAT.Model
 		/// Sends given file.
 		/// </summary>
 		/// <param name="c">File to be sent.</param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void SendFile(Command c)
 		{
 			if (!c.IsValidFilePath)

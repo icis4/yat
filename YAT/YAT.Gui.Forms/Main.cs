@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -825,6 +825,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > File Recent Context Menu
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<ToolStripMenuItem> menuItems_recents;
 
 		private void contextMenuStrip_FileRecent_InitializeControls()
@@ -988,7 +989,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > PerformStartOperation
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void timer_PerformStartOperation_Tick(object sender, EventArgs e)
 		{
 			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;

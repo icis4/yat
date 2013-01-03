@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -21,17 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Text;
-using System.Xml.Serialization;
 
-using MKY.Diagnostics;
-using MKY.IO;
+using MKY.Test.Xml.Serialization;
 
 using NUnit.Framework;
+
+#endregion
 
 namespace MKY.IO.Ports.Test.SerialPort
 {
@@ -130,7 +132,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{
@@ -138,43 +140,24 @@ namespace MKY.IO.Ports.Test.SerialPort
 			SerialPortId id = new SerialPortId(portName);
 			SerialPortId idDeserialized = null;
 
-			// Serialize to file.
-			try
-			{
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					XmlSerializer serializer = new XmlSerializer(typeof(SerialPortId));
-					serializer.Serialize(sw, id);
-				}
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(SerialPortIdTest), ex);
+			// Serialize to file:
+			XmlSerializerTest.TestSerializeToFile(filePath, typeof(SerialPortId), id);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML serialize error: " + ex.Message);
-			}
-
-			// Deserialize from file.
-			try
-			{
-				using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-				{
-					XmlSerializer serializer = new XmlSerializer(typeof(SerialPortId));
-					idDeserialized = (SerialPortId)serializer.Deserialize(sr);
-				}
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(SerialPortIdTest), ex);
-
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML deserialize error: " + ex.Message);
-			}
-
-			// Verify deserialized object.
+			// Deserialize from file using different methods and verify the result:
+			idDeserialized = (SerialPortId)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(SerialPortId));
 			Assert.AreEqual(standardPortNumber, (int)idDeserialized);
 			Assert.AreEqual(portName, (string)idDeserialized);
+
+			if (portName != "1") // \remind "1" will be treated as byte value by the tolerant deserializer...
+			{
+				idDeserialized = (SerialPortId)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(SerialPortId));
+				Assert.AreEqual(standardPortNumber, (int)idDeserialized);
+				Assert.AreEqual(portName, (string)idDeserialized);
+
+				idDeserialized = (SerialPortId)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(SerialPortId));
+				Assert.AreEqual(standardPortNumber, (int)idDeserialized);
+				Assert.AreEqual(portName, (string)idDeserialized);
+			}
 		}
 
 		#endregion

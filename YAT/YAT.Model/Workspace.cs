@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -431,6 +431,7 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object settingsRoot_Changed_SyncObj = new object();
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
@@ -657,7 +658,7 @@ namespace YAT.Model
 		/// The path to the former auto saved file, it will be deleted if the file can successfully
 		/// be stored in the new location.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
 		{
 			if (!isAutoSave)
@@ -882,6 +883,7 @@ namespace YAT.Model
 					// Implicit have changed, but do not try to auto save since user intends to close.
 					doSaveWorkspace = false;
 					autoSaveIsAllowedForWorkspace = false;
+					successWithWorkspace = true;
 				}
 				else
 				{

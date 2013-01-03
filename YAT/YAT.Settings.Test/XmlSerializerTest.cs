@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -26,11 +26,9 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Recent;
 
@@ -95,11 +93,11 @@ namespace YAT.Settings.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "EmptyArrayOfCommands", FileExtension);
 			Command[] a = new Command[] { };
-			TestSerialization(filePath, typeof(Command[]), a);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(Command[]), a);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "EmptyListOfCommands", FileExtension);
 			List<Command> l = new List<Command>();
-			TestSerialization(filePath, typeof(List<Command>), l);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(List<Command>), l);
 		}
 
 		#endregion
@@ -123,7 +121,7 @@ namespace YAT.Settings.Test
 
 			RecentFileSettings rfs = new RecentFileSettings();
 			rfs.FilePaths = ric;
-			TestSerialization(filePath, typeof(RecentFileSettings), rfs);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(RecentFileSettings), rfs);
 		}
 
 		#endregion
@@ -143,7 +141,7 @@ namespace YAT.Settings.Test
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
 			pcp.Commands.Add(new Command("Hello", "World"));
 			pcp.Commands.Add(new Command("Hallo", "Wält"));
-			TestSerialization(filePath, typeof(PredefinedCommandPage), pcp);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(PredefinedCommandPage), pcp);
 
 			PredefinedCommandPageCollection c = new PredefinedCommandPageCollection();
 			c.Add(pcp);
@@ -152,7 +150,7 @@ namespace YAT.Settings.Test
 			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandSettings", FileExtension);
 			PredefinedCommandSettings pcs = new PredefinedCommandSettings();
 			pcs.Pages = c;
-			TestSerialization(filePath, typeof(PredefinedCommandSettings), pcs);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(PredefinedCommandSettings), pcs);
 		}
 
 		#endregion
@@ -170,7 +168,7 @@ namespace YAT.Settings.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ExplicitSettings", FileExtension);
 			ExplicitSettings s = new ExplicitSettings();
-			TestSerialization(filePath, typeof(ExplicitSettings), s);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(ExplicitSettings), s);
 		}
 
 		#endregion
@@ -188,49 +186,12 @@ namespace YAT.Settings.Test
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ImplicitSettings", FileExtension);
 			ImplicitSettings s = new ImplicitSettings();
-			TestSerialization(filePath, typeof(ImplicitSettings), s);
+			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(ImplicitSettings), s);
 		}
 
 		#endregion
 
 		#endregion
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
-		private static void TestSerialization(string filePath, Type type, object obj)
-		{
-			// Save.
-			try
-			{
-				MKY.Xml.Serialization.XmlSerializerEx.SerializeToFile(filePath, type, obj);
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
-
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML serialize error: " + ex.Message);
-			}
-
-			// Load.
-			try
-			{
-				MKY.Xml.Serialization.XmlSerializerEx.DeserializeFromFile(filePath, type);
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
-
-				// Attention: The following call throws an exception, code below that call won't be executed.
-				Assert.Fail("XML deserialize error: " + ex.Message);
-			}
-		}
 
 		#endregion
 	}

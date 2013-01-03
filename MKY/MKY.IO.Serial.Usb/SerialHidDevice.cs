@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -421,7 +421,7 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool TryCreateAndStartDevice()
 		{
 			try
@@ -447,11 +447,11 @@ namespace MKY.IO.Serial.Usb
 			if (this.device != null)
 				DisposeDeviceAndThreads();
 
-			StartThreads();
-
 			IO.Usb.DeviceInfo di = this.settings.DeviceInfo;
 			if (di != null)
 			{
+				StartThreads();
+
 				lock (this.deviceSyncObj)
 				{
 					// Ensure to create device info from VID/PID/SNR since system path is not saved.
@@ -488,7 +488,7 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void DisposeDeviceAndThreads()
 		{
 			if (this.device != null)

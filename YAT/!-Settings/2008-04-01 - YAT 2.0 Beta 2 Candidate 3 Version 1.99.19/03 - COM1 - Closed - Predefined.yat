@@ -157,32 +157,32 @@
         <PageName>Second Page</PageName>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>2A</Description>
-          <CommandLines>2A</CommandLines>
+          <Description>21</Description>
+          <CommandLines>21</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>2B</Description>
-          <CommandLines>2B</CommandLines>
+          <Description>22</Description>
+          <CommandLines>22</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>2C</Description>
-          <CommandLines>2C</CommandLines>
+          <Description>23</Description>
+          <CommandLines>23</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
           <IsDefined>true</IsDefined>
-          <Description>2D</Description>
-          <CommandLines>2D</CommandLines>
+          <Description>24</Description>
+          <CommandLines>24</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />

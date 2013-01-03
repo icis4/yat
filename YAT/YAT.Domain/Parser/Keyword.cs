@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -58,19 +58,20 @@ namespace YAT.Domain.Parser
 	/// <summary>
 	/// Extended enum KeywordEx.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	[Serializable]
 	public class KeywordEx : EnumEx
 	{
 		#region String Definitions
 
-		private const string Clear_string = "Clear";
-		private const string Delay_string = "Delay";
-		private const string LineDelay_string = "LineDelay";
-		private const string Eol_string = "EOL";
-		private const string NoEol_string = "NoEOL";
-		private const string OutputBreakOn_string = "OutputBreakOn";
-		private const string OutputBreakOff_string = "OutputBreakOff";
+		private const string Clear_string             = "Clear";
+		private const string Delay_string             = "Delay";
+		private const string LineDelay_string         = "LineDelay";
+		private const string Eol_string               = "EOL";
+		private const string NoEol_string             = "NoEOL";
+		private const string OutputBreakOn_string     = "OutputBreakOn";
+		private const string OutputBreakOff_string    = "OutputBreakOff";
 		private const string OutputBreakToggle_string = "OutputBreakToggle";
 
 		#endregion

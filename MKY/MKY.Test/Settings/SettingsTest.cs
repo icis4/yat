@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -30,12 +30,10 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
-using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Diagnostics;
 using MKY.IO;
+using MKY.Test.Xml.Serialization;
 
 using NUnit.Framework;
 
@@ -798,10 +796,9 @@ namespace MKY.Test.Settings
 			string filePath = Temp.MakeTempFilePath(GetType(), fileName, ".xml");
 
 			object objToSerialize = typeToSerialize.GetConstructor(new Type[] { }).Invoke(new object[] { });
-			SerializeTestObject(typeToSerialize, objToSerialize, filePath);
+			XmlSerializerTest.TestSerializeToFile(filePath, typeToSerialize, objToSerialize);
 
-			object objToDeserialize;
-			DeserializeTestObject(typeToDeserialize, out objToDeserialize, filePath);
+			object objFromDeserialize = XmlSerializerTest.TestDeserializeFromFile(filePath, typeToDeserialize);
 
 			object objToTestAgainst = typeToDeserialize.GetConstructor(new Type[] { }).Invoke(new object[] { });
 
@@ -817,7 +814,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._11:
 				{
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
-					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objToDeserialize;
+					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objFromDeserialize;
 					Assert.AreEqual(v1a.Data1, v1b.Data1); // Data 1 must be the one from V1.
 					Assert.AreEqual(v1a.Data2, v1b.Data2); // Data 2 must be the one from V1.
 					break;
@@ -825,7 +822,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._12:
 				{
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
-					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToDeserialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objFromDeserialize;
 					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToTestAgainst;
 					Assert.AreEqual(v2a.Data1, v1a.Data1); // Data 1 must be the one from V1.
 					Assert.AreEqual(v2a.Data2, v1a.Data2); // Data 2 must be the one from V1.
@@ -835,7 +832,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._13:
 				{
 					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToSerialize;
-					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToDeserialize;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objFromDeserialize;
 					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objToTestAgainst;
 					Assert.AreEqual(v3a.Data1, v1a.Data1); // Data 1 must be the one from V1.
 					Assert.AreEqual(v3a.Data3, v3b.Data3); // Data 3 can only be the one from V3.
@@ -844,7 +841,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._21:
 				{
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
-					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToDeserialize;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objFromDeserialize;
 					Assert.AreEqual(v1a.Data1, v2a.Data1); // Data 1 must be the one from V2.
 					Assert.AreEqual(v1a.Data2, v2a.Data2); // Data 2 must be the one from V2.
 					break;
@@ -852,7 +849,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._22:
 				{
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
-					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToDeserialize;
+					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objFromDeserialize;
 					Assert.AreEqual(v2a.Data1, v2b.Data1); // Data 1 must be the one from V2.
 					Assert.AreEqual(v2a.Data2, v2b.Data2); // Data 2 must be the one from V2.
 					Assert.AreEqual(v2a.Data3, v2b.Data3); // Data 3 must be the one from V2.
@@ -861,7 +858,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._23:
 				{
 					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToSerialize;
-					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToDeserialize;
+					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objFromDeserialize;
 					Assert.AreEqual(v3a.Data1, v2a.Data1); // Data 1 must be the one from V2.
 					Assert.AreEqual(v3a.Data3, v2a.Data3); // Data 3 must be the one from V2.
 					break;
@@ -869,7 +866,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._31:
 				{
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
-					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objToDeserialize;
+					v1a = (SettingsEvolutionTestTypeAndData.TestClassV1)objFromDeserialize;
 					v1b = (SettingsEvolutionTestTypeAndData.TestClassV1)objToTestAgainst;
 					Assert.AreEqual(v1a.Data1, v3a.Data1); // Data 1 must be the one from V3.
 					Assert.AreEqual(v1a.Data2, v1b.Data2); // Data 2 can only be the one from V1.
@@ -878,7 +875,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._32:
 				{
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
-					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objToDeserialize;
+					v2a = (SettingsEvolutionTestTypeAndData.TestClassV2)objFromDeserialize;
 					v2b = (SettingsEvolutionTestTypeAndData.TestClassV2)objToTestAgainst;
 					Assert.AreEqual(v2a.Data1, v3a.Data1); // Data 1 must be the one from V3.
 					Assert.AreEqual(v2a.Data2, v2b.Data2); // Data 2 can only be the one from V2.
@@ -888,7 +885,7 @@ namespace MKY.Test.Settings
 				case SettingsEvolutionTestTypeAndData.TestCaseId._33:
 				{
 					v3a = (SettingsEvolutionTestTypeAndData.TestClassV3)objToSerialize;
-					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objToDeserialize;
+					v3b = (SettingsEvolutionTestTypeAndData.TestClassV3)objFromDeserialize;
 					Assert.AreEqual(v3a.Data1, v3b.Data1); // Data 1 must be the one from V3.
 					Assert.AreEqual(v3a.Data3, v3b.Data3); // Data 3 must be the one from V3.
 					break;
@@ -902,54 +899,6 @@ namespace MKY.Test.Settings
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private static void SerializeTestObject(Type type, object obj, string filePath)
-		{
-			try
-			{
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					XmlSerializer serializer = new XmlSerializer(type);
-					serializer.Serialize(sw, obj);
-				}
-			}
-			catch (Exception ex)
-			{
-				TraceEx.WriteException(typeof(SettingsTest), ex);
-
-				// Attention: The following call throws an exception, code below that call won't be executed
-				Assert.Fail("XML serialize error: " + ex.Message);
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private static void DeserializeTestObject(Type type, out object obj, string filePath)
-		{
-			try
-			{
-				using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-				{
-					XmlSerializer serializer = new XmlSerializer(type);
-					obj = serializer.Deserialize(sr);
-				}
-			}
-			catch (Exception ex)
-			{
-				obj = null;
-				TraceEx.WriteException(typeof(SettingsTest), ex);
-
-				// Attention: The following call throws an exception, code below that call won't be executed
-				Assert.Fail("XML deserialize error: " + ex.Message);
-			}
-		}
 
 		#endregion
 	}

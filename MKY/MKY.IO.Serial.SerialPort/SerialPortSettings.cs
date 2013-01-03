@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -152,7 +152,7 @@ namespace MKY.IO.Serial.SerialPort
 			base.SetMyDefaults();
 
 			// Attention: See remarks above.
-			PortId                 = SerialPortId.FirstStandardPort;
+			PortId              = SerialPortId.FirstStandardPort;
 
 			AutoReopen          = AutoReopenDefault;
 			MaxSendChunkSize    = MaxSendChunkSizeDefault;

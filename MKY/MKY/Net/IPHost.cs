@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -54,12 +54,13 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum IPHost.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[Serializable]
 	public class IPHost : EnumEx
 	{
 		#region String Definitions
 
-		private const string Localhost_string = "localhost";
+		private const string Localhost_string     = "localhost";
 		private const string Localhost_stringNice = "<Localhost>";
 		private const string IPv4Localhost_string = "IPv4 localhost";
 		private const string IPv6Localhost_string = "IPv6 localhost";

@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -306,7 +306,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					ResetPort();
+					ResetPortAndThreads();
 
 					// Do not yet dispose of thread events and state lock because that may result
 					// in null ref exceptions during closing. Further investigation is required
@@ -541,7 +541,15 @@ namespace MKY.IO.Serial.SerialPort
 			if (!IsStarted)
 			{
 				WriteDebugMessageLine("Starting...");
-				CreateAndOpenPort();
+				try
+				{
+					CreateAndOpenPortAndThreads();
+				}
+				catch
+				{
+					ResetPortAndThreads();
+					throw; // Re-throw!
+				}
 			}
 			else
 			{
@@ -559,7 +567,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (IsStarted)
 			{
 				WriteDebugMessageLine("Stopping...");
-				ResetPort();
+				ResetPortAndThreads();
 			}
 			else
 			{
@@ -902,7 +910,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void CloseAndDisposePort()
 		{
 			if (this.port != null)
@@ -922,13 +930,13 @@ namespace MKY.IO.Serial.SerialPort
 
 		#endregion
 
-		#region Port Methods
+		#region Complex Port Methods
 		//==========================================================================================
-		// Port Methods
+		// Complex Port Methods
 		//==========================================================================================
 
 		/// <summary></summary>
-		private void CreateAndOpenPort()
+		private void CreateAndOpenPortAndThreads()
 		{
 			CreatePort();          // Port must be created each time because this.port.Close()
 			ApplySettings();       //   disposes the underlying IO instance
@@ -1005,7 +1013,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		private void StopOrClosePort()
+		private void RestartOrResetPortAndThreads()
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
@@ -1013,18 +1021,17 @@ namespace MKY.IO.Serial.SerialPort
 				StopAndDisposeAliveTimer();
 				CloseAndDisposePort();
 				SetStateSynchronizedAndNotify(State.Closed);
-				OnIOControlChanged(new EventArgs());
 
 				StartReopenTimer();
 				SetStateSynchronizedAndNotify(State.WaitingForReopen);
 			}
 			else
 			{
-				Stop();
+				ResetPortAndThreads();
 			}
 		}
 
-		private void ResetPort()
+		private void ResetPortAndThreads()
 		{
 			StopThreads();
 			StopAndDisposeAliveTimer();
@@ -1264,7 +1271,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "cts", Justification = "Local variable 'cts' is required to force access to port to check whether it's still alive.")]
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
@@ -1303,7 +1310,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch
 			{
-				StopOrClosePort();
+				RestartOrResetPortAndThreads();
 			}
 		}
 
@@ -1366,7 +1373,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (!IsDisposed && IsStarted)
@@ -1376,11 +1383,11 @@ namespace MKY.IO.Serial.SerialPort
 					// If port isn't open anymore, or access to port throws exception,
 					//   port has been shut down, e.g. USB to serial converter disconnected.
 					if (!this.port.IsOpen)
-						StopOrClosePort();
+						RestartOrResetPortAndThreads();
 				}
 				catch
 				{
-					StopOrClosePort();
+					RestartOrResetPortAndThreads();
 				}
 			}
 			else
@@ -1417,7 +1424,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReopenEnabledAndAllowed)
@@ -1425,13 +1432,12 @@ namespace MKY.IO.Serial.SerialPort
 				try
 				{
 					// Try to re-open port.
-					CreateAndOpenPort();
+					CreateAndOpenPortAndThreads();
 				}
 				catch
 				{
 					// Re-open failed, cleanup and restart.
-					CloseAndDisposePort();
-					StartReopenTimer();
+					RestartOrResetPortAndThreads();
 				}
 			}
 			else

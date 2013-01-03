@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -40,7 +40,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		private string inputText = "";
-		private string inputText_Form = "";
+		private string inputTextInEdit = "";
 
 		#endregion
 
@@ -56,7 +56,7 @@ namespace MKY.Windows.Forms
 
 			Text = caption;
 			label_Text.Text = text;
-			this.inputText_Form = initialInputText;
+			this.inputTextInEdit = initialInputText;
 
 			// SetControls() is initially called in the 'Paint' event handler.
 		}
@@ -113,12 +113,12 @@ namespace MKY.Windows.Forms
 
 		private void textBox_InputText_Validating(object sender, CancelEventArgs e)
 		{
-			this.inputText_Form = textBox_InputText.Text;
+			this.inputTextInEdit = textBox_InputText.Text;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.inputText = this.inputText_Form;
+			this.inputText = this.inputTextInEdit;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -135,7 +135,7 @@ namespace MKY.Windows.Forms
 
 		private void SetControls()
 		{
-			textBox_InputText.Text = this.inputText_Form;
+			textBox_InputText.Text = this.inputTextInEdit;
 		}
 
 		#endregion

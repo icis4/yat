@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -204,7 +204,7 @@ namespace YAT.Settings.Test
 			return (defaultDocument);
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private static void ArchiveSchema(string path, string fileName, XmlDocument document)
 		{
 			try
@@ -236,12 +236,12 @@ namespace YAT.Settings.Test
 			{
 				TraceEx.WriteException(typeof(SettingsFilesArchiver), ex);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
+				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private static void ArchiveDefault(string path, string fileName, XmlDocument document)
 		{
 			try
@@ -261,7 +261,7 @@ namespace YAT.Settings.Test
 			{
 				TraceEx.WriteException(typeof(SettingsFilesArchiver), ex);
 
-				// Attention: The following call throws an exception, code below that call won't be executed.
+				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 		}

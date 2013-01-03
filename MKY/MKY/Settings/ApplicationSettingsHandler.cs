@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.8
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -286,7 +286,7 @@ namespace MKY.Settings
 			/// Returns <c>true</c> if settings could be loaded from the given file path,
 			/// return <c>false</c> if they could not be loaded and were set to defaults instead.
 			/// </returns>
-			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 			public virtual bool Load()
 			{
 				AssertNotDisposed();
@@ -835,7 +835,7 @@ namespace MKY.Settings
 		/// Returns false if either settings could not be loaded from its file path and have been
 		/// set to defaults.
 		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool Load()
 		{
 			// AssertNotDisposed() is called by 'Load()' below.
@@ -927,7 +927,7 @@ namespace MKY.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void Save()
 		{
 			AssertNotDisposed();

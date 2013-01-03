@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -799,6 +799,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Preset Context Menu
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<ToolStripMenuItem> menuItems_preset;
 
 		private void contextMenuStrip_Preset_Initialize()
@@ -1207,10 +1208,14 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Predefined Context Menu
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<ToolStripMenuItem> menuItems_Predefined_Commands;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<ToolStripMenuItem> menuItems_Predefined_Pages;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1303:ConstFieldNamesMustBeginWithUpperCaseLetter", Justification = "'MaxPages' indeed starts with an upper case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private const int menuItems_Predefined_MaxPages = 12;
 
 		private void contextMenuStrip_Predefined_Initialize()
@@ -1326,7 +1331,10 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Temporary reference to command to be copied.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private int contextMenuStrip_Predefined_SelectedCommand; // = 0;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendCommand; // = null;
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
@@ -1631,6 +1639,7 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Status
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<ToolStripStatusLabel> statusLabels_ioControlSerialPort;
 
 		private void toolStripStatusLabel_TerminalStatus_Initialize()

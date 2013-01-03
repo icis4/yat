@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Development Version 1.99.29
+// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -56,7 +56,7 @@ namespace YAT.Gui.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private Command command;
-		private Command command_Form;
+		private Command commandInEdit;
 
 		#endregion
 
@@ -75,7 +75,7 @@ namespace YAT.Gui.Controls
 			ResumeLayout();
 
 			this.command = command;
-			this.command_Form = new Command(command);
+			this.commandInEdit = new Command(command);
 
 			// SetControls() is initially called in the 'Paint' event handler.
 		}
@@ -188,7 +188,7 @@ namespace YAT.Gui.Controls
 				}
 				if (isValid)
 				{
-					this.command_Form.MultiLineText = multiLineCommand.ToArray();
+					this.commandInEdit.MultiLineText = multiLineCommand.ToArray();
 					SetControls();
 				}
 				else
@@ -225,17 +225,17 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			if (this.command_Form.IsSingleLineText)
+			if (this.commandInEdit.IsSingleLineText)
 			{
-				textBox_Command.Text = this.command_Form.SingleLineText;
+				textBox_Command.Text = this.commandInEdit.SingleLineText;
 			}
 			else
 			{
 				string text = "";
-				for (int i = 0; i < this.command_Form.MultiLineText.Length; i++)
+				for (int i = 0; i < this.commandInEdit.MultiLineText.Length; i++)
 				{
-					text += this.command_Form.MultiLineText[i];
-					if (i < (this.command_Form.MultiLineText.Length - 1))
+					text += this.commandInEdit.MultiLineText[i];
+					if (i < (this.commandInEdit.MultiLineText.Length - 1))
 						text += Environment.NewLine;
 				}
 				textBox_Command.Text = text;
@@ -246,7 +246,7 @@ namespace YAT.Gui.Controls
 
 		private void AcceptAndClose()
 		{
-			this.command = this.command_Form;
+			this.command = this.commandInEdit;
 			DialogResult = DialogResult.OK;
 			Close();
 		}
