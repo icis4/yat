@@ -351,6 +351,11 @@ namespace MKY.IO.Usb
 			return (ToString(true, true));
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
@@ -450,6 +455,11 @@ namespace MKY.IO.Usb
 			return (sb.ToString());
 		}
 
+		#region Parse
+		//==========================================================================================
+		// Parse
+		//==========================================================================================
+
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding device.
 		/// </summary>
@@ -492,6 +502,10 @@ namespace MKY.IO.Usb
 			result = null;
 			return (false);
 		}
+
+		#endregion
+
+		#endregion
 
 		#endregion
 

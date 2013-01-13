@@ -516,8 +516,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.TimeStamp(ts));
 				lp.Add(new DisplayElement.LeftMargin());
 
-				// Attention: Clone elements because they are needed again below.
-				lineState.LineElements.AddRange(lp.Clone());
+				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
 			}
 			lineState.LinePosition = LinePosition.Data;
@@ -552,7 +551,7 @@ namespace YAT.Domain
 			if (lineState.Eol.IsCompleteMatch)
 			{
 				if (de.IsData)
-					lineState.EolElements.Add(de);
+					lineState.EolElements.Add(de); // No clone needed as element has just been created.
 
 				// Normal case, EOL consists of a single sequence of control characters.
 				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.EolSequence.Count))
@@ -560,7 +559,7 @@ namespace YAT.Domain
 					// Mark element as EOL.
 					DisplayElement item = lineState.EolElements[0];
 					item.IsEol = true;
-					lp.Add(item);
+					lp.Add(item); // No clone needed as element has just been created.
 				}
 				else
 				{
@@ -590,7 +589,7 @@ namespace YAT.Domain
 						if (currentIndex > firstEolIndex)
 							item.IsEol = true;
 
-						lp.Add(item);
+						lp.Add(item); // No clone needed as items have just been recreated futher above.
 					}
 				}
 
@@ -601,27 +600,23 @@ namespace YAT.Domain
 			{
 				// Keep EOL elements but delay them until EOL is complete.
 				if (de.IsData)
-					lineState.EolElements.Add(de);
+					lineState.EolElements.Add(de); // No clone needed as element has just been created.
 			}
 			else
 			{
 				// Retrieve potential EOL elements on incomplete EOL.
 				if (lineState.EolElements.Count > 0)
 				{
-					lp.AddRange(lineState.EolElements);
+					lp.AddRange(lineState.EolElements); // No clone needed thanks to clear below.
 					lineState.EolElements.Clear();
 				}
 
 				// Add non-EOL data.
 				if (de.IsData)
-					lp.Add(de);
+					lp.Add(de); // No clone needed as element has just been created.
 			}
 
-			// Return elements.
-			//
-			// \attention:
-			// Clone elements because they are needed again a line below.
-			lineState.LineElements.AddRange(lp.Clone());
+			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 		}
 
@@ -633,7 +628,7 @@ namespace YAT.Domain
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
-				line.AddRange(lineState.LineElements);
+				line.AddRange(lineState.LineElements); // No clone needed thanks to reset futher below.
 			}
 			else // Remove EOL.
 			{
@@ -652,7 +647,7 @@ namespace YAT.Domain
 
 				// Now traverse elements forward and add elements to line.
 				for (int i = 0; i < (des.Length - eolAndWhiteCount); i++)
-					line.Add(des[i]);
+					line.Add(des[i]); // No clone needed as items have just been recreated futher above.
 
 				// Finally, remove EOL and white spaces from elements.
 				if (elements.Count >= eolAndWhiteCount)
@@ -680,12 +675,10 @@ namespace YAT.Domain
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 
-			// Add line end to elements and return them.
-			elements.AddRange(lp);
+			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 
 			// Also add line end to line and return it.
-			// Attention: Clone elements because they've also needed above.
-			line.AddRange(lp.Clone());
+			line.AddRange(lp);
 			lines.Add(line);
 
 			// Reset line state.

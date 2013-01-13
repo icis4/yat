@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -29,6 +34,8 @@ using System.Text;
 using System.Xml.Serialization;
 
 using MKY.Collections.Generic;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -352,11 +359,11 @@ namespace YAT.Domain
 		private void Initialize(SerialDirection direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol)
 		{
 			this.direction = direction;
-			this.origin = origin;
-			this.text = text;
+			this.origin    = origin;
+			this.text      = text;
 			this.dataCount = dataCount;
-			this.isData = isData;
-			this.isEol = isEol;
+			this.isData    = isData;
+			this.isEol     = isEol;
 		}
 
 		#endregion
@@ -563,6 +570,11 @@ namespace YAT.Domain
 			return (this.text);
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Extended ToString method which can be used for trace/debug.
 		/// </summary>
@@ -580,6 +592,8 @@ namespace YAT.Domain
 
 			return (sb.ToString());
 		}
+
+		#endregion
 
 		#endregion
 	}

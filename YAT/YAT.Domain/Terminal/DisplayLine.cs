@@ -71,14 +71,14 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
 		{
-			foreach (DisplayElement item in collection)
-				Add(item);
+			foreach (DisplayElement de in collection)
+				Add(de.Clone()); // Clone the whole collection.
 		}
 
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElement displayElement)
 		{
-			Add(displayElement);
+			Add(displayElement.Clone()); // Clone the element.
 		}
 
 		#endregion
@@ -103,42 +103,24 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		/// <remarks>
-		/// Item must be cloned to prevent unexpected behavior of the reference type.
-		/// </remarks>
+		/// <summary></summary>
 		public new void Add(DisplayElement item)
 		{
 			if (Count <= 0)
 			{
-				base.Add(item.Clone());
+				base.Add(item);
 			}
 			else
 			{
 				// For performance reasons, append the item to the last item if possible.
 				int lastIndex = Count - 1;
 				if (this[lastIndex].AcceptsAppendOf(item))
-					this[lastIndex].Append(item.Clone());
+					this[lastIndex].Append(item);
 				else
-					base.Add(item.Clone());
+					base.Add(item);
 			}
-			this.dataCount += item.DataCount;
-		}
 
-		/// <summary></summary>
-		public new void AddRange(IEnumerable<DisplayElement> collection)
-		{
-			// \fixme (2010-04-01 / mky):
-			// Weird InvalidOperationException when receiving large chunks of data.
-			try
-			{
-				foreach (DisplayElement item in collection)
-					Add(item);
-			}
-			catch (InvalidOperationException ex)
-			{
-				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
-				System.Diagnostics.Debug.WriteLine(collection.ToString());
-			}
+			this.dataCount += item.DataCount;
 		}
 
 		/// <summary></summary>
@@ -179,7 +161,7 @@ namespace YAT.Domain
 			DisplayElementCollection c = new DisplayElementCollection();
 
 			foreach (DisplayElement de in this)
-				c.Add(de.Clone());
+				c.Add(de.Clone()); // Clone the whole collection.
 
 			return (c);
 		}
@@ -299,7 +281,7 @@ namespace YAT.Domain
 			DisplayLine dl = new DisplayLine();
 
 			foreach (DisplayElement de in this)
-				dl.Add(de.Clone());
+				dl.Add(de.Clone()); // Clone the whole collection.
 
 			return (dl);
 		}

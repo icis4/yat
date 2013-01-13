@@ -709,20 +709,20 @@ namespace MKY.IO.Serial.Socket
 		{
 			this.client = new TcpClient(remoteIPAddress, remotePort);
 
-			this.client.IOChanged    += new EventHandler(this.client_IOChanged);
-			this.client.IOError      += new EventHandler<IOErrorEventArgs>(this.client_IOError);
+			this.client.IOChanged    += new EventHandler                       (this.client_IOChanged);
+			this.client.IOError      += new EventHandler<IOErrorEventArgs>     (this.client_IOError);
 			this.client.DataReceived += new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
-			this.client.DataSent     += new EventHandler<DataSentEventArgs>(this.client_DataSent);
+			this.client.DataSent     += new EventHandler<DataSentEventArgs>    (this.client_DataSent);
 		}
 
 		private void DestroyClient()
 		{
 			if (this.client != null)
 			{
-				this.client.IOChanged    -= new EventHandler(this.client_IOChanged);
-				this.client.IOError      -= new EventHandler<IOErrorEventArgs>(this.client_IOError);
+				this.client.IOChanged    -= new EventHandler                       (this.client_IOChanged);
+				this.client.IOError      -= new EventHandler<IOErrorEventArgs>     (this.client_IOError);
 				this.client.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
-				this.client.DataSent     -= new EventHandler<DataSentEventArgs>(this.client_DataSent);
+				this.client.DataSent     -= new EventHandler<DataSentEventArgs>    (this.client_DataSent);
 
 				this.client.Dispose();
 				this.client = null;
@@ -953,6 +953,11 @@ namespace MKY.IO.Serial.Socket
 			return (ToShortEndPointString());
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <remarks>
 		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>
@@ -961,6 +966,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			return ("Server:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
 		}
+
+		#endregion
 
 		#endregion
 

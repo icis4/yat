@@ -248,6 +248,11 @@ namespace MKY
 			return (UnderlyingEnum.ToString());
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation using the
 		/// specified format.
@@ -260,6 +265,8 @@ namespace MKY
 		{
 			return (UnderlyingEnum.ToString(format));
 		}
+
+		#endregion
 
 		#endregion
 

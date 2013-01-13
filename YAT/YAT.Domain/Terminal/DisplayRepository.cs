@@ -145,7 +145,7 @@ namespace YAT.Domain
 					DequeueExcessLine();
 
 				// Enqueue new line and reset current line
-				base.Enqueue(this.currentLine.Clone());
+				base.Enqueue(this.currentLine); // No clone needed thanks to reset below.
 				this.currentLine.Clear();
 			}
 		}

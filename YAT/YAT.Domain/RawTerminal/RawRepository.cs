@@ -98,7 +98,9 @@ namespace YAT.Domain
 		public virtual void Clear()
 		{
 			lock (this.queue)
+			{
 				this.queue.Clear();
+			}
 		}
 
 		/// <summary></summary>
@@ -111,7 +113,6 @@ namespace YAT.Domain
 				foreach (RawElement re in this.queue.ToArray())
 					to.AddRange(re.Data);
 			}
-
 			return (to.ToArray());
 		}
 
@@ -123,7 +124,6 @@ namespace YAT.Domain
 			{
 				to = new List<RawElement>(this.queue);
 			}
-
 			return (to);
 		}
 
@@ -164,8 +164,9 @@ namespace YAT.Domain
 		{
 			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			foreach (RawElement re in ToElements())
+			{
 				to.Write(re.ToString(indent));
-
+			}
 			return (to.ToString());
 		}
 
@@ -178,8 +179,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToDetailedString(string indent)
 		{
-			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			int i = 1;
+			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
 			foreach (RawElement re in ToElements())
 			{
 				to.Write(indent + "RawElement " + i++ + ":" + Environment.NewLine);

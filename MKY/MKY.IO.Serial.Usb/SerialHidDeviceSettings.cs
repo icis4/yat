@@ -171,6 +171,11 @@ namespace MKY.IO.Serial.Usb
 			);
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		public virtual string ToShortDeviceInfoString()
 		{
@@ -179,6 +184,8 @@ namespace MKY.IO.Serial.Usb
 			else
 				return (Undefined);
 		}
+
+		#endregion
 
 		#endregion
 

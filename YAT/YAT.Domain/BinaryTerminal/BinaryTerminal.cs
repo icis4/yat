@@ -446,11 +446,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.TimeStamp(ts));
 				lp.Add(new DisplayElement.LeftMargin());
 
-				// Return elements.
-				//
-				// \attention:
-				// Clone elements because they are needed again a line below.
-				lineState.LineElements.AddRange(lp.Clone());
+				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
 			}
 
@@ -480,18 +476,14 @@ namespace YAT.Domain
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 
-			// Return elements.
+			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 
-			// Return line.
-			// Attention: Clone elements because they've also needed above.
-			lineState.LineElements.AddRange(lp);
-
 			DisplayLine line = new DisplayLine();
-			line.AddRange(lineState.LineElements);
-			lines.Add(line);
-
+			line.AddRange(lineState.LineElements); // No clone needed thanks to reset below.
 			lineState.Reset();
+
+			lines.Add(line);
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
@@ -554,8 +546,7 @@ namespace YAT.Domain
 			// Add data.
 			lp.Add(ByteToElement(b, d));
 
-			// Return data.
-			lineState.LineElements.AddRange(lp);
+			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 		}
 

@@ -587,16 +587,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessRawSendItem(RawSendItem item)
 		{
-			// Nothing to further process, simply formward:
+			// Nothing to further process, simply forward:
 			ForwardDataToRawTerminal(item.Data);
-		}
-
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
-		/// </remarks>
-		protected virtual void ForwardDataToRawTerminal(byte[] data)
-		{
-			this.rawTerminal.Send(data);
 		}
 
 		/// <summary></summary>
@@ -708,6 +700,14 @@ namespace YAT.Domain
 					break;
 				}
 			}
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
+		/// </remarks>
+		protected void ForwardDataToRawTerminal(byte[] data)
+		{
+			this.rawTerminal.Send(data);
 		}
 
 		#endregion
@@ -939,11 +939,7 @@ namespace YAT.Domain
 			}
 			dl.Add(new DisplayElement.LineBreak(re.Direction));
 
-			// Return elements.
-			//
-			// \attention:
-			// Clone elements because they are needed again a line below.
-			elements.AddRange(dl.Clone());
+			elements.AddRange(dl.Clone()); // Clone elements because they are needed again a line below.
 			lines.Add(dl);
 		}
 
@@ -1342,7 +1338,7 @@ namespace YAT.Domain
 		protected virtual void OnDisplayElementProcessed(SerialDirection direction, DisplayElement element)
 		{
 			DisplayElementCollection elements = new DisplayElementCollection();
-			elements.Add(element);
+			elements.Add(element); // No clone needed as the element must be created when calling this event method.
 			OnDisplayElementsProcessed(direction, elements);
 		}
 
@@ -1353,23 +1349,23 @@ namespace YAT.Domain
 			{
 				lock (this.repositorySyncObj)
 				{
-					this.txRepository.Enqueue(elements);
-					this.bidirRepository.Enqueue(elements);
+					this.txRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
 				}
 
 				if (!this.eventsSuspendedForReload)
-					OnDisplayElementsSent(new DisplayElementsEventArgs(elements));
+					OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 			}
 			else
 			{
 				lock (this.repositorySyncObj)
 				{
-					this.bidirRepository.Enqueue(elements);
-					this.rxRepository.Enqueue(elements);
+					this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
 				}
 
 				if (!this.eventsSuspendedForReload)
-					OnDisplayElementsReceived(new DisplayElementsEventArgs(elements));
+					OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
 			}
 		}
 
@@ -1442,6 +1438,11 @@ namespace YAT.Domain
 			return (ToString(""));
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
@@ -1475,6 +1476,8 @@ namespace YAT.Domain
 			else
 				return (Undefined);
 		}
+
+		#endregion
 
 		#endregion
 

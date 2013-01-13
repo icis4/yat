@@ -474,6 +474,13 @@ namespace MKY.IO.Ports
 			return (sb.ToString());
 		}
 
+		#endregion
+
+		#region Parse/From
+		//==========================================================================================
+		// Parse/From
+		//==========================================================================================
+
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding port.
 		/// </summary>

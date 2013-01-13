@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -332,7 +333,26 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			if (IsReadyToSend)
+			{
+				// Enqueue and signal the send operation BEFORE actually sending the data. This
+				// ensures that an outgoing request is shown above the corresponding incoming
+				// response in ther terminal monitor. // See comments in AttachIO() for more
+				// information.
+				RawElement re = new RawElement(data, SerialDirection.Tx);
+				lock (this.repositorySyncObj)
+				{
+					this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+					this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				}
+				OnRawElementSent(new RawElementEventArgs(re));
+
+				// Then send the data using the active I/O provider:
 				this.io.Send(data);
+			}
+			else
+			{
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Output, "No data can currently be sent!"));
+			}
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -507,7 +527,23 @@ namespace YAT.Domain
 			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
 			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 			this.io.DataReceived     += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
-			this.io.DataSent         += new EventHandler<DataSentEventArgs>(io_DataSent);
+
+			// The 'DataSent' event is not used because it would not allow to properly synchronize
+			// outgoing with incoming data. In most applications that isn't needed, but in case of
+			// YAT it is a major feature that outgoing requests and incoming responses are properly
+			// displayed line-after-line. Using the 'DataSent' event could lead to data races between
+			// the threads which process the outgoing and incoming data events, and thus lead to mixed
+			// up displaying of the lines.
+			// Instead of the 'DataSent' event, this raw terminal fills outgoing data directly into
+			// the Tx and Bidir repositories, before that the data is actually being sent, relying
+			// on the underlying I/O provider to eventually send the data.
+			// 
+			// Additional advantage of this approach:
+			//  > Tx data is shown even if XOn/XOff or some other flow control mechanism is active
+			//
+			// Disadvantage of this approach:
+			//  > Time stamp information of the outgoing data is more related to the time when the
+			//    user triggered the send operation than to the time when the data actually left
 		}
 
 		private void DetachIO()
@@ -516,7 +552,6 @@ namespace YAT.Domain
 			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
 			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 			this.io.DataReceived     -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
-			this.io.DataSent         -= new EventHandler<DataSentEventArgs>(io_DataSent);
 			this.io = null;
 		}
 
@@ -557,31 +592,12 @@ namespace YAT.Domain
 
 			lock (this.repositorySyncObj)
 			{
-				this.rxRepository.Enqueue(re);
-				this.bidirRepository.Enqueue(re);
+				this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
 			}
 
 			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
 			OnRawElementReceived(new RawElementEventArgs(re));
-		}
-
-		/// <remarks>
-		/// Note that this I/O event has a calling contract of:
-		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization or locking is required here.
-		/// </remarks>
-		private void io_DataSent(object sender, DataSentEventArgs e)
-		{
-			RawElement re = new RawElement(e.Data, SerialDirection.Tx, e.TimeStamp);
-
-			lock (this.repositorySyncObj)
-			{
-				this.txRepository.Enqueue(re);
-				this.bidirRepository.Enqueue(re);
-			}
-
-			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
-			OnRawElementSent(new RawElementEventArgs(re));
 		}
 
 		#endregion
@@ -642,6 +658,11 @@ namespace YAT.Domain
 			return (ToString(""));
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
@@ -674,6 +695,8 @@ namespace YAT.Domain
 			else
 				return (Undefined);
 		}
+
+		#endregion
 
 		#endregion
 	}

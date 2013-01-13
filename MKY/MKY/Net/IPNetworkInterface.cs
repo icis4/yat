@@ -124,9 +124,6 @@ namespace MKY.Net
 		#endregion
 
 		#region Object Members
-		//------------------------------------------------------------------------------------------
-		// Object Members
-		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
