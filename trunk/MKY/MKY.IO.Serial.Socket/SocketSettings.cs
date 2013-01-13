@@ -476,6 +476,11 @@ namespace MKY.IO.Serial.Socket
 			);
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
@@ -490,6 +495,8 @@ namespace MKY.IO.Serial.Socket
 				default:                           return (Undefined);
 			}
 		}
+
+		#endregion
 
 		#endregion
 

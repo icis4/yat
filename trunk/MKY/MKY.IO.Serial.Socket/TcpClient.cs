@@ -682,10 +682,14 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
-		/// Fired when data is sent.
+		/// Fired when data has been sent.
 		/// </summary>
 		/// <param name="e">
-		/// Information about the Message.
+		/// Information about the data that has been sent.
+		/// <remarks>
+		/// Note that the original ALAZ implementation always keeps <paramref name="e.Buffer"/> at
+		/// <c>null</c> whereas the modified version contains a filled data buffer.
+		/// </remarks>
 		/// </param>
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
@@ -975,6 +979,11 @@ namespace MKY.IO.Serial.Socket
 			return (ToShortEndPointString());
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		/// <remarks>
 		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
@@ -984,6 +993,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			return (this.remoteIPAddress + ":" + this.remotePort);
 		}
+
+		#endregion
 
 		#endregion
 

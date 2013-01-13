@@ -190,7 +190,7 @@ namespace YAT.Log.Settings
 			switch (channelType)
 			{
 				case LogChannelType.Tx:    return ("Tx");
-				case LogChannelType.Bidir: return ("BiDir");
+				case LogChannelType.Bidir: return ("Bidir");
 				case LogChannelType.Rx:    return ("Rx");
 				default: throw (new ArgumentException("LogChannelType '" + channelType + "' unknown"));
 			}

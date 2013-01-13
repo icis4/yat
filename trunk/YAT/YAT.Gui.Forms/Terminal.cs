@@ -1781,7 +1781,7 @@ namespace YAT.Gui.Forms
 			splitContainer_TxMonitor.Orientation = orientation;
 			splitContainer_RxMonitor.Orientation = orientation;
 
-			// Tx split contains Tx and BiDir&Rx.
+			// Tx split contains Tx and Bidir+Rx.
 			if (txIsVisible)
 			{
 				splitContainer_TxMonitor.Panel1Collapsed = false;
@@ -1803,7 +1803,7 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
 
-			// Rx split contains BiDir and Rx.
+			// Rx split contains Bidir and Rx.
 			if (bidirIsVisible)
 			{
 				splitContainer_RxMonitor.Panel1Collapsed = false;

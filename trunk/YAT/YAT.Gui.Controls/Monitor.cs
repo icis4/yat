@@ -494,25 +494,25 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
-			AddElementsOrLines(element.Clone());
+			AddElementsOrLines(element.Clone()); // Clone element to ensure decoupling from caller.
 		}
 
 		/// <summary></summary>
 		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
-			AddElementsOrLines(new List<Domain.DisplayElement>(elements));
+			AddElementsOrLines(new List<Domain.DisplayElement>(elements)); // Clone elements to ensure decoupling from caller.
 		}
 
 		/// <summary></summary>
 		public virtual void AddLine(Domain.DisplayLine line)
 		{
-			AddElementsOrLines(line.Clone());
+			AddElementsOrLines(line.Clone()); // Clone line to ensure decoupling from caller.
 		}
 
 		/// <summary></summary>
 		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
-			AddElementsOrLines(new List<Domain.DisplayLine>(lines));
+			AddElementsOrLines(new List<Domain.DisplayLine>(lines)); // Clone lines to ensure decoupling from caller.
 		}
 
 		/// <summary></summary>

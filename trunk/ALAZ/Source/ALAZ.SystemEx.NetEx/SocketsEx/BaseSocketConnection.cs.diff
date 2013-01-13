@@ -1,5 +1,3 @@
---- C:/Users/Matthias/AppData/Local/Temp/BaseSocketConnection.cs-revBASE.svn002.tmp.cs	So Okt 14 13:18:15 2012
-+++ D:/Sandboxes/YAT/Trunk/ALAZ/Source/ALAZ.SystemEx.NetEx/SocketsEx/BaseSocketConnection.cs	So Okt 14 13:11:57 2012
 @@ -175,7 +175,34 @@
                  FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
                  f.SetValue(FReadOV, null);
@@ -45,7 +43,7 @@
 +                // ----- \remind BEGIN -----
 +
 +                // 2011-04-25 / Matthias Klaey
-+                // Work-around to an issue described in the headers of MKY AutoSocket/TcpClient/TcpServer.
++                // Workaround to an issue described in the headers of MKY AutoSocket/TcpClient/TcpServer.
 +
 +//              lock (FSyncActive)
 +//              {

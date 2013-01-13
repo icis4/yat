@@ -679,6 +679,11 @@ namespace MKY.IO.Serial.Socket
 			return (ToShortEndPointString());
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		/// <remarks>
 		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
@@ -688,6 +693,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			return ("Receive:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
 		}
+
+		#endregion
 
 		#endregion
 

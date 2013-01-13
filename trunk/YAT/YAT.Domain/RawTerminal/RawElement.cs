@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -46,23 +47,46 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawElement
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
 		private ReadOnlyCollection<byte> data;
 		private SerialDirection direction;
 		private DateTime timeStamp;
 
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
 		/// <summary></summary>
-		public RawElement(ReadOnlyCollection<byte> data, SerialDirection direction)
+		public RawElement(IEnumerable<byte> data, SerialDirection direction)
 			: this(data, direction, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(ReadOnlyCollection<byte> data, SerialDirection direction, DateTime timeStamp)
+		public RawElement(IEnumerable<byte> data, SerialDirection direction, DateTime timeStamp)
 		{
-			this.data = data;
+			List<byte> l = new List<byte>();
+			foreach (byte b in data)
+				l.Add(b);
+
+			this.data = new ReadOnlyCollection<byte>(l);
 			this.direction = direction;
 			this.timeStamp = timeStamp;
 		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary></summary>
 		public virtual ReadOnlyCollection<byte> Data
@@ -82,11 +106,36 @@ namespace YAT.Domain
 			get { return (this.timeStamp); }
 		}
 
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual RawElement Clone()
+		{
+			return (new RawElement(this.data, this.direction, this.timeStamp));
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
 		/// <summary></summary>
 		public override string ToString()
 		{
 			return (ToString(""));
 		}
+
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public virtual string ToString(string indent)
@@ -122,6 +171,10 @@ namespace YAT.Domain
 					indent + "- Direction: " + this.direction + Environment.NewLine +
 					indent + "- TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", NumberFormatInfo.InvariantInfo), 2) + Environment.NewLine);
 		}
+
+		#endregion
+
+		#endregion
 	}
 }
 

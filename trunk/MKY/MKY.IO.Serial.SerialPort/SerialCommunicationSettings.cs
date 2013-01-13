@@ -325,7 +325,10 @@ namespace MKY.IO.Serial.SerialPort
 			);
 		}
 
-		#endregion
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public virtual string ToShortString()
@@ -350,6 +353,10 @@ namespace MKY.IO.Serial.SerialPort
 				((SerialFlowControlEx)    FlowControl)
 			);
 		}
+
+		#endregion
+
+		#endregion
 
 		#region Comparison Operators
 

@@ -875,6 +875,11 @@ namespace MKY.IO.Usb
 			return (this.deviceInfo.ToString());
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Returns a string describing the USB device in a short form.
 		/// </summary>
@@ -882,6 +887,8 @@ namespace MKY.IO.Usb
 		{
 			return (this.deviceInfo.ToShortString());
 		}
+
+		#endregion
 
 		#endregion
 	}
