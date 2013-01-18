@@ -154,7 +154,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static BaudRateEx Parse(string baudRate)
 		{
-			return ((BaudRateEx)int.Parse(baudRate, NumberFormatInfo.InvariantInfo));
+			return ((BaudRateEx)int.Parse(baudRate, CultureInfo.InvariantCulture));
 		}
 
 		/// <summary></summary>

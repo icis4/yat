@@ -231,16 +231,16 @@ namespace YAT.Log.Settings
 			if (this.nameDate)
 			{
 				postFix.Append(this.nameSeparator.Separator);
-				postFix.Append(now.Year.ToString ("D4", NumberFormatInfo.InvariantInfo));
-				postFix.Append(now.Month.ToString("D2", NumberFormatInfo.InvariantInfo));
-				postFix.Append(now.Day.ToString  ("D2", NumberFormatInfo.InvariantInfo));
+				postFix.Append(now.Year.ToString ("D4", CultureInfo.InvariantCulture));
+				postFix.Append(now.Month.ToString("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Day.ToString  ("D2", CultureInfo.InvariantCulture));
 			}
 			if (this.nameTime)
 			{
 				postFix.Append(this.nameSeparator.Separator);
-				postFix.Append(now.Hour.ToString  ("D2", NumberFormatInfo.InvariantInfo));
-				postFix.Append(now.Minute.ToString("D2", NumberFormatInfo.InvariantInfo));
-				postFix.Append(now.Second.ToString("D2", NumberFormatInfo.InvariantInfo));
+				postFix.Append(now.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Minute.ToString("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
 			}
 			return (postFix.ToString());
 		}

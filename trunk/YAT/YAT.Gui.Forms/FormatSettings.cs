@@ -127,7 +127,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				GetFormatFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag), NumberFormatInfo.InvariantInfo));
+				GetFormatFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag), CultureInfo.InvariantCulture));
 				SetControls();
 			}
 		}

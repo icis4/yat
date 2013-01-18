@@ -1013,119 +1013,128 @@ namespace MKY.CommandLine
 			StringBuilder helpText = new StringBuilder();
 			FieldInfo[] fields = GetMemberFields();
 
-			helpText.AppendLine();
-			helpText.AppendLine("Value arguments:");
-			helpText.AppendLine();
-			foreach (FieldInfo field in fields)
+			if (this.supportValueArgs)
 			{
-				foreach (ValueArgAttribute att in GetValueArgAttributes(field))
+				helpText.AppendLine();
+				helpText.AppendLine("Value arguments:");
+				helpText.AppendLine();
+				foreach (FieldInfo field in fields)
 				{
-					if (!string.IsNullOrEmpty(att.Description))
+					foreach (ValueArgAttribute att in GetValueArgAttributes(field))
 					{
-						helpText.Append(SplitIntoLines(maxWidth, MinorIndent, att.Description));
+						if (!string.IsNullOrEmpty(att.Description))
+						{
+							helpText.Append(SplitIntoLines(maxWidth, MinorIndent, att.Description));
+							helpText.AppendLine();
+						}
+					}
+				}
+			}
+
+			if (this.supportOptionArgs || this.supportArrayOptionArgs)
+			{
+				helpText.AppendLine();
+				helpText.AppendLine("Option arguments:");
+				helpText.AppendLine();
+				foreach (FieldInfo field in fields)
+				{
+					string valueTypeString;
+					if (field.FieldType == typeof(bool))
+					{
+						valueTypeString = "";
+					}
+					else if (field.FieldType.IsArray)
+					{
+						if (field.FieldType.GetElementType().IsPrimitive)
+							valueTypeString = "=VAL[]";
+						else
+							valueTypeString = "=STR[]";
+					}
+					else
+					{
+						if (field.FieldType.IsPrimitive)
+							valueTypeString = "=VAL";
+						else
+							valueTypeString = "=STR";
+					}
+
+					foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
+					{
+						//-----------------------------------------------------------------------------------
+						// Example:
+						//
+						//   /r, -r, --recursive, --processrecursive
+						//           Processes the command recursive, blablablablablablablablablablablblabl
+						//           Multiple lines if description is longer than 70 (80-10) characters
+						//   /i=VAL, -i=VAL, --index=VAL, --requestedindex=VAL
+						//           Processes the item with the given index, blablablablablablablablablabl
+						//           Multiple lines if description is longer than 70 (80-10) characters
+						//
+						// 0 3       10                                                                    80
+						//-----------------------------------------------------------------------------------
+
+						StringBuilder names = new StringBuilder();
+
+						// Short name(s):
+						if (att.ShortNames != null)
+						{
+							foreach (string shortName in att.ShortNames)
+							{
+								string option = shortName.ToLowerInvariant(); // Short names shall be lower case.
+
+								if (names.Length > 0)
+									names.Append(", ");
+
+								if (AllowForwardSlash)
+								{
+									names.Append("/" + option);
+									names.Append(valueTypeString);
+									names.Append(", ");
+								}
+								names.Append("-" + option);
+								names.Append(valueTypeString);
+							}
+						}
+
+						// Name(s):
+						if (att.Names != null)
+						{
+							foreach (string name in att.Names)
+							{
+								string option = name; // 'Normal' names shall be case-sensitive.
+
+								if (names.Length > 0)
+									names.Append(", ");
+
+								names.Append("--" + option);
+								names.Append(valueTypeString);
+							}
+						}
+
+						// Long name, only if there is no short nor 'normal' name:
+						if (names.Length <= 0)
+						{
+							names.Append("--" + field.Name.ToLowerInvariant());
+							names.Append(valueTypeString);
+						}
+
+						// 1st line = Names:
+						helpText.Append(SplitIntoLines(maxWidth, MinorIndent, names.ToString()));
+
+						// Next line(s) = Description:
+						if (!string.IsNullOrEmpty(att.Description))
+							helpText.Append(SplitIntoLines(maxWidth, MajorIndent, att.Description));
+
 						helpText.AppendLine();
 					}
 				}
 			}
 
-			helpText.AppendLine();
-			helpText.AppendLine("Option arguments:");
-			helpText.AppendLine();
-			foreach (FieldInfo field in fields)
+			if (this.supportValueArgs || this.supportOptionArgs || this.supportArrayOptionArgs)
 			{
-				string valueTypeString;
-				if (field.FieldType == typeof(bool))
-				{
-					valueTypeString = "";
-				}
-				else if (field.FieldType.IsArray)
-				{
-					if (field.FieldType.GetElementType().IsPrimitive)
-						valueTypeString = "=VAL[]";
-					else
-						valueTypeString = "=STR[]";
-				}
-				else
-				{
-					if (field.FieldType.IsPrimitive)
-						valueTypeString = "=VAL";
-					else
-						valueTypeString = "=STR";
-				}
-
-				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
-				{
-					//-----------------------------------------------------------------------------------
-					// Example:
-					//
-					//   /r, -r, --recursive, --processrecursive
-					//           Processes the command recursive, blablablablablablablablablablablblabl
-					//           Multiple lines if description is longer than 70 (80-10) characters
-					//   /i=VAL, -i=VAL, --index=VAL, --requestedindex=VAL
-					//           Processes the item with the given index, blablablablablablablablablabl
-					//           Multiple lines if description is longer than 70 (80-10) characters
-					//
-					// 0 3       10                                                                    80
-					//-----------------------------------------------------------------------------------
-
-					StringBuilder names = new StringBuilder();
-
-					// Short name(s):
-					if (att.ShortNames != null)
-					{
-						foreach (string shortName in att.ShortNames)
-						{
-							string option = shortName.ToLowerInvariant(); // Short names shall be lower case.
-
-							if (names.Length > 0)
-								names.Append(", ");
-
-							if (AllowForwardSlash)
-							{
-								names.Append("/" + option);
-								names.Append(valueTypeString);
-								names.Append(", ");
-							}
-							names.Append("-" + option);
-							names.Append(valueTypeString);
-						}
-					}
-
-					// Name(s):
-					if (att.Names != null)
-					{
-						foreach (string name in att.Names)
-						{
-							string option = name; // 'Normal' names shall be case-sensitive.
-
-							if (names.Length > 0)
-								names.Append(", ");
-
-							names.Append("--" + option);
-							names.Append(valueTypeString);
-						}
-					}
-
-					// Long name, only if there is no short nor 'normal' name:
-					if (names.Length <= 0)
-					{
-						names.Append("--" + field.Name.ToLowerInvariant());
-						names.Append(valueTypeString);
-					}
-
-					// 1st line = Names:
-					helpText.Append(SplitIntoLines(maxWidth, MinorIndent, names.ToString()));
-
-					// Next line(s) = Description:
-					if (!string.IsNullOrEmpty(att.Description))
-						helpText.Append(SplitIntoLines(maxWidth, MajorIndent, att.Description));
-
-					helpText.AppendLine();
-				}
+				helpText.AppendLine();
+				helpText.AppendLine("Notes:");
 			}
-
-			helpText.AppendLine();
-			helpText.AppendLine("Notes:");
 
 			if (this.supportOptionArgs || this.supportArrayOptionArgs)
 			{
@@ -1138,7 +1147,7 @@ namespace MKY.CommandLine
 				helpText.Append(SplitIntoLines(maxWidth, MinorIndent, continuousText));
 			}
 
-			// Applies to any kind of args.
+			if (this.supportValueArgs || this.supportOptionArgs || this.supportArrayOptionArgs)
 			{
 				string continuousText =
 					@"Use quotes to pass string values ""including spaces"". " +

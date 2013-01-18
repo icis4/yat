@@ -244,7 +244,7 @@ namespace YAT.Gui.Forms
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag), NumberFormatInfo.InvariantInfo));
+				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)

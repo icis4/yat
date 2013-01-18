@@ -205,7 +205,7 @@ namespace YAT.Gui.Controls
 
 		private void button_Command_Click(object sender, EventArgs e)
 		{
-			CommandRequest(int.Parse((string)(((Button)sender).Tag), NumberFormatInfo.InvariantInfo));
+			CommandRequest(int.Parse((string)(((Button)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		#endregion

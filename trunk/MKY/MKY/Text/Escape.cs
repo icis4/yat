@@ -54,11 +54,11 @@ namespace MKY.Text
 				default:
 				{
 					if      (code <= 0xFF)
-						return (@"\x" + code.ToString("X2", NumberFormatInfo.InvariantInfo));
+						return (@"\x" + code.ToString("X2", CultureInfo.InvariantCulture));
 					else if (code <= 0xFFFF)
-						return (@"\x" + code.ToString("X4", NumberFormatInfo.InvariantInfo));
+						return (@"\x" + code.ToString("X4", CultureInfo.InvariantCulture));
 					else
-						return (@"\x" + code.ToString("X8", NumberFormatInfo.InvariantInfo));
+						return (@"\x" + code.ToString("X8", CultureInfo.InvariantCulture));
 				}
 			}
 		}

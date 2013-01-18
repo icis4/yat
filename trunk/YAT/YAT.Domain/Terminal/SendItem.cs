@@ -153,7 +153,7 @@ namespace YAT.Domain
 					data.Write(" ");
 
 				begin = false;
-				data.Write(b.ToString("X2", NumberFormatInfo.InvariantInfo) + "h");
+				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 			}
 
 			return (indent + "- Data: " + data + Environment.NewLine);

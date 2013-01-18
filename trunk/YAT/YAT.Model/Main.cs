@@ -630,13 +630,13 @@ namespace YAT.Model
 							int vendorId;
 							int productId;
 
-							if (!int.TryParse(this.commandLineArgs.VendorId, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out vendorId))
+							if (!int.TryParse(this.commandLineArgs.VendorId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out vendorId))
 								return (false);
 
 							if (!Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
 								return (false);
 
-							if (!int.TryParse(this.commandLineArgs.ProductId, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out productId))
+							if (!int.TryParse(this.commandLineArgs.ProductId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 								return (false);
 							
 							if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))

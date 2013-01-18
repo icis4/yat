@@ -43,11 +43,11 @@ namespace MKY
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(dateTime.Year.ToString ("D4", NumberFormatInfo.InvariantInfo));
+			sb.Append(dateTime.Year.ToString ("D4", CultureInfo.InvariantCulture));
 			sb.Append("-");
-			sb.Append(dateTime.Month.ToString("D2", NumberFormatInfo.InvariantInfo));
+			sb.Append(dateTime.Month.ToString("D2", CultureInfo.InvariantCulture));
 			sb.Append("-");
-			sb.Append(dateTime.Day.ToString  ("D2", NumberFormatInfo.InvariantInfo));
+			sb.Append(dateTime.Day.ToString  ("D2", CultureInfo.InvariantCulture));
 
 			return (sb.ToString());
 		}
@@ -69,15 +69,15 @@ namespace MKY
 
 			if (hundredths)
 			{
-				sb.Insert(0, (dateTime.Millisecond / 10).ToString("D2", NumberFormatInfo.InvariantInfo));
+				sb.Insert(0, (dateTime.Millisecond / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, dateTime.Second.ToString("D2", NumberFormatInfo.InvariantInfo));
+			sb.Insert(0, dateTime.Second.ToString("D2", CultureInfo.InvariantCulture));
 			sb.Insert(0, ":");
-			sb.Insert(0, dateTime.Minute.ToString("D2", NumberFormatInfo.InvariantInfo));
+			sb.Insert(0, dateTime.Minute.ToString("D2", CultureInfo.InvariantCulture));
 			sb.Insert(0, ":");
-			sb.Insert(0, dateTime.Hour.ToString  ("D2", NumberFormatInfo.InvariantInfo));
+			sb.Insert(0, dateTime.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
 
 			return (sb.ToString());
 		}

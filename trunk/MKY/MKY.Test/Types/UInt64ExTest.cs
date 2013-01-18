@@ -111,8 +111,8 @@ namespace MKY.Test.Types
 
 			Assert.AreEqual(binString, UInt64Ex.ConvertToBinaryString(data, max));
 			Assert.AreEqual(octString, UInt64Ex.ConvertToOctalString (data, max));
-			Assert.AreEqual(decString, data.ToString(decFormat, NumberFormatInfo.InvariantInfo));
-			Assert.AreEqual(hexString, data.ToString(hexFormat, NumberFormatInfo.InvariantInfo));
+			Assert.AreEqual(decString, data.ToString(decFormat, CultureInfo.InvariantCulture));
+			Assert.AreEqual(hexString, data.ToString(hexFormat, CultureInfo.InvariantCulture));
 		}
 
 		#endregion
@@ -152,7 +152,7 @@ namespace MKY.Test.Types
 				Assert.Fail("Failed to parse octal string"       + octString);
 			if (!UInt64.TryParse        (decString, out data))
 				Assert.Fail("Failed to parse decimal string"     + decString);
-			if (!UInt64.TryParse        (hexString, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out data))
+			if (!UInt64.TryParse        (hexString, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out data))
 				Assert.Fail("Failed to parse hexadecimal string" + hexString);
 		}
 
