@@ -836,7 +836,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
 		{
-			RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo));
+			RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		#endregion
@@ -1386,7 +1386,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
 		{
-			SendPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo));
+			SendPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
@@ -1401,7 +1401,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Click(object sender, EventArgs e)
 		{
-			predefined.SelectedPage = int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo);
+			predefined.SelectedPage = int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)

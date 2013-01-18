@@ -355,6 +355,12 @@ namespace MKY.Data
 
 		#endregion
 	}
+
+	/// <summary></summary>
+	[Serializable]
+	public class EmptyDataItem : DataItem
+	{
+	}
 }
 
 //==================================================================================================

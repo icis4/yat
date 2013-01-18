@@ -852,7 +852,7 @@ namespace YAT.Gui.Forms
 			// Hide all.
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 			{
-				string prefix = string.Format(NumberFormatInfo.InvariantInfo, "{0}: ", i + 1);
+				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
 				this.menuItems_recents[i].Text = "&" + prefix;
 				this.menuItems_recents[i].Visible = false;
 			}
@@ -860,7 +860,7 @@ namespace YAT.Gui.Forms
 			// Show valid.
 			for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
 			{
-				string prefix = string.Format(NumberFormatInfo.InvariantInfo, "{0}: ", i + 1);
+				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
 				string file = PathEx.LimitPath(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
 				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 				{
@@ -913,7 +913,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
-			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag), NumberFormatInfo.InvariantInfo));
+			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		#endregion

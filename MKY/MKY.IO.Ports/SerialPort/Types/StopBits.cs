@@ -96,7 +96,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static StopBitsEx Parse(string bits)
 		{
-			return ((StopBitsEx)(double.Parse(bits, NumberFormatInfo.InvariantInfo)));
+			return ((StopBitsEx)(double.Parse(bits, CultureInfo.InvariantCulture)));
 		}
 
 		/// <summary></summary>

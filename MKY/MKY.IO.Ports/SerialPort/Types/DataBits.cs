@@ -100,7 +100,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static DataBitsEx Parse(string bits)
 		{
-			return ((DataBitsEx)int.Parse(bits, NumberFormatInfo.InvariantInfo));
+			return ((DataBitsEx)int.Parse(bits, CultureInfo.InvariantCulture));
 		}
 
 		/// <summary></summary>

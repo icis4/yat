@@ -298,7 +298,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static HidUsagePageEx Parse(string page)
 		{
-			return ((HidUsagePageEx)int.Parse(page, NumberFormatInfo.InvariantInfo));
+			return ((HidUsagePageEx)int.Parse(page, CultureInfo.InvariantCulture));
 		}
 
 		/// <summary></summary>
@@ -421,7 +421,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static HidUsageEx Parse(string usage)
 		{
-			return ((HidUsageEx)int.Parse(usage, NumberFormatInfo.InvariantInfo));
+			return ((HidUsageEx)int.Parse(usage, CultureInfo.InvariantCulture));
 		}
 
 		/// <summary></summary>

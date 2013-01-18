@@ -164,12 +164,12 @@ namespace YAT.Domain
 					data.Write(" ");
 
 				begin = false;
-				data.Write(b.ToString("X2", NumberFormatInfo.InvariantInfo) + "h");
+				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 			}
 
 			return (indent + "- Data: " + data + Environment.NewLine +
 					indent + "- Direction: " + this.direction + Environment.NewLine +
-					indent + "- TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", NumberFormatInfo.InvariantInfo), 2) + Environment.NewLine);
+					indent + "- TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2) + Environment.NewLine);
 		}
 
 		#endregion

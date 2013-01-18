@@ -53,11 +53,11 @@ namespace MKY
 
 			if (hundredths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2", NumberFormatInfo.InvariantInfo));
+				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, timeSpan.Seconds.ToString("D2", NumberFormatInfo.InvariantInfo));
+			sb.Insert(0, timeSpan.Seconds.ToString("D2", CultureInfo.InvariantCulture));
 			sb.Insert(0, ":");
 			if (timeSpan.TotalHours < 1)
 			{
@@ -65,7 +65,7 @@ namespace MKY
 			}
 			else
 			{
-				sb.Insert(0, timeSpan.Minutes.ToString("D2", NumberFormatInfo.InvariantInfo));
+				sb.Insert(0, timeSpan.Minutes.ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ":");
 				if (timeSpan.TotalDays < 1)
 				{
@@ -73,7 +73,7 @@ namespace MKY
 				}
 				else
 				{
-					sb.Insert(0, timeSpan.Hours.ToString("D2", NumberFormatInfo.InvariantInfo));
+					sb.Insert(0, timeSpan.Hours.ToString("D2", CultureInfo.InvariantCulture));
 					sb.Insert(0, "days ");
 					sb.Insert(0, timeSpan.Days);
 				}

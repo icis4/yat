@@ -59,16 +59,16 @@ namespace MKY.IO.Usb
 		public const int LastProductId  = 0xFFFF;
 
 		/// <summary></summary>
-		public static readonly string FirstVendorIdString  = FirstVendorId .ToString("X4", NumberFormatInfo.InvariantInfo);
+		public static readonly string FirstVendorIdString  = FirstVendorId .ToString("X4", CultureInfo.InvariantCulture);
 
 		/// <summary></summary>
-		public static readonly string LastVendorIdString   = LastVendorId  .ToString("X4", NumberFormatInfo.InvariantInfo);
+		public static readonly string LastVendorIdString   = LastVendorId  .ToString("X4", CultureInfo.InvariantCulture);
 
 		/// <summary></summary>
-		public static readonly string FirstProductIdString = FirstProductId.ToString("X4", NumberFormatInfo.InvariantInfo);
+		public static readonly string FirstProductIdString = FirstProductId.ToString("X4", CultureInfo.InvariantCulture);
 
 		/// <summary></summary>
-		public static readonly string LastProductIdString  = LastProductId .ToString("X4", NumberFormatInfo.InvariantInfo);
+		public static readonly string LastProductIdString  = LastProductId .ToString("X4", CultureInfo.InvariantCulture);
 
 		/// <summary></summary>
 		public const int DefaultVendorId = FirstVendorId;
@@ -210,7 +210,7 @@ namespace MKY.IO.Usb
 		[XmlIgnore]
 		public virtual string VendorIdString
 		{
-			get { return (VendorId.ToString("X4", NumberFormatInfo.InvariantInfo)); }
+			get { return (VendorId.ToString("X4", CultureInfo.InvariantCulture)); }
 		}
 
 		/// <summary></summary>
@@ -225,7 +225,7 @@ namespace MKY.IO.Usb
 		[XmlIgnore]
 		public virtual string ProductIdString
 		{
-			get { return (ProductId.ToString("X4", NumberFormatInfo.InvariantInfo)); }
+			get { return (ProductId.ToString("X4", CultureInfo.InvariantCulture)); }
 		}
 
 		/// <summary></summary>
@@ -484,13 +484,13 @@ namespace MKY.IO.Usb
 			if (m.Success)
 			{
 				int vendorId;
-				if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out vendorId))
+				if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out vendorId))
 				{
 					m = ProductIdRegex.Match(s);
 					if (m.Success)
 					{
 						int productId;
-						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out productId))
+						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 						{
 							result = new DeviceInfo(vendorId, productId);
 							return (true);

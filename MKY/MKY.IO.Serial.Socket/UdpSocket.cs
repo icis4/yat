@@ -707,7 +707,7 @@ namespace MKY.IO.Serial.Socket
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + "     (" + this.instanceId.ToString("D2", System.Globalization.NumberFormatInfo.InvariantInfo) + ")(" + ToShortEndPointString() + "): " + message);
+			Debug.WriteLine(GetType() + "     (" + this.instanceId.ToString("D2", System.Globalization.CultureInfo.InvariantCulture) + ")(" + ToShortEndPointString() + "): " + message);
 		}
 
 		#endregion
