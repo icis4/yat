@@ -3,7 +3,7 @@
                                          YAT Release Notes.
  --------------------------------------------------------------------------------------------------
                                     YAT - Yet Another Terminal.
-                              Operate and debug serial communications.
+                           Operate, test and debug serial communications.
      Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID.
  --------------------------------------------------------------------------------------------------
                      Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
@@ -74,6 +74,9 @@ Important changes:
 - Serial COM port, USB as well as TCP/IP and UDP/IP socket functionality of MKY.IO.Serial has been
   split into separate assemblies to allow dedicated use of one of the new assemblies without
   unnecessary dependencies to the other parts (feature request #3388950>#156)
+- Serial COM port break counts added (feature request #187)
+- Serial COM port flow control counts added in case of manual flow control (feature request #187)
+- Serial COM port uses the official term RFR (Ready For Receiving) instead of RTS (Ready To Send)
 - Additional help content on serial port errors added (feature requests #2213647>#66, #3440986>#166)
 - Error message in case a serial port cannot be opened has been improved (bug #3565648>#239)
 - Issue with predefined commands in case of concurrent YAT instances fixed (bug #3464323>#218)

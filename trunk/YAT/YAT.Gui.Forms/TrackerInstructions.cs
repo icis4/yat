@@ -25,6 +25,8 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -47,9 +49,9 @@ namespace YAT.Gui.Forms
 
 			StringBuilder sb;
 
-			// Form.
+			// Form:
 			sb = new StringBuilder();
-			sb.Append(Application.ProductName);
+			sb.Append(ApplicationInfo.ProductName);
 			switch (tracker)
 			{
 				case TrackerType.Feature: sb.Append(" Feature Request"); break;
@@ -57,7 +59,7 @@ namespace YAT.Gui.Forms
 			}
 			Text = sb.ToString();
 
-			// Intro.
+			// Intro:
 			sb = new StringBuilder();
 			switch (tracker)
 			{
@@ -67,7 +69,7 @@ namespace YAT.Gui.Forms
 			sb.Append(" Follow the link below and proceed according to the instructions.");
 			linkLabel_Intro.Text = sb.ToString();
 
-			// SourceForge remarks.
+			// SourceForge remarks:
 			sb = new StringBuilder();
 			sb.Append("If you have a SourceForge.net account, log in to SourceForge before");
 			sb.Append(" you proceed. You will then get email notifications about the progress");
@@ -81,7 +83,7 @@ namespace YAT.Gui.Forms
 			sb.Append(" you may provide a valid email address to get the notifications.");
 			linkLabel_SourceForgeRemark.Text = sb.ToString();
 
-			// Links.
+			// Links:
 			string filteredAndSortedLink = "";
 			string plainLink = "";
 			switch (tracker)
@@ -104,7 +106,7 @@ namespace YAT.Gui.Forms
 			linkLabel_PlainLink.Text = plainLink;
 			linkLabel_PlainLink.Links.Add(0, plainLink.Length, plainLink);
 
-			// Instructions.
+			// Instructions:
 			sb = new StringBuilder();
 			sb.AppendLine("1. Select 'Create Ticket'");
 			sb.AppendLine("2. Fill in a 'Title'");

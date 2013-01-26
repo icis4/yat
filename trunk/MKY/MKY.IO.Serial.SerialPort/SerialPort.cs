@@ -28,10 +28,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
@@ -208,12 +206,12 @@ namespace MKY.IO.Serial.SerialPort
 		private Thread receiveThread;
 
 		/// <remarks>
-		/// In case of manual RTS/CTS + DTR/DSR, RTS is enabled after initialization.
+		/// In case of manual RFR/CTS + DTR/DSR, RFR is enabled after initialization.
 		/// </remarks>
-		private bool manualRtsWasEnabled = true;
+		private bool manualRfrWasEnabled = true;
 
 		/// <remarks>
-		/// In case of manual RTS/CTS + DTR/DSR, DTR is disabled after initialization.
+		/// In case of manual RFR/CTS + DTR/DSR, DTR is disabled after initialization.
 		/// </remarks>
 		private bool manualDtrWasEnabled; // = false
 
@@ -240,6 +238,11 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		private bool manualInputWasXOn = true;
 		private object manualInputWasXOnSyncObj = new object();
+
+		private int sentXOnCount;
+		private int sentXOffCount;
+		private int receivedXOnCount;
+		private int receivedXOffCount;
 
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
@@ -462,6 +465,38 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
+		/// Serial port control pins.
+		/// </summary>
+		public virtual Ports.SerialPortControlPins ControlPins
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.port != null)
+					return (this.port.ControlPins);
+				else
+					return (new Ports.SerialPortControlPins());
+			}
+		}
+
+		/// <summary>
+		/// Serial port control pin counts.
+		/// </summary>
+		public virtual Ports.SerialPortControlPinCounts ControlPinCounts
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.port != null)
+					return (this.port.ControlPinCounts);
+				else
+					return (new Ports.SerialPortControlPinCounts());
+			}
+		}
+
+		/// <summary>
 		/// Returns <c>true</c> if XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
 		/// flow control is active.
 		/// </summary>
@@ -513,6 +548,98 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					return (true);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signalling.
+		/// </summary>
+		public virtual int SentXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+					return (this.sentXOnCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signalling.
+		/// </summary>
+		public virtual int SentXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+					return (this.sentXOffCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signalling.
+		/// </summary>
+		public virtual int ReceivedXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+					return (this.receivedXOnCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signalling.
+		/// </summary>
+		public virtual int ReceivedXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+					return (this.receivedXOffCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.port != null)
+					return (this.port.OutputBreakCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int InputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.port != null)
+					return (this.port.InputBreakCount);
+				else
+					return (0);
 			}
 		}
 
@@ -603,6 +730,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							if (b == SerialPortSettings.XOnByte)
 							{
+								Interlocked.Increment(ref this.sentXOnCount);
 								lock (this.inputIsXOnSyncObj)
 								{
 									if (BooleanEx.SetIfCleared(ref this.inputIsXOn))
@@ -614,6 +742,7 @@ namespace MKY.IO.Serial.SerialPort
 							}
 							else if (b == SerialPortSettings.XOffByte)
 							{
+								Interlocked.Increment(ref this.sentXOffCount);
 								lock (this.inputIsXOnSyncObj)
 								{
 									if (BooleanEx.ClearIfSet(ref this.inputIsXOn))
@@ -697,7 +826,7 @@ namespace MKY.IO.Serial.SerialPort
 							break; // Let other threads do their job and wait until signaled again.
 
 						// In case of disabled CTS line:
-						if (this.settings.Communication.FlowControlUsesRtsCts)
+						if (this.settings.Communication.FlowControlUsesRfrCts)
 						{
 							bool isClearToSend;
 							lock (this.port)
@@ -721,7 +850,7 @@ namespace MKY.IO.Serial.SerialPort
 						lock (this.port)
 						{
 							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-								this.port.RtsEnable = true;
+								this.port.RfrEnable = true;
 
 							// 'WriteBufferSize' typically is 2048. However, devices on the other side may
 							// not be able to deal with that much data if flow control is active.
@@ -751,7 +880,7 @@ namespace MKY.IO.Serial.SerialPort
 							this.port.Flush(); // Make sure that data is sent before continuing.
 
 							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-								this.port.RtsEnable = false;
+								this.port.RfrEnable = false;
 						}
 
 						OnDataSent(new DataSentEventArgs(chunkData));
@@ -822,12 +951,51 @@ namespace MKY.IO.Serial.SerialPort
 		public virtual void ToggleInputXOnXOff()
 		{
 			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
-			// 'InputIsXOn' property below.
+			// 'InputIsXOn' property.
 
 			if (InputIsXOn)
 				SetInputXOff();
 			else
 				SetInputXOn();
+		}
+
+		/// <summary>
+		/// Resets the XOn/XOff signalling counts.
+		/// </summary>
+		public virtual void ResetXOnXOffCounts()
+		{
+			AssertNotDisposed();
+
+			Interlocked.Exchange(ref this.sentXOnCount, 0);
+			Interlocked.Exchange(ref this.sentXOffCount, 0);
+			Interlocked.Exchange(ref this.receivedXOnCount, 0);
+			Interlocked.Exchange(ref this.receivedXOffCount, 0);
+
+			OnIOControlChanged(new EventArgs());
+		}
+
+		/// <summary>
+		/// Resets the flow control signalling counts.
+		/// </summary>
+		public virtual void ResetFlowControlCounts()
+		{
+			// AssertNotDisposed() is called by 'ResetXOnXOffCounts()'.
+
+			ResetXOnXOffCounts();
+
+			if (this.port != null)
+				this.port.ResetControlPinCounts();
+		}
+
+		/// <summary>
+		/// Resets the break counts.
+		/// </summary>
+		public virtual void ResetBreakCounts()
+		{
+			AssertNotDisposed();
+
+			if (this.port != null)
+				this.port.ResetBreakCounts();
 		}
 
 		#endregion
@@ -954,25 +1122,25 @@ namespace MKY.IO.Serial.SerialPort
 
 			lock (this.port)
 			{
-				// RTS
+				// RFR (formerly RTS)
 				switch (this.settings.Communication.FlowControl)
 				{
 					case SerialFlowControl.Hardware:
 					case SerialFlowControl.Combined:
-						// Do nothing, RTS is handled by the underlying serial port object.
+						// Do nothing, RFR is handled by the underlying serial port object.
 						break;
 
 					case SerialFlowControl.RS485:
-						this.port.RtsEnable = false;
+						this.port.RfrEnable = false;
 						break;
 
 					case SerialFlowControl.ManualHardware:
 					case SerialFlowControl.ManualCombined:
-						this.port.RtsEnable = this.manualRtsWasEnabled;
+						this.port.RfrEnable = this.manualRfrWasEnabled;
 						break;
 
 					default:
-						this.port.RtsEnable = false;
+						this.port.RfrEnable = false;
 						break;
 				}
 
@@ -1141,6 +1309,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							if (b == SerialPortSettings.XOnByte)
 							{
+								Interlocked.Increment(ref this.receivedXOnCount);
 								lock (this.outputIsXOnSyncObj)
 								{
 									if (BooleanEx.SetIfCleared(ref this.outputIsXOn))
@@ -1149,6 +1318,7 @@ namespace MKY.IO.Serial.SerialPort
 							}
 							else if (b == SerialPortSettings.XOffByte)
 							{
+								Interlocked.Increment(ref this.receivedXOffCount);
 								lock (this.outputIsXOnSyncObj)
 								{
 									if (BooleanEx.ClearIfSet(ref this.outputIsXOn))
@@ -1295,9 +1465,9 @@ namespace MKY.IO.Serial.SerialPort
 
 				if (IsOpen) // Ensure not to forward any events during closing anymore.
 				{
-					if (this.settings.Communication.FlowControlManagesRtsCtsDtrDsrManually)
+					if (this.settings.Communication.FlowControlManagesRfrCtsDtrDsrManually)
 					{
-						this.manualRtsWasEnabled = this.port.RtsEnable;
+						this.manualRfrWasEnabled = this.port.RfrEnable;
 						this.manualDtrWasEnabled = this.port.DtrEnable;
 					}
 

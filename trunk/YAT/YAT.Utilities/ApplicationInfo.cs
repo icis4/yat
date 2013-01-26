@@ -31,7 +31,7 @@ namespace YAT.Utilities
 	public static class ApplicationInfo
 	{
 		/// <summary>The product name.</summary>
-		public static readonly string ProductName = Application.ProductName;
+		public static readonly string ProductName = "YAT";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Final";
@@ -49,7 +49,7 @@ namespace YAT.Utilities
 		////public const string ProductBuildName = " Beta 4 Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
-		public static readonly string ProductNameAndBuildName = Application.ProductName + ProductBuildName;
+		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
 
 		/// <summary>The product version.</summary>
 		public static readonly string ProductVersion = Application.ProductVersion;
@@ -58,7 +58,7 @@ namespace YAT.Utilities
 		public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + ProductVersion;
 
 		/// <summary>The long variant of the complete product name including build description and version.</summary>
-		public static readonly string ProductNameLong = Application.ProductName + " - Yet Another Terminal";
+		public static readonly string ProductNameLong = ProductName + " - Yet Another Terminal";
 	}
 }
 

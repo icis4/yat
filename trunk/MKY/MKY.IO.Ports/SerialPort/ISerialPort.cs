@@ -73,10 +73,17 @@ namespace MKY.IO.Ports
 		SerialPortSettings PortSettings { get; set; }
 
 		/// <summary>
-		/// Toggles the RTS (Request To Send) control line.
+		/// Gets or sets a value indicating whether the RFR (Ready For Receiving) signal
+		/// is enabled during serial communication.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
-		void ToggleRts();
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		bool RfrEnable { get; set; }
+
+		/// <summary>
+		/// Toggles the RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		void ToggleRfr();
 
 		/// <summary>
 		/// Toggles the DTR (Data Terminal Ready) control line.
@@ -85,9 +92,19 @@ namespace MKY.IO.Ports
 		void ToggleDtr();
 
 		/// <summary>
-		/// Control pins.
+		/// Serial port control pins.
 		/// </summary>
 		SerialPortControlPins ControlPins { get; }
+
+		/// <summary>
+		/// Serial port control pin counts.
+		/// </summary>
+		SerialPortControlPinCounts ControlPinCounts { get; }
+
+		/// <summary>
+		/// Resets the control pin counts.
+		/// </summary>
+		void ResetControlPinCounts();
 
 		/// <summary>
 		/// Gets the input break state.
@@ -103,6 +120,21 @@ namespace MKY.IO.Ports
 		/// Toggles the output break state.
 		/// </summary>
 		void ToggleOutputBreak();
+
+		/// <summary>
+		/// Returns the number of output breaks.
+		/// </summary>
+		int OutputBreakCount { get; }
+
+		/// <summary>
+		/// Returns the number of input breaks.
+		/// </summary>
+		int InputBreakCount { get; }
+
+		/// <summary>
+		/// Resets the break counts.
+		/// </summary>
+		void ResetBreakCounts();
 
 		/// <summary>
 		/// Writes the specified byte to an output buffer at the specified offset.

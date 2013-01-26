@@ -32,42 +32,45 @@ namespace MKY.IO.Ports
 	/// Specifies the type of change that occurred on the MKY.IO.Ports.SerialPort object.
 	/// </summary>
 	/// <remarks>
-	/// This enum adds RTS and DTR pin changes to <see cref="System.IO.Ports.SerialPinChange"/>.
+	/// This enum adds RFR and DTR pin changes to <see cref="System.IO.Ports.SerialPinChange"/>.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "The name resembles 'System.IO.Ports.SerialPinChange'")]
 	[Flags]
 	public enum SerialPinChange
 	{
 		/// <summary>
-		/// The Ready to Send (RTS) signal changed state. This signal is used to indicate
+		/// The RFR (Ready For Receiving) signal changed state. This signal is used to indicate
 		/// whether data can be received over the serial port.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
-		Rts = 2,
+		/// <remarks>
+		/// This signal was formerly called RTS (Request To Send).
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		Rfr = 2,
 
 		/// <summary>
-		/// The Clear to Send (CTS) signal changed state. This signal is used to indicate
+		/// The CTS (Clear To Send) signal changed state. This signal is used to indicate
 		/// whether data can be sent over the serial port.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
 		Cts = System.IO.Ports.SerialPinChange.CtsChanged,
 
 		/// <summary>
-		/// The Data Terminal Ready (DTR) signal changed state. This signal is used to indicate
+		/// The DTR (Data Terminal Ready) signal changed state. This signal is used to indicate
 		/// whether this serial port host is ready to operate.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
 		Dtr = 4,
 
 		/// <summary>
-		/// The Data Set Ready (DSR) signal changed state. This signal is used to indicate
+		/// The DSR (Data Set Ready) signal changed state. This signal is used to indicate
 		/// whether the device on the serial port is ready to operate.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
 		Dsr = System.IO.Ports.SerialPinChange.DsrChanged,
 
 		/// <summary>
-		/// The Carrier Detect (CD) signal changed state. This signal is used to indicate
+		/// The DCD (Data Carrier Detect) signal changed state. This signal is used to indicate
 		/// whether a modem is connected to a working phone line and a data carrier signal
 		/// is detected.
 		/// </summary>

@@ -44,6 +44,8 @@ using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
 
+using YAT.Utilities;
+
 #endregion
 
 namespace YAT.Model
@@ -222,7 +224,7 @@ namespace YAT.Model
 				if (this.workspace != null)
 					return (this.workspace.AutoName);
 				else
-					return (Application.ProductName);
+					return (ApplicationInfo.ProductName);
 			}
 		}
 
@@ -849,7 +851,7 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
+				OnFixedStatusTextRequest("Exiting " + ApplicationInfo.ProductName + "...");
 				cancel = false;
 
 				// Close the static application settings.

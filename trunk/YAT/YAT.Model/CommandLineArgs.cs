@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 using MKY;
 using MKY.CommandLine;
@@ -134,7 +135,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "FlowControl", ShortName = "fc", Description =
-			"The desired method of flow control. Valid values are 'None', 'Hardware' (RTS/CTS), 'Software' (XOn/XOff), 'Combined' (RTS/CTS and XOn/XOff), " +
+			"The desired method of flow control. Valid values are 'None', 'Hardware' (RFR/CTS), 'Software' (XOn/XOff), 'Combined' (RFR/CTS and XOn/XOff), " +
 			"'ManualHardware', 'ManualSoftware', 'ManualCombined' and 'RS485' (RS-485 Transceiver Control). The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public string FlowControl;
@@ -390,34 +391,35 @@ namespace YAT.Model
 		/// </summary>
 		public override string GetHelpText(int maxWidth)
 		{
+			string name = Application.ProductName;
 			StringBuilder helpText = new StringBuilder();
 
 			helpText.AppendLine(                                "Usage:");
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT[.exe] [<Workspace>.yaw|<Terminal>.yat] [<Options>]"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + "[.exe] [<Workspace>.yaw|<Terminal>.yat] [<Options>]"));
 			helpText.AppendLine();
 			helpText.AppendLine();
 			helpText.AppendLine(                                "Usage examples:");
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT MyWorkspace.yaw"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " MyWorkspace.yaw"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the given workspace."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT MyTerminal.yat"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " MyTerminal.yat"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the given terminal."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT MyTerminal.yat /b=19200"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " MyTerminal.yat /b=19200"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT with the given terminal, but change the baud rate to 19200 baud."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /r"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /r"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the most recent file."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /n /p=1 /b=19200"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /n /p=1 /b=19200"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and create a new terminal on COM1 using 19200 baud."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and show the 'New Terminal' dialog."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /e"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /e"));
 			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT but neither show any dialog nor perform any operation."));
 			helpText.AppendLine();
 
@@ -426,6 +428,7 @@ namespace YAT.Model
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "Files can be provided with an absolute or relative path. Relative paths are relative to the current working directory. Paths containing spaces must be surrounded with quotes."));
 			helpText.AppendLine();
+
 			return (helpText.ToString());
 		}
 

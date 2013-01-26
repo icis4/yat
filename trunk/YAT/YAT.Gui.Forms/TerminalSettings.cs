@@ -484,12 +484,14 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.Display.RxRadix           = f.SettingsResult.Terminal.Display.RxRadix;
 
 				// Display:
-				this.settingsInEdit.Terminal.Display.ShowRadix       = f.SettingsResult.Terminal.Display.ShowRadix;
-				this.settingsInEdit.Terminal.Display.ShowTimeStamp   = f.SettingsResult.Terminal.Display.ShowTimeStamp;
-				this.settingsInEdit.Terminal.Display.ShowLength      = f.SettingsResult.Terminal.Display.ShowLength;
-				this.settingsInEdit.Terminal.Display.ShowLineNumbers = f.SettingsResult.Terminal.Display.ShowLineNumbers;
-				this.settingsInEdit.Terminal.Status.ShowConnectTime  = f.SettingsResult.Terminal.Status.ShowConnectTime;
-				this.settingsInEdit.Terminal.Status.ShowCountAndRate = f.SettingsResult.Terminal.Status.ShowCountAndRate;
+				this.settingsInEdit.Terminal.Display.ShowRadix           = f.SettingsResult.Terminal.Display.ShowRadix;
+				this.settingsInEdit.Terminal.Display.ShowTimeStamp       = f.SettingsResult.Terminal.Display.ShowTimeStamp;
+				this.settingsInEdit.Terminal.Display.ShowLength          = f.SettingsResult.Terminal.Display.ShowLength;
+				this.settingsInEdit.Terminal.Display.ShowLineNumbers     = f.SettingsResult.Terminal.Display.ShowLineNumbers;
+				this.settingsInEdit.Terminal.Status.ShowConnectTime      = f.SettingsResult.Terminal.Status.ShowConnectTime;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate     = f.SettingsResult.Terminal.Status.ShowCountAndRate;
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = f.SettingsResult.Terminal.Status.ShowFlowControlCount;
+				this.settingsInEdit.Terminal.Status.ShowBreakCount       = f.SettingsResult.Terminal.Status.ShowBreakCount;
 
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.TxMaxLineCount            = f.SettingsResult.Terminal.Display.TxMaxLineCount;

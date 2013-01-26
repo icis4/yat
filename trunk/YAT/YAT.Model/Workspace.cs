@@ -47,6 +47,8 @@ using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
 
+using YAT.Utilities;
+
 #endregion
 
 namespace YAT.Model
@@ -257,7 +259,7 @@ namespace YAT.Model
 				if (this.activeTerminal != null)
 					return (this.activeTerminal.AutoName);
 				else
-					return (Application.ProductName);
+					return (ApplicationInfo.ProductName);
 			}
 		}
 

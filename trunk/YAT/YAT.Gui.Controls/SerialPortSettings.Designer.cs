@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.comboBox_StopBits = new System.Windows.Forms.ComboBox();
 			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
 			this.comboBox_Parity = new System.Windows.Forms.ComboBox();
@@ -43,6 +44,7 @@
 			this.label_AutoReopenIntervalUnit = new System.Windows.Forms.Label();
 			this.textBox_AutoReopenInterval = new System.Windows.Forms.TextBox();
 			this.checkBox_AutoReopen = new System.Windows.Forms.CheckBox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
 			// comboBox_StopBits
@@ -65,6 +67,8 @@
 			this.comboBox_FlowControl.Name = "comboBox_FlowControl";
 			this.comboBox_FlowControl.Size = new System.Drawing.Size(254, 21);
 			this.comboBox_FlowControl.TabIndex = 9;
+			this.toolTip.SetToolTip(this.comboBox_FlowControl, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
+					"t To Send) control line");
 			this.comboBox_FlowControl.SelectedIndexChanged += new System.EventHandler(this.comboBox_FlowControl_SelectedIndexChanged);
 			// 
 			// comboBox_Parity
@@ -161,7 +165,9 @@
 			this.label_FlowControlRemarks_2.Name = "label_FlowControlRemarks_2";
 			this.label_FlowControlRemarks_2.Size = new System.Drawing.Size(203, 26);
 			this.label_FlowControlRemarks_2.TabIndex = 11;
-			this.label_FlowControlRemarks_2.Text = "RTS/DTR and/or XOn/XOff set manually\r\nRTS is set high while sending\r\n";
+			this.label_FlowControlRemarks_2.Text = "RFR/DTR and/or XOn/XOff set manually\r\nRFR is set high while sending\r\n";
+			this.toolTip.SetToolTip(this.label_FlowControlRemarks_2, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
+					"t To Send) control line");
 			// 
 			// label_AutoReopenIntervalUnit
 			// 
@@ -239,5 +245,6 @@
 		private System.Windows.Forms.Label label_AutoReopenIntervalUnit;
 		private System.Windows.Forms.TextBox textBox_AutoReopenInterval;
 		private System.Windows.Forms.CheckBox checkBox_AutoReopen;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }
