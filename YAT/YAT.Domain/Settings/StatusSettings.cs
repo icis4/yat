@@ -42,8 +42,16 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool ShowCountAndRateDefault = false;
 
+		/// <summary></summary>
+		public const bool ShowFlowControlCountDefault = false;
+
+		/// <summary></summary>
+		public const bool ShowBreakCountDefault = false;
+
 		private bool showConnectTime;
 		private bool showCountAndRate;
+		private bool showFlowControlCount;
+		private bool showBreakCount;
 
 		/// <summary></summary>
 		public StatusSettings()
@@ -67,8 +75,10 @@ namespace YAT.Domain.Settings
 		public StatusSettings(StatusSettings rhs)
 			: base(rhs)
 		{
-			ShowConnectTime  = rhs.ShowConnectTime;
-			ShowCountAndRate = rhs.ShowCountAndRate;
+			ShowConnectTime      = rhs.ShowConnectTime;
+			ShowCountAndRate     = rhs.ShowCountAndRate;
+			ShowFlowControlCount = rhs.ShowFlowControlCount;
+			ShowBreakCount       = rhs.ShowBreakCount;
 
 			ClearChanged();
 		}
@@ -80,8 +90,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			ShowConnectTime  = ShowConnectTimeDefault;
-			ShowCountAndRate = ShowCountAndRateDefault;
+			ShowConnectTime      = ShowConnectTimeDefault;
+			ShowCountAndRate     = ShowCountAndRateDefault;
+			ShowFlowControlCount = ShowFlowControlCountDefault;
+			ShowBreakCount       = ShowBreakCountDefault;
 		}
 
 		#region Properties
@@ -105,6 +117,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>Data count is singular even that there is a count per direction.</remarks>
 		[XmlElement("ShowCountAndRate")]
 		public virtual bool ShowCountAndRate
 		{
@@ -114,6 +127,38 @@ namespace YAT.Domain.Settings
 				if (value != this.showCountAndRate)
 				{
 					this.showCountAndRate = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		/// <remarks>Signal count is singular even that there are multiple counts per port.</remarks>
+		[XmlElement("ShowFlowControlCount")]
+		public virtual bool ShowFlowControlCount
+		{
+			get { return (this.showFlowControlCount); }
+			set
+			{
+				if (value != this.showFlowControlCount)
+				{
+					this.showFlowControlCount = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		/// <remarks>Break count is singular even that there are multiple counts per port.</remarks>
+		[XmlElement("ShowBreakCount")]
+		public virtual bool ShowBreakCount
+		{
+			get { return (this.showBreakCount); }
+			set
+			{
+				if (value != this.showBreakCount)
+				{
+					this.showBreakCount = value;
 					SetChanged();
 				}
 			}
@@ -143,8 +188,10 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(ShowConnectTime  == other.ShowConnectTime) &&
-				(ShowCountAndRate == other.ShowCountAndRate)
+				(ShowConnectTime      == other.ShowConnectTime) &&
+				(ShowCountAndRate     == other.ShowCountAndRate) &&
+				(ShowFlowControlCount == other.ShowFlowControlCount) &&
+				(ShowBreakCount       == other.ShowBreakCount)
 			);
 		}
 
@@ -161,8 +208,10 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				ShowConnectTime .GetHashCode() ^
-				ShowCountAndRate.GetHashCode()
+				ShowConnectTime     .GetHashCode() ^
+				ShowCountAndRate    .GetHashCode() ^
+				ShowFlowControlCount.GetHashCode() ^
+				ShowBreakCount      .GetHashCode()
 			);
 		}
 

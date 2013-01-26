@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Ports
@@ -34,15 +35,15 @@ namespace MKY.IO.Ports
 	public struct SerialPortControlPins
 	{
 		/// <summary>
-		/// Request To Send.
+		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
-		[XmlElement("RTS")]
-		public bool Rts;
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[XmlElement("RFR")]
+		public bool Rfr;
 
 		/// <summary>
-		/// Clear To Send.
+		/// CTS (Clear To Send) control line.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
@@ -50,7 +51,7 @@ namespace MKY.IO.Ports
 		public bool Cts;
 
 		/// <summary>
-		/// Data Terminal Ready.
+		/// DTR (Data Terminal Ready) control line.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
@@ -58,7 +59,7 @@ namespace MKY.IO.Ports
 		public bool Dtr;
 
 		/// <summary>
-		/// Data Set Ready.
+		/// DSR (Data Set Ready) control line.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
@@ -66,7 +67,7 @@ namespace MKY.IO.Ports
 		public bool Dsr;
 
 		/// <summary>
-		/// Data Carrier Detect.
+		/// DCD (Data Carrier Detect) control line.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "DCD is a common term for serial ports.")]
@@ -93,7 +94,7 @@ namespace MKY.IO.Ports
 			SerialPortControlPins other = (SerialPortControlPins)obj;
 			return
 			(
-				(Rts == other.Rts) &&
+				(Rfr == other.Rfr) &&
 				(Cts == other.Cts) &&
 				(Dtr == other.Dtr) &&
 				(Dsr == other.Dsr) &&
@@ -112,7 +113,7 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				Rts.GetHashCode() ^
+				Rfr.GetHashCode() ^
 				Cts.GetHashCode() ^
 				Dtr.GetHashCode() ^
 				Dsr.GetHashCode() ^
@@ -125,7 +126,7 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				"RTS=" + Rts.ToString() + ", " +
+				"RFR=" + Rfr.ToString() + ", " +
 				"CTS=" + Cts.ToString() + ", " +
 				"DTR=" + Dtr.ToString() + ", " +
 				"DSR=" + Dsr.ToString() + ", " +
@@ -156,6 +157,154 @@ namespace MKY.IO.Ports
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
 		public static bool operator !=(SerialPortControlPins lhs, SerialPortControlPins rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Serial port control pin counts.
+	/// </summary>
+	[Serializable]
+	public struct SerialPortControlPinCounts
+	{
+		/// <summary>
+		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		[XmlElement("RFR")]
+		public int RfrDisableCount;
+
+		/// <summary>
+		/// CTS (Clear To Send) control line.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "CTS is a common term for serial ports.")]
+		[XmlElement("CTS")]
+		public int CtsDisableCount;
+
+		/// <summary>
+		/// DTR (Data Terminal Ready) control line.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		[XmlElement("DTR")]
+		public int DtrDisableCount;
+
+		/// <summary>
+		/// DSR (Data Set Ready) control line.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "DSR is a common term for serial ports.")]
+		[XmlElement("DSR")]
+		public int DsrDisableCount;
+
+		/// <summary>
+		/// DCD (Data Carrier Detect) control line.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "DCD is a common term for serial ports.")]
+		[XmlElement("DCD")]
+		public int DcdCount;
+
+		/// <summary>
+		/// Resets the control pin counts.
+		/// </summary>
+		public void Reset()
+		{
+			Interlocked.Exchange(ref RfrDisableCount, 0);
+			Interlocked.Exchange(ref CtsDisableCount, 0);
+			Interlocked.Exchange(ref DtrDisableCount, 0);
+			Interlocked.Exchange(ref DsrDisableCount, 0);
+			Interlocked.Exchange(ref DcdCount, 0);
+		}
+
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			SerialPortControlPinCounts other = (SerialPortControlPinCounts)obj;
+			return
+			(
+				(RfrDisableCount == other.RfrDisableCount) &&
+				(CtsDisableCount == other.CtsDisableCount) &&
+				(DtrDisableCount == other.DtrDisableCount) &&
+				(DsrDisableCount == other.DsrDisableCount) &&
+				(DcdCount        == other.DcdCount)
+			);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			return
+			(
+				RfrDisableCount.GetHashCode() ^
+				CtsDisableCount.GetHashCode() ^
+				DtrDisableCount.GetHashCode() ^
+				DsrDisableCount.GetHashCode() ^
+				DcdCount.GetHashCode()
+			);
+		}
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return
+			(
+				"RFR=" + RfrDisableCount.ToString() + ", " +
+				"CTS=" + CtsDisableCount.ToString() + ", " +
+				"DTR=" + DtrDisableCount.ToString() + ", " +
+				"DSR=" + DsrDisableCount.ToString() + ", " +
+				"DCD=" + DcdCount.ToString()
+			);
+		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(SerialPortControlPinCounts lhs, SerialPortControlPinCounts rhs)
+		{
+			// Value type implementation of operator ==.
+			// See MKY.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(SerialPortControlPinCounts lhs, SerialPortControlPinCounts rhs)
 		{
 			return (!(lhs == rhs));
 		}

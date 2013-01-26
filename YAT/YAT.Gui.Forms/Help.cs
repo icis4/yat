@@ -24,6 +24,8 @@
 using System;
 using System.Windows.Forms;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -38,7 +40,7 @@ namespace YAT.Gui.Forms
 			InitializeComponent();
 
 			// Form title/caption:
-			string text = Application.ProductName;
+			string text = ApplicationInfo.ProductName;
 			text += " Help";
 			Text = text;
 

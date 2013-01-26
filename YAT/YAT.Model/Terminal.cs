@@ -463,6 +463,16 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool UnderlyingIOIsSerialPort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return ((this.settingsRoot != null) && (this.settingsRoot.IOType == Domain.IOType.SerialPort));
+			}
+		}
+
+		/// <summary></summary>
 		public virtual string Caption
 		{
 			get
@@ -1842,15 +1852,15 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Toggles RTS line if current flow control settings allow this.
+		/// Toggles RFR line if current flow control settings allow this.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "RTS is a common term for serial ports.")]
-		public virtual void RequestToggleRts()
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		public virtual void RequestToggleRfr()
 		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
 			{
 				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				p.ToggleRts();
+				p.ToggleRfr();
 			}
 		}
 
@@ -1860,7 +1870,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
 		public virtual void RequestToggleDtr()
 		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
 			{
 				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
 				p.ToggleDtr();
@@ -2558,6 +2568,187 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 				OnIORateChanged(e);
+		}
+
+		#endregion
+
+		#region Terminal > Flow Control and Break Status
+		//------------------------------------------------------------------------------------------
+		// Terminal > Flow Control and Break Status
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Serial port control pins.
+		/// </summary>
+		public virtual MKY.IO.Ports.SerialPortControlPins SerialPortControlPins
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ControlPins);
+				}
+
+				return (new MKY.IO.Ports.SerialPortControlPins());
+			}
+		}
+
+		/// <summary>
+		/// Serial port control pin counts.
+		/// </summary>
+		public virtual MKY.IO.Ports.SerialPortControlPinCounts SerialPortControlPinCounts
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ControlPinCounts);
+				}
+
+				return (new MKY.IO.Ports.SerialPortControlPinCounts());
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int SentXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.SentXOnCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int SentXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.SentXOffCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int ReceivedXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ReceivedXOnCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int ReceivedXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ReceivedXOffCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ResetFlowControlCounts()
+		{
+			AssertNotDisposed();
+
+			if (UnderlyingIOIsSerialPort)
+			{
+				MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+				if (port != null)
+					port.ResetFlowControlCounts();
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.OutputBreakCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int InputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (UnderlyingIOIsSerialPort)
+				{
+					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.InputBreakCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ResetBreakCounts()
+		{
+			AssertNotDisposed();
+
+			if (UnderlyingIOIsSerialPort)
+			{
+				MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+				if (port != null)
+					port.ResetBreakCounts();
+			}
 		}
 
 		#endregion

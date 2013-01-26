@@ -64,7 +64,7 @@ namespace YAT.Controller
 		private static readonly string[] Logo =
 		{
 			ApplicationInfo.ProductNameLong + ".",
-			"Operate and debug serial communications.",
+			"Operate, test and debug serial communications.",
 			"Supports RS-232/422/423/485...",
 			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
 			"",
@@ -271,7 +271,7 @@ namespace YAT.Controller
 			{
 				mainResult = MainResult.Success;
 				showLogo = true;
-				showView = !runFromConsole;
+				showView = true; // By default, start YAT with view.
 				showHelp = false;
 			}
 			// Prio 1 = Invalid:
@@ -279,7 +279,7 @@ namespace YAT.Controller
 			{
 				mainResult = MainResult.CommandLineError;
 				showLogo = true;
-				showView = !runFromConsole;
+				showView = false; // YAT will not be started, instead the help will be shown.
 				showHelp = true;
 			}
 			// Prio 2 = Valid:
@@ -294,10 +294,10 @@ namespace YAT.Controller
 			// Show help or run application.
 			if (showHelp)
 			{
-				if (showView)
-					ShowMessageBoxHelp(showLogo);
-				else
+				if (runFromConsole)
 					ShowConsoleHelp(showLogo);
+				else
+					ShowMessageBoxHelp(showLogo);
 			}
 			else
 			{

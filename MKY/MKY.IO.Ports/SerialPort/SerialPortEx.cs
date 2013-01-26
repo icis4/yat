@@ -36,13 +36,12 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Text;
 using System.Threading;
+
+using MKY.Diagnostics;
 
 #endregion
 
@@ -75,9 +74,14 @@ namespace MKY.IO.Ports
 		// Fields
 		//==========================================================================================
 
+		private SerialPortControlPinCounts controlPinCounts;
+
 		private bool inputBreak;
 		private bool inputBreakSignal;
 		private object inputBreakSyncObj = new object();
+
+		private int outputBreakCount;
+		private int inputBreakCount;
 
 		#endregion
 
@@ -107,7 +111,7 @@ namespace MKY.IO.Ports
 		/// of a <see cref="System.IO.Ports.SerialPort"/> object.
 		/// </summary>
 		/// <remarks>
-		/// Attention: No event is fired if the RTS or DTR line is changed.
+		/// Attention: No event is fired if the RFR or DTR line is changed.
 		/// </remarks>
 		public new event SerialPinChangedEventHandler PinChanged;
 
@@ -371,13 +375,13 @@ namespace MKY.IO.Ports
 				{
 					base.Handshake = value;
 					OnPortSettingsChanged(new EventArgs());
-					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
 			}
 		}
 
-		private bool HandshakeIsNotUsingRequestToSend
+		private bool HandshakeIsNotUsingRts
 		{
 			get
 			{
@@ -419,18 +423,22 @@ namespace MKY.IO.Ports
 				base.Handshake = (HandshakeEx)value.Handshake;
 
 				OnPortSettingsChanged(new EventArgs());
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the Request to Send (RTS) signal
+		/// Gets or sets a value indicating whether the RTS (Request To Send) signal
 		/// is enabled during serial communication.
 		/// </summary>
 		/// <remarks>
-		/// Attention: Different than <see cref="System.IO.Ports.SerialPort.RtsEnable()"/>
-		/// this property fires an <see cref="PinChanged"/> event if the value changes.
+		/// Attention:
+		/// Different than <see cref="System.IO.Ports.SerialPort.RtsEnable()"/> this
+		/// property fires an <see cref="PinChanged"/> event if the value changes.
+		/// 
+		/// Also note that there is a synonym <see cref="RfrEnable"/> which now is
+		/// the official name of the RTS signal.
 		/// </remarks>
 		public new bool RtsEnable
 		{
@@ -439,7 +447,7 @@ namespace MKY.IO.Ports
 				AssertNotDisposed();
 
 				// Needed to prevent System.InvalidOperationException in case RTS is in use.
-				if (HandshakeIsNotUsingRequestToSend)
+				if (HandshakeIsNotUsingRts)
 					return (base.RtsEnable);
 				else
 					return (true);
@@ -449,24 +457,42 @@ namespace MKY.IO.Ports
 				AssertNotDisposed();
 
 				// Needed to prevent System.InvalidOperationException in case RTS is in use.
-				if (HandshakeIsNotUsingRequestToSend)
+				if (HandshakeIsNotUsingRts)
 				{
-					if (value != base.RtsEnable)
+					if (base.RtsEnable != value)
 					{
 						base.RtsEnable = value;
-						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+
+						if (!base.RtsEnable)
+							Interlocked.Increment(ref this.controlPinCounts.RfrDisableCount);
+
+						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 					}
 				}
 			}
 		}
 
 		/// <summary>
-		/// Toggles the RTS (Request To Send) control line.
+		/// Gets or sets a value indicating whether the RFR (Ready For Receiving) signal
+		/// is enabled during serial communication.
 		/// </summary>
-		public virtual void ToggleRts()
+		/// <remarks>
+		/// Note that there is a synonym <see cref="RtsEnable"/> which is the former
+		/// name of the RFR signal.
+		/// </remarks>
+		public bool RfrEnable
+		{
+			get { return (RtsEnable); }
+			set { RtsEnable = value;  }
+		}
+
+		/// <summary>
+		/// Toggles the RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// </summary>
+		public virtual void ToggleRfr()
 		{
 			AssertNotDisposed();
-			this.RtsEnable = !this.RtsEnable;
+			this.RfrEnable = !this.RfrEnable;
 		}
 
 		/// <summary>
@@ -487,9 +513,13 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.DtrEnable)
+				if (base.DtrEnable != value)
 				{
 					base.DtrEnable = value;
+
+					if (!base.DtrEnable)
+						Interlocked.Increment(ref this.controlPinCounts.DtrDisableCount);
+
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
 			}
@@ -515,18 +545,51 @@ namespace MKY.IO.Ports
 
 				SerialPortControlPins pins = new SerialPortControlPins();
 
-				if (HandshakeIsNotUsingRequestToSend)
-					pins.Rts = RtsEnable; // 'RtsEnable' must not be accessed if it is used by the base class!
+				if (HandshakeIsNotUsingRts)
+					pins.Rfr = RfrEnable; // 'RfrEnable' must not be accessed if it is used by the base class!
 				else
-					pins.Rts = true;
+					pins.Rfr = true;
 
-				pins.Cts = CtsHolding;
 				pins.Dtr = DtrEnable;
-				pins.Dsr = DsrHolding;
-				pins.Dcd = CDHolding;
+
+				if (IsOpen) // Ensure that incoming signals are only retrieved while port is open.
+				{
+					pins.Cts = CtsHolding;
+					pins.Dsr = DsrHolding;
+					pins.Dcd = CDHolding;
+				}
 
 				return (pins);
 			}
+		}
+
+		/// <summary>
+		/// Serial port control pin counts.
+		/// </summary>
+		public virtual SerialPortControlPinCounts ControlPinCounts
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.controlPinCounts);
+			}
+		}
+
+		/// <summary>
+		/// Resets the control pin counts.
+		/// </summary>
+		public virtual void ResetControlPinCounts()
+		{
+			AssertNotDisposed();
+
+			this.controlPinCounts.Reset();
+
+			// Fire the event even though just the count changed.
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Cts));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dsr));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dcd));
 		}
 
 		/// <summary>
@@ -556,9 +619,13 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (value != BreakState)
+				if (BreakState != value)
 				{
 					BreakState = value;
+
+					if (!BreakState)
+						Interlocked.Increment(ref this.outputBreakCount);
+
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 				}
 			}
@@ -571,6 +638,45 @@ namespace MKY.IO.Ports
 		{
 			AssertNotDisposed();
 			OutputBreak = !OutputBreak;
+		}
+
+		/// <summary>
+		/// Returns the number of output breaks.
+		/// </summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.outputBreakCount);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of input breaks.
+		/// </summary>
+		public virtual int InputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.inputBreakCount);
+			}
+		}
+
+		/// <summary>
+		/// Resets the break counts.
+		/// </summary>
+		public virtual void ResetBreakCounts()
+		{
+			AssertNotDisposed();
+
+			Interlocked.Exchange(ref this.outputBreakCount, 0);
+			Interlocked.Exchange(ref this.inputBreakCount, 0);
+
+			// Fire the event even though just the count changed.
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
+			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.InputBreak));
 		}
 
 		#endregion
@@ -631,7 +737,7 @@ namespace MKY.IO.Ports
 				base.Open();
 #endif
 				OnOpened(new EventArgs());
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 
@@ -699,7 +805,7 @@ namespace MKY.IO.Ports
 				base.Close();
 #endif
 				OnClosed(new EventArgs());
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 			}
@@ -769,13 +875,51 @@ namespace MKY.IO.Ports
 
 		private void base_PinChanged(object sender, System.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (e.EventType == System.IO.Ports.SerialPinChange.Break)
+			try // Access to pins may lead to exceptions when port is about to be closed.
 			{
-				lock (this.inputBreakSyncObj)
+				switch (e.EventType)
 				{
-					this.inputBreak = true;
-					this.inputBreakSignal = true;
+					case System.IO.Ports.SerialPinChange.CtsChanged:
+					{
+						if (IsOpen && !CtsHolding)
+							Interlocked.Increment(ref this.controlPinCounts.CtsDisableCount);
+
+						break;
+					}
+
+					case System.IO.Ports.SerialPinChange.DsrChanged:
+					{
+						if (IsOpen && !DsrHolding)
+							Interlocked.Increment(ref this.controlPinCounts.DsrDisableCount);
+
+						break;
+					}
+
+					case System.IO.Ports.SerialPinChange.CDChanged:
+					{
+						if (IsOpen && CDHolding) // Count signals!
+							Interlocked.Increment(ref this.controlPinCounts.DcdCount);
+
+						break;
+					}
+
+					case System.IO.Ports.SerialPinChange.Break:
+					{
+						lock (this.inputBreakSyncObj)
+						{
+							this.inputBreak = true;
+							this.inputBreakSignal = true;
+						}
+
+						Interlocked.Increment(ref this.inputBreakCount);
+
+						break;
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex);
 			}
 
 			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));

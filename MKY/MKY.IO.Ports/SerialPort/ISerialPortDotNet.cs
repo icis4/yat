@@ -58,7 +58,7 @@ namespace MKY.IO.Ports
 		/// of a <see cref="System.IO.Ports.SerialPort"/> object.
 		/// </summary>
 		/// <remarks>
-		/// Attention: No event is fired if the RTS or DTR line is changed.
+		/// Attention: No event is fired if the RFR/RTS or DTR line is changed.
 		/// </remarks>
 		event SerialPinChangedEventHandler PinChanged;
 
@@ -181,7 +181,7 @@ namespace MKY.IO.Ports
 		System.IO.Ports.Handshake Handshake { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the Request to Send (RTS) signal
+		/// Gets or sets a value indicating whether the Request To Send (RTS) signal
 		/// is enabled during serial communication.
 		/// </summary>
 		/// <value>

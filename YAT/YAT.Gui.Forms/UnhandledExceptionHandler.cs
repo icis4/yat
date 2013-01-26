@@ -32,6 +32,8 @@ using System.Windows.Forms;
 
 using MKY.Windows.Forms;
 
+using YAT.Utilities;
+
 #endregion
 
 namespace YAT.Gui.Forms
@@ -81,7 +83,7 @@ namespace YAT.Gui.Forms
 			if (!staticHandleExceptions)
 				return (UnhandledExceptionResult.Continue);
 
-			string productName = Application.ProductName;
+			string productName = ApplicationInfo.ProductName;
 
 			StringBuilder titleBuilder = new StringBuilder(productName);
 			{

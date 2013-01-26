@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace MKY.IO.Serial.SerialPort
 {
@@ -67,16 +66,16 @@ namespace MKY.IO.Serial.SerialPort
 	{
 		#region String Definitions
 
-		private const string             ManualHardware_string = "Manual Hardware (RTS/CTS)";
-		private const string             ManualHardware_stringShort = "Manual RTS/CTS";
+		private const string             ManualHardware_string = "Manual Hardware (RFR/CTS)";
+		private const string             ManualHardware_stringShort = "Manual RFR/CTS";
 		private static readonly string[] ManualHardware_stringAlternatives = new string[] { "Manual Hardware", "ManualHardware", "Manual Hard", "ManualHard", "Manual HW", "ManualHW", "MHW", "MH" };
 
 		private const string             ManualSoftware_string = "Manual Software (XOn/XOff)";
 		private const string             ManualSoftware_stringShort = "Manual XOn/XOff";
 		private static readonly string[] ManualSoftware_stringAlternatives = new string[] { "Manual Software", "ManualSoftware", "Manual Soft", "ManualSoft", "Manual SW", "ManualSW", "MSW", "MS" };
 
-		private const string             ManualCombined_string = "Manual Combined (RTS/CTS + XOn/XOff)";
-		private const string             ManualCombined_stringShort = "Manual RTS/CTS + XOn/XOff";
+		private const string             ManualCombined_string = "Manual Combined (RFR/CTS + XOn/XOff)";
+		private const string             ManualCombined_stringShort = "Manual RFR/CTS + XOn/XOff";
 		private static readonly string[] ManualCombined_stringAlternatives = new string[] { "Manual Combined", "ManualCombined", "Manual Combi", "ManualCombi", "Manual C", "ManualC", "MHW", "MH" };
 
 		private const string             RS485_string = "RS-485 Transceiver Control";

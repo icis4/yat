@@ -58,6 +58,31 @@ namespace MKY.IO.Serial.SerialPort
 		/// Toggles the input XOn/XOff state.
 		/// </summary>
 		void ToggleInputXOnXOff();
+
+		/// <summary>
+		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signalling.
+		/// </summary>
+		int SentXOnCount { get; }
+
+		/// <summary>
+		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signalling.
+		/// </summary>
+		int SentXOffCount { get; }
+
+		/// <summary>
+		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signalling.
+		/// </summary>
+		int ReceivedXOnCount { get; }
+
+		/// <summary>
+		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signalling.
+		/// </summary>
+		int ReceivedXOffCount { get; }
+
+		/// <summary>
+		/// Resets the XOn/XOff signalling counts.
+		/// </summary>
+		void ResetXOnXOffCounts();
 	}
 }
 

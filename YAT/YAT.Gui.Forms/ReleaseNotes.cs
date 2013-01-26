@@ -29,6 +29,8 @@ using System.Windows.Forms;
 
 using MKY.IO;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -51,7 +53,7 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			// Get file path depending on development or installation
+			// Get file path depending on development or installation:
 			string filePath;
 			switch (Path.GetFileName(Application.StartupPath))
 			{
@@ -65,12 +67,12 @@ namespace YAT.Gui.Forms
 					break;
 			}
 
-			// Set form title
-			string text = Application.ProductName;
+			// Set form title:
+			string text = ApplicationInfo.ProductName;
 			text += " Release Notes";
 			Text = text;
 
-			// Open and fill release notes
+			// Open and fill release notes:
 			textBox_ReleaseNotes.Text = "";
 			if (File.Exists(filePath))
 			{
