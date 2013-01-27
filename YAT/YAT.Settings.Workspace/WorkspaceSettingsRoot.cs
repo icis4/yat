@@ -113,7 +113,7 @@ namespace YAT.Settings.Workspace
 			get { return (this.autoSaved); }
 			set
 			{
-				if (value != this.autoSaved)
+				if (this.autoSaved != value)
 				{
 					this.autoSaved = value;
 
@@ -139,7 +139,7 @@ namespace YAT.Settings.Workspace
 					this.workspace = value;
 					AttachNode(this.workspace);
 				}
-				else if (value != this.workspace)
+				else if (this.workspace != value)
 				{
 					WorkspaceSettings old = this.workspace;
 					this.workspace = value;

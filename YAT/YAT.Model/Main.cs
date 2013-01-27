@@ -196,7 +196,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.guid);
 			}
 		}
@@ -206,7 +207,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.startArgs);
 			}
 		}
@@ -219,7 +221,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.workspace != null)
 					return (this.workspace.AutoName);
@@ -236,6 +238,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.workspace);
 			}
 		}

@@ -210,7 +210,7 @@ namespace MKY.Test.Settings
 						this.childLevel2A = value;
 						AttachNode(this.childLevel2A);
 					}
-					else if (value != this.childLevel2A)
+					else if (this.childLevel2A != value)
 					{
 						TestTreeChildLevel2 old = this.childLevel2A;
 						this.childLevel2A = value;
@@ -236,7 +236,7 @@ namespace MKY.Test.Settings
 						this.childLevel2B = value;
 						AttachNode(this.childLevel2B);
 					}
-					else if (value != this.childLevel2B)
+					else if (this.childLevel2B != value)
 					{
 						TestTreeChildLevel2 old = this.childLevel2B;
 						this.childLevel2B = value;
@@ -359,7 +359,7 @@ namespace MKY.Test.Settings
 						this.childLevel1 = value;
 						AttachNode(this.childLevel1);
 					}
-					else if (value != this.childLevel1)
+					else if (this.childLevel1 != value)
 					{
 						TestTreeChildLevel1 old = this.childLevel1;
 						this.childLevel1 = value;

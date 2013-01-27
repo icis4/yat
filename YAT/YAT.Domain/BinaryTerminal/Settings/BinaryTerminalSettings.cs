@@ -107,7 +107,7 @@ namespace YAT.Domain.Settings
 			get { return (this.separateTxRxDisplay); }
 			set
 			{
-				if (value != this.separateTxRxDisplay)
+				if (this.separateTxRxDisplay != value)
 				{
 					this.separateTxRxDisplay = value;
 					SetChanged();
@@ -132,7 +132,7 @@ namespace YAT.Domain.Settings
 					this.txDisplay = value;
 					AttachNode(this.txDisplay);
 				}
-				else if (value != this.txDisplay)
+				else if (this.txDisplay != value)
 				{
 					BinaryDisplaySettings old = this.txDisplay;
 					this.txDisplay = value;
@@ -164,7 +164,7 @@ namespace YAT.Domain.Settings
 					this.rxDisplay = value;
 					AttachNode(this.rxDisplay);
 				}
-				else if (value != this.rxDisplay)
+				else if (this.rxDisplay != value)
 				{
 					BinaryDisplaySettings old = this.rxDisplay;
 					this.rxDisplay = value;

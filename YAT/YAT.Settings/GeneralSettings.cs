@@ -105,7 +105,7 @@ namespace YAT.Settings
 			get { return (this.autoOpenWorkspace); }
 			set
 			{
-				if (value != this.autoOpenWorkspace)
+				if (this.autoOpenWorkspace != value)
 				{
 					this.autoOpenWorkspace = value;
 					SetChanged();
@@ -124,7 +124,7 @@ namespace YAT.Settings
 			get { return (this.autoSaveWorkspace); }
 			set
 			{
-				if (value != this.autoSaveWorkspace)
+				if (this.autoSaveWorkspace != value)
 				{
 					this.autoSaveWorkspace = value;
 					SetChanged();
@@ -139,7 +139,7 @@ namespace YAT.Settings
 			get { return (this.useRelativePaths); }
 			set
 			{
-				if (value != this.useRelativePaths)
+				if (this.useRelativePaths != value)
 				{
 					this.useRelativePaths = value;
 					SetChanged();
@@ -154,7 +154,7 @@ namespace YAT.Settings
 			get { return (this.detectSerialPortsInUse); }
 			set
 			{
-				if (value != this.detectSerialPortsInUse)
+				if (this.detectSerialPortsInUse != value)
 				{
 					this.detectSerialPortsInUse = value;
 					SetChanged();

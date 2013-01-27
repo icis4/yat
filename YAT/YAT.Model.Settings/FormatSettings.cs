@@ -107,7 +107,7 @@ namespace YAT.Model.Settings
 			get { return (this.font); }
 			set
 			{
-				if (value != this.font)
+				if (this.font != value)
 				{
 					this.font = value;
 					SetChanged();
@@ -122,7 +122,7 @@ namespace YAT.Model.Settings
 			get { return (this.font.Font); }
 			set
 			{
-				if (value != this.font.Font)
+				if (this.font.Font != value)
 				{
 					this.font.Font = value;
 					SetChanged();
@@ -137,7 +137,7 @@ namespace YAT.Model.Settings
 			get { return (this.txDataFormat); }
 			set
 			{
-				if (value != this.txDataFormat)
+				if (this.txDataFormat != value)
 				{
 					this.txDataFormat = value;
 					SetChanged();
@@ -152,7 +152,7 @@ namespace YAT.Model.Settings
 			get { return (this.txControlFormat); }
 			set
 			{
-				if (value != this.txControlFormat)
+				if (this.txControlFormat != value)
 				{
 					this.txControlFormat = value;
 					SetChanged();
@@ -167,7 +167,7 @@ namespace YAT.Model.Settings
 			get { return (this.rxDataFormat); }
 			set
 			{
-				if (value != this.rxDataFormat)
+				if (this.rxDataFormat != value)
 				{
 					this.rxDataFormat = value;
 					SetChanged();
@@ -182,7 +182,7 @@ namespace YAT.Model.Settings
 			get { return (this.rxControlFormat); }
 			set
 			{
-				if (value != this.rxControlFormat)
+				if (this.rxControlFormat != value)
 				{
 					this.rxControlFormat = value;
 					SetChanged();
@@ -197,7 +197,7 @@ namespace YAT.Model.Settings
 			get { return (this.timeStampFormat); }
 			set
 			{
-				if (value != this.timeStampFormat)
+				if (this.timeStampFormat != value)
 				{
 					this.timeStampFormat = value;
 					SetChanged();
@@ -212,7 +212,7 @@ namespace YAT.Model.Settings
 			get { return (this.lengthFormat); }
 			set
 			{
-				if (value != this.lengthFormat)
+				if (this.lengthFormat != value)
 				{
 					this.lengthFormat = value;
 					SetChanged();
@@ -227,7 +227,7 @@ namespace YAT.Model.Settings
 			get { return (this.whiteSpacesFormat); }
 			set
 			{
-				if (value != this.whiteSpacesFormat)
+				if (this.whiteSpacesFormat != value)
 				{
 					this.whiteSpacesFormat = value;
 					SetChanged();
@@ -242,7 +242,7 @@ namespace YAT.Model.Settings
 			get { return (this.errorFormat); }
 			set
 			{
-				if (value != this.errorFormat)
+				if (this.errorFormat != value)
 				{
 					this.errorFormat = value;
 					SetChanged();

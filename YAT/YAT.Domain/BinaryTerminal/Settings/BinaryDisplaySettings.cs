@@ -87,7 +87,7 @@ namespace YAT.Domain.Settings
 			get { return (this.lengthLineBreak); }
 			set
 			{
-				if (value != this.lengthLineBreak)
+				if (this.lengthLineBreak != value)
 				{
 					this.lengthLineBreak = value;
 					SetChanged();
@@ -102,7 +102,7 @@ namespace YAT.Domain.Settings
 			get { return (this.sequenceLineBreak); }
 			set
 			{
-				if (value != this.sequenceLineBreak)
+				if (this.sequenceLineBreak != value)
 				{
 					this.sequenceLineBreak = value;
 					SetChanged();
@@ -117,7 +117,7 @@ namespace YAT.Domain.Settings
 			get { return (this.timedLineBreak); }
 			set
 			{
-				if (value != this.timedLineBreak)
+				if (this.timedLineBreak != value)
 				{
 					this.timedLineBreak = value;
 					SetChanged();

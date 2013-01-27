@@ -80,7 +80,7 @@ namespace YAT.Model.Settings
 			get { return (this.selectedPage); }
 			set
 			{
-				if (value != this.selectedPage)
+				if (this.selectedPage != value)
 				{
 					this.selectedPage = value;
 					SetChanged();

@@ -96,7 +96,7 @@ namespace YAT.Gui.Controls
 			get { return (this.autoOpen); }
 			set
 			{
-				if (value != this.autoOpen)
+				if (this.autoOpen != value)
 				{
 					this.autoOpen = value;
 					SetControls();

@@ -202,7 +202,7 @@ namespace YAT.Gui.Controls
 			get { return (this.repositoryType); }
 			set
 			{
-				if (value != this.repositoryType)
+				if (this.repositoryType != value)
 				{
 					this.repositoryType = value;
 					SetControls();
@@ -219,7 +219,7 @@ namespace YAT.Gui.Controls
 			get { return (this.activityState); }
 			set
 			{
-				if (value != this.activityState)
+				if (this.activityState != value)
 				{
 					this.activityState = value;
 					SetControls();
@@ -236,7 +236,7 @@ namespace YAT.Gui.Controls
 			get { return (this.maxLineCount); }
 			set
 			{
-				if (value != this.maxLineCount)
+				if (this.maxLineCount != value)
 				{
 					this.maxLineCount = value;
 					Reload();
@@ -251,7 +251,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (value != this.formatSettings)
+				if (this.formatSettings != value)
 				{
 					this.formatSettings = value;
 					SetFormatDependentControls();
@@ -268,7 +268,7 @@ namespace YAT.Gui.Controls
 			get { return (this.showLineNumbers); }
 			set
 			{
-				if (value != this.showLineNumbers)
+				if (this.showLineNumbers != value)
 				{
 					this.showLineNumbers = value;
 					SetLineNumbersControls();
@@ -285,7 +285,7 @@ namespace YAT.Gui.Controls
 			get { return (this.showTimeStatus); }
 			set
 			{
-				if (value != this.showTimeStatus)
+				if (this.showTimeStatus != value)
 				{
 					this.showTimeStatus = value;
 					SetTimeStatusControls();
@@ -302,7 +302,7 @@ namespace YAT.Gui.Controls
 			get { return (this.connectTime); }
 			set
 			{
-				if (value != this.connectTime)
+				if (this.connectTime != value)
 				{
 					this.connectTime = value;
 					SetTimeStatusControls();
@@ -319,7 +319,7 @@ namespace YAT.Gui.Controls
 			get { return (this.totalConnectTime); }
 			set
 			{
-				if (value != this.totalConnectTime)
+				if (this.totalConnectTime != value)
 				{
 					this.totalConnectTime = value;
 					SetTimeStatusControls();
@@ -336,7 +336,7 @@ namespace YAT.Gui.Controls
 			get { return (this.showCountAndRateStatus); }
 			set
 			{
-				if (value != this.showCountAndRateStatus)
+				if (this.showCountAndRateStatus != value)
 				{
 					this.showCountAndRateStatus = value;
 					SetCountAndRateStatusControls();
@@ -353,7 +353,7 @@ namespace YAT.Gui.Controls
 			get { return (this.txByteCountStatus); }
 			set
 			{
-				if (value != this.txByteCountStatus)
+				if (this.txByteCountStatus != value)
 				{
 					this.txByteCountStatus = value;
 					SetCountAndRateStatusControls();
@@ -370,7 +370,7 @@ namespace YAT.Gui.Controls
 			get { return (this.txLineCountStatus); }
 			set
 			{
-				if (value != this.txLineCountStatus)
+				if (this.txLineCountStatus != value)
 				{
 					this.txLineCountStatus = value;
 					SetCountAndRateStatusControls();
@@ -387,7 +387,7 @@ namespace YAT.Gui.Controls
 			get { return (this.rxByteCountStatus); }
 			set
 			{
-				if (value != this.rxByteCountStatus)
+				if (this.rxByteCountStatus != value)
 				{
 					this.rxByteCountStatus = value;
 					SetCountAndRateStatusControls();
@@ -404,7 +404,7 @@ namespace YAT.Gui.Controls
 			get { return (this.rxLineCountStatus); }
 			set
 			{
-				if (value != this.rxLineCountStatus)
+				if (this.rxLineCountStatus != value)
 				{
 					this.rxLineCountStatus = value;
 					SetCountAndRateStatusControls();
@@ -421,7 +421,7 @@ namespace YAT.Gui.Controls
 			get { return (this.txByteRateStatus); }
 			set
 			{
-				if (value != this.txByteRateStatus)
+				if (this.txByteRateStatus != value)
 				{
 					this.txByteRateStatus = value;
 					SetCountAndRateStatusControls();
@@ -439,7 +439,7 @@ namespace YAT.Gui.Controls
 			get { return (this.txLineRateStatus); }
 			set
 			{
-				if (value != this.txLineRateStatus)
+				if (this.txLineRateStatus != value)
 				{
 					this.txLineRateStatus = value;
 					SetCountAndRateStatusControls();
@@ -457,7 +457,7 @@ namespace YAT.Gui.Controls
 			get { return (this.rxByteRateStatus); }
 			set
 			{
-				if (value != this.rxByteRateStatus)
+				if (this.rxByteRateStatus != value)
 				{
 					this.rxByteRateStatus = value;
 					SetCountAndRateStatusControls();
@@ -475,7 +475,7 @@ namespace YAT.Gui.Controls
 			get { return (this.rxLineRateStatus); }
 			set
 			{
-				if (value != this.rxLineRateStatus)
+				if (this.rxLineRateStatus != value)
 				{
 					this.rxLineRateStatus = value;
 					SetCountAndRateStatusControls();

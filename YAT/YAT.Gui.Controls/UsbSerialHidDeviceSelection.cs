@@ -97,7 +97,7 @@ namespace YAT.Gui.Controls
 				// devices are available, there is always a device selected.
 				if (value != null)
 				{
-					if (value != this.deviceInfo)
+					if (this.deviceInfo != value)
 					{
 						this.deviceInfo = value;
 						SetControls();

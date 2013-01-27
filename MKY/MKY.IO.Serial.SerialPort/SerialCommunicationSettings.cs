@@ -109,7 +109,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.baudRate); }
 			set
 			{
-				if (value != this.baudRate)
+				if (this.baudRate != value)
 				{
 					this.baudRate = value;
 					SetChanged();
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.dataBits); }
 			set
 			{
-				if (value != this.dataBits)
+				if (this.dataBits != value)
 				{
 					this.dataBits = value;
 					SetChanged();
@@ -139,7 +139,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.parity); }
 			set
 			{
-				if (value != this.parity)
+				if (this.parity != value)
 				{
 					this.parity = value;
 					SetChanged();
@@ -154,7 +154,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.stopBits); }
 			set
 			{
-				if (value != this.stopBits)
+				if (this.stopBits != value)
 				{
 					this.stopBits = value;
 					SetChanged();
@@ -169,7 +169,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.flowControl); }
 			set
 			{
-				if (value != this.flowControl)
+				if (this.flowControl != value)
 				{
 					this.flowControl = value;
 					SetChanged();

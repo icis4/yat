@@ -355,6 +355,7 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.settings);
 			}
 		}
@@ -364,7 +365,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				switch (this.state)
 				{
@@ -386,7 +387,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				switch (this.state)
 				{
@@ -421,7 +422,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.port != null)
 					return (this.port.IsOpen);
@@ -435,7 +436,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (IsOpen)
 					return (!this.port.OutputBreak && !this.port.InputBreak);
@@ -449,7 +450,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (IsOpen)
 				{
@@ -505,6 +506,7 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.settings.Communication.FlowControlUsesXOnXOff);
 			}
 		}
@@ -649,6 +651,7 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.port);
 			}
 		}

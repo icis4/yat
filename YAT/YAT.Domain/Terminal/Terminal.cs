@@ -330,11 +330,13 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.terminalSettings);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				AttachTerminalSettings(value);
 				ApplyTerminalSettings();
 			}
@@ -346,6 +348,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.IsStopped);
 			}
 		}
@@ -356,6 +359,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.IsStarted);
 			}
 		}
@@ -366,6 +370,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.IsConnected);
 			}
 		}
@@ -376,6 +381,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.IsOpen);
 			}
 		}
@@ -386,6 +392,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.IsReadyToSend);
 			}
 		}
@@ -396,6 +403,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.UnderlyingIOProvider);
 			}
 		}
@@ -406,6 +414,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.rawTerminal.UnderlyingIOInstance);
 			}
 		}
@@ -974,6 +983,7 @@ namespace YAT.Domain
 		public virtual void ClearRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
+
 			this.rawTerminal.ClearRepository(repository);
 		}
 
@@ -1015,6 +1025,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ClearMyRepository(RepositoryType repository)
 		{
+			AssertNotDisposed();
+
 			lock (this.repositorySyncObj)
 			{
 				switch (repository)
@@ -1122,6 +1134,7 @@ namespace YAT.Domain
 		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
+
 			return (this.rawTerminal.RepositoryToElements(repository));
 		}
 

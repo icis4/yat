@@ -148,7 +148,7 @@ namespace YAT.Model.Settings
 			get { return (this.terminalType); }
 			set
 			{
-				if (value != this.terminalType)
+				if (this.terminalType != value)
 				{
 					this.terminalType = value;
 					SetChanged();
@@ -163,7 +163,7 @@ namespace YAT.Model.Settings
 			get { return (this.ioType); }
 			set
 			{
-				if (value != this.ioType)
+				if (this.ioType != value)
 				{
 					this.ioType = value;
 					SetChanged();
@@ -178,7 +178,7 @@ namespace YAT.Model.Settings
 			get { return (this.serialPortId); }
 			set
 			{
-				if (value != this.serialPortId)
+				if (this.serialPortId != value)
 				{
 					this.serialPortId = value;
 					SetChanged();
@@ -203,7 +203,7 @@ namespace YAT.Model.Settings
 					this.serialPortCommunication = value;
 					AttachNode(this.serialPortCommunication);
 				}
-				else if (value != this.serialPortCommunication)
+				else if (this.serialPortCommunication != value)
 				{
 					MKY.IO.Serial.SerialPort.SerialCommunicationSettings old = this.serialPortCommunication;
 					this.serialPortCommunication = value;
@@ -219,7 +219,7 @@ namespace YAT.Model.Settings
 			get { return (this.serialPortAutoReopen); }
 			set
 			{
-				if (value != this.serialPortAutoReopen)
+				if (this.serialPortAutoReopen != value)
 				{
 					this.serialPortAutoReopen = value;
 					SetChanged();
@@ -234,7 +234,7 @@ namespace YAT.Model.Settings
 			get { return (this.socketRemoteHost); }
 			set
 			{
-				if (value != this.socketRemoteHost)
+				if (this.socketRemoteHost != value)
 				{
 					this.socketRemoteHost = value;
 					SetChanged();
@@ -249,7 +249,7 @@ namespace YAT.Model.Settings
 			get { return (this.socketRemoteTcpPort); }
 			set
 			{
-				if (value != this.socketRemoteTcpPort)
+				if (this.socketRemoteTcpPort != value)
 				{
 					this.socketRemoteTcpPort = value;
 					SetChanged();
@@ -264,7 +264,7 @@ namespace YAT.Model.Settings
 			get { return (this.socketRemoteUdpPort); }
 			set
 			{
-				if (value != this.socketRemoteUdpPort)
+				if (this.socketRemoteUdpPort != value)
 				{
 					this.socketRemoteUdpPort = value;
 					SetChanged();
@@ -279,7 +279,7 @@ namespace YAT.Model.Settings
 			get { return (this.socketLocalInterface); }
 			set
 			{
-				if (value != this.socketLocalInterface)
+				if (this.socketLocalInterface != value)
 				{
 					this.socketLocalInterface = value;
 					SetChanged();
@@ -331,7 +331,7 @@ namespace YAT.Model.Settings
 			get { return (this.socketLocalTcpPort); }
 			set
 			{
-				if (value != this.socketLocalTcpPort)
+				if (this.socketLocalTcpPort != value)
 				{
 					this.socketLocalTcpPort = value;
 					SetChanged();
@@ -346,7 +346,7 @@ namespace YAT.Model.Settings
 			get { return (this.socketLocalUdpPort); }
 			set
 			{
-				if (value != this.socketLocalUdpPort)
+				if (this.socketLocalUdpPort != value)
 				{
 					this.socketLocalUdpPort = value;
 					SetChanged();
@@ -361,7 +361,7 @@ namespace YAT.Model.Settings
 			get { return (this.tcpClientAutoReconnect); }
 			set
 			{
-				if (value != this.tcpClientAutoReconnect)
+				if (this.tcpClientAutoReconnect != value)
 				{
 					this.tcpClientAutoReconnect = value;
 					SetChanged();
@@ -376,7 +376,7 @@ namespace YAT.Model.Settings
 			get { return (this.usbSerialHidDeviceInfo); }
 			set
 			{
-				if (value != this.usbSerialHidDeviceInfo)
+				if (this.usbSerialHidDeviceInfo != value)
 				{
 					this.usbSerialHidDeviceInfo = value;
 					SetChanged();
@@ -391,7 +391,7 @@ namespace YAT.Model.Settings
 			get { return (this.usbSerialHidAutoOpen); }
 			set
 			{
-				if (value != this.usbSerialHidAutoOpen)
+				if (this.usbSerialHidAutoOpen != value)
 				{
 					this.usbSerialHidAutoOpen = value;
 					SetChanged();
@@ -406,7 +406,7 @@ namespace YAT.Model.Settings
 			get { return (this.startTerminal); }
 			set
 			{
-				if (value != this.startTerminal)
+				if (this.startTerminal != value)
 				{
 					this.startTerminal = value;
 					SetChanged();

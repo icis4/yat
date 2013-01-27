@@ -187,7 +187,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.hostType); }
 			set
 			{
-				if (value != this.hostType)
+				if (this.hostType != value)
 				{
 					this.hostType = value;
 					SetChanged();
@@ -203,7 +203,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.remoteHost); }
 			set
 			{
-				if (value != this.remoteHost)
+				if (this.remoteHost != value)
 				{
 					this.remoteHost = value;
 					SetChanged();
@@ -266,7 +266,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.remoteTcpPort); }
 			set
 			{
-				if (value != this.remoteTcpPort)
+				if (this.remoteTcpPort != value)
 				{
 					this.remoteTcpPort = value;
 					SetChanged();
@@ -281,7 +281,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.remoteUdpPort); }
 			set
 			{
-				if (value != this.remoteUdpPort)
+				if (this.remoteUdpPort != value)
 				{
 					this.remoteUdpPort = value;
 					SetChanged();
@@ -297,7 +297,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.localInterface); }
 			set
 			{
-				if (value != this.localInterface)
+				if (this.localInterface != value)
 				{
 					this.localInterface = value;
 					SetChanged();
@@ -360,7 +360,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.localTcpPort); }
 			set
 			{
-				if (value != this.localTcpPort)
+				if (this.localTcpPort != value)
 				{
 					this.localTcpPort = value;
 					SetChanged();
@@ -375,7 +375,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.localUdpPort); }
 			set
 			{
-				if (value != this.localUdpPort)
+				if (this.localUdpPort != value)
 				{
 					this.localUdpPort = value;
 					SetChanged();
@@ -390,7 +390,7 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.tcpClientAutoReconnect); }
 			set
 			{
-				if (value != this.tcpClientAutoReconnect)
+				if (this.tcpClientAutoReconnect != value)
 				{
 					this.tcpClientAutoReconnect = value;
 					SetChanged();

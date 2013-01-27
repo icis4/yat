@@ -227,7 +227,7 @@ namespace MKY.IO.Ports
 			get { return (this.name); }
 			set
 			{
-				if (value != this.name)
+				if (this.name != value)
 				{
 					SerialPortId id;
 					if (TryParseStandardPortName(value, out id))

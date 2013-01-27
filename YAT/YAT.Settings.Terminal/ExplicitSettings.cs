@@ -95,7 +95,7 @@ namespace YAT.Settings.Terminal
 			get { return (this.userName); }
 			set
 			{
-				if (value != this.userName)
+				if (this.userName != value)
 				{
 					this.userName = value;
 					SetChanged();
@@ -120,7 +120,7 @@ namespace YAT.Settings.Terminal
 					this.terminal = value;
 					AttachNode(this.terminal);
 				}
-				else if (value != this.terminal)
+				else if (this.terminal != value)
 				{
 					Domain.Settings.TerminalSettings old = this.terminal;
 					this.terminal = value;
@@ -146,7 +146,7 @@ namespace YAT.Settings.Terminal
 					this.predefinedCommand = value;
 					AttachNode(this.predefinedCommand);
 				}
-				else if (value != this.predefinedCommand)
+				else if (this.predefinedCommand != value)
 				{
 					Model.Settings.PredefinedCommandSettings old = this.predefinedCommand;
 					this.predefinedCommand = value;
@@ -172,7 +172,7 @@ namespace YAT.Settings.Terminal
 					this.format = value;
 					AttachNode(this.format);
 				}
-				else if (value != this.format)
+				else if (this.format != value)
 				{
 					Model.Settings.FormatSettings old = this.format;
 					this.format = value;
@@ -198,7 +198,7 @@ namespace YAT.Settings.Terminal
 					this.log = value;
 					AttachNode(this.log);
 				}
-				else if (value != this.log)
+				else if (this.log != value)
 				{
 					Log.Settings.LogSettings old = this.log;
 					this.log = value;

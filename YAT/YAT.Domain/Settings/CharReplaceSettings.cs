@@ -107,7 +107,7 @@ namespace YAT.Domain.Settings
 			get { return (this.replaceControlChars); }
 			set
 			{
-				if (value != this.replaceControlChars)
+				if (this.replaceControlChars != value)
 				{
 					this.replaceControlChars = value;
 					SetChanged();
@@ -122,7 +122,7 @@ namespace YAT.Domain.Settings
 			get { return (this.controlCharRadix); }
 			set
 			{
-				if (value != this.controlCharRadix)
+				if (this.controlCharRadix != value)
 				{
 					this.controlCharRadix = value;
 					SetChanged();
@@ -137,7 +137,7 @@ namespace YAT.Domain.Settings
 			get { return (this.replaceTab); }
 			set
 			{
-				if (value != this.replaceTab)
+				if (this.replaceTab != value)
 				{
 					this.replaceTab = value;
 					SetChanged();
@@ -152,7 +152,7 @@ namespace YAT.Domain.Settings
 			get { return (this.replaceSpace); }
 			set
 			{
-				if (value != this.replaceSpace)
+				if (this.replaceSpace != value)
 				{
 					this.replaceSpace = value;
 					SetChanged();

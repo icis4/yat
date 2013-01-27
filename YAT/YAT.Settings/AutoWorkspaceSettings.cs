@@ -83,7 +83,7 @@ namespace YAT.Settings
 			get { return (this.filePath); }
 			set
 			{
-				if (value != this.filePath)
+				if (this.filePath != value)
 				{
 					this.filePath = value;
 					SetChanged();

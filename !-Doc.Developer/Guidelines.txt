@@ -192,6 +192,9 @@ Inherited class
 		#endregion
 
 
+Call AssertNotDisposed() in every non-private member.
+Do not call AssertNotDisposed() in a simple get-property.
+
 Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
 
 
@@ -217,6 +220,19 @@ Variables
 ---------
 - Do not re-initialize fields with default value of respective type
 - Always initialize local variables
+
+
+Properties
+----------
+- Write..
+	if (this.<field> != value)
+	{
+		this.<field> = value;
+  ..instead of..
+	if (value != this.<field>)
+	{
+		this.<field> = value;
+  to improve readability and reduce the risk of copy-paste errors.
 
 
 Useful .NET classes

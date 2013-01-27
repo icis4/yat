@@ -227,7 +227,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.remoteIPAddress);
 			}
 		}
@@ -237,7 +238,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.remotePort);
 			}
 		}
@@ -247,7 +249,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.localPort);
 			}
 		}
@@ -257,7 +260,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Closed:
@@ -278,7 +282,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Opening:
@@ -299,7 +304,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Opened:
@@ -332,6 +338,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.socket);
 			}
 		}

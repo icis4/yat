@@ -225,6 +225,7 @@ namespace MKY.Time
 		public override string ToString()
 		{
 			AssertNotDisposed();
+
 			return (TimeSpanEx.FormatTimeSpan(TimeSpan, true));
 		}
 

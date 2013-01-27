@@ -171,7 +171,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.portId); }
 			set
 			{
-				if (value != this.portId)
+				if (this.portId != value)
 				{
 					this.portId = value;
 					SetChanged();
@@ -196,7 +196,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.communication = value;
 					AttachNode(this.communication);
 				}
-				else if (value != this.communication)
+				else if (this.communication != value)
 				{
 					SerialCommunicationSettings old = this.communication;
 					this.communication = value;
@@ -212,7 +212,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.autoReopen); }
 			set
 			{
-				if (value != this.autoReopen)
+				if (this.autoReopen != value)
 				{
 					this.autoReopen = value;
 					SetChanged();
@@ -227,7 +227,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.maxSendChunkSize); }
 			set
 			{
-				if (value != this.maxSendChunkSize)
+				if (this.maxSendChunkSize != value)
 				{
 					this.maxSendChunkSize = value;
 					SetChanged();
@@ -242,7 +242,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.noSendOnOutputBreak); }
 			set
 			{
-				if (value != this.noSendOnOutputBreak)
+				if (this.noSendOnOutputBreak != value)
 				{
 					this.noSendOnOutputBreak = value;
 					SetChanged();
@@ -257,7 +257,7 @@ namespace MKY.IO.Serial.SerialPort
 			get { return (this.noSendOnInputBreak); }
 			set
 			{
-				if (value != this.noSendOnInputBreak)
+				if (this.noSendOnInputBreak != value)
 				{
 					this.noSendOnInputBreak = value;
 					SetChanged();

@@ -73,12 +73,33 @@ namespace MKY.Test.IO
 		//==========================================================================================
 
 		/// <summary></summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesEmpty
+		{
+			get
+			{
+				// ---- Empty ----
+				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA	\todo: See below		RelativeB
+
+				// TS0: Empty relative path
+				yield return (new TestCaseDataSet(0,	0,	@"X:\MyDir",						@"X:\MyDir",						@"",								@""							));
+				yield return (new TestCaseDataSet(0,	1,	@"X:\MyDir",						@"X:\MyDir",						@"",								@""							));
+				yield return (new TestCaseDataSet(0,	2,	@"X:\MyDir",						@"X:\MyDir",						@"",								@""							));
+				yield return (new TestCaseDataSet(0,	3,	@"X:\MyDir\MyFile.abc",				@"X:\MyDir\MyFile.abc",				@"",								@""							));
+
+				// TS1: Empty absolute path
+				yield return (new TestCaseDataSet(1,	0,	@"",								@"",								@".",								@"."						));
+				yield return (new TestCaseDataSet(1,	1,	@"",								@"",								@".\MyFile2.abc",					@"."						));
+				yield return (new TestCaseDataSet(1,	2,	@"",								@"",								@".",								@".\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(1,	3,	@"",								@"",								@".\MyFile2.abc",					@".\MyFile1.abc"			));
+			}
+		}
+
+		/// <summary></summary>
 		private static IEnumerable<TestCaseDataSet> TestCasesBase
 		{
 			get
 			{
 				// ---- Local ----
-
 				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA	\todo: See below		RelativeB
 
 				// TS0: Local very-near relation
@@ -112,7 +133,6 @@ namespace MKY.Test.IO
 				yield return (new TestCaseDataSet(4,	3,	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1\MyFile1.abc"	));
 
 				// ---- Network ----
-
 				//									TS	TC	AbsoluteA											AbsoluteB											RelativeA							RelativeB
 
 				// TS5: Network very-near relation
@@ -377,6 +397,20 @@ namespace MKY.Test.IO
 		}
 
 		/// <summary>
+		/// AbsoluteA combined with RelativeA results in AbsoluteB.
+		/// </summary>
+		public static IEnumerable TestCasesCombineAEmpty
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesEmpty)
+				{
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, null));
+				}
+			}
+		}
+
+		/// <summary>
 		/// AbsoluteB combined with RelativeB results in AbsoluteA.
 		/// </summary>
 		public static IEnumerable TestCasesCombineB
@@ -384,6 +418,20 @@ namespace MKY.Test.IO
 			get
 			{
 				foreach (TestCaseDataSet s in TestCasesCombineBWithTrailingSeparatorAndAlternativeSeparator)
+				{
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, null, s.RelativeB));
+				}
+			}
+		}
+
+		/// <summary>
+		/// AbsoluteB combined with RelativeB results in AbsoluteA.
+		/// </summary>
+		public static IEnumerable TestCasesCombineBEmpty
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesEmpty)
 				{
 					yield return (new TestCaseData(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, null, s.RelativeB));
 				}
@@ -443,6 +491,14 @@ namespace MKY.Test.IO
 		}
 
 		/// <summary></summary>
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineAEmpty")]
+		public virtual void TestCombineAEmpty(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
+		{
+			// Same test as above, but using a different test source.
+			TestCombineA(testSet, testCase, absoluteA, absoluteB, relativeA, relativeB);
+		}
+
+		/// <summary></summary>
 		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineB")]
 		public virtual void TestCombineB(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
@@ -460,6 +516,14 @@ namespace MKY.Test.IO
 				default: result = PathEx.CombineFilePaths            (absoluteB, relativeB); break;
 			}
 			Assert.AreEqual(absoluteA, result, "B absolute combined with B relative doesn't result in A absolute");
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineBEmpty")]
+		public virtual void TestCombineBEmpty(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
+		{
+			// Same test as above, but using a different test source.
+			TestCombineB(testSet, testCase, absoluteA, absoluteB, relativeA, relativeB);
 		}
 
 		#endregion

@@ -88,7 +88,7 @@ namespace YAT.Model.Settings
 			get { return (this.state); }
 			set
 			{
-				if (value != this.state)
+				if (this.state != value)
 				{
 					this.state = value;
 					SetChanged();
@@ -103,7 +103,7 @@ namespace YAT.Model.Settings
 			get { return (this.location); }
 			set
 			{
-				if (value != this.location)
+				if (this.location != value)
 				{
 					this.location = value;
 					if (this.state == FormWindowState.Normal)
@@ -119,7 +119,7 @@ namespace YAT.Model.Settings
 			get { return (this.size); }
 			set
 			{
-				if (value != this.size)
+				if (this.size != value)
 				{
 					this.size = value;
 					if (this.state == FormWindowState.Normal)

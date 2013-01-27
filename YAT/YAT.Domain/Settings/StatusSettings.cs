@@ -108,7 +108,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showConnectTime); }
 			set
 			{
-				if (value != this.showConnectTime)
+				if (this.showConnectTime != value)
 				{
 					this.showConnectTime = value;
 					SetChanged();
@@ -124,7 +124,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showCountAndRate); }
 			set
 			{
-				if (value != this.showCountAndRate)
+				if (this.showCountAndRate != value)
 				{
 					this.showCountAndRate = value;
 					SetChanged();
@@ -140,7 +140,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showFlowControlCount); }
 			set
 			{
-				if (value != this.showFlowControlCount)
+				if (this.showFlowControlCount != value)
 				{
 					this.showFlowControlCount = value;
 					SetChanged();
@@ -156,7 +156,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showBreakCount); }
 			set
 			{
-				if (value != this.showBreakCount)
+				if (this.showBreakCount != value)
 				{
 					this.showBreakCount = value;
 					SetChanged();

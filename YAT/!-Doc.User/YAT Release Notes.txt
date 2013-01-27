@@ -139,12 +139,14 @@ Limitations and known issues:
   (bug #2865562>#125)
 - Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228>#101)
-- Handling of serial COM port break states (feature #2932691>#109) may not be supported on certain
-  hardware, e.g. USB/RS-232 converters
-- Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
+- Serial COM port RFR/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
   on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097>#203)
+- Serial COM port manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may
+  not be supported on Win7/64 on certain hardware, e.g. certain USB/RS-232 converters (bug #254)
 - Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
   'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205>#214)
+- Handling of serial COM port break states (feature #2932691>#109) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
 - USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they
   have different serial numbers, however, it is not yet possible to properly communicate with them
   simultaneously, this could be a bug or a limitation of the Win32 HID.dll (bug #3123900>#169)
@@ -230,12 +232,12 @@ Limitations and known issues:
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
-- Handling of serial COM port break states (feature #2932691) may not be supported on certain
-  hardware, e.g. USB/RS-232 converters
 - Serial COM port RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
   on certain hardware, e.g. certain USB/RS-232 converters (bug #3417097)
 - Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
   'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #3456205)
+- Handling of serial COM port break states (feature #2932691) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)

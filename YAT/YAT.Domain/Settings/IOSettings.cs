@@ -123,7 +123,7 @@ namespace YAT.Domain.Settings
 			get { return (this.ioType); }
 			set
 			{
-				if (value != this.ioType)
+				if (this.ioType != value)
 				{
 					this.ioType = value;
 					SetChanged();
@@ -152,7 +152,7 @@ namespace YAT.Domain.Settings
 					this.serialPort = value;
 					AttachNode(this.serialPort);
 				}
-				else if (value != this.serialPort)
+				else if (this.serialPort != value)
 				{
 					MKY.IO.Serial.SerialPort.SerialPortSettings old = this.serialPort;
 					this.serialPort = value;
@@ -178,7 +178,7 @@ namespace YAT.Domain.Settings
 					this.socket = value;
 					AttachNode(this.socket);
 				}
-				else if (value != this.socket)
+				else if (this.socket != value)
 				{
 					MKY.IO.Serial.Socket.SocketSettings old = this.socket;
 					this.socket = value;
@@ -204,7 +204,7 @@ namespace YAT.Domain.Settings
 					this.usbSerialHidDevice = value;
 					AttachNode(this.usbSerialHidDevice);
 				}
-				else if (value != this.usbSerialHidDevice)
+				else if (this.usbSerialHidDevice != value)
 				{
 					MKY.IO.Serial.Usb.SerialHidDeviceSettings old = this.usbSerialHidDevice;
 					this.usbSerialHidDevice = value;
@@ -221,7 +221,7 @@ namespace YAT.Domain.Settings
 			get { return (this.endianness); }
 			set
 			{
-				if (value != this.endianness)
+				if (this.endianness != value)
 				{
 					this.endianness = value;
 					SetChanged();
@@ -236,7 +236,7 @@ namespace YAT.Domain.Settings
 			get { return (this.indicateSerialPortBreakStates); }
 			set
 			{
-				if (value != this.indicateSerialPortBreakStates)
+				if (this.indicateSerialPortBreakStates != value)
 				{
 					this.indicateSerialPortBreakStates = value;
 					SetChanged();
@@ -251,7 +251,7 @@ namespace YAT.Domain.Settings
 			get { return (this.serialPortOutputBreakIsModifiable); }
 			set
 			{
-				if (value != this.serialPortOutputBreakIsModifiable)
+				if (this.serialPortOutputBreakIsModifiable != value)
 				{
 					this.serialPortOutputBreakIsModifiable = value;
 					SetChanged();
