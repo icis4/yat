@@ -241,7 +241,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.guid);
 			}
 		}
@@ -254,7 +255,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.activeTerminal != null)
 					return (this.activeTerminal.AutoName);
@@ -268,8 +269,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFilePath);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFilePath);
+				else
+					return (string.Empty);
 			}
 		}
 
@@ -278,8 +283,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFileExists);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFileExists);
+				else
+					return (false);
 			}
 		}
 
@@ -288,8 +297,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if ((this.settingsHandler != null) && (this.settingsRoot != null))
+					return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+				else
+					return (false);
 			}
 		}
 
@@ -298,7 +311,6 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
 				return (SettingsFileHasAlreadyBeenNormallySaved && !SettingsFileExists);
 			}
 		}
@@ -310,8 +322,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminals.Count);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminals != null)
+					return (this.terminals.Count);
+				else
+					return (0);
 			}
 		}
 
@@ -322,8 +338,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminals.ToArray());
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminals != null)
+					return (this.terminals.ToArray());
+				else
+					return (null);
 			}
 		}
 
@@ -334,7 +354,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.activeTerminal);
 			}
 		}
@@ -346,8 +367,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.activeTerminal.SequentialIndex);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.activeTerminal != null)
+					return (this.activeTerminal.SequentialIndex);
+				else
+					return (0);
 			}
 		}
 
@@ -358,8 +383,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (GetDynamicIndexByTerminal(this.activeTerminal));
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.activeTerminal != null)
+					return (GetDynamicIndexByTerminal(this.activeTerminal));
+				else
+					return (0);
 			}
 		}
 
@@ -370,8 +399,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (GetFixedIndexByTerminal(this.activeTerminal));
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.activeTerminal != null)
+					return (GetFixedIndexByTerminal(this.activeTerminal));
+				else
+					return (0);
 			}
 		}
 
@@ -382,7 +415,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (ActiveTerminal != null)
 				{
@@ -1130,38 +1163,56 @@ namespace YAT.Model
 			{
 				TerminalSettingsItem item = clone[i];
 
-				// Replace the desired terminal settings if requested.
-				if ((dynamicTerminalIndexToReplace != Indices.InvalidDynamicIndex) &&
-					(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
+				// \remind
+				// Check whether the item is defined. Cause by certain error conditions there were
+				// occasions when the item contained an empty file path and an empty GUID. // That
+				// has lead to an exception in an underlying System.IO call and would have lead to
+				// an error message which isn't really understandable to the user. Therefore, check
+				// the item and remove it if not defined.
+				if (item.IsDefined)
 				{
-					if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window))
-						openedTerminalCount++;
-				}
-				else // In all other cases, 'normally' open the terminal from the given file.
-				{
-					try
+					// Replace the desired terminal settings if requested.
+					if ((dynamicTerminalIndexToReplace != Indices.InvalidDynamicIndex) &&
+						(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
 					{
-						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
+						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window))
 							openedTerminalCount++;
 					}
-					catch (System.Xml.XmlException ex)
+					else // In all other cases, 'normally' open the terminal from the given file.
 					{
-						OnFixedStatusTextRequest("Error opening terminal!");
-						DialogResult result = OnMessageInputRequest
-							(
-							"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
-							"XML error message: " + ex.Message + Environment.NewLine +
-							"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
-							"Continue loading workspace?",
-							"Terminal File Error",
-							MessageBoxButtons.YesNo,
-							MessageBoxIcon.Exclamation
-							);
-						OnTimedStatusTextRequest("Terminal not opened!");
+						try
+						{
+							if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
+								openedTerminalCount++;
+						}
+						catch (System.Xml.XmlException ex)
+						{
+							OnFixedStatusTextRequest("Error opening terminal!");
 
-						if (result == DialogResult.No)
-							break;
+							string message =
+								"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
+								"XML error message: " + ex.Message + Environment.NewLine +
+								"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
+								"Continue loading workspace?";
+
+							DialogResult result = OnMessageInputRequest
+								(
+								message,
+								"Terminal File Error",
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Exclamation
+								);
+
+							OnTimedStatusTextRequest("Terminal not opened!");
+
+							if (result == DialogResult.No)
+								break;
+						}
 					}
+				}
+				else
+				{
+					this.settingsRoot.TerminalSettings.Remove(item);
 				}
 			}
 
@@ -1697,6 +1748,7 @@ namespace YAT.Model
 		public virtual void ActivateTerminal(Terminal terminal)
 		{
 			AssertNotDisposed();
+
 			this.activeTerminal = terminal;
 		}
 
@@ -1710,6 +1762,7 @@ namespace YAT.Model
 		public virtual bool SaveActiveTerminal()
 		{
 			AssertNotDisposed();
+
 			return (this.activeTerminal.Save());
 		}
 
@@ -1717,6 +1770,7 @@ namespace YAT.Model
 		public virtual bool CloseActiveTerminal()
 		{
 			AssertNotDisposed();
+
 			return (this.activeTerminal.Close());
 		}
 
@@ -1724,6 +1778,7 @@ namespace YAT.Model
 		public virtual bool OpenActiveTerminalIO()
 		{
 			AssertNotDisposed();
+
 			return (this.activeTerminal.StartIO());
 		}
 
@@ -1731,6 +1786,7 @@ namespace YAT.Model
 		public virtual bool CloseActiveTerminalIO()
 		{
 			AssertNotDisposed();
+
 			return (this.activeTerminal.StopIO());
 		}
 

@@ -86,7 +86,7 @@ namespace YAT.Model.Settings
 			get { return (this.terminalSettings); }
 			set
 			{
-				if (value != this.terminalSettings)
+				if (this.terminalSettings != value)
 				{
 					this.terminalSettings = value;
 					SetChanged();

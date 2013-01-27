@@ -152,7 +152,7 @@ namespace YAT.Gui.Controls
 			get { return (this.terminalType); }
 			set
 			{
-				if (value != this.terminalType)
+				if (this.terminalType != value)
 				{
 					this.terminalType = value;
 					SetControls();
@@ -170,7 +170,7 @@ namespace YAT.Gui.Controls
 			get { return (this.ioType); }
 			set
 			{
-				if (value != this.ioType)
+				if (this.ioType != value)
 				{
 					this.ioType = value;
 					SetControls();

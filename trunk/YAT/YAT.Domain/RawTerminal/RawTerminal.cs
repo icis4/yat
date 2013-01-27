@@ -201,11 +201,13 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.bufferSettings);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				AttachBufferSettings(value);
 				ApplyBufferSettings();
 			}
@@ -217,11 +219,13 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.ioSettings);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				AttachIOSettings(value);
 				ApplyIOSettings();
 			}
@@ -233,6 +237,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io.IsStopped);
 			}
 		}
@@ -243,6 +248,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io.IsStarted);
 			}
 		}
@@ -253,6 +259,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io.IsOpen);
 			}
 		}
@@ -263,6 +270,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io.IsConnected);
 			}
 		}
@@ -273,6 +281,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io.IsReadyToSend);
 			}
 		}
@@ -283,6 +292,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io);
 			}
 		}
@@ -293,6 +303,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.io.UnderlyingIOInstance);
 			}
 		}
@@ -312,6 +323,7 @@ namespace YAT.Domain
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
+
 			return (this.io.Start());
 		}
 
@@ -320,6 +332,7 @@ namespace YAT.Domain
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
+
 			this.io.Stop();
 		}
 

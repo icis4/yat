@@ -101,7 +101,7 @@ namespace YAT.Model.Settings
 			get { return (this.startPosition); }
 			set
 			{
-				if (value != this.startPosition)
+				if (this.startPosition != value)
 				{
 					this.startPosition = value;
 					SetChanged();
@@ -116,7 +116,7 @@ namespace YAT.Model.Settings
 			get { return (this.windowState); }
 			set
 			{
-				if (value != this.windowState)
+				if (this.windowState != value)
 				{
 					this.windowState = value;
 					SetChanged();
@@ -131,7 +131,7 @@ namespace YAT.Model.Settings
 			get { return (this.location); }
 			set
 			{
-				if (value != this.location)
+				if (this.location != value)
 				{
 					this.location = value;
 					SetChanged();
@@ -146,7 +146,7 @@ namespace YAT.Model.Settings
 			get { return (this.size); }
 			set
 			{
-				if (value != this.size)
+				if (this.size != value)
 				{
 					this.size = value;
 					SetChanged();
@@ -161,7 +161,7 @@ namespace YAT.Model.Settings
 			get { return (this.showTerminalInfo); }
 			set
 			{
-				if (value != this.showTerminalInfo)
+				if (this.showTerminalInfo != value)
 				{
 					this.showTerminalInfo = value;
 					SetChanged();
@@ -176,7 +176,7 @@ namespace YAT.Model.Settings
 			get { return (this.showChrono); }
 			set
 			{
-				if (value != this.showChrono)
+				if (this.showChrono != value)
 				{
 					this.showChrono = value;
 					SetChanged();

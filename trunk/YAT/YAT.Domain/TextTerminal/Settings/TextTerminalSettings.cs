@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 			get { return (this.separateTxRxEol); }
 			set
 			{
-				if (value != this.separateTxRxEol)
+				if (this.separateTxRxEol != value)
 				{
 					this.separateTxRxEol = value;
 					SetChanged();
@@ -153,7 +153,7 @@ namespace YAT.Domain.Settings
 			get { return (this.txEol); }
 			set
 			{
-				if (value != this.txEol)
+				if (this.txEol != value)
 				{
 					this.txEol = value;
 					SetChanged();
@@ -174,7 +174,7 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				if (value != this.rxEol)
+				if (this.rxEol != value)
 				{
 					this.rxEol = value;
 					SetChanged();
@@ -189,7 +189,7 @@ namespace YAT.Domain.Settings
 			get { return (this.encoding); }
 			set
 			{
-				if (value != this.encoding)
+				if (this.encoding != value)
 				{
 					this.encoding = value;
 					SetChanged();
@@ -204,7 +204,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showEol); }
 			set
 			{
-				if (value != this.showEol)
+				if (this.showEol != value)
 				{
 					this.showEol = value;
 					SetChanged();
@@ -219,7 +219,7 @@ namespace YAT.Domain.Settings
 			get { return (this.lineSendDelay); }
 			set
 			{
-				if (value != this.lineSendDelay)
+				if (this.lineSendDelay != value)
 				{
 					this.lineSendDelay = value;
 					SetChanged();
@@ -234,7 +234,7 @@ namespace YAT.Domain.Settings
 			get { return (this.waitForResponse); }
 			set
 			{
-				if (value != this.waitForResponse)
+				if (this.waitForResponse != value)
 				{
 					this.waitForResponse = value;
 					SetChanged();
@@ -249,7 +249,7 @@ namespace YAT.Domain.Settings
 			get { return (this.charSubstitution); }
 			set
 			{
-				if (value != this.charSubstitution)
+				if (this.charSubstitution != value)
 				{
 					this.charSubstitution = value;
 					SetChanged();
@@ -274,7 +274,7 @@ namespace YAT.Domain.Settings
 					this.eolComment = value;
 					AttachNode(this.eolComment);
 				}
-				else if (value != this.eolComment)
+				else if (this.eolComment != value)
 				{
 					EolCommentSettings old = this.eolComment;
 					this.eolComment = value;

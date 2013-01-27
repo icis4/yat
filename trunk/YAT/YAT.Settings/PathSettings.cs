@@ -97,7 +97,7 @@ namespace YAT.Settings
 			get { return (this.terminalFilesPath); }
 			set
 			{
-				if (value != this.terminalFilesPath)
+				if (this.terminalFilesPath != value)
 				{
 					this.terminalFilesPath = value;
 					SetChanged();
@@ -112,7 +112,7 @@ namespace YAT.Settings
 			get { return (this.workspaceFilesPath); }
 			set
 			{
-				if (value != this.workspaceFilesPath)
+				if (this.workspaceFilesPath != value)
 				{
 					this.workspaceFilesPath = value;
 					SetChanged();
@@ -127,7 +127,7 @@ namespace YAT.Settings
 			get { return (this.sendFilesPath); }
 			set
 			{
-				if (value != this.sendFilesPath)
+				if (this.sendFilesPath != value)
 				{
 					this.sendFilesPath = value;
 					SetChanged();
@@ -142,7 +142,7 @@ namespace YAT.Settings
 			get { return (this.logFilesPath); }
 			set
 			{
-				if (value != this.logFilesPath)
+				if (this.logFilesPath != value)
 				{
 					this.logFilesPath = value;
 					SetChanged();
@@ -157,7 +157,7 @@ namespace YAT.Settings
 			get { return (this.monitorFilesPath); }
 			set
 			{
-				if (value != this.monitorFilesPath)
+				if (this.monitorFilesPath != value)
 				{
 					this.monitorFilesPath = value;
 					SetChanged();

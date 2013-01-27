@@ -392,12 +392,14 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.autoOpen);
 			}
 			set
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				this.autoOpen = value;
 			}
 		}

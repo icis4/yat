@@ -267,7 +267,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.remoteIPAddress);
 			}
 		}
@@ -277,7 +278,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.remotePort);
 			}
 		}
@@ -287,7 +289,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.autoReconnect);
 			}
 		}
@@ -297,7 +300,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Reset:
@@ -324,7 +328,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Connected:
@@ -353,14 +358,7 @@ namespace MKY.IO.Serial.Socket
 
 		private bool AutoReconnectEnabledAndAllowed
 		{
-			get
-			{
-				return
-					(
-						!IsDisposed && IsStarted && !IsOpen &&
-						this.autoReconnect.Enabled
-					);
-			}
+			get { return (!IsDisposed && IsStarted && !IsOpen && AutoReconnect.Enabled); }
 		}
 
 		private bool EventHandlingIsSuppressedWhileStoppingSynchronized
@@ -390,6 +388,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.socket);
 			}
 		}

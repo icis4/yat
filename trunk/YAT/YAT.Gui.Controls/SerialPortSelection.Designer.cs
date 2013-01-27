@@ -65,18 +65,18 @@
 			this.label_Port.AutoSize = true;
 			this.label_Port.Location = new System.Drawing.Point(3, 6);
 			this.label_Port.Name = "label_Port";
-			this.label_Port.Size = new System.Drawing.Size(56, 13);
+			this.label_Port.Size = new System.Drawing.Size(58, 13);
 			this.label_Port.TabIndex = 0;
 			this.label_Port.Text = "Serial Port:";
 			// 
 			// timer_ShowScanDialog
 			// 
-			this.timer_ShowScanDialog.Interval = 500;
+			this.timer_ShowScanDialog.Interval = 150;
 			this.timer_ShowScanDialog.Tick += new System.EventHandler(this.timer_ShowScanDialog_Tick);
 			// 
 			// timer_ShowFillDialog
 			// 
-			this.timer_ShowFillDialog.Interval = 500;
+			this.timer_ShowFillDialog.Interval = 150;
 			this.timer_ShowFillDialog.Tick += new System.EventHandler(this.timer_ShowFillDialog_Tick);
 			// 
 			// SerialPortSelection

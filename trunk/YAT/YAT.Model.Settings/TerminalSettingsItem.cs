@@ -106,14 +106,14 @@ namespace YAT.Model.Settings
 			get { return (this.filePath); }
 			set
 			{
-				if (value != this.filePath)
+				if (this.filePath != value)
 				{
 					this.filePath = value;
 					SetChanged();
 				}
 				
-				// Create GUID from file path
-				if ((this.guid == Guid.Empty) && (this.filePath.Length > 0))
+				// Create GUID from file path:
+				if (PathEx.IsDefined(this.filePath) && (this.guid == Guid.Empty))
 				{
 					Guid guid;
 					if (GuidEx.TryCreateGuidFromFilePath(this.filePath, YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix, out guid))
@@ -131,7 +131,7 @@ namespace YAT.Model.Settings
 			get { return (this.guid); }
 			set
 			{
-				if (value != this.guid)
+				if (this.guid != value)
 				{
 					this.guid = value;
 					SetChanged();
@@ -146,7 +146,7 @@ namespace YAT.Model.Settings
 			get { return (this.fixedIndex); }
 			set
 			{
-				if (value != this.fixedIndex)
+				if (this.fixedIndex != value)
 				{
 					this.fixedIndex = value;
 					SetChanged();
@@ -171,12 +171,22 @@ namespace YAT.Model.Settings
 					this.window = value;
 					AttachNode(this.window);
 				}
-				else if (value != this.window)
+				else if (this.window != value)
 				{
 					WindowSettings old = this.window;
 					this.window = value;
 					ReplaceNode(old, this.window);
 				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsDefined
+		{
+			get
+			{
+				return (PathEx.IsDefined(this.filePath) && (this.guid != Guid.Empty));
 			}
 		}
 

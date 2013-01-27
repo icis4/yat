@@ -97,7 +97,7 @@ namespace MKY.IO.Serial.Usb
 			get { return (this.deviceInfo); }
 			set
 			{
-				if (value != this.deviceInfo)
+				if (this.deviceInfo != value)
 				{
 					this.deviceInfo = value;
 					SetChanged();
@@ -112,7 +112,7 @@ namespace MKY.IO.Serial.Usb
 			get { return (this.autoOpen); }
 			set
 			{
-				if (value != this.autoOpen)
+				if (this.autoOpen != value)
 				{
 					this.autoOpen = value;
 					SetChanged();

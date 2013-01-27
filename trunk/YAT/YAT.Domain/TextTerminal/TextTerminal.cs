@@ -237,11 +237,13 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (TerminalSettings.TextTerminal);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				AttachTextTerminalSettings(value);
 				ApplyTextTerminalSettings();
 			}
@@ -763,7 +765,7 @@ namespace YAT.Domain
 		public override void ReloadRepositories()
 		{
 			AssertNotDisposed();
-			
+
 			Initialize();
 			base.ReloadRepositories();
 		}
@@ -772,6 +774,8 @@ namespace YAT.Domain
 		/// <remarks>Ensure that line states are completely reset.</remarks>
 		protected override void ClearMyRepository(RepositoryType repository)
 		{
+			AssertNotDisposed();
+
 			Initialize();
 			base.ClearMyRepository(repository);
 		}

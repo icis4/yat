@@ -244,7 +244,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.localIPAddress);
 			}
 		}
@@ -254,7 +255,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.localPort);
 			}
 		}
@@ -264,7 +266,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Reset:
@@ -292,7 +295,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				switch (this.state)
 				{
 					case SocketState.Accepted:
@@ -361,6 +365,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.socket);
 			}
 		}

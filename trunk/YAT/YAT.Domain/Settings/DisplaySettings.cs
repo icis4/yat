@@ -134,7 +134,7 @@ namespace YAT.Domain.Settings
 			get { return (this.separateTxRxRadix); }
 			set
 			{
-				if (value != this.separateTxRxRadix)
+				if (this.separateTxRxRadix != value)
 				{
 					this.separateTxRxRadix = value;
 					SetChanged();
@@ -149,7 +149,7 @@ namespace YAT.Domain.Settings
 			get { return (this.txRadix); }
 			set
 			{
-				if (value != this.txRadix)
+				if (this.txRadix != value)
 				{
 					this.txRadix = value;
 					SetChanged();
@@ -170,7 +170,7 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				if (value != this.rxRadix)
+				if (this.rxRadix != value)
 				{
 					this.rxRadix = value;
 					SetChanged();
@@ -185,7 +185,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showRadix); }
 			set
 			{
-				if (value != this.showRadix)
+				if (this.showRadix != value)
 				{
 					this.showRadix = value;
 					SetChanged();
@@ -200,7 +200,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showTimeStamp); }
 			set
 			{
-				if (value != this.showTimeStamp)
+				if (this.showTimeStamp != value)
 				{
 					this.showTimeStamp = value;
 					SetChanged();
@@ -215,7 +215,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showLength); }
 			set
 			{
-				if (value != this.showLength)
+				if (this.showLength != value)
 				{
 					this.showLength = value;
 					SetChanged();
@@ -230,7 +230,7 @@ namespace YAT.Domain.Settings
 			get { return (this.showLineNumbers); }
 			set
 			{
-				if (value != this.showLineNumbers)
+				if (this.showLineNumbers != value)
 				{
 					this.showLineNumbers = value;
 					SetChanged();
@@ -245,7 +245,7 @@ namespace YAT.Domain.Settings
 			get { return (this.txMaxLineCount); }
 			set
 			{
-				if (value != this.txMaxLineCount)
+				if (this.txMaxLineCount != value)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1"));
@@ -263,7 +263,7 @@ namespace YAT.Domain.Settings
 			get { return (this.rxMaxLineCount); }
 			set
 			{
-				if (value != this.rxMaxLineCount)
+				if (this.rxMaxLineCount != value)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1"));
@@ -288,7 +288,7 @@ namespace YAT.Domain.Settings
 			get { return (this.directionLineBreakEnabled); }
 			set
 			{
-				if (value != this.directionLineBreakEnabled)
+				if (this.directionLineBreakEnabled != value)
 				{
 					this.directionLineBreakEnabled = value;
 					SetChanged();

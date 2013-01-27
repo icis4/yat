@@ -135,7 +135,7 @@ namespace YAT.Settings.Application
 					this.general = value;
 					AttachNode(this.general);
 				}
-				else if (value != this.general)
+				else if (this.general != value)
 				{
 					Settings.GeneralSettings old = this.general;
 					this.general = value;
@@ -161,7 +161,7 @@ namespace YAT.Settings.Application
 					this.paths = value;
 					AttachNode(this.paths);
 				}
-				else if (value != this.paths)
+				else if (this.paths != value)
 				{
 					Settings.PathSettings old = this.paths;
 					this.paths = value;
@@ -187,7 +187,7 @@ namespace YAT.Settings.Application
 					this.autoAutoWorkspace = value;
 					AttachNode(this.autoAutoWorkspace);
 				}
-				else if (value != this.autoAutoWorkspace)
+				else if (this.autoAutoWorkspace != value)
 				{
 					Settings.AutoWorkspaceSettings old = this.autoAutoWorkspace;
 					this.autoAutoWorkspace = value;
@@ -213,7 +213,7 @@ namespace YAT.Settings.Application
 					this.mainWindow = value;
 					AttachNode(this.mainWindow);
 				}
-				else if (value != this.mainWindow)
+				else if (this.mainWindow != value)
 				{
 					Model.Settings.MainWindowSettings old = this.mainWindow;
 					this.mainWindow = value;
@@ -239,7 +239,7 @@ namespace YAT.Settings.Application
 					this.newTerminal = value;
 					AttachNode(this.newTerminal);
 				}
-				else if (value != this.newTerminal)
+				else if (this.newTerminal != value)
 				{
 					Model.Settings.NewTerminalSettings old = this.newTerminal;
 					this.newTerminal = value;
@@ -255,12 +255,17 @@ namespace YAT.Settings.Application
 			get { return (this.recentFiles); }
 			set
 			{
-				if (this.recentFiles == null)
+				if (value == null)
+				{
+					this.recentFiles = value;
+					DetachNode(this.recentFiles);
+				}
+				else if (this.recentFiles == null)
 				{
 					this.recentFiles = value;
 					AttachNode(this.recentFiles);
 				}
-				else if (value != this.recentFiles)
+				else if (this.recentFiles != value)
 				{
 					Model.Settings.RecentFileSettings old = this.recentFiles;
 					this.recentFiles = value;

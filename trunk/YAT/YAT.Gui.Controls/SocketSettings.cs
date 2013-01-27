@@ -102,7 +102,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (value != this.hostType)
+				if (this.hostType != value)
 				{
 					this.hostType = value;
 					SetControls();
@@ -118,7 +118,7 @@ namespace YAT.Gui.Controls
 			get { return (this.tcpClientAutoReconnect); }
 			set
 			{
-				if (value != this.tcpClientAutoReconnect)
+				if (this.tcpClientAutoReconnect != value)
 				{
 					this.tcpClientAutoReconnect = value;
 					SetControls();

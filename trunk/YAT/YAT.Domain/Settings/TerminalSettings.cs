@@ -118,7 +118,7 @@ namespace YAT.Domain.Settings
 			get { return (this.terminalType); }
 			set
 			{
-				if (value != this.terminalType)
+				if (this.terminalType != value)
 				{
 					this.terminalType = value;
 					SetChanged();
@@ -143,7 +143,7 @@ namespace YAT.Domain.Settings
 					this.io = value;
 					AttachNode(this.io);
 				}
-				else if (value != this.io)
+				else if (this.io != value)
 				{
 					IOSettings old = this.io;
 					this.io = value;
@@ -169,7 +169,7 @@ namespace YAT.Domain.Settings
 					this.status = value;
 					AttachNode(this.status);
 				}
-				else if (value != this.status)
+				else if (this.status != value)
 				{
 					StatusSettings old = this.status;
 					this.status = value;
@@ -195,7 +195,7 @@ namespace YAT.Domain.Settings
 					this.buffer = value;
 					AttachNode(this.buffer);
 				}
-				else if (value != this.buffer)
+				else if (this.buffer != value)
 				{
 					BufferSettings old = this.buffer;
 					this.buffer = value;
@@ -221,7 +221,7 @@ namespace YAT.Domain.Settings
 					this.display = value;
 					AttachNode(this.display);
 				}
-				else if (value != this.display)
+				else if (this.display != value)
 				{
 					DisplaySettings old = this.display;
 					this.display = value;
@@ -247,7 +247,7 @@ namespace YAT.Domain.Settings
 					this.charReplace = value;
 					AttachNode(this.charReplace);
 				}
-				else if (value != this.charReplace)
+				else if (this.charReplace != value)
 				{
 					CharReplaceSettings old = this.charReplace;
 					this.charReplace = value;
@@ -273,7 +273,7 @@ namespace YAT.Domain.Settings
 					this.send = value;
 					AttachNode(this.send);
 				}
-				else if (value != this.send)
+				else if (this.send != value)
 				{
 					SendSettings old = this.send;
 					this.send = value;
@@ -299,7 +299,7 @@ namespace YAT.Domain.Settings
 					this.textTerminal = value;
 					AttachNode(this.textTerminal);
 				}
-				else if (value != this.textTerminal)
+				else if (this.textTerminal != value)
 				{
 					TextTerminalSettings old = this.textTerminal;
 					this.textTerminal = value;
@@ -315,12 +315,17 @@ namespace YAT.Domain.Settings
 			get { return (this.binaryTerminal); }
 			set
 			{
-				if (this.binaryTerminal == null)
+				if (value == null)
+				{
+					this.binaryTerminal = value;
+					DetachNode(this.binaryTerminal);
+				}
+				else if (this.binaryTerminal == null)
 				{
 					this.binaryTerminal = value;
 					AttachNode(this.binaryTerminal);
 				}
-				else if (value != this.binaryTerminal)
+				else if (this.binaryTerminal != value)
 				{
 					BinaryTerminalSettings old = this.binaryTerminal;
 					this.binaryTerminal = value;

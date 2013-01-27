@@ -119,7 +119,7 @@ namespace YAT.Settings.Terminal
 			get { return (this.autoSaved); }
 			set
 			{
-				if (value != this.autoSaved)
+				if (this.autoSaved != value)
 				{
 					this.autoSaved = value;
 
@@ -145,7 +145,7 @@ namespace YAT.Settings.Terminal
 					this.explicit_ = value;
 					AttachNode(this.explicit_);
 				}
-				else if (value != this.explicit_)
+				else if (this.explicit_ != value)
 				{
 					ExplicitSettings old = this.explicit_;
 					this.explicit_ = value;
@@ -171,7 +171,7 @@ namespace YAT.Settings.Terminal
 					this.implicit_ = value;
 					AttachNode(this.implicit_);
 				}
-				else if (value != this.implicit_)
+				else if (this.implicit_ != value)
 				{
 					ImplicitSettings old = this.implicit_;
 					this.implicit_ = value;

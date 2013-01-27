@@ -345,7 +345,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.guid);
 			}
 		}
@@ -355,7 +356,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.sequentialIndex);
 			}
 		}
@@ -369,7 +371,8 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.autoName);
 			}
 		}
@@ -387,8 +390,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminal.IsStopped);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsStopped);
+				else
+					return (false);
 			}
 		}
 
@@ -397,8 +404,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminal.IsStarted);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsStarted);
+				else
+					return (false);
 			}
 		}
 
@@ -407,8 +418,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminal.IsOpen);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsOpen);
+				else
+					return (false);
 			}
 		}
 
@@ -417,8 +432,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminal.IsConnected);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsConnected);
+				else
+					return (false);
 			}
 		}
 
@@ -427,8 +446,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.terminal.IsReadyToSend);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsReadyToSend);
+				else
+					return (false);
 			}
 		}
 
@@ -437,8 +460,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.log.IsStarted);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.log.IsStarted);
+				else
+					return (false);
 			}
 		}
 
@@ -448,6 +475,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.terminal.UnderlyingIOProvider);
 			}
 		}
@@ -458,6 +486,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.terminal.UnderlyingIOInstance);
 			}
 		}
@@ -468,6 +497,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
+
 				return ((this.settingsRoot != null) && (this.settingsRoot.IOType == Domain.IOType.SerialPort));
 			}
 		}
@@ -477,6 +507,8 @@ namespace YAT.Model
 		{
 			get
 			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				StringBuilder sb = new StringBuilder();
 
 				sb.Append("[");
@@ -660,6 +692,8 @@ namespace YAT.Model
 		{
 			get
 			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				StringBuilder sb = new StringBuilder();
 
 				if (this.settingsRoot != null)

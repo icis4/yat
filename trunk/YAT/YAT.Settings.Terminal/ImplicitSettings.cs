@@ -102,7 +102,7 @@ namespace YAT.Settings.Terminal
 			get { return (this.terminalIsStarted); }
 			set
 			{
-				if (value != this.terminalIsStarted)
+				if (this.terminalIsStarted != value)
 				{
 					this.terminalIsStarted = value;
 					SetChanged();
@@ -117,7 +117,7 @@ namespace YAT.Settings.Terminal
 			get { return (this.logIsStarted); }
 			set
 			{
-				if (value != this.logIsStarted)
+				if (this.logIsStarted != value)
 				{
 					this.logIsStarted = value;
 					SetChanged();
@@ -142,7 +142,7 @@ namespace YAT.Settings.Terminal
 					this.sendCommand = value;
 					AttachNode(this.sendCommand);
 				}
-				else if (value != this.sendCommand)
+				else if (this.sendCommand != value)
 				{
 					Model.Settings.SendCommandSettings old = this.sendCommand;
 					this.sendCommand = value;
@@ -168,7 +168,7 @@ namespace YAT.Settings.Terminal
 					this.sendFile = value;
 					AttachNode(this.sendFile);
 				}
-				else if (value != this.sendFile)
+				else if (this.sendFile != value)
 				{
 					Model.Settings.SendFileSettings old = this.sendFile;
 					this.sendFile = value;
@@ -194,7 +194,7 @@ namespace YAT.Settings.Terminal
 					this.predefined = value;
 					AttachNode(this.predefined);
 				}
-				else if (value != this.predefined)
+				else if (this.predefined != value)
 				{
 					Model.Settings.PredefinedSettings old = this.predefined;
 					this.predefined = value;
@@ -220,7 +220,7 @@ namespace YAT.Settings.Terminal
 					this.window = value;
 					AttachNode(this.window);
 				}
-				else if (value != this.window)
+				else if (this.window != value)
 				{
 					Model.Settings.WindowSettings old = this.window;
 					this.window = value;
@@ -246,7 +246,7 @@ namespace YAT.Settings.Terminal
 					this.layout = value;
 					AttachNode(this.layout);
 				}
-				else if (value != this.layout)
+				else if (this.layout != value)
 				{
 					Model.Settings.LayoutSettings old = this.layout;
 					this.layout = value;

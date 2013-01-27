@@ -215,13 +215,15 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (base.PortName);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.PortName)
+
+				if (base.PortName != value)
 				{
 					base.PortName = value;
 					OnPortChanged(new EventArgs());
@@ -240,7 +242,8 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (new SerialPortId(base.PortName));
 			}
 			set
@@ -269,13 +272,15 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (base.BaudRate);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.BaudRate)
+
+				if (base.BaudRate != value)
 				{
 					base.BaudRate = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -293,13 +298,15 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (base.DataBits);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.DataBits)
+
+				if (base.DataBits != value)
 				{
 					base.DataBits = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -317,13 +324,15 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (base.Parity);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.Parity)
+
+				if (base.Parity != value)
 				{
 					base.Parity = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -341,13 +350,15 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (base.StopBits);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.StopBits)
+
+				if (base.StopBits != value)
 				{
 					base.StopBits = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -365,13 +376,15 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (base.Handshake);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.Handshake)
+
+				if (base.Handshake != value)
 				{
 					base.Handshake = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -401,7 +414,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				SerialPortSettings settings = new SerialPortSettings();
 				settings.BaudRate  = (BaudRateEx) base.BaudRate;
@@ -492,6 +505,7 @@ namespace MKY.IO.Ports
 		public virtual void ToggleRfr()
 		{
 			AssertNotDisposed();
+
 			this.RfrEnable = !this.RfrEnable;
 		}
 
@@ -508,11 +522,13 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
+
 				return (base.DtrEnable);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				if (base.DtrEnable != value)
 				{
 					base.DtrEnable = value;
@@ -531,6 +547,7 @@ namespace MKY.IO.Ports
 		public virtual void ToggleDtr()
 		{
 			AssertNotDisposed();
+
 			this.DtrEnable = !this.DtrEnable;
 		}
 
@@ -571,6 +588,7 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.controlPinCounts);
 			}
 		}
@@ -614,11 +632,13 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
+
 				return (BreakState);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				if (BreakState != value)
 				{
 					BreakState = value;
@@ -637,6 +657,7 @@ namespace MKY.IO.Ports
 		public virtual void ToggleOutputBreak()
 		{
 			AssertNotDisposed();
+
 			OutputBreak = !OutputBreak;
 		}
 
@@ -648,6 +669,7 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.outputBreakCount);
 			}
 		}
@@ -660,6 +682,7 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.inputBreakCount);
 			}
 		}
@@ -717,6 +740,7 @@ namespace MKY.IO.Ports
 		public new void Open()
 		{
 			AssertNotDisposed();
+
 			if (!IsOpen)
 			{
 				OnOpening(new EventArgs());
@@ -753,6 +777,7 @@ namespace MKY.IO.Ports
 		public virtual void Flush()
 		{
 			AssertNotDisposed();
+
 			if (IsOpen)
 			{
 				try
@@ -785,6 +810,7 @@ namespace MKY.IO.Ports
 		public new void Close()
 		{
 			AssertNotDisposed();
+
 			if (IsOpen)
 			{
 				OnClosing(new EventArgs());

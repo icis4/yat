@@ -89,7 +89,7 @@ namespace YAT.Domain.Settings
 			get { return (this.skipComment); }
 			set
 			{
-				if (value != this.skipComment)
+				if (this.skipComment != value)
 				{
 					this.skipComment = value;
 					SetChanged();
@@ -104,7 +104,7 @@ namespace YAT.Domain.Settings
 			get { return (this.skipWhiteSpace); }
 			set
 			{
-				if (value != this.skipWhiteSpace)
+				if (this.skipWhiteSpace != value)
 				{
 					this.skipWhiteSpace = value;
 					SetChanged();
@@ -121,7 +121,7 @@ namespace YAT.Domain.Settings
 			get { return (this.indicators); }
 			set
 			{
-				if (value != this.indicators)
+				if (this.indicators != value)
 				{
 					this.indicators = value;
 					SetChanged();

@@ -187,7 +187,7 @@ namespace YAT.Gui.Controls
 				// devices are available, there is always a device selected.
 				if (value != null)
 				{
-					if (value != this.portId)
+					if (this.portId != value)
 					{
 						this.portId = value;
 						SetControls();
@@ -353,7 +353,7 @@ namespace YAT.Gui.Controls
 				{
 					// Fill list with available ports.
 					{
-						// Install timer which shows a dialog if filling takes more than 500ms.
+						// Install timer which shows a dialog if filling takes more than 150 ms.
 						timer_ShowFillDialog.Start();
 
 						// Start scanning on different thread.
@@ -372,7 +372,7 @@ namespace YAT.Gui.Controls
 
 					if (ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse)
 					{
-						// Install timer which shows a dialog if scanning takes more than 500ms.
+						// Install timer which shows a dialog if scanning takes more than 150 ms.
 						timer_ShowScanDialog.Start();
 
 						// Start scanning on different thread.

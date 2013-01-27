@@ -89,7 +89,7 @@ namespace YAT.Model.Settings
 			get { return (this.pages); }
 			set
 			{
-				if (value != this.pages)
+				if (this.pages != value)
 				{
 					this.pages = value;
 					SetChanged();

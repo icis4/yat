@@ -119,6 +119,7 @@ namespace YAT.Domain
 			public virtual void Start()
 			{
 				AssertNotDisposed();
+
 				CreateAndStartTimer();
 			}
 
@@ -136,6 +137,7 @@ namespace YAT.Domain
 			public virtual void Stop()
 			{
 				AssertNotDisposed();
+
 				StopAndDisposeTimer();
 			}
 
@@ -163,6 +165,7 @@ namespace YAT.Domain
 			protected virtual void OnTimeout(EventArgs e)
 			{
 				AssertNotDisposed();
+
 				EventHelper.FireSync(Timeout, this, e);
 			}
 		}
@@ -388,11 +391,13 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
+
 				return (TerminalSettings.BinaryTerminal);
 			}
 			set
 			{
 				AssertNotDisposed();
+
 				AttachBinaryTerminalSettings(value);
 				ApplyBinaryTerminalSettings();
 			}

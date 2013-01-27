@@ -115,7 +115,7 @@ namespace YAT.Model.Settings
 			get { return (this.txMonitorPanelIsVisible); }
 			set
 			{
-				if (value != this.txMonitorPanelIsVisible)
+				if (this.txMonitorPanelIsVisible != value)
 				{
 					this.txMonitorPanelIsVisible = value;
 					SetChanged();
@@ -130,7 +130,7 @@ namespace YAT.Model.Settings
 			get { return (this.bidirMonitorPanelIsVisible); }
 			set
 			{
-				if (value != this.bidirMonitorPanelIsVisible)
+				if (this.bidirMonitorPanelIsVisible != value)
 				{
 					this.bidirMonitorPanelIsVisible = value;
 					SetChanged();
@@ -145,7 +145,7 @@ namespace YAT.Model.Settings
 			get { return (this.rxMonitorPanelIsVisible); }
 			set
 			{
-				if (value != this.rxMonitorPanelIsVisible)
+				if (this.rxMonitorPanelIsVisible != value)
 				{
 					this.rxMonitorPanelIsVisible = value;
 					SetChanged();
@@ -160,7 +160,7 @@ namespace YAT.Model.Settings
 			get { return (this.monitorOrientation); }
 			set
 			{
-				if (value != this.monitorOrientation)
+				if (this.monitorOrientation != value)
 				{
 					this.monitorOrientation = value;
 					SetChanged();
@@ -175,7 +175,7 @@ namespace YAT.Model.Settings
 			get { return (this.txMonitorSplitterRatio); }
 			set
 			{
-				if (value != this.txMonitorSplitterRatio)
+				if (this.txMonitorSplitterRatio != value)
 				{
 					this.txMonitorSplitterRatio = value;
 					SetChanged();
@@ -190,7 +190,7 @@ namespace YAT.Model.Settings
 			get { return (this.rxMonitorSplitterRatio); }
 			set
 			{
-				if (value != this.rxMonitorSplitterRatio)
+				if (this.rxMonitorSplitterRatio != value)
 				{
 					this.rxMonitorSplitterRatio = value;
 					SetChanged();
@@ -205,7 +205,7 @@ namespace YAT.Model.Settings
 			get { return (this.predefinedPanelIsVisible); }
 			set
 			{
-				if (value != this.predefinedPanelIsVisible)
+				if (this.predefinedPanelIsVisible != value)
 				{
 					this.predefinedPanelIsVisible = value;
 					SetChanged();
@@ -220,7 +220,7 @@ namespace YAT.Model.Settings
 			get { return (this.predefinedSplitterRatio); }
 			set
 			{
-				if (value != this.predefinedSplitterRatio)
+				if (this.predefinedSplitterRatio != value)
 				{
 					this.predefinedSplitterRatio = value;
 					SetChanged();
@@ -235,7 +235,7 @@ namespace YAT.Model.Settings
 			get { return (this.sendCommandPanelIsVisible); }
 			set
 			{
-				if (value != this.sendCommandPanelIsVisible)
+				if (this.sendCommandPanelIsVisible != value)
 				{
 					this.sendCommandPanelIsVisible = value;
 					SetChanged();
@@ -250,7 +250,7 @@ namespace YAT.Model.Settings
 			get { return (this.sendFilePanelIsVisible); }
 			set
 			{
-				if (value != this.sendFilePanelIsVisible)
+				if (this.sendFilePanelIsVisible != value)
 				{
 					this.sendFilePanelIsVisible = value;
 					SetChanged();

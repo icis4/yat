@@ -267,7 +267,7 @@ namespace MKY.Settings
 			{
 				get
 				{
-					AssertNotDisposed();
+					// Do not call AssertNotDisposed() in a simple get-property.
 					return ((this.effectiveFileAccess & FileAccessFlags.Write) == FileAccessFlags.Write);
 				}
 			}
@@ -626,8 +626,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.commonSettings.FilePath);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasCommonSettings)
+					return (this.commonSettings.FilePath);
+				else
+					return (string.Empty);
 			}
 			set
 			{
@@ -651,8 +655,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.localUserSettings.FilePath);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasLocalUserSettings)
+					return (this.localUserSettings.FilePath);
+				else
+					return (string.Empty);
 			}
 			set
 			{
@@ -676,8 +684,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.roamingUserSettings.FilePath);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasRoamingUserSettings)
+					return (this.roamingUserSettings.FilePath);
+				else
+					return (string.Empty);
 			}
 			set
 			{
@@ -697,8 +709,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.commonSettings.Settings);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasCommonSettings)
+					return (this.commonSettings.Settings);
+				else
+					return (default(TCommonSettings));
 			}
 		}
 
@@ -709,8 +725,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.localUserSettings.Settings);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasLocalUserSettings)
+					return (this.localUserSettings.Settings);
+				else
+					return (default(TLocalUserSettings));
 			}
 		}
 
@@ -721,8 +741,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.roamingUserSettings.Settings);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasRoamingUserSettings)
+					return (this.roamingUserSettings.Settings);
+				else
+					return (default(TRoamingUserSettings));
 			}
 		}
 
@@ -734,8 +758,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.commonSettings.FileSuccessfullyLoaded);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasCommonSettings)
+					return (this.commonSettings.FileSuccessfullyLoaded);
+				else
+					return (false);
 			}
 		}
 
@@ -747,8 +775,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.localUserSettings.FileSuccessfullyLoaded);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasLocalUserSettings)
+					return (this.localUserSettings.FileSuccessfullyLoaded);
+				else
+					return (false);
 			}
 		}
 
@@ -760,8 +792,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.roamingUserSettings.FileSuccessfullyLoaded);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasRoamingUserSettings)
+					return (this.roamingUserSettings.FileSuccessfullyLoaded);
+				else
+					return (false);
 			}
 		}
 
@@ -778,8 +814,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.commonSettings.AreCurrentlyOwnedByThisInstance);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasCommonSettings)
+					return (this.commonSettings.AreCurrentlyOwnedByThisInstance);
+				else
+					return (false);
 			}
 		}
 
@@ -796,8 +836,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.localUserSettings.AreCurrentlyOwnedByThisInstance);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasLocalUserSettings)
+					return (this.localUserSettings.AreCurrentlyOwnedByThisInstance);
+				else
+					return (false);
 			}
 		}
 
@@ -814,8 +858,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.roamingUserSettings.AreCurrentlyOwnedByThisInstance);
+				// AssertNotDisposed() is called by 'Has...' below.
+
+				if (HasRoamingUserSettings)
+					return (this.roamingUserSettings.AreCurrentlyOwnedByThisInstance);
+				else
+					return (false);
 			}
 		}
 

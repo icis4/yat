@@ -204,7 +204,8 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.settings);
 			}
 		}
@@ -214,7 +215,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.device != null)
 					return (this.device.Info);
@@ -252,7 +253,8 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
+
 				return (this.device != null);
 			}
 		}
@@ -262,7 +264,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.device != null)
 					return (this.device.IsConnected);
@@ -276,7 +278,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.device != null)
 					return (this.device.IsOpen);
@@ -297,6 +299,7 @@ namespace MKY.IO.Serial.Usb
 			get
 			{
 				AssertNotDisposed();
+
 				return (this.device);
 			}
 		}

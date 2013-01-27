@@ -147,10 +147,11 @@ namespace MKY.IO
 		#region Compare...()
 
 		/// <summary>
-		/// Compares directoryPath2 relative to directoryPath1 and returns relative path of directory2.
+		/// Compares <paramref name="directoryPath2"/> relative to <paramref name="directoryPath1"/>
+		/// and returns relative path of <paramref name="directoryPath2"/>.
 		/// </summary>
 		/// <remarks>
-		/// Returns directoryPath2 if it already is relative.
+		/// Returns <paramref name="directoryPath2"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -168,10 +169,11 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Compares filePath relative to directoryPath and returns relative path of file.
+		/// Compares <paramref name="filePath"/> relative to <paramref name="directoryPath"/> and
+		/// returns relative path of file.
 		/// </summary>
 		/// <remarks>
-		/// Returns filePath if it already is relative.
+		/// Returns <paramref name="filePath"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -192,10 +194,11 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Compares directoryPath relative to filePath and returns relative path of directory2.
+		/// Compares <paramref name="directoryPath"/> relative to <paramref name="filePath"/> and
+		/// returns relative path of <paramref name="directory2"/>.
 		/// </summary>
 		/// <remarks>
-		/// Returns directoryPath if it already is relative.
+		/// Returns <paramref name="directoryPath"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -213,10 +216,11 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Compares filePath2 relative to filePath1 and returns relative path of file2.
+		/// Compares <paramref name="filePath2"/> relative to <paramref name="filePath1"/> and
+		/// returns relative path of file2.
 		/// </summary>
 		/// <remarks>
-		/// Returns filePath2 if it already is relative.
+		/// Returns <paramref name="filePath2"/> if it already is relative.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -241,10 +245,11 @@ namespace MKY.IO
 		#region Combine...()
 
 		/// <summary>
-		/// Resolves directoryPath2 relative to directoryPath1 and returns absolute path of directory2.
+		/// Resolves <paramref name="directoryPath2"/> relative to <paramref name="directoryPath1"/>
+		/// and returns absolute path of <paramref name="directory2"/>.
 		/// </summary>
 		/// <remarks>
-		/// Returns directoryPath2 if it is absolute.
+		/// Returns <paramref name="directoryPath2"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -258,14 +263,18 @@ namespace MKY.IO
 			if (!Path.IsPathRooted(directoryPath1))
 				return (directoryPath1);
 
+			if (string.IsNullOrEmpty(directoryPath1) || string.IsNullOrEmpty(directoryPath2))
+				return (directoryPath1);
+
 			return (DoCombineDirectoryPaths(directoryPath1, directoryPath2));
 		}
 
 		/// <summary>
-		/// Resolves filePath relative to directoryPath and returns absolute path of file.
+		/// Resolves <paramref name="filePath"/> relative to <paramref name="directoryPath"/> and
+		/// returns absolute path of file.
 		/// </summary>
 		/// <remarks>
-		/// Returns filePath if it is absolute.
+		/// Returns <paramref name="filePath"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -279,6 +288,9 @@ namespace MKY.IO
 			if (!Path.IsPathRooted(directoryPath))
 				return (directoryPath);
 
+			if (string.IsNullOrEmpty(directoryPath) || string.IsNullOrEmpty(filePath))
+				return (directoryPath);
+
 			string fileName = Path.GetFileName(filePath);
 			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
 
@@ -287,10 +299,11 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Resolves directoryPath relative to filePath and returns absolute path of directory2.
+		/// Resolves <paramref name="directoryPath"/> relative to <paramref name="filePath"/> and
+		/// returns absolute path of <paramref name="directory2"/>.
 		/// </summary>
 		/// <remarks>
-		/// Returns directoryPath if it is absolute.
+		/// Returns <paramref name="directoryPath"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -304,14 +317,18 @@ namespace MKY.IO
 			if (!Path.IsPathRooted(filePath))
 				return (filePath);
 
+			if (string.IsNullOrEmpty(filePath) || string.IsNullOrEmpty(directoryPath))
+				return (filePath);
+
 			return (DoCombineDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
 		}
 
 		/// <summary>
-		/// Resolves filePath2 relative to filePath1 and returns absolute path of file2.
+		/// Resolves <paramref name="filePath2"/> relative to <paramref name="filePath1"/> and
+		/// returns absolute path of file2.
 		/// </summary>
 		/// <remarks>
-		/// Returns filePath2 if it is absolute.
+		/// Returns <paramref name="filePath2"/> if it is absolute.
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// 
@@ -323,6 +340,9 @@ namespace MKY.IO
 				return (filePath2);
 
 			if (!Path.IsPathRooted(filePath1))
+				return (filePath1);
+
+			if (string.IsNullOrEmpty(filePath1) || string.IsNullOrEmpty(filePath2))
 				return (filePath1);
 
 			string fileName2 = Path.GetFileName(filePath2);

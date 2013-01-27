@@ -108,7 +108,7 @@ namespace YAT.Domain.Settings
 			get { return (this.keepCommand); }
 			set
 			{
-				if (value != this.keepCommand)
+				if (this.keepCommand != value)
 				{
 					this.keepCommand = value;
 					SetChanged();
@@ -123,7 +123,7 @@ namespace YAT.Domain.Settings
 			get { return (this.copyPredefined); }
 			set
 			{
-				if (value != this.copyPredefined)
+				if (this.copyPredefined != value)
 				{
 					this.copyPredefined = value;
 					SetChanged();
@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 			get { return (this.sendImmediately); }
 			set
 			{
-				if (value != this.sendImmediately)
+				if (this.sendImmediately != value)
 				{
 					this.sendImmediately = value;
 					SetChanged();
@@ -153,7 +153,7 @@ namespace YAT.Domain.Settings
 			get { return (this.defaultDelay); }
 			set
 			{
-				if (value != this.defaultDelay)
+				if (this.defaultDelay != value)
 				{
 					this.defaultDelay = value;
 					SetChanged();
@@ -168,7 +168,7 @@ namespace YAT.Domain.Settings
 			get { return (this.defaultLineDelay); }
 			set
 			{
-				if (value != this.defaultLineDelay)
+				if (this.defaultLineDelay != value)
 				{
 					this.defaultLineDelay = value;
 					SetChanged();

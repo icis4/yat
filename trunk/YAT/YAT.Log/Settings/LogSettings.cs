@@ -259,7 +259,7 @@ namespace YAT.Log.Settings
 			get { return (this.rootPath); }
 			set
 			{
-				if (value != this.rootPath)
+				if (this.rootPath != value)
 				{
 					this.rootPath = value;
 					SetChanged();
@@ -274,7 +274,7 @@ namespace YAT.Log.Settings
 			get { return (this.rootFileName); }
 			set
 			{
-				if (value != this.rootFileName)
+				if (this.rootFileName != value)
 				{
 					this.rootFileName = value;
 					SetChanged();
@@ -298,7 +298,7 @@ namespace YAT.Log.Settings
 			get { return (this.rawLogTx); }
 			set
 			{
-				if (value != this.rawLogTx)
+				if (this.rawLogTx != value)
 				{
 					this.rawLogTx = value;
 					SetChanged();
@@ -333,7 +333,7 @@ namespace YAT.Log.Settings
 			get { return (this.rawLogBidir); }
 			set
 			{
-				if (value != this.rawLogBidir)
+				if (this.rawLogBidir != value)
 				{
 					this.rawLogBidir = value;
 					SetChanged();
@@ -368,7 +368,7 @@ namespace YAT.Log.Settings
 			get { return (this.rawLogRx); }
 			set
 			{
-				if (value != this.rawLogRx)
+				if (this.rawLogRx != value)
 				{
 					this.rawLogRx = value;
 					SetChanged();
@@ -403,7 +403,7 @@ namespace YAT.Log.Settings
 			get { return (this.rawExtension); }
 			set
 			{
-				if (value != this.rawExtension)
+				if (this.rawExtension != value)
 				{
 					this.rawExtension = value;
 					SetChanged();
@@ -420,7 +420,7 @@ namespace YAT.Log.Settings
 			get { return (this.neatLogTx); }
 			set
 			{
-				if (value != this.neatLogTx)
+				if (this.neatLogTx != value)
 				{
 					this.neatLogTx = value;
 					SetChanged();
@@ -455,7 +455,7 @@ namespace YAT.Log.Settings
 			get { return (this.neatLogBidir); }
 			set
 			{
-				if (value != this.neatLogBidir)
+				if (this.neatLogBidir != value)
 				{
 					this.neatLogBidir = value;
 					SetChanged();
@@ -490,7 +490,7 @@ namespace YAT.Log.Settings
 			get { return (this.neatLogRx); }
 			set
 			{
-				if (value != this.neatLogRx)
+				if (this.neatLogRx != value)
 				{
 					this.neatLogRx = value;
 					SetChanged();
@@ -525,7 +525,7 @@ namespace YAT.Log.Settings
 			get { return (this.neatExtension); }
 			set
 			{
-				if (value != this.neatExtension)
+				if (this.neatExtension != value)
 				{
 					this.neatExtension = value;
 					SetChanged();
@@ -610,7 +610,7 @@ namespace YAT.Log.Settings
 			get { return (this.writeMode); }
 			set
 			{
-				if (value != this.writeMode)
+				if (this.writeMode != value)
 				{
 					this.writeMode = value;
 					SetChanged();
@@ -627,7 +627,7 @@ namespace YAT.Log.Settings
 			get { return (this.subdirectoriesFormat); }
 			set
 			{
-				if (value != this.subdirectoriesFormat)
+				if (this.subdirectoriesFormat != value)
 				{
 					this.subdirectoriesFormat = value;
 					SetChanged();
@@ -642,7 +642,7 @@ namespace YAT.Log.Settings
 			get { return (this.subdirectoriesChannel); }
 			set
 			{
-				if (value != this.subdirectoriesChannel)
+				if (this.subdirectoriesChannel != value)
 				{
 					this.subdirectoriesChannel = value;
 					SetChanged();
@@ -659,7 +659,7 @@ namespace YAT.Log.Settings
 			get { return (this.nameFormat); }
 			set
 			{
-				if (value != this.nameFormat)
+				if (this.nameFormat != value)
 				{
 					this.nameFormat = value;
 					SetChanged();
@@ -674,7 +674,7 @@ namespace YAT.Log.Settings
 			get { return (this.nameChannel); }
 			set
 			{
-				if (value != this.nameChannel)
+				if (this.nameChannel != value)
 				{
 					this.nameChannel = value;
 					SetChanged();
@@ -689,7 +689,7 @@ namespace YAT.Log.Settings
 			get { return (this.nameDate); }
 			set
 			{
-				if (value != this.nameDate)
+				if (this.nameDate != value)
 				{
 					this.nameDate = value;
 					SetChanged();
@@ -704,7 +704,7 @@ namespace YAT.Log.Settings
 			get { return (this.nameTime); }
 			set
 			{
-				if (value != this.nameTime)
+				if (this.nameTime != value)
 				{
 					this.nameTime = value;
 					SetChanged();
@@ -719,7 +719,7 @@ namespace YAT.Log.Settings
 			get { return (this.nameSeparator); }
 			set
 			{
-				if (value != this.nameSeparator)
+				if (this.nameSeparator != value)
 				{
 					this.nameSeparator = value;
 					SetChanged();
