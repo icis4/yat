@@ -211,53 +211,6 @@ namespace YAT.Domain
 			CreateAndStartSendThread();
 		}
 
-		#region Send Thread
-		//------------------------------------------------------------------------------------------
-		// Send Thread
-		//------------------------------------------------------------------------------------------
-
-		private void CreateAndStartSendThread()
-		{
-			// Ensure that thread has stopped after the last stop request:
-			int timeoutCounter = 0;
-			while (this.sendThread != null)
-			{
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
-			}
-
-			// Do not yet enforce that thread events have been disposed because that may result in
-			// deadlock. Further investigation is required in order to further improve the behaviour
-			// on Stop()/Dispose().
-
-			// Start thread:
-			this.sendThreadRunFlag = true;
-			this.sendThreadEvent = new AutoResetEvent(false);
-			this.sendThread = new Thread(new ThreadStart(SendThread));
-			this.sendThread.Start();
-		}
-
-		private void StopSendThread()
-		{
-			this.sendThreadRunFlag = false;
-
-			// Ensure that thread has stopped after the stop request:
-			int timeoutCounter = 0;
-			while (this.sendThread != null)
-			{
-				this.sendThreadEvent.Set();
-
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
-			}
-		}
-
-		#endregion
-
 		#region Disposal
 		//------------------------------------------------------------------------------------------
 		// Disposal
@@ -316,6 +269,53 @@ namespace YAT.Domain
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Send Thread
+		//------------------------------------------------------------------------------------------
+		// Send Thread
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartSendThread()
+		{
+			// Ensure that thread has stopped after the last stop request:
+			int timeoutCounter = 0;
+			while (this.sendThread != null)
+			{
+				Thread.Sleep(1);
+
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
+			}
+
+			// Do not yet enforce that thread events have been disposed because that may result in
+			// deadlock. Further investigation is required in order to further improve the behaviour
+			// on Stop()/Dispose().
+
+			// Start thread:
+			this.sendThreadRunFlag = true;
+			this.sendThreadEvent = new AutoResetEvent(false);
+			this.sendThread = new Thread(new ThreadStart(SendThread));
+			this.sendThread.Start();
+		}
+
+		private void StopSendThread()
+		{
+			this.sendThreadRunFlag = false;
+
+			// Ensure that thread has stopped after the stop request:
+			int timeoutCounter = 0;
+			while (this.sendThread != null)
+			{
+				this.sendThreadEvent.Set();
+
+				Thread.Sleep(1);
+
+				if (++timeoutCounter >= 3000)
+					throw (new TimeoutException("Thread hasn't properly stopped"));
+			}
+		}
 
 		#endregion
 
@@ -1002,7 +1002,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			// Clear display repository.
+			// Clear repository:
 			ClearMyRepository(RepositoryType.Tx);
 			ClearMyRepository(RepositoryType.Bidir);
 			ClearMyRepository(RepositoryType.Rx);
@@ -1010,7 +1010,7 @@ namespace YAT.Domain
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
 
-			// Reload display repository.
+			// Reload repository:
 			SuspendEventsForReload();
 			foreach (RawElement re in this.rawTerminal.RepositoryToElements(RepositoryType.Bidir))
 			{
@@ -1180,15 +1180,17 @@ namespace YAT.Domain
 		private void ApplyBufferSettings()
 		{
 			this.rawTerminal.BufferSettings = this.terminalSettings.Buffer;
+
+			ReloadRepositories();
 		}
 
 		private void ApplyDisplaySettings()
 		{
-			Settings.DisplaySettings s = this.terminalSettings.Display;
+			this.txRepository.Capacity    = this.terminalSettings.Display.TxMaxLineCount;
+			this.bidirRepository.Capacity = this.terminalSettings.Display.BidirMaxLineCount;
+			this.rxRepository.Capacity    = this.terminalSettings.Display.RxMaxLineCount;
 
-			this.txRepository.Capacity    = s.TxMaxLineCount;
-			this.bidirRepository.Capacity = s.BidirMaxLineCount;
-			this.rxRepository.Capacity    = s.RxMaxLineCount;
+			ReloadRepositories();
 		}
 
 		#endregion
@@ -1464,19 +1466,19 @@ namespace YAT.Domain
 			StringBuilder sb = new StringBuilder();
 			lock (this.repositorySyncObj)
 			{
-				sb.AppendLine(indent + "- Settings: " + this.terminalSettings);
+				sb.AppendLine(indent + "> Settings: " + this.terminalSettings);
 
-				sb.AppendLine(indent + "- RawTerminal: ");
-				sb.AppendLine(this.rawTerminal.ToString(indent + "--"));
+				sb.AppendLine(indent + "> RawTerminal: ");
+				sb.AppendLine(this.rawTerminal.ToString(indent + "   "));
 
-				sb.AppendLine(indent + "- TxRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				sb.AppendLine(indent + "> TxRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
 
-				sb.AppendLine(indent + "- BidirRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				sb.AppendLine(indent + "> BidirRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
 
-				sb.AppendLine(indent + "- RxRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				sb.AppendLine(indent + "> RxRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
 			}
 			return (sb.ToString());
 		}

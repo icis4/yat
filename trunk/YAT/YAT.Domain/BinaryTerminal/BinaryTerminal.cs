@@ -21,11 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -366,6 +373,7 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					DetachBinaryTerminalSettings();
 				}
 
 				// Set state to disposed:
@@ -713,7 +721,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			
-			return (indent + "- Type: BinaryTerminal" + Environment.NewLine + base.ToString(indent));
+			return (indent + "> Type: BinaryTerminal" + Environment.NewLine + base.ToString(indent));
 		}
 
 		#endregion
@@ -727,13 +735,8 @@ namespace YAT.Domain
 
 		private void AttachBinaryTerminalSettings(Settings.BinaryTerminalSettings binaryTerminalSettings)
 		{
-			if (Settings.IOSettings.ReferenceEquals(TerminalSettings.BinaryTerminal, binaryTerminalSettings))
-				return;
-
-			if (TerminalSettings.BinaryTerminal != null)
-				DetachBinaryTerminalSettings();
-
 			TerminalSettings.BinaryTerminal = binaryTerminalSettings;
+
 			BinaryTerminalSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
 		}
 
@@ -745,6 +748,7 @@ namespace YAT.Domain
 		private void ApplyBinaryTerminalSettings()
 		{
 			InitializeStates();
+			ReloadRepositories();
 		}
 
 		#endregion

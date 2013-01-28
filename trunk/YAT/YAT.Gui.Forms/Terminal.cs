@@ -804,7 +804,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetFlowControlCounts();
+			this.terminal.ResetFlowControlCount();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount_Click(object sender, EventArgs e)
@@ -814,7 +814,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetBreakCounts();
+			this.terminal.ResetBreakCount();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Format_Click(object sender, EventArgs e)
@@ -1574,7 +1574,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Status_FlowControlCount_ResetCount_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetFlowControlCounts();
+			this.terminal.ResetFlowControlCount();
 		}
 
 		private void contextMenuStrip_Status_BreakCount_ShowCount_Click(object sender, EventArgs e)
@@ -1584,7 +1584,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Status_BreakCount_ResetCount_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetBreakCounts();
+			this.terminal.ResetBreakCount();
 		}
 
 		#endregion
@@ -1739,11 +1739,11 @@ namespace YAT.Gui.Forms
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DSR);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DCD);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator2);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator3);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 
 			this.statusLabels_ioControlSerialPort_DefaultText = new Dictionary<ToolStripStatusLabel, string>();
 			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.Text);
@@ -1751,10 +1751,10 @@ namespace YAT.Gui.Forms
 			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.Text);
 			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.Text);
 			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DCD,           toolStripStatusLabel_TerminalStatus_DCD.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text);
 			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff,  toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.Text);
+			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text);
 			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.Text);
+			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.Text);
 
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText = new Dictionary<ToolStripStatusLabel, string>();
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.ToolTipText);
@@ -1762,10 +1762,10 @@ namespace YAT.Gui.Forms
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.ToolTipText);
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.ToolTipText);
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DCD,           toolStripStatusLabel_TerminalStatus_DCD.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText);
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff,  toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText);
+			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText);
 			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText);
+			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText);
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_IOStatus_Click(object sender, EventArgs e)
@@ -2169,6 +2169,13 @@ namespace YAT.Gui.Forms
 			ResumeLayout();
 		}
 
+		private void SetMonitorLineCount()
+		{
+			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.TxMaxLineCount;
+			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.BidirMaxLineCount;
+			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.RxMaxLineCount;
+		}
+
 		private void SetMonitorLineNumbers()
 		{
 			bool showLineNumbers = this.settingsRoot.Display.ShowLineNumbers;
@@ -2206,16 +2213,6 @@ namespace YAT.Gui.Forms
 			monitor_Tx.ShowCountAndRateStatus    = showCountAndRate;
 			monitor_Bidir.ShowCountAndRateStatus = showCountAndRate;
 			monitor_Rx.ShowCountAndRateStatus    = showCountAndRate;
-		}
-
-		private void SetMonitorContents()
-		{
-			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.TxMaxLineCount;
-			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.BidirMaxLineCount;
-			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.RxMaxLineCount;
-
-			// Reload from repositories.
-			ReloadMonitors();
 		}
 
 		private void ReloadMonitors()
@@ -2504,6 +2501,7 @@ namespace YAT.Gui.Forms
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetTerminalCaption();
+
 			if (e.Inner == null)
 			{
 				// SettingsRoot changed.
@@ -2519,6 +2517,7 @@ namespace YAT.Gui.Forms
 				// ImplicitSettings changed.
 				HandleImplicitSettings(e.Inner);
 			}
+
 			OnTerminalChanged(new EventArgs());
 		}
 
@@ -2617,34 +2616,17 @@ namespace YAT.Gui.Forms
 				SetMonitorCountAndRateStatus();
 				SetIOControlControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Buffer))
-			{
-				// BufferSettings changed.
-				ReloadMonitors();
-			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Display))
 			{
 				// DisplaySettings changed.
+				SetMonitorLineCount();
 				SetMonitorLineNumbers();
-				SetMonitorContents();
 				SetDisplayControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
 			{
 				// SendSettings changed.
 				SetSendControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.TextTerminal))
-			{
-				// TextTerminalSettings changed.
-				if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
-					ReloadMonitors();
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.BinaryTerminal))
-			{
-				// BinaryTerminalSettings changed.
-				if (this.settingsRoot.TerminalType == Domain.TerminalType.Binary)
-					ReloadMonitors();
 			}
 		}
 
@@ -2666,10 +2648,10 @@ namespace YAT.Gui.Forms
 
 			SetIOStatus();
 			SetIOControlControls();
+			SetMonitorLineCount();
 			SetMonitorLineNumbers();
 			SetMonitorIOStatus();
 			SetMonitorCountAndRateStatus();
-			SetMonitorContents();
 		}
 
 		#endregion
@@ -3102,13 +3084,13 @@ namespace YAT.Gui.Forms
 
 				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
 				{
-					MKY.IO.Ports.SerialPortControlPinCounts pinCounts = this.terminal.SerialPortControlPinCounts;
+					MKY.IO.Ports.SerialPortControlPinCount pinCount = this.terminal.SerialPortControlPinCount;
 
-					toolStripStatusLabel_TerminalStatus_RFR.Text += (" | " + pinCounts.RfrDisableCount.ToString(CultureInfo.InvariantCulture));
-					toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCounts.CtsDisableCount.ToString(CultureInfo.InvariantCulture));
-					toolStripStatusLabel_TerminalStatus_DTR.Text += (" | " + pinCounts.DtrDisableCount.ToString(CultureInfo.InvariantCulture));
-					toolStripStatusLabel_TerminalStatus_DSR.Text += (" | " + pinCounts.DsrDisableCount.ToString(CultureInfo.InvariantCulture));
-					toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCounts.DcdCount       .ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_RFR.Text += (" | " + pinCount.RfrDisableCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_CTS.Text += (" | " + pinCount.CtsDisableCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_DTR.Text += (" | " + pinCount.DtrDisableCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_DSR.Text += (" | " + pinCount.DsrDisableCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_DCD.Text += (" | " + pinCount.DcdCount       .ToString(CultureInfo.InvariantCulture));
 
 					toolStripStatusLabel_TerminalStatus_RFR.ToolTipText += (" | RFR Disable Count");
 					toolStripStatusLabel_TerminalStatus_CTS.ToolTipText += (" | CTS Disable Count");
@@ -3116,20 +3098,20 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.ToolTipText += (" | DSR Disable Count");
 					toolStripStatusLabel_TerminalStatus_DCD.ToolTipText += (" | DCD Count");
 
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + this.terminal.SentXOnCount.ToString(CultureInfo.InvariantCulture)     + " | " + this.terminal.SentXOffCount.ToString(CultureInfo.InvariantCulture));
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + this.terminal.ReceivedXOnCount.ToString(CultureInfo.InvariantCulture) + " | " + this.terminal.ReceivedXOffCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + this.terminal.SentXOnCount.ToString(CultureInfo.InvariantCulture)     + " | " + this.terminal.SentXOffCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + this.terminal.ReceivedXOnCount.ToString(CultureInfo.InvariantCulture) + " | " + this.terminal.ReceivedXOffCount.ToString(CultureInfo.InvariantCulture));
 
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
 				}
 
 				if (this.settingsRoot.Terminal.Status.ShowBreakCount)
 				{
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + this.terminal.OutputBreakCount.ToString(CultureInfo.InvariantCulture));
 					toolStripStatusLabel_TerminalStatus_InputBreak.Text  += (" | " + this.terminal.InputBreakCount.ToString(CultureInfo.InvariantCulture));
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Text += (" | " + this.terminal.OutputBreakCount.ToString(CultureInfo.InvariantCulture));
 
-					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
 					toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText  += (" | Input Break Count");
+					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
 				}
 
 				Image on = Properties.Resources.Image_On_12x12;
@@ -3139,13 +3121,13 @@ namespace YAT.Gui.Forms
 				{
 					MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
 					MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
-					bool outputBreak = false;
 					bool inputBreak = false;
+					bool outputBreak = false;
 					if (port != null)
 					{
 						pins        = port.ControlPins;
-						outputBreak = port.OutputBreak;
 						inputBreak  = port.InputBreak;
+						outputBreak = port.OutputBreak;
 					}
 					else
 					{
@@ -3192,24 +3174,24 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
 					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = showXOnXOff;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = showXOnXOff;
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = showXOnXOff;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = showXOnXOff;
 
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (manualXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 
 					toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (outputBreak ? off : on);
 					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (inputBreak  ? off : on);
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (outputBreak ? off : on);
 
-					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
 
 					// \attention
 					// Do not modify the 'Enabled' property. Labels must always be enabled,

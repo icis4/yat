@@ -684,16 +684,16 @@ namespace YAT.Domain
 			StringBuilder sb = new StringBuilder();
 			lock (this.repositorySyncObj)
 			{
-				sb.AppendLine(indent + "- TxRepository: ");
-				sb.Append(this.txRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				sb.AppendLine(indent + "> TxRepository: ");
+				sb.Append(this.txRepository.ToString(indent + "   "));    // Repository will add 'NewLine'.
 
-				sb.AppendLine(indent + "- BidirRepository: ");
-				sb.Append(this.bidirRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				sb.AppendLine(indent + "> BidirRepository: ");
+				sb.Append(this.bidirRepository.ToString(indent + "   ")); // Repository will add 'NewLine'.
 				
-				sb.AppendLine(indent + "- RxRepository: ");
-				sb.Append(this.rxRepository.ToString(indent + "--")); // Repository will add 'NewLine'.
+				sb.AppendLine(indent + "> RxRepository: ");
+				sb.Append(this.rxRepository.ToString(indent + "   "));    // Repository will add 'NewLine'.
 				
-				sb.Append(indent + "- I/O: " + this.io.ToString());
+				sb.Append(indent + "> I/O: " + this.io.ToString());
 			}
 			return (sb.ToString());
 		}

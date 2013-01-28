@@ -107,8 +107,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public override string ToDetailedString(string indent)
 		{
-			return (indent + "- Data: " + this.data + Environment.NewLine +
-					indent + "- IsLine: " + this.isLine + Environment.NewLine);
+			return (indent + "> Data: " + this.data + Environment.NewLine +
+					indent + "> IsLine: " + this.isLine + Environment.NewLine);
 		}
 	}
 
@@ -156,7 +156,7 @@ namespace YAT.Domain
 				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 			}
 
-			return (indent + "- Data: " + data + Environment.NewLine);
+			return (indent + "> Data: " + data + Environment.NewLine);
 		}
 	}
 }

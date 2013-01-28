@@ -920,13 +920,16 @@ namespace YAT.Model
 			// Settings have changed, recreate terminal with new settings.
 			if (this.terminal.IsStarted)
 			{
-				// Terminal is open, re-open it with the new settings.
+				// Terminal is open, close and re-open it with the new settings.
 				if (StopIO(false))
 				{
-					DetachTerminalEventHandlers();    // Detach to suspend events.
+					DetachTerminalEventHandlers(); // Detach to suspend events.
 					this.settingsRoot.Explicit = settings;
-					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, this.terminal);
-					AttachTerminalEventHandlers();    // Attach and resume events.
+					Domain.Terminal oldTerminal = this.terminal;
+					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+					oldTerminal.Dispose();         // Ensure to dispose of the 'old' resources.
+					AttachTerminalEventHandlers(); // Attach and resume events.
+
 					this.terminal.ReloadRepositories();
 
 					if (StartIO(false))
@@ -942,10 +945,13 @@ namespace YAT.Model
 			else
 			{
 				// Terminal is closed, simply set the new settings.
-				DetachTerminalEventHandlers();        // Detach to suspend events.
+				DetachTerminalEventHandlers(); // Detach to suspend events.
 				this.settingsRoot.Explicit = settings;
-				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, this.terminal);
-				AttachTerminalEventHandlers();        // Attach and resume events.
+				Domain.Terminal oldTerminal = this.terminal;
+				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
+				oldTerminal.Dispose();         // Ensure to dispose of the 'old' resources.
+				AttachTerminalEventHandlers(); // Attach and resume events.
+
 				this.terminal.ReloadRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");
@@ -2634,7 +2640,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Serial port control pin counts.
 		/// </summary>
-		public virtual MKY.IO.Ports.SerialPortControlPinCounts SerialPortControlPinCounts
+		public virtual MKY.IO.Ports.SerialPortControlPinCount SerialPortControlPinCount
 		{
 			get
 			{
@@ -2644,10 +2650,10 @@ namespace YAT.Model
 				{
 					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
-						return (port.ControlPinCounts);
+						return (port.ControlPinCount);
 				}
 
-				return (new MKY.IO.Ports.SerialPortControlPinCounts());
+				return (new MKY.IO.Ports.SerialPortControlPinCount());
 			}
 		}
 
@@ -2724,7 +2730,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void ResetFlowControlCounts()
+		public virtual void ResetFlowControlCount()
 		{
 			AssertNotDisposed();
 
@@ -2732,7 +2738,7 @@ namespace YAT.Model
 			{
 				MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
-					port.ResetFlowControlCounts();
+					port.ResetFlowControlCount();
 			}
 		}
 
@@ -2773,7 +2779,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void ResetBreakCounts()
+		public virtual void ResetBreakCount()
 		{
 			AssertNotDisposed();
 
@@ -2781,7 +2787,7 @@ namespace YAT.Model
 			{
 				MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
-					port.ResetBreakCounts();
+					port.ResetBreakCount();
 			}
 		}
 

@@ -58,18 +58,18 @@ namespace YAT.Domain
 		public DisplayRepository(int capacity)
 			: base(capacity)
 		{
-			this.capacity = capacity;
+			this.capacity    = capacity;
 			this.currentLine = new DisplayLine();
-		////this.dataCount = 0;
+		////this.dataCount   = 0;
 		}
 
 		/// <summary></summary>
 		public DisplayRepository(DisplayRepository rhs)
 			: base(rhs)
 		{
-			this.capacity = rhs.capacity;
+			this.capacity    = rhs.capacity;
 			this.currentLine = new DisplayLine(rhs.currentLine);
-			this.dataCount = rhs.dataCount;
+			this.dataCount   = rhs.dataCount;
 		}
 
 		#endregion
@@ -109,7 +109,7 @@ namespace YAT.Domain
 				if (this.currentLine.Count <= 0)
 					return (base.Count);
 				else
-					return (base.Count + 1); // Current line adds one line
+					return (base.Count + 1); // Current line adds one line.
 			}
 		}
 
@@ -132,19 +132,19 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1061:DoNotHideBaseClassMethods", Justification = "No clue why Queue<T>.Enqueue(T item) cannot be overridden...")]
 		public virtual void Enqueue(DisplayElement item)
 		{
-			// Add element to current line
+			// Add element to current line:
 			this.currentLine.Add(item);
 			if (item.IsData)
 				this.dataCount++;
 
-			// Check whether a line break is needed
+			// Check whether a line break is needed:
 			if (item is Domain.DisplayElement.LineBreak)
 			{
-				// Excess must be manually dequeued
+				// Excess must be manually dequeued:
 				if (Count >= Capacity)
 					DequeueExcessLine();
 
-				// Enqueue new line and reset current line
+				// Enqueue new line and reset current line:
 				base.Enqueue(this.currentLine); // No clone needed thanks to reset below.
 				this.currentLine.Clear();
 			}
@@ -177,7 +177,7 @@ namespace YAT.Domain
 		{
 			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray()); // Not using base.ToArray() result in stack overflow!
 
-			// Add current line if it contains elements
+			// Add current line if it contains elements:
 			if (this.currentLine.Count > 0)
 				lines.Add(new DisplayLine(this.currentLine));
 
@@ -236,10 +236,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "- LineCapacity: " +    Capacity.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "- LineCount: " +          Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "- DataCount: " + this.dataCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "- Lines: " + Environment.NewLine + LinesToString(indent + "--"));
+			return (indent + "> LineCapacity: " +    Capacity.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> LineCount: " +          Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> DataCount: " + this.dataCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> Lines: " + Environment.NewLine + LinesToString(indent + "   "));
 		}
 
 		/// <summary></summary>
@@ -252,13 +252,17 @@ namespace YAT.Domain
 		public virtual string LinesToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();
+
 			int i = 0;
 			foreach (DisplayLine dl in ToLines())
 			{
-				i++;
-				sb.Append(indent + "DisplayLine " + i + ":" + Environment.NewLine);
-				sb.Append(dl.ToString(indent + "--"));
+				sb.Append(indent + "> DisplayLine#" + (i++) + ":" + Environment.NewLine);
+				sb.Append(dl.ToString(indent + "   "));
 			}
+
+			if (i == 0)
+				sb.AppendLine(indent + "<NONE>");
+
 			return (sb.ToString());
 		}
 

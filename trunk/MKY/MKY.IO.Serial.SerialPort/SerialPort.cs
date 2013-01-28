@@ -484,16 +484,16 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Serial port control pin counts.
 		/// </summary>
-		public virtual Ports.SerialPortControlPinCounts ControlPinCounts
+		public virtual Ports.SerialPortControlPinCount ControlPinCount
 		{
 			get
 			{
 				AssertNotDisposed();
 
 				if (this.port != null)
-					return (this.port.ControlPinCounts);
+					return (this.port.ControlPinCount);
 				else
-					return (new Ports.SerialPortControlPinCounts());
+					return (new Ports.SerialPortControlPinCount());
 			}
 		}
 
@@ -963,9 +963,9 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Resets the XOn/XOff signalling counts.
+		/// Resets the XOn/XOff signalling count.
 		/// </summary>
-		public virtual void ResetXOnXOffCounts()
+		public virtual void ResetXOnXOffCount()
 		{
 			AssertNotDisposed();
 
@@ -978,27 +978,27 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Resets the flow control signalling counts.
+		/// Resets the flow control signalling count.
 		/// </summary>
-		public virtual void ResetFlowControlCounts()
+		public virtual void ResetFlowControlCount()
 		{
-			// AssertNotDisposed() is called by 'ResetXOnXOffCounts()'.
+			// AssertNotDisposed() is called by 'ResetXOnXOffCount()'.
 
-			ResetXOnXOffCounts();
+			ResetXOnXOffCount();
 
 			if (this.port != null)
-				this.port.ResetControlPinCounts();
+				this.port.ResetControlPinCount();
 		}
 
 		/// <summary>
-		/// Resets the break counts.
+		/// Resets the break count.
 		/// </summary>
-		public virtual void ResetBreakCounts()
+		public virtual void ResetBreakCount()
 		{
 			AssertNotDisposed();
 
 			if (this.port != null)
-				this.port.ResetBreakCounts();
+				this.port.ResetBreakCount();
 		}
 
 		#endregion
