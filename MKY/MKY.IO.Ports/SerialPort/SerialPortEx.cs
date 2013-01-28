@@ -74,7 +74,7 @@ namespace MKY.IO.Ports
 		// Fields
 		//==========================================================================================
 
-		private SerialPortControlPinCounts controlPinCounts;
+		private SerialPortControlPinCount controlPinCount;
 
 		private bool inputBreak;
 		private bool inputBreakSignal;
@@ -477,7 +477,7 @@ namespace MKY.IO.Ports
 						base.RtsEnable = value;
 
 						if (!base.RtsEnable)
-							Interlocked.Increment(ref this.controlPinCounts.RfrDisableCount);
+							Interlocked.Increment(ref this.controlPinCount.RfrDisableCount);
 
 						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 					}
@@ -534,7 +534,7 @@ namespace MKY.IO.Ports
 					base.DtrEnable = value;
 
 					if (!base.DtrEnable)
-						Interlocked.Increment(ref this.controlPinCounts.DtrDisableCount);
+						Interlocked.Increment(ref this.controlPinCount.DtrDisableCount);
 
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
@@ -583,24 +583,24 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Serial port control pin counts.
 		/// </summary>
-		public virtual SerialPortControlPinCounts ControlPinCounts
+		public virtual SerialPortControlPinCount ControlPinCount
 		{
 			get
 			{
 				AssertNotDisposed();
 
-				return (this.controlPinCounts);
+				return (this.controlPinCount);
 			}
 		}
 
 		/// <summary>
 		/// Resets the control pin counts.
 		/// </summary>
-		public virtual void ResetControlPinCounts()
+		public virtual void ResetControlPinCount()
 		{
 			AssertNotDisposed();
 
-			this.controlPinCounts.Reset();
+			this.controlPinCount.Reset();
 
 			// Fire the event even though just the count changed.
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
@@ -690,7 +690,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Resets the break counts.
 		/// </summary>
-		public virtual void ResetBreakCounts()
+		public virtual void ResetBreakCount()
 		{
 			AssertNotDisposed();
 
@@ -908,7 +908,7 @@ namespace MKY.IO.Ports
 					case System.IO.Ports.SerialPinChange.CtsChanged:
 					{
 						if (IsOpen && !CtsHolding)
-							Interlocked.Increment(ref this.controlPinCounts.CtsDisableCount);
+							Interlocked.Increment(ref this.controlPinCount.CtsDisableCount);
 
 						break;
 					}
@@ -916,7 +916,7 @@ namespace MKY.IO.Ports
 					case System.IO.Ports.SerialPinChange.DsrChanged:
 					{
 						if (IsOpen && !DsrHolding)
-							Interlocked.Increment(ref this.controlPinCounts.DsrDisableCount);
+							Interlocked.Increment(ref this.controlPinCount.DsrDisableCount);
 
 						break;
 					}
@@ -924,7 +924,7 @@ namespace MKY.IO.Ports
 					case System.IO.Ports.SerialPinChange.CDChanged:
 					{
 						if (IsOpen && CDHolding) // Count signals!
-							Interlocked.Increment(ref this.controlPinCounts.DcdCount);
+							Interlocked.Increment(ref this.controlPinCount.DcdCount);
 
 						break;
 					}

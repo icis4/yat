@@ -195,9 +195,9 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "- ElementCount: " +       Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "- DataCount: " + this.dataCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
-					indent + "- Elements: " + Environment.NewLine + ElementsToString(indent + "--"));
+			return (indent + "> ElementCount: " +       Count.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> DataCount: " + this.dataCount.ToString(CultureInfo.InvariantCulture) + Environment.NewLine +
+					indent + "> Elements: " + Environment.NewLine + ElementsToString(indent + "   "));
 		}
 
 		/// <summary></summary>
@@ -210,13 +210,17 @@ namespace YAT.Domain
 		public virtual string ElementsToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();
+
 			int i = 0;
 			foreach (DisplayElement de in this)
 			{
-				i++;
-				sb.Append(indent + "DisplayElement " + i + ":" + Environment.NewLine);
-				sb.Append(de.ToString(indent + "--"));
+				sb.Append(indent + "> DisplayElement#" + (i++) + ":" + Environment.NewLine);
+				sb.Append(de.ToString(indent + "   "));
 			}
+
+			if (i == 0)
+				sb.AppendLine(indent + "<NONE>");
+
 			return (sb.ToString());
 		}
 

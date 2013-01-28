@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 #endregion
 
@@ -148,9 +149,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDetailedString(string indent)
 		{
-			return (indent + "- Capacity: " + this.capacity + Environment.NewLine +
-					indent + "- Queue: " + Environment.NewLine +
-					QueueToDetailedString(indent + "--"));
+			return (indent + "> Capacity: " + this.capacity + Environment.NewLine +
+					indent + "> Queue: " + Environment.NewLine +
+					QueueToDetailedString(indent + "   "));
 		}
 
 		/// <summary></summary>
@@ -179,14 +180,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string QueueToDetailedString(string indent)
 		{
-			int i = 1;
-			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
+			StringBuilder sb = new StringBuilder();
+
+			int i = 0;
 			foreach (RawElement re in ToElements())
 			{
-				to.Write(indent + "RawElement " + i++ + ":" + Environment.NewLine);
-				to.Write(re.ToDetailedString(indent + "--"));
+				sb.Append(indent + "> RawElement#" + (i++) + ":" + Environment.NewLine);
+				sb.Append(re.ToDetailedString(indent + "   "));
 			}
-			return (to.ToString());
+
+			if (i == 0)
+				sb.AppendLine(indent + "<NONE>");
+
+			return (sb.ToString());
 		}
 	}
 }

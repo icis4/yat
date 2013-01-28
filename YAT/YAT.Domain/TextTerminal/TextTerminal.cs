@@ -21,17 +21,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
 using MKY.Text;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -216,6 +222,7 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					DetachTextTerminalSettings();
 				}
 			}
 
@@ -766,7 +773,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			Initialize();
+			InitializeStates();
 			base.ReloadRepositories();
 		}
 
@@ -776,7 +783,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			Initialize();
+			InitializeStates();
 			base.ClearMyRepository(repository);
 		}
 
@@ -800,7 +807,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			
-			return (indent + "- Type: TextTerminal" + Environment.NewLine + base.ToString(indent));
+			return (indent + "> Type: TextTerminal" + Environment.NewLine + base.ToString(indent));
 		}
 
 		#endregion
@@ -814,13 +821,8 @@ namespace YAT.Domain
 
 		private void AttachTextTerminalSettings(Settings.TextTerminalSettings textTerminalSettings)
 		{
-			if (Settings.IOSettings.ReferenceEquals(TerminalSettings.TextTerminal, textTerminalSettings))
-				return;
-
-			if (TerminalSettings.TextTerminal != null)
-				DetachTextTerminalSettings();
-
 			TerminalSettings.TextTerminal = textTerminalSettings;
+
 			TerminalSettings.TextTerminal.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
 		}
 
@@ -832,6 +834,7 @@ namespace YAT.Domain
 		private void ApplyTextTerminalSettings()
 		{
 			InitializeStates();
+			ReloadRepositories();
 		}
 
 		#endregion

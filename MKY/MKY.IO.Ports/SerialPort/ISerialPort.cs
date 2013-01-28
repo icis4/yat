@@ -99,12 +99,12 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Serial port control pin counts.
 		/// </summary>
-		SerialPortControlPinCounts ControlPinCounts { get; }
+		SerialPortControlPinCount ControlPinCount { get; }
 
 		/// <summary>
 		/// Resets the control pin counts.
 		/// </summary>
-		void ResetControlPinCounts();
+		void ResetControlPinCount();
 
 		/// <summary>
 		/// Gets the input break state.
@@ -134,7 +134,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Resets the break counts.
 		/// </summary>
-		void ResetBreakCounts();
+		void ResetBreakCount();
 
 		/// <summary>
 		/// Writes the specified byte to an output buffer at the specified offset.

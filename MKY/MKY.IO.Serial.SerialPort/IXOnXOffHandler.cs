@@ -82,7 +82,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Resets the XOn/XOff signalling counts.
 		/// </summary>
-		void ResetXOnXOffCounts();
+		void ResetXOnXOffCount();
 	}
 }
 

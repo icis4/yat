@@ -165,10 +165,10 @@ namespace MKY.IO.Ports
 	}
 
 	/// <summary>
-	/// Serial port control pin counts.
+	/// Serial port control pin count.
 	/// </summary>
 	[Serializable]
-	public struct SerialPortControlPinCounts
+	public struct SerialPortControlPinCount
 	{
 		/// <summary>
 		/// RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
@@ -239,7 +239,7 @@ namespace MKY.IO.Ports
 			if (GetType() != obj.GetType())
 				return (false);
 
-			SerialPortControlPinCounts other = (SerialPortControlPinCounts)obj;
+			SerialPortControlPinCount other = (SerialPortControlPinCount)obj;
 			return
 			(
 				(RfrDisableCount == other.RfrDisableCount) &&
@@ -289,7 +289,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(SerialPortControlPinCounts lhs, SerialPortControlPinCounts rhs)
+		public static bool operator ==(SerialPortControlPinCount lhs, SerialPortControlPinCount rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -304,7 +304,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(SerialPortControlPinCounts lhs, SerialPortControlPinCounts rhs)
+		public static bool operator !=(SerialPortControlPinCount lhs, SerialPortControlPinCount rhs)
 		{
 			return (!(lhs == rhs));
 		}
