@@ -21,11 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -153,9 +160,8 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Creates a shallow copy of the collection.
+		/// Creates and returns a new object that is a deep-copy of this instance.
 		/// </summary>
-		/// <returns>A shallow copy of the collection.</returns>
 		public virtual DisplayElementCollection Clone()
 		{
 			DisplayElementCollection c = new DisplayElementCollection();
@@ -277,9 +283,8 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// Creates a shallow copy of the collection.
+		/// Creates and returns a new object that is a deep-copy of this instance.
 		/// </summary>
-		/// <returns>A shallow copy of the collection.</returns>
 		public new DisplayLine Clone()
 		{
 			DisplayLine dl = new DisplayLine();

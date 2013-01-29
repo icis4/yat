@@ -296,7 +296,7 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Creates a deep copy of the EnumEx and returns it.
+		/// Creates and returns a new object that is a deep-copy of this instance.
 		/// </summary>
 		public virtual object Clone()
 		{

@@ -493,7 +493,7 @@ namespace YAT.Domain
 			elements.AddRange(lp);
 
 			DisplayLine line = new DisplayLine();
-			line.AddRange(lineState.LineElements); // No clone needed thanks to reset below.
+			line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
 			lineState.Reset();
 
 			lines.Add(line);
