@@ -113,7 +113,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates and returns a new object that is a deep-copy of this instance.
+		/// </summary>
 		public virtual RawElement Clone()
 		{
 			return (new RawElement(this.data, this.direction, this.timeStamp));

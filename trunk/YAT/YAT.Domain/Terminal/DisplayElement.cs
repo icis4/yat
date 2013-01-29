@@ -439,67 +439,65 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Static  Methods
-		//==========================================================================================
-		// Static Methods
-		//==========================================================================================
-
-		/// <summary></summary>
-		public static DisplayElement Recreate(DisplayElement baseElement, Pair<byte[], string> origin)
-		{
-			DisplayElement clone = baseElement.Clone(); // Ensure to recreate the proper type.
-
-			// Keep direction, isData and isEol.
-
-			// Replace rest based on given origin.
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
-			l.Add(origin);
-			clone.origin = l;
-			clone.text = origin.Value2;
-			clone.dataCount = 1;
-
-			return (clone);
-		}
-
-		#endregion
-
 		#region Methods
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates and returns a new object that is a deep-copy of this instance.
+		/// </summary>
 		public virtual DisplayElement Clone()
 		{
 			// Ensure to use the proper constructor.
 
 			// Attention: For performance reasons, reflection as shown below is not used
 			//ConstructorInfo ci = GetType().GetConstructor(Type.EmptyTypes);
-			//DisplayElement de = (DisplayElement)ci.Invoke(null);
+			//DisplayElement clone = (DisplayElement)ci.Invoke(null);
 
-			DisplayElement de;
+			DisplayElement clone;
 
-			if      (this is TxData)      de = new TxData();
-			else if (this is TxControl)   de = new TxControl();
-			else if (this is RxData)      de = new RxData();
-			else if (this is RxControl)   de = new RxControl();
-			else if (this is TimeStamp)   de = new TimeStamp();
-			else if (this is LineLength)  de = new LineLength();
-			else if (this is LeftMargin)  de = new LeftMargin();
-			else if (this is Space)       de = new Space();
-			else if (this is RightMargin) de = new RightMargin();
-			else if (this is LineBreak)   de = new LineBreak();
-			else if (this is IOError)     de = new IOError();
+			if      (this is TxData)      clone = new TxData();
+			else if (this is TxControl)   clone = new TxControl();
+			else if (this is RxData)      clone = new RxData();
+			else if (this is RxControl)   clone = new RxControl();
+			else if (this is TimeStamp)   clone = new TimeStamp();
+			else if (this is LineLength)  clone = new LineLength();
+			else if (this is LeftMargin)  clone = new LeftMargin();
+			else if (this is Space)       clone = new Space();
+			else if (this is RightMargin) clone = new RightMargin();
+			else if (this is LineBreak)   clone = new LineBreak();
+			else if (this is IOError)     clone = new IOError();
 			else throw (new TypeLoadException("Unknown display element type"));
 
-			de.direction = this.direction;
-			de.origin    = this.origin;
-			de.text      = this.text;
-			de.dataCount = this.dataCount;
-			de.isData    = this.isData;
-			de.isEol     = this.isEol;
+			clone.direction = this.direction;
+			clone.origin    = PerformDeepClone(this.origin);
+			clone.text      = this.text;
+			clone.dataCount = this.dataCount;
+			clone.isData    = this.isData;
+			clone.isEol     = this.isEol;
 
-			return (de);
+			return (clone);
+		}
+
+		/// <summary></summary>
+		public virtual DisplayElement RecreateFromOriginItem(Pair<byte[], string> originItem)
+		{
+			DisplayElement clone = Clone(); // Ensure to recreate the proper type.
+
+			// Keep direction, isData and isEol.
+
+			// Replace origin and dataCount.
+			List<Pair<byte[], string>> clonedOrigin = new List<Pair<byte[], string>>();
+			clonedOrigin.Add(PerformDeepClone(originItem));
+			clone.origin = clonedOrigin;
+			clone.dataCount = 1;
+
+			// Replace text.
+			string text = originItem.Value2;
+			clone.text = text;
+
+			return (clone);
 		}
 
 		/// <summary>
@@ -544,7 +542,7 @@ namespace YAT.Domain
 			// Weird ArgumentException when receiving large chunks of data.
 			try
 			{
-				this.origin.AddRange(de.origin);
+				this.origin.AddRange(PerformDeepClone(de.origin));
 				this.text      += de.text;
 				this.dataCount += de.dataCount;
 			}
@@ -553,6 +551,28 @@ namespace YAT.Domain
 				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
 				System.Diagnostics.Debug.WriteLine(de.ToString());
 			}
+		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
+
+		private static Pair<byte[], string> PerformDeepClone(Pair<byte[], string> originItem)
+		{
+			return (new Pair<byte[], string>((byte[])originItem.Value1.Clone(), originItem.Value2));
+		}
+
+		private static List<Pair<byte[], string>> PerformDeepClone(List<Pair<byte[], string>> origin)
+		{
+			List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>();
+
+			foreach (Pair<byte[], string> originItem in origin)
+				clone.Add(PerformDeepClone(originItem));
+
+			return (clone);
 		}
 
 		#endregion
@@ -582,13 +602,13 @@ namespace YAT.Domain
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(indent); sb.Append("- Type:      "); sb.AppendLine(GetType().Name);
-			sb.Append(indent); sb.Append("- Direction: "); sb.AppendLine(this.direction.ToString());
-			sb.Append(indent); sb.Append("- Origin:    "); sb.AppendLine(this.origin.ToString());
-			sb.Append(indent); sb.Append("- Text:      "); sb.AppendLine(this.text);
-			sb.Append(indent); sb.Append("- DataCount: "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
-			sb.Append(indent); sb.Append("- IsData:    "); sb.AppendLine(this.isData.ToString());
-			sb.Append(indent); sb.Append("- IsEol:     "); sb.AppendLine(this.isEol.ToString());
+			sb.Append(indent); sb.Append("> Type:      "); sb.AppendLine(GetType().Name);
+			sb.Append(indent); sb.Append("> Direction: "); sb.AppendLine(this.direction.ToString());
+			sb.Append(indent); sb.Append("> Origin:    "); sb.AppendLine(this.origin.ToString());
+			sb.Append(indent); sb.Append("> Text:      "); sb.AppendLine(this.text);
+			sb.Append(indent); sb.Append("> DataCount: "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
+			sb.Append(indent); sb.Append("> IsData:    "); sb.AppendLine(this.isData.ToString());
+			sb.Append(indent); sb.Append("> IsEol:     "); sb.AppendLine(this.isEol.ToString());
 
 			return (sb.ToString());
 		}

@@ -135,7 +135,7 @@ namespace YAT.Domain
 			// Add element to current line:
 			this.currentLine.Add(item);
 			if (item.IsData)
-				this.dataCount++;
+				this.dataCount += item.DataCount;
 
 			// Check whether a line break is needed:
 			if (item is Domain.DisplayElement.LineBreak)
@@ -145,7 +145,7 @@ namespace YAT.Domain
 					DequeueExcessLine();
 
 				// Enqueue new line and reset current line:
-				base.Enqueue(this.currentLine); // No clone needed thanks to reset below.
+				base.Enqueue(this.currentLine.Clone()); // Clone elements to ensure decoupling.
 				this.currentLine.Clear();
 			}
 		}
@@ -207,11 +207,9 @@ namespace YAT.Domain
 			if (Count > 0)
 			{
 				DisplayLine dl = Dequeue();
+
 				foreach (DisplayElement de in dl)
-				{
-					if (de.IsData)
-						this.dataCount--;
-				}
+					this.dataCount -= de.DataCount;
 			}
 		}
 
