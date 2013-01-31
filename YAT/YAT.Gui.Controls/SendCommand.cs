@@ -170,9 +170,15 @@ namespace YAT.Gui.Controls
 			set
 			{
 				if (value != null)
+				{
 					this.command = value;
+					this.isValidated = value.IsValidText;
+				}
 				else
+				{
 					this.command = new Command();
+					this.isValidated = false;
+				}
 
 				OnCommandChanged(new EventArgs());
 				SetControls();
@@ -361,7 +367,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
-			if ((this.editFocusState == FocusState.Inactive) && !this.command.IsSingleLineText)
+			if ((this.editFocusState == FocusState.Inactive) && !this.command.IsText)
 			{
 				this.isSettingControls.Enter();
 				comboBox_Command.Text      = "";
@@ -371,7 +377,8 @@ namespace YAT.Gui.Controls
 			}
 
 			SetEditFocusState(FocusState.HasFocus);
-			this.isValidated = false;
+
+			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
 		}
 
 		/// <remarks>
@@ -431,6 +438,7 @@ namespace YAT.Gui.Controls
 			{
 				if (!this.isValidated && (this.editFocusState != FocusState.IsLeavingControl))
 				{
+					// Easter egg ;-)
 					if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
 					{
 						this.isValidated = true;
@@ -444,6 +452,7 @@ namespace YAT.Gui.Controls
 						return;
 					}
 
+					// Single line => Validate!
 					int invalidTextStart;
 					int invalidTextLength;
 					if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text, out invalidTextStart, out invalidTextLength))
@@ -471,7 +480,9 @@ namespace YAT.Gui.Controls
 			if (!this.isSettingControls)
 			{
 				this.isValidated = true; // Commands in history have already been validated.
-				SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
+
+				if (comboBox_Command.SelectedItem != null)
+					SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
 			}
 		}
 		

@@ -334,12 +334,12 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			// description
+			// Description:
 			textBox_Description.Text = this.command.Description;
 
 			if (this.command.IsText)
 			{
-				// command
+				// Command:
 				textBox_Command.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
@@ -348,33 +348,33 @@ namespace YAT.Gui.Controls
 					textBox_Command.Font      = SystemFonts.DefaultFont;
 				}
 
-				// buttons
+				// Buttons:
 				button_SetMultiLineCommand.Visible = true;
 				button_SetMultiLineCommand.Enabled = true;
 				button_SetFile.Visible = false;
 				button_SetFile.Enabled = false;
 
-				// file path
+				// File path:
 				pathLabel_FilePath.Visible = false;
 				pathLabel_FilePath.Text = "";
 				checkBox_IsFile.Checked = false;
 
-				// delete
+				// Delete:
 				button_Delete.Enabled = true;
 			}
 			else if (this.command.IsFilePath)
 			{
-				// command
+				// Command:
 				textBox_Command.Visible = false;
 				textBox_Command.Text = "";
 
-				// buttons
+				// Buttons:
 				button_SetMultiLineCommand.Visible = false;
 				button_SetMultiLineCommand.Enabled = false;
 				button_SetFile.Visible = true;
 				button_SetFile.Enabled = true;
 
-				// file path
+				// File path:
 				pathLabel_FilePath.Visible = true;
 				if (this.command.IsFilePath)
 				{
@@ -391,12 +391,12 @@ namespace YAT.Gui.Controls
 
 				checkBox_IsFile.Checked = true;
 
-				// delete
+				// Delete:
 				button_Delete.Enabled = true;
 			}
 			else
 			{
-				// command
+				// Command:
 				textBox_Command.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
@@ -405,18 +405,18 @@ namespace YAT.Gui.Controls
 					textBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
 				}
 
-				// buttons
+				// Buttons:
 				button_SetMultiLineCommand.Visible = true;
 				button_SetMultiLineCommand.Enabled = true;
 				button_SetFile.Visible = false;
 				button_SetFile.Enabled = false;
 
-				// file path
+				// File path:
 				pathLabel_FilePath.Visible = false;
 				pathLabel_FilePath.Text = "";
 				checkBox_IsFile.Checked = false;
 
-				// delete
+				// Delete:
 				button_Delete.Enabled = false;
 			}
 
@@ -458,20 +458,20 @@ namespace YAT.Gui.Controls
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
-			// Indicate multi line command.
+			// Indicate multi line command:
 			this.isSettingControls.Enter();
 			textBox_Command.Text      = Command.MultiLineCommandText;
 			textBox_Command.ForeColor = SystemColors.ControlText;
 			textBox_Command.Font      = SystemFonts.DefaultFont;
 			this.isSettingControls.Leave();
 
-			// Calculate startup location.
+			// Calculate startup location:
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
 			Point formStartupLocation = new Point();
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
-			// Show multi line box.
+			// Show multi line box:
 			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
