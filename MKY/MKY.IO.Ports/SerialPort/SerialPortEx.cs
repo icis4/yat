@@ -899,6 +899,7 @@ namespace MKY.IO.Ports
 			OnDataReceived(new SerialDataReceivedEventArgs(e.EventType));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void base_PinChanged(object sender, System.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			try // Access to pins may lead to exceptions when port is about to be closed.

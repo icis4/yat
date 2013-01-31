@@ -106,6 +106,8 @@ Disable the following rules
   > Prevents readable implementation of multi-argument methods.
 - C# > Spacing > ClosingCurlyBracketsMustBeSpacedCorrectly (SA1013)
   > Prevents implementation of table-style aligned code.
+- C# > Spacing > ClosingGenericBracketsMustBeSpacedCorrectly (SA1015)
+  > Prevents implementation of table-style aligned code.
 - C# > Spacing > MemberAccessSymbolsMustBeSpacedCorrectly (SA1019)
   > Prevents implementation of table-style aligned code.
 - C# > Spacing > CodeMustNotContainMultipleWhitespaceInRow (SA1025)
@@ -125,14 +127,8 @@ Temporarily disable the following rules during transition from non-StyleCop to S
 Add the following prefixes to the list of allowed Hungarian prefixes
 - io (Input/Output)
 - ip (Internet Protocol)
-- pc
-- rs (RS-232/422/485)
 - rx (Receive)
-- ts (TimeSpan/TimeStamp)
 - tx (Transmit)
-- x  (X-Coordinate/Extended/Extension)
-- y  (Y-Coordinate)
-- z  (Z-Coordinate)
 
 
 In-Code Suppressions

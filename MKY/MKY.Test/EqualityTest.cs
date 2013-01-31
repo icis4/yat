@@ -1974,7 +1974,6 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestSystemValueType()
 		{
@@ -1992,7 +1991,6 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestOwnValueTypeWithoutOperators()
 		{
@@ -2010,7 +2008,6 @@ namespace MKY.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestOwnValueTypeWithOperators()
 		{
@@ -2183,7 +2180,6 @@ namespace MKY.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		[Test]
 		public virtual void TestSystemBaseReferenceTypeIEquatableWithOperators()
 		{

@@ -1315,7 +1315,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				// \remind (MKY 2012-09-19 @ Dalian ;-)
+				// \remind (2012-09-19 / mky @ Dalian ;-)
 				// As soon as "PathSettings.TerminalFilesPath and .WorkspaceFilesPath should be merged"
 				// has been implemented, the following if-elif-else can be merged back as well.
 				if (ExtensionSettings.IsTerminalFile(ofd.FileName))

@@ -721,6 +721,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (IsStarted)
 			{
 				bool signalXOnXOff = false;
+				bool signalXOnXOffCount = false;
 
 				lock (this.sendQueue)
 				{
@@ -733,7 +734,6 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							if (b == SerialPortSettings.XOnByte)
 							{
-								Interlocked.Increment(ref this.sentXOnCount);
 								lock (this.inputIsXOnSyncObj)
 								{
 									if (BooleanEx.SetIfCleared(ref this.inputIsXOn))
@@ -742,10 +742,12 @@ namespace MKY.IO.Serial.SerialPort
 									lock (this.manualInputWasXOnSyncObj)
 										this.manualInputWasXOn = true;
 								}
+
+								Interlocked.Increment(ref this.sentXOnCount);
+								signalXOnXOffCount = true;
 							}
 							else if (b == SerialPortSettings.XOffByte)
 							{
-								Interlocked.Increment(ref this.sentXOffCount);
 								lock (this.inputIsXOnSyncObj)
 								{
 									if (BooleanEx.ClearIfSet(ref this.inputIsXOn))
@@ -754,18 +756,21 @@ namespace MKY.IO.Serial.SerialPort
 									lock (this.manualInputWasXOnSyncObj)
 										this.manualInputWasXOn = false;
 								}
+
+								Interlocked.Increment(ref this.sentXOffCount);
+								signalXOnXOffCount = true;
 							}
 						}
 					}
 				}
 
+				// Signal XOn/XOff change to receive thread:
 				if (signalXOnXOff)
-				{
-					// Signal XOn/XOff change to receive thread:
 					this.receiveThreadEvent.Set();
 
+				// Immediately invoke the event, invoke it normally = synchronously:
+				if (signalXOnXOff || signalXOnXOffCount)
 					OnIOControlChanged(new EventArgs());
-				}
 
 				// Signal send thread:
 				this.sendThreadEvent.Set();
@@ -789,126 +794,150 @@ namespace MKY.IO.Serial.SerialPort
 		/// <remarks>
 		/// Will be signaled by <see cref="Send(byte[])"/> method above, or by XOn/XOff while receiving.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void SendThread()
 		{
 			WriteDebugMessageLine("SendThread() has started.");
 
-			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag && !IsDisposed)
+			// If access to port throws exception, port has been shut down, e.g. USB to serial converter
+			// was disconnected.
+			try
 			{
-				try
+				// Outer loop, requires another signal.
+				while (this.sendThreadRunFlag && !IsDisposed)
 				{
-					// WaitOne() might wait forever in case the underlying I/O provider crashes,
-					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-						continue;
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
-					break;
-				}
-
-				// Inner loop, runs as long as there is data in the send queue.
-				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend)
-				{
-					// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
-					// an exception when trying to write while in output break!
-					bool isOutputBreak;
-					lock (this.port)
-						isOutputBreak = this.port.OutputBreak;
-
-					if (!isOutputBreak)
+					try
 					{
-						// In case of XOff:
-						if (XOnXOffIsInUse && !OutputIsXOn)
-							break; // Let other threads do their job and wait until signaled again.
+						// WaitOne() might wait forever in case the underlying I/O provider crashes,
+						// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
+						// therefore, only wait for a certain period and then poll the run flag again.
+						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+							continue;
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+						break;
+					}
 
-						// In case of disabled CTS line:
-						if (this.settings.Communication.FlowControlUsesRfrCts)
-						{
-							bool isClearToSend;
-							lock (this.port)
-								isClearToSend = this.port.CtsHolding;
-
-							if (!isClearToSend)
-								break; // Let other threads do their job and wait until signaled again.
-						}
-
-						// No break, no XOff, no CTS disable, ready to send.
-
-						// Something to send?
-						lock (this.sendQueue)
-						{
-							if (this.sendQueue.Count <= 0)
-								break; // Let other threads do their job and wait until signaled again.
-						}
-
-						// Send it!
-						byte[] chunkData;
+					// Inner loop, runs as long as there is data in the send queue.
+					// Ensure not to forward any events during closing anymore.
+					while (this.sendThreadRunFlag && IsReadyToSend)
+					{
+						// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
+						// an exception when trying to write while in output break!
+						bool isOutputBreak;
 						lock (this.port)
+							isOutputBreak = this.port.OutputBreak;
+
+						if (!isOutputBreak)
 						{
-							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-								this.port.RfrEnable = true;
+							// In case of XOff:
+							if (XOnXOffIsInUse && !OutputIsXOn)
+								break; // Let other threads do their job and wait until signaled again.
 
-							// 'WriteBufferSize' typically is 2048. However, devices on the other side may
-							// not be able to deal with that much data if flow control is active.
-							int chunkSize;
-							int availableSpace = (this.port.WriteBufferSize - this.port.BytesToWrite);
-						////if (this.settings.Communication.FlowControlIsInactive)
-						////{
-						////	// Easy case, just stuff as much data as possible into output buffer:
-						////	chunkSize = availableSpace;
-						////}
-						////else
-						////{
-								// Harder case, limit the chunk size to the maximum chunk size setting:
-								chunkSize = Int32Ex.LimitToBounds(availableSpace, 0, this.settings.MaxSendChunkSize);
-						////}
-						//// Always use max chunk size, otherwise the DataSent event is very erratic.
+							// In case of disabled CTS line:
+							if (this.settings.Communication.FlowControlUsesRfrCts)
+							{
+								bool isClearToSend;
+								lock (this.port)
+									isClearToSend = this.port.CtsHolding;
 
-							List<byte> chunkList = new List<byte>(chunkSize);
+								if (!isClearToSend)
+									break; // Let other threads do their job and wait until signaled again.
+							}
+
+							// No break, no XOff, no CTS disable, ready to send.
+
+							// Something to send?
 							lock (this.sendQueue)
 							{
-								for (int i = 0; (i < chunkSize) && (this.sendQueue.Count > 0); i++)
-									chunkList.Add(this.sendQueue.Dequeue());
+								if (this.sendQueue.Count <= 0)
+									break; // Let other threads do their job and wait until signaled again.
 							}
-							chunkData = chunkList.ToArray();
 
-							this.port.Write(chunkData, 0, chunkData.Length);
-							this.port.Flush(); // Make sure that data is sent before continuing.
+							// Send it!
+							byte[] chunkData;
+							lock (this.port)
+							{
+								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+									this.port.RfrEnable = true;
 
-							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-								this.port.RfrEnable = false;
+								// 'WriteBufferSize' typically is 2048. However, devices on the other side may
+								// not be able to deal with that much data if flow control is active.
+								int chunkSize;
+								int availableSpace = (this.port.WriteBufferSize - this.port.BytesToWrite);
+							////if (this.settings.Communication.FlowControlIsInactive)
+							////{
+							////	// Easy case, just stuff as much data as possible into output buffer:
+							////	chunkSize = availableSpace;
+							////}
+							////else
+							////{
+									// Harder case, limit the chunk size to the maximum chunk size setting:
+									chunkSize = Int32Ex.LimitToBounds(availableSpace, 0, this.settings.MaxSendChunkSize);
+							////}
+							//// Always use max chunk size, otherwise the DataSent event is very erratic.
+
+								List<byte> chunkList = new List<byte>(chunkSize);
+								lock (this.sendQueue)
+								{
+									for (int i = 0; (i < chunkSize) && (this.sendQueue.Count > 0); i++)
+										chunkList.Add(this.sendQueue.Dequeue());
+								}
+								chunkData = chunkList.ToArray();
+
+								try
+								{
+									this.port.Write(chunkData, 0, chunkData.Length);
+									this.port.Flush(); // Make sure that data is sent before continuing.
+								}
+								catch (TimeoutException ex)
+								{
+									// \remind (2012-09-19 / mky)
+									// This try-catch works around YAT issue #255 "Manual software
+									// flow control may lead to data loss in case of too long XOff"
+									if (this.settings.Communication.FlowControlUsesXOnXOff)
+										DebugEx.WriteException(GetType(), ex, "SendThread() has provoked a timeout while writing to the port, ignoring the issue since it got caused due to XOff");
+									else
+										throw; // Re-throw!
+								}
+
+								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+									this.port.RfrEnable = false;
+							}
+
+							OnDataSent(new DataSentEventArgs(chunkData));
+
+							// Wait for the minimal time possible to allow other threads to execute and
+							// to prevent that 'DataSent' events are fired consecutively.
+							Thread.Sleep(TimeSpan.Zero);
 						}
-
-						OnDataSent(new DataSentEventArgs(chunkData));
-
-						// Wait for the minimal time possible to allow other threads to execute and
-						// to prevent that 'DataSent' events are fired consecutively.
-						Thread.Sleep(TimeSpan.Zero);
-					}
-					else
-					{
-						// If data is intended to be sent, and the output has changed to break,
-						// write an error message onto the terminal:
-						if ((this.sendQueue.Count > 0) && isOutputBreak && !SendThread_isOutputBreakOldAndErrorHasBeenSignaled)
+						else
 						{
-							OnIOError(new IOErrorEventArgs
-								(
-								ErrorSeverity.Acceptable,
-								Direction.Output,
-								"No data can be sent while port is in output break state")
-								);
+							// If data is intended to be sent, and the output has changed to break,
+							// write an error message onto the terminal:
+							if ((this.sendQueue.Count > 0) && isOutputBreak && !SendThread_isOutputBreakOldAndErrorHasBeenSignaled)
+							{
+								OnIOError(new IOErrorEventArgs
+									(
+									ErrorSeverity.Acceptable,
+									Direction.Output,
+									"No data can be sent while port is in output break state")
+									);
 
-							SendThread_isOutputBreakOldAndErrorHasBeenSignaled = isOutputBreak;
+								SendThread_isOutputBreakOldAndErrorHasBeenSignaled = isOutputBreak;
+							}
 						}
 					}
 				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port");
+				RestartOrResetPortAndThreads();
 			}
 
 			this.sendThread = null;
@@ -1285,64 +1314,79 @@ namespace MKY.IO.Serial.SerialPort
 		// Port Events
 		//==========================================================================================
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			if (IsOpen) // Ensure not to forward any events during closing anymore.
+			// If data has been received, but access to port throws exception, port has been shut
+			// down, e.g. USB to serial converter was disconnected.
+			try
 			{
-				// Immediately read data on this thread.
-				int bytesToRead;
-				byte[] data;
-				lock (this.port)
+				if (IsOpen) // Ensure not to forward any events during closing anymore.
 				{
-					bytesToRead = this.port.BytesToRead;
-					data = new byte[bytesToRead];
-					this.port.Read(data, 0, bytesToRead);
-				}
-
-				bool signalXOnXOff = false;
-
-				lock (this.receiveQueue)
-				{
-					foreach (byte b in data)
+					// Immediately read data on this thread.
+					int bytesToRead;
+					byte[] data;
+					lock (this.port)
 					{
-						this.receiveQueue.Enqueue(b);
+						bytesToRead = this.port.BytesToRead;
+						data = new byte[bytesToRead];
+						this.port.Read(data, 0, bytesToRead);
+					}
 
-						// Handle output XOn/XOff.
-						if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+					bool signalXOnXOff = false;
+					bool signalXOnXOffCount = false;
+
+					lock (this.receiveQueue)
+					{
+						foreach (byte b in data)
 						{
-							if (b == SerialPortSettings.XOnByte)
+							this.receiveQueue.Enqueue(b);
+
+							// Handle output XOn/XOff.
+							if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 							{
-								Interlocked.Increment(ref this.receivedXOnCount);
-								lock (this.outputIsXOnSyncObj)
+								if (b == SerialPortSettings.XOnByte)
 								{
-									if (BooleanEx.SetIfCleared(ref this.outputIsXOn))
-										signalXOnXOff = true;
+									lock (this.outputIsXOnSyncObj)
+									{
+										if (BooleanEx.SetIfCleared(ref this.outputIsXOn))
+											signalXOnXOff = true;
+									}
+
+									Interlocked.Increment(ref this.receivedXOnCount);
+									signalXOnXOffCount = true;
 								}
-							}
-							else if (b == SerialPortSettings.XOffByte)
-							{
-								Interlocked.Increment(ref this.receivedXOffCount);
-								lock (this.outputIsXOnSyncObj)
+								else if (b == SerialPortSettings.XOffByte)
 								{
-									if (BooleanEx.ClearIfSet(ref this.outputIsXOn))
-										signalXOnXOff = true;
+									lock (this.outputIsXOnSyncObj)
+									{
+										if (BooleanEx.ClearIfSet(ref this.outputIsXOn))
+											signalXOnXOff = true;
+									}
+
+									Interlocked.Increment(ref this.receivedXOffCount);
+									signalXOnXOffCount = true;
 								}
 							}
 						}
 					}
-				}
 
-				if (signalXOnXOff)
-				{
 					// Signal XOn/XOff change to send thread:
-					this.sendThreadEvent.Set();
+					if (signalXOnXOff)
+						this.sendThreadEvent.Set();
 
 					// Immediately invoke the event, but invoke it asynchronously!
-					OnIOControlChangedAsync(new EventArgs());
-				}
+					if (signalXOnXOff || signalXOnXOffCount)
+						OnIOControlChangedAsync(new EventArgs());
 
-				// Signal receive thread:
-				this.receiveThreadEvent.Set();
+					// Signal receive thread:
+					this.receiveThreadEvent.Set();
+				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port");
+				RestartOrResetPortAndThreads();
 			}
 		}
 
@@ -1460,7 +1504,7 @@ namespace MKY.IO.Serial.SerialPort
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
-			//   e.g. USB to serial converter was disconnected.
+			// e.g. USB to serial converter was disconnected.
 			try
 			{
 				// Force access to port to check whether the port is still alive:
@@ -1496,9 +1540,9 @@ namespace MKY.IO.Serial.SerialPort
 					OnIOControlChanged(new EventArgs());
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
-				WriteDebugMessageLine("PinChangedAsync() detected shutdown of port.");
+				DebugEx.WriteException(GetType(), ex, "PinChangedAsync() has detected shutdown of port");
 				RestartOrResetPortAndThreads();
 			}
 		}
@@ -1573,13 +1617,13 @@ namespace MKY.IO.Serial.SerialPort
 					//   port has been shut down, e.g. USB to serial converter disconnected.
 					if (!this.port.IsOpen)
 					{
-						WriteDebugMessageLine("AliveTimerElapsed() detected shutdown of port.");
+						WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port.");
 						RestartOrResetPortAndThreads();
 					}
 				}
 				catch
 				{
-					WriteDebugMessageLine("AliveTimerElapsed() detected shutdown of port.");
+					WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port.");
 					RestartOrResetPortAndThreads();
 				}
 			}
