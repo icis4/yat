@@ -492,6 +492,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "IOIs", Justification = "YAT uses the better readable 'IO' instead of 'Io'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "IOIs", Justification = "YAT uses the better readable 'IO' instead of 'Io'.")]
 		public virtual bool UnderlyingIOIsSerialPort
 		{
 			get
@@ -1900,7 +1902,10 @@ namespace YAT.Model
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
 			{
 				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				p.ToggleRfr();
+				if (p != null)
+					p.ToggleRfr();
+				else
+					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port"));
 			}
 		}
 
@@ -1913,7 +1918,10 @@ namespace YAT.Model
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
 			{
 				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				p.ToggleDtr();
+				if (p != null)
+					p.ToggleDtr();
+				else
+					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port"));
 			}
 		}
 
@@ -1926,9 +1934,22 @@ namespace YAT.Model
 			{
 				MKY.IO.Serial.SerialPort.IXOnXOffHandler x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 				if (x != null)
+				{
+					// Since the underlying I/O provider's 'DataSent' events are no longer used to
+					// feed the outgoing data into the repositories, outgoing XOn/XOff characters
+					// must manually be fed into the repositories. Do so before actually sending the
+					// character to ensure that it is placed before eventual data.
+					if (x.InputIsXOn)
+						this.terminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOffByte });
+					else
+						this.terminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
+
 					x.ToggleInputXOnXOff();
+				}
 				else
+				{
 					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
+				}
 			}
 		}
 

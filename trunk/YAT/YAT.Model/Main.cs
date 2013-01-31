@@ -888,7 +888,6 @@ namespace YAT.Model
 		// Workspace > Lifetime
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		private void AttachWorkspaceEventHandlers()
 		{
 			if (this.workspace != null)
@@ -898,7 +897,6 @@ namespace YAT.Model
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1015:ClosingGenericBracketsMustBeSpacedCorrectly", Justification = "Table-style aligned code.")]
 		private void DetachWorkspaceEventHandlers()
 		{
 			if (this.workspace != null)

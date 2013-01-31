@@ -750,7 +750,7 @@ namespace YAT.Settings.Test
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
 				terminal.Start();
-				VerifySettingsCase02(terminal, true); // Ignore baud rate because it changed from enum to int.
+				VerifySettingsCase02(terminal);
 			}
 		}
 
@@ -761,7 +761,7 @@ namespace YAT.Settings.Test
 		// Settings Cases > 03 :: Terminal :: COM1 / Closed / Predefined
 		//------------------------------------------------------------------------------------------
 
-		private void ExecuteSettingsCase03(string filePath)
+		private static void ExecuteSettingsCase03(string filePath)
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
 
@@ -780,7 +780,7 @@ namespace YAT.Settings.Test
 		// Settings Cases > 04 :: Workspace :: 2 Terminals on COM1 / COM2
 		//------------------------------------------------------------------------------------------
 
-		private void ExecuteSettingsCase04(string filePath)
+		private static void ExecuteSettingsCase04(string filePath)
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
 
@@ -821,12 +821,9 @@ namespace YAT.Settings.Test
 		// Settings Cases > 06 :: Workspace :: 2 TCP AutoSocket Terminals
 		//------------------------------------------------------------------------------------------
 
-		private void ExecuteSettingsCase06(string filePath)
+		private static void ExecuteSettingsCase06(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
-				(
-				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]
-				);
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
@@ -843,7 +840,7 @@ namespace YAT.Settings.Test
 		// Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
 		//------------------------------------------------------------------------------------------
 
-		private void ExecuteSettingsCase07(string filePath)
+		private static void ExecuteSettingsCase07(string filePath)
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
 
@@ -862,7 +859,7 @@ namespace YAT.Settings.Test
 		// Settings Cases > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
-		private void ExecuteSettingsCase08(string filePath)
+		private static void ExecuteSettingsCase08(string filePath)
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
 
@@ -926,16 +923,10 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase02(Model.Terminal terminal)
 		{
-			VerifySettingsCase02(terminal, false);
-		}
-
-		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
-		{
 			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary!");
 			Assert.AreEqual(2, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM2!");
 
-			if (!ignoreBaudRate)
-				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
+			Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB == "COM2")
 			{

@@ -444,6 +444,20 @@ namespace YAT.Domain
 			return (s);
 		}
 
+		/// <summary></summary>
+		public void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
+		{
+			AssertNotDisposed();
+
+			RawElement re = new RawElement(data, SerialDirection.Tx);
+			lock (this.repositorySyncObj)
+			{
+				this.txRepository.Enqueue(re.Clone());    // Clone elementas it is needed again below.
+				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+			}
+			OnRawElementSent(new RawElementEventArgs(re));
+		}
+
 		#endregion
 
 		#region Settings

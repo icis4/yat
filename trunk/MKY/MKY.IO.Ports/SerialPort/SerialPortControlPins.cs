@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 using System.Xml.Serialization;
 
@@ -265,7 +266,7 @@ namespace MKY.IO.Ports
 				CtsDisableCount.GetHashCode() ^
 				DtrDisableCount.GetHashCode() ^
 				DsrDisableCount.GetHashCode() ^
-				DcdCount.GetHashCode()
+				DcdCount       .GetHashCode()
 			);
 		}
 
@@ -274,11 +275,11 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				"RFR=" + RfrDisableCount.ToString() + ", " +
-				"CTS=" + CtsDisableCount.ToString() + ", " +
-				"DTR=" + DtrDisableCount.ToString() + ", " +
-				"DSR=" + DsrDisableCount.ToString() + ", " +
-				"DCD=" + DcdCount.ToString()
+				"RFR=" + RfrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"CTS=" + CtsDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"DTR=" + DtrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"DSR=" + DsrDisableCount.ToString(CultureInfo.InvariantCulture) + ", " +
+				"DCD=" + DcdCount       .ToString(CultureInfo.InvariantCulture)
 			);
 		}
 

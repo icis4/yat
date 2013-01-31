@@ -201,15 +201,10 @@ namespace MKY.IO.Usb
 				accumulatedLength += dataLength;
 			}
 
-			// According to the USB specifications, HID must add a terminating report in case the
-			// last report was full:
-			if ((reports.Count > 0) && reportIsFull)
-			{
-				byte[] emptyReport = new byte[2];
-				emptyReport[0] = reportId;
-				emptyReport[1] = 0;
-				reports.Add(emptyReport);
-			}
+			// According to the USB specifications, a terminating report must be added in case the
+			// last report was full. However, this only applies to data that is sent from device to
+			// host. In case of data that is sent from host to device this doesn't apply, due to the
+			// asymmetrical nature of USB.
 
 			// Return the reports, or <c>null</c> if there are no reports at all:
 			this.reports = reports.AsReadOnly();

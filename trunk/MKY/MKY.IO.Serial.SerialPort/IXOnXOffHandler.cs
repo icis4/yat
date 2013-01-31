@@ -21,8 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-
 namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
@@ -60,27 +58,27 @@ namespace MKY.IO.Serial.SerialPort
 		void ToggleInputXOnXOff();
 
 		/// <summary>
-		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signalling.
+		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		int SentXOnCount { get; }
 
 		/// <summary>
-		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signalling.
+		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		int SentXOffCount { get; }
 
 		/// <summary>
-		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signalling.
+		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		int ReceivedXOnCount { get; }
 
 		/// <summary>
-		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signalling.
+		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		int ReceivedXOffCount { get; }
 
 		/// <summary>
-		/// Resets the XOn/XOff signalling counts.
+		/// Resets the XOn/XOff signaling counts.
 		/// </summary>
 		void ResetXOnXOffCount();
 	}

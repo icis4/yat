@@ -719,6 +719,14 @@ namespace YAT.Domain
 			this.rawTerminal.Send(data);
 		}
 
+		/// <summary></summary>
+		public void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
+		{
+			AssertNotDisposed();
+
+			this.rawTerminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(data);
+		}
+
 		#endregion
 
 		#region Methods > Element Processing
