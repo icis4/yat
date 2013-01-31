@@ -41,7 +41,8 @@ Use <c>null</c>
 Use <c>true</c>
 Use <c>false</c>
 
-<see cref="T:Type`1"/>
+Generics     : <see cref="T:Type`1"/>
+Methods      : <see cref="Add()"/>           or   <see cref="Add"/>   if ambiguous
 
 
 Preprocessor statements

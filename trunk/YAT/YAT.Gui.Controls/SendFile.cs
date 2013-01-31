@@ -190,19 +190,12 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void pathComboBox_FilePath_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				try
-				{
-					Command c = (Command)((RecentItem<Command>)pathComboBox_FilePath.SelectedItem);
-					SetFileCommand(c);
-				}
-				catch
-				{
-				}
+				if (pathComboBox_FilePath.SelectedItem != null)
+					SetFileCommand((Command)((RecentItem<Command>)pathComboBox_FilePath.SelectedItem));
 			}
 		}
 

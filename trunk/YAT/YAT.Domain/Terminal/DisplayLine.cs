@@ -130,6 +130,17 @@ namespace YAT.Domain
 			this.dataCount += item.DataCount;
 		}
 
+		/// <remarks>
+		/// Required because <see cref="T:List`1.AddRange"/> doesn't call <see cref="Add"/>
+		/// method above because it is 'new'. Call to <see cref="Add"/> method above is
+		/// required to properly perform data counting.
+		/// </remarks>
+		public new void AddRange(IEnumerable<DisplayElement> collection)
+		{
+			foreach (DisplayElement item in collection)
+				Add(item);
+		}
+
 		/// <summary></summary>
 		public new void RemoveAt(int index)
 		{
