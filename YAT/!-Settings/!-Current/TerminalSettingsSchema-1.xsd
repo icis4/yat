@@ -395,6 +395,8 @@
         <xs:sequence>
           <xs:element minOccurs="1" maxOccurs="1" name="ShowConnectTime" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowCountAndRate" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowFlowControlCount" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowBreakCount" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

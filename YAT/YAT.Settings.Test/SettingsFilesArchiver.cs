@@ -38,6 +38,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using MKY.Diagnostics;
+using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
 using MKY.Xml.Schema;
@@ -64,26 +65,6 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		private static readonly SettingsFilePaths StaticPaths = new SettingsFilePaths("!-Current");
-
-		#endregion
-
-		#region Tear Down Fixture
-		//==========================================================================================
-		// Tear Down Fixture
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
-		{
-			string message =
-				@"Attention:" + Environment.NewLine +
-				@"The order of the archived schemas is random!" + Environment.NewLine +
-				@"Check the order of the .xsd files in ""\YAT\!-Settings\!-Current"" before committing!";
-
-			MessageBoxEx.Show(message, "Attention", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-		}
 
 		#endregion
 
@@ -230,6 +211,30 @@ namespace YAT.Settings.Test
 					);
 
 					i++;
+				}
+
+				// Attention:
+				// All YAT settings schema consists of two schemas:
+				//  > A GUID extension to http://microsoft.com/wsdl/types/ (~ 1 kB)
+				//  > The settings schema itself (>> 1 kB)
+				// However, the order of the archived schemas is random! Therefore, a size check
+				// is done here, and the files are swapped if needed. This ensures that file commits
+				// to SVN will not result in unnecessary diffs.
+				if (n >= 2)
+				{
+					DirectoryInfo di = new DirectoryInfo(path);
+					FileInfo[] fis = di.GetFiles(fileName + "-?.xsd");
+
+					if (fis.Length >= 2)
+					{
+						if (fis[0].Length > fis[1].Length)
+						{
+							string filePath0 = path + fileName + "-0.xsd";
+							string filePath1 = path + fileName + "-1.xsd";
+
+							PathEx.SwapExistingFiles(filePath0, filePath1);
+						}
+					}
 				}
 			}
 			catch (Exception ex)
