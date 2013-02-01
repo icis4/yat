@@ -106,7 +106,8 @@ namespace YAT.Settings.Test
 		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
 		{
-			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+			// Ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200], true);
 		}
 
 		/// <summary></summary>
@@ -741,6 +742,11 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase02(string filePath)
 		{
+			ExecuteSettingsCase02(filePath, false);
+		}
+
+		private void ExecuteSettingsCase02(string filePath, bool ignoreBaudRate)
+		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
@@ -750,7 +756,7 @@ namespace YAT.Settings.Test
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
 				terminal.Start();
-				VerifySettingsCase02(terminal);
+				VerifySettingsCase02(terminal, ignoreBaudRate);
 			}
 		}
 
@@ -923,10 +929,16 @@ namespace YAT.Settings.Test
 
 		private static void VerifySettingsCase02(Model.Terminal terminal)
 		{
+			VerifySettingsCase02(terminal, false);
+		}
+
+		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
+		{
 			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary!");
 			Assert.AreEqual(2, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM2!");
 
-			Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
+			if (!ignoreBaudRate) // Optionally ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
+				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
 			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB == "COM2")
 			{

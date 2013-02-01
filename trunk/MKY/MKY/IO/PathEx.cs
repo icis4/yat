@@ -131,6 +131,29 @@ namespace MKY.IO
 
 		#endregion
 
+		#region Swap()
+
+		/// <summary>
+		/// Swaps two existing files.
+		/// </summary>
+		public static bool SwapExistingFiles(string filePathA, string filePathB)
+		{
+			if (!File.Exists(filePathA))
+				return (false);
+
+			if (!File.Exists(filePathB))
+				return (false);
+
+			// Both files exist, swap them:
+			string filePathTemp = FileEx.MakeUniqueFileName(filePathA);
+			File.Move(filePathA, filePathTemp);
+			File.Move(filePathB, filePathA);
+			File.Move(filePathTemp, filePathB);
+			return (true);
+		}
+
+		#endregion
+
 		#region ConvertPathToPlatform()
 
 		/// <summary>

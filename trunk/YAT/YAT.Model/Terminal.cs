@@ -492,8 +492,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "IOIs", Justification = "YAT uses the better readable 'IO' instead of 'Io'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "IOIs", Justification = "YAT uses the better readable 'IO' instead of 'Io'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "IOIs", Justification = "What's wrong? 'IO' is according to the guideline, 'Is' is a verb...")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly",   MessageId = "IOIs", Justification = "What's wrong? 'IO' is according to the guideline, 'Is' is a verb...")]
 		public virtual bool UnderlyingIOIsSerialPort
 		{
 			get
