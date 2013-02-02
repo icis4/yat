@@ -5,7 +5,7 @@
   <ProductVersion>1.99.30</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2013-01-03T14:07:02.4788215+01:00</TimeStamp>
+    <TimeStamp>2013-02-02T08:04:37.0073203+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -36,7 +36,7 @@
         </SerialPort>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
-          <RemoteHost>localhost</RemoteHost>
+          <RemoteHost>&lt;Localhost&gt;</RemoteHost>
           <RemoteTcpPort>10000</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
@@ -62,6 +62,8 @@
       <Status>
         <ShowConnectTime>false</ShowConnectTime>
         <ShowCountAndRate>false</ShowCountAndRate>
+        <ShowFlowControlCount>false</ShowFlowControlCount>
+        <ShowBreakCount>false</ShowBreakCount>
       </Status>
       <Buffer>
         <TxBufferSize>65536</TxBufferSize>
@@ -209,31 +211,111 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>false</TerminalIsStarted>
+    <TerminalIsStarted>true</TerminalIsStarted>
     <LogIsStarted>false</LogIsStarted>
     <SendCommand>
       <Command>
-        <IsDefined>false</IsDefined>
-        <Description />
-        <CommandLines />
+        <IsDefined>true</IsDefined>
+        <Description>&lt;2 lines...&gt; [CC] [CC]</Description>
+        <CommandLines>CC</CommandLines>
+        <CommandLines>CC</CommandLines>
         <DefaultRadix>String</DefaultRadix>
         <IsPartialText>false</IsPartialText>
         <IsPartialEolText>false</IsPartialEolText>
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>&lt;2 lines...&gt; [CC] [CC]</Description>
+          <CommandLines>CC</CommandLines>
+          <CommandLines>CC</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2010-11-11T21:45:55.4021793+01:00</TimeStamp>
+      </RecentCommands>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>BB</Description>
+          <CommandLines>BB</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2010-11-11T21:45:49.5108423+01:00</TimeStamp>
+      </RecentCommands>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>A</Description>
+          <CommandLines>A</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2010-11-11T21:45:47.3817205+01:00</TimeStamp>
+      </RecentCommands>
     </SendCommand>
     <SendFile>
       <Command>
-        <IsDefined>false</IsDefined>
-        <Description />
+        <IsDefined>true</IsDefined>
+        <Description>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\CC-CC.txt</Description>
         <CommandLines />
         <DefaultRadix>String</DefaultRadix>
         <IsPartialText>false</IsPartialText>
         <IsPartialEolText>false</IsPartialEolText>
-        <IsFilePath>false</IsFilePath>
-        <FilePath />
+        <IsFilePath>true</IsFilePath>
+        <FilePath>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\CC-CC.txt</FilePath>
       </Command>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\CC-CC.txt</Description>
+          <CommandLines />
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>true</IsFilePath>
+          <FilePath>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\CC-CC.txt</FilePath>
+        </Item>
+        <TimeStamp>2010-11-11T21:46:07.3868647+01:00</TimeStamp>
+      </RecentCommands>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\BB.txt</Description>
+          <CommandLines />
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>true</IsFilePath>
+          <FilePath>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\BB.txt</FilePath>
+        </Item>
+        <TimeStamp>2010-11-11T21:46:04.6247067+01:00</TimeStamp>
+      </RecentCommands>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\A.txt</Description>
+          <CommandLines />
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>true</IsFilePath>
+          <FilePath>D:\Sandboxes\YAT\_Trunk\YAT\_SendFiles\A.txt</FilePath>
+        </Item>
+        <TimeStamp>2010-11-11T21:46:00.5614743+01:00</TimeStamp>
+      </RecentCommands>
     </SendFile>
     <Predefined>
       <SelectedPage>1</SelectedPage>

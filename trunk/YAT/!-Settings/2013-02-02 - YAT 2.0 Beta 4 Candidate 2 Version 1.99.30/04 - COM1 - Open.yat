@@ -5,7 +5,7 @@
   <ProductVersion>1.99.30</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2013-01-03T14:09:17.181526+01:00</TimeStamp>
+    <TimeStamp>2013-02-02T08:03:46.6294389+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -14,7 +14,7 @@
     <Terminal>
       <TerminalType>Text</TerminalType>
       <IO>
-        <IOType>TcpAutoSocket</IOType>
+        <IOType>SerialPort</IOType>
         <SerialPort>
           <PortId>
             <Name>COM1</Name>
@@ -36,7 +36,7 @@
         </SerialPort>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
-          <RemoteHost>localhost</RemoteHost>
+          <RemoteHost>&lt;Localhost&gt;</RemoteHost>
           <RemoteTcpPort>10000</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
@@ -62,6 +62,8 @@
       <Status>
         <ShowConnectTime>false</ShowConnectTime>
         <ShowCountAndRate>false</ShowCountAndRate>
+        <ShowFlowControlCount>false</ShowFlowControlCount>
+        <ShowBreakCount>false</ShowBreakCount>
       </Status>
       <Buffer>
         <TxBufferSize>65536</TxBufferSize>
@@ -147,31 +149,7 @@
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand>
-      <Pages>
-        <PageName>Page 1</PageName>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>äöü</Description>
-          <CommandLines>äöü</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>ÄÖÜ</Description>
-          <CommandLines>ÄÖÜ</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-    </PredefinedCommand>
+    <PredefinedCommand />
     <Format>
       <Font>
         <Name>DejaVu Sans Mono</Name>
@@ -212,7 +190,7 @@
       </ErrorFormat>
     </Format>
     <Log>
-      <RootPath>C:\Users\Matthias\Documents</RootPath>
+      <RootPath>C:\Dokumente und Einstellungen\Matthias\Eigene Dateien</RootPath>
       <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
@@ -238,40 +216,14 @@
     <SendCommand>
       <Command>
         <IsDefined>true</IsDefined>
-        <Description>ÄÖÜ</Description>
-        <CommandLines>ÄÖÜ</CommandLines>
+        <Description />
+        <CommandLines />
         <DefaultRadix>String</DefaultRadix>
         <IsPartialText>false</IsPartialText>
         <IsPartialEolText>false</IsPartialEolText>
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>ÄÖÜ</Description>
-          <CommandLines>ÄÖÜ</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2010-12-27T23:43:29.811303+01:00</TimeStamp>
-      </RecentCommands>
-      <RecentCommands>
-        <Item>
-          <IsDefined>true</IsDefined>
-          <Description>äöü</Description>
-          <CommandLines>äöü</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Item>
-        <TimeStamp>2010-12-27T23:43:22.6848954+01:00</TimeStamp>
-      </RecentCommands>
     </SendCommand>
     <SendFile>
       <Command>
@@ -307,7 +259,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.6296296</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.75</PredefinedSplitterRatio>
       <SendCommandPanelIsVisible>true</SendCommandPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
