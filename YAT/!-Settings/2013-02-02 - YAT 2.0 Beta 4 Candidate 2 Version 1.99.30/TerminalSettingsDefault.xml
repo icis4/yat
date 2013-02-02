@@ -5,7 +5,7 @@
   <ProductVersion>1.99.30</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2013-01-03T14:08:43.8826215+01:00</TimeStamp>
+    <TimeStamp>2013-02-01T07:00:43.0192314+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -14,7 +14,7 @@
     <Terminal>
       <TerminalType>Text</TerminalType>
       <IO>
-        <IOType>TcpAutoSocket</IOType>
+        <IOType>SerialPort</IOType>
         <SerialPort>
           <PortId>
             <Name>COM1</Name>
@@ -62,6 +62,8 @@
       <Status>
         <ShowConnectTime>false</ShowConnectTime>
         <ShowCountAndRate>false</ShowCountAndRate>
+        <ShowFlowControlCount>false</ShowFlowControlCount>
+        <ShowBreakCount>false</ShowBreakCount>
       </Status>
       <Buffer>
         <TxBufferSize>65536</TxBufferSize>
@@ -209,7 +211,7 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>true</TerminalIsStarted>
+    <TerminalIsStarted>false</TerminalIsStarted>
     <LogIsStarted>false</LogIsStarted>
     <SendCommand>
       <Command>
@@ -239,14 +241,14 @@
       <SelectedPage>1</SelectedPage>
     </Predefined>
     <Window>
-      <State>Normal</State>
+      <State>Maximized</State>
       <Location>
         <X>0</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>394</Width>
-        <Height>496</Height>
+        <Width>800</Width>
+        <Height>600</Height>
       </Size>
     </Window>
     <Layout>
@@ -257,7 +259,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.6296296</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.75</PredefinedSplitterRatio>
       <SendCommandPanelIsVisible>true</SendCommandPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>

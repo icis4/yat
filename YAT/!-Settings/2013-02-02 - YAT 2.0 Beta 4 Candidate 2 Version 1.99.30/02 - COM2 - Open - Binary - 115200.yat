@@ -5,22 +5,22 @@
   <ProductVersion>1.99.30</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2013-01-03T14:07:37.1168027+01:00</TimeStamp>
+    <TimeStamp>2013-02-02T08:03:15.5816631+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
   <Explicit>
     <UserName />
     <Terminal>
-      <TerminalType>Text</TerminalType>
+      <TerminalType>Binary</TerminalType>
       <IO>
         <IOType>SerialPort</IOType>
         <SerialPort>
           <PortId>
-            <Name>COM1</Name>
+            <Name>COM2</Name>
           </PortId>
           <Communication>
-            <BaudRate>9600</BaudRate>
+            <BaudRate>115200</BaudRate>
             <DataBits>Eight</DataBits>
             <Parity>None</Parity>
             <StopBits>One</StopBits>
@@ -62,6 +62,8 @@
       <Status>
         <ShowConnectTime>false</ShowConnectTime>
         <ShowCountAndRate>false</ShowCountAndRate>
+        <ShowFlowControlCount>false</ShowFlowControlCount>
+        <ShowBreakCount>false</ShowBreakCount>
       </Status>
       <Buffer>
         <TxBufferSize>65536</TxBufferSize>
@@ -69,8 +71,8 @@
       </Buffer>
       <Display>
         <SeparateTxRxRadix>false</SeparateTxRxRadix>
-        <TxRadix>String</TxRadix>
-        <RxRadix>String</RxRadix>
+        <TxRadix>Hex</TxRadix>
+        <RxRadix>Hex</RxRadix>
         <ShowRadix>true</ShowRadix>
         <ShowTimeStamp>false</ShowTimeStamp>
         <ShowLength>false</ShowLength>
@@ -147,94 +149,7 @@
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand>
-      <Pages>
-        <PageName>First Page</PageName>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1A</Description>
-          <CommandLines>1A</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1B</Description>
-          <CommandLines>1B</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1C</Description>
-          <CommandLines>1C</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1D</Description>
-          <CommandLines>1D</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-      <Pages>
-        <PageName>Second Page</PageName>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>21</Description>
-          <CommandLines>21</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>22</Description>
-          <CommandLines>22</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>23</Description>
-          <CommandLines>23</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>24</Description>
-          <CommandLines>24</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-    </PredefinedCommand>
+    <PredefinedCommand />
     <Format>
       <Font>
         <Name>DejaVu Sans Mono</Name>
@@ -275,7 +190,7 @@
       </ErrorFormat>
     </Format>
     <Log>
-      <RootPath>C:\Dokumente und Einstellungen\Matthias\Eigene Dateien</RootPath>
+      <RootPath>C:\Users\Matthias\Documents</RootPath>
       <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
@@ -296,11 +211,11 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>false</TerminalIsStarted>
+    <TerminalIsStarted>true</TerminalIsStarted>
     <LogIsStarted>false</LogIsStarted>
     <SendCommand>
       <Command>
-        <IsDefined>true</IsDefined>
+        <IsDefined>false</IsDefined>
         <Description />
         <CommandLines />
         <DefaultRadix>String</DefaultRadix>
