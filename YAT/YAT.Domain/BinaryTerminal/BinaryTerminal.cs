@@ -204,10 +204,10 @@ namespace YAT.Domain
 
 			public LineState(EolQueue sequenceBreak, DateTime timeStamp, LineBreakTimer lineBreakTimer)
 			{
-				LinePosition = BinaryTerminal.LinePosition.Begin;
-				LineElements = new DisplayLine();
-				SequenceBreak = sequenceBreak;
-				TimeStamp = timeStamp;
+				LinePosition   = BinaryTerminal.LinePosition.Begin;
+				LineElements   = new DisplayLine();
+				SequenceBreak  = sequenceBreak;
+				TimeStamp      = timeStamp;
 				LineBreakTimer = lineBreakTimer;
 			}
 
@@ -269,9 +269,9 @@ namespace YAT.Domain
 				AssertNotDisposed();
 
 				LinePosition = BinaryTerminal.LinePosition.Begin;
-				LineElements.Clear();
+				LineElements = new DisplayLine();
 				SequenceBreak.Reset();
-				TimeStamp = DateTime.Now;
+				TimeStamp    = DateTime.Now;
 			}
 		}
 
@@ -418,6 +418,40 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
+		#region Methods > Send
+		//------------------------------------------------------------------------------------------
+		// Methods > Send
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
+		{
+			switch (result.Keyword)
+			{
+				case Parser.Keyword.Eol:
+				case Parser.Keyword.NoEol:
+				{
+					// Add space if necessary.
+					if (ElementsAreSeparate(SerialDirection.Tx))
+					{
+						if (this.txLineState.LineElements.DataCount > 0)
+							OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Space());
+					}
+
+					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + " keyword is not supported for binary terminals"));
+					break;
+				}
+
+				default:
+				{
+					base.ProcessInLineKeywords(result);
+					break;
+				}
+			}
+		}
+
+		#endregion
+
 		#region Methods > Element Processing
 		//------------------------------------------------------------------------------------------
 		// Methods > Element Processing
@@ -544,16 +578,8 @@ namespace YAT.Domain
 			// Add space if necessary.
 			if (ElementsAreSeparate(d))
 			{
-				int lineLength = 0;
-				foreach (DisplayElement e in lineState.LineElements)
-				{
-					if (e.IsData)
-						lineLength += e.DataCount;
-				}
-				if (lineLength > 0)
-				{
+				if (lineState.LineElements.DataCount > 0)
 					lp.Add(new DisplayElement.Space());
-				}
 			}
 
 			// Add data.

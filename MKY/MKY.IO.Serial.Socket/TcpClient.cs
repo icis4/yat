@@ -85,6 +85,7 @@ namespace MKY.IO.Serial.Socket
 			Disconnecting,
 			Disconnected,
 			WaitingForReconnect,
+			Stopping,
 			Error,
 		}
 
@@ -305,6 +306,7 @@ namespace MKY.IO.Serial.Socket
 				switch (this.state)
 				{
 					case SocketState.Reset:
+					case SocketState.Stopping: // Stopping is considerd 'Stopped' because it will eventually result to that.
 					case SocketState.Error:
 					{
 						return (true);
@@ -527,7 +529,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (this.state == SocketState.Connected)
 			{
-				SetStateSynchronizedAndNotify(SocketState.Disconnecting);
+				SetStateSynchronizedAndNotify(SocketState.Stopping);
 
 				VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionAndThreadWithoutFiringEvents);
 				asyncInvoker.BeginInvoke(null, null);

@@ -482,7 +482,11 @@ namespace YAT.Gui.Controls
 				this.isValidated = true; // Commands in history have already been validated.
 
 				if (comboBox_Command.SelectedItem != null)
-					SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
+				{
+					RecentItem<Command> ri = (comboBox_Command.SelectedItem as RecentItem<Command>);
+					if (ri != null)
+						SetCommand(ri.Item);
+				}
 			}
 		}
 		

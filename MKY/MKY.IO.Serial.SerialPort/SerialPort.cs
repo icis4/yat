@@ -777,10 +777,6 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'isOutputBreakOld' indeed starts with an lower case letter.")]
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private bool SendThread_isOutputBreakOldAndErrorHasBeenSignaled;
-
 		/// <summary>
 		/// Asynchronously manage outgoing send requests to ensure that software and/or hardware
 		/// flow control is properly buffered and suspended if the communication counterpart
@@ -797,6 +793,8 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void SendThread()
 		{
+			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
+
 			WriteDebugMessageLine("SendThread() has started.");
 
 			// If access to port throws exception, port has been shut down, e.g. USB to serial converter
@@ -834,6 +832,9 @@ namespace MKY.IO.Serial.SerialPort
 
 						if (!isOutputBreak)
 						{
+							// Reset the flag, once the output break has been reset:
+							isOutputBreakOldAndErrorHasBeenSignaled = false;
+
 							// In case of XOff:
 							if (XOnXOffIsInUse && !OutputIsXOn)
 								break; // Let other threads do their job and wait until signaled again.
@@ -919,7 +920,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							// If data is intended to be sent, and the output has changed to break,
 							// write an error message onto the terminal:
-							if ((this.sendQueue.Count > 0) && isOutputBreak && !SendThread_isOutputBreakOldAndErrorHasBeenSignaled)
+							if ((this.sendQueue.Count > 0) && isOutputBreak && !isOutputBreakOldAndErrorHasBeenSignaled)
 							{
 								OnIOError(new IOErrorEventArgs
 									(
@@ -928,7 +929,7 @@ namespace MKY.IO.Serial.SerialPort
 									"No data can be sent while port is in output break state")
 									);
 
-								SendThread_isOutputBreakOldAndErrorHasBeenSignaled = isOutputBreak;
+								isOutputBreakOldAndErrorHasBeenSignaled = true;
 							}
 						}
 					}

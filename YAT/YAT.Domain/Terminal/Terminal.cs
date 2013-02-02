@@ -705,7 +705,11 @@ namespace YAT.Domain
 
 				default:
 				{
-					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + "is not yet supported"));
+					// Add space if necessary.
+					if (ElementsAreSeparate(SerialDirection.Tx))
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Space());
+
+					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + " keyword is not yet supported"));
 					break;
 				}
 			}

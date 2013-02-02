@@ -339,6 +339,7 @@ namespace YAT.Gui.Forms
 			{
 				SetTerminalText("");
 			}
+
 			SetChildControls();
 		}
 
@@ -357,6 +358,10 @@ namespace YAT.Gui.Forms
 
 					// Revert closing state.
 					this.closingState = ClosingState.None;
+				}
+				else
+				{
+					this.mainResult = result;
 				}
 			}
 		}
