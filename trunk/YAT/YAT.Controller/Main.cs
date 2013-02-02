@@ -398,8 +398,7 @@ namespace YAT.Controller
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				Application.EnableVisualStyles();
-				Application.SetCompatibleTextRenderingDefault(false);
+				ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 
 				try
 				{
@@ -501,8 +500,7 @@ namespace YAT.Controller
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				Application.EnableVisualStyles();
-				Application.SetCompatibleTextRenderingDefault(false);
+				ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 
 				try
 				{

@@ -1177,7 +1177,7 @@ namespace YAT.Model
 						DialogResult dr = OnMessageInputRequest
 							(
 							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-							"The file no longer exists. Would you like to save the file at another location or cancel the operation?",
+							"The file no longer exists. Would you like to save the file at another location or cancel?",
 							"File Error",
 							MessageBoxButtons.YesNoCancel,
 							MessageBoxIcon.Question

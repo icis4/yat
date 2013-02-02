@@ -99,15 +99,15 @@ namespace YAT.Domain
 			{
 				LinePosition = TextTerminal.LinePosition.Begin;
 				LineElements = new DisplayLinePart();
-				EolElements = new DisplayLinePart();
+				EolElements  = new DisplayLinePart();
 				Eol = eol;
 			}
 
 			public virtual void Reset()
 			{
 				LinePosition = TextTerminal.LinePosition.Begin;
-				LineElements.Clear();
-				EolElements.Clear();
+				LineElements = new DisplayLinePart();
+				EolElements  = new DisplayLinePart();
 				Eol.Reset();
 			}
 		}
@@ -121,13 +121,13 @@ namespace YAT.Domain
 			public BidirLineState(bool isFirstLine, SerialDirection direction)
 			{
 				IsFirstLine = isFirstLine;
-				Direction = direction;
+				Direction   = direction;
 			}
 
 			public BidirLineState(BidirLineState rhs)
 			{
 				IsFirstLine = rhs.IsFirstLine;
-				Direction = rhs.Direction;
+				Direction   = rhs.Direction;
 			}
 		}
 
@@ -540,16 +540,8 @@ namespace YAT.Domain
 			// Add space if necessary.
 			if (ElementsAreSeparate(d))
 			{
-				int lineLength = 0;
-				foreach (DisplayElement e in lineState.LineElements)
-				{
-					if (e.IsData)
-						lineLength += e.DataCount;
-				}
-				if (lineLength > 0)
-				{
+				if (lineState.LineElements.DataCount > 0)
 					lp.Add(new DisplayElement.Space());
-				}
 			}
 
 			// Process data.

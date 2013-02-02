@@ -195,7 +195,11 @@ namespace YAT.Gui.Controls
 			if (!this.isSettingControls)
 			{
 				if (pathComboBox_FilePath.SelectedItem != null)
-					SetFileCommand((Command)((RecentItem<Command>)pathComboBox_FilePath.SelectedItem));
+				{
+					RecentItem<Command> ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
+					if (ri != null)
+						SetFileCommand(ri.Item);
+				}
 			}
 		}
 

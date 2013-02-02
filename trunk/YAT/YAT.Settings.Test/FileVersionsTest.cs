@@ -927,11 +927,6 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 02 :: Terminal :: COM2 / Open / Binary / 115200
 		//------------------------------------------------------------------------------------------
 
-		private static void VerifySettingsCase02(Model.Terminal terminal)
-		{
-			VerifySettingsCase02(terminal, false);
-		}
-
 		private static void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
 		{
 			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary!");
