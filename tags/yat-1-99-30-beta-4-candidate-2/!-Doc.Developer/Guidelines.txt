@@ -1,0 +1,311 @@
+﻿
+Assemblies
+----------
+
+Sign all library/dll assemblies using the strong name tool:
+1. Open the Visual Studio command prompt with administrator rights
+2. Go to "C:\"
+3. Enter "sn -k <FileName>.snk"
+4. Move the .snk file to the "\Properties" directory of the project
+5. Project Properties > Signing > Sign
+
+Note that it is not possible to link to an .snk file. Thus, it is not possible
+to create a single .snk file for collection of assemblies and than link to that
+single file from the various projects.
+
+Enforce CLS compliance
+[assembly: CLSCompliant(true)]
+
+Define CODE_ANALYSIS
+
+Use StyleCop
+
+Use FxCop
+
+
+Comments
+--------
+
+Use special tags
+\todo        :   \todo: <Description>        or   \todo (<Date> / <Author>): <Description>)
+\fixme       :   \fixme: <Description>       or   \fixme (<Date> / <Author>): <Description>)
+\remind      :   \remind: <Description>      or   \remind (<Date> / <Author>): <Description>)
+\attention   :   \attention: <Description>   or   \attention (<Date> / <Author>): <Description>)
+
+Use special temporary tags
+\TEMP
+\DEBUG
+\TRACE
+
+Use <c>null</c>
+Use <c>true</c>
+Use <c>false</c>
+
+Generics     : <see cref="T:Type`1"/>
+Methods      : <see cref="Add()"/>           or   <see cref="Add"/>   if ambiguous
+
+
+Preprocessor statements
+-----------------------
+
+Use
+#if (FALSE)
+to permanently disable blocks of code.
+FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use.
+
+Write
+#if (FALSE)
+			<Block>
+#endif
+at column 0 to keep code structure clear of disabled block.
+
+Use
+#if (!DEBUG)
+			try
+			{
+#endif
+to enable or disable blocks of code depending on configuration switches or write preprocessor
+statements one level out of normal code structure to clearly show that these statements
+		#if (!DEBUG)
+			try
+			{
+		#endif
+do not belong to the normal code. Decided on version a) or b) such that readability is optimal.
+
+
+Classes
+-------
+Use static classes instead of Singletons
+
+
+Static Classes
+--------------
+Use e.g. 'public static' instead of 'static public'
+Use e.g. 'public static new' instead of something else
+
+
+Inheritance
+-----------
+- Implement IEquatable
+- Implement ICloneable (Problem: return type is object)
+- Implement TryParse() and Parse()
+- Use and TryParse() instead of Parse()
+
+Do not use extension methods <Method> (this…) as they could lead to future incompatibilities
+if the additional methods are supported by a future version of .NET with same parameters but
+differing functionality.
+
+
+Dispose
+-------
+
+Base class
+
+		class Class : IDisposable
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool isDisposed;
+
+		#endregion
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				// Finalize managed resources.
+				   - or -
+				// In any case, <CLOSE> the <ITEM> as it was created in the constructor:
+				// In any case, <CLOSE> the <ITEM>:
+
+				if (disposing)
+				{
+					// Dispose of unmanaged resources.
+					   - or -
+					// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
+				}
+
+				this.isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~<Class>()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		public bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+
+Inherited class
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		protected override void Dispose(bool disposing)
+		{
+			// Finalize managed resources.
+			   - or -
+			// In any case, <CLOSE> the <ITEM>:
+			
+			if (disposing)
+			{
+				// Dispose of unmanaged resources.
+				   - or -
+				// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
+			}
+
+			base.Dispose(disposing);
+		}
+
+		#endregion
+
+
+Call AssertNotDisposed() in every non-private member.
+Do not call AssertNotDisposed() in a simple get-property.
+
+Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
+
+
+Equality
+--------
+> Always implement operators ==/!= on value types
+> Always implement IEquatable
+> Implement operators ==/!= on base types
+> See MKY.Utilities.Test.EqualityTest
+
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+
+
+Variables
+---------
+- Do not re-initialize fields with default value of respective type
+- Always initialize local variables
+
+
+Properties
+----------
+- Write..
+	if (this.<field> != value)
+	{
+		this.<field> = value;
+  ..instead of..
+	if (value != this.<field>)
+	{
+		this.<field> = value;
+  to improve readability and reduce the risk of copy-paste errors.
+
+
+Useful .NET classes
+-------------------
+- Console.Title/.ForegroundColor/.ResetColor
+- System.Media.SystemSounds
+- DefaultFontValue
+
+
+Logging while debugging
+-----------------------
+
+private System.IO.StreamWriter _DEBUG_logWriter = new System.IO.StreamWriter(MKY.IO.Temp.MakeTempFilePath(typeof(<CLASS>), ".log"));
+
+_DEBUG_logWriter.Write(DateTime.Now + "::<CLASS>::<METHOD>()::<ID>::");
+foreach (byte b in data)
+	_DEBUG_logWriter.Write(b.ToString("X2"));
+_DEBUG_logWriter.WriteLine();
+_DEBUG_logWriter.Flush();
+
+File will be stored in C:\Users\<USER>\AppData\Local\Temp\YAT.
+
+
+Windows.Forms
+-------------
+- 'StatusStrip' items do not show tool tip by default, 'ShowItemToolTips' must be manually set to 'True'.
+- Use the 'Shown' event to initially set controls of a form:
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
+		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
+		/// 'Shown' event and will somehow be processed asynchronously.
+		/// </remarks>
+		private void <Form>_Shown(object sender, EventArgs e)
+		{
+
+- Use the 'StartUp-And-Properly-Show-UserControl-Controls' pattern to initially set controls of a user control:
+
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
+		private void <UserControl>_Paint(object sender, PaintEventArgs e)
+		{
+			if (this.isStartingUp)
+			{
+				this.isStartingUp = false;
+
+- For more details on events of Windows.Forms, see the MKY > SequenceOfFormAndControlEvents demo project.
+
+
+Known issues
+------------
+- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
+
+
+Further input
+-------------
+- "Excel sample [.NET Framework]"

@@ -1,0 +1,240 @@
+@@ -194,7 +194,17 @@
+                 FBufferManager = null;
+             }
+ 
++            // ----- \remind BEGIN -----
++            // 2012-10-21 / Matthias Klaey
++            // Ensure that lock is properly released, even in cases where asynchronous calls are
++            // still being processed while the socket is free'd.
++
++            FSocketConnectionsSync.Dispose();
++
++            // ----- \remind  END  -----
++
+             FSocketConnectionsSync = null;
++
+             FSocketService = null;
+             FDelimiter = null;
+             FDelimiterEncrypt = null;
+@@ -306,7 +316,27 @@
+ 
+                     if (creators.Length > 0)
+                     {
+-                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
++                        // ----- \remind BEGIN -----
++                        // 2010-05-14 / Matthias Klaey
++                        // Added catch (NullReferenceException) to handle cases where asynchronous
++                        // operations set the reference to null while this method is active.
++                        // 
++                        // 2012-10-23 / Matthias Klaey
++                        // Check (FWaitCreatorsDisposing != null) added to prevent exceptions.
++
++                        try
++                        {
++                            if (FWaitCreatorsDisposing != null)
++                                FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
++
++                            // Do not write the stack in the 'normal' case.
++                        }
++                        catch (NullReferenceException ex)
++                        {
++                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                        }
++
++                        // ----- \remind  END  -----
+                     }
+ 
+                 }
+@@ -404,7 +434,11 @@
+ 
+         #region FireOnSent
+ 
+-        private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
++        // ----- \remind BEGIN -----
++        // 2012-10-13 / Matthias Klaey
++        // Added buffer which is now forwarded to FSocketService.OnSent().
++
++        private void FireOnSent(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
+         {
+ 
+             if (!Disposed)
+@@ -421,7 +455,7 @@
+ 
+                             case EventProcessing.epUser:
+ 
+-                                FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
++                                FSocketService.OnSent(new MessageEventArgs(connection, buffer, sentByServer));
+                                 break;
+ 
+                             case EventProcessing.epEncrypt:
+@@ -448,6 +482,8 @@
+ 
+         }
+ 
++        // ----- \remind  END  -----
++
+         #endregion
+ 
+         #region FireOnReceived
+@@ -718,9 +754,15 @@
+                         connection.Stream.EndWrite(ar);
+                         connection.SetConnectionData(0, connection.WriteOV.Count);
+ 
++                        // ----- \remind BEGIN -----
++                        // 2012-10-14 / Matthias Klaey
++                        // Clone buffer to forwared it to FireOnSent().
++
++                        byte[] buffer = (byte[])connection.WriteOV.Buffer.Clone();
++
+                         FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
+ 
+-                        FireOnSent(connection, sentByServer);
++                        FireOnSent(connection, buffer, sentByServer);
+ 
+                         if (connection.Active)
+                         {
+@@ -748,6 +790,8 @@
+ 
+                         }
+ 
++                        // ----- \remind  END  -----
++
+                     }
+ 
+                 }
+@@ -832,12 +876,18 @@
+                             }
+                             else
+                             {
++                                // ----- \remind BEGIN -----
++                                // 2012-10-14 / Matthias Klaey
++                                // Clone buffer to forwared it to FireOnSent().
+ 
++                                byte[] buffer = (byte[])e.Buffer.Clone();
++
+                                 FBufferManager.ReturnBuffer(e.Buffer);
+                                 e.SetBuffer(null, 0, 0);
+ 
+-                                FireOnSent(connection, sentByServer);
++                                FireOnSent(connection, buffer, sentByServer);
+ 
++                                // ----- \remind  END  -----
+                             }
+ 
+                         }
+@@ -1707,34 +1757,62 @@
+           if (!Disposed)
+           {
+ 
+-              if (socketConnection != null)
++              // ----- \remind BEGIN -----
++              // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
++              // Added if != null due to NullReferenceExecption to finally{}.
++              // 
++              // 2012-10-15 / Matthias Klaey
++              // Added catch (NullReferenceException) to handle cases where asynchronous
++              // operations set the reference to null while this method is active.
++              // 
++              // 2012-10-23 / Matthias Klaey
++              // Rearranged checks (FSocketConnectionsSync != null) and (FSocketConnections != null).
++
++              if ((socketConnection != null)  && (FSocketConnectionsSync != null))
+               {
+ 
+-
+                   FSocketConnectionsSync.EnterWriteLock();
+ 
+                   try
+                   {
++                      if (FSocketConnections != null)
++                          FSocketConnections.Remove(socketConnection.ConnectionId);
+ 
+-                      FSocketConnections.Remove(socketConnection.ConnectionId);
+-
++                      // Do not write the stack in the 'normal' case.
+                   }
++                  catch (NullReferenceException ex)
++                  {
++                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                  }
+                   finally
+                   {
+-
+-                      if (FSocketConnections.Count <= 0)
++                      try
+                       {
+-                          FWaitConnectionsDisposing.Set();
++                          if (FSocketConnections.Count <= 0)
++                              FWaitConnectionsDisposing.Set();
++                          else
++                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
+                       }
++                      catch (NullReferenceException ex)
++                      {
++                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                      }
++                      finally
++                      {
++                          if (FSocketConnectionsSync != null)
++                              FSocketConnectionsSync.ExitWriteLock();
++                          else
++                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
++                      }
+ 
+-                      FSocketConnectionsSync.ExitWriteLock();
+-
+                   }
+ 
+               }
+ 
+-        }
++              // ----- \remind  END  -----
+ 
++          }
++
+         }
+ 
+         #endregion
+@@ -1788,12 +1866,22 @@
+             if (!Disposed)
+             {
+ 
++              // ----- \remind BEGIN -----
++              // 2012-10-28 / Matthias Klaey
++              // Handling exceptions:
++
++              try
++              {
++
+                 connection.Active = false;
+                 connection.Socket.Shutdown(SocketShutdown.Send);
+ 
+-                lock (connection.WriteQueue)
++                if (connection.WriteQueue != null)
+                 {
+ 
++                  lock (connection.WriteQueue)
++                  {
++
+                     if (connection.WriteQueue.Count > 0)
+                     {
+ 
+@@ -1811,7 +1899,18 @@
+ 
+                     }
+ 
++                  }
++
+                 }
++
++              }
++              catch (Exception ex)
++              {
++                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++              }
++
++              // ----- \remind  END  -----
++
+             }
+         }
+ 
