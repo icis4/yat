@@ -58,6 +58,51 @@ Start YAT by selecting "Start > Programs > YAT > YAT"
 ====================================================================================================
 
 
+YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2013-0x-xx
+----------------------------------------------------------------------------------------------------
+
+New:
+- <>
+
+Important changes:
+- <>
+
+Fixed bugs:
+- <>
+
+Limitations and known issues:
+- General imitations of .NET Windows.Forms
+   > If YAT is not the active application, two clicks are required to execute an action. Reason:
+     In .NET Windows.Forms the first click only activates the application but doesn't execute
+     anything (bug #210)
+   > System errors are output in local language, even though YAT is all-English (bug #66)
+- MDI limitations of .NET Windows.Forms
+   > Issues with frame (bugs #29 and #30)
+   > Issues with window list (bugs #31, #119, #180 and #213)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #152)
+- Long monitor contents are not displayed properly when horizontally scrolling using the scroll bar
+  (bug #125)
+- Support for serial ports which are named other than "COM..." isn't supported by .NET
+  (feature request #101)
+- Serial COM port RFR/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
+  on certain hardware, e.g. certain USB/RS-232 converters (bug #203)
+- Serial COM port manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may
+  not be supported on Win7/64 on certain hardware, e.g. certain USB/RS-232 converters (bug #254)
+- Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
+  'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #214)
+- Handling of serial COM port break states (feature ##109) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
+- USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they
+  have different serial numbers, however, it is not yet possible to properly communicate with them
+  simultaneously, this could be a bug or a limitation of the Win32 HID.dll (bug #169)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
+  a test environment would be needed to run USB Ser/HID on unixoids (feature request #119)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
+- Text terminals: Wait for answer line not yet implemented (feature request #19)
+- Direct mode does not yet support special formats and commands (feature request #10)
+- XML logging not yet implemented, definition of schema pending (bugs #26 and #27)
+
+
 YAT 2.0 Beta 4 Candidate 2 Version 1.99.30 :: 2013-02-02
 ----------------------------------------------------------------------------------------------------
 
