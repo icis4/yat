@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 2 Version 1.99.30
+// YAT 2.0 Beta 4 Candidate 3 Development Version 1.99.31
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -33,9 +33,9 @@ using System.Reflection;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.99.30.*")]
-[assembly: AssemblyFileVersion("1.99.30.0")]
-[assembly: AssemblyInformationalVersion("1.99.30")]
+[assembly: AssemblyVersion("1.99.31.*")]
+[assembly: AssemblyFileVersion("1.99.31.0")]
+[assembly: AssemblyInformationalVersion("1.99.31")]
 
 //==================================================================================================
 // End of
