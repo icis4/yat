@@ -84,6 +84,9 @@ namespace YAT.Model
 		public event EventHandler WorkspaceClosed;
 
 		/// <summary></summary>
+		public event EventHandler<WorkspaceEventArgs> WorkspaceStarted;
+
+		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
 
 		/// <summary></summary>
@@ -334,7 +337,10 @@ namespace YAT.Model
 				success = this.workspace.Start();
 
 			if (success)
+			{
+				OnWorkspaceStarted(new WorkspaceEventArgs(this.workspace));
 				return (MainResult.Success);
+			}
 			else
 				return (MainResult.ApplicationStartError);
 		}
@@ -761,12 +767,19 @@ namespace YAT.Model
 			string fileName  = Path.GetFileName(filePath);
 			string extension = Path.GetExtension(filePath);
 
-			if      (ExtensionSettings.IsWorkspaceFile(extension))
+			if (ExtensionSettings.IsWorkspaceFile(extension))
 			{
 				OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
 
 				if (OpenWorkspaceFromFile(filePath))
-					return (this.workspace.Start());
+				{
+					if (this.workspace.Start())
+					{
+						OnWorkspaceStarted(new WorkspaceEventArgs(this.workspace));
+						return (true);
+					}
+					return (false);
+				}
 				else
 					return (false);
 			}
@@ -1205,6 +1218,12 @@ namespace YAT.Model
 		protected virtual void OnWorkspaceClosed(EventArgs e)
 		{
 			EventHelper.FireSync(WorkspaceClosed, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnWorkspaceStarted(WorkspaceEventArgs e)
+		{
+			EventHelper.FireSync<WorkspaceEventArgs>(WorkspaceStarted, this, e);
 		}
 
 		/// <summary></summary>
