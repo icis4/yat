@@ -357,13 +357,13 @@ namespace YAT.Controller
 			MainResult mainResult = MainResult.Success;
 
 			if      (!runFromConsole &&  runWithView)
-				RunFullyWithView();                        // 1, 2, 7
+				mainResult = RunFullyWithView();                        // 1, 2, 7
 			else if ( runFromConsole &&  runWithView)
-				RunWithViewButOutputErrorsOnConsole();     // 3, 4, 7
+				mainResult = RunWithViewButOutputErrorsOnConsole();     // 3, 4, 7
 			else if ( runFromConsole && !runWithView)
-				RunFullyFromConsole();                     // 5, 6, 7
+				mainResult = RunFullyFromConsole();                     // 5, 6, 7
 			else
-				RunInvisible();                            // 7
+				mainResult = RunInvisible();                            // 7
 
 			if (mainResult == MainResult.CommandLineError)
 			{
