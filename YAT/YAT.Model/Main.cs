@@ -84,9 +84,6 @@ namespace YAT.Model
 		public event EventHandler WorkspaceClosed;
 
 		/// <summary></summary>
-		public event EventHandler<WorkspaceEventArgs> WorkspaceStarted;
-
-		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
 
 		/// <summary></summary>
@@ -94,6 +91,9 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
+
+		/// <summary></summary>
+		public event EventHandler Started;
 
 		/// <summary></summary>
 		public event EventHandler Exited;
@@ -338,7 +338,7 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnWorkspaceStarted(new WorkspaceEventArgs(this.workspace));
+				OnStarted(new EventArgs());
 				return (MainResult.Success);
 			}
 			else
@@ -775,7 +775,7 @@ namespace YAT.Model
 				{
 					if (this.workspace.Start())
 					{
-						OnWorkspaceStarted(new WorkspaceEventArgs(this.workspace));
+						OnStarted(new EventArgs());
 						return (true);
 					}
 					return (false);
@@ -1221,12 +1221,6 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnWorkspaceStarted(WorkspaceEventArgs e)
-		{
-			EventHelper.FireSync<WorkspaceEventArgs>(WorkspaceStarted, this, e);
-		}
-
-		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
 			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
@@ -1249,6 +1243,12 @@ namespace YAT.Model
 				throw (new InvalidOperationException("A 'Message Input' request by main was not processed by the application!"));
 
 			return (e.Result);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnStarted(EventArgs e)
+		{
+			EventHelper.FireSync<WorkspaceEventArgs>(Started, this, e);
 		}
 
 		/// <summary></summary>
