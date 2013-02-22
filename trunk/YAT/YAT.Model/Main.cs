@@ -1248,7 +1248,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnStarted(EventArgs e)
 		{
-			EventHelper.FireSync<WorkspaceEventArgs>(Started, this, e);
+			EventHelper.FireSync(Started, this, e);
 		}
 
 		/// <summary></summary>
