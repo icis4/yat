@@ -47,6 +47,16 @@ namespace YAT.Gui.Forms
 	/// <summary>
 	/// Result of unhandled exception operations.
 	/// </summary>
+	public enum UnhandledExceptionType
+	{
+		Synchronous,
+		AsynchronousSynchronized,
+		AsynchronousNonSynchronized,
+	}
+
+	/// <summary>
+	/// Result of unhandled exception operations.
+	/// </summary>
 	public enum UnhandledExceptionResult
 	{
 		Exit,
@@ -65,20 +75,38 @@ namespace YAT.Gui.Forms
 		private static bool staticHandleExceptions = true;
 
 		/// <summary></summary>
-		public static UnhandledExceptionResult ProvideExceptionToUser(string originMessage, bool isAsync, bool mayBeContinued)
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		public static UnhandledExceptionResult ProvideExceptionToUser(string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
-			return (ProvideExceptionToUser(null, null, originMessage, isAsync, mayBeContinued));
-		}
-
-		/// <summary></summary>
-		public static UnhandledExceptionResult ProvideExceptionToUser(Exception exception, string originMessage, bool isAsync, bool mayBeContinued)
-		{
-			return (ProvideExceptionToUser(null, exception, originMessage, isAsync, mayBeContinued));
+			return (ProvideExceptionToUser(null, null, originMessage, exceptionType, mayBeContinued));
 		}
 
 		/// <summary></summary>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, bool isAsync, bool mayBeContinued)
+		public static UnhandledExceptionResult ProvideExceptionToUser(Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
+		{
+			return (ProvideExceptionToUser(null, exception, originMessage, exceptionType, mayBeContinued));
+		}
+
+		/// <summary></summary>
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
+		{
+			if (Application.OpenForms.Count > 0)
+			{
+				Form f = Application.OpenForms[0];
+				if (f.InvokeRequired)
+				{
+					ProvideExceptionToUserDelegate invoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
+					return ((UnhandledExceptionResult)f.Invoke(invoker, null, exception, originMessage, exceptionType, mayBeContinued));
+				}
+			}
+			return (ProvideExceptionToUserInvocation(null, exception, originMessage, exceptionType, mayBeContinued));
+		}
+
+		private delegate UnhandledExceptionResult ProvideExceptionToUserDelegate(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued);
+
+		private static UnhandledExceptionResult ProvideExceptionToUserInvocation(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
 			if (!staticHandleExceptions)
 				return (UnhandledExceptionResult.Continue);
@@ -88,12 +116,12 @@ namespace YAT.Gui.Forms
 			StringBuilder titleBuilder = new StringBuilder(productName);
 			{
 				titleBuilder.Append(" Unhandled");
-
-				if (isAsync)
-					titleBuilder.Append(" Asynchronous");
-				else
-					titleBuilder.Append(" Synchronous");
-
+				switch (exceptionType)
+				{
+					case UnhandledExceptionType.Synchronous:                 titleBuilder.Append(" Synchronous");                   break;
+					case UnhandledExceptionType.AsynchronousSynchronized:    titleBuilder.Append(" Asynchronous Synchronized");     break;
+					case UnhandledExceptionType.AsynchronousNonSynchronized: titleBuilder.Append(" Asynchronous Non-Synchronized"); break;
+				}
 				titleBuilder.Append(" Exception");
 			}
 			string title = titleBuilder.ToString();
@@ -101,7 +129,7 @@ namespace YAT.Gui.Forms
 			if (exception != null)
 			{
 				string message =
-					originMessage + Environment.NewLine +
+					originMessage + Environment.NewLine + Environment.NewLine +
 					"Show detailed information?";
 
 				if (MessageBoxEx.Show

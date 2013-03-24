@@ -107,8 +107,8 @@ namespace YAT.Gui.Forms
 
 			// HHD.
 			linkLabel_HHD.Text = "";
-			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and a" + Environment.NewLine +
-						 "device, or between two devices, check out ";
+			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and" + Environment.NewLine +
+						 "a device, or between two devices, check out ";
 			textLink   =                                           "HHD Monitoring Studio";
 			textAfter  =                                                                ". It's worth the bucks. Or ";
 			linkLabel_HHD.Text += textBefore;
@@ -350,15 +350,8 @@ namespace YAT.Gui.Forms
 
 		private void timer_ExecuteManualTest3_Timeout(object obj)
 		{
-			// Immediately dispose of the timer:
 			timer_ExecuteManualTest3_Dispose();
-
-			// Create event sink that acts as exception source:
-			ExecuteManualTest3Class exceptionSource = new ExecuteManualTest3Class();
-			ExecuteManualTest3Event += new EventHandler(exceptionSource.Execute);
-
-			// Fire event synchronously:
-			EventHelper.FireSync(ExecuteManualTest3Event, this, new EventArgs());
+			throw (new Exception("Unhandled asynchronous non-synchronized exception test :: Outer exception", new Exception("Inner exception")));
 		}
 
 		private void timer_ExecuteManualTest3_Dispose()
@@ -370,19 +363,6 @@ namespace YAT.Gui.Forms
 					this.timer_ExecuteManualTest3.Dispose();
 					this.timer_ExecuteManualTest3 = null;
 				}
-			}
-		}
-
-		private class ExecuteManualTest3Class
-		{
-			public ExecuteManualTest3Class()
-			{
-			}
-
-			[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
-			public virtual void Execute(object sender, EventArgs e)
-			{
-				throw (new Exception("Unhandled asynchronous non-synchronized exception test :: Outer exception", new Exception("Inner exception")));
 			}
 		}
 
