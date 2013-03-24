@@ -68,7 +68,7 @@ Important changes:
 - <>
 
 Fixed bugs:
-- <>
+- ThreadException upon copy of exception data to clipboard fixed (bug #245)
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms
@@ -829,8 +829,9 @@ XTerm232 1.0.0 :: 2003-10-14
 
 YAT 2.0 Final :: Expected in 2013/2014
 ----------------------------------------------------------------------------------------------------
-Once all bugs and feature requests of priority 5 and above have been resolved, YAT 2.0 Final will
-be released. For details regarding these items, see the YAT bug and feature request trackers.
+Once all bugs of priority 5 and above as well as all feature requests of priority 7 and above have
+been resolved, YAT 2.0 Final will be released. For details regarding these items, see the YAT bug
+and feature request trackers.
 
 
 YAT 2.1 :: Not planned yet

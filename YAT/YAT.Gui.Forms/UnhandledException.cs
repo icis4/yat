@@ -32,6 +32,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY.Diagnostics;
@@ -92,7 +93,7 @@ namespace YAT.Gui.Forms
 			textBox_Exception.Text = this.exceptionText;
 
 			// Don't know why it is necessary to manually deselect the text.
-			// DeselectAll() isn't sufficient, settings the properties works.
+			// DeselectAll() isn't sufficient, setting the properties works.
 			textBox_Exception.SelectionLength = 0;
 			textBox_Exception.SelectionStart = 0;
 		}
@@ -128,6 +129,22 @@ namespace YAT.Gui.Forms
 						MessageBoxIcon.Error
 						);
 					retry = (userInput == DialogResult.Retry);
+				}
+				catch (ThreadStateException)
+				{
+					string message =
+						"Asynchronous unhandled exception data cannot be copied onto clipboard." + Environment.NewLine + Environment.NewLine +
+						"Copy the exception information manually.";
+
+					MessageBoxEx.Show
+						(
+						this,
+						message,
+						"Asynchronous Thread",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+						);
+					retry = false;
 				}
 				catch (Exception ex)
 				{

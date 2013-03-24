@@ -342,7 +342,9 @@ namespace YAT.Model
 				return (MainResult.Success);
 			}
 			else
+			{
 				return (MainResult.ApplicationStartError);
+			}
 		}
 
 		#region Start > Private Methods
@@ -781,23 +783,39 @@ namespace YAT.Model
 					return (false);
 				}
 				else
+				{
 					return (false);
+				}
 			}
 			else if (ExtensionSettings.IsTerminalFile(extension))
 			{
 				// Create workspace if it doesn't exist yet.
+				bool newWorkspaceSoSignalStarted = false;
 				if (this.workspace == null)
 				{
 					if (!CreateNewWorkspace())
 						return (false);
+
+					newWorkspaceSoSignalStarted = true;
 				}
 
 				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
 
 				if (this.workspace.OpenTerminalFromFile(filePath))
-					return (this.workspace.ActiveTerminal.Start());
-				else
+				{
+					if (this.workspace.ActiveTerminal.Start())
+					{
+						if (newWorkspaceSoSignalStarted)
+							OnStarted(new EventArgs());
+						
+						return (true);
+					}
 					return (false);
+				}
+				else
+				{
+					return (false);
+				}
 			}
 			else
 			{
