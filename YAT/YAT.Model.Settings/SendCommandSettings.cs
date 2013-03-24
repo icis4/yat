@@ -173,9 +173,9 @@ namespace YAT.Model.Settings
 
 		#endregion
 
-		#region Comparision
+		#region Comparison
 		//------------------------------------------------------------------------------------------
-		// Comparision ;-)
+		// Comparison ;-)
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg! But unfortunately StyleCop doesn't allow a suppression at the constant itself. So what...")]

@@ -39,11 +39,6 @@ namespace MKY.Collections.Generic
 		private const string NamingSuppressionJustification = "S and D is used to clearly indicate the source and destination type.";
 
 		/// <summary>
-		/// An invalid index is represented by -1.
-		/// </summary>
-		public const int InvalidIndex = -1;
-
-		/// <summary>
 		/// Simple variance for single method, variance in one direction only.
 		/// </summary>
 		/// <typeparam name="S">IList source.</typeparam>
@@ -316,7 +311,7 @@ namespace MKY.Collections.Generic
 				if (item is S)
 					return (this.source.IndexOf((S)item));
 				else
-					return (InvalidIndex);
+					return (CollectionsEx.InvalidIndex);
 			}
 
 			/// <summary>

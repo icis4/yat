@@ -545,7 +545,7 @@ namespace MKY.IO.Usb
 			if (casted != null)
 				return (casted.CompareTo(objB));
 
-			return (-1);
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		#endregion

@@ -21,10 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
+
+using MKY;
+
+#endregion
 
 namespace YAT.Model.Types
 {
@@ -212,7 +221,7 @@ namespace YAT.Model.Types
 			if (casted != null)
 				return (casted.CompareTo(objB));
 
-			return (-1);
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		#endregion
