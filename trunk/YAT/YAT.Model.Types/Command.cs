@@ -668,7 +668,7 @@ namespace YAT.Model.Types
 
 		#region Comparison Methods
 		//==========================================================================================
-		// Comparision Methods
+		// Comparison Methods
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -682,7 +682,7 @@ namespace YAT.Model.Types
 			if (casted != null)
 				return (casted.CompareTo(objB));
 
-			return (-1);
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		#endregion

@@ -537,7 +537,7 @@ namespace MKY
 			if (casted != null)
 				return (casted.CompareTo(objB));
 
-			return (-1);
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		#endregion

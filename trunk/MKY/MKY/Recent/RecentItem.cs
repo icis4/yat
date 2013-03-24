@@ -214,7 +214,7 @@ namespace MKY.Recent
 			if (otherA != null)
 				return (otherA.CompareTo(otherB));
 
-			return (-1);
+			return (ObjectEx.InvalidComparisonResult);
 		}
 
 		#endregion

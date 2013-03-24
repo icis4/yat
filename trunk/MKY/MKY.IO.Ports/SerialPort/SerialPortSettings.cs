@@ -291,7 +291,7 @@ namespace MKY.IO.Ports
 			);
 		}
 
-		#region Comparision Operators
+		#region Comparison Operators
 
 		/// <summary></summary>
 		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)

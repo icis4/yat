@@ -34,6 +34,7 @@ using System.IO;
 using System.Text;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Text;
 
@@ -287,22 +288,34 @@ namespace YAT.Domain.Parser
 					case 'b':
 					case 'B':
 					{
-						int nextChar = parser.Reader.Peek();
-						if (nextChar == '(')
+						int nextChar = CharEx.InvalidChar;
+						try
 						{
-							// \b(...) is used for binary values, e.g. \b(010110001).
-							parser.SetDefaultRadix(Radix.Bin);
-							ChangeState(parser, new OpeningState());
-							return (true);
+							nextChar = parser.Reader.Peek();
 						}
-						else
+						catch (ObjectDisposedException ex)
 						{
-							// Just \b is used for c-style backspace.
-							parser.ByteArrayWriter.WriteByte((byte)'\b');
-							parser.EndByteArray();
-							parser.HasFinished = true;
-							ChangeState(parser, null);
-							return (true);
+							DebugEx.WriteException(GetType(), ex); // Debug use only.
+						}
+
+						switch (nextChar)
+						{
+							case '(': // "\b(...)" is used for binary values, e.g. "\b(010110001)".
+							{
+								parser.SetDefaultRadix(Radix.Bin);
+								ChangeState(parser, new OpeningState());
+								return (true);
+							}
+
+							case StreamEx.EndOfStream: // Just "\b" is used for c-style backspace.
+							default:
+							{
+								parser.ByteArrayWriter.WriteByte((byte)'\b');
+								parser.EndByteArray();
+								parser.HasFinished = true;
+								ChangeState(parser, null);
+								return (true);
+							}
 						}
 					}
 
@@ -364,12 +377,21 @@ namespace YAT.Domain.Parser
 						}
 					}
 
-					case '0': // C-style <NUL>.
+					case '0':
 					{
-						int nextChar = parser.Reader.Peek();
+						int nextChar = CharEx.InvalidChar;
+						try
+						{
+							nextChar = parser.Reader.Peek();
+						}
+						catch (ObjectDisposedException ex)
+						{
+							DebugEx.WriteException(GetType(), ex); // Debug use only.
+						}
+
 						switch (nextChar)
 						{
-							case '0': // \0<value> is used for c-style octal notation.
+							case '0': // "\0<value>" is used for c-style octal notation.
 							case '1':
 							case '2':
 							case '3':
@@ -383,18 +405,37 @@ namespace YAT.Domain.Parser
 								return (true);
 							}
 
-							case 'x': // \0x is used for c-style hexadecimal notation.
+							case 'x': // "\0x.." is used for c-style hexadecimal notation.
 							case 'X':
 							{
-								parser.Reader.Read(); // Consume 'x' or 'X'.
-								parser.SetDefaultRadix(Radix.Hex);
-								ChangeState(parser, new NumericState());
-								return (true);
+								int thisChar = CharEx.InvalidChar;
+								try
+								{
+									thisChar = parser.Reader.Read(); // Consume 'x' or 'X'.
+								}
+								catch (ObjectDisposedException ex)
+								{
+									DebugEx.WriteException(GetType(), ex); // Debug use only.
+								}
+
+								if (thisChar != CharEx.InvalidChar)
+								{
+									parser.SetDefaultRadix(Radix.Hex);
+									ChangeState(parser, new NumericState());
+									return (true);
+								}
+								else // Consider it successful if there is just "\0x" without any numeric value.
+								{
+									parser.EndByteArray();
+									parser.HasFinished = true;
+									ChangeState(parser, null);
+									return (true);
+								}
 							}
 
+							case StreamEx.EndOfStream: // Just "\0" is used for c-style <NUL>.
 							default:
 							{
-								// Just \0 is used for c-style <NUL>.
 								parser.ByteArrayWriter.WriteByte((byte)'\0');
 								parser.EndByteArray();
 								parser.HasFinished = true;
@@ -414,7 +455,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					// For case 'b' or 'B' (C-style backspace) see above.
+					// For case 'b' or 'B' (C-style backspace) see top of this switch-case.
 
 					case 't': // C-style tab.
 					case 'T':
@@ -466,7 +507,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case 'x': // C-style hexadecimal value, e.g. \x1A.
+					case 'x': // C-style hexadecimal value, e.g. "\x1A".
 					case 'X':
 					{
 						parser.SetDefaultRadix(Radix.Hex);
@@ -474,7 +515,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case '1': // C-style decimal value, e.g. \12.
+					case '1': // C-style decimal value, e.g. "\12".
 					case '2':
 					case '3':
 					case '4':
@@ -1240,8 +1281,8 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called below.
 
-			string parsed;
-			return (TryParse(s, modes, out parsed));
+			Result[] result;
+			return (TryParse(s, modes, out result));
 		}
 
 		/// <summary></summary>
@@ -1298,14 +1339,45 @@ namespace YAT.Domain.Parser
 
 			while (!HasFinished)
 			{
-				if (!this.state.TryParse(this, this.reader.Read(), ref formatException))
+				int c = CharEx.InvalidChar;
+				try
+				{
+					c = this.Reader.Read();
+				}
+				catch (ObjectDisposedException ex)
+				{
+					DebugEx.WriteException(GetType(), ex); // Debug use only.
+				}
+
+				if (!this.state.TryParse(this, c, ref formatException))
 				{
 					EndByteArray();
 
-					// Return part of string that could be parsed
-					parsed = StringEx.Left(s, s.Length - this.reader.ReadToEnd().Length - 1);
-					result = this.resultList.ToArray();
-					return (false);
+					string remaining = null;
+					try
+					{
+						remaining = this.Reader.ReadToEnd();
+					}
+					catch (ObjectDisposedException ex)
+					{
+						DebugEx.WriteException(GetType(), ex); // Debug use only.
+					}
+
+					if (string.IsNullOrEmpty(remaining))
+					{
+						// Signal that parsing resulted in a severe stream error:
+						parsed = null;
+						result = null;
+						return (false);
+					}
+					else
+					{
+						// Signal that parsing resulted in a parse error and
+						//   return the part of the string that could be parsed:
+						parsed = StringEx.Left(s, s.Length - remaining.Length - 1);
+						result = this.resultList.ToArray();
+						return (false);
+					}
 				}
 			}
 
@@ -1432,7 +1504,7 @@ namespace YAT.Domain.Parser
 		{
 			this.encoding        = parent.encoding;
 			this.defaultRadix    = parent.defaultRadix;
-			this.modes       = parent.modes;
+			this.modes           = parent.modes;
 
 			this.reader          = parent.reader;
 			this.byteArrayWriter = new MemoryStream();

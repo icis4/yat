@@ -56,6 +56,7 @@ namespace YAT.Domain.Test.Parser
 
 				// C-style escape.
 				yield return (new TestCaseData("\\0",     new byte[] { 0x00 } ).SetName("C-stype <NUL>"));
+				yield return (new TestCaseData("\\0ABC",  new byte[] { 0x00, 0x41, 0x42, 0x43 }).SetName("C-stype <NUL> with following characters"));
 				yield return (new TestCaseData("\\a",     new byte[] { 0x07 } ).SetName("C-stype <BEL>"));
 				yield return (new TestCaseData("\\A",     new byte[] { 0x07 } ).SetName("C-stype capital <BEL>"));
 				yield return (new TestCaseData("\\b",     new byte[] { 0x08 } ).SetName("C-stype <BS>"));
@@ -70,6 +71,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData("C-style\\r\\nis like\\tthis", new byte[] { 0x43, 0x2D, 0x73, 0x74, 0x79, 0x6C, 0x65, 0x0D, 0x0A, 0x69, 0x73, 0x20, 0x6C, 0x69, 0x6B, 0x65, 0x09, 0x74, 0x68, 0x69, 0x73 }).SetName("C-style string"));
 				yield return (new TestCaseData("\\01",    new byte[] {   01 }).SetName("C-style octal value"));
 				yield return (new TestCaseData("\\12",    new byte[] {   12 }).SetName("C-style decimal value"));
+				yield return (new TestCaseData("\\0x",    new byte[] {      }).SetName("C-style hexadecimal value 0x empty prefix"));
 				yield return (new TestCaseData("\\0x1A",  new byte[] { 0x1A }).SetName("C-style hexadecimal value 0x"));
 				yield return (new TestCaseData("\\x1A",   new byte[] { 0x1A }).SetName("C-style hexadecimal value x only"));
 				yield return (new TestCaseData("\\x1A2B", new byte[] { 0x1A, 0x2B }).SetName("C-style hexadecimal value x only 16 bits"));
