@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -159,6 +160,8 @@ namespace YAT.Model
 			this.settingsRoot = this.settingsHandler.Settings;
 			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
+
+			WriteDebugMessageLine("Created");
 		}
 
 		#region Disposal
@@ -178,6 +181,8 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing.");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -997,13 +1002,16 @@ namespace YAT.Model
 
 			if (successWithTerminals && successWithWorkspace)
 			{
-				// Status text request must be before closed event, closed event may close the view.
+				// Status text request must be before closed event, closed event may close the view:
 				if (isMainExit)
 					OnTimedStatusTextRequest("Workspace successfully closed, exiting.");
 				else
 					OnTimedStatusTextRequest("Workspace successfully closed.");
 
 				OnClosed(new ClosedEventArgs(isMainExit));
+
+				// Ensure that all resources of the workspace get disposed of:
+				Dispose();
 				return (true);
 			}
 			else
@@ -1859,6 +1867,20 @@ namespace YAT.Model
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
 			EventHelper.FireSync<ClosedEventArgs>(Closed, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + Guid + "': " + message);
 		}
 
 		#endregion

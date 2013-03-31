@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -266,6 +267,8 @@ namespace YAT.Model
 
 			// Create rates.
 			CreateRates();
+
+			WriteDebugMessageLine("Created");
 		}
 
 		#region Disposal
@@ -285,6 +288,8 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing.");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -1502,22 +1507,25 @@ namespace YAT.Model
 				if (this.terminal.IsStarted)
 					success = StopIO(false);
 
-				// ...and signal that the terminal can definitely close.
+				// ...and signal that the terminal can definitely close:
 				this.terminal.Close();
 
-				// Then, close log.
+				// Then, close log:
 				if (this.log.IsStarted)
 					EndLog();
 
-				// Finally, ensure that chronos are stopped and do not fire events anymore.
+				// Finally, ensure that chronos are stopped and do not fire events anymore:
 				StopChronos();
 			}
 
 			if (success)
 			{
-				// Status text request must be before closed event, closed event may close the view.
+				// Status text request must be before closed event, closed event may close the view:
 				OnTimedStatusTextRequest("Terminal successfully closed.");
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
+
+				// Ensure that all resources of this terminal get disposed of:
+				Dispose();
 				return (true);
 			}
 			else
@@ -3031,6 +3039,20 @@ namespace YAT.Model
 		protected virtual void OnClosed(ClosedEventArgs e)
 		{
 			EventHelper.FireSync<ClosedEventArgs>(Closed, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + Guid + "' / '" + Caption + "': " + message);
 		}
 
 		#endregion

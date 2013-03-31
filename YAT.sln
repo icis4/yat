@@ -8,10 +8,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.De
 		!-Doc.Developer\HowToAddTestProject.txt = !-Doc.Developer\HowToAddTestProject.txt
 		!-Doc.Developer\HowToExportArgoUML.txt = !-Doc.Developer\HowToExportArgoUML.txt
 		!-Doc.Developer\HowToRunAndDebugNUnitTests.txt = !-Doc.Developer\HowToRunAndDebugNUnitTests.txt
+		!-Doc.Developer\HowToUpdateYear.txt = !-Doc.Developer\HowToUpdateYear.txt
 		!-Doc.Developer\NUnitSetup.txt = !-Doc.Developer\NUnitSetup.txt
+		!-Doc.Developer\ProjectSetup.txt = !-Doc.Developer\ProjectSetup.txt
 		!-Doc.Developer\StyleCopSetup.txt = !-Doc.Developer\StyleCopSetup.txt
 		!-Doc.Developer\SVNSetup.txt = !-Doc.Developer\SVNSetup.txt
 		!-Doc.Developer\Template.cs = !-Doc.Developer\Template.cs
+		!-Doc.Developer\TipsAndTricks.txt = !-Doc.Developer\TipsAndTricks.txt
 		!-Doc.Developer\VisualStudioSetup.txt = !-Doc.Developer\VisualStudioSetup.txt
 	EndProjectSection
 EndProject

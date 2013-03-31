@@ -236,9 +236,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.io.IsStopped);
+				if (this.io != null)
+					return (this.io.IsStopped);
+				else
+					return (false);
 			}
 		}
 
@@ -247,9 +250,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.io.IsStarted);
+				if (this.io != null)
+					return (this.io.IsStarted);
+				else
+					return (false);
 			}
 		}
 
@@ -258,9 +264,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.io.IsOpen);
+				if (this.io != null)
+					return (this.io.IsOpen);
+				else
+					return (false);
 			}
 		}
 
@@ -269,9 +278,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.io.IsConnected);
+				if (this.io != null)
+					return (this.io.IsConnected);
+				else
+					return (false);
 			}
 		}
 
@@ -280,9 +292,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.io.IsReadyToSend);
+				if (this.io != null)
+					return (this.io.IsReadyToSend);
+				else
+					return (false);
 			}
 		}
 

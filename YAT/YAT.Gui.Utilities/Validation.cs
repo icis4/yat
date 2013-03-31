@@ -96,21 +96,29 @@ namespace YAT.Gui.Utilities
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.Append(description);
-				sb.Append(          " is invalid at position ");
-				sb.Append(                                   (parsedText.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
-				if (parsedText.Length > 0)
+				sb.Append(         @" """);
+				sb.Append(              textToValidate);
+				sb.Append(                          @"""");
+				if (parsedText != null)
 				{
-					sb.Append(Environment.NewLine);
-					sb.Append(@"Only """);
-					sb.Append(         parsedText);
-					sb.Append(                 @""" is valid.");
+					sb.Append(                         " is invalid");
+					sb.Append(                                    " at position ");
+					sb.Append(                                                 (parsedText.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
+					if (parsedText.Length > 0)
+					{
+						sb.Append(Environment.NewLine);
+						sb.Append(@"Only """);
+						sb.Append(         parsedText);
+						sb.Append(                 @""" is valid.");
+					}
 				}
+				else
+				{
+					sb.Append(                         " is invalid.");
+				}
+
 				if (formatException.Message.Length > 0)
 				{
-					sb.Append(Environment.NewLine);
-					sb.Append(Environment.NewLine);
-					sb.Append("Detailed message:");
-					sb.Append(Environment.NewLine);
 					sb.Append(Environment.NewLine);
 					sb.Append(formatException.Message);
 				}

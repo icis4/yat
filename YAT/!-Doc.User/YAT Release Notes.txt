@@ -70,6 +70,8 @@ Important changes:
 Fixed bugs:
 - ThreadException upon copy of exception data to clipboard fixed (bug #245)
 - Exception while reading stream in YAT.Domain.Parser.Parser.TryParse() fixed (bug #261)
+- Memory leak when subsequently creating and closing terminals fixed (bug #263)
+- Excessive memory occupation after standby fixed (bug #243)
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms

@@ -157,6 +157,8 @@ namespace YAT.Gui.Forms
 			ApplyWindowSettingsAccordingToStartup();
 
 			SetControls();
+
+			WriteDebugMessageLine("Created");
 		}
 
 		#endregion
@@ -1271,9 +1273,82 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Main > New
+		#region Main > Properties
 		//------------------------------------------------------------------------------------------
-		// Main > New
+		// Main > Properties
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public Model.Main UnderlyingMain
+		{
+			get { return (this.main); }
+		}
+
+		/// <summary></summary>
+		public Model.Workspace UnderlyingWorkspace
+		{
+			get { return (this.workspace); }
+		}
+
+		#endregion
+
+		#region Main > Methods
+		//------------------------------------------------------------------------------------------
+		// Main > Methods
+		//------------------------------------------------------------------------------------------
+
+		private void InitializeControls()
+		{
+			InitializeRecentControls();
+		}
+
+		private void InitializeRecentControls()
+		{
+			contextMenuStrip_FileRecent_InitializeControls();
+		}
+
+		private void SetControls()
+		{
+			SetMainControls();
+			SetChildControls();
+			SetRecentControls();
+			SetWorkspaceControls();
+		}
+
+		private void SetMainControls()
+		{
+			this.isSettingControls.Enter();
+
+			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
+			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
+
+			this.isSettingControls.Leave();
+		}
+
+		private void SetChildControls()
+		{
+			toolStripButton_MainTool_SetControls();
+
+			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
+			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
+		}
+
+		private void SetRecentControls()
+		{
+			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
+
+			contextMenuStrip_Main_SetRecentMenuItems();
+			contextMenuStrip_FileRecent_SetRecentMenuItems();
+		}
+
+		private void SetWorkspaceControls()
+		{
+			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
+		}
+
+		#region Main > Methods > New
+		//------------------------------------------------------------------------------------------
+		// Main > Methods > New
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -1300,9 +1375,9 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Main > Open File
+		#region Main > Methods > Open File
 		//------------------------------------------------------------------------------------------
-		// Main > Open File
+		// Main > Methods > Open File
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -1347,6 +1422,8 @@ namespace YAT.Gui.Forms
 				ResetStatusText();
 			}
 		}
+
+		#endregion
 
 		#endregion
 
@@ -1473,30 +1550,24 @@ namespace YAT.Gui.Forms
 		// Workspace > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
+		/// </remarks>
 		private void workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
-			// Create terminal form.
+			// Create terminal form and immediately show it.
 			Terminal mdiChild = new Terminal(e.Terminal);
-
-			// Link MDI child this MDI parent.
-			mdiChild.MdiParent = this;
-
-			mdiChild.Changed    += new EventHandler(mdiChild_Changed);
-			mdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(mdiChild_Saved);
-			mdiChild.FormClosed += new FormClosedEventHandler(mdiChild_FormClosed);
-
-			// Show form.
+			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 			mdiChild.Show();
-
 			SetChildControls();
 		}
 
 		/// <remarks>
-		/// Terminal is removed by mdiChild_FormClose event handler.
+		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
 		private void workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
 		{
-			SetChildControls();
+			// Nothing to do, see remarks above.
 		}
 
 		private void workspace_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
@@ -1532,105 +1603,50 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region MDI Parent
+		#region Terminal MDI Child
 		//==========================================================================================
-		// MDI Parent
+		// Terminal MDI Child
 		//==========================================================================================
 
-		#region MDI Parent > Properties
+		#region Terminal MDI Child > Methods
 		//------------------------------------------------------------------------------------------
-		// MDI Parent > Properties
+		// Terminal MDI Child > Methods
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public Model.Main UnderlyingMain
+		private void AttachTerminalEventHandlersAndMdiChildToParent(Terminal terminalMdiChild)
 		{
-			get { return (this.main); }
+			terminalMdiChild.MdiParent = this;
+
+			terminalMdiChild.Changed    += new EventHandler(terminalMdiChild_Changed);
+			terminalMdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(terminalMdiChild_Saved);
+			terminalMdiChild.FormClosed += new FormClosedEventHandler(terminalMdiChild_FormClosed);
 		}
 
-		/// <summary></summary>
-		public Model.Workspace UnderlyingWorkspace
+		private void DetachTerminalEventHandlersAndMdiChildFromParent(Terminal terminalMdiChild)
 		{
-			get { return (this.workspace); }
+			terminalMdiChild.Changed    -= new EventHandler(terminalMdiChild_Changed);
+			terminalMdiChild.Saved      -= new EventHandler<Model.SavedEventArgs>(terminalMdiChild_Saved);
+			terminalMdiChild.FormClosed -= new FormClosedEventHandler(terminalMdiChild_FormClosed);
+
+			// Do not set terminalMdiChild.MdiParent to null. Doing so results in a detached non-
+			// MDI-form which appears for a short moment at the default startup location of windows.
+			// Pretty ugly!
 		}
 
 		#endregion
 
-		#region MDI Parent > Methods
+		#region Terminal MDI Child > Events
 		//------------------------------------------------------------------------------------------
-		// MDI Parent > Methods
-		//------------------------------------------------------------------------------------------
-
-		private void InitializeControls()
-		{
-			InitializeRecentControls();
-		}
-
-		private void InitializeRecentControls()
-		{
-			contextMenuStrip_FileRecent_InitializeControls();
-		}
-
-		private void SetControls()
-		{
-			SetMainControls();
-			SetChildControls();
-			SetRecentControls();
-			SetWorkspaceControls();
-		}
-
-		private void SetMainControls()
-		{
-			this.isSettingControls.Enter();
-
-			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUserSettings.MainWindow.ShowTerminalInfo;
-			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUserSettings.MainWindow.ShowChrono;
-
-			this.isSettingControls.Leave();
-		}
-
-		private void SetChildControls()
-		{
-			toolStripButton_MainTool_SetControls();
-
-			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
-			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
-		}
-
-		private void SetRecentControls()
-		{
-			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
-
-			contextMenuStrip_Main_SetRecentMenuItems();
-			contextMenuStrip_FileRecent_SetRecentMenuItems();
-		}
-
-		private void SetWorkspaceControls()
-		{
-			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
-		}
-
-		#endregion
-
-		#endregion
-
-		#region MDI Children
-		//==========================================================================================
-		// MDI Children
-		//==========================================================================================
-
-		#region MDI Children > Events
-		//------------------------------------------------------------------------------------------
-		// MDI Children > Events
+		// Terminal MDI Child > Events
 		//------------------------------------------------------------------------------------------
 
-		private void mdiChild_Changed(object sender, EventArgs e)
+		private void terminalMdiChild_Changed(object sender, EventArgs e)
 		{
 			SetTimedStatus(Status.ChildChanged);
 			SetChildControls();
 		}
 
-		private void mdiChild_Saved(object sender, Model.SavedEventArgs e)
+		private void terminalMdiChild_Saved(object sender, Model.SavedEventArgs e)
 		{
 			if (!e.IsAutoSave)
 				SetTimedStatus(Status.ChildSaved);
@@ -1638,8 +1654,11 @@ namespace YAT.Gui.Forms
 			SetChildControls();
 		}
 
-		private void mdiChild_FormClosed(object sender, FormClosedEventArgs e)
+		private void terminalMdiChild_FormClosed(object sender, FormClosedEventArgs e)
 		{
+			// Sender MUST be a terminal, otherwise something must have freaked out...
+			DetachTerminalEventHandlersAndMdiChildFromParent(sender as Terminal);
+
 			SetTimedStatus(Status.ChildClosed);
 			SetChildControls();
 		}
@@ -1721,6 +1740,26 @@ namespace YAT.Gui.Forms
 		private void SetTerminalText(string text)
 		{
 			toolStripStatusLabel_MainStatus_TerminalInfo.Text = text;
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			string caption;
+			if (this.main != null)
+				caption = this.main.Guid.ToString();
+			else
+				caption = "<None>";
+
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + caption + "': " + message);
 		}
 
 		#endregion

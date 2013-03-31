@@ -683,7 +683,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				WriteDebugMessageLine("Start() requested but state already is " + this.state + ".");
+				WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
 			}
 
 			return (true); // Return 'true' in any case since port is open in the end.
@@ -701,7 +701,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				WriteDebugMessageLine("Stop() requested but state already is " + this.state + ".");
+				WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
 			}
 		}
 
