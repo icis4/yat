@@ -21,13 +21,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Windows.Forms;
 
+using MKY;
+
 using YAT.Settings.Application;
 using YAT.Utilities;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -38,15 +47,6 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
-
-		/// <summary>
-		/// Timer to trigger loading of the application settings.
-		/// </summary>
-		/// <remarks>
-		/// In order to load settings in parallel to changing the opacity of the form, this is a
-		/// standard system timer, not a <see cref="System.Windows.Forms.Timer"/>.
-		/// </remarks>
-		private System.Timers.Timer applicationSettingsTimer = new System.Timers.Timer();
 
 		private bool finishedLoading;
 		private ReaderWriterLockSlim finishedLoadingLock = new ReaderWriterLockSlim();
@@ -82,11 +82,39 @@ namespace YAT.Gui.Forms
 				Width = width;
 
 			label_Status.Text = "Loading settings...";
+			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(LoadApplicationSettings);
+			asyncInvoker.BeginInvoke(null, null);
+		}
 
-			this.applicationSettingsTimer.Interval = 100;
-			this.applicationSettingsTimer.AutoReset = false;
-			this.applicationSettingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(applicationSettingsTimer_Elapsed);
-			this.applicationSettingsTimer.Start();
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Loads the application settings on a concurrent thread.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void LoadApplicationSettings()
+		{
+			try
+			{
+				// Don't care about result,
+				//   either the settings have been loaded or they have been set to defaults.
+				ApplicationSettings.Load();
+
+				DialogResult = DialogResult.OK;
+			}
+			catch
+			{
+				DialogResult = DialogResult.Abort;
+			}
+
+			this.finishedLoadingLock.EnterWriteLock();
+			this.finishedLoading = true;
+			this.finishedLoadingLock.ExitWriteLock();
 		}
 
 		#endregion
@@ -95,11 +123,6 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 		// Controls Event Handlers
 		//==========================================================================================
-
-		private void WelcomeScreen_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			this.applicationSettingsTimer.Dispose();
-		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
 		{
@@ -119,35 +142,12 @@ namespace YAT.Gui.Forms
 			else if (Opacity < 1.00)
 			{
 				// Opacity starts at 0.25 (25%).
-				// 25% opacity increase per second in 1% steps.
+				// 75% opacity increase within a second.
+				//  3% opacity increase per step.
 				//   => 40ms ticks
-				Opacity += 0.01;
+				Opacity += 0.03;
 				Refresh();
 			}
-		}
-
-		/// <summary>
-		/// Loads the application settings on a concurrent thread.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-		{
-			try
-			{
-				// Don't care about result,
-				//   either the settings have been loaded or they have been set to defaults.
-				ApplicationSettings.Load();
-
-				DialogResult = DialogResult.OK;
-			}
-			catch
-			{
-				DialogResult = DialogResult.Abort;
-			}
-
-			this.finishedLoadingLock.EnterWriteLock();
-			this.finishedLoading = true;
-			this.finishedLoadingLock.ExitWriteLock();
 		}
 
 		#endregion

@@ -314,8 +314,6 @@ namespace YAT.Gui.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object timer_ExecuteManualTest3SyncObj = new object();
 
-		private event EventHandler ExecuteManualTest3Event;
-
 		/// <summary>
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.
 		/// 

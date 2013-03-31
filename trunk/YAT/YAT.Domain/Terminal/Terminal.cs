@@ -187,9 +187,11 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-		////this.eventsSuspendedForReload = false;
+		////this.eventsSuspendedForReload has been initialized to false.
 
 			CreateAndStartSendThread();
+
+			WriteDebugMessageLine("Created.");
 		}
 
 		/// <summary></summary>
@@ -209,6 +211,8 @@ namespace YAT.Domain
 			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
 
 			CreateAndStartSendThread();
+
+			WriteDebugMessageLine("Created.");
 		}
 
 		#region Disposal
@@ -228,6 +232,8 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing.");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -347,9 +353,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.IsStopped);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.IsStopped);
+				else
+					return (false);
 			}
 		}
 
@@ -358,9 +367,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.IsStarted);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.IsStarted);
+				else
+					return (false);
 			}
 		}
 
@@ -369,9 +381,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.IsConnected);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.IsConnected);
+				else
+					return (false);
 			}
 		}
 
@@ -380,9 +395,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.IsOpen);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.IsOpen);
+				else
+					return (false);
 			}
 		}
 
@@ -391,9 +409,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.IsReadyToSend);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.IsReadyToSend);
+				else
+					return (false);
 			}
 		}
 
@@ -422,7 +443,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual bool IsReloading
 		{
-			get { return (this.eventsSuspendedForReload); }
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.eventsSuspendedForReload);
+			}
 		}
 
 		#endregion
@@ -1515,9 +1541,9 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		protected virtual void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + " '" + ToShortIOString() + "': " + message);
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + message);
 		}
 
 		#endregion

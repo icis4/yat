@@ -716,7 +716,7 @@ namespace YAT.Domain.Parser
 					else
 					{
 						result = new byte[] { };
-						formatException = new FormatException(@"""" + t + @""" is no ascii mnemonic!");
+						formatException = new FormatException(@"""" + t + @""" is no ASCII mnemonic!");
 						return (false);
 					}
 				}
@@ -892,6 +892,7 @@ namespace YAT.Domain.Parser
 							else
 								errorString = s;
 						}
+
 						if (string.IsNullOrEmpty(errorString))
 						{
 							result = bytes.ToArray();
@@ -901,6 +902,7 @@ namespace YAT.Domain.Parser
 						{
 							formatException = new FormatException(@"Substring """ + errorString + @""" of """ + value + @""" is no valid hexadecimal value!");
 						}
+
 						break;
 					}
 				}
@@ -1363,7 +1365,7 @@ namespace YAT.Domain.Parser
 						DebugEx.WriteException(GetType(), ex); // Debug use only.
 					}
 
-					if (string.IsNullOrEmpty(remaining))
+					if (remaining == null)
 					{
 						// Signal that parsing resulted in a severe stream error:
 						parsed = null;

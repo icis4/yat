@@ -29,6 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
@@ -175,151 +176,9 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.ClearChanged();
 			this.settingsRoot.ForceChangeEvent();
 			ResumeHandlingTerminalSettings();
+
+			WriteDebugMessageLine("Created");
 		}
-
-		#endregion
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		private bool IsStartingUp
-		{
-			get { return (this.isStartingUp); }
-		}
-
-		private bool IsClosing
-		{
-			get { return (this.closingState != ClosingState.None); }
-		}
-
-		#endregion
-
-		#region MDI Parent
-		//==========================================================================================
-		// MDI Parent
-		//==========================================================================================
-
-		#region MDI Parent > Properties
-		//------------------------------------------------------------------------------------------
-		// MDI Parent > Properties
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// This is the automatically assigned terminal name. The name is either an incrementally
-		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
-		/// by the user, e.g. 'MyTerminal.yat'.
-		/// </summary>
-		public virtual string AutoName
-		{
-			get
-			{
-				if (TerminalIsAvailable)
-					return (this.terminal.AutoName);
-				else
-					return ("");
-			}
-		}
-
-		/// <summary></summary>
-		public virtual bool IsStopped
-		{
-			get
-			{
-				if (TerminalIsAvailable)
-					return (this.terminal.IsStopped);
-				else
-					return (true);
-			}
-		}
-
-		/// <summary></summary>
-		public virtual bool IsStarted
-		{
-			get
-			{
-				if (TerminalIsAvailable)
-					return (this.terminal.IsStarted);
-				else
-					return (false);
-			}
-		}
-
-		/// <summary></summary>
-		public virtual Model.Terminal UnderlyingTerminal
-		{
-			get { return (this.terminal); }
-		}
-
-		#endregion
-
-		#region MDI Parent > Methods
-		//------------------------------------------------------------------------------------------
-		// MDI Parent > Methods
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public virtual bool RequestSaveFile()
-		{
-			return (this.terminal.Save());
-		}
-
-		/// <summary></summary>
-		public virtual bool RequestCloseFile()
-		{
-			return (this.terminal.Close());
-		}
-
-		/// <summary></summary>
-		public virtual bool RequestStartTerminal()
-		{
-			return (this.terminal.StartIO());
-		}
-
-		/// <summary></summary>
-		public virtual bool RequestStopTerminal()
-		{
-			return (this.terminal.StopIO());
-		}
-
-		/// <summary></summary>
-		public virtual void RequestRadix(Domain.Radix radix)
-		{
-			this.settingsRoot.Display.TxRadix = radix;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestClear()
-		{
-			this.terminal.ClearRepositories();
-		}
-
-		/// <summary></summary>
-		public virtual void RequestSaveToFile()
-		{
-			ShowSaveMonitorDialog(GetMonitor(this.lastMonitorSelection));
-		}
-
-		/// <summary></summary>
-		public virtual void RequestCopyToClipboard()
-		{
-			CopyMonitorToClipboard(GetMonitor(this.lastMonitorSelection));
-		}
-
-		/// <summary></summary>
-		public virtual void RequestPrint()
-		{
-			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
-		}
-
-		/// <summary></summary>
-		public virtual void RequestEditTerminalSettings()
-		{
-			ShowTerminalSettings();
-		}
-
-		#endregion
 
 		#endregion
 
@@ -1794,6 +1653,136 @@ namespace YAT.Gui.Forms
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// This is the automatically assigned terminal name. The name is either an incrementally
+		/// assigned 'Terminal1', 'Terminal2',... or the file name once the terminal has been saved
+		/// by the user, e.g. 'MyTerminal.yat'.
+		/// </summary>
+		public virtual string AutoName
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.AutoName);
+				else
+					return ("");
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.IsStopped);
+				else
+					return (true);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsStarted
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.IsStarted);
+				else
+					return (false);
+			}
+		}
+
+		private bool IsStartingUp
+		{
+			get { return (this.isStartingUp); }
+		}
+
+		private bool IsClosing
+		{
+			get { return (this.closingState != ClosingState.None); }
+		}
+
+		/// <summary></summary>
+		public virtual Model.Terminal UnderlyingTerminal
+		{
+			get { return (this.terminal); }
+		}
+
+		#endregion
+
+		#region Methods
+		//------------------------------------------------------------------------------------------
+		// Methods
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public virtual bool RequestSaveFile()
+		{
+			return (this.terminal.Save());
+		}
+
+		/// <summary></summary>
+		public virtual bool RequestCloseFile()
+		{
+			return (this.terminal.Close());
+		}
+
+		/// <summary></summary>
+		public virtual bool RequestStartTerminal()
+		{
+			return (this.terminal.StartIO());
+		}
+
+		/// <summary></summary>
+		public virtual bool RequestStopTerminal()
+		{
+			return (this.terminal.StopIO());
+		}
+
+		/// <summary></summary>
+		public virtual void RequestRadix(Domain.Radix radix)
+		{
+			this.settingsRoot.Display.TxRadix = radix;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestClear()
+		{
+			this.terminal.ClearRepositories();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestSaveToFile()
+		{
+			ShowSaveMonitorDialog(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
+		public virtual void RequestCopyToClipboard()
+		{
+			CopyMonitorToClipboard(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
+		public virtual void RequestPrint()
+		{
+			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
+		public virtual void RequestEditTerminalSettings()
+		{
+			ShowTerminalSettings();
+		}
 
 		#endregion
 
@@ -3348,6 +3337,26 @@ namespace YAT.Gui.Forms
 		{
 			timer_Status.Enabled = false;
 			ResetStatusText();
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			string caption;
+			if (this.terminal != null)
+				caption = this.terminal.Guid + "' / '" + this.terminal.Caption;
+			else
+				caption = "<None>";
+
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + caption + "': " + message);
 		}
 
 		#endregion

@@ -113,21 +113,23 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Main(string requestedFilePath)
+			: this(new CommandLineArgs(new string[] { requestedFilePath }))
 		{
-			this.commandLineArgs = new CommandLineArgs(new string[] { requestedFilePath });
-			Initialize();
 		}
 
 		/// <summary></summary>
 		public Main(CommandLineArgs commandLineArgs)
 		{
 			this.commandLineArgs = commandLineArgs;
+
 			Initialize();
 		}
 
 		private void Initialize()
 		{
 			this.guid = Guid.NewGuid();
+
+			WriteDebugMessageLine("Created");
 		}
 
 		#region Disposal
@@ -147,6 +149,8 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing.");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -888,11 +892,14 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Exiting " + ApplicationInfo.ProductName + "...");
 				cancel = false;
 
-				// Close the static application settings.
+				// Close the static application settings:
 				success = ApplicationSettings.Close();
 
-				// Signal the exit.
+				// Signal the exit:
 				OnExited(new EventArgs());
+
+				// Ensure that all resources of the workspace get disposed of:
+				Dispose();
 
 				if (success)
 					return (MainResult.Success);
@@ -1273,6 +1280,20 @@ namespace YAT.Model
 		protected virtual void OnExited(EventArgs e)
 		{
 			EventHelper.FireSync(Exited, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + Guid + "': " + message);
 		}
 
 		#endregion
