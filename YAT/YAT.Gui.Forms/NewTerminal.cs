@@ -59,7 +59,7 @@ namespace YAT.Gui.Forms
 			this.newTerminalSettings = newTerminalSettings;
 			this.newTerminalSettingsInEdit = new Model.Settings.NewTerminalSettings(newTerminalSettings);
 
-			// SetControls() is initially called in the 'Paint' event handler.
+			// SetControls() is initially called in the 'Shown' event handler.
 		}
 
 		#endregion

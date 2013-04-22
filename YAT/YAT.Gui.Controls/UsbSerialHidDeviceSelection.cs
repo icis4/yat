@@ -229,7 +229,25 @@ namespace YAT.Gui.Controls
 					else if ((old != null) && (devices.Contains(old)))
 						comboBox_Device.SelectedItem = old;
 					else
+					{
 						comboBox_Device.SelectedIndex = 0;
+
+						if (this.deviceInfo != null)
+						{
+							string message =
+								"The given USB device " + this.deviceInfo + " is currently not available." + Environment.NewLine +
+								"The setting has been defaulted to the first available device.";
+
+							MessageBoxEx.Show
+								(
+								this,
+								message,
+								"USB device not available",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								);
+						}
+					}
 
 					// Set property instead of member to ensure that changed event is fired.
 					DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
@@ -240,7 +258,7 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"No Ser/HID capable USB devices available.",
-						"No USB Ser/HID Devices",
+						"No USB Ser/HID devices",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
 						);
@@ -259,9 +277,21 @@ namespace YAT.Gui.Controls
 				if (comboBox_Device.Items.Count > 0)
 				{
 					if (this.deviceInfo != null)
-						comboBox_Device.SelectedItem = this.deviceInfo;
+					{
+						if (comboBox_Device.Items.Contains(this.deviceInfo))
+						{	// Applies if an item of the combo box is selected.
+							comboBox_Device.SelectedItem = this.deviceInfo;
+						}
+						else
+						{	// Applies if an item that is not in the combo box is selected.
+							comboBox_Device.SelectedIndex = ControlEx.InvalidIndex;
+							comboBox_Device.Text = this.deviceInfo;
+						}
+					}
 					else
+					{	// Item doesn't exist, use default = first item in the combo box.
 						comboBox_Device.SelectedIndex = 0;
+					}
 				}
 				else
 				{

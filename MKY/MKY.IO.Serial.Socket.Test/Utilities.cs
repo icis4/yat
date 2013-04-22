@@ -40,8 +40,8 @@ namespace MKY.IO.Serial.Socket.Test
 		// Private Constants
 		//==========================================================================================
 
-		private const int Interval = 100;
-		private const int Timeout = 10000;
+		private const int WaitInterval = 100;
+		private const int WaitTimeout = 10000;
 
 		#endregion
 
@@ -201,10 +201,10 @@ namespace MKY.IO.Serial.Socket.Test
 			int timeout = 0;
 			do
 			{
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail(message);
 			}
 			while (!io.IsStarted);
@@ -215,10 +215,10 @@ namespace MKY.IO.Serial.Socket.Test
 			int timeout = 0;
 			do
 			{
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail(message);
 			}
 			while (!(io.IsStarted && io.IsServer));
@@ -229,10 +229,10 @@ namespace MKY.IO.Serial.Socket.Test
 			int timeout = 0;
 			do
 			{
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail(message);
 			}
 			while (!ioA.IsConnected && !ioB.IsConnected);
@@ -243,10 +243,10 @@ namespace MKY.IO.Serial.Socket.Test
 			int timeout = 0;
 			do
 			{
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail(message);
 			}
 			while (ioA.IsConnected || ioB.IsConnected);
@@ -257,10 +257,10 @@ namespace MKY.IO.Serial.Socket.Test
 			int timeout = 0;
 			do
 			{
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail(message);
 			}
 			while (io.IsStarted);

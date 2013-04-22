@@ -67,6 +67,9 @@ namespace YAT.Domain
 		private const string RxParityErrorString         = "RX PARITY ERROR";
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
+		private const int ThreadWaitInterval = 1;
+		private const int ThreadWaitTimeout = 3000;
+
 		private const string Undefined = "<Undefined>";
 
 		#endregion
@@ -122,6 +125,7 @@ namespace YAT.Domain
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
+		private object sendThreadSyncObj = new object();
 
 		private object repositorySyncObj = new object();
 		private DisplayRepository txRepository;
@@ -243,9 +247,6 @@ namespace YAT.Domain
 
 					// In the 'normal' case, the send thread will already have been stopped in Close().
 					StopSendThread();
-
-					if (this.sendThreadEvent != null)
-						this.sendThreadEvent.Close();
 				}
 
 				// Set state to disposed:
@@ -285,41 +286,39 @@ namespace YAT.Domain
 
 		private void CreateAndStartSendThread()
 		{
-			// Ensure that thread has stopped after the last stop request:
-			int timeoutCounter = 0;
-			while (this.sendThread != null)
+			lock (this.sendThreadSyncObj)
 			{
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+				if (this.sendThread == null)
+				{
+					// Start thread:
+					this.sendThreadRunFlag = true;
+					this.sendThreadEvent = new AutoResetEvent(false);
+					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Start();
+				}
 			}
-
-			// Do not yet enforce that thread events have been disposed because that may result in
-			// deadlock. Further investigation is required in order to further improve the behaviour
-			// on Stop()/Dispose().
-
-			// Start thread:
-			this.sendThreadRunFlag = true;
-			this.sendThreadEvent = new AutoResetEvent(false);
-			this.sendThread = new Thread(new ThreadStart(SendThread));
-			this.sendThread.Start();
 		}
 
 		private void StopSendThread()
 		{
-			this.sendThreadRunFlag = false;
-
-			// Ensure that thread has stopped after the stop request:
-			int timeoutCounter = 0;
-			while (this.sendThread != null)
+			lock (this.sendThreadSyncObj)
 			{
-				this.sendThreadEvent.Set();
+				if (this.sendThread != null)
+				{
+					this.sendThreadRunFlag = false;
 
-				Thread.Sleep(1);
+					// Ensure that send thread has stopped after the stop request:
+					int timeoutCounter = 0;
+					while (!this.sendThread.Join(ThreadWaitInterval))
+					{
+						this.sendThreadEvent.Set();
+						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+							throw (new TimeoutException("Send thread hasn't properly stopped"));
+					}
 
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+					this.sendThreadEvent.Close();
+					this.sendThread = null;
+				}
 			}
 		}
 
@@ -592,11 +591,6 @@ namespace YAT.Domain
 						ProcessSendItem(si);
 				}
 			}
-
-			this.sendThread = null;
-
-			// Do not Close() and de-reference the corresponding event as it may be Set() again
-			// right now by another thread, e.g. during closing.
 
 			WriteDebugMessageLine("SendThread() has terminated.");
 		}

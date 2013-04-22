@@ -65,13 +65,18 @@ New:
 - <>
 
 Important changes:
-- <>
+- Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and
+  'Manual Combined', this is due to a limitation of the .NET/Win32 serial port driver (bug #214)
 
 Fixed bugs:
-- ThreadException upon copy of exception data to clipboard fixed (bug #245)
+- Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly
+  restored when opening the terminal settings dialog (bug #259)
 - Exception while reading stream in YAT.Domain.Parser.Parser.TryParse() fixed (bug #261)
 - Memory leak when subsequently creating and closing terminals fixed (bug #263)
 - Excessive memory occupation after standby fixed (bug #243)
+- MissingMethodException of 'Boolean System.Threading.WaitHandle.WaitOne(Int32)' fixed by adding
+  .NET 3.5 SP1 as prerequisite to setup/installation (bug #273)
+- ThreadException upon copy of exception data to clipboard fixed (bug #245)
 
 Limitations and known issues:
 - General imitations of .NET Windows.Forms
@@ -91,8 +96,6 @@ Limitations and known issues:
   on certain hardware, e.g. certain USB/RS-232 converters (bug #203)
 - Serial COM port manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may
   not be supported on Win7/64 on certain hardware, e.g. certain USB/RS-232 converters (bug #254)
-- Serial COM port XOn/XOff flow control state is properly indicated for 'Manual Software' and
-  'Manual Combined' only, and always on for 'Software' and 'Combined' (bug #214)
 - Handling of serial COM port break states (feature ##109) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
 - USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they

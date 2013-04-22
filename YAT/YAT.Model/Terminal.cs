@@ -1820,13 +1820,13 @@ namespace YAT.Model
 				if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
 				{
 					hintTitle = "YAT hints:";
-					hintText = "Check the settings of the serial port and make sure it is not already in use." + Environment.NewLine +
-					           "Note that hardware and driver may limit the allowed communication settings.";
+					hintText  = "Make sure the selected serial port is available and not already in use. " +
+					            "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
 				}
 				else
 				{
 					hintTitle = "YAT hint:";
-					hintText = "Make sure the socket is not already in use.";
+					hintText  = "Make sure the socket is not already in use.";
 				}
 
 				OnMessageInputRequest

@@ -212,9 +212,9 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
-		private const int Interval = 100;
-		private const int Timeout = 10000;
-		private const int WaitEol = 1000;
+		private const int WaitInterval = 100;
+		private const int WaitTimeout = 10000;
+		private const int EolWaitInterval = 1000;
 
 		#endregion
 
@@ -363,10 +363,10 @@ namespace YAT.Model.Test
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
@@ -377,10 +377,10 @@ namespace YAT.Model.Test
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(Interval);
-				timeout += Interval;
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
 
-				if (timeout >= Timeout)
+				if (timeout >= WaitTimeout)
 					Assert.Fail("Transmission timeout! Try to re-run test case.");
 			}
 			while ((terminalB.RxByteCount != terminalA.TxByteCount) &&
@@ -388,7 +388,7 @@ namespace YAT.Model.Test
 			       (terminalB.RxLineCount != testSet.ExpectedLineCount));
 
 			// Wait to allow Eol to be sent (Eol is sent a bit later than line contents).
-			Thread.Sleep(WaitEol);
+			Thread.Sleep(EolWaitInterval);
 		}
 
 		#endregion

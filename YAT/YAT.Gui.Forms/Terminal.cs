@@ -3128,19 +3128,19 @@ namespace YAT.Gui.Forms
 					bool manualRfrDtr  = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually;
 					bool manualXOnXOff = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
 
-					bool showXOnXOff = false;
-					bool outputIsXOn = false;
-					bool inputIsXOn = false;
-					MKY.IO.Serial.SerialPort.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler;
+					bool indicateXOnXOff = manualXOnXOff; // Indication only properly works if manual XOn/XOff (bug #214).
+					bool outputIsXOn     = false;
+					bool inputIsXOn      = false;
+					MKY.IO.Serial.SerialPort.IXOnXOffHandler x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 					if (x != null)
 					{
-						showXOnXOff = x.XOnXOffIsInUse;
-						outputIsXOn = x.OutputIsXOn;
-						inputIsXOn  = x.InputIsXOn;
+					////indicateXOnXOff = x.XOnXOffIsInUse;
+						outputIsXOn     = x.OutputIsXOn;
+						inputIsXOn      = x.InputIsXOn;
 					}
 
-					bool indicateBreakStates  = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
-					bool manualOutputBreak    = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
+					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+					bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
 					if (rs485FlowControl)
 					{
 						if (pins.Rfr)
@@ -3162,9 +3162,9 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
-					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = showXOnXOff;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = showXOnXOff;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = showXOnXOff;
+					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
