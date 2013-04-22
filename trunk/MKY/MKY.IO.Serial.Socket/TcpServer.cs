@@ -90,6 +90,9 @@ namespace MKY.IO.Serial.Socket
 
 		private const int DataSentQueueInitialCapacity = 4096;
 
+		private const int ThreadWaitInterval = 1;
+		private const int ThreadWaitTimeout = 3000;
+
 		#endregion
 
 		#region Static Fields
@@ -134,6 +137,7 @@ namespace MKY.IO.Serial.Socket
 		private bool dataSentThreadRunFlag;
 		private AutoResetEvent dataSentThreadEvent;
 		private Thread dataSentThread;
+		private object dataSentThreadSyncObj = new object();
 
 		#endregion
 
@@ -571,41 +575,39 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartDataSentThread()
 		{
-			// Ensure that thread has stopped after the last stop request:
-			int timeoutCounter = 0;
-			while (this.dataSentThread != null)
+			lock (this.dataSentThreadSyncObj)
 			{
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+				if (this.dataSentThread == null)
+				{
+					// Start thread:
+					this.dataSentThreadRunFlag = true;
+					this.dataSentThreadEvent = new AutoResetEvent(false);
+					this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
+					this.dataSentThread.Start();
+				}
 			}
-
-			// Do not yet enforce that thread events have been disposed because that may result in
-			// deadlock. Further investigation is required in order to further improve the behaviour
-			// on Stop()/Dispose().
-
-			// Start thread:
-			this.dataSentThreadRunFlag = true;
-			this.dataSentThreadEvent = new AutoResetEvent(false);
-			this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
-			this.dataSentThread.Start();
 		}
 
 		private void StopDataSentThread()
 		{
-			this.dataSentThreadRunFlag = false;
-
-			// Ensure that thread has stopped after the stop request:
-			int timeoutCounter = 0;
-			while (this.dataSentThread != null)
+			lock (this.dataSentThreadSyncObj)
 			{
-				this.dataSentThreadEvent.Set();
+				if (this.dataSentThread != null)
+				{
+					this.dataSentThreadRunFlag = false;
 
-				Thread.Sleep(1);
+					// Ensure that thread has stopped after the stop request:
+					int timeoutCounter = 0;
+					while (!this.dataSentThread.Join(ThreadWaitInterval))
+					{
+						this.dataSentThreadEvent.Set();
+						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+							throw (new TimeoutException("Data sent thread hasn't properly stopped"));
+					}
 
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+					this.dataSentThreadEvent.Close();
+					this.dataSentThread = null;
+				}
 			}
 		}
 
@@ -736,11 +738,6 @@ namespace MKY.IO.Serial.Socket
 					Thread.Sleep(TimeSpan.Zero);
 				}
 			}
-
-			this.dataSentThread = null;
-
-			// Do not Close() and de-reference the corresponding event as it may be Set() again
-			// right now by another thread, e.g. during closing.
 
 			WriteDebugMessageLine("SendThread() has terminated.");
 		}

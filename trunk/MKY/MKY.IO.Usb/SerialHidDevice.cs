@@ -73,6 +73,9 @@ namespace MKY.IO.Usb
 
 		private const int ReceiveQueueInitialCapacity = 4096;
 
+		private const int ThreadWaitInterval = 1;
+		private const int ThreadWaitTimeout = 3000;
+
 		#endregion
 
 		#region Static Events
@@ -260,6 +263,7 @@ namespace MKY.IO.Usb
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
+		private object receiveThreadSyncObj = new object();
 
 		#endregion
 
@@ -364,9 +368,8 @@ namespace MKY.IO.Usb
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// Do not yet dispose of thread event and state lock because that may result
-					// in null ref exceptions during closing. Further investigation is required
-					// in order to further improve the behaviour on Stop()/Dispose().
+					// In the 'normal' case, the receive thread will already have been stopped in Close().
+					StopReceiveThread();
 				}
 			}
 
@@ -628,41 +631,39 @@ namespace MKY.IO.Usb
 
 		private void CreateAndStartReceiveThread()
 		{
-			// Ensure that thread has stopped after the last stop request:
-			int timeoutCounter = 0;
-			while (this.receiveThread != null)
+			lock (this.receiveThreadSyncObj)
 			{
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+				if (this.receiveThread == null)
+				{
+					// Start receive thread:
+					this.receiveThreadRunFlag = true;
+					this.receiveThreadEvent = new AutoResetEvent(false);
+					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.receiveThread.Start();
+				}
 			}
-
-			// Do not yet enforce that thread events have been disposed because that may result in
-			// deadlock. Further investigation is required in order to further improve the behaviour
-			// on Stop()/Dispose().
-
-			// Start thread:
-			this.receiveThreadRunFlag = true;
-			this.receiveThreadEvent = new AutoResetEvent(false);
-			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-			this.receiveThread.Start();
 		}
 
 		private void StopReceiveThread()
 		{
-			this.receiveThreadRunFlag = false;
-
-			// Ensure that thread has stopped after the stop request:
-			int timeoutCounter = 0;
-			while (this.receiveThread != null)
+			lock (this.receiveThreadSyncObj)
 			{
-				this.receiveThreadEvent.Set();
+				if (this.receiveThread != null)
+				{
+					this.receiveThreadRunFlag = false;
 
-				Thread.Sleep(1);
+					// Ensure that receive thread has stopped after the stop request:
+					int timeoutCounter = 0;
+					while (!this.receiveThread.Join(ThreadWaitInterval))
+					{
+						this.receiveThreadEvent.Set();
+						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+							throw (new TimeoutException("Receive thread hasn't properly stopped"));
+					}
 
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+					this.receiveThreadEvent.Close();
+					this.receiveThread = null;
+				}
 			}
 		}
 
@@ -793,11 +794,6 @@ namespace MKY.IO.Usb
 					Thread.Sleep(TimeSpan.Zero);
 				}
 			}
-
-			this.receiveThread = null;
-
-			// Do not Close() and de-reference the corresponding event as it may be Set() again
-			// right now by another thread, e.g. during closing.
 
 			WriteDebugMessageLine("ReceiveThread() has terminated.");
 		}

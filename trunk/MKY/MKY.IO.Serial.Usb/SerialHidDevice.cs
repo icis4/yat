@@ -52,6 +52,9 @@ namespace MKY.IO.Serial.Usb
 		private const int SendQueueInitialCapacity = 4096;
 		private const int ReceiveQueueInitialCapacity = 4096;
 
+		private const int ThreadWaitInterval = 1;
+		private const int ThreadWaitTimeout = 3000;
+
 		private const string Undefined = "<Undefined>";
 
 		#endregion
@@ -86,6 +89,7 @@ namespace MKY.IO.Serial.Usb
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
+		private object sendThreadSyncObj = new object();
 
 		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
@@ -96,6 +100,7 @@ namespace MKY.IO.Serial.Usb
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
+		private object receiveThreadSyncObj = new object();
 
 		#endregion
 
@@ -156,12 +161,6 @@ namespace MKY.IO.Serial.Usb
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeDeviceAndThreads();
-
-					if (this.sendThreadEvent != null)
-						this.sendThreadEvent.Close();
-
-					if (this.receiveThreadEvent != null)
-						this.receiveThreadEvent.Close();
 				}
 
 				// Set state to disposed:
@@ -408,12 +407,7 @@ namespace MKY.IO.Serial.Usb
 				}
 			}
 
-			this.sendThread = null;
-
-			// Do not Close() and de-reference the corresponding event as it may be Set() again
-			// right now by another thread, e.g. during closing.
-
-			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': SendThread() has terminated.");
+			WriteDebugMessageLine("SendThread() has terminated.");
 		}
 
 		#endregion
@@ -521,50 +515,74 @@ namespace MKY.IO.Serial.Usb
 
 		private void StartThreads()
 		{
-			// Ensure that threads have stopped after the last stop request:
-			int timeoutCounter = 0;
-			while ((this.sendThread != null) && (this.receiveThread != null))
+			lock (this.sendThreadSyncObj)
 			{
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Threads havn't properly stopped"));
+				if (this.sendThread == null)
+				{
+					// Start send thread:
+					this.sendThreadRunFlag = true;
+					this.sendThreadEvent = new AutoResetEvent(false);
+					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Start();
+				}
 			}
 
-			// Do not yet enforce that thread events have been disposed because that may result in
-			// deadlock. Further investigation is required in order to further improve the behaviour
-			// on Stop()/Dispose().
-
-			// Start threads:
-			this.sendThreadRunFlag = true;
-			this.sendThreadEvent = new AutoResetEvent(false);
-			this.sendThread = new Thread(new ThreadStart(SendThread));
-			this.sendThread.Start();
-
-			this.receiveThreadRunFlag = true;
-			this.receiveThreadEvent = new AutoResetEvent(false);
-			this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-			this.receiveThread.Start();
+			lock (this.receiveThreadSyncObj)
+			{
+				if (this.receiveThread == null)
+				{
+					// Start receive thread:
+					this.receiveThreadRunFlag = true;
+					this.receiveThreadEvent = new AutoResetEvent(false);
+					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.receiveThread.Start();
+				}
+			}
 		}
 
 		private void StopThreads()
 		{
 			// First clear both flags to reduce the time to stop the receive thread, it may already
 			// be signaled while receiving data while the send thread is still running.
-			this.sendThreadRunFlag = false;
-			this.receiveThreadRunFlag = false;
+			lock (this.sendThreadSyncObj)
+				this.sendThreadRunFlag = false;
+			lock (this.receiveThreadSyncObj)
+				this.receiveThreadRunFlag = false;
 
-			// Ensure that threads have stopped after the stop request:
-			int timeoutCounter = 0;
-			while ((this.sendThread != null) && (this.receiveThread != null))
+			lock (this.sendThreadSyncObj)
 			{
-				this.sendThreadEvent.Set();
-				this.receiveThreadEvent.Set();
+				if (this.sendThread != null)
+				{
+					// Ensure that send thread has stopped after the stop request:
+					int timeoutCounter = 0;
+					while (!this.sendThread.Join(ThreadWaitInterval))
+					{
+						this.sendThreadEvent.Set();
+						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+							throw (new TimeoutException("Send thread hasn't properly stopped"));
+					}
 
-				Thread.Sleep(1);
+					this.sendThreadEvent.Close();
+					this.sendThread = null;
+				}
+			}
 
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Threads havn't properly stopped"));
+			lock (this.receiveThreadSyncObj)
+			{
+				if (this.receiveThread != null)
+				{
+					// Ensure that receive thread has stopped after the stop request:
+					int timeoutCounter = 0;
+					while (!this.receiveThread.Join(ThreadWaitInterval))
+					{
+						this.receiveThreadEvent.Set();
+						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+							throw (new TimeoutException("Receive thread hasn't properly stopped"));
+					}
+
+					this.receiveThreadEvent.Close();
+					this.receiveThread = null;
+				}
 			}
 		}
 
@@ -675,12 +693,7 @@ namespace MKY.IO.Serial.Usb
 				}
 			}
 
-			this.receiveThread = null;
-
-			// Do not Close() and de-reference the corresponding event as it may be Set() again
-			// right now by another thread, e.g. during closing.
-
-			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': ReceiveThread() has terminated.");
+			WriteDebugMessageLine("ReceiveThread() has terminated.");
 		}
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
@@ -773,6 +786,20 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void WriteDebugMessageLine(string message)
+		{
+			Debug.WriteLine(GetType() + " '" + ToDeviceInfoString() + "': " + message);
+		}
 
 		#endregion
 	}

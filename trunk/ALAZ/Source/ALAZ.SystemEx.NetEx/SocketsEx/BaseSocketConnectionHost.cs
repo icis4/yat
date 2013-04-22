@@ -1797,6 +1797,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                       {
                           MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
                       }
+                      catch (ObjectDisposedException ex)
+                      {
+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+                      }
                       finally
                       {
                           if (FSocketConnectionsSync != null)

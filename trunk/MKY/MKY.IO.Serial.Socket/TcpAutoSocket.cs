@@ -605,9 +605,9 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StartConnecting()
 		{
-			int delay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
-			WriteDebugMessageLine("Delaying connecting by " + delay + "ms.");
-			Thread.Sleep(delay);
+			int randomDelay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
+			WriteDebugMessageLine("Delaying connecting by " + randomDelay + "ms.");
+			Thread.Sleep(randomDelay);
 
 			SetStateSynchronizedAndNotify(SocketState.Connecting);
 			CreateClient(this.remoteIPAddress, this.remotePort);
@@ -628,9 +628,9 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StartListening()
 		{
-			int delay = staticRandom.Next(MinListenDelay, MaxListenDelay);
-			WriteDebugMessageLine("Delaying listening by " + delay + "ms.");
-			Thread.Sleep(delay);
+			int randomDelay = staticRandom.Next(MinListenDelay, MaxListenDelay);
+			WriteDebugMessageLine("Delaying listening by " + randomDelay + "ms.");
+			Thread.Sleep(randomDelay);
 
 			SetStateSynchronizedAndNotify(SocketState.StartingListening);
 			CreateServer(this.localIPAddress, this.localPort);

@@ -243,6 +243,15 @@ Useful .NET classes
 - DefaultFontValue
 
 
+Threading
+---------
+
+Threads should never be aborted. The thread that calls Abort() might block if the thread that is being aborted is in a protected region of code, such as a catch block, finally block, or constrained execution region. If the thread that calls Abort holds a lock that the aborted thread requires, a deadlock can occur.
+Reference:
+http://stackoverflow.com/questions/7634797/why-threadabortexception-does-not-throw-in-catch-block
+http://msdn.microsoft.com/en-us/library/5b50fdsz.aspx
+
+
 Logging while debugging
 -----------------------
 

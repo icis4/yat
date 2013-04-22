@@ -78,6 +78,9 @@ namespace MKY.IO.Serial.Socket
 
 		private const int SendQueueInitialCapacity = 4096;
 
+		private const int ThreadWaitInterval = 1;
+		private const int ThreadWaitTimeout = 3000;
+
 		#endregion
 
 		#region Static Fields
@@ -117,6 +120,7 @@ namespace MKY.IO.Serial.Socket
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
+		private object sendThreadSyncObj = new object();
 
 		#endregion
 
@@ -181,10 +185,6 @@ namespace MKY.IO.Serial.Socket
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSocketAndThreads();
-
-					// Do not yet dispose of thread event and state lock because that may result
-					// in null ref exceptions during closing. Further investigation is required
-					// in order to further improve the behaviour on Stop()/Dispose().
 				}
 
 				// Set state to disposed:
@@ -461,11 +461,6 @@ namespace MKY.IO.Serial.Socket
 				}
 			}
 
-			this.sendThread = null;
-
-			// Do not Close() and de-reference the corresponding event as it may be Set() again
-			// right now by another thread, e.g. during closing.
-
 			WriteDebugMessageLine("SendThread() has terminated.");
 		}
 
@@ -513,7 +508,7 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartSocket()
 		{
-			CreateAndStartSendThread();
+			StartSendThread();
 
 			SetStateSynchronizedAndNotify(SocketState.Opening);
 
@@ -527,27 +522,19 @@ namespace MKY.IO.Serial.Socket
 			BeginReceive();
 		}
 
-		private void CreateAndStartSendThread()
+		private void StartSendThread()
 		{
-			// Ensure that thread has stopped after the last stop request:
-			int timeoutCounter = 0;
-			while (this.sendThread != null)
+			lock (this.sendThreadSyncObj)
 			{
-				Thread.Sleep(1);
-
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+				if (this.sendThread == null)
+				{
+					// Start thread:
+					this.sendThreadRunFlag = true;
+					this.sendThreadEvent = new AutoResetEvent(false);
+					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Start();
+				}
 			}
-
-			// Do not yet enforce that thread events have been disposed because that may result in
-			// deadlock. Further investigation is required in order to further improve the behaviour
-			// on Stop()/Dispose().
-
-			// Start thread:
-			this.sendThreadRunFlag = true;
-			this.sendThreadEvent = new AutoResetEvent(false);
-			this.sendThread = new Thread(new ThreadStart(SendThread));
-			this.sendThread.Start();
 		}
 
 		private void StopSocket()
@@ -562,20 +549,26 @@ namespace MKY.IO.Serial.Socket
 			this.socket.Close();
 			this.socket = null;
 
-			// Finally, stop the thread. Must be done AFTER the socket got closed to ensure that
-			// the last socket callbacks can still be properly processed.
-			this.sendThreadRunFlag = false;
-
-			// Ensure that thread has stopped after the stop request:
-			int timeoutCounter = 0;
-			while (this.sendThread != null)
+			lock (this.sendThreadSyncObj)
 			{
-				this.sendThreadEvent.Set();
+				if (this.sendThread != null)
+				{
+					// Stop the thread. Must be done AFTER the socket got closed to ensure that
+					// the last socket callbacks can still be properly processed.
+					this.sendThreadRunFlag = false;
 
-				Thread.Sleep(1);
+					// Ensure that send thread has stopped after the stop request:
+					int timeoutCounter = 0;
+					while (!this.sendThread.Join(ThreadWaitInterval))
+					{
+						this.sendThreadEvent.Set();
+						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+							throw (new TimeoutException("Send thread hasn't properly stopped"));
+					}
 
-				if (++timeoutCounter >= 3000)
-					throw (new TimeoutException("Thread hasn't properly stopped"));
+					this.sendThreadEvent.Close();
+					this.sendThread = null;
+				}
 			}
 		}
 

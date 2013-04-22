@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -32,6 +37,8 @@ using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -399,7 +406,25 @@ namespace YAT.Gui.Controls
 						else if ((old != null) && (ports.Contains(old)))
 							comboBox_Port.SelectedItem = old;
 						else
+						{
 							comboBox_Port.SelectedIndex = 0;
+
+							if (this.portId != null)
+							{
+								string message =
+									"The given serial port " + this.portId + " is currently not available." + Environment.NewLine +
+									"The setting has been defaulted to the first available port.";
+
+								MessageBoxEx.Show
+									(
+									this,
+									message,
+									"Serial COM port not available",
+									MessageBoxButtons.OK,
+									MessageBoxIcon.Warning
+									);
+							}
+						}
 
 						// Set property instead of member to ensure that changed event is fired.
 						PortId = comboBox_Port.SelectedItem as SerialPortId;
@@ -450,9 +475,21 @@ namespace YAT.Gui.Controls
 				if (comboBox_Port.Items.Count > 0)
 				{
 					if (this.portId != null)
-						comboBox_Port.SelectedItem = this.portId;
+					{
+						if (comboBox_Port.Items.Contains(this.portId))
+						{	// Applies if an item of the combo box is selected.
+							comboBox_Port.SelectedItem = this.portId;
+						}
+						else
+						{	// Applies if an item that is not in the combo box is selected.
+							comboBox_Port.SelectedIndex = ControlEx.InvalidIndex;
+							comboBox_Port.Text = this.portId;
+						}
+					}
 					else
+					{	// Item doesn't exist, use default = first item in the combo box.
 						comboBox_Port.SelectedIndex = 0;
+					}
 				}
 				else
 				{

@@ -529,7 +529,25 @@ namespace YAT.Gui.Controls
 					else if ((old != null) && (localInterfaces.Contains(old)))
 						comboBox_LocalInterface.SelectedItem = old;
 					else
+					{
 						comboBox_LocalInterface.SelectedIndex = 0;
+
+						if (this.localInterface != null)
+						{
+							string message =
+								"The given local network interface " + this.localInterface + " is currently not available." + Environment.NewLine +
+								"The setting has been defaulted to the first available interface.";
+
+							MessageBoxEx.Show
+								(
+								this,
+								message,
+								"Interface not available",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning
+								);
+						}
+					}
 
 					// Set property instead of member to ensure that changed event is fired.
 					LocalInterface = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
@@ -540,7 +558,7 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"No local network interfaces available, check network system settings.",
-						"No Interfaces",
+						"No interfaces",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
 						);
@@ -561,9 +579,21 @@ namespace YAT.Gui.Controls
 				if (comboBox_RemoteHost.Items.Count > 0)
 				{
 					if (this.remoteHost != null)
-						comboBox_RemoteHost.SelectedItem = this.remoteHost;
+					{
+						if (comboBox_RemoteHost.Items.Contains(this.remoteHost))
+						{	// Applies if an item of the combo box is selected.
+							comboBox_RemoteHost.SelectedItem = this.remoteHost;
+						}
+						else
+						{	// Applies if an item that is not in the combo box is selected.
+							comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
+							comboBox_RemoteHost.Text = this.remoteHost;
+						}
+					}
 					else
+					{	// Item doesn't exist, use default = first item in the combo box.
 						comboBox_RemoteHost.SelectedIndex = 0;
+					}
 				}
 				else
 				{
