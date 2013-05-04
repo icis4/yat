@@ -67,14 +67,14 @@ namespace YAT.Domain.Parser
 			@"Format specifiers are case insensitive, e.g. ""\H"" = ""\h"", ""4f"" = ""4F"", ""<lf>"" = ""<LF>""" + Environment.NewLine +
 			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
-			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" instead of ""\h""" + Environment.NewLine +
+			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" alternative to ""\h""" + Environment.NewLine +
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
-			@"""\r\n"" instead of ""<CR><LF>""" + Environment.NewLine +
-			@"""\0"" instead of ""<NUL>"" or \d(0) or \h(0)" + Environment.NewLine +
-			@"""\01"" instead of \o(1)" + Environment.NewLine +
-			@"""\12"" instead of \d(12)" + Environment.NewLine +
-			@"""\0x1A"" or ""\x1A"" instead of \h(1A)" + Environment.NewLine +
+			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +
+			@"""\0"" alternative to ""<NUL>"" or \d(0) or \h(0)" + Environment.NewLine +
+			@"""\01"" alternative to \o(1)" + Environment.NewLine +
+			@"""\12"" alternative to \d(12)" + Environment.NewLine +
+			@"""\0x1A"" or ""\x1A"" alternative to \h(1A)" + Environment.NewLine +
 			Environment.NewLine +
 			@"Type \\ to send a backspace" + Environment.NewLine +
 			@"Type \< to send an opening angle bracket" + Environment.NewLine +
@@ -1188,7 +1188,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			string parsed;
 			return (Parse(s, out parsed));
@@ -1198,7 +1198,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual byte[] Parse(string s, out string parsed)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			Result[] resultResult = Parse(s, Modes.AllByteArrayResults, out parsed);
 			MemoryStream byteResult = new MemoryStream();
@@ -1217,7 +1217,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, Modes modes)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			string parsed;
 			return (Parse(s, modes, out parsed));
@@ -1227,7 +1227,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual Result[] Parse(string s, Modes modes, out string parsed)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			FormatException formatException = new FormatException("");
@@ -1240,7 +1240,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, out byte[] result)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			string parsed;
 			return (TryParse(s, out result, out parsed));
@@ -1250,10 +1250,19 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, out byte[] result, out string parsed)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			return (TryParse(s, Modes.AllByteArrayResults, out result, out parsed));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string parsed)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] resultResult;
-			bool tryResult = TryParse(s, Modes.AllByteArrayResults, out resultResult, out parsed);
+			bool tryResult = TryParse(s, modes, out resultResult, out parsed);
 
 			MemoryStream byteResult = new MemoryStream();
 			foreach (Result r in resultResult)
@@ -1273,7 +1282,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			return (TryParse(s, Modes.All));
 		}
@@ -1281,7 +1290,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, Modes modes)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			return (TryParse(s, modes, out result));
@@ -1291,7 +1300,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, Modes modes, out Result[] result)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			string parsed;
 			return (TryParse(s, modes, out result, out parsed));
@@ -1301,7 +1310,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, Modes modes, out string parsed)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			return (TryParse(s, modes, out result, out parsed));
@@ -1312,7 +1321,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, Modes modes, out string parsed, ref FormatException formatException)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			return (TryParse(s, modes, out result, out parsed, ref formatException));
@@ -1323,7 +1332,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed)
 		{
-			// AssertNotDisposed() is called below.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, modes, out result, out parsed, ref formatException));

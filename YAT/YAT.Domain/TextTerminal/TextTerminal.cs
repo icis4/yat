@@ -289,95 +289,87 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessParsableSendItem(ParsableSendItem item)
 		{
-			string data = item.Data;
+			string textToParse = item.Data;
 			bool sendEol = item.IsLine;
 			bool performLineDelay = false;
-
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
-
-			// Prepare EOL:
-			byte[] eolByteArray = new byte[] { };
-			if (item.IsLine)
-			{
-				MemoryStream eolWriter = new MemoryStream();
-				foreach (Parser.Result r in p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults))
-				{
-					Parser.ByteArrayResult bar = r as Parser.ByteArrayResult;
-					if (bar != null)
-					{
-						byte[] a = bar.ByteArray;
-						eolWriter.Write(a, 0, a.Length);
-					}
-				}
-				eolByteArray = eolWriter.ToArray();
-			}
 
 			// Check for EOL comment indicators:
 			if (TextTerminalSettings.EolComment.SkipComment)
 			{
 				foreach (string marker in TextTerminalSettings.EolComment.Indicators)
 				{
-					int index = StringEx.IndexOfOutsideDoubleQuotes(data, marker, StringComparison.Ordinal);
+					int index = StringEx.IndexOfOutsideDoubleQuotes(textToParse, marker, StringComparison.Ordinal);
 					if (index >= 0)
 					{
-						data = StringEx.Left(data, index);
+						textToParse = StringEx.Left(textToParse, index);
 
 						if (TextTerminalSettings.EolComment.SkipWhiteSpace)
-							data = data.TrimEnd(null); // <c>null</c> means white-spaces.
+							textToParse = textToParse.TrimEnd(null); // <c>null</c> means white-spaces.
 					}
 				}
 			}
 
 			// Parse string and execute keywords:
-			foreach (Parser.Result r in p.Parse(data, TextTerminalSettings.CharSubstitution, Parser.Modes.All))
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
+			Parser.Result[] parseResult;
+			string textSuccessfullyParsed;
+			if (p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, Parser.Modes.All, out parseResult, out textSuccessfullyParsed))
 			{
-				Parser.ByteArrayResult bar = r as Parser.ByteArrayResult;
-				if (bar != null)
+				foreach (Parser.Result ri in parseResult)
 				{
-					ForwardDataToRawTerminal(bar.ByteArray);
-				}
-				else
-				{
-					Parser.KeywordResult kr = r as Parser.KeywordResult;
-					if (kr != null)
+					Parser.ByteArrayResult bar = ri as Parser.ByteArrayResult;
+					if (bar != null)
 					{
-						switch (kr.Keyword)
+						ForwardDataToRawTerminal(bar.ByteArray);
+					}
+					else
+					{
+						Parser.KeywordResult kr = ri as Parser.KeywordResult;
+						if (kr != null)
 						{
-							// Process end-of-line keywords:
-							case Parser.Keyword.LineDelay:
+							switch (kr.Keyword)
 							{
-								performLineDelay = true;
-								break;
-							}
+								// Process end-of-line keywords:
+								case Parser.Keyword.LineDelay:
+								{
+									performLineDelay = true;
+									break;
+								}
 
-							case Parser.Keyword.NoEol:
-							{
-								sendEol = false;
-								break;
-							}
+								case Parser.Keyword.NoEol:
+								{
+									sendEol = false;
+									break;
+								}
 
-							// Process text terminal specific in-line keywords:
-							case Parser.Keyword.Eol:
-							{
-								ForwardDataToRawTerminal(eolByteArray);
-								break;
-							}
+								// Process text terminal specific in-line keywords:
+								case Parser.Keyword.Eol:
+								{
+									ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+									break;
+								}
 
-							// Process other in-line keywords:
-							default:
-							{
-								ProcessInLineKeywords(kr);
-								break;
+								// Process other in-line keywords:
+								default:
+								{
+									ProcessInLineKeywords(kr);
+									break;
+								}
 							}
 						}
 					}
 				}
+
+				// Finalize the line:
+				if (sendEol)
+					ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+			}
+			else
+			{
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 			}
 
-			// Finalize the line:
-			if (sendEol)
-				ForwardDataToRawTerminal(eolByteArray);
-
+			// Process delay settings independent on parser success:
 			int accumulatedLineDelay = 0;
 			if (performLineDelay)
 			{
@@ -417,14 +409,20 @@ namespace YAT.Domain
 
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
 			byte[] txEol;
-			if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, out txEol))
+			if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out txEol))
 			{
+				// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
+				// the EOL sequence when the user enters it. However, the user might manually edit the EOL
+				// sequence in a settings file.
 				TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
 				txEol = p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution);
 			}
 			byte[] rxEol;
-			if (!p.TryParse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution, out rxEol))
+			if (!p.TryParse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out rxEol))
 			{
+				// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
+				// the EOL sequence when the user enters it. However, the user might manually edit the EOL
+				// sequence in a settings file.
 				TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
 				rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
 			}

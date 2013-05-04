@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -624,43 +625,53 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
 		protected virtual void ProcessParsableSendItem(ParsableSendItem item)
 		{
-			bool lineDelay = false;
+			string textToParse = item.Data;
+			bool performLineDelay = false;
 
 			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
-			foreach (Parser.Result r in p.Parse(item.Data, Parser.Modes.All))
+			Parser.Result[] parseResult;
+			string textSuccessfullyParsed;
+			if (p.TryParse(textToParse, Parser.Modes.All, out parseResult, out textSuccessfullyParsed))
 			{
-				Parser.ByteArrayResult bar = r as Parser.ByteArrayResult;
-				if (bar != null)
+				foreach (Parser.Result ri in parseResult)
 				{
-					ForwardDataToRawTerminal(bar.ByteArray);
-				}
-				else
-				{
-					Parser.KeywordResult kr = r as Parser.KeywordResult;
-					if (kr != null)
+					Parser.ByteArrayResult bar = ri as Parser.ByteArrayResult;
+					if (bar != null)
 					{
-						switch (kr.Keyword)
+						ForwardDataToRawTerminal(bar.ByteArray);
+					}
+					else
+					{
+						Parser.KeywordResult kr = ri as Parser.KeywordResult;
+						if (kr != null)
 						{
-							// Process end-of-line keywords:
-							case Parser.Keyword.LineDelay:
+							switch (kr.Keyword)
 							{
-								lineDelay = true;
-								break;
-							}
+								// Process end-of-line keywords:
+								case Parser.Keyword.LineDelay:
+								{
+									performLineDelay = true;
+									break;
+								}
 
-							// Process in-line keywords:
-							default:
-							{
-								ProcessInLineKeywords(kr);
-								break;
+								// Process in-line keywords:
+								default:
+								{
+									ProcessInLineKeywords(kr);
+									break;
+								}
 							}
 						}
 					}
 				}
 			}
+			else
+			{
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+			}
 
 			// Finalize the line.
-			if (lineDelay)
+			if (performLineDelay)
 				Thread.Sleep(TerminalSettings.Send.DefaultLineDelay);
 		}
 
@@ -690,7 +701,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -704,7 +715,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -718,7 +729,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError("Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -735,15 +746,68 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary>
+		/// Creates a parser error message which can be displayed in the terminal.
+		/// </summary>
+		/// <param name="s">The string to be parsed.</param>
+		/// <param name="parsed">The substring that could successfully be parsed.</param>
+		/// <returns>The error message to display.</returns>
+		protected string CreateParserErrorMessage(string s, string parsed)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(@"""");
+			sb.Append(s);
+			sb.Append(@"""");
+			if (parsed != null)
+			{
+				sb.Append(" is invalid");
+				sb.Append(" at position ");
+				sb.Append((parsed.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
+				if (parsed.Length > 0)
+				{
+					sb.Append(@" Only """);
+					sb.Append(parsed);
+					sb.Append(@""" is valid.");
+				}
+			}
+			else
+			{
+				sb.Append(" is invalid.");
+			}
+
+			return (sb.ToString());
+		}
+
 		/// <remarks>
 		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
 		/// </remarks>
+		protected void ForwardDataToRawTerminal(ReadOnlyCollection<byte> data)
+		{
+			// AssertNotDisposed() is called by 'ForwardDataToRawTerminal()' below.
+
+			byte[] a = new byte[data.Count];
+			data.CopyTo(a, 0);
+
+			ForwardDataToRawTerminal(a);
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
+		/// 
+		/// \todo
+		/// Use a 'ReadOnlyCollection' instead of a byte array in 'RawTerminal', then remove this method.
+		/// </remarks>
 		protected void ForwardDataToRawTerminal(byte[] data)
 		{
+			AssertNotDisposed();
+
 			this.rawTerminal.Send(data);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
+		/// </remarks>
 		public void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
 		{
 			AssertNotDisposed();
@@ -1134,6 +1198,40 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual DisplayLine LastDisplayLineAuxiliary(RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repository)
+				{
+					case RepositoryType.Tx:    return (this.txRepository.   LastLineAuxiliary());
+					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
+					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ClearLastDisplayLineAuxiliary(RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repository)
+				{
+					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
+					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
+					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
 					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 				}
 			}

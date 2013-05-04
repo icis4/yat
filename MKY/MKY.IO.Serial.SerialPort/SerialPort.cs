@@ -1008,7 +1008,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void ResetFlowControlCount()
 		{
-			// AssertNotDisposed() is called by 'ResetXOnXOffCount()'.
+			// AssertNotDisposed() is called by 'ResetXOnXOffCount()' below.
 
 			ResetXOnXOffCount();
 

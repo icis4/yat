@@ -21,11 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
+
+#endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -47,6 +54,8 @@ namespace YAT.Domain
 		private DisplayLine currentLine; // = null;
 		private int dataCount; // = 0;
 
+		private DisplayLine lastLineAuxiliary; // = null;
+
 		#endregion
 
 		#region Object Lifetime
@@ -61,6 +70,8 @@ namespace YAT.Domain
 			this.capacity    = capacity;
 			this.currentLine = new DisplayLine();
 		////this.dataCount   = 0;
+
+			this.lastLineAuxiliary    = new DisplayLine();
 		}
 
 		/// <summary></summary>
@@ -68,8 +79,10 @@ namespace YAT.Domain
 			: base(rhs)
 		{
 			this.capacity    = rhs.capacity;
-			this.currentLine = new DisplayLine(rhs.currentLine);
+			this.currentLine = new DisplayLine(rhs.currentLine.Clone());
 			this.dataCount   = rhs.dataCount;
+
+			this.lastLineAuxiliary    = new DisplayLine(rhs.lastLineAuxiliary.Clone());
 		}
 
 		#endregion
@@ -146,6 +159,7 @@ namespace YAT.Domain
 
 				// Enqueue new line and reset current line:
 				base.Enqueue(this.currentLine.Clone()); // Clone elements to ensure decoupling.
+				this.lastLineAuxiliary = this.currentLine.Clone(); // Clone elements to ensure decoupling.
 				this.currentLine.Clear();
 			}
 		}
@@ -164,6 +178,8 @@ namespace YAT.Domain
 			base.Clear();
 			this.currentLine.Clear();
 			this.dataCount = 0;
+
+			this.lastLineAuxiliary.Clear();
 		}
 
 		/// <summary></summary>
@@ -193,6 +209,18 @@ namespace YAT.Domain
 				elements.AddRange(line.ToArray());
 
 			return (elements);
+		}
+
+		/// <summary></summary>
+		public virtual DisplayLine LastLineAuxiliary()
+		{
+			return (this.lastLineAuxiliary);
+		}
+
+		/// <summary></summary>
+		public virtual void ClearLastLineAuxiliary()
+		{
+			this.lastLineAuxiliary.Clear();
 		}
 
 		#endregion

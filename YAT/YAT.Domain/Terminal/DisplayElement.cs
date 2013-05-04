@@ -274,7 +274,12 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This element type should rather be called 'Error' because it applies to any errors
+		/// that shall be displayed in the terminal. However, 'Error' is a keyword in certain
+		/// .NET languages such as VB.NET. As a result, any identifier called 'Error' or 'error'
+		/// will cause StyleCop/FxCop to issue a severe warning. So 'IOError' is used instead.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class IOError : DisplayElement
 		{
@@ -286,13 +291,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public IOError(string message)
-				: base('<' + message + '>')
+				: this(SerialDirection.None, message)
 			{
 			}
 
 			/// <summary></summary>
 			public IOError(SerialDirection direction, string message)
-				: base(direction, '<' + message + '>')
+				: base(direction, "<Error: " + message + ">")
 			{
 			}
 		}
