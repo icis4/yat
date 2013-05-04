@@ -65,54 +65,6 @@ namespace YAT.Domain
 	}
 
 	/// <summary>
-	/// Defines a text item that shall be sent by the terminal.
-	/// </summary>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
-	public class ParsableSendItem : SendItem
-	{
-		private string data;
-		private bool isLine;
-
-		/// <summary></summary>
-		public ParsableSendItem(string data)
-			: this(data, false)
-		{
-		}
-
-		/// <summary></summary>
-		public ParsableSendItem(string data, bool isLine)
-		{
-			this.data = data;
-			this.isLine = isLine;
-		}
-
-		/// <summary></summary>
-		public virtual string Data
-		{
-			get { return (this.data); }
-		}
-
-		/// <summary></summary>
-		public virtual bool IsLine
-		{
-			get { return (this.isLine); }
-		}
-
-		/// <summary></summary>
-		public override string ToString(string indent)
-		{
-			return (indent + this.data);
-		}
-
-		/// <summary></summary>
-		public override string ToDetailedString(string indent)
-		{
-			return (indent + "> Data: " + this.data + Environment.NewLine +
-					indent + "> IsLine: " + this.isLine + Environment.NewLine);
-		}
-	}
-
-	/// <summary>
 	/// Defines a binary item that shall be sent by the terminal.
 	/// </summary>
 	public class RawSendItem : SendItem
@@ -157,6 +109,54 @@ namespace YAT.Domain
 			}
 
 			return (indent + "> Data: " + data + Environment.NewLine);
+		}
+	}
+
+	/// <summary>
+	/// Defines a text item that shall be sent by the terminal.
+	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Parsable", Justification = "'Parsable' is a correct English term.")]
+	public class ParsableSendItem : SendItem
+	{
+		private string data;
+		private bool isLine;
+
+		/// <summary></summary>
+		public ParsableSendItem(string data)
+			: this(data, false)
+		{
+		}
+
+		/// <summary></summary>
+		public ParsableSendItem(string data, bool isLine)
+		{
+			this.data = data;
+			this.isLine = isLine;
+		}
+
+		/// <summary></summary>
+		public virtual string Data
+		{
+			get { return (this.data); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsLine
+		{
+			get { return (this.isLine); }
+		}
+
+		/// <summary></summary>
+		public override string ToString(string indent)
+		{
+			return (indent + this.data);
+		}
+
+		/// <summary></summary>
+		public override string ToDetailedString(string indent)
+		{
+			return (indent + "> Data: " + this.data + Environment.NewLine +
+					indent + "> IsLine: " + this.isLine + Environment.NewLine);
 		}
 	}
 }

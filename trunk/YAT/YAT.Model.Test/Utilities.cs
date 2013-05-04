@@ -270,6 +270,36 @@ namespace YAT.Model.Test
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortBSettings()));
 		}
 
+		internal static TerminalSettingsRoot GetStartedTextMtSicsDeviceASettings()
+		{
+			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceAIsConnected)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceA));
+
+			Assert.Ignore("'MtSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MtSicsDeviceA' is properly configured and availabel if passing this test is required.");
+			return (null);
+		}
+
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMtSicsDeviceASettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMtSicsDeviceASettings()));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextMtSicsDeviceBSettings()
+		{
+			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceBIsConnected)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceB));
+
+			Assert.Ignore("'MtSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MtSicsDeviceB' is properly configured and availabel if passing this test is required.");
+			return (null);
+		}
+
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMtSicsDeviceBSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMtSicsDeviceBSettings()));
+		}
+
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)
 		{
 			// Create settings
@@ -357,6 +387,20 @@ namespace YAT.Model.Test
 		//==========================================================================================
 		// Wait
 		//==========================================================================================
+
+		internal static void WaitForConnection(Model.Terminal terminalA)
+		{
+			int timeout = 0;
+			do                         // Initially wait to allow async send,
+			{                          //   therefore, use do-while.
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeout)
+					Assert.Fail("Connect timeout!");
+			}
+			while (!terminalA.IsConnected);
+		}
 
 		internal static void WaitForConnection(Model.Terminal terminalA, Model.Terminal terminalB)
 		{

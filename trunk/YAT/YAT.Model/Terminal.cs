@@ -2372,6 +2372,24 @@ namespace YAT.Model
 		}
 
 		/// <summary>
+		/// Returns the last display line of desired repository for auxiliary purposes.
+		/// </summary>
+		public virtual Domain.DisplayLine LastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			return (this.terminal.LastDisplayLineAuxiliary(repositoryType));
+		}
+
+		/// <summary>
+		/// Clears the last display line of desired repository for auxiliary purposes.
+		/// </summary>
+		public virtual void ClearLastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			this.terminal.ClearLastDisplayLineAuxiliary(repositoryType);
+		}
+
+		/// <summary>
 		/// Returns contents of desired repository as string.
 		/// </summary>
 		/// <remarks>

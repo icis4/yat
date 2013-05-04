@@ -65,6 +65,7 @@ New:
 - <>
 
 Important changes:
+- Format exceptions while sending are now reported as error messages within the terminal (bug #270)
 - Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and
   'Manual Combined', this is due to a limitation of the .NET/Win32 serial port driver (bug #214)
 

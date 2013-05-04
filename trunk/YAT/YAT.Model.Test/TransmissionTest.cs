@@ -26,10 +26,15 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
+using MKY;
+using MKY.Collections.Generic;
 using MKY.Settings;
 
 using NUnit.Framework;
@@ -217,7 +222,11 @@ namespace YAT.Model.Test
 		#endregion
 	}
 
-	/// <summary></summary>
+	/// <remarks>
+	/// It can be argued that this test would be better located in YAT.Domain.Test. It currently is
+	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
+	/// and required when evaluating the test result.
+	/// </remarks>
 	[TestFixture]
 	public class OneWayTransmissionTest
 	{
@@ -371,7 +380,7 @@ namespace YAT.Model.Test
 					yield return (new TestCaseData(kvp.Key, PingPongCommand,  10).SetCategory(kvp.Value).SetName(kvp.Key + "_PingPong10"));
 
 				//	yield return (new TestCaseData(kvp.Key, PingPongCommand, 100).SetCategory(kvp.Value).SetName(kvp.Key + "_PingPong100"));
-				//	Takes several minutes and doesn't reproduce bugs #3284550 and #3480565, therefore disabled.
+				//	Takes several minutes and doesn't reproduce bugs #3284550>#194 and #3480565>#221, therefore disabled.
 				}
 			}
 		}
@@ -379,7 +388,11 @@ namespace YAT.Model.Test
 		#endregion
 	}
 
-	/// <summary></summary>
+	/// <remarks>
+	/// It can be argued that this test would be better located in YAT.Domain.Test. It currently is
+	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
+	/// and required when evaluating the test result.
+	/// </remarks>
 	[TestFixture]
 	public class TwoWayTransmissionTest
 	{
@@ -495,6 +508,217 @@ namespace YAT.Model.Test
 					}
 				}
 			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
+	public static class MtSicsDeviceTransmissionTestData
+	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private static readonly List<Pair<Pair<string, string>, TimeSpan>> Commands;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
+		static MtSicsDeviceTransmissionTestData()
+		{
+			Commands = new List<Pair<Pair<string, string>, TimeSpan>>();
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S", @"S +"),  TimeSpan.FromSeconds(90.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S +"), TimeSpan.FromSeconds(15.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(50.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I6", @"ES"),  TimeSpan.FromSeconds(15.0 / 1000)));
+		}
+
+		#endregion
+
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				TransmissionType tt = TransmissionType.SerialPort;
+				string categoryDev = MKY.IO.Ports.Test.SettingsCategoryStrings.MtSicsDeviceAIsConnected;
+				string category01m = new NUnit.MinuteDurationCategoryAttribute( 1).Name;
+				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
+				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;
+
+				foreach (Pair<Pair<string, string>, TimeSpan> c in Commands)
+				{
+					// Get stimulus and expected:
+					string stimulus = c.Value1.Value1;
+					string expected = c.Value1.Value2;
+
+					// Calculate number of transmissions based on the expected time available/required:
+					int loops01m = (int)((       60.0 * 1000) / c.Value2.TotalMilliseconds);
+					int loops60m = (int)((     3600.0 * 1000) / c.Value2.TotalMilliseconds);
+					int loops24h = (int)((24 * 3600.0 * 1000) / c.Value2.TotalMilliseconds);
+
+					yield return (new TestCaseData(tt, stimulus, expected,  1).SetCategory(categoryDev).SetName(tt + "_" + stimulus +  "_1"));
+					yield return (new TestCaseData(tt, stimulus, expected, 10).SetCategory(categoryDev).SetName(tt + "_" + stimulus + "_10"));
+					yield return (new TestCaseData(tt, stimulus, expected, loops01m).SetCategory(category01m).SetName(tt + "_" + stimulus + "_" + loops01m));
+					yield return (new TestCaseData(tt, stimulus, expected, loops60m).SetCategory(category60m).SetName(tt + "_" + stimulus + "_" + loops60m));
+					yield return (new TestCaseData(tt, stimulus, expected, loops24h).SetCategory(category24h).SetName(tt + "_" + stimulus + "_" + loops24h));
+				}
+			}
+		}
+
+		#endregion
+	}
+
+	/// <remarks>
+	/// It can be argued that this test would be better located in YAT.Domain.Test. It currently is
+	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
+	/// and required when evaluating the test result.
+	/// </remarks>
+	[TestFixture]
+	public class MtSicsDeviceTransmissionTest
+	{
+		#region Set Up Fixture
+		//==========================================================================================
+		// Set Up Fixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
+		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
+			// Prevent auto-save of workspace settings.
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+		}
+
+		#endregion
+
+		#region Tear Down Fixture
+		//==========================================================================================
+		// Tear Down Fixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
+		}
+
+		#endregion
+
+		#region Tests
+		//==========================================================================================
+		// Tests
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(MtSicsDeviceTransmissionTestData), "TestCases")]
+		public virtual void PerformTransmission(TransmissionType transmissionType, string stimulus, string expected, int transmissionCount)
+		{
+			switch (transmissionType)
+			{
+				case TransmissionType.SerialPort:
+					PerformTransmission(Utilities.GetStartedTextMtSicsDeviceASettings(), stimulus, expected, transmissionCount);
+					break;
+			}
+		}
+
+		#endregion
+
+		#region Transmission
+		//==========================================================================================
+		// Transmission
+		//==========================================================================================
+
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
+		private static void PerformTransmission(TerminalSettingsRoot settings, string stimulus, string expected, int transmissionCount)
+		{
+			// Ensure that EOL is displayed, otherwise the EOL bytes are not available for verification.
+			settings.TextTerminal.ShowEol = true;
+
+			// Create terminals from settings and check whether B receives from A:
+			using (Terminal terminal = new Terminal(settings))
+			{
+				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+
+				// Prepare stimulus and expected:
+				Types.Command stimulusCommand = new Types.Command(stimulus);
+				
+				List<byte> l = new List<byte>();
+				foreach (char c in expected.ToCharArray())
+					l.Add((byte)c); // ASCII only!
+
+				l.Add(0x0D); // <CR>
+				l.Add(0x0A); // <LF>
+
+				byte[] expectedBytes = l.ToArray();
+
+				// Required if COM1 is not available.
+				terminal.Start();
+				Utilities.WaitForConnection(terminal);
+
+				for (int i = 0; i < transmissionCount; i++)
+				{
+					// Send stimulus to device:
+					Trace.WriteLine(@">> """ + stimulus + @""" (" + i + ")");
+					terminal.SendText(stimulusCommand);
+
+					// Wait for response from device:
+					Domain.DisplayLine lastLine;
+					byte[] actualBytes;
+					const int WaitInterval = 5;
+					const int WaitTimeout = 3000;
+					int timeout = 0;
+					do                         // Initially wait to allow async send,
+					{                          //   therefore, use do-while.
+						Thread.Sleep(WaitInterval);
+						timeout += WaitInterval;
+
+						if (timeout >= WaitTimeout)
+							Assert.Fail("Transmission timeout! Try to re-run test case.");
+
+						lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
+						actualBytes = lastLine.ElementsToOrigin();
+					}
+					while (actualBytes.Length < expectedBytes.Length);
+
+					// Verify response:
+					Assert.True(ArrayEx.ValuesEqual(expectedBytes, actualBytes), "Unexpected respose from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
+					Trace.WriteLine(@"<< """ + expected + @"""");
+					terminal.ClearLastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
+				}
+			}
+		}
+
+		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
+		{
+			Assert.Fail
+				(
+				"Unexpected message input request:" + Environment.NewLine + Environment.NewLine +
+				e.Caption + Environment.NewLine + Environment.NewLine +
+				e.Text
+				);
 		}
 
 		#endregion

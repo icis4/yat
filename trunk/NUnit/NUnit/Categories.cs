@@ -44,7 +44,6 @@ namespace NUnit
 		public static readonly string Duration = "Duration";
 	}
 
-	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class InteractiveCategoryAttribute : CategoryAttribute
@@ -56,7 +55,6 @@ namespace NUnit
 		}
 	}
 
-	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class EnduranceCategoryAttribute : CategoryAttribute
@@ -68,7 +66,6 @@ namespace NUnit
 		}
 	}
 
-	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class StressCategoryAttribute : CategoryAttribute
@@ -143,6 +140,25 @@ namespace NUnit
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
 	[CLSCompliant(false)]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	public class HourDurationCategoryAttribute : DurationCategoryAttribute
+	{
+		/// <summary></summary>
+		public HourDurationCategoryAttribute(int hours)
+			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is approx. " + hours.ToString(CultureInfo.InvariantCulture) + " hour(s)")
+		{
+		}
+
+		/// <summary></summary>
+		public new int Hours
+		{
+			get { return ((int)Duration.TotalHours); }
+		}
+	}
+
+	/// <summary></summary>
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
+	[CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class MinuteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
@@ -177,7 +193,7 @@ namespace NUnit
 		}
 	}
 
-	/// <summary></summary>
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[CLSCompliant(false)]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class InfiniteDurationCategoryAttribute : DurationCategoryAttribute

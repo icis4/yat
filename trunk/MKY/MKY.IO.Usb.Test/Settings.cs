@@ -208,7 +208,6 @@ namespace MKY.IO.Usb.Test
 		public static readonly string SerialHidDeviceBIsAvailable = "USB Ser/HID " + SettingsProvider.Settings.SerialHidDeviceB + " is available";
 	}
 
-	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "DeviceA and DeviceB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
@@ -221,7 +220,6 @@ namespace MKY.IO.Usb.Test
 		}
 	}
 
-	/// <summary></summary>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "DeviceA and DeviceB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]

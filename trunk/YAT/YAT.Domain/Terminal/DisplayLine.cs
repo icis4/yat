@@ -32,6 +32,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
+using MKY.Collections.Generic;
+
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -239,6 +241,20 @@ namespace YAT.Domain
 				sb.AppendLine(indent + "<NONE>");
 
 			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public virtual byte[] ElementsToOrigin()
+		{
+			List<byte> l = new List<byte>();
+
+			foreach (DisplayElement de in this)
+			{
+				foreach (Pair<byte[], string> p in de.Origin)
+					l.AddRange(p.Value1);
+			}
+
+			return (l.ToArray());
 		}
 
 		#endregion

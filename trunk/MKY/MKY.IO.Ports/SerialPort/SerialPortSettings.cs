@@ -230,17 +230,59 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public static SerialPortSettings Parse(string s)
 		{
-			SerialPortSettings ps = new SerialPortSettings();
+			SerialPortSettings settings = new SerialPortSettings();
 
 			string delimiters = "/,;";
 			string[] sa = s.Split(delimiters.ToCharArray());
-			ps.baudRate  = BaudRateEx .Parse(sa[0]);
-			ps.dataBits  = DataBitsEx .Parse(sa[1]);
-			ps.parity    = ParityEx   .Parse(sa[2]);
-			ps.stopBits  = StopBitsEx .Parse(sa[3]);
-			ps.handshake = HandshakeEx.Parse(sa[4]);
+			if (sa.Length == 5)
+			{
+				settings.baudRate  = BaudRateEx .Parse(sa[0]);
+				settings.dataBits  = DataBitsEx .Parse(sa[1]);
+				settings.parity    = ParityEx   .Parse(sa[2]);
+				settings.stopBits  = StopBitsEx .Parse(sa[3]);
+				settings.handshake = HandshakeEx.Parse(sa[4]);
 
-			return (ps);
+				return (settings);
+			}
+
+			return (null);
+		}
+
+		/// <summary>
+		/// Parses s for the first integer number and returns the corresponding port.
+		/// </summary>
+		public static bool TryParse(string s, out SerialPortSettings settings)
+		{
+			string delimiters = "/,;";
+			string[] sa = s.Split(delimiters.ToCharArray());
+			if (sa.Length == 5)
+			{
+				BaudRateEx baudRate;
+				if (BaudRateEx.TryParse(sa[0], out baudRate))
+				{
+					DataBitsEx dataBits;
+					if (DataBitsEx.TryParse(sa[1], out dataBits))
+					{
+						ParityEx parity;
+						if (ParityEx.TryParse(sa[2], out parity))
+						{
+							StopBitsEx stopBits;
+							if (StopBitsEx.TryParse(sa[3], out stopBits))
+							{
+								HandshakeEx handshake;
+								if (HandshakeEx.TryParse(sa[4], out handshake))
+								{
+									settings = new SerialPortSettings(baudRate, dataBits, parity, stopBits, handshake);
+									return (true);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			settings = null;
+			return (false);
 		}
 
 		#endregion

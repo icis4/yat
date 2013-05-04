@@ -155,7 +155,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s, CharSubstitution substitution)
 		{
-			// AssertNotDisposed() is called by 'base.Parse()'.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			string parsed;
 			return (Parse(s, substitution, out parsed));
@@ -165,7 +165,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual byte[] Parse(string s, CharSubstitution substitution, out string parsed)
 		{
-			// AssertNotDisposed() is called by 'base.Parse()'.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			this.substitution = substitution;
 			return (Parse(s, out parsed));
@@ -174,7 +174,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, CharSubstitution substitution, Modes modes)
 		{
-			// AssertNotDisposed() is called by 'base.Parse()'.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			string parsed;
 			return (Parse(s, substitution, modes, out parsed));
@@ -184,19 +184,30 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual Result[] Parse(string s, CharSubstitution substitution, Modes modes, out string parsed)
 		{
-			// AssertNotDisposed() is called by 'base.Parse()'.
+			// AssertNotDisposed() is called by 'Parse()' below.
 
 			this.substitution = substitution;
 			return (Parse(s, modes, out parsed));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result)
 		{
-			// AssertNotDisposed() is called by 'base.TryParse()'.
+			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			string parsed;
 			return (TryParse(s, substitution, out result, out parsed));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, CharSubstitution substitution, Modes modes, out byte[] result)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			string parsed;
+			return (TryParse(s, substitution, modes, out result, out parsed));
 		}
 
 		/// <summary></summary>
@@ -204,16 +215,38 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string parsed)
 		{
-			// AssertNotDisposed() is called by 'base.TryParse()'.
+			// AssertNotDisposed() is called by 'base.TryParse()' below.
 
 			this.substitution = substitution;
 			return (TryParse(s, out result, out parsed));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, CharSubstitution substitution, Modes modes, out byte[] result, out string parsed)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			this.substitution = substitution;
+			return (TryParse(s, modes, out result, out parsed));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, CharSubstitution substitution, Modes modes, out Result[] result, out string parsed)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			this.substitution = substitution;
+			return (TryParse(s, modes, out result, out parsed));
+		}
+
+		/// <summary></summary>
 		protected override bool TryParseContiguousRadixToken(string token, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixToken()'.
+			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixToken()' below.
 
 			return (base.TryParseContiguousRadixToken(Substitute(token), radix, out result, ref formatException));
 		}
