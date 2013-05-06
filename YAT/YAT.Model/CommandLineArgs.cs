@@ -239,6 +239,18 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[CLSCompliant(false)]
+		[OptionArg(Names = new string[] { "Horizontal", "TileHorizontal" }, ShortName = "th", Description = "Tile the terminals horizontal after having openend a workspace.")]
+		public bool TileHorizontal;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[CLSCompliant(false)]
+		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertical after having openend a workspace.")]
+		public bool TileVertical;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "Terminal", ShortName = "t", Description =
 			"Perform any requested operation on the terminal with the given dynamic index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
@@ -270,15 +282,10 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
-		[OptionArg(Names = new string[] { "Horizontal", "TileHorizontal" }, ShortName = "th", Description = "Tile the terminals horizontal after having openend a workspace.")]
-		public bool TileHorizontal;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]
-		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertical after having openend a workspace.")]
-		public bool TileVertical;
+		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the YAT application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
+			"For YAT.exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
+			"For YATConsole.exe, interaction is disabled by default.")]
+		public bool NonInteractive;
 
 		#endregion
 
@@ -430,6 +437,21 @@ namespace YAT.Model
 			helpText.AppendLine();
 
 			return (helpText.ToString());
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Returns whether user or other interaction shall be permitted.
+		/// </summary>
+		public bool Interactive
+		{
+			get { return (!(NonInteractive)); }
 		}
 
 		#endregion

@@ -47,7 +47,7 @@ namespace YAT.Model
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
-	public class StartArgs
+	public class MainStartArgs
 	{
 		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
 
@@ -58,6 +58,14 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public DocumentSettingsHandler<TerminalSettingsRoot> TerminalSettings;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool TileHorizontal;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool TileVertical;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -85,11 +93,81 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public bool TileHorizontal;
+		public bool NonInteractive;
+
+		/// <summary></summary>
+		public WorkspaceStartArgs ToWorkspaceStartArgs()
+		{
+			WorkspaceStartArgs args = new WorkspaceStartArgs();
+
+			args.KeepOpen        = this.KeepOpen;
+			args.KeepOpenOnError = this.KeepOpenOnError;
+			args.NonInteractive  = this.NonInteractive;
+
+			return (args);
+		}
+
+		/// <summary></summary>
+		public TerminalStartArgs ToTerminalStartArgs()
+		{
+			TerminalStartArgs args = new TerminalStartArgs();
+
+			args.KeepOpen        = this.KeepOpen;
+			args.KeepOpenOnError = this.KeepOpenOnError;
+			args.NonInteractive  = this.NonInteractive;
+
+			return (args);
+		}
+	}
+
+	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
+	public class WorkspaceStartArgs
+	{
+		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public bool TileVertical;
+		public bool KeepOpen;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool KeepOpenOnError;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool NonInteractive;
+
+		/// <summary></summary>
+		public TerminalStartArgs ToTerminalStartArgs()
+		{
+			TerminalStartArgs args = new TerminalStartArgs();
+
+			args.KeepOpen        = this.KeepOpen;
+			args.KeepOpenOnError = this.KeepOpenOnError;
+			args.NonInteractive  = this.NonInteractive;
+
+			return (args);
+		}
+	}
+
+	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
+	public class TerminalStartArgs
+	{
+		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool KeepOpen;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool KeepOpenOnError;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public bool NonInteractive;
 	}
 }
 

@@ -83,7 +83,7 @@ namespace YAT.Controller
 		//==========================================================================================
 
 		/// <summary>
-		/// Gets a value indicating whether [show logo].
+		/// Returns whether logo shall be shown.
 		/// </summary>
 		public bool ShowLogo
 		{
@@ -91,7 +91,7 @@ namespace YAT.Controller
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether [show view].
+		/// Returns whether view shall be shown.
 		/// </summary>
 		public bool ShowView
 		{

@@ -79,6 +79,7 @@ namespace YAT.Model
 
 		private bool isDisposed;
 
+		private WorkspaceStartArgs startArgs;
 		private Guid guid;
 
 		// Settings.
@@ -129,33 +130,29 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Workspace()
-			: this(new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.NewGuid())
-		{
-		}
-
-		/// <summary></summary>
-		public Workspace(WorkspaceSettingsRoot settings)
-			: this(new DocumentSettingsHandler<WorkspaceSettingsRoot>(settings), Guid.Empty)
-		{
-		}
-
-		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
-			: this(settingsHandler, Guid.Empty)
+			: this(new WorkspaceStartArgs(), settingsHandler, Guid.Empty)
+		{
+		}
+
+		/// <summary></summary>
+		public Workspace(WorkspaceStartArgs startArgs)
+			: this(startArgs, new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.Empty)
 		{
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
+		public Workspace(WorkspaceStartArgs startArgs, DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
+			this.startArgs = startArgs;
+
 			if (guid != Guid.Empty)
 				this.guid = guid;
 			else
 				this.guid = Guid.NewGuid();
 
-			// link and attach to settings
+			// Link and attach to settings:
 			this.settingsHandler = settingsHandler;
 			this.settingsRoot = this.settingsHandler.Settings;
 			this.settingsRoot.ClearChanged();
@@ -266,6 +263,17 @@ namespace YAT.Model
 					return (this.activeTerminal.AutoName);
 				else
 					return (ApplicationInfo.ProductName);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual WorkspaceStartArgs StartArgs
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.startArgs);
 			}
 		}
 
@@ -1134,7 +1142,7 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Creating new terminal...");
 
 			// Create terminal:
-			Terminal terminal = new Terminal(settingsHandler);
+			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
 			AddToWorkspace(terminal);
 
 			// Start terminal:
@@ -1296,7 +1304,7 @@ namespace YAT.Model
 				settings.Settings.Window = windowSettings;
 
 			// Create terminal.
-			Terminal terminal = new Terminal(settings, guid);
+			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settings, guid);
 			AddToWorkspace(terminal, fixedIndex);
 
 			if (!settings.Settings.AutoSaved)

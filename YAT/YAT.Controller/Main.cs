@@ -216,7 +216,8 @@ namespace YAT.Controller
 			// 
 			// Note that this is the location where the command line arguments are processed and
 			// validated in normal operation. In case of automated testing, they will be processed
-			// and validated in PrepareRun() below or in YAT.Model.Main.
+			// and validated in PrepareRun() below or in YAT.Model.Main. Calling ProcessAndValidate()
+			// multiple times doesn't matter, this case is handled with 'ArgsHandler'.
 			if (this.commandLineArgs != null)
 			{
 				if (this.commandLineArgs.ProcessAndValidate())
@@ -262,7 +263,8 @@ namespace YAT.Controller
 			// 
 			// Note that this is the location where the command line arguments are processed and
 			// validated in normal operation. In case of automated testing, they will be processed
-			// and validated in PrepareRun() above or in YAT.Model.Main.
+			// and validated in PrepareRun() above or in YAT.Model.Main. Calling ProcessAndValidate()
+			// multiple times doesn't matter, this case is handled with 'ArgsHandler'.
 			if (this.commandLineArgs != null)
 				this.commandLineArgs.ProcessAndValidate();
 
@@ -291,7 +293,11 @@ namespace YAT.Controller
 				showHelp = this.commandLineArgs.HelpIsRequested;
 			}
 
-			// Show help or run application.
+			// Default 'NonInteractive' option depending on execution origin:
+			if (!this.commandLineArgs.OptionIsGiven("NonInteractive"))
+				this.commandLineArgs.NonInteractive = runFromConsole;
+
+			// Show help or run application:
 			if (showHelp)
 			{
 				if (runFromConsole)
@@ -354,7 +360,7 @@ namespace YAT.Controller
 		{
 			AssertNotDisposed();
 
-			MainResult mainResult = MainResult.Success;
+			MainResult mainResult;
 
 			if      (!runFromConsole &&  runWithView)
 				mainResult = RunFullyWithView();                        // 1, 2, 7
@@ -521,7 +527,7 @@ namespace YAT.Controller
 					Console.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -552,7 +558,7 @@ namespace YAT.Controller
 					Console.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -569,7 +575,7 @@ namespace YAT.Controller
 
 			Exception ex = e.Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 		/// <remarks>
@@ -582,7 +588,7 @@ namespace YAT.Controller
 
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 		#endregion
@@ -625,7 +631,7 @@ namespace YAT.Controller
 					Console.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -643,7 +649,7 @@ namespace YAT.Controller
 					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
 					Console.WriteLine(message);
 
-					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -660,7 +666,7 @@ namespace YAT.Controller
 
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex);
+				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 		#endregion
@@ -694,8 +700,11 @@ namespace YAT.Controller
 						return (MainResult.ApplicationSettingsError);
 					}
 				}
-				catch
+				catch (Exception ex)
 				{
+					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
+					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex, message);
+
 					return (MainResult.UnhandledException);
 				}
 
@@ -707,8 +716,11 @@ namespace YAT.Controller
 
 					return (ConvertToMainResult(modelResult));
 				}
-				catch
+				catch (Exception ex)
 				{
+					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
+					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex, message);
+
 					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
