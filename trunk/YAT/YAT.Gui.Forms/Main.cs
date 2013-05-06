@@ -1024,14 +1024,25 @@ namespace YAT.Gui.Forms
 
 					string filePath = this.main.StartArgs.RequestedTransmitFilePath;
 					this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
-
-					SetFixedStatusText("Automatically closing YAT");
-					Close();
 				}
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex);
 					this.mainResult = Model.MainResult.ApplicationRunError;
+				}
+
+				if (!this.main.StartArgs.KeepOpen)
+				{
+					try
+					{
+						SetFixedStatusText("Automatically closing YAT");
+						Close();
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex);
+						this.mainResult = Model.MainResult.ApplicationExitError;
+					}
 				}
 			}
 			else

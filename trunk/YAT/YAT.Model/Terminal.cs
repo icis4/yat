@@ -117,6 +117,7 @@ namespace YAT.Model
 
 		private bool isDisposed;
 
+		private TerminalStartArgs startArgs;
 		private Guid guid;
 		private int sequentialIndex;
 		private string autoName;
@@ -217,32 +218,40 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Terminal()
-			: this(new DocumentSettingsHandler<TerminalSettingsRoot>(), Guid.NewGuid())
+			: this(new TerminalSettingsRoot())
 		{
 		}
 
 		/// <summary></summary>
 		public Terminal(TerminalSettingsRoot settings)
-			: this(new DocumentSettingsHandler<TerminalSettingsRoot>(settings), Guid.NewGuid())
+			: this(new DocumentSettingsHandler<TerminalSettingsRoot>(settings))
 		{
 		}
 
 		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
-			: this(settingsHandler, Guid.NewGuid())
+			: this(new TerminalStartArgs(), settingsHandler)
+		{
+		}
+
+		/// <summary></summary>
+		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+			: this(startArgs, settingsHandler, Guid.Empty)
 		{
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
+		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
+			this.startArgs = startArgs;
+
 			if (guid != Guid.Empty)
 				this.guid = guid;
 			else
 				this.guid = Guid.NewGuid();
 
-			// Link and attach to settings.
+			// Link and attach to settings:
 			this.settingsHandler = settingsHandler;
 			this.settingsRoot = this.settingsHandler.Settings;
 			this.settingsRoot.ClearChanged();
@@ -387,6 +396,17 @@ namespace YAT.Model
 			set
 			{
 				this.autoName = Path.GetFileName(value);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual TerminalStartArgs StartArgs
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.startArgs);
 			}
 		}
 
@@ -3024,27 +3044,41 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
-			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+			if (!this.startArgs.NonInteractive)
+			{
+				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
+				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
-			// Ensure that the request is processed!
-			if (e.Result == DialogResult.None)
-				throw (new InvalidOperationException("A 'Message Input' request by a terminal was not processed by the application!"));
+				// Ensure that the request is processed!
+				if (e.Result == DialogResult.None)
+					throw (new InvalidOperationException(@"A 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!"));
 
-			return (e.Result);
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			DialogEventArgs e = new DialogEventArgs();
-			EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
+			if (!this.startArgs.NonInteractive)
+			{
+				DialogEventArgs e = new DialogEventArgs();
+				EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
-			// Ensure that the request is processed!
-			if (e.Result == DialogResult.None)
-				throw (new InvalidOperationException("A 'Save As' request by a terminal was not processed by the application!"));
+				// Ensure that the request is processed!
+				if (e.Result == DialogResult.None)
+					throw (new InvalidOperationException(@"A 'Save As' request by terminal """ + Caption + @""" was not processed by the application!"));
 
-			return (e.Result);
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
 		}
 
 		/// <summary></summary>

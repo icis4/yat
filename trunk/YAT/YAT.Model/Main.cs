@@ -63,10 +63,9 @@ namespace YAT.Model
 
 		private bool isDisposed;
 
-		private Guid guid;
-
 		private CommandLineArgs commandLineArgs;
-		private StartArgs startArgs;
+		private MainStartArgs startArgs;
+		private Guid guid;
 
 		private Workspace workspace;
 
@@ -210,7 +209,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual StartArgs StartArgs
+		public virtual MainStartArgs StartArgs
 		{
 			get
 			{
@@ -364,13 +363,14 @@ namespace YAT.Model
 		private bool ProcessCommandLineArgsIntoStartRequests()
 		{
 			// Always create start requests to ensure that object exists.
-			this.startArgs = new StartArgs();
+			this.startArgs = new MainStartArgs();
 
 			// Process command line arguments, and evaluate them:
 			// 
 			// Note that this is the location where the command line arguments are processed and
 			// validated in case of automated testing. In normal operation, they will be processed
-			// and validated in YAT.Controller.Main.Run().
+			// and validated in YAT.Controller.Main.Run(). Calling ProcessAndValidate() multiple
+			// times doesn't matter, this case is handled with 'ArgsHandler'.
 			if (this.commandLineArgs != null)
 				this.commandLineArgs.ProcessAndValidate();
 
@@ -389,6 +389,9 @@ namespace YAT.Model
 			{
 				return (false);
 			}
+
+			// Valid args are available, transfer 'NonInteractive' option:
+			this.startArgs.NonInteractive = this.commandLineArgs.NonInteractive;
 
 			// Prio 2 = Empty:
 			if (this.commandLineArgs.Empty)
@@ -985,7 +988,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool CreateNewWorkspace()
 		{
-			// Close workspace, only one workspace can exist within application.
+			// Close workspace, only one workspace can exist within application:
 			if (this.workspace != null)
 			{
 				if (!this.workspace.Close())
@@ -994,8 +997,8 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Creating new workspace...");
 
-			// Create workspace.
-			this.workspace = new Workspace(new DocumentSettingsHandler<WorkspaceSettingsRoot>());
+			// Create workspace:
+			this.workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs());
 			AttachWorkspaceEventHandlers();
 			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
 
@@ -1017,7 +1020,7 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening workspace file...");
 			if (OpenWorkspaceFile(filePath, out settings, out guid, out ex))
 			{
-				return (OpenWorkspaceFromSettings(settings));
+				return (OpenWorkspaceFromSettings(settings, guid));
 			}
 			else
 			{
@@ -1039,11 +1042,20 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
 		{
-			return (OpenWorkspaceFromSettings(settings, Indices.InvalidIndex, null));
+			return (OpenWorkspaceFromSettings(settings, Guid.NewGuid()));
 		}
 
-		/// <summary></summary>
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid)
+		{
+			return (OpenWorkspaceFromSettings(settings, guid, Indices.InvalidIndex, null));
+		}
+
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		{
+			return (OpenWorkspaceFromSettings(settings, Guid.NewGuid(), dynamicTerminalIndexToReplace, terminalSettingsToReplace));
+		}
+
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
 			AssertNotDisposed();
 
@@ -1057,7 +1069,7 @@ namespace YAT.Model
 
 			// Create new workspace.
 			OnFixedStatusTextRequest("Opening workspace...");
-			this.workspace = new Workspace(settings, guid);
+			this.workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs(), settings, guid);
 			AttachWorkspaceEventHandlers();
 
 			// Save auto workspace.
