@@ -153,10 +153,10 @@ namespace MKY.CommandLine
 
 		private string[] args;
 
-		private List<string> valueArgs;
-		private List<string> optionArgs;
-		private List<string[]> arrayOptionArgs;
-		private List<string> invalidArgs;
+		private List<string>    valueArgs;
+		private List<string>    optionArgs;
+		private List<string[]>  arrayOptionArgs;
+		private List<string>    invalidArgs;
 
 		private List<FieldInfo> optionFields;
 
@@ -798,17 +798,11 @@ namespace MKY.CommandLine
 		/// calls virtual methods. If a derived class has overridden such a method, the derived
 		/// class version will be called before the derived class constructor is called. Finding
 		/// of FxCop.
+		/// This method may be called multiple times. Upon each call, the state of the object is
+		/// reset and all arguments are processed and validated.
 		/// </remarks>
 		public virtual bool ProcessAndValidate()
 		{
-			// Ensure to process the arguments only once in order to save time. However, it shall
-			// be allowed to call this method multiple times, e.g. if the application is started
-			// in different sequences. This especially may be the case when running test sequences
-			// at the application level.
-
-			if (this.valueArgs != null)
-				return (IsValid);
-
 			// Prepare the argument containers:
 			this.valueArgs       = new List<string>();
 			this.optionArgs      = new List<string>();
@@ -917,7 +911,7 @@ namespace MKY.CommandLine
 			return (Validate());
 		}
 
-		private FieldInfo arrayOptionField;
+		private FieldInfo    arrayOptionField;
 		private List<object> arrayOptionValues;
 		private List<string> arrayOptionStrings;
 

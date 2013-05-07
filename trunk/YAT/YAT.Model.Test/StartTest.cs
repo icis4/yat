@@ -323,16 +323,16 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Tests > SerialPortOptionsPrepare
+		#region Tests > NewSerialPortOptionsPrepare
 		//------------------------------------------------------------------------------------------
-		// Tests > SerialPortOptionsPrepare
+		// Tests > NewSerialPortOptionsPrepare
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestSerialPortOptionsPrepare()
+		public virtual void TestNewSerialPortOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" })))
+			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New", "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -370,16 +370,16 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Tests > TcpAutoSocketOptionsPrepare
+		#region Tests > NewTcpAutoSocketOptionsPrepare
 		//------------------------------------------------------------------------------------------
-		// Tests > TcpAutoSocketOptionsPrepare
+		// Tests > NewTcpAutoSocketOptionsPrepare
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestTcpAutoSocketOptionsPrepare()
+		public virtual void TestNewTcpAutoSocketOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--IOType=TCPAutoSocket", "--RemotePort=12345", "--LocalPort=56789", "--OpenTerminal", "--BeginLog" })))
+			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=TCPAutoSocket", "--RemotePort=12345", "--LocalPort=56789", "--OpenTerminal", "--BeginLog" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -412,16 +412,16 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Tests > TcpUsbSerialHidOptionsPrepare
+		#region Tests > NewUsbSerialHidOptionsPrepare
 		//------------------------------------------------------------------------------------------
-		// Tests > TcpUsbSerialHidOptionsPrepare
+		// Tests > NewUsbSerialHidOptionsPrepare
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestUsbSerialHidOptionsPrepare()
+		public virtual void TestNewUsbSerialHidOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--IOType=USBSerHID", "--VendorID=1234", "--ProductID=ABCD", "--NoUsbAutoOpen" })))
+			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=USBSerHID", "--VendorID=1234", "--ProductID=ABCD", "--NoUsbAutoOpen" })))
 			{
 				PrepareMainAndVerifyResult(main);
 

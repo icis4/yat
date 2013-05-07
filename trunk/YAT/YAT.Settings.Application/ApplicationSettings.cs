@@ -59,6 +59,15 @@ namespace YAT.Settings.Application
 		//==========================================================================================
 
 		/// <summary></summary>
+		public static bool LocalUserSettingsAreAvailable
+		{
+			get
+			{
+				return (staticSettingsHandler != null);
+			}
+		}
+
+		/// <summary></summary>
 		public static LocalUserSettingsRoot LocalUserSettings
 		{
 			get
@@ -67,6 +76,18 @@ namespace YAT.Settings.Application
 					return (staticSettingsHandler.LocalUserSettings);
 				else
 					throw (new InvalidOperationException("The settings have to be created before they can be accessed, ensure to call Create() and if needed also Load() before accessing the settings."));
+			}
+		}
+
+		/// <summary></summary>
+		public static string LocalUserSettingsFilePath
+		{
+			get
+			{
+				if (staticSettingsHandler != null)
+					return (staticSettingsHandler.LocalUserSettingsFilePath);
+				else
+					return ("");
 			}
 		}
 
@@ -91,18 +112,6 @@ namespace YAT.Settings.Application
 					return (staticSettingsHandler.LocalUserSettingsAreCurrentlyOwnedByThisInstance);
 				else
 					return (false);
-			}
-		}
-
-		/// <summary></summary>
-		public static string LocalUserSettingsFilePath
-		{
-			get
-			{
-				if (staticSettingsHandler != null)
-					return (staticSettingsHandler.LocalUserSettingsFilePath);
-				else
-					return ("");
 			}
 		}
 
