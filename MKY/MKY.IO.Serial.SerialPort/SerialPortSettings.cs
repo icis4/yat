@@ -188,8 +188,8 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (value == null)
 				{
-					this.communication = value;
 					DetachNode(this.communication);
+					this.communication = null;
 				}
 				else if (this.communication == null)
 				{

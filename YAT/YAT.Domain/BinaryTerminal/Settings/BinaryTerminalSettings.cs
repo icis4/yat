@@ -124,8 +124,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.txDisplay = value;
 					DetachNode(this.txDisplay);
+					this.txDisplay = null;
 				}
 				else if (this.txDisplay == null)
 				{
@@ -156,8 +156,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.rxDisplay = value;
 					DetachNode(this.rxDisplay);
+					this.rxDisplay = null;
 				}
 				else if (this.rxDisplay == null)
 				{

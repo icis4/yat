@@ -127,8 +127,8 @@ namespace YAT.Settings.Application
 			{
 				if (value == null)
 				{
-					this.general = value;
 					DetachNode(this.general);
+					this.general = null;
 				}
 				else if (this.general == null)
 				{
@@ -153,8 +153,8 @@ namespace YAT.Settings.Application
 			{
 				if (value == null)
 				{
-					this.paths = value;
 					DetachNode(this.paths);
+					this.paths = null;
 				}
 				else if (this.paths == null)
 				{
@@ -179,8 +179,8 @@ namespace YAT.Settings.Application
 			{
 				if (value == null)
 				{
-					this.autoAutoWorkspace = value;
 					DetachNode(this.autoAutoWorkspace);
+					this.autoAutoWorkspace = null;
 				}
 				else if (this.autoAutoWorkspace == null)
 				{
@@ -205,8 +205,8 @@ namespace YAT.Settings.Application
 			{
 				if (value == null)
 				{
-					this.mainWindow = value;
 					DetachNode(this.mainWindow);
+					this.mainWindow = null;
 				}
 				else if (this.mainWindow == null)
 				{
@@ -231,8 +231,8 @@ namespace YAT.Settings.Application
 			{
 				if (value == null)
 				{
-					this.newTerminal = value;
 					DetachNode(this.newTerminal);
+					this.newTerminal = null;
 				}
 				else if (this.newTerminal == null)
 				{
@@ -257,8 +257,8 @@ namespace YAT.Settings.Application
 			{
 				if (value == null)
 				{
-					this.recentFiles = value;
 					DetachNode(this.recentFiles);
+					this.recentFiles = null;
 				}
 				else if (this.recentFiles == null)
 				{

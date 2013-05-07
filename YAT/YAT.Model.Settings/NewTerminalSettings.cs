@@ -195,8 +195,8 @@ namespace YAT.Model.Settings
 			{
 				if (value == null)
 				{
-					this.serialPortCommunication = value;
 					DetachNode(this.serialPortCommunication);
+					this.serialPortCommunication = null;
 				}
 				else if (this.serialPortCommunication == null)
 				{

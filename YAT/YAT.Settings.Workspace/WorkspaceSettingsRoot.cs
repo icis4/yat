@@ -131,8 +131,8 @@ namespace YAT.Settings.Workspace
 			{
 				if (value == null)
 				{
-					this.workspace = value;
 					DetachNode(this.workspace);
+					this.workspace = null;
 				}
 				else if (this.workspace == null)
 				{

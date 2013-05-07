@@ -134,8 +134,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.sendCommand = value;
 					DetachNode(this.sendCommand);
+					this.sendCommand = null;
 				}
 				else if (this.sendCommand == null)
 				{
@@ -160,8 +160,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.sendFile = value;
 					DetachNode(this.sendFile);
+					this.sendFile = null;
 				}
 				else if (this.sendFile == null)
 				{
@@ -186,8 +186,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.predefined = value;
 					DetachNode(this.predefined);
+					this.predefined = null;
 				}
 				else if (this.predefined == null)
 				{
@@ -212,8 +212,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.window = value;
 					DetachNode(this.window);
+					this.window = null;
 				}
 				else if (this.window == null)
 				{
@@ -238,8 +238,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.layout = value;
 					DetachNode(this.layout);
+					this.layout = null;
 				}
 				else if (this.layout == null)
 				{

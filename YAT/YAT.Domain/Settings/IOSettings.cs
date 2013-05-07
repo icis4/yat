@@ -144,8 +144,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.serialPort = value;
 					DetachNode(this.serialPort);
+					this.serialPort = null;
 				}
 				else if (this.serialPort == null)
 				{
@@ -170,8 +170,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.socket = value;
 					DetachNode(this.socket);
+					this.socket = null;
 				}
 				else if (this.socket == null)
 				{
@@ -196,8 +196,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.usbSerialHidDevice = value;
 					DetachNode(this.usbSerialHidDevice);
+					this.usbSerialHidDevice = null;
 				}
 				else if (this.usbSerialHidDevice == null)
 				{
