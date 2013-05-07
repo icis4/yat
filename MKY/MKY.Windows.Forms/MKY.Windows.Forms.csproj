@@ -150,6 +150,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>PathLabel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PictureBoxEx.resx">
+      <DependentUpon>PictureBoxEx.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StatusBox.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StatusBox.cs</DependentUpon>
