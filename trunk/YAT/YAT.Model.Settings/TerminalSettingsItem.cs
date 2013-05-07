@@ -163,8 +163,8 @@ namespace YAT.Model.Settings
 			{
 				if (value == null)
 				{
-					this.window = value;
 					DetachNode(this.window);
+					this.window = null;
 				}
 				else if (this.window == null)
 				{

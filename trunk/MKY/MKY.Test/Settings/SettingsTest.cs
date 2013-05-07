@@ -202,8 +202,8 @@ namespace MKY.Test.Settings
 				{
 					if (value == null)
 					{
-						this.childLevel2A = value;
 						DetachNode(this.childLevel2A);
+						this.childLevel2A = null;
 					}
 					else if (this.childLevel2A == null)
 					{
@@ -228,8 +228,8 @@ namespace MKY.Test.Settings
 				{
 					if (value == null)
 					{
-						this.childLevel2B = value;
 						DetachNode(this.childLevel2B);
+						this.childLevel2B = null;
 					}
 					else if (this.childLevel2B == null)
 					{
@@ -351,8 +351,8 @@ namespace MKY.Test.Settings
 				{
 					if (value == null)
 					{
-						this.childLevel1 = value;
 						DetachNode(this.childLevel1);
+						this.childLevel1 = null;
 					}
 					else if (this.childLevel1 == null)
 					{

@@ -137,8 +137,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.explicit_ = value;
 					DetachNode(this.explicit_);
+					this.explicit_ = null;
 				}
 				else if (this.explicit_ == null)
 				{
@@ -163,8 +163,8 @@ namespace YAT.Settings.Terminal
 			{
 				if (value == null)
 				{
-					this.implicit_ = value;
 					DetachNode(this.implicit_);
+					this.implicit_ = null;
 				}
 				else if (this.implicit_ == null)
 				{

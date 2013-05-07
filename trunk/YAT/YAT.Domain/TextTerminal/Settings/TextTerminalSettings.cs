@@ -266,8 +266,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.eolComment = value;
 					DetachNode(this.eolComment);
+					this.eolComment = null;
 				}
 				else if (this.eolComment == null)
 				{

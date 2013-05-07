@@ -135,8 +135,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.io = value;
 					DetachNode(this.io);
+					this.io = null;
 				}
 				else if (this.io == null)
 				{
@@ -161,8 +161,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.status = value;
 					DetachNode(this.status);
+					this.status = null;
 				}
 				else if (this.status == null)
 				{
@@ -187,8 +187,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.buffer = value;
 					DetachNode(this.buffer);
+					this.buffer = null;
 				}
 				else if (this.buffer == null)
 				{
@@ -213,8 +213,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.display = value;
 					DetachNode(this.display);
+					this.display = null;
 				}
 				else if (this.display == null)
 				{
@@ -239,8 +239,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.charReplace = value;
 					DetachNode(this.charReplace);
+					this.charReplace = null;
 				}
 				else if (this.charReplace == null)
 				{
@@ -265,8 +265,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.send = value;
 					DetachNode(this.send);
+					this.send = null;
 				}
 				else if (this.send == null)
 				{
@@ -291,8 +291,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.textTerminal = value;
 					DetachNode(this.textTerminal);
+					this.textTerminal = null;
 				}
 				else if (this.textTerminal == null)
 				{
@@ -317,8 +317,8 @@ namespace YAT.Domain.Settings
 			{
 				if (value == null)
 				{
-					this.binaryTerminal = value;
 					DetachNode(this.binaryTerminal);
+					this.binaryTerminal = null;
 				}
 				else if (this.binaryTerminal == null)
 				{
