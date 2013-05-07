@@ -21,11 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
+
+using MKY.Drawing;
+
+#endregion
 
 namespace MKY.Windows.Forms
 {
@@ -36,6 +45,30 @@ namespace MKY.Windows.Forms
 	[DesignerCategory("Windows Forms")]
 	public partial class PictureBoxEx : PictureBox
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary></summary>
+		public const RotateType RotationDefault = RotateType.RotateNone;
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private RotateType rotation = RotationDefault;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
 		/// <summary></summary>
 		public PictureBoxEx()
 		{
@@ -50,6 +83,90 @@ namespace MKY.Windows.Forms
 			InitializeComponent();
 		}
 
+		#endregion
+
+		#region Image Rotation Properties and Methods
+		//==========================================================================================
+		// Image Rotation Properties and Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets or sets the image that is displayed by this picture box.
+		/// </summary>
+		/// <remarks>
+		/// Overridden to get a notification when the image changes.
+		/// </remarks>
+		[Localizable(true)]
+		[Bindable(true)]
+		public new Image Image
+		{
+			get { return (base.Image); }
+			set
+			{
+				if (base.Image != value)
+				{
+					base.Image = value;
+					ApplyImageRotationAfterImageChange();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[DefaultValue(RotationDefault)]
+		public virtual RotateType Rotation
+		{
+			get { return (this.rotation); }
+			set
+			{
+				if (this.rotation != value)
+				{
+					this.rotation = value;
+					ApplyImageRotationAfterRotationChange();
+				}
+			}
+		}
+
+		/// <summary>
+		/// This variable is used to get the difference between the actual and the desired rotation.
+		/// Without this, the image would need to be kept twice, with and without rotation. Upon a
+		/// change of a property, the image would have to be redrawn from the unrotated image.
+		/// </summary>
+		private RotateType ApplyImageRotation_rotationOld = RotationDefault;
+
+		private void ApplyImageRotationAfterRotationChange()
+		{
+			if (this.ApplyImageRotation_rotationOld != this.rotation)
+			{
+				if (Image != null)
+				{
+					RotateType requiredRotation = RotateTypeEx.RotationFromDifference(this.ApplyImageRotation_rotationOld, this.rotation);
+					Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(requiredRotation));
+					Invalidate();
+
+					this.ApplyImageRotation_rotationOld = this.rotation;
+				}
+			}
+		}
+
+		private void ApplyImageRotationAfterImageChange()
+		{
+			if (Image != null)
+			{
+				RotateType requiredRotation = this.rotation;
+				Image.RotateFlip(RotateTypeEx.ConvertToRotateFlipType(requiredRotation));
+				Invalidate();
+
+				this.ApplyImageRotation_rotationOld = this.rotation;
+			}
+		}
+
+		#endregion
+
+		#region Scaled Image Properties
+		//==========================================================================================
+		// Scaled Image Properties
+		//==========================================================================================
+
 		/// <summary></summary>
 		public float ImageWidthHeightRatio
 		{
@@ -59,7 +176,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public float WidthHeightRatio
 		{
-			get { return ((float)this.Width / this.Height); }
+			get { return ((float)Width / Height); }
 		}
 
 		/// <summary></summary>
@@ -157,5 +274,7 @@ namespace MKY.Windows.Forms
 				}
 			}
 		}
+
+		#endregion
 	}
 }
