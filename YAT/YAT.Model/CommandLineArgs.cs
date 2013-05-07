@@ -345,27 +345,32 @@ namespace YAT.Model
 			// Recent:
 			if (MostRecentIsRequested)
 			{
-				ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
-				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0)
+				// Application settings can only be accessed after they have been created/loaded.
+				// However, this validation method may be called before the settings are available.
+				if (ApplicationSettings.LocalUserSettingsAreAvailable)
 				{
-					string mostRecent = ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[0];
-					if (File.Exists(mostRecent))
+					ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0)
 					{
-						if (ExtensionSettings.IsWorkspaceFile(mostRecent) ||
-							ExtensionSettings.IsTerminalFile (mostRecent))
+						string mostRecent = ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[0];
+						if (File.Exists(mostRecent))
 						{
-							MostRecentFilePath = mostRecent;
+							if (ExtensionSettings.IsWorkspaceFile(mostRecent) ||
+								ExtensionSettings.IsTerminalFile(mostRecent))
+							{
+								MostRecentFilePath = mostRecent;
+							}
+							else
+							{
+								Invalidate("Requested file is no workspace nor terminal file");
+								BooleanEx.ClearIfSet(ref isValid);
+							}
 						}
 						else
 						{
-							Invalidate("Requested file is no workspace nor terminal file");
+							Invalidate("Requested file does not exist");
 							BooleanEx.ClearIfSet(ref isValid);
 						}
-					}
-					else
-					{
-						Invalidate("Requested file does not exist");
-						BooleanEx.ClearIfSet(ref isValid);
 					}
 				}
 			}

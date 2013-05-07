@@ -251,6 +251,9 @@ namespace YAT.Controller
 			return (Run(true));
 		}
 
+		/// <summary>
+		/// This is the main run method.
+		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private MainResult Run(bool runFromConsole)
 		{
@@ -259,12 +262,17 @@ namespace YAT.Controller
 			bool showView;
 			bool showHelp;
 
-			// Process command line arguments, and evaluate them:
 			// 
-			// Note that this is the location where the command line arguments are processed and
-			// validated in normal operation. In case of automated testing, they will be processed
-			// and validated in PrepareRun() above or in YAT.Model.Main. Calling ProcessAndValidate()
-			// multiple times doesn't matter, this case is handled with 'ArgsHandler'.
+			// Process and validate command line arguments:
+			// 
+			// In normal operation this is the location where the command line arguments are
+			// processed and validated for a first time. Then they will be processed and validated
+			// for a second time after to application settings have been created/loaded. This second
+			// processing happens in YAT.Model.Main.ProcessCommandLineArgsIntoStartRequests().
+			// 
+			// In case of automated testing, the command line arguments will be processed and
+			// validated in PrepareRun() above, or also in YAT.Model.Main.
+			// 
 			if (this.commandLineArgs != null)
 				this.commandLineArgs.ProcessAndValidate();
 
@@ -315,9 +323,9 @@ namespace YAT.Controller
 
 		/// <summary>
 		/// This is the main run method that supports all run options. Do not directly call
-		/// this  method for normal or console operation. Call <see cref="RunNormally"/> or
+		/// this method for normal or console operation. Call <see cref="RunNormally"/> or
 		/// <see cref="RunFromConsole"/> instead. Call this method directly for automated
-		/// testing purposes.
+		/// testing purposes only.
 		/// </summary>
 		/// <remarks>
 		/// There are the following use cases to run YAT. This Run() method supports all these
@@ -353,7 +361,28 @@ namespace YAT.Controller
 		///    ==> Run(false, true) or Run(true, true) to test the GUI (e.g. GUI stress test)
 		///    ==> Run(false, false) or Run(true, false) to test the behavior (e.g. controller test)
 		/// 
-		/// Saying hello to StyleCop ;-.
+		/// 
+		/// Handling of the application settings is related to these use cases.
+		/// Handling is done as follows:
+		/// 
+		/// > In case of 'RunFullyWithView()' the application settings are created/loaded with
+		///   <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> permissions.
+		/// 
+		/// > In case of 'RunWithViewButOutputErrorsOnConsole()' they are created/loaded with
+		///   <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> permissions.
+		/// 
+		/// > In case of 'RunFullyFromConsole()' they are created/loaded with
+		///   <see cref="ApplicationSettingsFileAccess.ReadShared"/> permissions.
+		/// 
+		/// > In case of 'RunInvisible()' they are created/loaded with
+		///   <see cref="ApplicationSettingsFileAccess.ReadShared"/> permissions.
+		/// 
+		/// <see cref="ApplicationSettingsFileAccess.ReadSharedWriteIfOwned"/> means that the
+		/// instance reads the application settings, but only the owner, i.e. the first instance
+		/// that was started, also writes them.
+		/// <see cref="ApplicationSettingsFileAccess.ReadShared"/> means that the instance only
+		/// reads the application settings, independent on whether it is the first or subsequent
+		/// instance.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop doesn't seem to be able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView)

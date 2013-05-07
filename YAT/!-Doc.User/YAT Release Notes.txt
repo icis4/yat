@@ -77,6 +77,8 @@ Fixed bugs:
 - Excessive memory occupation after standby fixed (bug #243)
 - MissingMethodException of 'Boolean System.Threading.WaitHandle.WaitOne(Int32)' fixed by adding
   .NET 3.5 SP1 as prerequisite to setup/installation (bug #273)
+- Start from command line no longer always generates a terminal (bug #262)
+- InvalidOperationException when starting YAT with /r command line option fixed (bug #260)
 - ThreadException upon copy of exception data to clipboard fixed (bug #245)
 
 Limitations and known issues:

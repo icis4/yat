@@ -365,12 +365,17 @@ namespace YAT.Model
 			// Always create start requests to ensure that object exists.
 			this.startArgs = new MainStartArgs();
 
-			// Process command line arguments, and evaluate them:
 			// 
-			// Note that this is the location where the command line arguments are processed and
-			// validated in case of automated testing. In normal operation, they will be processed
-			// and validated in YAT.Controller.Main.Run(). Calling ProcessAndValidate() multiple
-			// times doesn't matter, this case is handled with 'ArgsHandler'.
+			// Process and validate command line arguments:
+			// 
+			// In normal operation this is the location where the command line arguments are
+			// processed and validated for a second time. They have already been processed and
+			// validated for a first time even before the application settings have been created/
+			// loaded. This first processing happens in YAT.Controller.Main.Run().
+			// 
+			// In case of automated testing, the command line arguments may also be processed and
+			// validated here for the first time.
+			// 
 			if (this.commandLineArgs != null)
 				this.commandLineArgs.ProcessAndValidate();
 
@@ -501,30 +506,27 @@ namespace YAT.Model
 				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
-			// Prio 8 = If no settings loaded so far, create a new terminal anyway:
-			if ((this.startArgs.WorkspaceSettings == null) && (this.startArgs.TerminalSettings == null))
-				 this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
-
-			// Prio 9 = Override settings as desired:
-			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
-			{
-				Domain.TerminalTypeEx terminalType;
-				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
-					this.startArgs.TerminalSettings.Settings.TerminalType = terminalType;
-				else
-					return (false);
-			}
-			if (this.commandLineArgs.OptionIsGiven("PortType"))
-			{
-				Domain.IOTypeEx ioType;
-				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
-					this.startArgs.TerminalSettings.Settings.IOType = ioType;
-				else
-					return (false);
-			}
-
+			// Prio 8 = Override settings as desired:
 			if (this.startArgs.TerminalSettings != null)
 			{
+				if (this.commandLineArgs.OptionIsGiven("TerminalType"))
+				{
+					Domain.TerminalTypeEx terminalType;
+					if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
+						this.startArgs.TerminalSettings.Settings.TerminalType = terminalType;
+					else
+						return (false);
+				}
+
+				if (this.commandLineArgs.OptionIsGiven("PortType"))
+				{
+					Domain.IOTypeEx ioType;
+					if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
+						this.startArgs.TerminalSettings.Settings.IOType = ioType;
+					else
+						return (false);
+				}
+
 				Domain.IOType finalIOType = this.startArgs.TerminalSettings.Settings.IOType;
 				if (finalIOType == Domain.IOType.SerialPort)
 				{
@@ -678,22 +680,22 @@ namespace YAT.Model
 				{
 					return (false);
 				}
-			}
 
-			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
-				this.startArgs.TerminalSettings.Settings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
+				if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
+					this.startArgs.TerminalSettings.Settings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
 
-			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
-				this.startArgs.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
+				if (this.commandLineArgs.OptionIsGiven("BeginLog"))
+					this.startArgs.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
+			} // if (this.startArgs.TerminalSettings != null)
 
-			// Prio 10 = Perform requested operation:
+			// Prio 9 = Perform requested operation:
 			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 			{
 				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
 				this.startArgs.PerformOperationOnRequestedTerminal = true;
 			}
 
-			// Prio 11 = Set behavior:
+			// Prio 10 = Set behavior:
 			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
@@ -705,7 +707,7 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError = true;
 			}
 
-			// Prio 12 = Tile:
+			// Prio 11 = Tile:
 			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
 			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 
