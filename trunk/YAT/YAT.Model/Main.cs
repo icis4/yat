@@ -506,196 +506,41 @@ namespace YAT.Model
 				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
-			// Prio 8 = Override settings as desired:
+			// Prio 8 = Show 'New Terminal' dialog:
+			if (this.startArgs.TerminalSettings == null)
+			{
+				this.startArgs.ShowNewTerminalDialog = true;
+				this.startArgs.KeepOpen              = true;
+				this.startArgs.KeepOpenOnError       = true;
+
+				return (true);
+			}
+
+			// Prio 9 = Override settings as desired:
 			if (this.startArgs.TerminalSettings != null)
 			{
-				if (this.commandLineArgs.OptionIsGiven("TerminalType"))
+				bool terminalIsStarted = this.startArgs.TerminalSettings.Settings.TerminalIsStarted;
+				bool logIsStarted      = this.startArgs.TerminalSettings.Settings.LogIsStarted;
+
+				if (ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettings.Settings.Terminal, ref terminalIsStarted, ref logIsStarted))
 				{
-					Domain.TerminalTypeEx terminalType;
-					if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
-						this.startArgs.TerminalSettings.Settings.TerminalType = terminalType;
-					else
-						return (false);
-				}
-
-				if (this.commandLineArgs.OptionIsGiven("PortType"))
-				{
-					Domain.IOTypeEx ioType;
-					if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
-						this.startArgs.TerminalSettings.Settings.IOType = ioType;
-					else
-						return (false);
-				}
-
-				Domain.IOType finalIOType = this.startArgs.TerminalSettings.Settings.IOType;
-				if (finalIOType == Domain.IOType.SerialPort)
-				{
-					if (this.commandLineArgs.OptionIsGiven("SerialPort"))
-					{
-						MKY.IO.Ports.SerialPortId portId;
-						if (MKY.IO.Ports.SerialPortId.TryFrom(this.commandLineArgs.SerialPort, out portId))
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.PortId = portId;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("BaudRate"))
-					{
-						MKY.IO.Ports.BaudRateEx baudRate;
-						if (MKY.IO.Ports.BaudRateEx.TryFrom(this.commandLineArgs.BaudRate, out baudRate))
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate = baudRate;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("DataBits"))
-					{
-						MKY.IO.Ports.DataBitsEx dataBits;
-						if (MKY.IO.Ports.DataBitsEx.TryFrom(this.commandLineArgs.DataBits, out dataBits))
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits = dataBits;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("Parity"))
-					{
-						MKY.IO.Ports.ParityEx parity;
-						if (MKY.IO.Ports.ParityEx.TryParse(this.commandLineArgs.Parity, out parity))
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.Parity = parity;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("StopBits"))
-					{
-						MKY.IO.Ports.StopBitsEx stopBits;
-						if (MKY.IO.Ports.StopBitsEx.TryFrom(this.commandLineArgs.StopBits, out stopBits))
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits = stopBits;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("FlowControl"))
-					{
-						MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
-						if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl = flowControl;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("SerialPortAutoReopen"))
-					{
-						if (this.commandLineArgs.SerialPortAutoReopen == 0)
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
-						else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval)
-							this.startArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
-						else
-							return (false);
-					}
-				}
-				else if ((finalIOType == Domain.IOType.TcpClient) ||
-						 (finalIOType == Domain.IOType.TcpServer) ||
-						 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-						 (finalIOType == Domain.IOType.Udp))
-				{
-					if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
-					{
-						MKY.Net.IPHost remoteHost;
-						if (MKY.Net.IPHost.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
-							this.startArgs.TerminalSettings.Settings.IO.Socket.RemoteHost = remoteHost;
-						else
-							return (false);
-					}
-					if (((finalIOType == Domain.IOType.TcpClient) ||
-						 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-						 (finalIOType == Domain.IOType.Udp)) &&
-						this.commandLineArgs.OptionIsGiven("RemotePort"))
-					{
-						if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
-							this.startArgs.TerminalSettings.Settings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
-						else
-							return (false);
-					}
-					if (this.commandLineArgs.OptionIsGiven("LocalInterface"))
-					{
-						MKY.Net.IPNetworkInterface localInterface;
-						if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
-							this.startArgs.TerminalSettings.Settings.IO.Socket.LocalInterface = localInterface;
-						else
-							return (false);
-					}
-					if (((finalIOType == Domain.IOType.TcpServer) ||
-						 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-						 (finalIOType == Domain.IOType.Udp)) &&
-						this.commandLineArgs.OptionIsGiven("LocalPort"))
-					{
-						if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
-							this.startArgs.TerminalSettings.Settings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
-						else
-							return (false);
-					}
-					if ((finalIOType == Domain.IOType.TcpClient) &&
-						this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
-					{
-						if (this.commandLineArgs.TcpAutoReconnect == 0)
-							this.startArgs.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
-						else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval)
-							this.startArgs.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
-						else
-							return (false);
-					}
-				}
-				else if (finalIOType == Domain.IOType.UsbSerialHid)
-				{
-					bool vendorIdIsGiven  = this.commandLineArgs.OptionIsGiven("VendorID");
-					bool productIdIsGiven = this.commandLineArgs.OptionIsGiven("ProductId");
-					if (vendorIdIsGiven || productIdIsGiven)
-					{
-						// Both vendor and product ID must be given!
-						if (vendorIdIsGiven && productIdIsGiven)
-						{
-							int vendorId;
-							int productId;
-
-							if (!int.TryParse(this.commandLineArgs.VendorId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out vendorId))
-								return (false);
-
-							if (!Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
-								return (false);
-
-							if (!int.TryParse(this.commandLineArgs.ProductId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
-								return (false);
-							
-							if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
-								return (false);
-
-							this.startArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
-						}
-						else
-						{
-							return (false);
-						}
-					}
-					if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
-					{
-						this.startArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
-					}
+					this.startArgs.TerminalSettings.Settings.TerminalIsStarted = terminalIsStarted;
+					this.startArgs.TerminalSettings.Settings.LogIsStarted      = logIsStarted;
 				}
 				else
 				{
 					return (false);
 				}
+			}
 
-				if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
-					this.startArgs.TerminalSettings.Settings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
-
-				if (this.commandLineArgs.OptionIsGiven("BeginLog"))
-					this.startArgs.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
-			} // if (this.startArgs.TerminalSettings != null)
-
-			// Prio 9 = Perform requested operation:
+			// Prio 10 = Perform requested operation:
 			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 			{
 				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
 				this.startArgs.PerformOperationOnRequestedTerminal = true;
 			}
 
-			// Prio 10 = Set behavior:
+			// Prio 11 = Set behavior:
 			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
@@ -707,11 +552,266 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError = true;
 			}
 
-			// Prio 11 = Tile:
+			// Prio 12 = Tile:
 			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
 			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 
 			return (true);
+		}
+
+		/// <summary>
+		/// This method takes existing terminal settings and modifies/overrides those settings that
+		/// are given by the given command line args.
+		/// </summary>
+		/// <remarks>
+		/// Unfortunately, 'normal' terminal settings and new terminal settings are defined rather
+		/// differently. Therefore, this implementation looks a bit weird.
+		/// </remarks>
+		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings, ref bool terminalIsStarted, ref bool logIsStarted)
+		{
+			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
+			{
+				Domain.TerminalTypeEx terminalType;
+				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
+					terminalSettings.TerminalType = terminalType;
+				else
+					return (false);
+			}
+
+			if (this.commandLineArgs.OptionIsGiven("PortType"))
+			{
+				Domain.IOTypeEx ioType;
+				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
+					terminalSettings.IO.IOType = ioType;
+				else
+					return (false);
+			}
+
+			Domain.IOType finalIOType = terminalSettings.IO.IOType;
+			if (finalIOType == Domain.IOType.SerialPort)
+			{
+				if (this.commandLineArgs.OptionIsGiven("SerialPort"))
+				{
+					MKY.IO.Ports.SerialPortId portId;
+					if (MKY.IO.Ports.SerialPortId.TryFrom(this.commandLineArgs.SerialPort, out portId))
+						terminalSettings.IO.SerialPort.PortId = portId;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("BaudRate"))
+				{
+					MKY.IO.Ports.BaudRateEx baudRate;
+					if (MKY.IO.Ports.BaudRateEx.TryFrom(this.commandLineArgs.BaudRate, out baudRate))
+						terminalSettings.IO.SerialPort.Communication.BaudRate = baudRate;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("DataBits"))
+				{
+					MKY.IO.Ports.DataBitsEx dataBits;
+					if (MKY.IO.Ports.DataBitsEx.TryFrom(this.commandLineArgs.DataBits, out dataBits))
+						terminalSettings.IO.SerialPort.Communication.DataBits = dataBits;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("Parity"))
+				{
+					MKY.IO.Ports.ParityEx parity;
+					if (MKY.IO.Ports.ParityEx.TryParse(this.commandLineArgs.Parity, out parity))
+						terminalSettings.IO.SerialPort.Communication.Parity = parity;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("StopBits"))
+				{
+					MKY.IO.Ports.StopBitsEx stopBits;
+					if (MKY.IO.Ports.StopBitsEx.TryFrom(this.commandLineArgs.StopBits, out stopBits))
+						terminalSettings.IO.SerialPort.Communication.StopBits = stopBits;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
+				{
+					MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
+					if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
+						terminalSettings.IO.SerialPort.Communication.FlowControl = flowControl;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("SerialPortAutoReopen"))
+				{
+					if (this.commandLineArgs.SerialPortAutoReopen == 0)
+						terminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
+					else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval)
+						terminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
+					else
+						return (false);
+				}
+			}
+			else if ((finalIOType == Domain.IOType.TcpClient) ||
+					 (finalIOType == Domain.IOType.TcpServer) ||
+					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
+					 (finalIOType == Domain.IOType.Udp))
+			{
+				if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
+				{
+					MKY.Net.IPHost remoteHost;
+					if (MKY.Net.IPHost.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
+						terminalSettings.IO.Socket.RemoteHost = remoteHost;
+					else
+						return (false);
+				}
+				if (((finalIOType == Domain.IOType.TcpClient) ||
+					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
+					 (finalIOType == Domain.IOType.Udp)) &&
+					this.commandLineArgs.OptionIsGiven("RemotePort"))
+				{
+					if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
+						terminalSettings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("LocalInterface"))
+				{
+					MKY.Net.IPNetworkInterface localInterface;
+					if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
+						terminalSettings.IO.Socket.LocalInterface = localInterface;
+					else
+						return (false);
+				}
+				if (((finalIOType == Domain.IOType.TcpServer) ||
+					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
+					 (finalIOType == Domain.IOType.Udp)) &&
+					this.commandLineArgs.OptionIsGiven("LocalPort"))
+				{
+					if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
+						terminalSettings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
+					else
+						return (false);
+				}
+				if ((finalIOType == Domain.IOType.TcpClient) &&
+					this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
+				{
+					if (this.commandLineArgs.TcpAutoReconnect == 0)
+						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
+					else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval)
+						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
+					else
+						return (false);
+				}
+			}
+			else if (finalIOType == Domain.IOType.UsbSerialHid)
+			{
+				bool vendorIdIsGiven  = this.commandLineArgs.OptionIsGiven("VendorID");
+				bool productIdIsGiven = this.commandLineArgs.OptionIsGiven("ProductId");
+				if (vendorIdIsGiven || productIdIsGiven)
+				{
+					// Both vendor and product ID must be given!
+					if (vendorIdIsGiven && productIdIsGiven)
+					{
+						int vendorId;
+						int productId;
+
+						if (!int.TryParse(this.commandLineArgs.VendorId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out vendorId))
+							return (false);
+
+						if (!Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
+							return (false);
+
+						if (!int.TryParse(this.commandLineArgs.ProductId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
+							return (false);
+
+						if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
+							return (false);
+
+						terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
+					}
+					else
+					{
+						return (false);
+					}
+				}
+				if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
+				{
+					terminalSettings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
+				}
+			}
+			else
+			{
+				return (false);
+			}
+
+			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
+				terminalIsStarted = this.commandLineArgs.OpenTerminal;
+
+			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
+				logIsStarted = this.commandLineArgs.BeginLog;
+
+			return (true);
+		}
+
+		/// <summary>
+		/// This method takes existing terminal settings and modifies/overrides those settings that
+		/// are given by the given command line args.
+		/// </summary>
+		/// <remarks>
+		/// Unfortunately, 'normal' terminal settings and new terminal settings are defined rather
+		/// differently. Therefore, this implementation looks a bit weird.
+		/// </remarks>
+		public bool ProcessCommandLineArgsIntoExistingNewTerminalSettings(Model.Settings.NewTerminalSettings newTerminalSettings)
+		{
+			// These are temporary settings. Therefore, child items of these settings are not
+			// cloned below. They can simply be assigned and will then later be assigned back.
+			Domain.Settings.TerminalSettings terminalSettings = new Domain.Settings.TerminalSettings(); ;
+
+			terminalSettings.TerminalType = newTerminalSettings.TerminalType;
+			terminalSettings.IO.IOType    = newTerminalSettings.IOType;
+
+			terminalSettings.IO.SerialPort.PortId        = newTerminalSettings.SerialPortId;
+			terminalSettings.IO.SerialPort.Communication = newTerminalSettings.SerialPortCommunication;
+			terminalSettings.IO.SerialPort.AutoReopen    = newTerminalSettings.SerialPortAutoReopen;
+
+			terminalSettings.IO.Socket.RemoteHost             = newTerminalSettings.SocketRemoteHost;
+			terminalSettings.IO.Socket.RemoteTcpPort          = newTerminalSettings.SocketRemoteTcpPort;
+			terminalSettings.IO.Socket.RemoteUdpPort          = newTerminalSettings.SocketRemoteUdpPort;
+			terminalSettings.IO.Socket.LocalInterface         = newTerminalSettings.SocketLocalInterface;
+			terminalSettings.IO.Socket.LocalTcpPort           = newTerminalSettings.SocketLocalTcpPort;
+			terminalSettings.IO.Socket.LocalUdpPort           = newTerminalSettings.SocketLocalUdpPort;
+			terminalSettings.IO.Socket.TcpClientAutoReconnect = newTerminalSettings.TcpClientAutoReconnect;
+
+			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = newTerminalSettings.UsbSerialHidDeviceInfo;
+			terminalSettings.IO.UsbSerialHidDevice.AutoOpen   = newTerminalSettings.UsbSerialHidAutoOpen;
+
+			bool terminalIsStarted = newTerminalSettings.StartTerminal;
+			bool logIsStarted      = false; // Doesn't matter, new terminal settings do not have this option.
+
+			if (ProcessCommandLineArgsIntoExistingTerminalSettings(terminalSettings, ref terminalIsStarted, ref logIsStarted))
+			{
+				newTerminalSettings.TerminalType = terminalSettings.TerminalType;
+				newTerminalSettings.IOType       = terminalSettings.IO.IOType;
+
+				newTerminalSettings.SerialPortId            = terminalSettings.IO.SerialPort.PortId;
+				newTerminalSettings.SerialPortCommunication = terminalSettings.IO.SerialPort.Communication;
+				newTerminalSettings.SerialPortAutoReopen    = terminalSettings.IO.SerialPort.AutoReopen;
+
+				newTerminalSettings.SocketRemoteHost       = terminalSettings.IO.Socket.RemoteHost;
+				newTerminalSettings.SocketRemoteTcpPort    = terminalSettings.IO.Socket.RemoteTcpPort;
+				newTerminalSettings.SocketRemoteUdpPort    = terminalSettings.IO.Socket.RemoteUdpPort;
+				newTerminalSettings.SocketLocalInterface   = terminalSettings.IO.Socket.LocalInterface;
+				newTerminalSettings.SocketLocalTcpPort     = terminalSettings.IO.Socket.LocalTcpPort;
+				newTerminalSettings.SocketLocalUdpPort     = terminalSettings.IO.Socket.LocalUdpPort;
+				newTerminalSettings.TcpClientAutoReconnect = terminalSettings.IO.Socket.TcpClientAutoReconnect;
+
+				newTerminalSettings.UsbSerialHidDeviceInfo = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
+				newTerminalSettings.UsbSerialHidAutoOpen   = terminalSettings.IO.UsbSerialHidDevice.AutoOpen;
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
