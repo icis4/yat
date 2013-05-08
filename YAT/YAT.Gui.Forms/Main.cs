@@ -290,20 +290,20 @@ namespace YAT.Gui.Forms
 			{
 				if (this.workspace.TerminalCount == 0)
 				{
-					// If workspace is empty, and requested, display new terminal dialog.
+					// If workspace is empty, and requested, display new terminal dialog:
 					if (this.main.StartArgs.ShowNewTerminalDialog)
 						ShowNewTerminalDialog();
 				}
 				else
 				{
-					// If workspace contains terminals, and requested, tile the terminal forms accordingly.
+					// If workspace contains terminals, and requested, tile the terminal forms accordingly:
 					if      (this.main.StartArgs.TileHorizontal)
 						LayoutMdi(MdiLayout.TileHorizontal);
 					else if (this.main.StartArgs.TileVertical)
 						LayoutMdi(MdiLayout.TileVertical);
 				}
 
-				// Automatically trigger transmit data if desired.
+				// Automatically trigger transmit data if desired:
 				if (this.main.StartArgs.PerformOperationOnRequestedTerminal)
 				{
 					SetFixedStatusText("Triggering start operation...");
@@ -1367,7 +1367,15 @@ namespace YAT.Gui.Forms
 		{
 			SetFixedStatusText("New terminal...");
 
-			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUserSettings.NewTerminal);
+			// Let those settings that are given by the given command line args be modified/overridden:
+			Model.Settings.NewTerminalSettings processed = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
+
+			Gui.Forms.NewTerminal f;
+			if (this.main.ProcessCommandLineArgsIntoExistingNewTerminalSettings(processed))
+				f = new Gui.Forms.NewTerminal(processed);
+			else
+				f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUserSettings.NewTerminal);
+
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
