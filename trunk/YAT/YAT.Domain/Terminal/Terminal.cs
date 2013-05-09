@@ -802,7 +802,24 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			this.rawTerminal.Send(data);
+			try
+			{
+				this.rawTerminal.Send(data);
+			}
+			catch (ObjectDisposedException ex)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("ObjectDisposedException while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
+				sb.AppendLine();
+				DebugEx.WriteException(GetType(), ex, sb.ToString());
+			}
+			catch (Exception ex)
+			{
+				string leadMessage = "Unable to send data:";
+				DebugEx.WriteException(GetType(), ex, leadMessage);
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Output, leadMessage + Environment.NewLine + ex.Message));
+			}
 		}
 
 		/// <remarks>
@@ -812,7 +829,24 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			this.rawTerminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(data);
+			try
+			{
+				this.rawTerminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(data);
+			}
+			catch (ObjectDisposedException ex)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("ObjectDisposedException while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
+				sb.AppendLine();
+				DebugEx.WriteException(GetType(), ex, sb.ToString());
+			}
+			catch (Exception ex)
+			{
+				string leadMessage = "Unable to prepare data for sending:";
+				DebugEx.WriteException(GetType(), ex, leadMessage);
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Output, leadMessage + Environment.NewLine + ex.Message));
+			}
 		}
 
 		#endregion

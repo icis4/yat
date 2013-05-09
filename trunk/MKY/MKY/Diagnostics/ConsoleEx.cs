@@ -50,9 +50,9 @@ namespace MKY.Diagnostics
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteException(Type type, Exception ex, string additionalMessage)
+		public static void WriteException(Type type, Exception ex, string leadMessage)
 		{
-			DiagnosticsWriterOutput.WriteException(consoleWrapper, type, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(consoleWrapper, type, ex, leadMessage);
 		}
 
 		/// <summary>
@@ -66,9 +66,9 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteStack(Type type, string additionalMessage)
+		public static void WriteStack(Type type, string leadMessage)
 		{
-			WriteStack(type, new StackTrace(), additionalMessage);
+			WriteStack(type, new StackTrace(), leadMessage);
 		}
 
 		/// <summary>
@@ -82,9 +82,9 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteStack(Type type, StackTrace st, string additionalMessage)
+		public static void WriteStack(Type type, StackTrace st, string leadMessage)
 		{
-			DiagnosticsWriterOutput.WriteStack(consoleWrapper, type, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(consoleWrapper, type, st, leadMessage);
 		}
 
 		/// <summary>
@@ -100,9 +100,9 @@ namespace MKY.Diagnostics
 		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		public static void WriteWindowsFormsMessage(Type type, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage)
 		{
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(consoleWrapper, type, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(consoleWrapper, type, m, leadMessage);
 		}
 
 		/// <summary>
@@ -116,9 +116,9 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteFileStream(Type type, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(Type type, FileStream fs, string leadMessage)
 		{
-			DiagnosticsWriterOutput.WriteFileStream(consoleWrapper, type, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(consoleWrapper, type, fs, leadMessage);
 		}
 	}
 }

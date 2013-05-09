@@ -2300,7 +2300,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     }
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     FireOnException(connection, ex);
                 }

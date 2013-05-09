@@ -59,7 +59,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteException(IDiagnosticsWriter writer, Type type, Exception ex, string additionalMessage)
+		public static void WriteException(IDiagnosticsWriter writer, Type type, Exception ex, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -73,7 +73,7 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, additionalMessage);
+				WriteMessage(writer, leadMessage);
 				WriteException(writer, ex);
 			}
 			writer.Unindent();
@@ -91,7 +91,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteStack(IDiagnosticsWriter writer, Type type, StackTrace st, string additionalMessage)
+		public static void WriteStack(IDiagnosticsWriter writer, Type type, StackTrace st, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -105,7 +105,7 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, additionalMessage);
+				WriteMessage(writer, leadMessage);
 				WriteStack(writer, st.ToString());
 			}
 			writer.Unindent();
@@ -124,7 +124,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Type type, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Type type, Message m, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -138,7 +138,7 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, additionalMessage);
+				WriteMessage(writer, leadMessage);
 				WriteWindowsFormsMessage(writer, m);
 			}
 			writer.Unindent();
@@ -156,7 +156,7 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteFileStream(IDiagnosticsWriter writer, Type type, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(IDiagnosticsWriter writer, Type type, FileStream fs, string leadMessage)
 		{
 			if (type != null)
 			{
@@ -170,7 +170,7 @@ namespace MKY.Diagnostics
 
 			writer.Indent();
 			{
-				WriteMessage(writer, additionalMessage);
+				WriteMessage(writer, leadMessage);
 				WriteFileStream(writer, fs);
 			}
 			writer.Unindent();

@@ -290,9 +290,16 @@ namespace YAT.Gui.Forms
 			{
 				if (this.workspace.TerminalCount == 0)
 				{
-					// If workspace is empty, and requested, display new terminal dialog:
+					// If workspace is empty, and the new terminal dialog is requested, display it:
 					if (this.main.StartArgs.ShowNewTerminalDialog)
-						ShowNewTerminalDialog();
+					{
+						// Let those settings that are given by the command line args be modified/overridden:
+						Model.Settings.NewTerminalSettings processed = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
+						if (this.main.ProcessCommandLineArgsIntoExistingNewTerminalSettings(processed))
+							ShowNewTerminalDialog(processed);
+						else
+							ShowNewTerminalDialog();
+					}
 				}
 				else
 				{
@@ -1365,17 +1372,15 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowNewTerminalDialog()
 		{
+			ShowNewTerminalDialog(ApplicationSettings.LocalUserSettings.NewTerminal);
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowNewTerminalDialog(Model.Settings.NewTerminalSettings newTerminalSettings)
+		{
 			SetFixedStatusText("New terminal...");
 
-			// Let those settings that are given by the given command line args be modified/overridden:
-			Model.Settings.NewTerminalSettings processed = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
-
-			Gui.Forms.NewTerminal f;
-			if (this.main.ProcessCommandLineArgsIntoExistingNewTerminalSettings(processed))
-				f = new Gui.Forms.NewTerminal(processed);
-			else
-				f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUserSettings.NewTerminal);
-
+			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(newTerminalSettings);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

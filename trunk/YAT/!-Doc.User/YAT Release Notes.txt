@@ -62,11 +62,11 @@ YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2013-0x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- <>
+- N/A
 
 Important changes:
-- Command line arguments can also be used to preset the values shown in the 'New Terminal' dialog
-  (related to bug #262)
+- Command line arguments can also be used to preset the settings of the initial 'New Terminal'
+  dialog to fixed values, independent on the values that were selected before (related to bug #262)
 - Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and
   'Manual Combined', this is due to a limitation of the .NET/Win32 serial port driver (bug #214)
 - Format exceptions while sending are now reported as error messages within the terminal (bug #270)
@@ -75,6 +75,7 @@ Fixed bugs:
 - Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly
   restored when opening the terminal settings dialog (bug #259)
 - Exception while reading stream in YAT.Domain.Parser.Parser.TryParse() fixed (bug #261)
+- Exception while closing terminal or application in YAT.Domain.RawTerminal.Send() fixed (bug #267)
 - Memory leak when subsequently creating and closing terminals fixed (bug #263)
 - Excessive memory occupation after standby fixed (bug #243)
 - MissingMethodException of 'Boolean System.Threading.WaitHandle.WaitOne(Int32)' fixed by adding

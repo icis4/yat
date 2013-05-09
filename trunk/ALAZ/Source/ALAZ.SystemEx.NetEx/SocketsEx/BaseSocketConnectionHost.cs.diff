@@ -242,3 +242,12 @@
              }
          }
  
+@@ -2197,7 +2300,7 @@
+                     }
+ 
+                 }
+-                catch(Exception ex)
++                catch (Exception ex)
+                 {
+                     FireOnException(connection, ex);
+                 }
