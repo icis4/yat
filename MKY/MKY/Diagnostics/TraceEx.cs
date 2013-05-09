@@ -63,10 +63,10 @@ namespace MKY.Diagnostics
 		/// to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
 		[Conditional("TRACE")]
-		public static void WriteException(Type type, Exception ex, string additionalMessage)
+		public static void WriteException(Type type, Exception ex, string leadMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteException(traceWrapper, type, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(traceWrapper, type, ex, leadMessage);
 		#endif
 		}
 
@@ -83,9 +83,9 @@ namespace MKY.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
 		[Conditional("TRACE")]
-		public static void WriteStack(Type type, string additionalMessage)
+		public static void WriteStack(Type type, string leadMessage)
 		{
-			WriteStack(type, new StackTrace(), additionalMessage);
+			WriteStack(type, new StackTrace(), leadMessage);
 		}
 
 		/// <summary>
@@ -101,10 +101,10 @@ namespace MKY.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
 		[Conditional("TRACE")]
-		public static void WriteStack(Type type, StackTrace st, string additionalMessage)
+		public static void WriteStack(Type type, StackTrace st, string leadMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteStack(traceWrapper, type, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(traceWrapper, type, st, leadMessage);
 		#endif
 		}
 
@@ -123,10 +123,10 @@ namespace MKY.Diagnostics
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		[Conditional("TRACE")]
-		public static void WriteWindowsFormsMessage(Type type, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(traceWrapper, type, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(traceWrapper, type, m, leadMessage);
 		#endif
 		}
 
@@ -143,10 +143,10 @@ namespace MKY.Diagnostics
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
 		[Conditional("TRACE")]
-		public static void WriteFileStream(Type type, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(Type type, FileStream fs, string leadMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteFileStream(traceWrapper, type, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(traceWrapper, type, fs, leadMessage);
 		#endif
 		}
 	}

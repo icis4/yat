@@ -56,10 +56,10 @@ namespace MKY.Diagnostics
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteException(TextWriter writer, Type type, Exception ex, string additionalMessage)
+		public static void WriteException(TextWriter writer, Type type, Exception ex, string leadMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, type, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, type, ex, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -74,9 +74,9 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, Type type, string additionalMessage)
+		public static void WriteStack(TextWriter writer, Type type, string leadMessage)
 		{
-			WriteStack(writer, type, new StackTrace(), additionalMessage);
+			WriteStack(writer, type, new StackTrace(), leadMessage);
 		}
 
 		/// <summary>
@@ -90,10 +90,10 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string additionalMessage)
+		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string leadMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, type, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, type, st, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -110,10 +110,10 @@ namespace MKY.Diagnostics
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string leadMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, type, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, type, m, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
@@ -128,10 +128,10 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string leadMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, type, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, type, fs, leadMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 	}

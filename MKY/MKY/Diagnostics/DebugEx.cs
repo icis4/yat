@@ -63,10 +63,10 @@ namespace MKY.Diagnostics
 		/// to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteException(Type type, Exception ex, string additionalMessage)
+		public static void WriteException(Type type, Exception ex, string leadMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteException(debugWrapper, type, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(debugWrapper, type, ex, leadMessage);
 		#endif
 		}
 
@@ -83,9 +83,9 @@ namespace MKY.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteStack(Type type, string additionalMessage)
+		public static void WriteStack(Type type, string leadMessage)
 		{
-			WriteStack(type, new StackTrace(), additionalMessage);
+			WriteStack(type, new StackTrace(), leadMessage);
 		}
 
 		/// <summary>
@@ -101,10 +101,10 @@ namespace MKY.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteStack(Type type, StackTrace st, string additionalMessage)
+		public static void WriteStack(Type type, StackTrace st, string leadMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteStack(debugWrapper, type, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(debugWrapper, type, st, leadMessage);
 		#endif
 		}
 
@@ -123,10 +123,10 @@ namespace MKY.Diagnostics
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		[Conditional("DEBUG")]
-		public static void WriteWindowsFormsMessage(Type type, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(debugWrapper, type, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(debugWrapper, type, m, leadMessage);
 		#endif
 		}
 
@@ -143,10 +143,10 @@ namespace MKY.Diagnostics
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteFileStream(Type type, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(Type type, FileStream fs, string leadMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteFileStream(debugWrapper, type, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(debugWrapper, type, fs, leadMessage);
 		#endif
 		}
 	}
