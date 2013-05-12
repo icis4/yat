@@ -186,13 +186,13 @@ namespace YAT.Gui.Forms
 			{
 				string description;
 				if (!this.settingsInEdit.SeparateTxRxEol)
-					description = "Tx EOL";
-				else
 					description = "EOL";
+				else
+					description = "Tx EOL";
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, description, eolString, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateSequence(this, description, eolString, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 					{
@@ -234,9 +234,10 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
+				string description = "Rx EOL";
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, "Rx EOL", eolString, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateSequence(this, description, eolString, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 						this.settingsInEdit.RxEol = eolString;

@@ -47,12 +47,6 @@
 			this.label_MaxSendChunkSizeRemark = new System.Windows.Forms.Label();
 			this.textBox_MaxSendChunkSize = new System.Windows.Forms.TextBox();
 			this.label_MaxSendChunkSize = new System.Windows.Forms.Label();
-			this.label_DefaultLineDelayUnit = new System.Windows.Forms.Label();
-			this.textBox_DefaultLineDelay = new System.Windows.Forms.TextBox();
-			this.label_DefaultLineDelay = new System.Windows.Forms.Label();
-			this.label_DefaultDelayUnit = new System.Windows.Forms.Label();
-			this.textBox_DefaultDelay = new System.Windows.Forms.TextBox();
-			this.label_DefaultDelay = new System.Windows.Forms.Label();
 			this.checkBox_NoSendOnOutputBreak = new System.Windows.Forms.CheckBox();
 			this.label_SendImmediately = new System.Windows.Forms.Label();
 			this.checkBox_SendImmediately = new System.Windows.Forms.CheckBox();
@@ -88,6 +82,14 @@
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
+			this.checkBox_DisableKeywords = new System.Windows.Forms.CheckBox();
+			this.groupBox_Send_Keywords = new System.Windows.Forms.GroupBox();
+			this.label_DefaultLineDelayUnit = new System.Windows.Forms.Label();
+			this.textBox_DefaultLineDelay = new System.Windows.Forms.TextBox();
+			this.label_DefaultLineDelay = new System.Windows.Forms.Label();
+			this.label_DefaultDelayUnit = new System.Windows.Forms.Label();
+			this.textBox_DefaultDelay = new System.Windows.Forms.TextBox();
+			this.label_DefaultDelay = new System.Windows.Forms.Label();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
@@ -98,6 +100,7 @@
 			this.groupBox_Display_Tab.SuspendLayout();
 			this.groupBox_Display_Space.SuspendLayout();
 			this.groupBox_Display_ControlChars.SuspendLayout();
+			this.groupBox_Send_Keywords.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Defaults
@@ -247,17 +250,12 @@
 			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Send.Controls.Add(this.groupBox_Send_Keywords);
 			this.groupBox_Send.Controls.Add(this.checkBox_NoSendOnInputBreak);
 			this.groupBox_Send.Controls.Add(this.label_MaxSendChunkSizeUnit);
 			this.groupBox_Send.Controls.Add(this.label_MaxSendChunkSizeRemark);
 			this.groupBox_Send.Controls.Add(this.textBox_MaxSendChunkSize);
 			this.groupBox_Send.Controls.Add(this.label_MaxSendChunkSize);
-			this.groupBox_Send.Controls.Add(this.label_DefaultLineDelayUnit);
-			this.groupBox_Send.Controls.Add(this.textBox_DefaultLineDelay);
-			this.groupBox_Send.Controls.Add(this.label_DefaultLineDelay);
-			this.groupBox_Send.Controls.Add(this.label_DefaultDelayUnit);
-			this.groupBox_Send.Controls.Add(this.textBox_DefaultDelay);
-			this.groupBox_Send.Controls.Add(this.label_DefaultDelay);
 			this.groupBox_Send.Controls.Add(this.checkBox_NoSendOnOutputBreak);
 			this.groupBox_Send.Controls.Add(this.label_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
@@ -273,10 +271,10 @@
 			// checkBox_NoSendOnInputBreak
 			// 
 			this.checkBox_NoSendOnInputBreak.AutoSize = true;
-			this.checkBox_NoSendOnInputBreak.Location = new System.Drawing.Point(12, 210);
+			this.checkBox_NoSendOnInputBreak.Location = new System.Drawing.Point(12, 165);
 			this.checkBox_NoSendOnInputBreak.Name = "checkBox_NoSendOnInputBreak";
 			this.checkBox_NoSendOnInputBreak.Size = new System.Drawing.Size(212, 17);
-			this.checkBox_NoSendOnInputBreak.TabIndex = 3;
+			this.checkBox_NoSendOnInputBreak.TabIndex = 9;
 			this.checkBox_NoSendOnInputBreak.Text = "No send w&hile in input break state (IBS)";
 			this.checkBox_NoSendOnInputBreak.UseVisualStyleBackColor = true;
 			this.checkBox_NoSendOnInputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnInputBreak_CheckedChanged);
@@ -319,71 +317,13 @@
 			this.label_MaxSendChunkSize.TabIndex = 5;
 			this.label_MaxSendChunkSize.Text = "send data in &chunks of max.";
 			// 
-			// label_DefaultLineDelayUnit
-			// 
-			this.label_DefaultLineDelayUnit.AutoSize = true;
-			this.label_DefaultLineDelayUnit.Location = new System.Drawing.Point(202, 161);
-			this.label_DefaultLineDelayUnit.Name = "label_DefaultLineDelayUnit";
-			this.label_DefaultLineDelayUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_DefaultLineDelayUnit.TabIndex = 13;
-			this.label_DefaultLineDelayUnit.Text = "ms";
-			this.label_DefaultLineDelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBox_DefaultLineDelay
-			// 
-			this.textBox_DefaultLineDelay.Location = new System.Drawing.Point(150, 158);
-			this.textBox_DefaultLineDelay.Name = "textBox_DefaultLineDelay";
-			this.textBox_DefaultLineDelay.Size = new System.Drawing.Size(50, 20);
-			this.textBox_DefaultLineDelay.TabIndex = 12;
-			this.textBox_DefaultLineDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_DefaultLineDelay.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineDelay_Validating);
-			// 
-			// label_DefaultLineDelay
-			// 
-			this.label_DefaultLineDelay.AutoSize = true;
-			this.label_DefaultLineDelay.Location = new System.Drawing.Point(9, 161);
-			this.label_DefaultLineDelay.Name = "label_DefaultLineDelay";
-			this.label_DefaultLineDelay.Size = new System.Drawing.Size(127, 13);
-			this.label_DefaultLineDelay.TabIndex = 11;
-			this.label_DefaultLineDelay.Text = "&Default of \\!(LineDelay) is\r\n";
-			this.label_DefaultLineDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label_DefaultDelayUnit
-			// 
-			this.label_DefaultDelayUnit.AutoSize = true;
-			this.label_DefaultDelayUnit.Location = new System.Drawing.Point(202, 140);
-			this.label_DefaultDelayUnit.Name = "label_DefaultDelayUnit";
-			this.label_DefaultDelayUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_DefaultDelayUnit.TabIndex = 10;
-			this.label_DefaultDelayUnit.Text = "ms";
-			this.label_DefaultDelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBox_DefaultDelay
-			// 
-			this.textBox_DefaultDelay.Location = new System.Drawing.Point(150, 137);
-			this.textBox_DefaultDelay.Name = "textBox_DefaultDelay";
-			this.textBox_DefaultDelay.Size = new System.Drawing.Size(50, 20);
-			this.textBox_DefaultDelay.TabIndex = 9;
-			this.textBox_DefaultDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_DefaultDelay.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultDelay_Validating);
-			// 
-			// label_DefaultDelay
-			// 
-			this.label_DefaultDelay.AutoSize = true;
-			this.label_DefaultDelay.Location = new System.Drawing.Point(9, 140);
-			this.label_DefaultDelay.Name = "label_DefaultDelay";
-			this.label_DefaultDelay.Size = new System.Drawing.Size(107, 13);
-			this.label_DefaultDelay.TabIndex = 8;
-			this.label_DefaultDelay.Text = "&Default of \\!(Delay) is\r\n";
-			this.label_DefaultDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// checkBox_NoSendOnOutputBreak
 			// 
 			this.checkBox_NoSendOnOutputBreak.AutoSize = true;
-			this.checkBox_NoSendOnOutputBreak.Location = new System.Drawing.Point(12, 187);
+			this.checkBox_NoSendOnOutputBreak.Location = new System.Drawing.Point(12, 142);
 			this.checkBox_NoSendOnOutputBreak.Name = "checkBox_NoSendOnOutputBreak";
 			this.checkBox_NoSendOnOutputBreak.Size = new System.Drawing.Size(224, 17);
-			this.checkBox_NoSendOnOutputBreak.TabIndex = 14;
+			this.checkBox_NoSendOnOutputBreak.TabIndex = 8;
 			this.checkBox_NoSendOnOutputBreak.Text = "No send while in o&utput break state (OBS)";
 			this.checkBox_NoSendOnOutputBreak.UseVisualStyleBackColor = true;
 			this.checkBox_NoSendOnOutputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnOutputBreak_CheckedChanged);
@@ -773,6 +713,89 @@
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// checkBox_DisableKeywords
+			// 
+			this.checkBox_DisableKeywords.AutoSize = true;
+			this.checkBox_DisableKeywords.Location = new System.Drawing.Point(9, 67);
+			this.checkBox_DisableKeywords.Name = "checkBox_DisableKeywords";
+			this.checkBox_DisableKeywords.Size = new System.Drawing.Size(148, 17);
+			this.checkBox_DisableKeywords.TabIndex = 6;
+			this.checkBox_DisableKeywords.Text = "&Disable all \\!(...) keywords";
+			this.checkBox_DisableKeywords.UseVisualStyleBackColor = true;
+			this.checkBox_DisableKeywords.CheckedChanged += new System.EventHandler(this.checkBox_DisableKeywords_CheckedChanged);
+			// 
+			// groupBox_Send_Keywords
+			// 
+			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineDelayUnit);
+			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultLineDelay);
+			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineDelay);
+			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelayUnit);
+			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultDelay);
+			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelay);
+			this.groupBox_Send_Keywords.Controls.Add(this.checkBox_DisableKeywords);
+			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 190);
+			this.groupBox_Send_Keywords.Name = "groupBox_Send_Keywords";
+			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 92);
+			this.groupBox_Send_Keywords.TabIndex = 10;
+			this.groupBox_Send_Keywords.TabStop = false;
+			this.groupBox_Send_Keywords.Text = "Keywords";
+			// 
+			// label_DefaultLineDelayUnit
+			// 
+			this.label_DefaultLineDelayUnit.AutoSize = true;
+			this.label_DefaultLineDelayUnit.Location = new System.Drawing.Point(196, 42);
+			this.label_DefaultLineDelayUnit.Name = "label_DefaultLineDelayUnit";
+			this.label_DefaultLineDelayUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_DefaultLineDelayUnit.TabIndex = 5;
+			this.label_DefaultLineDelayUnit.Text = "ms";
+			this.label_DefaultLineDelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_DefaultLineDelay
+			// 
+			this.textBox_DefaultLineDelay.Location = new System.Drawing.Point(144, 39);
+			this.textBox_DefaultLineDelay.Name = "textBox_DefaultLineDelay";
+			this.textBox_DefaultLineDelay.Size = new System.Drawing.Size(50, 20);
+			this.textBox_DefaultLineDelay.TabIndex = 4;
+			this.textBox_DefaultLineDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label_DefaultLineDelay
+			// 
+			this.label_DefaultLineDelay.AutoSize = true;
+			this.label_DefaultLineDelay.Location = new System.Drawing.Point(6, 42);
+			this.label_DefaultLineDelay.Name = "label_DefaultLineDelay";
+			this.label_DefaultLineDelay.Size = new System.Drawing.Size(127, 13);
+			this.label_DefaultLineDelay.TabIndex = 3;
+			this.label_DefaultLineDelay.Text = "Default of \\!(&LineDelay) is\r\n";
+			this.label_DefaultLineDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label_DefaultDelayUnit
+			// 
+			this.label_DefaultDelayUnit.AutoSize = true;
+			this.label_DefaultDelayUnit.Location = new System.Drawing.Point(196, 21);
+			this.label_DefaultDelayUnit.Name = "label_DefaultDelayUnit";
+			this.label_DefaultDelayUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_DefaultDelayUnit.TabIndex = 2;
+			this.label_DefaultDelayUnit.Text = "ms";
+			this.label_DefaultDelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_DefaultDelay
+			// 
+			this.textBox_DefaultDelay.Location = new System.Drawing.Point(144, 18);
+			this.textBox_DefaultDelay.Name = "textBox_DefaultDelay";
+			this.textBox_DefaultDelay.Size = new System.Drawing.Size(50, 20);
+			this.textBox_DefaultDelay.TabIndex = 1;
+			this.textBox_DefaultDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// label_DefaultDelay
+			// 
+			this.label_DefaultDelay.AutoSize = true;
+			this.label_DefaultDelay.Location = new System.Drawing.Point(6, 21);
+			this.label_DefaultDelay.Name = "label_DefaultDelay";
+			this.label_DefaultDelay.Size = new System.Drawing.Size(107, 13);
+			this.label_DefaultDelay.TabIndex = 0;
+			this.label_DefaultDelay.Text = "Default of \\!(&Delay) is\r\n";
+			this.label_DefaultDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// AdvancedTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -811,6 +834,8 @@
 			this.groupBox_Display_Space.PerformLayout();
 			this.groupBox_Display_ControlChars.ResumeLayout(false);
 			this.groupBox_Display_ControlChars.PerformLayout();
+			this.groupBox_Send_Keywords.ResumeLayout(false);
+			this.groupBox_Send_Keywords.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -863,12 +888,6 @@
 		private System.Windows.Forms.CheckBox checkBox_OutputBreakModifiable;
 		private System.Windows.Forms.CheckBox checkBox_IndicateBreakStates;
 		private System.Windows.Forms.CheckBox checkBox_ShowLineNumbers;
-		private System.Windows.Forms.Label label_DefaultDelayUnit;
-		private System.Windows.Forms.TextBox textBox_DefaultDelay;
-		private System.Windows.Forms.Label label_DefaultDelay;
-		private System.Windows.Forms.Label label_DefaultLineDelay;
-		private System.Windows.Forms.Label label_DefaultLineDelayUnit;
-		private System.Windows.Forms.TextBox textBox_DefaultLineDelay;
 		private System.Windows.Forms.TextBox textBox_MaxSendChunkSize;
 		private System.Windows.Forms.Label label_MaxSendChunkSize;
 		private System.Windows.Forms.Label label_MaxSendChunkSizeRemark;
@@ -877,5 +896,13 @@
 		private System.Windows.Forms.CheckBox checkBox_ShowFlowControlCount;
 		private System.Windows.Forms.GroupBox groupBox_Display_XOnXOff;
 		private System.Windows.Forms.CheckBox checkBox_HideXOnXOff;
+		private System.Windows.Forms.CheckBox checkBox_DisableKeywords;
+		private System.Windows.Forms.GroupBox groupBox_Send_Keywords;
+		private System.Windows.Forms.Label label_DefaultLineDelayUnit;
+		private System.Windows.Forms.TextBox textBox_DefaultLineDelay;
+		private System.Windows.Forms.Label label_DefaultLineDelay;
+		private System.Windows.Forms.Label label_DefaultDelayUnit;
+		private System.Windows.Forms.TextBox textBox_DefaultDelay;
+		private System.Windows.Forms.Label label_DefaultDelay;
 	}
 }

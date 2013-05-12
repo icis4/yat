@@ -631,7 +631,7 @@ namespace YAT.Domain
 			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (p.TryParse(textToParse, Parser.Modes.All, out parseResult, out textSuccessfullyParsed))
+			if (p.TryParse(textToParse, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed))
 			{
 				foreach (Parser.Result ri in parseResult)
 				{
@@ -640,7 +640,7 @@ namespace YAT.Domain
 					{
 						ForwardDataToRawTerminal(bar.ByteArray);
 					}
-					else
+					else // if keyword result (will not occur if keywords are disabled while parsing)
 					{
 						Parser.KeywordResult kr = ri as Parser.KeywordResult;
 						if (kr != null)
@@ -675,7 +675,7 @@ namespace YAT.Domain
 				Thread.Sleep(TerminalSettings.Send.DefaultLineDelay);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Shall not be called if keywords are disabled.</remarks>
 		protected virtual void ProcessInLineKeywords(Parser.KeywordResult result)
 		{
 			switch (result.Keyword)
@@ -749,31 +749,30 @@ namespace YAT.Domain
 		/// <summary>
 		/// Creates a parser error message which can be displayed in the terminal.
 		/// </summary>
-		/// <param name="s">The string to be parsed.</param>
-		/// <param name="parsed">The substring that could successfully be parsed.</param>
+		/// <param name="textToParse">The string to be parsed.</param>
+		/// <param name="parsedText">The substring that could successfully be parsed.</param>
 		/// <returns>The error message to display.</returns>
-		protected string CreateParserErrorMessage(string s, string parsed)
+		protected string CreateParserErrorMessage(string textToParse, string parsedText)
 		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(@"""");
-			sb.Append(s);
-			sb.Append(@"""");
-			if (parsed != null)
+			sb.Append(    textToParse);
+			sb.Append(             @"""");
+			if (parsedText != null)
 			{
-				sb.Append(" is invalid");
-				sb.Append(" at position ");
-				sb.Append((parsed.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
-				if (parsed.Length > 0)
+				sb.Append(            " is invalid at position ");
+				sb.Append(                                    (parsedText.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
+				if (parsedText.Length > 0)
 				{
-					sb.Append(@" Only """);
-					sb.Append(parsed);
-					sb.Append(@""" is valid.");
+					sb.Append(                                           @" Only """);
+					sb.Append(                                                     parsedText);
+					sb.Append(                                                             @""" is valid.");
 				}
 			}
 			else
 			{
-				sb.Append(" is invalid.");
+				sb.Append(            " is invalid.");
 			}
 
 			return (sb.ToString());

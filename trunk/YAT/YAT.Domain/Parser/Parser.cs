@@ -369,11 +369,13 @@ namespace YAT.Domain.Parser
 						}
 						else
 						{
-							formatException = new FormatException
-								(
-								"Keywords are not allowd in this sequence"
-								);
-							return (false);
+							// Keywords are disabled, therefore return the escape sequence.
+							byte[] b = parser.Encoding.GetBytes(new char[] { '\\', '!' });
+							parser.ByteArrayWriter.Write(b, 0, b.Length);
+							parser.EndByteArray();
+							parser.HasFinished = true;
+							ChangeState(parser, null);
+							return (true);
 						}
 					}
 

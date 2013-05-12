@@ -42,18 +42,19 @@ namespace YAT.Gui.Utilities
 	public static class Validation
 	{
 		/// <summary></summary>
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate)
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes)
 		{
-			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.Modes.All));
+			string parsedText;
+			return (ValidateSequence(owner, description, textToValidate, modes, out parsedText));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength)
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength)
 		{
 			string parsedText;
-			if (ValidateSequence(owner, description, textToValidate, out parsedText))
+			if (ValidateSequence(owner, description, textToValidate, modes, out parsedText))
 			{
 				invalidTextStart = -1;
 				invalidTextLength = 0;
@@ -65,20 +66,6 @@ namespace YAT.Gui.Utilities
 				invalidTextLength = textToValidate.Length - invalidTextStart;
 				return (false);
 			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out string parsedText)
-		{
-			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.Modes.All, out parsedText));
-		}
-
-		/// <summary></summary>
-		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes)
-		{
-			string parsedText;
-			return (ValidateSequence(owner, description, textToValidate, modes, out parsedText));
 		}
 
 		/// <summary></summary>
@@ -101,15 +88,14 @@ namespace YAT.Gui.Utilities
 				sb.Append(                          @"""");
 				if (parsedText != null)
 				{
-					sb.Append(                         " is invalid");
-					sb.Append(                                    " at position ");
+					sb.Append(                         " is invalid at position ");
 					sb.Append(                                                 (parsedText.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
 					if (parsedText.Length > 0)
 					{
 						sb.Append(Environment.NewLine);
 						sb.Append(@"Only """);
 						sb.Append(         parsedText);
-						sb.Append(                 @""" is valid.");
+						sb.Append(                  @""" is valid.");
 					}
 				}
 				else
