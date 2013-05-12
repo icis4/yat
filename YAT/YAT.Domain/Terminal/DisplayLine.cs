@@ -121,7 +121,7 @@ namespace YAT.Domain
 			}
 			else
 			{
-				// For performance reasons, append the item to the last item if possible.
+				// For performance reasons, append the item to the last item if possible:
 				int lastIndex = Count - 1;
 				if (this[lastIndex].AcceptsAppendOf(item))
 					this[lastIndex].Append(item);

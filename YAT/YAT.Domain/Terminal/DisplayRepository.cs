@@ -191,7 +191,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<DisplayLine> ToLines()
 		{
-			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray()); // Not using base.ToArray() result in stack overflow!
+			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray()); // Using this.ToArray() would result in stack overflow!
 
 			// Add current line if it contains elements:
 			if (this.currentLine.Count > 0)

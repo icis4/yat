@@ -501,6 +501,7 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
 				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
+				this.settingsInEdit.Terminal.CharReplace.HideXOnXOff       = f.SettingsResult.Terminal.CharReplace.HideXOnXOff;
 
 				// Communication:
 				this.settingsInEdit.Terminal.IO.Endianness                         = f.SettingsResult.Terminal.IO.Endianness;

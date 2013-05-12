@@ -1452,7 +1452,7 @@ namespace MKY.IO.Serial.SerialPort
 				// ensure that events are fired even for data that was enqueued above while the
 				// 'OnDataReceived' event was being handled.
 				// 
-				// Measurements 2011-04-24 on an Intel Core 2 Duo running Win7 at 2.4 GHz and 3 GB of RAM:
+				// Measurements 2011-04-24 on an Intel Core 2 Duo running Win7 at 2.4 GHz and 3.5 GB of RAM:
 				// > 0.0% CPU load in idle
 				// > Up to an short-term-average of 20% CPU load while sending a large chuck of text
 				//   (\YAT\!-SendFiles\Stress-2-Large.txt, 106 kB)

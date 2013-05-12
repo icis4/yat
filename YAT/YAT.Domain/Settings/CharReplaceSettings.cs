@@ -47,10 +47,14 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const string SpaceReplaceChar = "␣";
 
+		/// <summary></summary>
+		public const bool HideXOnXOffDefault = false;
+
 		private bool replaceControlChars;
 		private ControlCharRadix controlCharRadix;
 		private bool replaceTab;
 		private bool replaceSpace;
+		private bool hideXOnXOff;
 
 		/// <summary></summary>
 		public CharReplaceSettings()
@@ -78,6 +82,7 @@ namespace YAT.Domain.Settings
 			ControlCharRadix    = rhs.ControlCharRadix;
 			ReplaceTab          = rhs.ReplaceTab;
 			ReplaceSpace        = rhs.ReplaceSpace;
+			HideXOnXOff       = rhs.HideXOnXOff;
 
 			ClearChanged();
 		}
@@ -93,6 +98,7 @@ namespace YAT.Domain.Settings
 			ControlCharRadix    = ControlCharRadixDefault;
 			ReplaceTab          = ReplaceTabDefault;
 			ReplaceSpace        = ReplaceSpaceDefault;
+			HideXOnXOff       = HideXOnXOffDefault;
 		}
 
 		#region Properties
@@ -160,6 +166,21 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("HideXOnXOff")]
+		public virtual bool HideXOnXOff
+		{
+			get { return (this.hideXOnXOff); }
+			set
+			{
+				if (this.hideXOnXOff != value)
+				{
+					this.hideXOnXOff = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -187,7 +208,8 @@ namespace YAT.Domain.Settings
 				(ReplaceControlChars == other.ReplaceControlChars) &&
 				(ControlCharRadix    == other.ControlCharRadix) &&
 				(ReplaceTab          == other.ReplaceTab) &&
-				(ReplaceSpace        == other.ReplaceSpace)
+				(ReplaceSpace        == other.ReplaceSpace) &&
+				(HideXOnXOff       == other.HideXOnXOff)
 			);
 		}
 
@@ -207,7 +229,8 @@ namespace YAT.Domain.Settings
 				ReplaceControlChars.GetHashCode() ^
 				ControlCharRadix   .GetHashCode() ^
 				ReplaceTab         .GetHashCode() ^
-				ReplaceSpace       .GetHashCode()
+				ReplaceSpace       .GetHashCode() ^
+				HideXOnXOff      .GetHashCode()
 			);
 		}
 
