@@ -190,9 +190,11 @@ namespace YAT.Gui.Controls
 					}
 					textLength += s.Length + Environment.NewLine.Length;
 				}
+
 				if (isValid)
 				{
 					this.commandInEdit.MultiLineText = multiLineCommand.ToArray();
+					this.commandInEdit.SetDescriptionFromSingleLineText(); // Enforce "<N lines...> [...] [...] ..." description.
 					SetControls();
 				}
 				else

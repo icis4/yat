@@ -587,6 +587,12 @@ namespace YAT.Model.Types
 			this.description = "";
 		}
 
+		/// <summary></summary>
+		public virtual void SetDescriptionFromSingleLineText()
+		{
+			this.description = SingleLineText;
+		}
+
 		#endregion
 
 		#region Object Members
@@ -665,7 +671,7 @@ namespace YAT.Model.Types
 		public virtual int CompareTo(object obj)
 		{
 			Command other = obj as Command;
-			if (other != null)
+			if (other != null) // \todo (MKY 2013-05-12): Comparison should be based on 'this.commandLines'.
 				return (string.Compare(this.description, other.description, StringComparison.CurrentCulture));
 			else
 				throw (new ArgumentException("Object is not a Command entry"));
