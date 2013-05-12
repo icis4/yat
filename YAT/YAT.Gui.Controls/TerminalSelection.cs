@@ -86,8 +86,8 @@ namespace YAT.Gui.Controls
 			"   by several device manufacturers which simply need to replace an 'old fashioned' serial interfcae." + Environment.NewLine +
 			"   USB Ser/HID requires no additional driver to be installed on the computer.";
 
-		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
-		private const Domain.IOType       IOTypeDefault       = Domain.IOType.SerialPort;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
+		private const Domain.IOType       IOTypeDefault       = Domain.Settings.IOSettings.IOTypeDefault;
 
 		#endregion
 

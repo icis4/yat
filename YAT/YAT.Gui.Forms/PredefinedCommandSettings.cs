@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,10 +35,12 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
+#endregion
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
-	public partial class PredefinedCommandSettings : System.Windows.Forms.Form
+	public partial class PredefinedCommandSettings : Form
 	{
 		#region Types
 		//==========================================================================================
@@ -82,17 +89,27 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <param name="settings">Settings to be displayed.</param>
+		/// <param name="terminalType">The terminal type related to the command.</param>
+		/// <param name="parseMode">The parse mode related to the command.</param>
 		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
-		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, int requestedPage, int requestedCommand)
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, Domain.TerminalType terminalType, Domain.Parser.Modes parseMode, int requestedPage, int requestedCommand)
 		{
 			InitializeComponent();
 
 			this.settings = settings;
 			this.settingsInEdit = new Model.Settings.PredefinedCommandSettings(settings);
+
+			InitializeControls();
+
+			foreach (Controls.PredefinedCommandSettingsSet set in this.predefinedCommandSettingsSets)
+			{
+				set.TerminalType = terminalType;
+				set.ParseMode = parseMode;
+			}
+
 			this.startupControl.RequestedPage = requestedPage;
 			this.startupControl.RequestedCommand = requestedCommand;
-			InitializeControls();
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}

@@ -115,7 +115,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalType            = Domain.TerminalType.Text;
+			TerminalType            = Domain.Settings.TerminalSettings.TerminalTypefault;
 			IOType                  = Domain.IOType.SerialPort;
 
 			SerialPortId            = MKY.IO.Ports.SerialPortId.FirstStandardPort;

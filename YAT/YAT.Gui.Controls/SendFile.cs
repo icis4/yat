@@ -55,7 +55,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
 		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
 

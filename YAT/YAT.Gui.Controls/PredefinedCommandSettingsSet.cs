@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -34,6 +39,8 @@ using YAT.Gui.Utilities;
 using YAT.Model.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -68,8 +75,9 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
+		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
 		private const string ShortcutStringDefault = "Shift+F1";
-		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
 
 		#endregion
 
@@ -80,8 +88,10 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private Model.Types.Command command = new Model.Types.Command();
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
+		private Domain.Parser.Modes parseMode = ParseModeDefault;
+
+		private Model.Types.Command command = new Model.Types.Command();
 
 		private FocusState focusState = FocusState.Inactive;
 		private bool isValidated; // = false;
@@ -120,8 +130,47 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
+		[Category("Command")]
+		[Description("The terminal type related to the command.")]
+		[DefaultValue(TerminalTypeDefault)]
+		public virtual Domain.TerminalType TerminalType
+		{
+			get { return (this.terminalType); }
+			set
+			{
+				this.terminalType = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Command")]
+		[Description("The parse mode related to the command.")]
+		[DefaultValue(ParseModeDefault)]
+		public virtual Domain.Parser.Modes ParseMode
+		{
+			get { return (this.parseMode); }
+			set
+			{
+				this.parseMode = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Command")]
+		[Description("The command shortcut.")]
+		[DefaultValue(ShortcutStringDefault)]
+		public virtual string ShortcutString
+		{
+			get { return (label_Shortcut.Text); }
+			set { label_Shortcut.Text = value; }
+		}
+
 		/// <summary>
-		/// Command always returns a Command object, it never returns <c>null</c>.
+		/// This property always returns a <see cref="Model.Types.Command"/> object,
+		/// it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -138,24 +187,6 @@ namespace YAT.Gui.Controls
 				OnCommandChanged(new EventArgs());
 				SetControls();
 			}
-		}
-
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Domain.TerminalType TerminalType
-		{
-			set { this.terminalType = value; }
-		}
-
-		/// <summary></summary>
-		[Category("Command")]
-		[Description("The command shortcut.")]
-		[DefaultValue(ShortcutStringDefault)]
-		public virtual string ShortcutString
-		{
-			get { return (label_Shortcut.Text); }
-			set { label_Shortcut.Text = value; }
 		}
 
 		#endregion
@@ -276,7 +307,7 @@ namespace YAT.Gui.Controls
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, "Command", textBox_Command.Text, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateSequence(this, "Command", textBox_Command.Text, this.parseMode, out invalidTextStart, out invalidTextLength))
 				{
 					this.isValidated = true;
 
@@ -472,7 +503,7 @@ namespace YAT.Gui.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi line box:
-			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

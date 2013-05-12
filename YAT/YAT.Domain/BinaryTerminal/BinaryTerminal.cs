@@ -423,7 +423,7 @@ namespace YAT.Domain
 		// Methods > Send
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>Shall not be called if keywords are disabled.</remarks>
 		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
 		{
 			switch (result.Keyword)

@@ -55,6 +55,8 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
+		private Domain.Parser.Modes parseMode;
+
 		private Command command;
 		private Command commandInEdit;
 
@@ -66,13 +68,15 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public MultiLineBox(Command command, Point startupLocation)
+		public MultiLineBox(Command command, Point startupLocation, Domain.Parser.Modes parseMode)
 		{
 			InitializeComponent();
 
 			SuspendLayout();
 			Location = startupLocation;
 			ResumeLayout();
+
+			this.parseMode = parseMode;
 
 			this.command = command;
 			this.commandInEdit = new Command(command);
@@ -160,7 +164,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				// retrieve lines from text box with Environment.NewLine
+				// Retrieve lines from text box with Environment.NewLine:
 				StringReader reader = new StringReader(textBox_Command.Text);
 				List<string> multiLineCommand = new List<string>();
 				string line;
@@ -169,14 +173,14 @@ namespace YAT.Gui.Controls
 					multiLineCommand.Add(line);
 				}
 
-				// validate each line
+				// Validate each line:
 				bool isValid = true;
 				int textLength = 0;
 				foreach (string s in multiLineCommand)
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!Validation.ValidateSequence(this, "Command", s, out invalidTextStart, out invalidTextLength))
+					if (!Validation.ValidateSequence(this, "Command", s, this.parseMode, out invalidTextStart, out invalidTextLength))
 					{
 						invalidTextStart += textLength;
 						invalidTextLength = textBox_Command.Text.Length - invalidTextStart;

@@ -501,10 +501,10 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
 				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
-				this.settingsInEdit.Terminal.CharReplace.HideXOnXOff       = f.SettingsResult.Terminal.CharReplace.HideXOnXOff;
+				this.settingsInEdit.Terminal.CharReplace.HideXOnXOff         = f.SettingsResult.Terminal.CharReplace.HideXOnXOff;
 
 				// Communication:
-				this.settingsInEdit.Terminal.IO.Endianness                         = f.SettingsResult.Terminal.IO.Endianness;
+				this.settingsInEdit.Terminal.IO.Endianness                        = f.SettingsResult.Terminal.IO.Endianness;
 				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = f.SettingsResult.Terminal.IO.IndicateSerialPortBreakStates;
 				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
@@ -513,12 +513,11 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.Send.CopyPredefined               = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settingsInEdit.Terminal.Send.SendImmediately              = f.SettingsResult.Terminal.Send.SendImmediately;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize    = f.SettingsResult.Terminal.IO.SerialPort.MaxSendChunkSize;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak  = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 				this.settingsInEdit.Terminal.Send.DefaultDelay                 = f.SettingsResult.Terminal.Send.DefaultDelay;
 				this.settingsInEdit.Terminal.Send.DefaultLineDelay             = f.SettingsResult.Terminal.Send.DefaultLineDelay;
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-
-				// Receive:
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
+				this.settingsInEdit.Terminal.Send.DisableKeywords              = f.SettingsResult.Terminal.Send.DisableKeywords;
 
 				this.settingsInEdit.UserName = f.SettingsResult.UserName;
 			}

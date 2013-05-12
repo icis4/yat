@@ -167,7 +167,7 @@ namespace YAT.Gui.Controls
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakSequence.Text, out invalidTextStart, out invalidTextLength))
+			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakSequence.Text, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
 			{
 				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreak;
 				slb.Sequence = textBox_SequenceLineBreakSequence.Text;

@@ -308,6 +308,12 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 		}
 
+		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
+		}
+
 		private void textBox_MaxSendChunkSize_TextChanged(object sender, EventArgs e)
 		{
 			int bytes;
@@ -341,6 +347,18 @@ namespace YAT.Gui.Forms
 					e.Cancel = true;
 				}
 			}
+		}
+
+		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
+		}
+
+		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -395,22 +413,10 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_DisableKeywords_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
-		}
-
-		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
-		}
-
-		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
+				this.settingsInEdit.Terminal.Send.DisableKeywords = checkBox_DisableKeywords.Checked;
 		}
 
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)
@@ -514,7 +520,7 @@ namespace YAT.Gui.Forms
 			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharReplace.HideXOnXOff;
 
 			// Communication:
-			comboBox_Endianness.SelectedItem        = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
+			comboBox_Endianness.SelectedItem       = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
 			checkBox_IndicateBreakStates.Checked   = this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates;
 			checkBox_OutputBreakModifiable.Checked = this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
@@ -529,13 +535,21 @@ namespace YAT.Gui.Forms
 			textBox_MaxSendChunkSize.Enabled     = isSerialPort;
 			textBox_MaxSendChunkSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize.ToString(CultureInfo.InvariantCulture);
 
-			textBox_DefaultDelay.Text     = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
-			textBox_DefaultLineDelay.Text = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
-
 			checkBox_NoSendOnOutputBreak.Enabled = isSerialPort;
 			checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 			checkBox_NoSendOnInputBreak.Enabled  = isSerialPort;
 			checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
+
+			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
+			label_DefaultDelay.Enabled         = !disableKeywords;
+			label_DefaultDelayUnit.Enabled     = !disableKeywords;
+			textBox_DefaultDelay.Enabled       = !disableKeywords;
+			textBox_DefaultDelay.Text          = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
+			label_DefaultLineDelay.Enabled     = !disableKeywords;
+			label_DefaultLineDelayUnit.Enabled = !disableKeywords;
+			textBox_DefaultLineDelay.Enabled   = !disableKeywords;
+			textBox_DefaultLineDelay.Text      = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
+			checkBox_DisableKeywords.Checked   = disableKeywords;
 
 			// User:
 			textBox_UserName.Text = this.settingsInEdit.UserName;
@@ -575,10 +589,10 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
 			this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
 			this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
-			this.settingsInEdit.Terminal.CharReplace.HideXOnXOff       = Domain.Settings.CharReplaceSettings.HideXOnXOffDefault;
+			this.settingsInEdit.Terminal.CharReplace.HideXOnXOff         = Domain.Settings.CharReplaceSettings.HideXOnXOffDefault;
 
 			// Communication:
-			this.settingsInEdit.Terminal.IO.Endianness                         = Domain.Settings.IOSettings.EndiannessDefault;
+			this.settingsInEdit.Terminal.IO.Endianness                        = Domain.Settings.IOSettings.EndiannessDefault;
 			this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
 			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
@@ -587,12 +601,11 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settingsInEdit.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize    = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendChunkSizeDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak  = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 			this.settingsInEdit.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
-
-			// Receive:
-			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
+			this.settingsInEdit.Terminal.Send.DisableKeywords              = Domain.Settings.SendSettings.DisableKeywordsDefault;
 
 			// User:
 			this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;

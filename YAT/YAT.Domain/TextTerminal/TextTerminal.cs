@@ -313,7 +313,7 @@ namespace YAT.Domain
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, Parser.Modes.All, out parseResult, out textSuccessfullyParsed))
+			if (p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed))
 			{
 				foreach (Parser.Result ri in parseResult)
 				{
@@ -322,7 +322,7 @@ namespace YAT.Domain
 					{
 						ForwardDataToRawTerminal(bar.ByteArray);
 					}
-					else
+					else // if keyword result (will not occur if keywords are disabled while parsing)
 					{
 						Parser.KeywordResult kr = ri as Parser.KeywordResult;
 						if (kr != null)

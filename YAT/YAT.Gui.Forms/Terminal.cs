@@ -400,8 +400,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = this.settingsRoot.SendFile.Command.IsValidFilePath;
 
-			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked    = this.settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
 			this.isSettingControls.Leave();
@@ -2435,7 +2435,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
-			PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, page, command);
+			PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, this.settingsRoot.TerminalType, this.settingsRoot.Send.ToParseMode(), page, command);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

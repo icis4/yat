@@ -45,11 +45,15 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const int DefaultLineDelayDefault = 100;
 
+		/// <summary></summary>
+		public const bool DisableKeywordsDefault = false;
+
 		private bool keepCommand;
 		private bool copyPredefined;
 		private bool sendImmediately;
 		private int defaultDelay;
 		private int defaultLineDelay;
+		private bool disableKeywords;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -78,6 +82,7 @@ namespace YAT.Domain.Settings
 			SendImmediately  = rhs.sendImmediately;
 			DefaultDelay     = rhs.DefaultDelay;
 			DefaultLineDelay = rhs.DefaultLineDelay;
+			DisableKeywords  = rhs.DisableKeywords;
 
 			ClearChanged();
 		}
@@ -94,6 +99,7 @@ namespace YAT.Domain.Settings
 			SendImmediately  = SendImmediatelyDefault;
 			DefaultDelay     = DefaultDelayDefault;
 			DefaultLineDelay = DefaultLineDelayDefault;
+			DisableKeywords  = DisableKeywordsDefault;
 		}
 
 		#region Properties
@@ -176,6 +182,37 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("DisableKeywords")]
+		public virtual bool DisableKeywords
+		{
+			get { return (this.disableKeywords); }
+			set
+			{
+				if (this.disableKeywords != value)
+				{
+					this.disableKeywords = value;
+					SetChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual Parser.Modes ToParseMode()
+		{
+			if (DisableKeywords)
+				return (Parser.Modes.AllExceptKeywords);
+			else
+				return (Parser.Modes.All);
+		}
+
 		#endregion
 
 		#region Object Members
@@ -204,7 +241,8 @@ namespace YAT.Domain.Settings
 				(CopyPredefined   == other.CopyPredefined) &&
 				(SendImmediately  == other.SendImmediately) &&
 				(DefaultDelay     == other.DefaultDelay) &&
-				(DefaultLineDelay == other.DefaultLineDelay)
+				(DefaultLineDelay == other.DefaultLineDelay) &&
+				(DisableKeywords  == other.DisableKeywords)
 			);
 		}
 
@@ -225,7 +263,8 @@ namespace YAT.Domain.Settings
 				CopyPredefined  .GetHashCode() ^
 				SendImmediately .GetHashCode() ^
 				DefaultDelay    .GetHashCode() ^
-				DefaultLineDelay.GetHashCode()
+				DefaultLineDelay.GetHashCode() ^
+				DisableKeywords .GetHashCode()
 			);
 		}
 

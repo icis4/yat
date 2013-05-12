@@ -89,6 +89,7 @@ namespace YAT.Gui.Controls
 
 		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
+		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
 
 		/// <summary></summary>
 		public const bool SendImmediatelyDefault = false;
@@ -106,6 +107,7 @@ namespace YAT.Gui.Controls
 		private RecentItemCollection<Command> recents;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
+		private Domain.Parser.Modes parseMode = ParseModeDefault;
 
 		private FocusState editFocusState = FocusState.Inactive;
 		private bool isValidated;
@@ -186,18 +188,6 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		[DefaultValue(SendImmediatelyDefault)]
-		public virtual bool SendImmediately
-		{
-			get { return (this.sendImmediately); }
-			set
-			{
-				this.sendImmediately = value;
-				SetControls();
-			}
-		}
-
-		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Setter is intended.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
@@ -209,6 +199,34 @@ namespace YAT.Gui.Controls
 				this.recents = value;
 
 				// Don't call SetControls(), recents are shown at DropDown.
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Command")]
+		[Description("The parse mode related to the command.")]
+		[DefaultValue(ParseModeDefault)]
+		public virtual Domain.Parser.Modes ParseMode
+		{
+			get { return (this.parseMode); }
+			set
+			{
+				this.parseMode = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Command")]
+		[Description("The send mode related to the command.")]
+		[DefaultValue(SendImmediatelyDefault)]
+		public virtual bool SendImmediately
+		{
+			get { return (this.sendImmediately); }
+			set
+			{
+				this.sendImmediately = value;
+				SetControls();
 			}
 		}
 
@@ -455,7 +473,7 @@ namespace YAT.Gui.Controls
 					// Single line => Validate!
 					int invalidTextStart;
 					int invalidTextLength;
-					if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text, out invalidTextStart, out invalidTextLength))
+					if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text, this.parseMode, out invalidTextStart, out invalidTextLength))
 					{
 						this.isValidated = true;
 
@@ -625,7 +643,7 @@ namespace YAT.Gui.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi line box.
-			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

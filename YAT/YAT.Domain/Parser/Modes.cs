@@ -39,10 +39,16 @@ namespace YAT.Domain.Parser
 		AllByteArrayResults = Radix | Ascii,
 
 		/// <summary></summary>
+		AllExceptKeywords = AllByteArrayResults,
+
+		/// <summary></summary>
 		Keywords = 128,
 
 		/// <summary></summary>
 		All = AllByteArrayResults | Keywords,
+
+		/// <summary></summary>
+		Default = All,
 	}
 }
 

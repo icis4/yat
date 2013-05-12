@@ -65,6 +65,7 @@ New:
 - N/A
 
 Important changes:
+- \!(...) keywords can optionally be disabled (feature request #183)
 - Command line arguments can also be used to preset the settings of the initial 'New Terminal'
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
 - Serial COM port XOn/XOff flow control chars can optionally be hidden for 'Manual Software' and
