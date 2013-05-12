@@ -158,7 +158,7 @@ namespace YAT.Domain
 					DequeueExcessLine();
 
 				// Enqueue new line and reset current line:
-				base.Enqueue(this.currentLine.Clone()); // Clone elements to ensure decoupling.
+				base.Enqueue(this.currentLine.Clone());            // Clone elements to ensure decoupling.
 				this.lastLineAuxiliary = this.currentLine.Clone(); // Clone elements to ensure decoupling.
 				this.currentLine.Clear();
 			}

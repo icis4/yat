@@ -80,8 +80,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
 		{
-			foreach (DisplayElement de in collection)
-				Add(de.Clone()); // Clone the whole collection.
+			foreach (DisplayElement de in collection) // Clone the whole collection.
+				Add(de.Clone());
 		}
 
 		/// <summary></summary>
@@ -179,8 +179,8 @@ namespace YAT.Domain
 		{
 			DisplayElementCollection c = new DisplayElementCollection();
 
-			foreach (DisplayElement de in this)
-				c.Add(de.Clone()); // Clone the whole collection.
+			foreach (DisplayElement de in this) // Clone the whole collection.
+				c.Add(de.Clone());
 
 			return (c);
 		}
@@ -316,8 +316,8 @@ namespace YAT.Domain
 		{
 			DisplayLine dl = new DisplayLine();
 
-			foreach (DisplayElement de in this)
-				dl.Add(de.Clone()); // Clone the whole collection.
+			foreach (DisplayElement de in this) // Clone the whole collection.
+				dl.Add(de.Clone());
 
 			return (dl);
 		}
