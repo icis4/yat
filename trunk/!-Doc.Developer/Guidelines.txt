@@ -236,6 +236,11 @@ Properties
   to improve readability and reduce the risk of copy-paste errors.
 
 
+Console
+-------
+- Use Console.Out or Console.Error to emphasize the output stream, do not use Console itself.
+
+
 Useful .NET classes
 -------------------
 - Console.Title/.ForegroundColor/.ResetColor
