@@ -34,19 +34,19 @@ namespace MKY.IO.Usb.Demo
 			DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
 			devices.FillWithAvailableDevices();
 
-			Console.WriteLine();
-			Console.WriteLine("USB HID Devices");
+			Console.Out.WriteLine();
+			Console.Out.WriteLine("USB HID Devices");
 			foreach (DeviceInfo device in devices)
 			{
-				Console.Write(" + ");
-				Console.WriteLine(device.ToString());
-				Console.Write("   ");
-				Console.WriteLine(device.Path);
+				Console.Out.Write(" + ");
+				Console.Out.WriteLine(device.ToString());
+				Console.Out.Write("   ");
+				Console.Out.WriteLine(device.Path);
 			}
-			Console.WriteLine();
+			Console.Out.WriteLine();
 
-			Console.WriteLine("Press <Enter> to exit.");
-			Console.ReadLine();
+			Console.Out.WriteLine("Press <Enter> to exit.");
+			Console.In.ReadLine();
 		}
 	}
 }

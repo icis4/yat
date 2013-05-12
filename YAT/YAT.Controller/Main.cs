@@ -553,10 +553,10 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
-					Console.WriteLine(message);
+					Console.Error.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -584,10 +584,10 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
-					Console.WriteLine(message);
+					Console.Error.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -600,11 +600,11 @@ namespace YAT.Controller
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous synchronized exception occurred while running " + Application.ProductName + ".";
-			Console.WriteLine(message);
+			Console.Error.WriteLine(message);
 
 			Exception ex = e.Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 		/// <remarks>
@@ -613,11 +613,11 @@ namespace YAT.Controller
 		private void RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
-			Console.WriteLine(message);
+			Console.Error.WriteLine(message);
 
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 		#endregion
@@ -657,10 +657,10 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
-					Console.WriteLine(message);
+					Console.Error.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -676,9 +676,9 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
-					Console.WriteLine(message);
+					Console.Error.WriteLine(message);
 
-					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -691,11 +691,11 @@ namespace YAT.Controller
 		private void RunFullyFromConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
-			Console.WriteLine(message);
+			Console.Error.WriteLine(message);
 
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex); // Message has already been output onto console.
+				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 		#endregion
@@ -732,7 +732,7 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
-					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex, message);
+					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (MainResult.UnhandledException);
 				}
@@ -748,7 +748,7 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
-					MKY.Diagnostics.ConsoleEx.WriteException(GetType(), ex, message);
+					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (MainResult.UnhandledException);
 				}
@@ -807,17 +807,17 @@ namespace YAT.Controller
 		/// </remarks>
 		private static void WriteLogoToConsole()
 		{
-			Console.WriteLine();
-			Console.WriteLine();
-			Console.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
-			Console.WriteLine();
+			Console.Out.WriteLine();
+			Console.Out.WriteLine();
+			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
+			Console.Out.WriteLine();
 
 			foreach (string line in Logo)
-				Console.WriteLine(line);
+				Console.Out.WriteLine(line);
 
-			Console.WriteLine();
-			Console.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
-			Console.WriteLine();
+			Console.Out.WriteLine();
+			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
+			Console.Out.WriteLine();
 		}
 
 		/// <remarks>
@@ -827,7 +827,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void WriteHelpToConsole()
 		{
-			Console.Write(this.commandLineArgs.GetHelpText(Console.WindowWidth - 1));
+			Console.Out.Write(this.commandLineArgs.GetHelpText(Console.WindowWidth - 1));
 		}
 
 		/// <remarks>
@@ -837,12 +837,12 @@ namespace YAT.Controller
 		/// </remarks>
 		private static void WriteReturnToConsole()
 		{
-			Console.WriteLine();
+			Console.Out.WriteLine();
 			foreach (string line in Return)
-				Console.WriteLine(line);
+				Console.Out.WriteLine(line);
 
-			Console.WriteLine();
-			Console.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
+			Console.Out.WriteLine();
+			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 		}
 
 		#endregion

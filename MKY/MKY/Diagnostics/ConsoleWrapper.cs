@@ -22,7 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace MKY.Diagnostics
@@ -33,6 +33,24 @@ namespace MKY.Diagnostics
 	/// </summary>
 	public class ConsoleWrapper : IDiagnosticsWriter
 	{
+		#region Writer
+		//==========================================================================================
+		// Writer
+		//==========================================================================================
+
+		private TextWriter console;
+
+		/// <summary>
+		/// Initializes this wrapper and sets the console writer.
+		/// Standard writers are <see cref="Console.Out"/> and <see cref="Console.Error"/>.
+		/// </summary>
+		public ConsoleWrapper(TextWriter console)
+		{
+			this.console = console;
+		}
+
+		#endregion
+
 		#region Indent
 		//==========================================================================================
 		// Indent
@@ -108,7 +126,8 @@ namespace MKY.Diagnostics
 			if (this.beginOfLine)
 				WriteIndent();
 
-			Console.Write(message);
+			if (this.console != null)
+				this.console.Write(message);
 		}
 
 		/// <summary>
@@ -120,7 +139,9 @@ namespace MKY.Diagnostics
 			if (this.beginOfLine)
 				WriteIndent();
 
-			Console.WriteLine(message);
+			if (this.console != null)
+				this.console.WriteLine(message);
+
 			this.beginOfLine = true;
 		}
 
@@ -128,10 +149,13 @@ namespace MKY.Diagnostics
 		/// Writes <see cref="IndentLevel"/> times <see cref="IndentSize"/> spaces to the
 		/// diagnostics listeners.
 		/// </summary>
-		public virtual void WriteIndent()
+		protected virtual void WriteIndent()
 		{
-			for (int i = 0; i < this.indentLevel; i++)
-				Console.Write(this.indentString);
+			if (this.console != null)
+			{
+				for (int i = 0; i < this.indentLevel; i++)
+					this.console.Write(this.indentString);
+			}
 
 			this.beginOfLine = false;
 		}

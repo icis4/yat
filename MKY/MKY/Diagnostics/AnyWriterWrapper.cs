@@ -147,13 +147,14 @@ namespace MKY.Diagnostics
 		/// Writes <see cref="IndentLevel"/> times <see cref="IndentSize"/> spaces to the
 		/// diagnostics listeners.
 		/// </summary>
-		public virtual void WriteIndent()
+		protected virtual void WriteIndent()
 		{
 			if (this.writer != null)
 			{
 				for (int i = 0; i < this.indentLevel; i++)
 					this.writer.Write(this.indentString);
 			}
+
 			this.beginOfLine = false;
 		}
 
