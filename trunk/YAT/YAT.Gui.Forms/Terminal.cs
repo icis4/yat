@@ -2846,15 +2846,15 @@ namespace YAT.Gui.Forms
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display elements immediately.
-			monitor_Tx.AddElements(e.Elements);
-			monitor_Bidir.AddElements(e.Elements);
+			monitor_Tx.AddElements(e.Elements.Clone());    // Clone elements to ensure decoupling from event source.
+			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 		}
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display elements immediately.
-			monitor_Bidir.AddElements(e.Elements);
-			monitor_Rx.AddElements(e.Elements);
+			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
+			monitor_Rx.AddElements(e.Elements.Clone());    // Clone elements to ensure decoupling from event source.
 		}
 
 		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)

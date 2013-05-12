@@ -161,7 +161,7 @@ namespace YAT.Gui.Controls
 		private long updateTickStamp;
 		private long updateTickInterval;
 		private bool performImmediateUpdate;
-		private List<object> pendingElementsAndLines = new List<object>();
+		private List<object> pendingElementsAndLines = new List<object>(32); // The initial capacity typically is 4, that's rather small.
 
 		#endregion
 
@@ -494,25 +494,25 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
-			AddElementsOrLines(element.Clone()); // Clone element to ensure decoupling from caller.
+			AddElementsOrLines(element);
 		}
 
 		/// <summary></summary>
 		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
-			AddElementsOrLines(new List<Domain.DisplayElement>(elements)); // Clone elements to ensure decoupling from caller.
+			AddElementsOrLines(elements);
 		}
 
 		/// <summary></summary>
 		public virtual void AddLine(Domain.DisplayLine line)
 		{
-			AddElementsOrLines(line.Clone()); // Clone line to ensure decoupling from caller.
+			AddElementsOrLines(line);
 		}
 
 		/// <summary></summary>
 		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
-			AddElementsOrLines(new List<Domain.DisplayLine>(lines)); // Clone lines to ensure decoupling from caller.
+			AddElementsOrLines(lines);
 		}
 
 		/// <summary></summary>
@@ -526,7 +526,7 @@ namespace YAT.Gui.Controls
 		{
 			ListBox lb = fastListBox_Monitor;
 
-			// Retrieve lines from list box.
+			// Retrieve lines from list box:
 			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
 			foreach (object item in lb.Items)
 			{
@@ -534,7 +534,7 @@ namespace YAT.Gui.Controls
 				lines.Add(line);
 			}
 
-			// Clear everything and perform reload.
+			// Clear everything and perform reload:
 			Clear();
 			AddLines(lines);
 		}
@@ -1015,8 +1015,8 @@ namespace YAT.Gui.Controls
 		{
 			this.pendingElementsAndLines.Add(elementsOrLines);
 
-			// Either perform the update or arm the update timeout to ensure that update
-			// will be performed later.
+			// Either perform the update...
+			// ...or arm the update timeout to ensure that update will be performed later:
 			if (UpdateHasToBePerformed())
 				UpdateFastListBoxWithPendingElementsAndLines();
 			else

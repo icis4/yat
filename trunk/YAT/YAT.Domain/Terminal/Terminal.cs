@@ -875,6 +875,12 @@ namespace YAT.Domain
 		{
 			bool replaceToAscii = ((TerminalSettings.CharReplace.ReplaceControlChars) &&
 								   (TerminalSettings.CharReplace.ControlCharRadix == ControlCharRadix.AsciiMnemonic));
+			bool hideXOnXOff    =  (TerminalSettings.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually &&
+								    TerminalSettings.CharReplace.HideXOnXOff);
+
+			bool isControlChar = ((b  < 0x20) || (b == 0x7F));
+			bool isXOnXOffChar = ((b == 0x11) || (b == 0x13));
+
 			bool error = false;
 			string text = "";
 
@@ -885,12 +891,19 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					if ((b < 0x20) || (b == 0x7F)) // Control chars.
+					if (isControlChar)
 					{
-						if (replaceToAscii)
-							text = ByteToAsciiString(b);
+						if (isXOnXOffChar && hideXOnXOff)
+						{
+							// Do nothing, ignore the character, this results in hiding.
+						}
 						else
-							text = ByteToNumericRadixString(b, r);
+						{
+							if (replaceToAscii)
+								text = ByteToAsciiString(b);
+							else
+								text = ByteToNumericRadixString(b, r);
+						}
 					}
 					else
 					{
@@ -901,25 +914,32 @@ namespace YAT.Domain
 				case Radix.Char:
 				case Radix.String:
 				{
-					if ((b < 0x20) || (b == 0x7F)) // Control chars.
+					if (isControlChar)
 					{
-						if (replaceToAscii)
+						if (isXOnXOffChar && hideXOnXOff)
 						{
-							text = ByteToAsciiString(b);
+							// Do nothing, ignore the character, this results in hiding.
 						}
 						else
 						{
-							error = true; // Signal error.
-							if (d == SerialDirection.Tx)
-								text = "Sent";
+							if (replaceToAscii)
+							{
+								text = ByteToAsciiString(b);
+							}
 							else
-								text = "Received";
-							text += " ASCII control char";
-							text += " <" + b.ToString("X2", CultureInfo.InvariantCulture) + "h>";
-							text += " cannot be displayed in current settings";
+							{
+								error = true; // Signal error.
+								if (d == SerialDirection.Tx)
+									text = "Sent";
+								else
+									text = "Received";
+								text += " ASCII control character";
+								text += " <" + b.ToString("X2", CultureInfo.InvariantCulture) + "h>";
+								text += " cannot be displayed in the current settings, enable control character replacement to do so";
+							}
 						}
 					}
-					else if (b == 0x20) // Space.
+					else if (b == ' ') // Space.
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
 							text = Settings.CharReplaceSettings.SpaceReplaceChar;
@@ -937,14 +957,14 @@ namespace YAT.Domain
 
 			if (!error)
 			{
-				if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab) // Tab.
+				if ((b == '\t') && !this.terminalSettings.CharReplace.ReplaceTab) // Tab.
 				{
 					if (d == SerialDirection.Tx)
 						return (new DisplayElement.TxData(b, text));
 					else
 						return (new DisplayElement.RxData(b, text));
 				}
-				else if ((b < 0x20) || (b == 0x7F)) // Control chars.
+				else if (isControlChar)
 				{
 					if (d == SerialDirection.Tx)
 						return (new DisplayElement.TxControl(b, text));
