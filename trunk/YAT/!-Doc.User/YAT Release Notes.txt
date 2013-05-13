@@ -70,6 +70,9 @@ Important changes:
   'Manual Combined' (feature request #190)
 - Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and
   'Manual Combined', this is due to a limitation of the .NET/Win32 serial port driver (bug #214)
+- USB Ser/HID now limits the available devices to those reporting 'GenericDesktopControls' HID usage
+  page and 'Undefined' HID usage (related to feature request #193)
+- USB Ser/HID input and output format flexibilized to prepare for feature request #193
 - Format exceptions while sending are now reported as error messages within the terminal (bug #270)
 - Command line arguments can also be used to preset the settings of the initial 'New Terminal'
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
