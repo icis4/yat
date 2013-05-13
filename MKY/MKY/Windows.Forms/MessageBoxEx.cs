@@ -60,6 +60,8 @@ namespace MKY.Windows.Forms
 			if (IsRightToLeft(owner))
 				options |= (MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign);
 
+			MKY.Diagnostics.DebugEx.WriteStack(typeof(MessageBoxEx));
+
 			return (MessageBox.Show(owner, text, caption, buttons, icon, defaultButton, options));
 		}
 

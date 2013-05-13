@@ -115,10 +115,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public static new DeviceInfo[] GetDevices()
 		{
-			// \fixme (2010-04-02 / mky):
-			// Ser/HID should be Generic/Undefined
-			//return (HidDevice.GetDevices(HidUsagePage.GenericDesktopControls, HidUsage.Undefined));
-			return (HidDevice.GetDevices());
+			return (HidDevice.GetDevices(HidUsagePage.GenericDesktopControls, HidUsage.Undefined));
 		}
 
 		#endregion
@@ -714,7 +711,7 @@ namespace MKY.IO.Usb
 
 					// Convert the input report into usable data.
 					HidInputReportContainer input = new HidInputReportContainer(this);
-					input.CreateDataFromReport(inputReportBuffer);
+					input.CreateDataFromReport(inputReportBuffer, true);
 
 					// Don't care about report ID, Ser/HID only supports report 0.
 
