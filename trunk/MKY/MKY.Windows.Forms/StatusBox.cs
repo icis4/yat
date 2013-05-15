@@ -244,20 +244,33 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public static void AcceptAndClose()
 		{
-			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
-			if (sinkTarget != null)
+			try
 			{
-				DialogResult dialogResult = DialogResult.OK;
-				if (sinkTarget.InvokeRequired)
+				ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+				if (sinkTarget != null)
 				{
-					DialogResultMethodDelegate del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
-					object[] args = { dialogResult };
-					sinkTarget.Invoke(del, args);
+					DialogResult dialogResult = DialogResult.OK;
+					if (sinkTarget.InvokeRequired)
+					{
+						DialogResultMethodDelegate del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
+						object[] args = { dialogResult };
+						sinkTarget.Invoke(del, args);
+					}
+					else
+					{
+						staticStatusBox.RequestClose(dialogResult);
+					}
 				}
-				else
-				{
-					staticStatusBox.RequestClose(dialogResult);
-				}
+			}
+			catch (Exception ex)
+			{
+				// \fixme (2013-01-03 / mky)
+				// A better solution than this try/catch should be found to deal with infrequently
+				// happening invocation exceptions, but for the moment it is better to catch than
+				// do nothing...
+				// The proper solution would be to implement this status box without any static
+				// field. Maybe a good implementation can be found online.
+				DebugEx.WriteException(typeof(StatusBox), ex);
 			}
 		}
 
