@@ -980,11 +980,11 @@ namespace MKY.Win32
 
 			System.Diagnostics.Debug.WriteLine("USB device capabilities:");
 			System.Diagnostics.Debug.Indent();
-			System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage    .ToString("X2", CultureInfo.InvariantCulture));
-			System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2", CultureInfo.InvariantCulture));
-			System.Diagnostics.Debug.WriteLine("Input Report byte Length:        " + capabilities.InputReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Output Report byte Length:       " + capabilities.OutputReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Feature Report byte Length:      " + capabilities.FeatureReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Usage:                         0x" + capabilities.Usage    .ToString("X2", CultureInfo.InvariantCulture));
+			System.Diagnostics.Debug.WriteLine("Usage Page:                    0x" + capabilities.UsagePage.ToString("X2", CultureInfo.InvariantCulture));
+			System.Diagnostics.Debug.WriteLine("Input Report Byte Length:        " + capabilities.InputReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Output Report Byte Length:       " + capabilities.OutputReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Feature Report Byte Length:      " + capabilities.FeatureReportByteLength);
 			System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
 			System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
 			System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);

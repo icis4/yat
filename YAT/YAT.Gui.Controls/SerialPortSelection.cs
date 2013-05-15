@@ -136,6 +136,12 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		/// <summary>
+		/// Only set device list and controls once as soon as this control is enabled. This saves
+		/// some time on startup since scanning for the ports takes quite some time.
+		/// </summary>
+		private bool deviceListIsInitialized; // = false;
+
 		private SettingControlsHelper isSettingControls;
 
 		/// <remarks>
@@ -250,8 +256,15 @@ namespace YAT.Gui.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetSerialPortList();
 				SetControls();
+			}
+
+			// Ensure that device list is set as soon as this control gets enabled. Could
+			// also be implemented in a EnabledChanged event handler. However, it's easier
+			// to implement this here so it also done on initial Paint event.
+			if (Enabled && !this.deviceListIsInitialized)
+			{
+				SetSerialPortList();
 			}
 		}
 
@@ -342,6 +355,31 @@ namespace YAT.Gui.Controls
 		// Private Methods
 		//==========================================================================================
 
+		/// <remarks>
+		/// Without precaution, and in case of no devices, the message box may appear twice due to
+		/// the recursion shown below:
+		///  > MKY.Diagnostics.DebugEx.WriteStack(Type type)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		///  > YAT.Gui.Controls.SerialPortSelection.SetSerialPortList()
+		///  > YAT.Gui.Controls.SerialPortSelection.SerialPortSelection_Paint(Object sender, PaintEventArgs e)
+		///  > System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer, Boolean disposeEventArgs)
+		///  > System.Windows.Forms.Control.WmPaint(Message& m)
+		///  > System.Windows.Forms.Control.WndProc(Message& m)
+		///  > System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+		///  > System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+		///  > System.Windows.Forms.MessageBox.ShowCore(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, Boolean showHelp)
+		///  > System.Windows.Forms.MessageBox.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		///  > YAT.Gui.Controls.SerialPortSelection.SetSerialPortList()
+		///  > YAT.Gui.Controls.SerialPortSelection.RefreshSerialPortList()
+		/// This issue is fixed by setting 'this.deviceListIsInitialized' upon entering this method.
+		/// 
+		/// Note that the same fix has been implemented in <see cref="UsbSerialHidDeviceSelection"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetSerialPortList()
@@ -349,6 +387,7 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
+				this.deviceListIsInitialized = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
 
 				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
@@ -361,6 +400,7 @@ namespace YAT.Gui.Controls
 					// Fill list with available ports.
 					{
 						// Install timer which shows a dialog if filling takes more than 150 ms.
+						// 150 ms because that's the standard time until a human notices a delay.
 						timer_ShowFillDialog.Start();
 
 						// Start scanning on different thread.
@@ -380,6 +420,7 @@ namespace YAT.Gui.Controls
 					if (ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse)
 					{
 						// Install timer which shows a dialog if scanning takes more than 150 ms.
+						// 150 ms because that's the standard time until a human notices a delay.
 						timer_ShowScanDialog.Start();
 
 						// Start scanning on different thread.

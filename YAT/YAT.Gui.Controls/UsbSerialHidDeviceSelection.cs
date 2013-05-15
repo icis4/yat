@@ -48,6 +48,12 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		/// <summary>
+		/// Only set device list and controls once as soon as this control is enabled. This saves
+		/// some time on startup since scanning for the ports takes quite some time.
+		/// </summary>
+		private bool deviceListIsInitialized; // = false;
+
 		private SettingControlsHelper isSettingControls;
 
 		private DeviceInfo deviceInfo; // = null;
@@ -142,12 +148,6 @@ namespace YAT.Gui.Controls
 		private bool isStartingUp = true;
 
 		/// <summary>
-		/// Only set device list and controls once as soon as this control is enabled. This saves
-		/// some time on startup since scanning for the ports takes quite some time.
-		/// </summary>
-		private bool deviceListIsInitialized; // = false;
-
-		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		/// <remarks>
@@ -162,8 +162,8 @@ namespace YAT.Gui.Controls
 				SetControls();
 			}
 
-			// Ensure that device list is set as soon as this control gets enabled.
-			// Could also be implemented in a EnabledChanged event handler. However, it's easier
+			// Ensure that device list is set as soon as this control gets enabled. Could
+			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial Paint event.
 			if (Enabled && !this.deviceListIsInitialized)
 			{
@@ -227,6 +227,8 @@ namespace YAT.Gui.Controls
 		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.SetDeviceList()
 		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.RefreshDeviceList()
 		/// This issue is fixed by setting 'this.deviceListIsInitialized' upon entering this method.
+		/// 
+		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/>.
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetDeviceList()
