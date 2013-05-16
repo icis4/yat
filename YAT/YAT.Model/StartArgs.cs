@@ -118,6 +118,14 @@ namespace YAT.Model
 
 			return (args);
 		}
+
+		/// <summary>
+		/// Returns whether user or other interaction shall be permitted.
+		/// </summary>
+		public bool Interactive
+		{
+			get { return (!(NonInteractive)); }
+		}
 	}
 
 	/// <summary></summary>
@@ -149,6 +157,14 @@ namespace YAT.Model
 
 			return (args);
 		}
+
+		/// <summary>
+		/// Returns whether user or other interaction shall be permitted.
+		/// </summary>
+		public bool Interactive
+		{
+			get { return (!(NonInteractive)); }
+		}
 	}
 
 	/// <summary></summary>
@@ -168,6 +184,14 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		public bool NonInteractive;
+
+		/// <summary>
+		/// Returns whether user or other interaction shall be permitted.
+		/// </summary>
+		public bool Interactive
+		{
+			get { return (!(NonInteractive)); }
+		}
 	}
 }
 
