@@ -284,7 +284,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the YAT application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
 			"For YAT.exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
-			"For YATConsole.exe, interaction is disabled by default.")]
+			"For YATConsole.exe, interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
 
 		#endregion

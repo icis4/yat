@@ -506,8 +506,11 @@ namespace YAT.Model
 				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
-			// Prio 8 = Show 'New Terminal' dialog:
-			if (this.startArgs.TerminalSettings == null)
+			// Prio 8 = Show 'New Terminal' dialog, but only if interactive is permissible:
+			//          \remind MKY 2013-05-16:
+			//                      Check whether NewTerminal dialog can happen here,
+			//                      standard case is handled further above.
+			if ((this.startArgs.TerminalSettings == null) && (this.startArgs.Interactive))
 			{
 				this.startArgs.ShowNewTerminalDialog = true;
 				this.startArgs.KeepOpen              = true;

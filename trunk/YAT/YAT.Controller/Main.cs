@@ -301,9 +301,9 @@ namespace YAT.Controller
 				showHelp = this.commandLineArgs.HelpIsRequested;
 			}
 
-			// Default 'NonInteractive' option depending on execution origin:
-			if (!this.commandLineArgs.OptionIsGiven("NonInteractive"))
-				this.commandLineArgs.NonInteractive = runFromConsole;
+			// Default 'NonInteractive' in case of console execution:
+			if (runFromConsole)
+				this.commandLineArgs.NonInteractive = true;
 
 			// Show help or run application:
 			if (showHelp)
