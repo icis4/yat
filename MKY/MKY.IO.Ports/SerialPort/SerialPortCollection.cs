@@ -75,24 +75,24 @@ namespace MKY.IO.Ports
 			Sort();
 
 			if (getPortDescriptionsFromSystem)
-				GetPortDescriptionsFromSystem();
+				GetPortCaptionsFromSystem();
 		}
 
 		/// <summary>
-		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to description
+		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to caption
 		/// that is associated with the serial port.
 		/// </summary>
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public virtual void GetPortDescriptionsFromSystem()
+		public virtual void GetPortCaptionsFromSystem()
 		{
-			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
+			Dictionary<string, string> descriptions = SerialPortSearcher.GetCaptionsFromSystem();
 
 			foreach (SerialPortId portId in this)
 			{
 				if (descriptions.ContainsKey(portId.Name))
-					portId.SetDescriptionFromSystem(descriptions[portId.Name]);
+					portId.SetCaptionFromSystem(descriptions[portId.Name]);
 			}
 		}
 

@@ -159,6 +159,12 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
 		}
 
+		private void checkBox_RetrieveSerialPortCaptions_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.General.RetrieveSerialPortCaptions = checkBox_RetrieveSerialPortCaptions.Checked;
+		}
+
 		private void checkBox_DetectSerialPortsInUse_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -220,7 +226,8 @@ namespace YAT.Gui.Forms
 			checkBox_AutoSaveWorkspace.Checked = this.settingsInEdit.General.AutoSaveWorkspace;
 			checkBox_UseRelativePaths.Checked  = this.settingsInEdit.General.UseRelativePaths;
 
-			checkBox_DetectSerialPortsInUse.Checked = this.settingsInEdit.General.DetectSerialPortsInUse;
+			checkBox_RetrieveSerialPortCaptions.Checked = this.settingsInEdit.General.RetrieveSerialPortCaptions;
+			checkBox_DetectSerialPortsInUse.Checked     = this.settingsInEdit.General.DetectSerialPortsInUse;
 
 			this.isSettingControls.Leave();
 		}

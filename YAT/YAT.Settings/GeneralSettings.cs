@@ -45,6 +45,7 @@ namespace YAT.Settings
 		private bool autoOpenWorkspace;
 		private bool autoSaveWorkspace;
 		private bool useRelativePaths;
+		private bool retrieveSerialPortCaptions;
 		private bool detectSerialPortsInUse;
 
 		/// <summary></summary>
@@ -69,10 +70,11 @@ namespace YAT.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			AutoOpenWorkspace      = rhs.AutoOpenWorkspace;
-			AutoSaveWorkspace      = rhs.AutoSaveWorkspace;
-			UseRelativePaths       = rhs.UseRelativePaths;
-			DetectSerialPortsInUse = rhs.DetectSerialPortsInUse;
+			AutoOpenWorkspace          = rhs.AutoOpenWorkspace;
+			AutoSaveWorkspace          = rhs.AutoSaveWorkspace;
+			UseRelativePaths           = rhs.UseRelativePaths;
+			RetrieveSerialPortCaptions = rhs.RetrieveSerialPortCaptions;
+			DetectSerialPortsInUse     = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
 		}
@@ -84,10 +86,11 @@ namespace YAT.Settings
 		{
 			base.SetMyDefaults();
 
-			AutoOpenWorkspace      = true;
-			AutoSaveWorkspace      = true;
-			UseRelativePaths       = true;
-			DetectSerialPortsInUse = true;
+			AutoOpenWorkspace          = true;
+			AutoSaveWorkspace          = true;
+			UseRelativePaths           = true;
+			RetrieveSerialPortCaptions = true;
+			DetectSerialPortsInUse     = true;
 		}
 
 		#region Properties
@@ -148,6 +151,21 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("RetrieveSerialPortCaptions")]
+		public virtual bool RetrieveSerialPortCaptions
+		{
+			get { return (this.retrieveSerialPortCaptions); }
+			set
+			{
+				if (this.retrieveSerialPortCaptions != value)
+				{
+					this.retrieveSerialPortCaptions = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("DetectSerialPortsInUse")]
 		public virtual bool DetectSerialPortsInUse
 		{
@@ -186,10 +204,11 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(AutoOpenWorkspace      == other.AutoOpenWorkspace) &&
-				(AutoSaveWorkspace      == other.AutoSaveWorkspace) &&
-				(UseRelativePaths       == other.UseRelativePaths) &&
-				(DetectSerialPortsInUse == other.DetectSerialPortsInUse)
+				(AutoOpenWorkspace          == other.AutoOpenWorkspace) &&
+				(AutoSaveWorkspace          == other.AutoSaveWorkspace) &&
+				(UseRelativePaths           == other.UseRelativePaths) &&
+				(RetrieveSerialPortCaptions == other.RetrieveSerialPortCaptions) &&
+				(DetectSerialPortsInUse     == other.DetectSerialPortsInUse)
 			);
 		}
 
@@ -206,10 +225,11 @@ namespace YAT.Settings
 			(
 				base.GetHashCode() ^
 
-				AutoOpenWorkspace     .GetHashCode() ^
-				AutoSaveWorkspace     .GetHashCode() ^
-				UseRelativePaths      .GetHashCode() ^
-				DetectSerialPortsInUse.GetHashCode()
+				AutoOpenWorkspace         .GetHashCode() ^
+				AutoSaveWorkspace         .GetHashCode() ^
+				UseRelativePaths          .GetHashCode() ^
+				RetrieveSerialPortCaptions.GetHashCode() ^
+				DetectSerialPortsInUse    .GetHashCode()
 			);
 		}
 

@@ -34,7 +34,7 @@
 			this.label_Port = new System.Windows.Forms.Label();
 			this.timer_ShowScanDialog = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.timer_ShowFillDialog = new System.Windows.Forms.Timer(this.components);
+			this.timer_ShowRetrieveDialog = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// button_RefreshPorts
@@ -74,10 +74,10 @@
 			this.timer_ShowScanDialog.Interval = 150;
 			this.timer_ShowScanDialog.Tick += new System.EventHandler(this.timer_ShowScanDialog_Tick);
 			// 
-			// timer_ShowFillDialog
+			// timer_ShowRetrieveDialog
 			// 
-			this.timer_ShowFillDialog.Interval = 150;
-			this.timer_ShowFillDialog.Tick += new System.EventHandler(this.timer_ShowFillDialog_Tick);
+			this.timer_ShowRetrieveDialog.Interval = 150;
+			this.timer_ShowRetrieveDialog.Tick += new System.EventHandler(this.timer_ShowRetrieveDialog_Tick);
 			// 
 			// SerialPortSelection
 			// 
@@ -102,6 +102,6 @@
 		private System.Windows.Forms.Label label_Port;
 		private System.Windows.Forms.Timer timer_ShowScanDialog;
 		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.Timer timer_ShowFillDialog;
+		private System.Windows.Forms.Timer timer_ShowRetrieveDialog;
 	}
 }

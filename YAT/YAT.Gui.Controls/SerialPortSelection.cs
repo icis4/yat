@@ -52,12 +52,12 @@ namespace YAT.Gui.Controls
 		// Types
 		//==========================================================================================
 
-		private class FillPortsThread
+		private class RetrievePortCaptionsThread
 		{
 			private SerialPortCollection ports;
-			private bool isFilling = true;
+			private bool isRetrieving = true;
 
-			public FillPortsThread(SerialPortCollection ports)
+			public RetrievePortCaptionsThread(SerialPortCollection ports)
 			{
 				this.ports = ports;
 			}
@@ -67,15 +67,15 @@ namespace YAT.Gui.Controls
 				get { return (this.ports); }
 			}
 
-			public virtual bool IsFilling
+			public virtual bool IsRetrieving
 			{
-				get { return (this.isFilling); }
+				get { return (this.isRetrieving); }
 			}
 
-			public virtual void FillWithAvailablePorts()
+			public virtual void GetPortCaptionsFromSystem()
 			{
-				this.ports.FillWithAvailablePorts(true);
-				this.isFilling = false;
+				this.ports.GetPortCaptionsFromSystem();
+				this.isRetrieving = false;
 
 				StatusBox.AcceptAndClose();
 			}
@@ -151,7 +151,7 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private SerialPortId portId = SerialPortId.FirstStandardPort;
 
-		private FillPortsThread fillPortsThread;
+		private RetrievePortCaptionsThread retrieveDescriptionsThread;
 		private MarkPortsInUseThread markPortsInUseThread;
 
 		#endregion
@@ -327,9 +327,9 @@ namespace YAT.Gui.Controls
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Only used to temporarily display a modal dialog.")]
-		private void timer_ShowFillDialog_Tick(object sender, EventArgs e)
+		private void timer_ShowRetrieveDialog_Tick(object sender, EventArgs e)
 		{
-			timer_ShowFillDialog.Stop();
+			timer_ShowRetrieveDialog.Stop();
 
 			StatusBox.Show(this, "Retrieving ports...", "Serial Ports");
 		}
@@ -365,9 +365,9 @@ namespace YAT.Gui.Controls
 		///  > YAT.Gui.Controls.SerialPortSelection.SetSerialPortList()
 		///  > YAT.Gui.Controls.SerialPortSelection.SerialPortSelection_Paint(Object sender, PaintEventArgs e)
 		///  > System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer, Boolean disposeEventArgs)
-		///  > System.Windows.Forms.Control.WmPaint(Message& m)
-		///  > System.Windows.Forms.Control.WndProc(Message& m)
-		///  > System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+		///  > System.Windows.Forms.Control.WmPaint(Message m)
+		///  > System.Windows.Forms.Control.WndProc(Message m)
+		///  > System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message m)
 		///  > System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
 		///  > System.Windows.Forms.MessageBox.ShowCore(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, Boolean showHelp)
 		///  > System.Windows.Forms.MessageBox.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
@@ -398,23 +398,26 @@ namespace YAT.Gui.Controls
 				try
 				{
 					// Fill list with available ports.
+					ports.FillWithAvailablePorts(false);
+
+					if (ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions)
 					{
 						// Install timer which shows a dialog if filling takes more than 150 ms.
 						// 150 ms because that's the standard time until a human notices a delay.
-						timer_ShowFillDialog.Start();
+						timer_ShowRetrieveDialog.Start();
 
-						// Start scanning on different thread.
-						this.fillPortsThread = new FillPortsThread(ports);
-						Thread t = new Thread(new ThreadStart(this.fillPortsThread.FillWithAvailablePorts));
+						// Start retrieving on different thread.
+						this.retrieveDescriptionsThread = new RetrievePortCaptionsThread(ports);
+						Thread t = new Thread(new ThreadStart(this.retrieveDescriptionsThread.GetPortCaptionsFromSystem));
 						t.Start();
 
-						while (this.fillPortsThread.IsFilling)
+						while (this.retrieveDescriptionsThread.IsRetrieving)
 							Application.DoEvents();
 
 						t.Join();
 
 						// Cleanup.
-						timer_ShowFillDialog.Stop();
+						timer_ShowRetrieveDialog.Stop();
 					}
 
 					if (ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse)
