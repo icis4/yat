@@ -43,17 +43,19 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to description
+		/// Queries WMI (Windows Management Instrumentation) trying to retrieve the captions
 		///   that is associated with the serial ports.
 		/// </summary>
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
+		/// 
+		/// WMI calls the captions 'descriptions'. But from a user's point of view these are rather captions.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Emphasizes that this is a call to underlying system functions.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static Dictionary<string, string> GetDescriptionsFromSystem()
+		public static Dictionary<string, string> GetCaptionsFromSystem()
 		{
-			Dictionary<string, string> descriptions = new Dictionary<string, string>();
+			Dictionary<string, string> result = new Dictionary<string, string>();
 
 			try
 			{
@@ -80,8 +82,8 @@ namespace MKY.IO.Ports
 									{
 										// Retrieve description.
 										string portName = SerialPortId.StandardPortNumberToString(portNumber);
-										if (!descriptions.ContainsKey(portName))
-											descriptions.Add(portName, obj["Description"].ToString());
+										if (!result.ContainsKey(portName))
+											result.Add(portName, obj["Description"].ToString());
 									}
 								}
 							}
@@ -109,8 +111,8 @@ namespace MKY.IO.Ports
 								{
 									// Retrieve description.
 									string portName = SerialPortId.StandardPortNumberToString(portNumber);
-									if (!descriptions.ContainsKey(portName))
-										descriptions.Add(portName, obj["Description"].ToString());
+									if (!result.ContainsKey(portName))
+										result.Add(portName, obj["Description"].ToString());
 								}
 							}
 						}
@@ -126,7 +128,7 @@ namespace MKY.IO.Ports
 				DebugEx.WriteException(typeof(SerialPortSearcher), ex);
 			}
 
-			return (descriptions);
+			return (result);
 		}
 
 		#endregion

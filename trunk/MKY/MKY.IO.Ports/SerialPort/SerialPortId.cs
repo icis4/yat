@@ -164,8 +164,8 @@ namespace MKY.IO.Ports
 		private string name = FirstStandardPortName;
 		private int standardPortNumber = FirstStandardPortNumber;
 
-		private string description;
-		private bool hasDescriptonFromSystem;
+		private string caption;
+		private bool hasCaptionFromSystem;
 
 		private bool isInUse;
 		private string inUseText = "";
@@ -202,8 +202,8 @@ namespace MKY.IO.Ports
 			this.name = rhs.name;
 			this.standardPortNumber = rhs.standardPortNumber;
 
-			this.description = rhs.description;
-			this.hasDescriptonFromSystem = rhs.hasDescriptonFromSystem;
+			this.caption = rhs.caption;
+			this.hasCaptionFromSystem = rhs.hasCaptionFromSystem;
 
 			this.isInUse = rhs.isInUse;
 			this.inUseText = rhs.inUseText;
@@ -280,23 +280,23 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Port description (e.g. "Serial On USB Port").
+		/// Port caption (e.g. "Serial On USB Port").
 		/// </summary>
 		[XmlIgnore]
-		public virtual string Description
+		public virtual string Caption
 		{
-			get { return (this.description); }
-			set { this.description = value;  }
+			get { return (this.caption); }
+			set { this.caption = value;  }
 		}
 
 		/// <summary>
-		/// Indicates whether port has retrieved description from system.
+		/// Indicates whether port has retrieved caption from system.
 		/// </summary>
 		[XmlIgnore]
-		public virtual bool HasDescriptionFromSystem
+		public virtual bool HasCaptionFromSystem
 		{
-			get { return (this.hasDescriptonFromSystem); }
-			set { this.hasDescriptonFromSystem = value; }
+			get { return (this.hasCaptionFromSystem); }
+			set { this.hasCaptionFromSystem = value; }
 		}
 
 		/// <summary>
@@ -358,26 +358,26 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public virtual void GetDescriptionFromSystem()
 		{
-			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
+			Dictionary<string, string> descriptions = SerialPortSearcher.GetCaptionsFromSystem();
 
 			if (descriptions.ContainsKey(this.name))
-				SetDescriptionFromSystem(descriptions[this.name]);
+				SetCaptionFromSystem(descriptions[this.name]);
 		}
 
 		/// <summary>
-		/// Set the description which was retrieved from the system.
+		/// Set the caption which was retrieved from the system.
 		/// </summary>
 		/// <remarks>
 		/// Can be used to set the descriptions of multiple ID with a single call to
-		/// <see cref="SerialPortSearcher.GetDescriptionsFromSystem()"/>. A single call is much
-		/// faster than calling <see cref="SerialPortSearcher.GetDescriptionsFromSystem()"/> for
+		/// <see cref="SerialPortSearcher.GetCaptionsFromSystem()"/>. A single call is much
+		/// faster than calling <see cref="SerialPortSearcher.GetCaptionsFromSystem()"/> for
 		/// each ID.
 		/// </remarks>
-		/// <param name="description">The description to set.</param>
-		public virtual void SetDescriptionFromSystem(string description)
+		/// <param name="caption">The description to set.</param>
+		public virtual void SetCaptionFromSystem(string caption)
 		{
-			this.description = description;
-			this.hasDescriptonFromSystem = true;
+			this.caption = caption;
+			this.hasCaptionFromSystem = true;
 		}
 
 		#endregion
@@ -453,16 +453,16 @@ namespace MKY.IO.Ports
 		/// Use properties instead of fields. This ensures that 'intelligent' properties,
 		/// i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public virtual string ToString(bool appendDescription, bool appendInUseText)
+		public virtual string ToString(bool appendCaption, bool appendInUseText)
 		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(Name);                     // "COM10"
 
-			if (appendDescription && !string.IsNullOrEmpty(Description))
+			if (appendCaption && !string.IsNullOrEmpty(Caption))
 			{
 				sb.Append(Separator);            // "COM10 - "
-				sb.Append(Description);          // "COM10 - Serial On USB Port"
+				sb.Append(Caption);              // "COM10 - Serial On USB Port"
 			}
 
 			if (appendInUseText && IsInUse)
