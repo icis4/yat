@@ -153,12 +153,16 @@ namespace MKY.CommandLine
 
 		private string[] args;
 
+		private Dictionary<string, object> argsOverride;
+
 		private List<string>    valueArgs;
 		private List<string>    optionArgs;
 		private List<string[]>  arrayOptionArgs;
 		private List<string>    invalidArgs;
 
 		private List<FieldInfo> optionFields;
+
+		private bool hasBeenProcessed;
 
 		#endregion
 
@@ -185,6 +189,14 @@ namespace MKY.CommandLine
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has been processed.
+		/// </summary>
+		public bool HasBeenProcessed
+		{
+			get { return (this.hasBeenProcessed); }
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is invalid.
@@ -787,6 +799,33 @@ namespace MKY.CommandLine
 		//==========================================================================================
 
 		/// <summary>
+		/// Overrides an argument. This can be useful to default arguments at runtime, e.g. after
+		/// the command line has been received but before it is processed, no matter what the
+		/// command line is set to.
+		/// </summary>
+		/// <remarks>
+		/// This mechanism allows to override an argument WITHOUT changing the original command line.
+		/// 
+		/// Unfortunately, there is no practicable way to use a delegate to access a field, nor an
+		/// easy way to get a <see cref="FieldInfo"/> of a given class' field. So, the field name
+		/// is used to reflect the field.
+		/// </remarks>
+		/// <param name="fieldName">The name of the argument to.</param>
+		/// <param name="value">The value of the argument.</param>
+		public virtual void Override(string fieldName, object value)
+		{
+			// Only create override once needed:
+			if (this.argsOverride == null)
+				this.argsOverride = new Dictionary<string, object>();
+
+			// Remove key if it already exists, i.e. replace the value:
+			if (this.argsOverride.ContainsKey(fieldName))
+				this.argsOverride.Remove(fieldName);
+
+			this.argsOverride.Add(fieldName, value);
+		}
+
+		/// <summary>
 		/// Processes and validates the specified args.
 		/// </summary>
 		/// <returns>
@@ -908,6 +947,8 @@ namespace MKY.CommandLine
 				EndArrayOption();
 			}
 
+			ProcessOverride();
+			this.hasBeenProcessed = true;
 			return (Validate());
 		}
 
@@ -992,6 +1033,19 @@ namespace MKY.CommandLine
 				lines.AppendLine(IndentSpace(indent) + line);
 
 			return (lines.ToString());
+		}
+
+		private void ProcessOverride()
+		{
+			if (this.argsOverride != null)
+			{
+				foreach (KeyValuePair<string, object> item in this.argsOverride)
+				{
+					FieldInfo field = this.GetMemberField(item.Key);
+					if (field != null)
+						field.SetValue(this, item.Value);
+				}
+			}
 		}
 
 		/// <summary>

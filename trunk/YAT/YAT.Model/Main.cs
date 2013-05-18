@@ -369,9 +369,10 @@ namespace YAT.Model
 			// Process and validate command line arguments:
 			// 
 			// In normal operation this is the location where the command line arguments are
-			// processed and validated for a second time. They have already been processed and
-			// validated for a first time even before the application settings have been created/
-			// loaded. This first processing happens in YAT.Controller.Main.Run().
+			// processed and validated for a second time AFTER the application settings have been
+			// created/loaded. They have already been processed and validated for a first time
+			// BEFORE the application settings were created/loaded. This first processing happens
+			// in YAT.Controller.Main.Run().
 			// 
 			// In case of automated testing, the command line arguments may also be processed and
 			// validated here for the first time.
@@ -380,13 +381,28 @@ namespace YAT.Model
 				this.commandLineArgs.ProcessAndValidate();
 
 			// Prio 0 = None:
-			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
+			if ((this.commandLineArgs == null) || this.commandLineArgs.NoArgs)
 			{
-				this.startArgs.ShowNewTerminalDialog = true;
-				this.startArgs.KeepOpen              = true;
-				this.startArgs.KeepOpenOnError       = true;
+				// This is the standard case, the 'New Terminal' dialog will get shown.
+				if (this.commandLineArgs == null)
+				{
+					this.startArgs.ShowNewTerminalDialog = true;
+					this.startArgs.KeepOpen              = true;
+					this.startArgs.KeepOpenOnError       = true;
 
-				return (true);
+					return (true);
+				}
+				// In case of "YATConsole.exe" the controller will set the 'NonInteractive'
+				// option and no 'New Terminal' dialog shall get shown. The behavior will be
+				// the same as with the 'Empty' option.
+				else
+				{
+					this.startArgs.ShowNewTerminalDialog = this.commandLineArgs.Interactive;
+					this.startArgs.KeepOpen              = true;
+					this.startArgs.KeepOpenOnError       = true;
+
+					return (true);
+				}
 			}
 
 			// Prio 1 = Invalid:
@@ -395,7 +411,7 @@ namespace YAT.Model
 				return (false);
 			}
 
-			// Valid args are available, transfer 'NonInteractive' option:
+			// Arguments are available and valid, transfer 'NonInteractive' option:
 			this.startArgs.NonInteractive = this.commandLineArgs.NonInteractive;
 
 			// Prio 2 = Empty:
@@ -506,20 +522,7 @@ namespace YAT.Model
 				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
-			// Prio 8 = Show 'New Terminal' dialog, but only if interactive is permissible:
-			//          \remind MKY 2013-05-16:
-			//                      Check whether NewTerminal dialog can happen here,
-			//                      standard case is handled further above.
-			if ((this.startArgs.TerminalSettings == null) && (this.startArgs.Interactive))
-			{
-				this.startArgs.ShowNewTerminalDialog = true;
-				this.startArgs.KeepOpen              = true;
-				this.startArgs.KeepOpenOnError       = true;
-
-				return (true);
-			}
-
-			// Prio 9 = Override settings as desired:
+			// Prio 8 = Override settings as desired:
 			if (this.startArgs.TerminalSettings != null)
 			{
 				bool terminalIsStarted = this.startArgs.TerminalSettings.Settings.TerminalIsStarted;
@@ -536,14 +539,14 @@ namespace YAT.Model
 				}
 			}
 
-			// Prio 10 = Perform requested operation:
+			// Prio 9 = Perform requested operation:
 			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 			{
 				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
 				this.startArgs.PerformOperationOnRequestedTerminal = true;
 			}
 
-			// Prio 11 = Set behavior:
+			// Prio 10 = Set behavior:
 			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
@@ -555,7 +558,7 @@ namespace YAT.Model
 				this.startArgs.KeepOpenOnError = true;
 			}
 
-			// Prio 12 = Tile:
+			// Prio 11 = Tile:
 			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
 			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 

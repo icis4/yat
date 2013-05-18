@@ -212,7 +212,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isStartingUp = false;
 
-			// Start YAT according to the main settings.
+			// Start YAT according to the requested settings.
 			this.mainResult = this.main.Start();
 
 			if (this.mainResult != Model.MainResult.Success)
