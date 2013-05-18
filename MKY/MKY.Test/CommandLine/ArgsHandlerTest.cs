@@ -806,6 +806,93 @@ namespace MKY.Test.CommandLine
 
 		#endregion
 
+		#region Tests > Override
+		//------------------------------------------------------------------------------------------
+		// Tests > Override
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestValueArgOverride()
+		{
+			string arg = "ABC";
+			string argOverride = "XYZ";
+
+			// Normal case:
+			CommandLineArgs cla = new CommandLineArgs(new string[] { arg });
+			Assert.IsTrue(cla.ProcessAndValidate());
+			Assert.IsTrue(cla.IsValid);
+
+			Assert.AreEqual(1, cla.ValueArgsCount);
+			Assert.AreEqual(arg, cla.ValueArgs[0]);
+			Assert.AreEqual(arg, cla.PureValueArg);
+
+			// Override:
+			cla.Override("PureValueArg", argOverride);
+			Assert.IsTrue(cla.ProcessAndValidate());
+			Assert.IsTrue(cla.IsValid);
+
+			Assert.AreEqual(1, cla.ValueArgsCount);
+			Assert.AreEqual(arg, cla.ValueArgs[0]); // Arg array must still contain the original arg.
+			Assert.AreEqual(argOverride, cla.PureValueArg); // Arg field must contain the override.
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestOptionArgOverride()
+		{
+			string argValue = "ABC";
+			string arg = "/svo=" + argValue;
+			string argValueOverride = "XYZ";
+
+			// Normal case:
+			CommandLineArgs cla = new CommandLineArgs(new string[] { arg });
+			Assert.IsTrue(cla.ProcessAndValidate());
+			Assert.IsTrue(cla.IsValid);
+
+			Assert.AreEqual(1, cla.OptionArgsCount);
+			Assert.AreEqual(arg, cla.OptionArgs[0]);
+			Assert.AreEqual(argValue, cla.StringValueOption);
+
+			// Override:
+			cla.Override("StringValueOption", argValueOverride);
+			Assert.IsTrue(cla.ProcessAndValidate());
+			Assert.IsTrue(cla.IsValid);
+
+			Assert.AreEqual(1, cla.OptionArgsCount);
+			Assert.AreEqual(arg, cla.OptionArgs[0]); // Arg array must still contain the original arg.
+			Assert.AreEqual(argValueOverride, cla.StringValueOption); // Arg field must contain the override.
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestCombinedArgOverride()
+		{
+			string argValue = "ABC";
+			string arg = "/cvoa=" + argValue;
+			string argValueOverride = "XYZ";
+
+			// Normal case:
+			CommandLineArgs cla = new CommandLineArgs(new string[] { arg });
+			Assert.IsTrue(cla.ProcessAndValidate());
+			Assert.IsTrue(cla.IsValid);
+
+			Assert.AreEqual(1, cla.OptionArgsCount);
+			Assert.AreEqual(arg, cla.OptionArgs[0]);
+			Assert.AreEqual(argValue, cla.CombinedValueOptionArg);
+
+			// Override:
+			cla.Override("CombinedValueOptionArg", argValueOverride);
+			Assert.IsTrue(cla.ProcessAndValidate());
+			Assert.IsTrue(cla.IsValid);
+
+			Assert.AreEqual(1, cla.OptionArgsCount);
+			Assert.AreEqual(arg, cla.OptionArgs[0]); // Arg array must still contain the original arg.
+			Assert.AreEqual(argValueOverride, cla.CombinedValueOptionArg); // Arg field must contain the override.
+		}
+
+		#endregion
+
 		#region Tests > RuntimeValidation
 		//------------------------------------------------------------------------------------------
 		// Tests > RuntimeValidation

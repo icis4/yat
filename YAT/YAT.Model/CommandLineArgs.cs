@@ -267,11 +267,6 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start YAT but neither show any dialog nor perform any operation.")]
-		public bool Empty;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep YAT open after performing the requested operation.")]
 		public bool KeepOpen;
 
@@ -286,6 +281,11 @@ namespace YAT.Model
 			"For YAT.exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
 			"For YATConsole.exe, interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start YAT but neither show any dialog nor perform any operation.")]
+		public bool Empty;
 
 		#endregion
 

@@ -266,10 +266,11 @@ namespace YAT.Controller
 			// Process and validate command line arguments:
 			// 
 			// In normal operation this is the location where the command line arguments are
-			// processed and validated for a first time. Then they will be processed and validated
-			// for a second time after to application settings have been created/loaded. This second
-			// processing happens in YAT.Model.Main.ProcessCommandLineArgsIntoStartRequests().
-			// 
+			// processed and validated for a first time, even BEFORE the application settings have
+			// been created/loaded. Then they will be processed and validated for a second time
+			// AFTER the application settings were created/loaded. This second processing happens
+			// in YAT.Model.Main.ProcessCommandLineArgsIntoStartRequests().
+			//
 			// In case of automated testing, the command line arguments will be processed and
 			// validated in PrepareRun() above, or also in YAT.Model.Main.
 			// 
@@ -300,10 +301,6 @@ namespace YAT.Controller
 				showView = this.commandLineArgs.ShowView;
 				showHelp = this.commandLineArgs.HelpIsRequested;
 			}
-
-			// Default 'NonInteractive' in case of console execution:
-			if (runFromConsole)
-				this.commandLineArgs.NonInteractive = true;
 
 			// Show help or run application:
 			if (showHelp)
@@ -391,14 +388,22 @@ namespace YAT.Controller
 
 			MainResult mainResult;
 
-			if      (!runFromConsole &&  runWithView)
+			if (!runFromConsole && runWithView)
+			{
 				mainResult = RunFullyWithView();                        // 1, 2, 7
-			else if ( runFromConsole &&  runWithView)
-				mainResult = RunWithViewButOutputErrorsOnConsole();     // 3, 4, 7
-			else if ( runFromConsole && !runWithView)
-				mainResult = RunFullyFromConsole();                     // 5, 6, 7
+			}
 			else
-				mainResult = RunInvisible();                            // 7
+			{
+				// Default 'NonInteractive' in case of console or invisible execution:
+				this.commandLineArgs.Override("NonInteractive", true);
+
+				if (     runFromConsole && runWithView)
+					mainResult = RunWithViewButOutputErrorsOnConsole(); // 3, 4, 7
+				else if (runFromConsole && !runWithView)
+					mainResult = RunFullyFromConsole();                 // 5, 6, 7
+				else
+					mainResult = RunInvisible();                        //       7
+			}
 
 			if (mainResult == MainResult.CommandLineError)
 			{
@@ -450,10 +455,12 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
-					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-						Application.Restart();
-
+					if (this.commandLineArgs.Interactive)
+					{
+						string message = "An unhandled synchronous exception occurred while preparing " + Application.ProductName + ".";
+						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+							Application.Restart();
+					}
 					return (MainResult.UnhandledException);
 				}
 
@@ -479,10 +486,12 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
-					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-						Application.Restart();
-
+					if (this.commandLineArgs.Interactive)
+					{
+						string message = "An unhandled synchronous exception occurred while running " + Application.ProductName + ".";
+						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+							Application.Restart();
+					}
 					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
@@ -493,14 +502,22 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous synchronized exception occurred while running " + Application.ProductName + ".";
-			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, Gui.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
-			
-			if      (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-				Application.Restart();
-			else if (result == Gui.Forms.UnhandledExceptionResult.Exit)
+			if (this.commandLineArgs.Interactive)
+			{
+				string message = "An unhandled asynchronous synchronized exception occurred while running " + Application.ProductName + ".";
+				Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, Gui.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
+
+				if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+					Application.Restart();
+				else if (result == Gui.Forms.UnhandledExceptionResult.Continue)
+					return; // Ignore, do nothing.
+				else
+					Application.Exit();
+			}
+			else
+			{
 				Application.Exit();
-			//// else do nothing.
+			}
 		}
 
 		/// <remarks>
@@ -508,14 +525,23 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyWithView_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			Exception ex = e.ExceptionObject as Exception;
-			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
-			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
+			if (this.commandLineArgs.Interactive)
+			{
+				Exception ex = e.ExceptionObject as Exception;
+				string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
+				Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
 
-			if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-				Application.Restart();
+				if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+					Application.Restart();
+				else if (result == Gui.Forms.UnhandledExceptionResult.Continue)
+					return; // Ignore, do nothing.
+				else
+					Application.Exit();
+			}
 			else
+			{
 				Application.Exit();
+			}
 		}
 
 		#endregion

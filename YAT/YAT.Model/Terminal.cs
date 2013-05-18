@@ -3044,7 +3044,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
-			if (!this.startArgs.NonInteractive)
+			if (this.startArgs.Interactive)
 			{
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
@@ -3064,7 +3064,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			if (!this.startArgs.NonInteractive)
+			if (this.startArgs.Interactive)
 			{
 				DialogEventArgs e = new DialogEventArgs();
 				EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);

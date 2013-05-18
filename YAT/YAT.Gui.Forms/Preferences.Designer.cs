@@ -43,6 +43,7 @@
 			this.checkBox_UseRelativePaths = new System.Windows.Forms.CheckBox();
 			this.checkBox_AutoSaveWorkspace = new System.Windows.Forms.CheckBox();
 			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
+			this.label_SerialPortDiscoveryRemarks = new System.Windows.Forms.Label();
 			this.groupBox_Preferences.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
 			this.groupBox_Port.SuspendLayout();
@@ -52,7 +53,7 @@
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(284, 97);
+			this.button_Defaults.Location = new System.Drawing.Point(433, 97);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
@@ -63,7 +64,7 @@
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(284, 68);
+			this.button_Cancel.Location = new System.Drawing.Point(433, 68);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -74,7 +75,7 @@
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(284, 39);
+			this.button_OK.Location = new System.Drawing.Point(433, 39);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -91,7 +92,7 @@
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Workspace);
 			this.groupBox_Preferences.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Preferences.Name = "groupBox_Preferences";
-			this.groupBox_Preferences.Size = new System.Drawing.Size(258, 283);
+			this.groupBox_Preferences.Size = new System.Drawing.Size(407, 283);
 			this.groupBox_Preferences.TabIndex = 0;
 			this.groupBox_Preferences.TabStop = false;
 			// 
@@ -103,7 +104,7 @@
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowTerminalInfo);
 			this.groupBox_Main.Location = new System.Drawing.Point(6, 14);
 			this.groupBox_Main.Name = "groupBox_Main";
-			this.groupBox_Main.Size = new System.Drawing.Size(245, 70);
+			this.groupBox_Main.Size = new System.Drawing.Size(394, 70);
 			this.groupBox_Main.TabIndex = 0;
 			this.groupBox_Main.TabStop = false;
 			this.groupBox_Main.Text = "Main";
@@ -134,12 +135,13 @@
 			// 
 			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Port.Controls.Add(this.label_SerialPortDiscoveryRemarks);
 			this.groupBox_Port.Controls.Add(this.checkBox_RetrieveSerialPortCaptions);
 			this.groupBox_Port.Controls.Add(this.label_SerialPortDiscovery);
 			this.groupBox_Port.Controls.Add(this.checkBox_DetectSerialPortsInUse);
 			this.groupBox_Port.Location = new System.Drawing.Point(6, 188);
 			this.groupBox_Port.Name = "groupBox_Port";
-			this.groupBox_Port.Size = new System.Drawing.Size(246, 88);
+			this.groupBox_Port.Size = new System.Drawing.Size(395, 88);
 			this.groupBox_Port.TabIndex = 2;
 			this.groupBox_Port.TabStop = false;
 			this.groupBox_Port.Text = "Port";
@@ -184,7 +186,7 @@
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoOpenWorkspace);
 			this.groupBox_Workspace.Location = new System.Drawing.Point(6, 90);
 			this.groupBox_Workspace.Name = "groupBox_Workspace";
-			this.groupBox_Workspace.Size = new System.Drawing.Size(246, 92);
+			this.groupBox_Workspace.Size = new System.Drawing.Size(395, 92);
 			this.groupBox_Workspace.TabIndex = 1;
 			this.groupBox_Workspace.TabStop = false;
 			this.groupBox_Workspace.Text = "Workspace";
@@ -222,13 +224,27 @@
 			this.checkBox_AutoOpenWorkspace.UseVisualStyleBackColor = true;
 			this.checkBox_AutoOpenWorkspace.CheckedChanged += new System.EventHandler(this.checkBox_AutoOpenWorkspace_CheckedChanged);
 			// 
+			// label_SerialPortDiscoveryRemarks
+			// 
+			this.label_SerialPortDiscoveryRemarks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.label_SerialPortDiscoveryRemarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_SerialPortDiscoveryRemarks.Location = new System.Drawing.Point(210, 19);
+			this.label_SerialPortDiscoveryRemarks.Name = "label_SerialPortDiscoveryRemarks";
+			this.label_SerialPortDiscoveryRemarks.Size = new System.Drawing.Size(179, 59);
+			this.label_SerialPortDiscoveryRemarks.TabIndex = 3;
+			this.label_SerialPortDiscoveryRemarks.Text = "On certain computers, discovery of serial ports takes several seconds. In such ca" +
+				"ses it can be useful to disable one or both of these options.";
+			this.label_SerialPortDiscoveryRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// Preferences
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(371, 307);
+			this.ClientSize = new System.Drawing.Size(520, 307);
 			this.Controls.Add(this.groupBox_Preferences);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -269,5 +285,6 @@
 		private System.Windows.Forms.CheckBox checkBox_ShowTerminalInfo;
 		private System.Windows.Forms.Label label_SerialPortDiscovery;
 		private System.Windows.Forms.CheckBox checkBox_RetrieveSerialPortCaptions;
+		private System.Windows.Forms.Label label_SerialPortDiscoveryRemarks;
 	}
 }
