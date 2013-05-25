@@ -581,12 +581,9 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void SelectAll()
 		{
-			ListBox lb = fastListBox_Monitor;
+			ListBoxEx lb = fastListBox_Monitor;
 			lb.BeginUpdate();
-
-			for (int i = 0; i < lb.Items.Count; i++)
-				lb.SelectedIndex = i;
-
+			lb.SelectAllIndices();
 			lb.EndUpdate();
 		}
 
@@ -595,9 +592,7 @@ namespace YAT.Gui.Controls
 		{
 			ListBox lb = fastListBox_Monitor;
 			lb.BeginUpdate();
-
 			lb.ClearSelected();
-
 			lb.EndUpdate();
 		}
 
@@ -774,7 +769,7 @@ namespace YAT.Gui.Controls
 			{
 				if (e.Index >= 0)
 				{
-					ListBox lb = fastListBox_Monitor;
+					ListBoxEx lb = fastListBox_Monitor;
 					SizeF requestedSize;
 					SizeF drawnSize;
 
@@ -787,13 +782,29 @@ namespace YAT.Gui.Controls
 					// The item height is set in SetFormatDependentControls().
 					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
 					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
-						lb.HorizontalExtent = requestedWidth;
-
-					// Check whether the top index has changed, if yes, also scroll the line numbers.
-					if (this.fastListBox_Monitor_DrawItem_lastTopIndex != lb.TopIndex)
 					{
-						this.fastListBox_Monitor_DrawItem_lastTopIndex = lb.TopIndex;
-						ListBoxEx.ScrollToIndex(fastListBox_LineNumbers, lb.TopIndex);
+						lb.HorizontalExtent = requestedWidth;
+					}
+
+					// Perform horizontal auto scroll, but only on the last item.
+					// 
+					// \remind MKY 2013-05-25 (related to feature request #163)
+					// No feasible way to implement horizontal auto scroll found. There are Win32
+					// API functions to move the position of the scroll bar itself, and to scroll
+					// rectangles, but it is not feasible to do the whole translation from .NET
+					// Windows.Forms to Win32. Giving up.
+#if (FALSE)
+					if (e.Index == (lb.Items.Count - 1))
+					{
+						lb.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
+					}
+#endif
+					// Check whether the top index has changed, if yes, also scroll the line numbers.
+					// This especially is the case when the monitor gets cleared, the top index will become 0.
+					if (fastListBox_Monitor_DrawItem_lastTopIndex != lb.TopIndex)
+					{
+						fastListBox_Monitor_DrawItem_lastTopIndex = lb.TopIndex;
+						fastListBox_LineNumbers.VerticalScrollToIndex(lb.TopIndex);
 					}
 				}
 			}
@@ -935,7 +946,6 @@ namespace YAT.Gui.Controls
 			lb.BeginUpdate();
 			lb.Font = (Font)f.Clone();
 			lb.ItemHeight = f.Height;
-			ListBoxEx.ScrollToBottomIfNoItemButTheLastIsSelected(lb);
 			lb.Invalidate();
 			lb.EndUpdate();
 		}
@@ -1025,8 +1035,8 @@ namespace YAT.Gui.Controls
 
 		private void UpdateFastListBoxWithPendingElementsAndLines()
 		{
-			ListBox lblin = fastListBox_LineNumbers;
-			ListBox lbmon = fastListBox_Monitor;
+			ListBoxEx lblin = fastListBox_LineNumbers;
+			ListBoxEx lbmon = fastListBox_Monitor;
 
 			lblin.BeginUpdate();
 			lbmon.BeginUpdate();
@@ -1080,8 +1090,8 @@ namespace YAT.Gui.Controls
 			// Keep tick stamp of update.
 			this.updateTickStamp = DateTime.Now.Ticks;
 
-			if (ListBoxEx.ScrollToBottomIfNoItemButTheLastIsSelected(lbmon))
-				ListBoxEx.ScrollToBottom(lblin);
+			if (lbmon.VerticalScrollToBottomIfNoItemButTheLastIsSelected())
+				lblin.VerticalScrollToBottom();
 
 			lblin.EndUpdate();
 			lbmon.EndUpdate();

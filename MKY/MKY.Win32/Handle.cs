@@ -133,7 +133,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool CloseHandle([In] SafeFileHandle hObject);
+			public static extern Boolean CloseHandle([In] SafeFileHandle hObject);
 
 			/// <summary>
 			/// Duplicates an object handle.
@@ -164,15 +164,17 @@ namespace MKY.Win32
 			/// created by the target process. If FALSE, the new handle cannot be inherited.</param>
 			/// <param name="dwOptions">Optional actions. This parameter can be zero, or any
 			/// combination of the values.</param>
-			/// <returns> If the function succeeds, the return value is nonzero.
+			/// <returns>
+			/// If the function succeeds, the return value is nonzero.
 			/// If the function fails, the return value is zero.
-			/// To get extended error information, call GetLastError.</returns>
+			/// To get extended error information, call <see cref="WinError.GetLastError"/>.
+			/// </returns>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool DuplicateHandle([In] IntPtr hSourceProcessHandle, [In] SafeFileHandle hSourceHandle, [In] IntPtr hTargetProcessHandle, [Out] out SafeFileHandle lpTargetHandle, [In] UInt32 dwDesiredAccess, [In, MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, [In] NativeTypes.Options dwOptions);
+			public static extern Boolean DuplicateHandle([In] IntPtr hSourceProcessHandle, [In] SafeFileHandle hSourceHandle, [In] IntPtr hTargetProcessHandle, [Out] out SafeFileHandle lpTargetHandle, [In] UInt32 dwDesiredAccess, [In, MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, [In] NativeTypes.Options dwOptions);
 		}
 
 		#endregion

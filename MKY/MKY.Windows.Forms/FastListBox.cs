@@ -41,7 +41,7 @@ namespace MKY.Windows.Forms
 	/// there are many consecutive updates/adds.
 	/// </summary>
 	[DesignerCategory("Windows Forms")]
-	public class FastListBox : ListBox
+	public class FastListBox : ListBoxEx
 	{
 		#region Fields
 		//==========================================================================================

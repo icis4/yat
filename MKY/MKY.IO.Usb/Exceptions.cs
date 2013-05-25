@@ -92,8 +92,8 @@ namespace MKY.IO.Usb
 			: base(message, innerException)
 		{
 			this.method        = method;
-			this.errorCode     = Win32.Debug.GetLastErrorCode();
-			this.nativeMessage = Win32.Debug.GetLastErrorMessage();
+			this.errorCode     = Win32.WinError.GetLastErrorCode();
+			this.nativeMessage = Win32.WinError.GetLastErrorMessage();
 		}
 
 		#region ISerializable Members

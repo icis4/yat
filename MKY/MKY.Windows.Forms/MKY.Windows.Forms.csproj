@@ -92,11 +92,11 @@
     <Compile Include="Chronometer.Designer.cs">
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathComboBox.cs">
+    <Compile Include="ListBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PathComboBox.Designer.cs">
-      <DependentUpon>PathComboBox.cs</DependentUpon>
+    <Compile Include="PathComboBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="FastListBox.cs">
       <SubType>Component</SubType>
@@ -104,14 +104,8 @@
     <Compile Include="PathLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PathLabel.Designer.cs">
-      <DependentUpon>PathLabel.cs</DependentUpon>
-    </Compile>
     <Compile Include="PictureBoxEx.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PictureBoxEx.Designer.cs">
-      <DependentUpon>PictureBoxEx.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusBox.cs">
@@ -142,17 +136,6 @@
       <DependentUpon>Chronometer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathComboBox.resx">
-      <DependentUpon>PathComboBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PathLabel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PathLabel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PictureBoxEx.resx">
-      <DependentUpon>PictureBoxEx.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="StatusBox.resx">
       <SubType>Designer</SubType>
       <DependentUpon>StatusBox.cs</DependentUpon>
@@ -166,6 +149,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MKY.Win32\MKY.Win32.csproj">
+      <Project>{877BAA28-C2A6-41EC-BEDE-27B396FA8E20}</Project>
+      <Name>MKY.Win32</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY %28MKY\MKY%29</Name>
