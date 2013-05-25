@@ -336,7 +336,6 @@ namespace YAT.Gui.Forms
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Exclamation
 							);
-
 						cancel = (result != DialogResult.OK);
 					}
 				}

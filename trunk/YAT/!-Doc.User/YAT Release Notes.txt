@@ -101,6 +101,7 @@ Limitations and known issues:
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #210)
+   > Horizontal auto scroll is not feasible to implement (feature request #163)
    > System errors are output in local language, even though YAT is all-English (bug #66)
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #29 and #30)

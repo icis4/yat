@@ -83,16 +83,16 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
-    <Compile Include="FastListBoxTest.cs">
+    <Compile Include="WindowsFormsTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FastListBoxTest.Designer.cs">
-      <DependentUpon>FastListBoxTest.cs</DependentUpon>
+    <Compile Include="WindowsFormsTest.Designer.cs">
+      <DependentUpon>WindowsFormsTest.cs</DependentUpon>
     </Compile>
     <Compile Include="TestMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FastListBoxTest.resx">
-      <DependentUpon>FastListBoxTest.cs</DependentUpon>
+    <EmbeddedResource Include="WindowsFormsTest.resx">
+      <DependentUpon>WindowsFormsTest.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

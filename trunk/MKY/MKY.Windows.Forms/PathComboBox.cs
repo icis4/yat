@@ -31,14 +31,8 @@ namespace MKY.Windows.Forms
 	/// Provides a label that displays path strings with ellipsis.
 	/// </summary>
 	[DesignerCategory("Windows Forms")]
-	public partial class PathComboBox : ComboBox
+	public class PathComboBox : ComboBox
 	{
-		/// <summary></summary>
-		public PathComboBox()
-		{
-			InitializeComponent();
-		}
-
 		/// <summary>
 		/// Draws string with ellipsis.
 		/// </summary>

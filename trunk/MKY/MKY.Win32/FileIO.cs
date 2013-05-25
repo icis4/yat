@@ -461,7 +461,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool CancelIo([In] SafeFileHandle hFile);
+			public static extern Boolean CancelIo([In] SafeFileHandle hFile);
 
 			/// <summary>
 			/// Creates an event object for the overlapped structure used with ReadFile.
@@ -491,7 +491,7 @@ namespace MKY.Win32
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool GetFileInformationByHandle([In] SafeFileHandle hFile, [Out] out NativeTypes.BY_HANDLE_FILE_INFORMATION lpFileInformation);
+			public static extern Boolean GetFileInformationByHandle([In] SafeFileHandle hFile, [Out] out NativeTypes.BY_HANDLE_FILE_INFORMATION lpFileInformation);
 
 			/// <summary>
 			/// Gets the result of an overlapped operation.
@@ -512,7 +512,7 @@ namespace MKY.Win32
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool GetOverlappedResult([In] SafeFileHandle hFile, [In] IntPtr lpOverlapped, [Out] out UInt32 lpNumberOfBytesTransferred, [In, MarshalAs(UnmanagedType.Bool)] bool bWait);
+			private static extern Boolean GetOverlappedResult([In] SafeFileHandle hFile, [In] IntPtr lpOverlapped, [Out] out UInt32 lpNumberOfBytesTransferred, [In, MarshalAs(UnmanagedType.Bool)] bool bWait);
 
 			/// <summary>
 			/// Attempts to read an Input report from the device.
@@ -542,7 +542,7 @@ namespace MKY.Win32
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] ref NativeOverlapped lpOverlapped);
+			private static extern Boolean ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] ref NativeOverlapped lpOverlapped);
 
 			/// <summary>
 			/// Waits for at least one report or a timeout.
@@ -576,7 +576,7 @@ namespace MKY.Win32
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] ref NativeOverlapped lpOverlapped);
+			private static extern Boolean WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] ref NativeOverlapped lpOverlapped);
 		}
 
 		#endregion

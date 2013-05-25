@@ -43,52 +43,36 @@ namespace MKY.Windows.Forms
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[DesignerCategory("Windows Forms")]
-	public partial class PictureBoxEx : PictureBox
+	public class PictureBoxEx : PictureBox
 	{
-		#region Constants
+		#region Image Rotation
 		//==========================================================================================
-		// Constants
+		// Image Rotation
 		//==========================================================================================
+
+		#region Image Rotation > Constants
+		//------------------------------------------------------------------------------------------
+		// Image Rotation > Constants
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public const RotateType RotationDefault = RotateType.RotateNone;
 
 		#endregion
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
+		#region Image Rotation > Fields
+		//------------------------------------------------------------------------------------------
+		// Image Rotation > Fields
+		//------------------------------------------------------------------------------------------
 
 		private RotateType rotation = RotationDefault;
 
 		#endregion
 
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		public PictureBoxEx()
-		{
-			InitializeComponent();
-		}
-
-		/// <summary></summary>
-		public PictureBoxEx(IContainer container)
-		{
-			container.Add(this);
-
-			InitializeComponent();
-		}
-
-		#endregion
-
-		#region Image Rotation Properties and Methods
-		//==========================================================================================
-		// Image Rotation Properties and Methods
-		//==========================================================================================
+		#region Image Rotation > Properties
+		//------------------------------------------------------------------------------------------
+		// Image Rotation > Properties
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Gets or sets the image that is displayed by this picture box.
@@ -126,6 +110,13 @@ namespace MKY.Windows.Forms
 			}
 		}
 
+		#endregion
+
+		#region Image Rotation > Methods
+		//------------------------------------------------------------------------------------------
+		// Image Rotation > Methods
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// This variable is used to get the difference between the actual and the desired rotation.
 		/// Without this, the image would need to be kept twice, with and without rotation. Upon a
@@ -162,10 +153,17 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
-		#region Scaled Image Properties
+		#endregion
+
+		#region Scaled Image
 		//==========================================================================================
-		// Scaled Image Properties
+		// Scaled Image
 		//==========================================================================================
+
+		#region Scaled Image > Properties
+		//------------------------------------------------------------------------------------------
+		// Scaled Image > Properties
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public float ImageWidthHeightRatio
@@ -274,6 +272,8 @@ namespace MKY.Windows.Forms
 				}
 			}
 		}
+
+		#endregion
 
 		#endregion
 	}

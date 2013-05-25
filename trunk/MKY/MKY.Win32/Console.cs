@@ -83,9 +83,9 @@ namespace MKY.Win32
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 		private static class NativeConstants
 		{
-			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Field name is given by the Win32 API.")]
 			public const UInt32 ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
 		}
 
@@ -118,7 +118,7 @@ namespace MKY.Win32
 			/// <summary></summary>
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool AttachConsole([In] UInt32 dwProcessId);
+			private static extern Boolean AttachConsole([In] UInt32 dwProcessId);
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Method implemented but then not needed, kept for potential future use.")]
@@ -136,7 +136,7 @@ namespace MKY.Win32
 			/// <summary></summary>
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool FreeConsole([In] UInt32 dwProcessId);
+			private static extern Boolean FreeConsole([In] UInt32 dwProcessId);
 
 			/// <summary></summary>
 			public static SafeFileHandle GetStandardInputHandle()
@@ -166,7 +166,7 @@ namespace MKY.Win32
 			/// GENERIC_READ and GENERIC_WRITE access rights, unless the application has used
 			/// SetStdHandle to set a standard handle with lesser access.
 			/// If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended
-			/// error information, call GetLastError.
+			/// error information, call <see cref="WinError.GetLastError"/>.
 			/// If an application does not have associated standard handles, such as a service
 			/// running on an interactive desktop, and has not redirected them, the return value
 			/// is NULL.
@@ -211,8 +211,11 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="nStdHandle">The standard device for which the handle is to be set.</param>
 			/// <param name="hHandle">The handle for the standard device.</param>
-			/// <returns>If the function succeeds, the return value is nonzero. If the function fails,
-			/// the return value is zero. To get extended error information, call GetLastError.</returns>
+			/// <returns>
+			/// If the function succeeds, the return value is nonzero.
+			/// If the function fails, the return value is zero.
+			/// To get extended error information, call <see cref="WinError.GetLastError"/>.
+			/// </returns>
 			/// <remarks>
 			/// The standard handles of a process may have been redirected by a call to SetStdHandle,
 			/// in which case GetStdHandle will return the redirected handle. If the standard handles
@@ -222,7 +225,7 @@ namespace MKY.Win32
 			/// </remarks>
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool SetStdHandle([In] NativeTypes.STD_HANDLE nStdHandle, [In] SafeFileHandle hHandle);
+			private static extern Boolean SetStdHandle([In] NativeTypes.STD_HANDLE nStdHandle, [In] SafeFileHandle hHandle);
 		}
 
 		#endregion

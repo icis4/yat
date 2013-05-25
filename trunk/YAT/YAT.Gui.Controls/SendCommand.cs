@@ -515,7 +515,15 @@ namespace YAT.Gui.Controls
 
 		private void button_SendCommand_Click(object sender, EventArgs e)
 		{
-			RequestSendCompleteCommand();
+			if (this.sendImmediately)
+			{
+				CreatePartialEolCommand();
+				RequestSendPartialEolCommand();
+			}
+			else
+			{
+				RequestSendCompleteCommand();
+			}
 		}
 
 		#endregion
@@ -673,11 +681,13 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <remarks>Required when sending immediately.</remarks>
 		private void RequestSendPartialCommand()
 		{
 			RequestSendCommand();
 		}
 
+		/// <remarks>Required when sending EOL immediately.</remarks>
 		private void RequestSendPartialEolCommand()
 		{
 			ResetPartialCommand();

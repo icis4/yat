@@ -1365,7 +1365,10 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
 		{
-			this.terminal.SendText();
+			if (this.settingsRoot.Send.SendImmediately)
+				this.terminal.SendText(new Model.Types.Command(true, ""));
+			else
+				this.terminal.SendText();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)

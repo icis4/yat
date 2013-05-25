@@ -69,16 +69,16 @@ namespace MKY.Win32
 
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool WinUsb_Initialize([In] SafeFileHandle DeviceHandle, [Out] out SafeFileHandle InterfaceHandle);
+			public static extern Boolean WinUsb_Initialize([In] SafeFileHandle DeviceHandle, [Out] out SafeFileHandle InterfaceHandle);
 
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
+			public static extern Boolean WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 
 			[SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "4", Justification = "'CharSet.Auto' will automatically marshal strings appropriately for the target operating system.")]
 			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
+			public static extern Boolean WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 		}
 
 		#endregion
@@ -155,8 +155,8 @@ namespace MKY.Win32
 		/// </param>
 		/// <returns>
 		/// TRUE if the operation succeeds. Otherwise, this routine returns FALSE, and the caller
-		/// can retrieve the logged error by calling <see cref="Debug.GetLastErrorCode"/> or
-		/// <see cref="Debug.GetLastErrorMessage"/>.
+		/// can retrieve the logged error by calling <see cref="WinError.GetLastErrorCode"/> or
+		/// <see cref="WinError.GetLastErrorMessage"/>.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool InitializeInterfaceHandle(SafeFileHandle deviceHandle, out SafeFileHandle interfaceHandle)

@@ -39,7 +39,7 @@ namespace MKY.Windows.Forms.Test
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new FastListBoxTest());
+			Application.Run(new WindowsFormsTest());
 		}
 	}
 }

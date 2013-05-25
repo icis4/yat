@@ -216,7 +216,7 @@ using MKY.IO;
 namespace MKY.Win32
 {
 	/// <summary>
-	/// Encapsulates parts of the Win32 API relating relating to device management
+	/// Encapsulates parts of the Win32 API related to device management
 	/// (SetupDi___ and RegisterDeviceNotification functions).
 	/// </summary>
 	/// <remarks>
@@ -395,11 +395,11 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Name is given by the Win32 API.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Native items are nested on purpose, to emphasize their native nature.")]
 		public static class NativeConstants
 		{
 			/// <remarks>dbt.h and saying hello to StyleCop ;-.</remarks>
-			[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Name is given by the Win32 API.")]
 			[CLSCompliant(false)]
 			public const UInt32 WM_DEVICECHANGE = 0x00000219;
 		}
@@ -448,7 +448,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
+			public static extern Boolean SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
 
 			/// <summary>
 			/// Retrieves a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.
@@ -467,7 +467,7 @@ namespace MKY.Win32
 			[CLSCompliant(false)]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
+			public static extern Boolean SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 			/// <summary>
 			/// Retrieves a device information set for a specified group of devices.
@@ -508,7 +508,7 @@ namespace MKY.Win32
 			[CLSCompliant(false)]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
+			public static extern Boolean SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
 
 			/// <summary>
 			/// Stop receiving notification messages.
@@ -518,7 +518,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
-			public static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
+			public static extern Boolean UnregisterDeviceNotification([In] IntPtr Handle);
 		}
 
 		#endregion

@@ -33,14 +33,8 @@ namespace MKY.Windows.Forms
 	/// Provides a label that displays path strings with ellipsis.
 	/// </summary>
 	[DesignerCategory("Windows Forms")]
-	public partial class PathLabel : Label
+	public class PathLabel : Label
 	{
-		/// <summary></summary>
-		public PathLabel()
-		{
-			InitializeComponent();
-		}
-
 		/// <summary>
 		/// Draws string with ellipsis.
 		/// </summary>
