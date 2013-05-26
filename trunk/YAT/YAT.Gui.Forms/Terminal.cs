@@ -2731,6 +2731,8 @@ namespace YAT.Gui.Forms
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
 			SetTerminalControls();
+
+			ResetStatusText();
 			OnTerminalChanged(new EventArgs());
 		}
 

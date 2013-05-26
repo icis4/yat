@@ -1835,18 +1835,39 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error starting terminal!");
 
-				string hintTitle;
-				string hintText;
-				if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
+				string yatTitle;
+				string yatText;
+				switch (this.settingsRoot.IOType)
 				{
-					hintTitle = "YAT hints:";
-					hintText  = "Make sure the selected serial port is available and not already in use. " +
-					            "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
-				}
-				else
-				{
-					hintTitle = "YAT hint:";
-					hintText  = "Make sure the socket is not already in use.";
+					case Domain.IOType.SerialPort:
+					{
+						yatTitle = "YAT hints:";
+						yatText  = "Make sure the selected serial port is available and not already in use. " +
+						           "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
+						break;
+					}
+					case Domain.IOType.TcpClient:
+					case Domain.IOType.TcpServer:
+					case Domain.IOType.TcpAutoSocket:
+					case Domain.IOType.Udp:
+					{
+						yatTitle = "YAT hint:";
+						yatText  = "Make sure the selected socket is not already in use.";
+						break;
+					}
+					case Domain.IOType.UsbSerialHid:
+					{
+						yatTitle = "YAT hint:";
+						yatText  = "Make sure the selected USB device is connected.";
+						break;
+					}
+					default:
+					{
+						yatTitle = "YAT error:";
+						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown! " +
+						           "Please report this issue as described in YAT > Help > Submit Bug. Thanks.";
+						break;
+					}
 				}
 
 				OnMessageInputRequest
@@ -1854,8 +1875,8 @@ namespace YAT.Model
 					"Unable to start terminal!" + Environment.NewLine + Environment.NewLine +
 					"System error message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
-					hintTitle + Environment.NewLine +
-					hintText,
+					yatTitle + Environment.NewLine +
+					yatText,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
