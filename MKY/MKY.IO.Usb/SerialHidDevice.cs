@@ -56,6 +56,7 @@ namespace MKY.IO.Usb
 		private enum State
 		{
 			Reset,
+			Starting,
 			Started,
 			ConnectedAndClosed,
 			ConnectedAndOpened,
@@ -499,12 +500,17 @@ namespace MKY.IO.Usb
 			AssertNotDisposed();
 
 			WriteDebugMessageLine("Starting...");
-			SetStateSynchronized(State.Started);
-			Open();
-
-			// Return true even if device has not been openend. After all, this is the Start()
-			// method and it must successfully return even if device is not yet open.
-			return (true);
+			SetStateSynchronized(State.Starting);
+			if (Open())
+			{
+				SetStateSynchronized(State.Started);
+				return (true);
+			}
+			else
+			{
+				SetStateSynchronized(State.Reset);
+				return (false);
+			}
 		}
 
 		/// <summary>
