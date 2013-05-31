@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MKY.Settings
 {
@@ -55,9 +56,10 @@ namespace MKY.Settings
 	{
 		private SettingsType settingsType;
 
-		private List<SettingsItem> nodes;
-		private bool haveChanged;
-		private int changeEventSuspendedCount;
+		private List<SettingsItem> nodes;      // = null;
+		private bool haveChanged;              // = false;
+		private int changeEventSuspendedCount; // = 0;
+		private ReaderWriterLockSlim changeEventSuspendedCountLock = new ReaderWriterLockSlim();
 
 		/// <summary></summary>
 		public event EventHandler<SettingsEventArgs> Changed;
@@ -122,7 +124,7 @@ namespace MKY.Settings
 					int index = this.nodes.IndexOf(nodeOld);
 					this.nodes.RemoveAt(index);
 
-					nodeNew.SuspendChangeEvent();
+					nodeNew.SuspendChangeEvent(nodeOld.changeEventSuspendedCount);
 					nodeNew.SetChanged();
 					nodeNew.Changed += new EventHandler<SettingsEventArgs>(node_Changed);
 					this.nodes.Insert(index, nodeNew);
@@ -319,8 +321,20 @@ namespace MKY.Settings
 		/// <summary></summary>
 		protected virtual void OnChanged(SettingsEventArgs e)
 		{
-			if (this.changeEventSuspendedCount == 0)
-				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
+			bool fire = false;
+
+			this.changeEventSuspendedCountLock.EnterReadLock();
+			try
+			{
+				fire = (this.changeEventSuspendedCount == 0);
+			}
+			finally
+			{
+				this.changeEventSuspendedCountLock.ExitReadLock();
+			}
+
+			if (fire)
+				EventHelper.FireSync<DataEventArgs>(Changed, this, e);
 		}
 
 		#endregion
@@ -335,10 +349,26 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void SuspendChangeEvent()
 		{
-			foreach (SettingsItem node in this.nodes)
-				node.SuspendChangeEvent();
+			SuspendChangeEvent(1);
+		}
 
-			this.changeEventSuspendedCount++;
+		/// <summary>
+		/// Temporarily suspends the change event for the settings and all nodes of the settings tree.
+		/// </summary>
+		protected virtual void SuspendChangeEvent(int suspendedCount)
+		{
+			foreach (DataItem node in this.nodes)
+				node.SuspendChangeEvent(suspendedCount);
+
+			this.changeEventSuspendedCountLock.EnterWriteLock();
+			try
+			{
+				this.changeEventSuspendedCount += suspendedCount;
+			}
+			finally
+			{
+				this.changeEventSuspendedCountLock.ExitWriteLock();
+			}
 		}
 
 		/// <summary>
@@ -355,7 +385,17 @@ namespace MKY.Settings
 		/// <summary></summary>
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent)
 		{
-			this.changeEventSuspendedCount--;
+			this.changeEventSuspendedCountLock.EnterWriteLock();
+			try
+			{
+				this.changeEventSuspendedCount--;
+				if (this.changeEventSuspendedCount < 0)
+					this.changeEventSuspendedCount = 0;
+			}
+			finally
+			{
+				this.changeEventSuspendedCountLock.ExitWriteLock();
+			}
 
 			foreach (SettingsItem node in this.nodes)
 				node.ResumeChangeEvent(forcePendingChangeEvent);
