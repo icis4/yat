@@ -139,15 +139,6 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
-		/// no valid settings file available.
-		/// </summary>
-		public virtual bool FileSuccessfullyLoaded
-		{
-			get { return (this.successfullyLoaded); }
-		}
-
-		/// <summary>
 		/// Returns whether the settings file is up to date.
 		/// </summary>
 		public virtual bool FileIsUpToDate
@@ -162,8 +153,81 @@ namespace MKY.Settings
 				if (!PathEx.Equals(this.filePath, this.lastAccessFilePath))
 					return (false);
 
-				return (File.GetLastAccessTimeUtc(this.filePath) == this.lastAccessTimeUtc);
+				try
+				{
+					DateTime lastAccessTimeUtc = File.GetLastAccessTimeUtc(this.filePath);
+					return (lastAccessTimeUtc == this.lastAccessTimeUtc);
+				}
+				catch
+				{
+					return (false);
+				}
 			}
+		}
+
+		/// <summary>
+		/// Returns whether setting file is readable.
+		/// </summary>
+		public virtual bool FileIsReadable
+		{
+			get
+			{
+				// String validation and file existence:
+				if (!FileExists)
+					return (false);
+
+				try
+				{
+					// Force exception if file is not accessible:
+					FileInfo fi = new FileInfo(this.filePath);
+					return (true);
+				}
+				catch
+				{
+					return (false);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns whether setting file is read-only.
+		/// </summary>
+		public virtual bool FileIsReadOnly
+		{
+			get
+			{
+				// String validation and file existence:
+				if (!FileExists)
+					return (false);
+
+				try
+				{
+					// Force exception if file is not accessible:
+					FileInfo fi = new FileInfo(this.filePath);
+					return (fi.IsReadOnly);
+				}
+				catch
+				{
+					return (false);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns whether setting file is writeable.
+		/// </summary>
+		public virtual bool FileIsWriteable
+		{
+			get { return (!FileIsReadOnly); }
+		}
+
+		/// <summary>
+		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
+		/// no valid settings file available.
+		/// </summary>
+		public virtual bool FileSuccessfullyLoaded
+		{
+			get { return (this.successfullyLoaded); }
 		}
 
 		#endregion
@@ -223,7 +287,7 @@ namespace MKY.Settings
 			object result = null; // If not successful, return <c>null</c>.
 
 			// First check for file to minimize exceptions thrown.
-			if (FileExists)
+			if (FileExists && FileIsReadable)
 			{
 				// First, always try standard deserialization:
 				//  > This is the fastest way of deserialization
@@ -300,7 +364,7 @@ namespace MKY.Settings
 		{
 			bool success = false;
 
-			if (FilePathIsValid)
+			if (FilePathIsValid && FileIsWriteable)
 			{
 				string backup = filePath + IO.FileEx.BackupFileExtension;
 

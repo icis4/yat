@@ -74,7 +74,10 @@ namespace MKY.IO
 			string path = MakeTempPath(type, false);
 
 			if (Directory.Exists(path))
+			{
+				DirectoryEx.MakeAllFilesWritable(path, true);
 				Directory.Delete(path, true);
+			}
 
 			if (outputPathToDebug)
 				Debug.WriteLine(@"Temporary path         """ + path + @""" cleaned.");

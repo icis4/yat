@@ -475,9 +475,14 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			bool workspaceIsReady = (this.workspace != null);
-			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled = !workspaceIsReady;
-			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled = workspaceIsReady;
-			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled = workspaceIsReady;
+
+			bool workspaceFileIsWriteable = false;
+			if (workspaceIsReady)
+				workspaceFileIsWriteable = this.workspace.SettingsFileIsWriteable;
+
+			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled    = !workspaceIsReady;
+			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
+			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWriteable;
 			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
 
 			this.isSettingControls.Leave();
@@ -649,6 +654,10 @@ namespace YAT.Gui.Forms
 
 			bool childIsReady = (ActiveMdiChild != null);
 
+			bool terminalFileIsWriteable = false;
+			if (childIsReady)
+				terminalFileIsWriteable = ((Gui.Forms.Terminal)ActiveMdiChild).SettingsFileIsWriteable;
+
 			bool terminalIsStopped = false;
 			if (childIsReady)
 				terminalIsStopped = ((Gui.Forms.Terminal)ActiveMdiChild).IsStopped;
@@ -670,7 +679,7 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			toolStripButton_MainTool_File_Save.Enabled      = childIsReady;
+			toolStripButton_MainTool_File_Save.Enabled      = childIsReady && terminalFileIsWriteable;
 			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && terminalIsStopped;
 			toolStripButton_MainTool_Terminal_Stop.Enabled  = childIsReady && terminalIsStarted;
 

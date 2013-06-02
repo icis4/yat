@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 
 namespace MKY.IO
@@ -31,72 +30,35 @@ namespace MKY.IO
 	/// Utility methods for <see cref="System.IO.File"/>.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class FileEx
+	public static class DirectoryEx
 	{
 		/// <summary>
-		/// Default extension for backup files.
+		/// Makes all files within a directory writable, including all sub-directories.
 		/// </summary>
-		public const string BackupFileExtension = ".bak";
-
-		/// <summary>
-		/// Returns a unique file name for a file specified by path.
-		/// </summary>
-		public static string MakeUniqueFileName(string path)
+		public static void MakeAllFilesWritable(string path)
 		{
-			return (MakeUniqueFileName(path, ""));
+			MakeAllFilesWritable(path, true);
 		}
 
 		/// <summary>
-		/// Returns a unique file name for a file specified by path, unique part is separated by separator string.
+		/// Makes all files within a directory writable.
 		/// </summary>
-		public static string MakeUniqueFileName(string path, string separator)
+		public static void MakeAllFilesWritable(string path, bool recursive)
 		{
-			string dir  = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;
-			string name = Path.GetFileNameWithoutExtension(path);
-			string ext  = Path.GetExtension(path);
-
-			if (File.Exists(dir + name + ext))
+			if (Directory.Exists(path))
 			{
-				int index = -1; // Initialize to -1 and increment before first use.
-				string unique = "";
-				do
+				// Recurse into sub-directories:
+				if (recursive)
 				{
-					index++; // No need to check for overflow, that is checked by the .NET runtime.
-					unique = index.ToString(CultureInfo.InvariantCulture);
+					foreach (string directoryName in Directory.GetDirectories(path))
+						MakeAllFilesWritable(Path.Combine(path, directoryName), recursive); // Recursion!
 				}
-				while (File.Exists(dir + name + separator + unique + ext));
 
-				return (dir + name + separator + unique + ext);
-			}
-			return (dir + name + ext);
-		}
-
-		/// <summary>
-		/// Tries to delete file <paramref name="filePath"/>.
-		/// </summary>
-		/// <returns>
-		/// Returns <c>true</c> if file successfully saved.
-		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static bool TryDelete(string filePath)
-		{
-			// No need to check whether string is valid, 'File.Exists()' returns <c>false</c>
-			// in such cases.
-			if (File.Exists(filePath))
-			{
-				try
+				// Make files of this directory writable:
+				foreach (string fileName in Directory.GetFiles(path))
 				{
-					File.Delete(filePath);
-					return (true);
+					File.SetAttributes(Path.Combine(path, fileName), FileAttributes.Normal);
 				}
-				catch
-				{
-					return (false);
-				}
-			}
-			else
-			{
-				return (false);
 			}
 		}
 	}

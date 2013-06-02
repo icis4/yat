@@ -538,11 +538,24 @@ namespace YAT.Model
 
 				StringBuilder sb = new StringBuilder();
 
-				sb.Append("[");
-				sb.Append(AutoName);
-
-				if (this.settingsRoot != null)
+				if (this.settingsRoot == null)
 				{
+					sb.Append("[");
+					sb.Append(AutoName);
+					sb.Append("]");
+				}
+				else
+				{
+					sb.Append("[");
+
+					if (this.settingsHandler.SettingsFileIsReadOnly)
+						sb.Append("#");
+
+					sb.Append(AutoName);
+
+					if (this.settingsHandler.SettingsFileIsReadOnly)
+						sb.Append("#");
+
 					if (this.settingsRoot.ExplicitHaveChanged)
 						sb.Append(" *");
 
@@ -1045,8 +1058,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFilePath);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFilePath);
+				else
+					return (null);
 			}
 		}
 
@@ -1055,8 +1072,26 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFileExists);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFileExists);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool SettingsFileIsWriteable
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFileIsWriteable);
+				else
+					return (false);
 			}
 		}
 
@@ -1065,8 +1100,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
+				else
+					return (false);
 			}
 		}
 
@@ -1075,8 +1114,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (SettingsFileHasAlreadyBeenNormallySaved && !SettingsFileExists);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (SettingsFileHasAlreadyBeenNormallySaved && !SettingsFileExists);
+				else
+					return (false);
 			}
 		}
 
@@ -1085,18 +1128,10 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsRoot);
-			}
-		}
+				// Do not call AssertNotDisposed() to still allow reading the settings after the
+				// terminal has been disposed. This is required for certain test cases.
 
-		/// <summary></summary>
-		public virtual WindowSettings WindowSettings
-		{
-			get
-			{
-				AssertNotDisposed();
-				return (this.settingsRoot.Window);
+				return (this.settingsRoot);
 			}
 		}
 
@@ -1174,9 +1209,21 @@ namespace YAT.Model
 				}
 				else if (userInteractionIsAllowed)
 				{
-					// This Save As... request will request the file path from the user and then
-					// call the 'SaveAs()' method below.
-					return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+					// This Save As... request will request the file path from the user and then call
+					// the 'SaveAs()' method below.
+					switch (OnSaveAsFileDialogRequest())
+					{
+						case DialogResult.OK:
+						case DialogResult.Yes:
+							return (true);
+
+						case DialogResult.No:
+							OnTimedStatusTextRequest("Terminal not saved!");
+							return (true);
+
+						default:
+							return (false);
+					}
 				}
 				else
 				{
@@ -1188,21 +1235,42 @@ namespace YAT.Model
 			{
 				if (userInteractionIsAllowed)
 				{
-					// Ensure that existing former auto files are 'Saved As' if auto save is not allowed.
-					if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+					// Ensure that existing former auto files are 'Saved As' if this is no auto save.
+					if (this.settingsRoot.AutoSaved && !isAutoSave)
 					{
-						// This Save As... request will request the file path from the user and then
-						// call the 'SaveAs()' method below.
-						return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+						// This Save As... request will request the file path from the user and then call
+						// the 'SaveAs()' method below.
+						switch (OnSaveAsFileDialogRequest())
+						{
+							case DialogResult.OK:
+							case DialogResult.Yes:
+								return (true);
+
+							case DialogResult.No:
+								OnTimedStatusTextRequest("Terminal not saved!");
+								return (true);
+
+							default:
+								return (false);
+						}
 					}
 
-					// Ensure that normal files which no longer exist are 'Saved As'.
-					if (SettingsFileNoLongerExists)
+					// Ensure that normal files which are write-protected or no longer exist are 'Saved As'.
+					if (!SettingsFileIsWriteable || SettingsFileNoLongerExists)
 					{
+						string reason;
+						if (!SettingsFileIsWriteable)
+							reason = "The file is write-protected.";
+						else
+							reason = "The file no longer exists.";
+
+						string message =
+							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+							reason + " Would you like to save the file at another location or cancel?";
+
 						DialogResult dr = OnMessageInputRequest
 							(
-							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-							"The file no longer exists. Would you like to save the file at another location or cancel?",
+							message,
 							"File Error",
 							MessageBoxButtons.YesNoCancel,
 							MessageBoxIcon.Question
@@ -1211,7 +1279,19 @@ namespace YAT.Model
 						switch (dr)
 						{
 							case DialogResult.Yes:
-								return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+								switch (OnSaveAsFileDialogRequest())
+								{
+									case DialogResult.OK:
+									case DialogResult.Yes:
+										return (true);
+
+									case DialogResult.No:
+										OnTimedStatusTextRequest("Terminal not saved!");
+										return (true);
+
+									default:
+										return (false);
+								}
 
 							case DialogResult.No:
 								OnTimedStatusTextRequest("Terminal not saved!");
@@ -1226,10 +1306,13 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Save terminal.
+			// Save if allowed so.
 			// -------------------------------------------------------------------------------------
 
-			return (SaveToFile(isAutoSave, ""));
+			if (this.settingsHandler.SettingsFileIsWriteable)
+				return (SaveToFile(isAutoSave, ""));
+			else
+				return (false); // Let save fail if file shall not be written.
 		}
 
 		/// <summary>
@@ -1291,12 +1374,15 @@ namespace YAT.Model
 			{
 				if (!isAutoSave)
 				{
+					string message =
+						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine +
+						"File error message: " + ex.InnerException.Message;
+
 					OnFixedStatusTextRequest("Error saving terminal!");
 					OnMessageInputRequest
 						(
-						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
+						message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -1308,12 +1394,15 @@ namespace YAT.Model
 			{
 				if (!isAutoSave)
 				{
+					string message =
+						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine +
+						ex.Message;
+
 					OnFixedStatusTextRequest("Error saving terminal!");
 					OnMessageInputRequest
 						(
-						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine +
-						ex.Message,
+						message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -1449,8 +1538,8 @@ namespace YAT.Model
 				}
 				else
 				{
-					// Explicit have changed, try to auto save and save is required if auto save is desired.
-					doSave = autoSaveIsAllowed;
+					// Explicit have changed, save is required.
+					doSave = true;
 				}
 			}
 
@@ -1508,6 +1597,12 @@ namespace YAT.Model
 				FileEx.TryDelete(formerExistingAutoFilePath);
 				this.settingsHandler.ResetSettingsFilePath();
 				success = true;
+			}
+
+			// Write-protected file:
+			if (!success && !this.settingsHandler.SettingsFileIsWriteable)
+			{
+				success = true; // Consider it successful if file shall not be saved.
 			}
 
 			// No file (w1, t1):
@@ -1870,13 +1965,16 @@ namespace YAT.Model
 					}
 				}
 
-				OnMessageInputRequest
-					(
+				string message =
 					"Unable to start terminal!" + Environment.NewLine + Environment.NewLine +
 					"System error message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
 					yatTitle + Environment.NewLine +
-					yatText,
+					yatText;
+
+				OnMessageInputRequest
+					(
+					message,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

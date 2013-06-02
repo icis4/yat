@@ -143,20 +143,44 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
+		/// Returns whether the settings file is up to date.
+		/// </summary>
+		public virtual bool SettingsFileIsUpToDate
+		{
+			get { return (this.fileHandler.FileIsUpToDate); }
+		}
+
+		/// <summary>
+		/// Returns whether setting file is readable.
+		/// </summary>
+		public virtual bool SettingsFileIsReadable
+		{
+			get { return (this.fileHandler.FileIsReadable); }
+		}
+
+		/// <summary>
+		/// Returns whether setting file is read-only.
+		/// </summary>
+		public virtual bool SettingsFileIsWriteable
+		{
+			get { return (this.fileHandler.FileIsWriteable); }
+		}
+
+		/// <summary>
+		/// Returns whether setting file is writeable.
+		/// </summary>
+		public virtual bool SettingsFileIsReadOnly
+		{
+			get { return (this.fileHandler.FileIsReadOnly); }
+		}
+
+		/// <summary>
 		/// Returns whether setting file has successfully been loaded, <c>false</c> if there was
 		/// no valid settings file available.
 		/// </summary>
 		public virtual bool SettingsFileSuccessfullyLoaded
 		{
 			get { return (this.fileHandler.FileSuccessfullyLoaded); }
-		}
-
-		/// <summary>
-		/// Returns whether the settings file is up to date.
-		/// </summary>
-		public virtual bool SettingsFileIsUpToDate
-		{
-			get { return (this.fileHandler.FileIsUpToDate); }
 		}
 
 		/// <summary>
