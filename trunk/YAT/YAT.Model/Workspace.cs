@@ -306,6 +306,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool SettingsFileIsWriteable
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsHandler.SettingsFileIsWriteable);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool SettingsFileHasAlreadyBeenNormallySaved
 		{
 			get
@@ -511,8 +525,12 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
-				return (this.settingsRoot.HaveChanged);
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.settingsHandler != null)
+					return (this.settingsRoot.HaveChanged);
+				else
+					return (false);
 			}
 		}
 
@@ -521,7 +539,9 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() to still allow reading the settings after the
+				// workspace has been disposed. This is required for certain test cases.
+
 				return (this.settingsRoot);
 			}
 		}
@@ -605,9 +625,21 @@ namespace YAT.Model
 				}
 				else if (userInteractionIsAllowed)
 				{
-					// This Save As... request will request the file path from the user and then
-					// call the 'SaveAs()' method below.
-					return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+					// This Save As... request will request the file path from the user and then call
+					// the 'SaveAs()' method below.
+					switch (OnSaveAsFileDialogRequest())
+					{
+						case DialogResult.OK:
+						case DialogResult.Yes:
+							return (true);
+
+						case DialogResult.No:
+							OnTimedStatusTextRequest("Terminal not saved!");
+							return (true);
+
+						default:
+							return (false);
+					}
 				}
 				else
 				{
@@ -619,21 +651,39 @@ namespace YAT.Model
 			{
 				if (userInteractionIsAllowed)
 				{
-					// Ensure that existing former auto files are 'Saved As' if auto save is not allowed.
-					if (this.settingsRoot.AutoSaved && !autoSaveIsAllowed)
+					// Ensure that existing former auto files are 'Saved As' if this is no auto save.
+					if (this.settingsRoot.AutoSaved && !isAutoSave)
 					{
-						// This Save As... request will request the file path from the user and then
-						// call the 'SaveAs()' method below.
-						return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+						// This Save As... request will request the file path from the user and then call
+						// the 'SaveAs()' method below.
+						switch (OnSaveAsFileDialogRequest())
+						{
+							case DialogResult.OK:
+							case DialogResult.Yes:
+								return (true);
+
+							case DialogResult.No:
+								OnTimedStatusTextRequest("Terminal not saved!");
+								return (true);
+
+							default:
+								return (false);
+						}
 					}
 
-					// Ensure that normal files which no longer exist are 'Saved As'.
-					if (SettingsFileNoLongerExists)
+					// Ensure that normal files which are write-protected or no longer exist are 'Saved As'.
+					if (!SettingsFileIsWriteable || SettingsFileNoLongerExists)
 					{
+						string reason;
+						if (!SettingsFileIsWriteable)
+							reason = "The file is write-protected.";
+						else
+							reason = "The file no longer exists.";
+
 						DialogResult dr = OnMessageInputRequest
 							(
 							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-							"The file no longer exists. Would you like to save the file at another location or cancel?",
+							reason + " Would you like to save the file at another location or cancel?",
 							"File Error",
 							MessageBoxButtons.YesNoCancel,
 							MessageBoxIcon.Question
@@ -642,7 +692,19 @@ namespace YAT.Model
 						switch (dr)
 						{
 							case DialogResult.Yes:
-								return (OnSaveAsFileDialogRequest() == DialogResult.OK);
+								switch (OnSaveAsFileDialogRequest())
+								{
+									case DialogResult.OK:
+									case DialogResult.Yes:
+										return (true);
+
+									case DialogResult.No:
+										OnTimedStatusTextRequest("Terminal not saved!");
+										return (true);
+
+									default:
+										return (false);
+								}
 
 							case DialogResult.No:
 								OnTimedStatusTextRequest("Workspace not saved!");
@@ -657,10 +719,13 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Save workspace.
+			// Save if allowed so.
 			// -------------------------------------------------------------------------------------
 
-			return (SaveToFile(isAutoSave, ""));
+			if (this.settingsHandler.SettingsFileIsWriteable)
+				return (SaveToFile(isAutoSave, ""));
+			else
+				return (false); // Let save fail if file shall not be written.
 		}
 
 		/// <summary>
@@ -878,13 +943,13 @@ namespace YAT.Model
 				if (doSaveWorkspace)
 				{
 					if (autoSaveIsAllowedForTerminals)
-						successWithTerminals = SaveAllTerminals(true, false);
+						successWithTerminals = SaveAllTerminals(true, true);
 					else
 						successWithTerminals = SaveAllTerminals(false, true);
 				}
 				else
 				{
-					// Save normally saved terminals even if workspace was or will not auto saved!
+					// Save normally saved terminals even if workspace was or will not be auto saved!
 					if (autoSaveIsAllowedForTerminals)
 						successWithTerminals = SaveAllTerminalsWhereFileHasAlreadyBeenNormallySaved();
 					else
@@ -985,6 +1050,12 @@ namespace YAT.Model
 				FileEx.TryDelete(formerExistingAutoFilePath);
 				this.settingsHandler.ResetSettingsFilePath();
 				successWithWorkspace = true;
+			}
+
+			// Write-protected file:
+			if (!successWithWorkspace && !this.settingsHandler.SettingsFileIsWriteable)
+			{
+				successWithWorkspace = true; // Consider it successful if file shall not be saved.
 			}
 
 			// No file (m1, w1):
@@ -1401,7 +1472,7 @@ namespace YAT.Model
 			if (fixedIndex >= Indices.FirstFixedIndex)
 				tsi.FixedIndex = fixedIndex;
 
-			tsi.Window = new WindowSettings(terminal.WindowSettings); // Clone window settings.
+			tsi.Window = new WindowSettings(terminal.SettingsRoot.Window); // Clone window settings.
 
 			return (tsi);
 		}
@@ -1641,7 +1712,8 @@ namespace YAT.Model
 		{
 			bool success = true;
 
-			autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowed(autoSaveIsAllowed);
+			if (autoSaveIsAllowed)
+				autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowedIndeed(autoSaveIsAllowed);
 
 			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
@@ -1665,9 +1737,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		private static bool EvaluateWhetherSaveIsFeasibleForThisTerminal(Terminal t)
 		{
-			// Save is not feasible in case of files which have been successfully loaded but do
-			// not exist anymore.
+			// Save is not feasible for write-protected files:
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileIsWriteable)
+				return (false);
 
+			// Save is not feasible for files which no longer exist:
 			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileExists)
 				return (false);
 
@@ -1677,9 +1751,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		private static bool EvaluateWhetherSaveIsRequiredForThisTerminal(Terminal t)
 		{
-			// Save is not required if file does no longer exist and no or only implicit changes
-			// would have to be saved.
+			// Save is not required for write-protected files...
+			// ...with no or only implicit changes would have to be saved:
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileIsWriteable)
+				return (false);
 
+			// Save is not required if file does no longer exist...
+			// ...and no or only implicit changes would have to be saved:
 			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileExists)
 				return (t.SettingsRoot.ExplicitHaveChanged);
 
@@ -1725,8 +1803,8 @@ namespace YAT.Model
 		{
 			bool success = true;
 
-			if (doSave)
-				autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowed(autoSaveIsAllowed);
+			if (doSave && autoSaveIsAllowed)
+				autoSaveIsAllowed = EvaluateWhetherAutoSaveIsAllowedIndeed(autoSaveIsAllowed);
 			else
 				autoSaveIsAllowed = false;
 
@@ -1743,8 +1821,10 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual bool EvaluateWhetherAutoSaveIsAllowed(bool autoSaveIsAllowed)
+		protected virtual bool EvaluateWhetherAutoSaveIsAllowedIndeed(bool autoSaveIsAllowed)
 		{
+			AssertNotDisposed();
+
 			// Do not auto save if workspace file already exists but isn't auto saved.
 			// Ensures that normal workspaces do not refer to auto terminals.
 			if (autoSaveIsAllowed && this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved)

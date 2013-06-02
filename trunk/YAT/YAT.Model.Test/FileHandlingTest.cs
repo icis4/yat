@@ -174,7 +174,11 @@ namespace YAT.Model.Test
 			
 			using (main)
 			{
-				main.Exit();
+				bool success = false;
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be exited successfully!");
+
 				VerifyFiles(workspace, true, terminal, true);
 			}
 		}
@@ -194,9 +198,16 @@ namespace YAT.Model.Test
 			
 			using (main)
 			{
-				workspace.Close();
+				bool success = false;
+
+				success = workspace.Close();
+				Assert.IsTrue(success, "Workspace could not be closed successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
-				main.Exit();
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be exited successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
 			}
 		}
@@ -216,9 +227,16 @@ namespace YAT.Model.Test
 			
 			using (main)
 			{
-				terminal.Close();
+				bool success = false;
+
+				success = terminal.Close();
+				Assert.IsTrue(success, "Terminal could not be closed successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
-				main.Exit();
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be exited successfully!");
+
 				VerifyFiles(workspace, true, terminal, false);
 			}
 		}
@@ -238,11 +256,21 @@ namespace YAT.Model.Test
 	
 			using (main)
 			{
-				terminal.Close();
+				bool success = false;
+
+				success = terminal.Close();
+				Assert.IsTrue(success, "Terminal could not be closed successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
-				workspace.Close();
+
+				success = workspace.Close();
+				Assert.IsTrue(success, "Workspace could not be closed successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
-				main.Exit();
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be exited successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
 			}
 		}
@@ -273,7 +301,9 @@ namespace YAT.Model.Test
 
 			using (main)
 			{
-				main.Exit();
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be exited successfully!");
+
 				VerifyFiles(workspace, true, terminal, true);
 			}
 
@@ -293,9 +323,14 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, true, terminal, true);
 
-				workspace.Close();
+				success = workspace.Close();
+				Assert.IsTrue(success, "Workspace could not be closed successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
-				main.Exit();
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, "Main could not be exited successfully!");
+
 				VerifyFiles(workspace, false, terminal, false);
 			}
 		}
@@ -371,7 +406,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Terminal could not be saved!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
-				main.Exit();
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles(uc, workspace, true, terminal, true);
@@ -589,7 +624,7 @@ namespace YAT.Model.Test
 					);
 
 				// Install callback handler that sets the normal file path for terminal 2:
-				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest);
+				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_SaveAs);
 
 				string autoWorkspaceFilePath = workspace.SettingsFilePath;
 				string autoTerminal2FilePath = terminal2.SettingsFilePath;
@@ -664,7 +699,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
 
 				// Install callback handler that sets the normal file path for terminal 3:
-				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest);
+				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest_SaveAs);
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
@@ -734,27 +769,6 @@ namespace YAT.Model.Test
 			}
 			#endregion
 		}
-
-		#region Tests > TestSequenceOfUseCases_1_through_5a_ > Event Handlers
-		//------------------------------------------------------------------------------------------
-		// Tests > TestSequenceOfUseCases_1_through_5a_ > Event Handlers
-		//------------------------------------------------------------------------------------------
-
-		private void terminal2_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
-		{
-			Terminal terminal = sender as Terminal;
-			Assert.IsTrue(terminal.SaveAs(this.normalTerminal2FilePath), "Terminal 2 could not be saved as!");
-			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
-
-		private void terminal3_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
-		{
-			Terminal terminal = sender as Terminal;
-			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as!");
-			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
-
-		#endregion
 
 		#endregion
 
@@ -1131,6 +1145,276 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Tests > TestWriteProtection
+		//------------------------------------------------------------------------------------------
+		// Tests > TestWriteProtection
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Condition: No files existing.
+		/// Expected:  File saved as.
+		/// </summary>
+		[Test]
+		public virtual void TestWriteProtection()
+		{
+			bool success = false;
+			string step = "";
+			DateTime workspaceTS;
+			DateTime terminalTS;
+
+			#region Step 1
+			// - Initial start
+			// - Create new terminal
+			// - Save terminal as
+			// - Save workspace as
+			using (Main main = new Main())
+			{
+				step = "Step 1: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, step + "Terminal could not be created!");
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				Assert.IsTrue(success, step + "Terminal could not be saved as!");
+
+				success = workspace.SaveAs(this.normalWorkspaceFilePath);
+				Assert.IsTrue(success, step + "Workspace could not be saved as!");
+
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+			}
+			#endregion
+
+			#region Step 2
+			// - Make files write-protected
+			using (Main main = new Main())
+			{
+				step = "Step 2: ";
+				{
+					string filePath = this.normalWorkspaceFilePath;
+					File.SetAttributes(filePath, FileAttributes.ReadOnly);
+					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), "Workspace file is not write-protected!");
+					workspaceTS = File.GetLastWriteTimeUtc(filePath);
+				}
+				{
+					string filePath = this.normalTerminal1FilePath;
+					File.SetAttributes(filePath, FileAttributes.ReadOnly);
+					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), "Terminal file is not write-protected!");
+					terminalTS = File.GetLastWriteTimeUtc(filePath);
+				}
+			}
+			#endregion
+
+			#region Step 3
+			// - Subsequent start on write-protected files
+			//   => Implicit changes to terminal must not be written
+			using (Main main = new Main())
+			{
+				step = "Step 3: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, step + "Terminal not opened from file!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+
+				terminal.StopIO();
+				Assert.IsFalse(terminal.IsStarted, step + "Terminal not stopped!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+
+				string filePath = this.normalTerminal1FilePath;
+				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), "Terminal file is not write-protected!");
+				Assert.IsTrue((terminalTS == File.GetLastWriteTimeUtc(filePath)), "Terminal file time stamp mismatches!");
+			}
+			#endregion
+
+			#region Step 4
+			// - Subsequent start on write-protected files
+			//   => Explicit changes to workspace must not be written
+			using (Main main = new Main())
+			{
+				step = "Step 4: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal1 = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal1, step + "Terminal not opened from file!");
+
+				VerifyFiles(step, workspace, true, false, terminal1, true, false);
+
+				Assert.IsTrue(terminal1.IsStarted, step + "Terminal is no longer started!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
+				Terminal terminal2 = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
+				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
+
+				// Install callback handler that does not save terminal 2:
+				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_DoNotSave);
+
+				// Workspace also has to be saved:
+				workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_DoNotSave);
+
+				int countBefore = this.workspace_MessageInputRequest_DoNotSave_counter;
+				success = (main.Exit() == MainResult.Success);
+				int countAfter = this.workspace_MessageInputRequest_DoNotSave_counter;
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
+
+				VerifyFiles(step, workspace, true, false, terminal1, true, false);
+
+				string filePath = this.normalWorkspaceFilePath;
+				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) != 0), "Workspace file is not write-protected!");
+				Assert.IsTrue((workspaceTS == File.GetLastWriteTimeUtc(filePath)), "Workspace file time stamp mismatches!");
+			}
+			#endregion
+
+			#region Step 5
+			// - Make files writeable again and then perform steps 3 and 4 again
+			using (Main main = new Main())
+			{
+				step = "Step 5: ";
+				{
+					string filePath = this.normalWorkspaceFilePath;
+					File.SetAttributes(filePath, FileAttributes.Normal);
+					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");
+				}
+				{
+					string filePath = this.normalTerminal1FilePath;
+					File.SetAttributes(filePath, FileAttributes.Normal);
+					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Terminal file is not writeable!");
+				}
+			}
+			#endregion
+
+			#region Step 6
+			// - Subsequent start on writeable files
+			//   => Implicit changes to terminal must be written again
+			using (Main main = new Main())
+			{
+				step = "Step 6: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, step + "Terminal not opened from file!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+
+				terminal.StopIO();
+				Assert.IsFalse(terminal.IsStarted, step + "Terminal not stopped!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+
+				string filePath = this.normalTerminal1FilePath;
+				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");
+				Assert.IsTrue((terminalTS != File.GetLastWriteTimeUtc(filePath)), "Terminal file time stamp still unchanged!");
+			}
+			#endregion
+
+			#region Step 7
+			// - Subsequent start on writeable files
+			//   => Explicit changes to workspace must be written again
+			using (Main main = new Main())
+			{
+				step = "Step 7: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal1 = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal1, step + "Terminal not opened from file!");
+
+				VerifyFiles(step, workspace, true, false, terminal1, true, false);
+
+				Assert.IsFalse(terminal1.IsStarted, step + "Terminal is started but should be stopped!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
+				Terminal terminal2 = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
+				success = terminal2.SaveAs(this.normalTerminal2FilePath);
+				Assert.IsTrue(success, step + "Terminal could not be saved as!");
+
+				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+
+				VerifyFiles
+					(
+					step,
+					workspace,
+					true,
+					false,
+					new Terminal[] { terminal1, terminal2 },
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     false     }  // Auto.
+					);
+
+				string filePath = this.normalWorkspaceFilePath;
+				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");
+				Assert.IsTrue((workspaceTS != File.GetLastWriteTimeUtc(filePath)), "Workspace file time stamp still unchanged!");
+			}
+			#endregion
+
+			#region Step 8
+			// - Final start for verification
+			using (Main main = new Main())
+			{
+				step = "Step 8: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+			}
+			#endregion
+		}
+
+		#endregion
+
 		#region Tests > TestFixedIndexFeatureOfWorkspace
 		//------------------------------------------------------------------------------------------
 		// Tests > TestFixedIndexFeatureOfWorkspace
@@ -1349,24 +1633,34 @@ namespace YAT.Model.Test
 			VerifyFiles(prefix, workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
 		}
 
+		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
+		{
+			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileAutoExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
+		}
+
+		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
+		{
+			VerifyFiles(prefix, workspace, workspaceFileExpected, workspaceFileAutoExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
+		}
+
 		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
 		{
-			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileExpected);
+			VerifyFiles("", workspace, workspaceFileExpected, true, terminal, terminalFileExpected, new bool[] { true });
 		}
 
 		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
 		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileExpected);
+			VerifyFiles(prefix, workspace, workspaceFileExpected, true, terminal, terminalFileExpected, new bool[] { true });
 		}
 
 		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
-			VerifyFiles("", workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
+			VerifyFiles("", workspace, workspaceFileExpected, true, terminal, terminalFileExpected, terminalFileAutoExpected);
 		}
 
 		private static void VerifyFiles(string prefix, Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
-			VerifyFiles(prefix, workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
+			VerifyFiles(prefix, workspace, workspaceFileExpected, true, terminal, terminalFileExpected, terminalFileAutoExpected);
 		}
 
 		private static void VerifyFiles(               Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
@@ -1431,6 +1725,40 @@ namespace YAT.Model.Test
 				else
 					Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path must not be in recents!");
 			}
+		}
+
+		#endregion
+
+		#region Private Methods > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void terminal2_SaveAsFileDialogRequest_SaveAs(object sender, DialogEventArgs e)
+		{
+			Terminal terminal = sender as Terminal;
+			Assert.IsTrue(terminal.SaveAs(this.normalTerminal2FilePath), "Terminal 2 could not be saved as!");
+			e.Result = System.Windows.Forms.DialogResult.OK;
+		}
+
+		private void terminal2_SaveAsFileDialogRequest_DoNotSave(object sender, DialogEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.No;
+		}
+
+		private void terminal3_SaveAsFileDialogRequest_SaveAs(object sender, DialogEventArgs e)
+		{
+			Terminal terminal = sender as Terminal;
+			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as!");
+			e.Result = System.Windows.Forms.DialogResult.OK;
+		}
+
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		private int  workspace_MessageInputRequest_DoNotSave_counter; // = 0;
+		private void workspace_MessageInputRequest_DoNotSave(object sender, MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.No;
+			this.workspace_MessageInputRequest_DoNotSave_counter++;
 		}
 
 		#endregion

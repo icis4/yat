@@ -278,6 +278,27 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Terminal Menu > File
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Must be called each time terminal status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_File_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+
+			if (TerminalIsAvailable)
+				toolStripMenuItem_TerminalMenu_File_Save.Enabled = this.terminal.SettingsFileIsWriteable;
+			else
+				toolStripMenuItem_TerminalMenu_File_Save.Enabled = false;
+
+			this.isSettingControls.Leave();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_File_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_File_SetMenuItems();
+		}
+
 		private void toolStripMenuItem_TerminalMenu_File_Save_Click(object sender, EventArgs e)
 		{
 			this.terminal.Save();
@@ -1681,6 +1702,18 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
+		public virtual bool SettingsFileIsWriteable
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.SettingsFileIsWriteable);
+				else
+					return (true);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStopped
 		{
 			get
@@ -3011,6 +3044,7 @@ namespace YAT.Gui.Forms
 		private void SetTerminalControls()
 		{
 			// Terminal menu.
+			toolStripMenuItem_TerminalMenu_File_SetMenuItems();
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 
 			// Terminal panel.

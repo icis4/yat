@@ -157,8 +157,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// This flag indicates that the data item has changed. Either the data of the item itself
-		/// or any of the sub-items. The flag can be used to e.g. display an asterisk * indicating
-		/// a change of data, settings,...
+		/// or any of the sub-items. Either explicit or implicit data.
 		/// </summary>
 		/// <remarks>
 		/// To clear this flag, <see cref="ClearChanged"/> must be called. The flag is never cleared
@@ -175,7 +174,15 @@ namespace MKY.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// This flag indicates that the data item has changed. Either the data of the item itself
+		/// or any of the sub-items. This flag can be used to e.g. display an asterisk * indicating
+		/// a change of data, settings,...
+		/// </summary>
+		/// <remarks>
+		/// To clear this flag, <see cref="ClearChanged"/> must be called. The flag is never cleared
+		/// automatically.
+		/// </remarks>
 		public virtual bool ExplicitHaveChanged
 		{
 			get
@@ -334,7 +341,7 @@ namespace MKY.Settings
 			}
 
 			if (fire)
-				EventHelper.FireSync<DataEventArgs>(Changed, this, e);
+				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
 		}
 
 		#endregion
@@ -357,7 +364,7 @@ namespace MKY.Settings
 		/// </summary>
 		protected virtual void SuspendChangeEvent(int suspendedCount)
 		{
-			foreach (DataItem node in this.nodes)
+			foreach (SettingsItem node in this.nodes)
 				node.SuspendChangeEvent(suspendedCount);
 
 			this.changeEventSuspendedCountLock.EnterWriteLock();

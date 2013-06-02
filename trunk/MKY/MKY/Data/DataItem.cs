@@ -119,7 +119,7 @@ namespace MKY.Data
 
 		/// <summary>
 		/// This flag indicates that the data item has changed. Either the data of the item itself
-		/// or any of the sub-items. The flag can be used to e.g. display an asterisk * indicating
+		/// or any of the sub-items. This flag can be used to e.g. display an asterisk * indicating
 		/// a change of data, settings,...
 		/// </summary>
 		/// <remarks>
