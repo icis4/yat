@@ -54,7 +54,9 @@ using YAT.Utilities;
 
 namespace YAT.Model
 {
-	/// <summary></summary>
+	/// <summary>
+	/// Workspaces (.yaw) of the YAT application model.
+	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Workspace : IDisposable, IGuidProvider
 	{
@@ -805,8 +807,8 @@ namespace YAT.Model
 					OnMessageInputRequest
 						(
 						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
+						"XML error message:"  + Environment.NewLine + ex.Message                            + Environment.NewLine + Environment.NewLine +
+						"File error message:" + Environment.NewLine + ex.InnerException.Message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -821,9 +823,8 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
 						(
-						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine +
-						ex.Message,
+						"Unable to save file"   + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine + ex.Message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -1263,43 +1264,55 @@ namespace YAT.Model
 						(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
 					{
 						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window))
+						{
 							openedTerminalCount++;
+						}
+						else
+						{
+							this.settingsRoot.TerminalSettings.Remove(item);
+							this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+						}
 					}
 					else // In all other cases, 'normally' open the terminal from the given file.
 					{
-						try
-						{
-							if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
-								openedTerminalCount++;
+						string errorMessage;
+						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, out errorMessage))
+						{                                   // Error must be handled here because of looping over terminals.
+							openedTerminalCount++;
 						}
-						catch (System.Xml.XmlException ex)
+						else
 						{
+							this.settingsRoot.TerminalSettings.Remove(item);
+							this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+
 							OnFixedStatusTextRequest("Error opening terminal!");
-
-							string message =
-								"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
-								"XML error message: " + ex.Message + Environment.NewLine +
-								"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
-								"Continue loading workspace?";
-
 							DialogResult result = OnMessageInputRequest
 								(
-								message,
+								errorMessage + Environment.NewLine + "Continue loading workspace?",
 								"Terminal File Error",
 								MessageBoxButtons.YesNo,
 								MessageBoxIcon.Exclamation
 								);
-
 							OnTimedStatusTextRequest("Terminal not opened!");
 
 							if (result == DialogResult.No)
+							{
+								// Remove all remaining items:
+								int remainingCount = (clone.Count - (i + 1));
+								int remainingStartIndex = (this.settingsRoot.TerminalSettings.Count - remainingCount);
+								this.settingsRoot.TerminalSettings.RemoveRange(remainingStartIndex, remainingCount);
+								this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+
+								// Break looping over terminals:
 								break;
+							}
 						}
 					}
 				}
 				else
 				{
 					this.settingsRoot.TerminalSettings.Remove(item);
+					this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 				}
 			}
 
@@ -1313,44 +1326,87 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenTerminalFromFile(string filePath)
 		{
-			return (OpenTerminalFromFile(filePath, Guid.Empty, Indices.DefaultFixedIndex, null, false));
-		}
+			string fileName = Path.GetFileName(filePath);
+			OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
 
-		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool errorHandlingIsSuppressed)
-		{
-			AssertNotDisposed();
-
-			// Open the terminal.
-			// The terminal file is checked within OpenTerminalFromSettings().
-			DocumentSettingsHandler<TerminalSettingsRoot> settings;
-			System.Xml.XmlException ex;
-
-			OnFixedStatusTextRequest("Opening terminal file...");
-			if (OpenTerminalFile(filePath, out settings, out ex))
+			string errorMessage;
+			if (OpenTerminalFromFile(filePath, Guid.Empty, Indices.DefaultFixedIndex, null, out errorMessage))
 			{
-				return (OpenTerminalFromSettings(settings, guid, fixedIndex, windowSettings));
+				return (true);
 			}
 			else
 			{
-				if (!errorHandlingIsSuppressed)
+				OnFixedStatusTextRequest("Error opening terminal!");
+				OnMessageInputRequest
+					(
+					errorMessage,
+					"Terminal File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Stop
+					);
+				OnTimedStatusTextRequest("Terminal not opened!");
+				return (false);
+			}
+		}
+
+		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out string errorMessage)
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settings;
+			System.Xml.XmlException xmlEx;
+			if (OpenTerminalFile(filePath, out settings, out xmlEx))
+			{
+				try
 				{
-					OnFixedStatusTextRequest("Error opening terminal!");
-					OnMessageInputRequest
-						(
-						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
-						"Invalid Terminal File",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-						);
-					OnTimedStatusTextRequest("Terminal not opened!");
+					if (OpenTerminalFromSettings(settings, guid, fixedIndex, windowSettings))
+					{
+						errorMessage = null;
+						return (true);
+					}
+					else
+					{
+						StringBuilder sb = new StringBuilder();
+						sb.AppendLine("Unable to open terminal");
+						sb.AppendLine(filePath);
+
+						errorMessage = sb.ToString();
+						return (false);
+					}
+				}
+				catch (Exception ex)
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.AppendLine("Unable to open terminal");
+					sb.AppendLine(filePath);
+					sb.AppendLine();
+					sb.AppendLine("System error message:");
+					sb.AppendLine(ex.Message);
+
+					errorMessage = sb.ToString();
 					return (false);
 				}
-				else
+			}
+			else
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("Unable to open file");
+				sb.AppendLine(filePath);
+
+				if (xmlEx != null)
 				{
-					throw (ex);
+					sb.AppendLine();
+					sb.AppendLine("XML error message:");
+					sb.AppendLine(xmlEx.Message);
+
+					if (xmlEx.InnerException != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine("File error message:");
+						sb.AppendLine(xmlEx.InnerException.Message);
+					}
 				}
+
+				errorMessage = sb.ToString();
+				return (false);
 			}
 		}
 
@@ -1364,17 +1420,17 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Ensure that the terminal file is not already open.
+			// Ensure that the terminal file is not already open:
 			if (!CheckTerminalFiles(settings.SettingsFilePath))
 				return (false);
 
 			OnFixedStatusTextRequest("Opening terminal...");
 
-			// Set window settings if there are.
+			// Set window settings if there are:
 			if (windowSettings != null)
 				settings.Settings.Window = windowSettings;
 
-			// Create terminal.
+			// Create terminal:
 			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settings, guid);
 			AddToWorkspace(terminal, fixedIndex);
 
@@ -1438,12 +1494,20 @@ namespace YAT.Model
 
 			try
 			{
-				settings = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				settings.SettingsFilePath = filePath;
-				settings.Load();
-
-				exception = null;
-				return (true);
+				DocumentSettingsHandler<TerminalSettingsRoot> s = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				s.SettingsFilePath = filePath;
+				if (s.Load())
+				{
+					settings = s;
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					settings = null;
+					exception = null;
+					return (false);
+				}
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -1494,7 +1558,7 @@ namespace YAT.Model
 			// Add terminal settings for new terminals.
 			// Replace terminal settings if workspace settings have been loaded from file prior.
 			this.settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal, effectiveIndex));
-			this.settingsRoot.SetChanged();
+			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
 			// Fire terminal added event.
 			OnTerminalAdded(new TerminalEventArgs(terminal));
@@ -1512,7 +1576,7 @@ namespace YAT.Model
 			if ((tsiOld == null) || (tsiNew != tsiOld))
 			{
 				this.settingsRoot.TerminalSettings.ReplaceGuidItem(tsiNew);
-				this.settingsRoot.SetChanged();
+				this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 			}
 		}
 
@@ -1527,7 +1591,7 @@ namespace YAT.Model
 
 			// Remove terminal from workspace settings.
 			this.settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
-			this.settingsRoot.SetChanged();
+			this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
 			// Fire terminal added event.
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
