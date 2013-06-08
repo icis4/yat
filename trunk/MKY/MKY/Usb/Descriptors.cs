@@ -47,12 +47,12 @@ namespace MKY.Usb
 		/// <summary>
 		/// Maximum of 126 characters in UCS-2 format.
 		/// </summary>
-		public const int MaximumStringDescriptorCharLength = 126;
+		public const int MaxStringDescriptorCharLength = 126;
 
 		/// <summary>
 		/// 2 x 126 characters + 2 x '\0' results in 254.
 		/// </summary>
-		public const int MaximumStringDescriptorByteLength = 254;
+		public const int MaxStringDescriptorByteLength = 254;
 
 		#endregion
 

@@ -138,9 +138,9 @@ namespace YAT.Gui.Controls
 
 		/// <summary>
 		/// Only set device list and controls once as soon as this control is enabled. This saves
-		/// some time on startup since scanning for the ports takes quite some time.
+		/// some time on startup since scanning for the ports may take some time.
 		/// </summary>
-		private bool deviceListIsInitialized; // = false;
+		private bool portListIsInitialized; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -259,10 +259,10 @@ namespace YAT.Gui.Controls
 				SetControls();
 			}
 
-			// Ensure that device list is set as soon as this control gets enabled. Could
+			// Ensure that port list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
-			// to implement this here so it also done on initial Paint event.
-			if (Enabled && !this.deviceListIsInitialized)
+			// to implement this here so it also done on initial 'Paint' event.
+			if (Enabled && !this.portListIsInitialized)
 			{
 				SetSerialPortList();
 			}
@@ -356,7 +356,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <remarks>
-		/// Without precaution, and in case of no devices, the message box may appear twice due to
+		/// Without precaution, and in case of no ports, the message box may appear twice due to
 		/// the recursion shown below:
 		///  > MKY.Diagnostics.DebugEx.WriteStack(Type type)
 		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
@@ -376,9 +376,9 @@ namespace YAT.Gui.Controls
 		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		///  > YAT.Gui.Controls.SerialPortSelection.SetSerialPortList()
 		///  > YAT.Gui.Controls.SerialPortSelection.RefreshSerialPortList()
-		/// This issue is fixed by setting 'this.deviceListIsInitialized' upon entering this method.
+		/// This issue is fixed by setting 'this.portListIsInitialized' upon entering this method.
 		/// 
-		/// Note that the same fix has been implemented in <see cref="UsbSerialHidDeviceSelection"/>.
+		/// Note that the same fix has been implemented in <see cref="SocketSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
@@ -387,10 +387,9 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
-				this.deviceListIsInitialized = true; // Purpose see remarks above.
+				this.portListIsInitialized = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
 
-				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
 				SerialPortCollection ports = new SerialPortCollection();
 
 				// Exceptions should not but can happen:
@@ -446,17 +445,24 @@ namespace YAT.Gui.Controls
 					if (comboBox_Port.Items.Count > 0)
 					{
 						if ((this.portId != null) && (ports.Contains(this.portId)))
+						{
+							// Nothing has changed, just restore the selected item:
 							comboBox_Port.SelectedItem = this.portId;
-						else if ((old != null) && (ports.Contains(old)))
-							comboBox_Port.SelectedItem = old;
+						}
 						else
 						{
+							string portIdNoLongerAvailable = this.portId;
+
+							// Ensure that the settings item is defaulted and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							PortId = ports[0];
+
 							comboBox_Port.SelectedIndex = 0;
 
-							if (this.portId != null)
+							if (!string.IsNullOrEmpty(portIdNoLongerAvailable))
 							{
 								string message =
-									"The given serial port " + this.portId + " is currently not available." + Environment.NewLine +
+									"The given serial port " + portIdNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
 									"The setting has been defaulted to the first available port.";
 
 								MessageBoxEx.Show
@@ -469,12 +475,13 @@ namespace YAT.Gui.Controls
 									);
 							}
 						}
-
-						// Set property instead of member to ensure that changed event is fired.
-						PortId = comboBox_Port.SelectedItem as SerialPortId;
 					}
 					else
 					{
+						// Ensure that the settings item is nulled and reset by SetControls().
+						// Set property instead of member to ensure that changed event is fired.
+						PortId = null;
+
 						string message =
 							"There are no serial COM ports available." + Environment.NewLine +
 							"Check the serial COM ports of your system.";

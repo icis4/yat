@@ -279,8 +279,8 @@ namespace MKY.Win32
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_CAPS
 			{
-				public Int16 Usage;
-				public Int16 UsagePage;
+				public Int16 Usage;     // \attention: The Win32 HIDP_CAPS structure contains 'Usage' before 'UsagePage', even though it should be vice-versa from a USB logic point of view!
+				public Int16 UsagePage; // \attention: The Win32 HIDP_CAPS structure contains 'UsagePage' after 'Usage', even though it should be vice-versa from a USB logic point of view!
 				public Int16 InputReportByteLength;
 				public Int16 OutputReportByteLength;
 				public Int16 FeatureReportByteLength;
@@ -449,7 +449,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, s, (UInt32)s.Capacity))
 				{
 					IndexedString = s.ToString();
@@ -489,7 +489,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 				if (HidD_GetManufacturerString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
 					Manufacturer = s.ToString();
@@ -554,7 +554,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 				if (HidD_GetProductString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
 					Product = s.ToString();
@@ -574,7 +574,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetSerialNumberString(SafeFileHandle HidDeviceObject, out string SerialNumber)
 			{
-				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 				if (HidD_GetSerialNumberString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
 					SerialNumber = s.ToString();
@@ -980,32 +980,32 @@ namespace MKY.Win32
 			if ((NativeMethods.HidP_GetCaps(pPreparsedData, ref capabilities) == 0))
 				return (false);
 
-			System.Diagnostics.Debug.WriteLine("USB device capabilities:");
+			System.Diagnostics.Debug.WriteLine("USB HID device capabilities:");
 			System.Diagnostics.Debug.Indent();
-			System.Diagnostics.Debug.WriteLine("Usage:                         0x" + capabilities.Usage    .ToString("X2", CultureInfo.InvariantCulture));
-			System.Diagnostics.Debug.WriteLine("Usage Page:                    0x" + capabilities.UsagePage.ToString("X2", CultureInfo.InvariantCulture));
-			System.Diagnostics.Debug.WriteLine("Input Report Byte Length:        " + capabilities.InputReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Output Report Byte Length:       " + capabilities.OutputReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Feature Report Byte Length:      " + capabilities.FeatureReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
-			System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
-			System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
-			System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
-			System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
-			System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
-			System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
-			System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
-			System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
-			System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
+			System.Diagnostics.Debug.WriteLine("Usage page:                    0x" + capabilities.UsagePage.ToString("X4", CultureInfo.InvariantCulture));
+			System.Diagnostics.Debug.WriteLine("Usage ID:                      0x" + capabilities.Usage    .ToString("X4", CultureInfo.InvariantCulture));
+			System.Diagnostics.Debug.WriteLine("Input report byte length:        " + capabilities.InputReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Output report byte length:       " + capabilities.OutputReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Feature report byte length:      " + capabilities.FeatureReportByteLength);
+			System.Diagnostics.Debug.WriteLine("Number of link collection nodes: " + capabilities.NumberLinkCollectionNodes);
+			System.Diagnostics.Debug.WriteLine("Number of input button caps:     " + capabilities.NumberInputButtonCaps);
+			System.Diagnostics.Debug.WriteLine("Number of input value caps:      " + capabilities.NumberInputValueCaps);
+			System.Diagnostics.Debug.WriteLine("Number of input data indices:    " + capabilities.NumberInputDataIndices);
+			System.Diagnostics.Debug.WriteLine("Number of output button caps:    " + capabilities.NumberOutputButtonCaps);
+			System.Diagnostics.Debug.WriteLine("Number of output value caps:     " + capabilities.NumberOutputValueCaps);
+			System.Diagnostics.Debug.WriteLine("Number of output data indices:   " + capabilities.NumberOutputDataIndices);
+			System.Diagnostics.Debug.WriteLine("Number of feature button caps:   " + capabilities.NumberFeatureButtonCaps);
+			System.Diagnostics.Debug.WriteLine("Number of feature value caps:    " + capabilities.NumberFeatureValueCaps);
+			System.Diagnostics.Debug.WriteLine("Number of feature data indices:  " + capabilities.NumberFeatureDataIndices);
 			System.Diagnostics.Debug.Unindent();
 
 			// \remind (2010-03-21 / mky):
-			// The following two lines demonstrate how the devices value capabilities can be retrieved.
-			// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
-			// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
+			// The following two lines demonstrate how the device's value capabilities can be retrieved.
+			// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'.
+			// Before making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
 			//
-			//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
-			//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
+		////HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
+		////HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
 
 			return (true);
 		}

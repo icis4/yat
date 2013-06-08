@@ -112,11 +112,16 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns an array of all USB Ser/HID devices currently available on the system.
+		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
 		public static new DeviceInfo[] GetDevices()
 		{
-			return (HidDevice.GetDevices(HidUsagePage.GenericDesktopControls, HidUsage.Undefined));
+			// \remind MKY 2013-06-08:
+			// It is not possible to limit this list/array to true Ser/HID devices, as there is no
+			// standardized way to retrieve whether a device is Ser/HID capable. However, this list
+			// could be limited to vendor-specific usages. Feature request #195 "USB Ser/HID device
+			// list could be limited to vendor-specific usages" deals with this potential feature.
+			return (HidDevice.GetDevices());
 		}
 
 		#endregion
@@ -716,7 +721,7 @@ namespace MKY.IO.Usb
 					this.stream.EndRead(result);
 
 					// Convert the input report into usable data.
-					HidInputReportContainer input = new HidInputReportContainer(this);
+					SerialHidInputReportContainer input = new SerialHidInputReportContainer(this);
 					input.CreateDataFromReport(inputReportBuffer, true);
 
 					// Don't care about report ID, Ser/HID only supports report 0.
@@ -809,7 +814,7 @@ namespace MKY.IO.Usb
 				// Report ID is fixed, Ser/HID only supports report 0.
 				byte reportId = 0;
 
-				HidOutputReportContainer output = new HidOutputReportContainer(this);
+				SerialHidOutputReportContainer output = new SerialHidOutputReportContainer(this);
 				output.CreateReportsFromData(reportId, data);
 
 				foreach (byte[] report in output.Reports)
@@ -828,14 +833,21 @@ namespace MKY.IO.Usb
 		{
 			if (this.stream != null)
 			{
-				// \attention:
-				// Set this.stream to null before initiating Close() to ensure that the IsOpen
-				// property returns false during closing. AsyncReadCompleted() will be called
-				// when Close() is initiated. AsyncReadCompleted() will check IsOpen.
+				try
+				{
+					// \attention:
+					// Set this.stream to null before initiating Close() to ensure that the IsOpen
+					// property returns false during closing. AsyncReadCompleted() will be called
+					// when Close() is initiated. AsyncReadCompleted() will check IsOpen.
 
-				FileStream fs = this.stream;
-				this.stream = null;
-				fs.Close();
+					FileStream fs = this.stream;
+					this.stream = null;
+					fs.Close();
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex);
+				}
 			}
 		}
 

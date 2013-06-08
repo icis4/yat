@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
@@ -91,6 +92,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of the USB HID devices of the given usage page currently available
 		/// on the system.
 		/// </summary>
+		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage)
 		{
 			List<DeviceInfo> l = new List<DeviceInfo>();
@@ -111,7 +113,8 @@ namespace MKY.IO.Usb
 		/// Returns an array of the USB HID devices of the given usage page and usage currently
 		/// available on the system.
 		/// </summary>
-		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsage usage)
+		[CLSCompliant(false)]
+		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId)
 		{
 			List<DeviceInfo> l = new List<DeviceInfo>();
 
@@ -120,7 +123,7 @@ namespace MKY.IO.Usb
 				using (HidDevice device = new HidDevice(di))
 				{
 					if (device.UsagePage == usagePage)
-						if (device.Usage == usage)
+						if (device.UsageId == usageId)
 							l.Add(di);
 				}
 			}
@@ -251,7 +254,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		private HidUsagePage usagePage;
-		private HidUsage usage;
+		private HidUsageId   usageId;
 
 		private int inputReportLength;
 		private int outputReportLength;
@@ -336,7 +339,7 @@ namespace MKY.IO.Usb
 					if (Win32.Hid.GetDeviceCapabilities(deviceHandle, ref capabilities))
 					{
 						this.usagePage = (HidUsagePageEx)capabilities.UsagePage;
-						this.usage     = (HidUsageEx)capabilities.Usage;
+						this.usageId   = (HidUsageIdEx)  capabilities.Usage; // The Win32 HIDP_CAPS structure is named 'Usage', not 'UsageId'.
 
 						this.inputReportLength   = capabilities.InputReportByteLength;
 						this.outputReportLength  = capabilities.OutputReportByteLength;
@@ -352,6 +355,34 @@ namespace MKY.IO.Usb
 						this.featureButtonCaps   = capabilities.NumberFeatureButtonCaps;
 						this.featureValueCaps    = capabilities.NumberFeatureValueCaps;
 						this.featureDataIndices  = capabilities.NumberFeatureDataIndices;
+
+						// Output user-friendly usage information:
+						string usagePageValue = "0x" + this.usagePage.GetHashCode().ToString("X4", CultureInfo.InvariantCulture);
+						string usageIdValue   = "0x" + this.usageId  .GetHashCode().ToString("X4", CultureInfo.InvariantCulture);
+
+						string usagePageName = "<Unknown>";
+						try
+						{
+							string name = Enum.GetName(typeof(HidUsagePage), this.usagePage);
+							if (!string.IsNullOrEmpty(name))
+								usagePageName = name;
+						}
+						catch { }
+
+						string usageIdName = "<Unknown>";
+						try
+						{
+							string name = Enum.GetName(typeof(HidUsageId), this.usageId);
+							if (!string.IsNullOrEmpty(name))
+								usageIdName = name;
+						}
+						catch { }
+
+						System.Diagnostics.Debug.WriteLine("USB HID device usage information:");
+						System.Diagnostics.Debug.Indent();
+						System.Diagnostics.Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
+						System.Diagnostics.Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
+						System.Diagnostics.Debug.Unindent();
 					}
 				}
 				finally
@@ -406,15 +437,17 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		public virtual HidUsagePage UsagePage
 		{
 			get { return (this.usagePage); }
 		}
 
 		/// <summary></summary>
-		public virtual HidUsage Usage
+		[CLSCompliant(false)]
+		public virtual HidUsageId UsageId
 		{
-			get { return (this.usage); }
+			get { return (this.usageId); }
 		}
 
 		/// <summary></summary>
