@@ -72,6 +72,12 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		/// <summary>
+		/// Only set interface list and controls once as soon as this control is enabled. This saves
+		/// some time on startup since scanning for the interfaces may take some time.
+		/// </summary>
+		private bool localInterfaceListIsInitialized; // = false;
+
 		private SettingControlsHelper isSettingControls;
 
 		private SocketHostType hostType = DefaultHostType;
@@ -311,10 +317,16 @@ namespace YAT.Gui.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-
 				InitializeControls();
-				SetLocalInterfaceList();
 				SetControls();
+			}
+
+			// Ensure that interface list is set as soon as this control gets enabled. Could
+			// also be implemented in a EnabledChanged event handler. However, it's easier
+			// to implement this here so it also done on initial 'Paint' event.
+			if (Enabled && !this.localInterfaceListIsInitialized)
+			{
+				SetLocalInterfaceList();
 			}
 		}
 
@@ -374,8 +386,7 @@ namespace YAT.Gui.Controls
 						{
 							string message =
 								"Remote host name or address is invalid!" + Environment.NewLine + Environment.NewLine +
-								"System error message:" + Environment.NewLine +
-								ex.Message;
+								"System error message:" + Environment.NewLine + ex.Message;
 
 							MessageBoxEx.Show
 								(
@@ -507,14 +518,37 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Leave();
 		}
 
+		/// <remarks>
+		/// Without precaution, and in case of no interfaces, the message box may appear twice due to
+		/// the recursion shown below:
+		///  > MKY.Diagnostics.DebugEx.WriteStack(Type type)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		///  > YAT.Gui.Controls.SocketSelection.SetLocalInterfaceList()
+		///  > YAT.Gui.Controls.SocketSelection.SocketSelection_Paint(Object sender, PaintEventArgs e)
+		///  > System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer, Boolean disposeEventArgs)
+		///  > System.Windows.Forms.Control.WmPaint(Message m)
+		///  > System.Windows.Forms.Control.WndProc(Message m)
+		///  > System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message m)
+		///  > System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+		///  > System.Windows.Forms.MessageBox.ShowCore(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, Boolean showHelp)
+		///  > System.Windows.Forms.MessageBox.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		///  > YAT.Gui.Controls.SocketSelection.SetLocalInterfaceList()
+		/// This issue is fixed by setting 'this.interfaceListIsInitialized' upon entering this method.
+		/// 
+		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
+		/// </remarks>
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetLocalInterfaceList()
 		{
 			if (Enabled)
 			{
+				this.localInterfaceListIsInitialized = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
-
-				IPNetworkInterface old = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
 
 				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();
 				localInterfaces.FillWithAvailableInterfaces();
@@ -525,17 +559,24 @@ namespace YAT.Gui.Controls
 				if (comboBox_LocalInterface.Items.Count > 0)
 				{
 					if ((this.localInterface != null) && (localInterfaces.Contains(this.localInterface)))
+					{
+						// Nothing has changed, just restore the selected item:
 						comboBox_LocalInterface.SelectedItem = this.localInterface;
-					else if ((old != null) && (localInterfaces.Contains(old)))
-						comboBox_LocalInterface.SelectedItem = old;
+					}
 					else
 					{
+						string localInterfaceNoLongerAvailable = this.localInterface;
+
+						// Ensure that the settings item is defaulted and shown by SetControls().
+						// Set property instead of member to ensure that changed event is fired.
+						LocalInterface = localInterfaces[0];
+
 						comboBox_LocalInterface.SelectedIndex = 0;
 
-						if (this.localInterface != null)
+						if (!string.IsNullOrEmpty(localInterfaceNoLongerAvailable))
 						{
 							string message =
-								"The given local network interface " + this.localInterface + " is currently not available." + Environment.NewLine +
+								"The given local network interface " + localInterfaceNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
 								"The setting has been defaulted to the first available interface.";
 
 							MessageBoxEx.Show
@@ -548,12 +589,13 @@ namespace YAT.Gui.Controls
 								);
 						}
 					}
-
-					// Set property instead of member to ensure that changed event is fired.
-					LocalInterface = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
 				}
 				else
 				{
+					// Ensure that the settings item is nulled and reset by SetControls().
+					// Set property instead of member to ensure that changed event is fired.
+					LocalInterface = null;
+
 					MessageBoxEx.Show
 						(
 						this,

@@ -86,6 +86,7 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="SerialHidReports.cs" />
     <Compile Include="SerialHidDeviceCollection.cs" />
     <Compile Include="HidDeviceCollection.cs" />
     <Compile Include="HidDevice.cs" />

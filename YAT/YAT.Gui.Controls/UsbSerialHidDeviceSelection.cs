@@ -50,7 +50,7 @@ namespace YAT.Gui.Controls
 
 		/// <summary>
 		/// Only set device list and controls once as soon as this control is enabled. This saves
-		/// some time on startup since scanning for the ports takes quite some time.
+		/// some time on startup since scanning for the devices may take some time.
 		/// </summary>
 		private bool deviceListIsInitialized; // = false;
 
@@ -164,7 +164,7 @@ namespace YAT.Gui.Controls
 
 			// Ensure that device list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
-			// to implement this here so it also done on initial Paint event.
+			// to implement this here so it also done on initial 'Paint' event.
 			if (Enabled && !this.deviceListIsInitialized)
 			{
 				SetDeviceList();
@@ -228,7 +228,7 @@ namespace YAT.Gui.Controls
 		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.RefreshDeviceList()
 		/// This issue is fixed by setting 'this.deviceListIsInitialized' upon entering this method.
 		/// 
-		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/>.
+		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="SocketSelection"/>.
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetDeviceList()
@@ -239,8 +239,6 @@ namespace YAT.Gui.Controls
 				this.deviceListIsInitialized = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
 
-				DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
-
 				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
 				devices.FillWithAvailableDevices();
 
@@ -250,17 +248,24 @@ namespace YAT.Gui.Controls
 				if (comboBox_Device.Items.Count > 0)
 				{
 					if ((this.deviceInfo != null) && (devices.Contains(this.deviceInfo)))
+					{
+						// Nothing has changed, just restore the selected item:
 						comboBox_Device.SelectedItem = this.deviceInfo;
-					else if ((old != null) && (devices.Contains(old)))
-						comboBox_Device.SelectedItem = old;
+					}
 					else
 					{
+						string deviceInfoNoLongerAvailable = this.deviceInfo;
+
+						// Ensure that the settings item is defaulted and shown by SetControls().
+						// Set property instead of member to ensure that changed event is fired.
+						DeviceInfo = devices[0];
+
 						comboBox_Device.SelectedIndex = 0;
 
-						if (this.deviceInfo != null)
+						if (!string.IsNullOrEmpty(deviceInfoNoLongerAvailable))
 						{
 							string message =
-								"The given USB device " + this.deviceInfo + " is currently not available." + Environment.NewLine +
+								"The given USB device " + deviceInfoNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
 								"The setting has been defaulted to the first available device.";
 
 							MessageBoxEx.Show
@@ -273,12 +278,13 @@ namespace YAT.Gui.Controls
 								);
 						}
 					}
-
-					// Set property instead of member to ensure that changed event is fired.
-					DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
 				}
 				else
 				{
+					// Ensure that the settings item is nulled and reset by SetControls().
+					// Set property instead of member to ensure that changed event is fired.
+					DeviceInfo = null;
+
 					MessageBoxEx.Show
 						(
 						this,

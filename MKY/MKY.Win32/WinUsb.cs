@@ -238,7 +238,7 @@ namespace MKY.Win32
 			{
 				if (Version.IsWindowsVistaOrLater)
 				{
-					StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
+					StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 					uint l;
 					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (ushort)languageId, s, (uint)s.Capacity, out l))
 					{

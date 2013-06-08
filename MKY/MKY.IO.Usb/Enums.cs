@@ -35,16 +35,16 @@ namespace MKY.IO.Usb
 {
 	/// <summary>
 	/// USB device classes as defined by the USB standard.
-	/// See http://www.usb.org/developers/defined_class/ for detailed list.
+	/// See http://www.usb.org/developers/defined_class/ for latest list.
 	/// </summary>
-	public enum DeviceClass
+	public enum DeviceClass : byte // 8 bits!
 	{
 		DeviceSpecific      = 0x00,
 
 		Audio               = 0x01,
 		CdcControl          = 0x02,
 		Hid                 = 0x03,
-		//// Reserved         0x04
+		////                  0x04 is reserved
 		Physical            = 0x05,
 		Image               = 0x06,
 		Printer             = 0x07,
@@ -53,10 +53,11 @@ namespace MKY.IO.Usb
 		CdcData             = 0x0A,
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SmartCard", Justification = "Item names are given by USB.")]
 		SmartCard           = 0x0B,
-		//// Reserved         0x0C
+		////                  0x0C is reserved
 		ContentSecurity     = 0x0D,
 		Video               = 0x0E,
 		PersonalHealthcare  = 0x0F,
+		AudioVideo          = 0x10,
 
 		DiagnosticDevice    = 0xDC,
 
@@ -148,7 +149,7 @@ namespace MKY.IO.Usb
 	{
 		GetStatus        = 0x00,
 		ClearFeature     = 0x01,
-		////               0x02 is reserved 
+		////               0x02 is reserved
 		SetFeature       = 0x03,
 		////               0x04 is reserved
 		SetAddress       = 0x05,
@@ -203,12 +204,12 @@ namespace MKY.IO.Usb
 	}
 
 	/// <summary>
-	/// The USB usage page as described in http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
+	/// The USB usage page as described in http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
-	public enum HidUsagePage
+	[CLSCompliant(false)]
+	public enum HidUsagePage : ushort // 16 bits!
 	{
-		Unknown                      =   -1,
 		Undefined                    = 0x00,
 		GenericDesktopControls       = 0x01,
 		SimulationControls           = 0x02,
@@ -225,15 +226,15 @@ namespace MKY.IO.Usb
 		Telephony                    = 0x0B,
 		Consumer                     = 0x0C,
 		Digitizer                    = 0x0D,
-		//// Reserved                  0x0E
+		////                           0x0E is reserved
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "PID", Justification = "Item names are given by USB.")]
 		PID                          = 0x0F,
 		Unicode                      = 0x10,
-		//// Reserved                  0x11..0x13
+		////                           0x11..0x13 are reserved
 		AlphanumericDisplay          = 0x14,
-		//// Reserved                  0x15..0x3F
+		////                           0x15..0x3F are reserved
 		MedicalInstruments           = 0x40,
-		//// Reserved                  0x41..0x7F
+		////                           0x41..0x7F are reserved
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Monitor_1                    = 0x80,
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
@@ -250,7 +251,7 @@ namespace MKY.IO.Usb
 		Power_3                      = 0x86,
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Item names are given by USB.")]
 		Power_4                      = 0x87,
-		//// Reserved                  0x88..0x8B
+		////                           0x88..0x8B are reserved
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BarCode", Justification = "Item names are given by USB.")]
 		BarCodeScanner               = 0x8C,
 		Scale                        = 0x8D,
@@ -258,8 +259,8 @@ namespace MKY.IO.Usb
 		PointOfSale                  = 0x8F,
 		CameraControl                = 0x90,
 		Arcade                       = 0x91,
-		//// Reserved                  0x92..0xFEFF
-		//// Vendor-defined          0xFF00..0xFFFF
+		////                           0x92..0xFEFF are reserved
+		////                         0xFF00..0xFFFF are vendor-defined
 	}
 
 	#region HidUsagePage XEnum
@@ -271,13 +272,14 @@ namespace MKY.IO.Usb
 	[Serializable]
 	public class HidUsagePageEx : EnumEx
 	{
-		/// <summary>Default is <see cref="HidUsagePage.Unknown"/>.</summary>
+		/// <summary>Default is <see cref="HidUsagePage.Undefined"/>.</summary>
 		public HidUsagePageEx()
-			: base(HidUsagePage.Unknown)
+			: base(HidUsagePage.Undefined)
 		{
 		}
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		protected HidUsagePageEx(HidUsagePage page)
 			: base(page)
 		{
@@ -323,12 +325,14 @@ namespace MKY.IO.Usb
 		#region Conversion Operators
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		public static implicit operator HidUsagePage(HidUsagePageEx page)
 		{
 			return ((HidUsagePage)page.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		public static implicit operator HidUsagePageEx(HidUsagePage page)
 		{
 			return (new HidUsagePageEx(page));
@@ -364,44 +368,35 @@ namespace MKY.IO.Usb
 	#endregion
 
 	/// <summary>
-	/// The USB HID usage as described in http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
+	/// The USB HID usage as described in http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
-	public enum HidUsage
+	[CLSCompliant(false)]
+	public enum HidUsageId : ushort // 16 bits!
 	{
-		Unknown     =   -1,
-		Undefined   = 0x00,
-		Pointer     = 0x01,
-		Mouse       = 0x02,
-		//// Reserved 0x03,
-		Joystick    = 0x04,
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "GamePad", Justification = "Item names are given by USB.")]
-		GamePad     = 0x05,
-		Keyboard    = 0x06,
-		Keypad      = 0x07,
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "Item names are given by USB.")]
-		MultiAxis   = 0x08,
-		TabletPC    = 0x09,
-		//// See document above.
+		Undefined                    = 0x00,
+		////                           0x01..0xFEFF are defined per usage page
+		////                         0xFF00..0xFFFF are vendor-defined
 	}
 
-	#region HidUsage XEnum
+	#region HidUsageId XEnum
 
 	/// <summary>
 	/// Extended enum HidUsageEx.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	[Serializable]
-	public class HidUsageEx : EnumEx
+	public class HidUsageIdEx : EnumEx
 	{
-		/// <summary>Default is <see cref="HidUsage.Unknown"/>.</summary>
-		public HidUsageEx()
-			: base(HidUsage.Unknown)
+		/// <summary>Default is <see cref="HidUsageId.Undefined"/>.</summary>
+		public HidUsageIdEx()
+			: base(HidUsageId.Undefined)
 		{
 		}
 
 		/// <summary></summary>
-		protected HidUsageEx(HidUsage usage)
+		[CLSCompliant(false)]
+		protected HidUsageIdEx(HidUsageId usage)
 			: base(usage)
 		{
 		}
@@ -419,19 +414,19 @@ namespace MKY.IO.Usb
 		#region Parse
 
 		/// <summary></summary>
-		public static HidUsageEx Parse(string usage)
+		public static HidUsageIdEx Parse(string usage)
 		{
-			return ((HidUsageEx)int.Parse(usage, CultureInfo.InvariantCulture));
+			return ((HidUsageIdEx)int.Parse(usage, CultureInfo.InvariantCulture));
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string usage, out HidUsageEx result)
+		public static bool TryParse(string usage, out HidUsageIdEx result)
 		{
 			int intResult;
 
 			if (int.TryParse(usage, out intResult))
 			{
-				result = (HidUsageEx)intResult;
+				result = (HidUsageIdEx)intResult;
 				return (true);
 			}
 			else
@@ -446,37 +441,39 @@ namespace MKY.IO.Usb
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator HidUsage(HidUsageEx usage)
+		[CLSCompliant(false)]
+		public static implicit operator HidUsageId(HidUsageIdEx usage)
 		{
-			return ((HidUsage)usage.UnderlyingEnum);
+			return ((HidUsageId)usage.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator HidUsageEx(HidUsage usage)
+		[CLSCompliant(false)]
+		public static implicit operator HidUsageIdEx(HidUsageId usage)
 		{
-			return (new HidUsageEx(usage));
+			return (new HidUsageIdEx(usage));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(HidUsageEx usage)
+		public static implicit operator int(HidUsageIdEx usage)
 		{
 			return (usage.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator HidUsageEx(int usage)
+		public static implicit operator HidUsageIdEx(int usage)
 		{
-			return (new HidUsageEx((HidUsage)usage));
+			return (new HidUsageIdEx((HidUsageId)usage));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(HidUsageEx usage)
+		public static implicit operator string(HidUsageIdEx usage)
 		{
 			return (usage.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator HidUsageEx(string usage)
+		public static implicit operator HidUsageIdEx(string usage)
 		{
 			return (Parse(usage));
 		}
