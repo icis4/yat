@@ -699,7 +699,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
 
 				// Install callback handler that sets the normal file path for terminal 3:
-				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest_SaveAs);
+				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest_SaveAsOK);
 
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
@@ -1145,6 +1145,155 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Tests > TestDeletedTerminalFile
+		//------------------------------------------------------------------------------------------
+		// Tests > TestDeletedTerminalFile
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Condition: Formerly saved file gets deleted.
+		/// Expected:  Error message upon start.
+		/// </summary>
+		[Test]
+		public virtual void TestDeletedTerminalFile()
+		{
+			bool success = false;
+			string step = "";
+
+			#region Step 1
+			// - Initial start
+			// - Create new terminal
+			// - Save terminal as
+			using (Main main = new Main())
+			{
+				step = "Step 1: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, step + "Terminal could not be created!");
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				Assert.IsTrue(success, step + "Terminal could not be saved as!");
+
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+
+				VerifyFiles(step, workspace, true, terminal, true, false);
+			}
+			#endregion
+
+			#region Step 2
+			// - Delete the terminal file
+			{
+				step = "Step 2: ";
+				File.Delete(this.normalTerminal1FilePath);
+			}
+			#endregion
+
+			#region Step 3
+			// - Subsequent start
+			//   => Error message because of deleted file
+			using (Main main = new Main())
+			{
+				step = "Step 3: ";
+				int countBefore = this.workspace_MessageInputRequest_No_counter;
+				main.WorkspaceOpened += new EventHandler<WorkspaceEventArgs>(main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No);
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+				int countAfter = this.workspace_MessageInputRequest_No_counter;
+				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
+			}
+			#endregion
+		}
+
+		#endregion
+
+		#region Tests > TestDeletedWorkspaceFile
+		//------------------------------------------------------------------------------------------
+		// Tests > TestDeletedWorkspaceFile
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Condition: Formerly saved file gets deleted.
+		/// Expected:  Error message upon start.
+		/// </summary>
+		[Test]
+		public virtual void TestDeletedWorkspaceFile()
+		{
+			bool success = false;
+			string step = "";
+
+			#region Step 1
+			// - Initial start
+			// - Create new terminal
+			// - Save terminal as
+			// - Save workspace as
+			using (Main main = new Main())
+			{
+				step = "Step 1: ";
+				success = (main.Start() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, step + "Terminal could not be created!");
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				Assert.IsTrue(success, step + "Terminal could not be saved as!");
+
+				success = workspace.SaveAs(this.normalWorkspaceFilePath);
+				Assert.IsTrue(success, step + "Workspace could not be saved as!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				success = (main.Exit() == MainResult.Success);
+				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+
+				VerifyFiles(step, workspace, true, false, terminal, true, false);
+			}
+			#endregion
+
+			#region Step 2
+			// - Delete the workspace file
+			{
+				step = "Step 2: ";
+				File.Delete(this.normalWorkspaceFilePath);
+			}
+			#endregion
+
+			#region Step 3
+			// - Subsequent start
+			//   => Error message because of deleted file
+			using (Main main = new Main())
+			{
+				step = "Step 3: ";
+				int countBefore = this.main_MessageInputRequest_OK_counter;
+				main.MessageInputRequest += new EventHandler<MessageInputEventArgs>(main_MessageInputRequest_OK);
+				success = (main.Start() == MainResult.ApplicationStartError);
+				Assert.IsTrue(success, step + "Main could be started even though workspace file is missing!");
+				int countAfter = this.main_MessageInputRequest_OK_counter;
+				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
+			}
+			#endregion
+		}
+
+		#endregion
+
 		#region Tests > TestWriteProtection
 		//------------------------------------------------------------------------------------------
 		// Tests > TestWriteProtection
@@ -1186,7 +1335,6 @@ namespace YAT.Model.Test
 
 				success = workspace.SaveAs(this.normalWorkspaceFilePath);
 				Assert.IsTrue(success, step + "Workspace could not be saved as!");
-
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
@@ -1200,7 +1348,6 @@ namespace YAT.Model.Test
 
 			#region Step 2
 			// - Make files write-protected
-			using (Main main = new Main())
 			{
 				step = "Step 2: ";
 				{
@@ -1277,15 +1424,14 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				// Install callback handler that does not save terminal 2:
-				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_DoNotSave);
+				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_No);
 
 				// Workspace also has to be saved:
-				workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_DoNotSave);
-
-				int countBefore = this.workspace_MessageInputRequest_DoNotSave_counter;
+				int countBefore = this.workspace_MessageInputRequest_No_counter;
+				workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_No);
 				success = (main.Exit() == MainResult.Success);
-				int countAfter = this.workspace_MessageInputRequest_DoNotSave_counter;
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
+				int countAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
 
 				VerifyFiles(step, workspace, true, false, terminal1, true, false);
@@ -1298,7 +1444,6 @@ namespace YAT.Model.Test
 
 			#region Step 5
 			// - Make files writeable again and then perform steps 3 and 4 again
-			using (Main main = new Main())
 			{
 				step = "Step 5: ";
 				{
@@ -1456,6 +1601,8 @@ namespace YAT.Model.Test
 
 				success = workspace.SaveAs(this.normalWorkspaceFilePath);
 				Assert.IsTrue(success, step + "Workspace could not be saved as!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
 				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 			}
@@ -1734,6 +1881,30 @@ namespace YAT.Model.Test
 		// Private Methods > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		private int  main_MessageInputRequest_OK_counter; // = 0;
+		private void main_MessageInputRequest_OK(object sender, MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.OK;
+			this.main_MessageInputRequest_OK_counter++;
+		}
+
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		private int  main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter; // = 0;
+		private void main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No(object sender, WorkspaceEventArgs e)
+		{
+			e.Workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_No);
+			this.main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter++;
+		}
+
+		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
+		private int  workspace_MessageInputRequest_No_counter; // = 0;
+		private void workspace_MessageInputRequest_No(object sender, MessageInputEventArgs e)
+		{
+			e.Result = System.Windows.Forms.DialogResult.No;
+			this.workspace_MessageInputRequest_No_counter++;
+		}
+
 		private void terminal2_SaveAsFileDialogRequest_SaveAs(object sender, DialogEventArgs e)
 		{
 			Terminal terminal = sender as Terminal;
@@ -1741,24 +1912,16 @@ namespace YAT.Model.Test
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 
-		private void terminal2_SaveAsFileDialogRequest_DoNotSave(object sender, DialogEventArgs e)
+		private void terminal2_SaveAsFileDialogRequest_No(object sender, DialogEventArgs e)
 		{
 			e.Result = System.Windows.Forms.DialogResult.No;
 		}
 
-		private void terminal3_SaveAsFileDialogRequest_SaveAs(object sender, DialogEventArgs e)
+		private void terminal3_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
 		{
 			Terminal terminal = sender as Terminal;
 			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
-		}
-
-		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		private int  workspace_MessageInputRequest_DoNotSave_counter; // = 0;
-		private void workspace_MessageInputRequest_DoNotSave(object sender, MessageInputEventArgs e)
-		{
-			e.Result = System.Windows.Forms.DialogResult.No;
-			this.workspace_MessageInputRequest_DoNotSave_counter++;
 		}
 
 		#endregion

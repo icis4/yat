@@ -32,6 +32,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -51,8 +52,7 @@ using YAT.Utilities;
 namespace YAT.Model
 {
 	/// <summary>
-	/// Provides the YAT application model. This model can handle terminals (.yat),
-	/// workspaces (.yaw) and logs.
+	/// Provides the YAT application model which can handle workspaces (.yaw) and terminals (.yat).
 	/// </summary>
 	public class Main : IDisposable, IGuidProvider
 	{
@@ -317,8 +317,35 @@ namespace YAT.Model
 				if (ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace)
 				{
 					string filePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
-					if (File.Exists(filePath))
-						success = OpenWorkspaceFromFile(filePath);
+					if (PathEx.IsValid(filePath))
+					{
+						if (File.Exists(filePath))
+							success = OpenWorkspaceFromFile(filePath);
+
+						if (!success)
+						{
+							OnFixedStatusTextRequest("Error opening workspace!");
+
+							StringBuilder sb = new StringBuilder();
+							sb.AppendLine("Unable to open workspace");
+							sb.AppendLine(filePath);
+							sb.AppendLine();
+							sb.AppendLine("A new empty workspace will be created.");
+
+							OnMessageInputRequest
+								(
+								sb.ToString(),
+								"Workspace File Error",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Stop
+								);
+
+							// Do not yet create a new empty workspace, it will be created when
+							// needed. Not creating it now allows the user to exit YAT, restore
+							// the .yaw file, and try again.
+							return (MainResult.ApplicationStartError);
+						}
+					}
 				}
 
 				// Clean up the local user directory:
@@ -881,13 +908,9 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			string fileName  = Path.GetFileName(filePath);
 			string extension = Path.GetExtension(filePath);
-
 			if (ExtensionSettings.IsWorkspaceFile(extension))
 			{
-				OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
-
 				if (OpenWorkspaceFromFile(filePath))
 				{
 					if (this.workspace.Start())
@@ -913,8 +936,6 @@ namespace YAT.Model
 
 					newWorkspaceSoSignalStarted = true;
 				}
-
-				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
 
 				if (this.workspace.OpenTerminalFromFile(filePath))
 				{
@@ -1119,13 +1140,12 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Open the workspace file, then the workspace itself.
-			// The workspace file and the workspace itself is checked within OpenWorkspaceFromSettings().
+			string fileName = Path.GetFileName(filePath);
+			OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
+
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
 			Guid guid;
 			System.Xml.XmlException ex;
-
-			OnFixedStatusTextRequest("Opening workspace file...");
 			if (OpenWorkspaceFile(filePath, out settings, out guid, out ex))
 			{
 				return (OpenWorkspaceFromSettings(settings, guid));
@@ -1133,15 +1153,39 @@ namespace YAT.Model
 			else
 			{
 				OnFixedStatusTextRequest("Error opening workspace!");
-				OnMessageInputRequest
-					(
-					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"XML error message: " + ex.Message + Environment.NewLine +
-					"File error message: " + ex.InnerException.Message,
-					"Invalid Workspace File",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Stop
-					);
+				if (ex is System.Xml.XmlException)
+				{
+					OnMessageInputRequest
+						(
+						"Unable to open file" + Environment.NewLine + filePath   + Environment.NewLine + Environment.NewLine +
+						"XML error message:"  + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
+						"File error message:" + Environment.NewLine + ex.InnerException.Message,
+						"Invalid Workspace File",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+						);
+				}
+				else if (ex is Exception)
+				{
+					OnMessageInputRequest
+						(
+						"Unable to open file"   + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine + ex.Message,
+						"Invalid Workspace File",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+						);
+				}
+				else
+				{
+					OnMessageInputRequest
+						(
+						"Unable to open file" + Environment.NewLine + filePath,
+						"Invalid Workspace File",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+						);
+				}
 				OnTimedStatusTextRequest("No workspace opened!");
 				return (false);
 			}
@@ -1256,16 +1300,26 @@ namespace YAT.Model
 		{
 			try
 			{
-				settings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-				settings.SettingsFilePath = filePath;
-				settings.Load();
+				DocumentSettingsHandler<WorkspaceSettingsRoot> s = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+				s.SettingsFilePath = filePath;
+				if (s.Load())
+				{
+					settings = s;
 
-				// Try to retrieve GUID from file path (in case of auto saved workspace files).
-				if (!GuidEx.TryCreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
-					guid = Guid.NewGuid();
+					// Try to retrieve GUID from file path (in case of auto saved workspace files).
+					if (!GuidEx.TryCreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
+						guid = Guid.NewGuid();
 
-				exception = null;
-				return (true);
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					settings = null;
+					guid = Guid.Empty;
+					exception = null;
+					return (false);
+				}
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -1328,12 +1382,20 @@ namespace YAT.Model
 
 			try
 			{
-				settings = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				settings.SettingsFilePath = terminalFilePath;
-				settings.Load();
-
-				exception = null;
-				return (true);
+				DocumentSettingsHandler<TerminalSettingsRoot> s = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				s.SettingsFilePath = terminalFilePath;
+				if (s.Load())
+				{
+					settings = s;
+					exception = null;
+					return (true);
+				}
+				else
+				{
+					settings = null;
+					exception = null;
+					return (false);
+				}
 			}
 			catch (System.Xml.XmlException ex)
 			{

@@ -66,6 +66,7 @@ New:
 Important changes:
 - Write protected .yat files are marked '#' and are not attempted to be written automatically,
   write protected .yaw files are not attempted to be written either (feature request #194)
+- Error handling in case of deleted .yaw and .yat files improved (related to feature request #194)
 - \!(...) keywords can optionally be disabled (feature request #183)
 - Retrieving serial COM port captions from the system can optionally be disabled in 'Preferences'
   Disabling can be useful on computers where discovery of serial COM ports takes too long

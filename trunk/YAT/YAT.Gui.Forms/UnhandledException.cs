@@ -149,10 +149,9 @@ namespace YAT.Gui.Forms
 				catch (Exception ex)
 				{
 					string message =
-						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine + Environment.NewLine +
+						"Unhandled exception data could not be copied onto clipboard."                    + Environment.NewLine + Environment.NewLine +
 						"Copy the exception information manually and add the system error message below." + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine +
-						ex.Message;
+						"System error message:" + Environment.NewLine + ex.Message;
 
 					MessageBoxEx.Show
 						(

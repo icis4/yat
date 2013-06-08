@@ -2367,8 +2367,7 @@ namespace YAT.Gui.Forms
 
 				string message =
 					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"System error message:" + Environment.NewLine +
-					e.Message;
+					"System error message:"       + Environment.NewLine + e.Message;
 
 				MessageBoxEx.Show
 					(
@@ -2423,9 +2422,8 @@ namespace YAT.Gui.Forms
 					SetFixedStatusText("Error printing data!");
 
 					string message =
-						"Unable to print data." + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine +
-						ex.Message;
+						"Unable to print data!" + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine + ex.Message;
 
 					MessageBoxEx.Show
 						(
