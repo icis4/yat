@@ -57,15 +57,17 @@ Start YAT by selecting "Start > Programs > YAT > YAT"
 2. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2013-0x-xx
+YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2013-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- N/A
-
-Important changes:
+- Support for variants of USB Ser/HID (e.g TI MSP430 HID Datapipe Interface) added, report content
+  can be specified in USB Ser/HID settings (feature request #193)
 - Write protected .yat files are marked '#' and are not attempted to be written automatically,
   write protected .yaw files are not attempted to be written either (feature request #194)
+
+Important changes:
+- Update to DejaVu fonts 2.34
 - Error handling in case of deleted .yaw and .yat files improved (related to feature request #194)
 - \!(...) keywords can optionally be disabled (feature request #183)
 - Retrieving serial COM port captions from the system can optionally be disabled in 'Preferences'
@@ -74,9 +76,6 @@ Important changes:
   'Manual Combined' (feature request #190)
 - Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and
   'Manual Combined', this is due to a limitation of the .NET/Win32 serial port driver (bug #214)
-- USB Ser/HID now limits the available devices to those reporting 'GenericDesktopControls' HID usage
-  page and 'Undefined' HID usage (related to feature request #193)
-- USB Ser/HID input and output format flexibilized to prepare for feature request #193
 - Format exceptions while sending are now reported as error messages within the terminal (bug #270)
 - Command line arguments can also be used to preset the settings of the initial 'New Terminal'
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
