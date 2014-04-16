@@ -469,7 +469,7 @@ namespace YAT.Controller
 					// If everything is fine so far, start main application including view.
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
-						// Assume unhandled exceptions and attach the application to the respective handler.
+						// Assume unhandled synchronuous exceptions and attach the application to the respective handler.
 						Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
@@ -555,6 +555,7 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
+			// Assume unhandled asynchronuous exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException);
 
@@ -592,7 +593,7 @@ namespace YAT.Controller
 					// If everything is fine so far, start main application including view.
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
-						// Assume unhandled exceptions and attach the application to the respective handler.
+						// Assume unhandled synchronuous exceptions and attach the application to the respective handler.
 						Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
@@ -659,6 +660,7 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyFromConsole()
 		{
+			// Assume unhandled asynchronuous exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_currentDomain_UnhandledException);
 
