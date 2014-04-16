@@ -432,8 +432,8 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyWithView()
 		{
-			AppDomain curentDomain = AppDomain.CurrentDomain;
-			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_curentDomain_UnhandledException);
+			AppDomain currentDomain = AppDomain.CurrentDomain;
+			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_currentDomain_UnhandledException);
 
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -523,7 +523,7 @@ namespace YAT.Controller
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
-		private void RunFullyWithView_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunFullyWithView_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			if (this.commandLineArgs.Interactive)
 			{
@@ -555,8 +555,8 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
-			AppDomain curentDomain = AppDomain.CurrentDomain;
-			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException);
+			AppDomain currentDomain = AppDomain.CurrentDomain;
+			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException);
 
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -636,7 +636,7 @@ namespace YAT.Controller
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
-		private void RunWithViewButOutputErrorsOnConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
 			Console.Error.WriteLine(message);
@@ -659,8 +659,8 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyFromConsole()
 		{
-			AppDomain curentDomain = AppDomain.CurrentDomain;
-			curentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_curentDomain_UnhandledException);
+			AppDomain currentDomain = AppDomain.CurrentDomain;
+			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_currentDomain_UnhandledException);
 
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -714,7 +714,7 @@ namespace YAT.Controller
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
-		private void RunFullyFromConsole_curentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void RunFullyFromConsole_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
 			Console.Error.WriteLine(message);
