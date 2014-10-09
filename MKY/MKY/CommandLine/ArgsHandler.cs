@@ -80,6 +80,8 @@ namespace MKY.CommandLine
 	/// In addition, this implementation has added so-called multi-options. Multi-options can be
 	/// used to deal with a variable number of additional argument, i.e. ellipsis. This feature is
 	/// optional.
+	/// 
+	/// An alternative command line infrastructure can be found at http://commandline.codeplex.com/.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	public abstract class ArgsHandler
