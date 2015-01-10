@@ -432,10 +432,11 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyWithView()
 		{
+		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyWithView_currentDomain_UnhandledException);
-
+		#endif
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
@@ -556,10 +557,11 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
+		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException);
-
+		#endif
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
@@ -661,10 +663,11 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyFromConsole()
 		{
+		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
 			AppDomain currentDomain = AppDomain.CurrentDomain;
 			currentDomain.UnhandledException += new UnhandledExceptionEventHandler(RunFullyFromConsole_currentDomain_UnhandledException);
-
+		#endif
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
