@@ -435,6 +435,8 @@ namespace YAT.Gui.Controls
 			{
 				if (!this.sendImmediately)
 					this.isValidated = false;
+
+				SetToolTip();
 			}
 		}
 
@@ -565,14 +567,31 @@ namespace YAT.Gui.Controls
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
 
+			SetText();
+			SetToolTip();
+			button_SendCommand.Enabled = this.terminalIsReadyToSend;
+
+			this.isSettingControls.Leave();
+		}
+
+		private void SetText()
+		{
 			if (this.sendImmediately)
 				button_SendCommand.Text = "Send EOL (F3)";
 			else
 				button_SendCommand.Text = "Send Command (F3)";
+		}
 
-			button_SendCommand.Enabled = this.terminalIsReadyToSend;
+		private void SetToolTip()
+		{
+			string text = "";
+			if (!string.IsNullOrEmpty(comboBox_Command.Text))
+				text = comboBox_Command.Text;
 
-			this.isSettingControls.Leave();
+			if (this.sendImmediately)
+				toolTip.SetToolTip(button_SendCommand, "Send EOL");
+			else
+				toolTip.SetToolTip(button_SendCommand, @"Send """ + text + @"""");
 		}
 
 		private void SetRecents()
