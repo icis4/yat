@@ -789,8 +789,14 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Indicates whether the device is connected to the computer.
+		/// Indicates whether the device is physically connected to the computer, i.e. the USB cable
+		/// is connected to both computer and device.
 		/// </summary>
+		/// <remarks>
+		/// The Win32 API 'RegisterDeviceNotification' fires 'Connected' or 'Disconnected' events
+		/// in case a device is attached or removed from the computer. The <see cref="IsConnected"/>
+		/// property relates to the state of these events.
+		/// </remarks>
 		/// <returns>
 		/// <c>true</c> if the device is connected to the computer; otherwise, <c>false</c>.
 		/// </returns>
