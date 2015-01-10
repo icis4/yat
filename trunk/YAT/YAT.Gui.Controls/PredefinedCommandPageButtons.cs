@@ -249,6 +249,8 @@ namespace YAT.Gui.Controls
 					this.buttons_commands[i].ForeColor = SystemColors.ControlText;
 					this.buttons_commands[i].Font      = SystemFonts.DefaultFont;
 					this.buttons_commands[i].Enabled   = isValid;
+
+					toolTip.SetToolTip(this.buttons_commands[i], @"Send """ + this.commands[i].SingleLineText + @"""");
 				}
 				else
 				{
@@ -256,6 +258,8 @@ namespace YAT.Gui.Controls
 					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
 					this.buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
 					this.buttons_commands[i].Enabled   = true;
+
+					toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 				}
 			}
 			for (int i = commandCount; i < PredefinedCommandSettings.MaxCommandsPerPage; i++)
@@ -264,6 +268,8 @@ namespace YAT.Gui.Controls
 				this.buttons_commands[i].ForeColor = SystemColors.GrayText;
 				this.buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
 				this.buttons_commands[i].Enabled   = true;
+
+				toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 			}
 		}
 
