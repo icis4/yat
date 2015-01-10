@@ -488,7 +488,7 @@ namespace MKY.IO.Serial.Socket
 			else
 				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
-			OnIOChanged(new EventArgs());
+			OnIOChanged(EventArgs.Empty);
 		}
 
 		#endregion

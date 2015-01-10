@@ -96,6 +96,10 @@ if the additional methods are supported by a future version of .NET with same pa
 differing functionality.
 
 
+Events
+------
+Use "EventArgs.Empty" instead of "new EventArgs()".
+
 Dispose
 -------
 

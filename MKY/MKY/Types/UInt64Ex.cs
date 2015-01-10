@@ -217,7 +217,7 @@ namespace MKY
 			// For negative values, expand most significant byte.
 			if (expandNegative)
 			{
-				if (b < 0x01) b |= 0xFF;
+				if      (b < 0x01) b |= 0xFF;
 				else if (b < 0x02) b |= 0xFE;
 				else if (b < 0x04) b |= 0xFC;
 				else if (b < 0x08) b |= 0xF8;

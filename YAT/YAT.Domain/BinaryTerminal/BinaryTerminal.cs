@@ -165,7 +165,7 @@ namespace YAT.Domain
 			private void timer_Timeout(object obj)
 			{
 				Stop();
-				OnTimeout(new EventArgs());
+				OnTimeout(EventArgs.Empty);
 			}
 
 			/// <summary></summary>

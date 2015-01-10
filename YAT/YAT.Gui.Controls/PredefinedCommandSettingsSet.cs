@@ -184,7 +184,7 @@ namespace YAT.Gui.Controls
 				else
 					this.command = new Model.Types.Command();
 
-				OnCommandChanged(new EventArgs());
+				OnCommandChanged(EventArgs.Empty);
 				SetControls();
 			}
 		}
@@ -245,7 +245,7 @@ namespace YAT.Gui.Controls
 				{
 					this.command.IsFilePath = checkBox_IsFile.Checked;
 					SetControls();
-					OnCommandChanged(new EventArgs());
+					OnCommandChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -351,7 +351,7 @@ namespace YAT.Gui.Controls
 		{
 			this.command.Clear();
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		#endregion
@@ -462,7 +462,7 @@ namespace YAT.Gui.Controls
 				this.command.ClearDescription();
 
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		private void SetSingleLineCommand(string commandLine)
@@ -471,7 +471,7 @@ namespace YAT.Gui.Controls
 			this.command.SingleLineText = commandLine;
 
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		private void ClearCommand()
@@ -513,7 +513,7 @@ namespace YAT.Gui.Controls
 				SetControls();
 				textBox_Description.Select();
 
-				OnCommandChanged(new EventArgs());
+				OnCommandChanged(EventArgs.Empty);
 			}
 			else
 			{
@@ -554,7 +554,7 @@ namespace YAT.Gui.Controls
 
 				this.command.IsFilePath = true;
 				this.command.FilePath = ofd.FileName;
-				OnCommandChanged(new EventArgs());
+				OnCommandChanged(EventArgs.Empty);
 			}
 
 			// Set controls in any case:

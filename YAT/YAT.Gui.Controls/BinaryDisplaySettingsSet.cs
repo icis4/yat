@@ -109,7 +109,7 @@ namespace YAT.Gui.Controls
 				llb.Enabled = checkBox_LengthLineBreak.Checked;
 				this.settings.LengthLineBreak = llb;
 				SetControls();
-				OnSettingsChanged(new EventArgs());
+				OnSettingsChanged(EventArgs.Empty);
 			}
 		}
 
@@ -134,7 +134,7 @@ namespace YAT.Gui.Controls
 					llb.LineLength = length;
 					this.settings.LengthLineBreak = llb;
 					SetControls();
-					OnSettingsChanged(new EventArgs());
+					OnSettingsChanged(EventArgs.Empty);
 				}
 				else
 				{
@@ -159,7 +159,7 @@ namespace YAT.Gui.Controls
 				slb.Enabled = checkBox_SequenceLineBreak.Checked;
 				this.settings.SequenceLineBreak = slb;
 				SetControls();
-				OnSettingsChanged(new EventArgs());
+				OnSettingsChanged(EventArgs.Empty);
 			}
 		}
 
@@ -173,7 +173,7 @@ namespace YAT.Gui.Controls
 				slb.Sequence = textBox_SequenceLineBreakSequence.Text;
 				this.settings.SequenceLineBreak = slb;
 				SetControls();
-				OnSettingsChanged(new EventArgs());
+				OnSettingsChanged(EventArgs.Empty);
 			}
 			else
 			{
@@ -190,7 +190,7 @@ namespace YAT.Gui.Controls
 				tlb.Enabled = checkBox_TimedLineBreak.Checked;
 				this.settings.TimedLineBreak = tlb;
 				SetControls();
-				OnSettingsChanged(new EventArgs());
+				OnSettingsChanged(EventArgs.Empty);
 			}
 		}
 
@@ -206,7 +206,7 @@ namespace YAT.Gui.Controls
 					tlb.Timeout = timeout;
 					this.settings.TimedLineBreak = tlb;
 					SetControls();
-					OnSettingsChanged(new EventArgs());
+					OnSettingsChanged(EventArgs.Empty);
 				}
 				else
 				{

@@ -226,7 +226,7 @@ namespace MKY.IO.Ports
 				if (base.PortName != value)
 				{
 					base.PortName = value;
-					OnPortChanged(new EventArgs());
+					OnPortChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -256,8 +256,8 @@ namespace MKY.IO.Ports
 						throw (new System.InvalidOperationException("The specified port is open."));
 
 					base.PortName = value.Name;
-					OnPortChanged(new EventArgs());
-					OnPortSettingsChanged(new EventArgs());
+					OnPortChanged(EventArgs.Empty);
+					OnPortSettingsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -283,7 +283,7 @@ namespace MKY.IO.Ports
 				if (base.BaudRate != value)
 				{
 					base.BaudRate = value;
-					OnPortSettingsChanged(new EventArgs());
+					OnPortSettingsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -309,7 +309,7 @@ namespace MKY.IO.Ports
 				if (base.DataBits != value)
 				{
 					base.DataBits = value;
-					OnPortSettingsChanged(new EventArgs());
+					OnPortSettingsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -335,7 +335,7 @@ namespace MKY.IO.Ports
 				if (base.Parity != value)
 				{
 					base.Parity = value;
-					OnPortSettingsChanged(new EventArgs());
+					OnPortSettingsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -361,7 +361,7 @@ namespace MKY.IO.Ports
 				if (base.StopBits != value)
 				{
 					base.StopBits = value;
-					OnPortSettingsChanged(new EventArgs());
+					OnPortSettingsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -387,7 +387,7 @@ namespace MKY.IO.Ports
 				if (base.Handshake != value)
 				{
 					base.Handshake = value;
-					OnPortSettingsChanged(new EventArgs());
+					OnPortSettingsChanged(EventArgs.Empty);
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
@@ -435,7 +435,7 @@ namespace MKY.IO.Ports
 				base.StopBits  = (StopBitsEx) value.StopBits;
 				base.Handshake = (HandshakeEx)value.Handshake;
 
-				OnPortSettingsChanged(new EventArgs());
+				OnPortSettingsChanged(EventArgs.Empty);
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 			}
@@ -743,7 +743,7 @@ namespace MKY.IO.Ports
 
 			if (!IsOpen)
 			{
-				OnOpening(new EventArgs());
+				OnOpening(EventArgs.Empty);
 #if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
@@ -760,7 +760,7 @@ namespace MKY.IO.Ports
 #else
 				base.Open();
 #endif
-				OnOpened(new EventArgs());
+				OnOpened(EventArgs.Empty);
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
@@ -813,7 +813,7 @@ namespace MKY.IO.Ports
 
 			if (IsOpen)
 			{
-				OnClosing(new EventArgs());
+				OnClosing(EventArgs.Empty);
 #if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
@@ -830,7 +830,7 @@ namespace MKY.IO.Ports
 #else
 				base.Close();
 #endif
-				OnClosed(new EventArgs());
+				OnClosed(EventArgs.Empty);
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));

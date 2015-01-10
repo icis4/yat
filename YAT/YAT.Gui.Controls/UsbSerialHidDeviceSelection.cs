@@ -107,7 +107,7 @@ namespace YAT.Gui.Controls
 					{
 						this.deviceInfo = value;
 						SetControls();
-						OnDeviceInfoChanged(new EventArgs());
+						OnDeviceInfoChanged(EventArgs.Empty);
 					}
 				}
 			}

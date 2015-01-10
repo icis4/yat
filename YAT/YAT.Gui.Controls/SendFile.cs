@@ -128,7 +128,7 @@ namespace YAT.Gui.Controls
 				else
 					this.fileCommand = new Command();
 
-				OnFileCommandChanged(new EventArgs());
+				OnFileCommandChanged(EventArgs.Empty);
 				SetControls();
 			}
 		}
@@ -273,7 +273,7 @@ namespace YAT.Gui.Controls
 				this.recents.Add(fileCommand);
 
 			SetControls();
-			OnFileCommandChanged(new EventArgs());
+			OnFileCommandChanged(EventArgs.Empty);
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -345,7 +345,7 @@ namespace YAT.Gui.Controls
 
 			if (this.fileCommand.IsValidFilePath)
 			{
-				OnSendFileCommandRequest(new EventArgs());
+				OnSendFileCommandRequest(EventArgs.Empty);
 			}
 			else
 			{

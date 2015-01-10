@@ -1770,11 +1770,11 @@ namespace YAT.Model
 
 			// Count.
 			this.txByteCount += e.Element.Data.Count;
-			OnIOCountChanged(new EventArgs());
+			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate.
 			if (this.txByteRate.Update(e.Element.Data.Count))
-				OnIORateChanged(new EventArgs());
+				OnIORateChanged(EventArgs.Empty);
 
 			// Log.
 			if (this.log.IsStarted)
@@ -1790,11 +1790,11 @@ namespace YAT.Model
 
 			// Count.
 			this.rxByteCount += e.Element.Data.Count;
-			OnIOCountChanged(new EventArgs());
+			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate.
 			if (this.rxByteRate.Update(e.Element.Data.Count))
-				OnIORateChanged(new EventArgs());
+				OnIORateChanged(EventArgs.Empty);
 
 			// Log.
 			if (this.log.IsStarted)
@@ -1856,11 +1856,11 @@ namespace YAT.Model
 		{
 			// Count.
 			this.txLineCount += e.Lines.Count;
-			OnIOCountChanged(new EventArgs());
+			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate.
 			if (this.txLineRate.Update(e.Lines.Count))
-				OnIORateChanged(new EventArgs());
+				OnIORateChanged(EventArgs.Empty);
 
 			// Display.
 			OnDisplayLinesSent(e);
@@ -1870,11 +1870,11 @@ namespace YAT.Model
 		{
 			// Count.
 			this.rxLineCount += e.Lines.Count;
-			OnIOCountChanged(new EventArgs());
+			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate.
 			if (this.rxLineRate.Update(e.Lines.Count))
-				OnIORateChanged(new EventArgs());
+				OnIORateChanged(EventArgs.Empty);
 
 			// Display.
 			OnDisplayLinesReceived(e);
@@ -2729,14 +2729,14 @@ namespace YAT.Model
 			this.rxByteCount = 0;
 			this.rxLineCount = 0;
 
-			OnIOCountChanged(new EventArgs());
+			OnIOCountChanged(EventArgs.Empty);
 
 			this.txByteRate.Reset();
 			this.txLineRate.Reset();
 			this.rxByteRate.Reset();
 			this.rxLineRate.Reset();
 
-			OnIORateChanged(new EventArgs());
+			OnIORateChanged(EventArgs.Empty);
 		}
 
 		private void CreateRates()

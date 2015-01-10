@@ -150,7 +150,7 @@ namespace YAT.Gui.Controls
 				{
 					this.selectedPage = selectedPageNew;
 					SetControls();
-					OnSelectedPageChanged(new EventArgs());
+					OnSelectedPageChanged(EventArgs.Empty);
 				}
 			}
 		}

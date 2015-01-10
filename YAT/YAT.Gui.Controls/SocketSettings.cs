@@ -122,7 +122,7 @@ namespace YAT.Gui.Controls
 				{
 					this.tcpClientAutoReconnect = value;
 					SetControls();
-					OnTcpClientAutoReconnectChanged(new EventArgs());
+					OnTcpClientAutoReconnectChanged(EventArgs.Empty);
 				}
 			}
 		}

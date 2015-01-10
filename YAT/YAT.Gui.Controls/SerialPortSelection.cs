@@ -204,7 +204,7 @@ namespace YAT.Gui.Controls
 					{
 						this.portId = value;
 						SetControls();
-						OnPortIdChanged(new EventArgs());
+						OnPortIdChanged(EventArgs.Empty);
 					}
 				}
 			}

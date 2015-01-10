@@ -101,7 +101,7 @@ namespace YAT.Gui.Controls
 			{
 				this.font = new Font(value.Name, value.Size, value.Style);
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 			{
 				this.font = new Font(value.Name, value.Size, this.font.Style);
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace YAT.Gui.Controls
 					style &= ~FontStyle.Bold;
 				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace YAT.Gui.Controls
 					style &= ~FontStyle.Italic;
 				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace YAT.Gui.Controls
 					style &= ~FontStyle.Underline;
 				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -210,7 +210,7 @@ namespace YAT.Gui.Controls
 					style &= ~FontStyle.Strikeout;
 				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace YAT.Gui.Controls
 			{
 				this.color = value;
 				SetControls();
-				OnFormatChanged(new EventArgs());
+				OnFormatChanged(EventArgs.Empty);
 			}
 		}
 

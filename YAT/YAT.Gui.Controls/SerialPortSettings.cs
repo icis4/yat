@@ -143,7 +143,7 @@ namespace YAT.Gui.Controls
 				{
 					this.baudRate = value;
 					SetControls();
-					OnBaudRateChanged(new EventArgs());
+					OnBaudRateChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -161,7 +161,7 @@ namespace YAT.Gui.Controls
 				{
 					this.dataBits = value;
 					SetControls();
-					OnDataBitsChanged(new EventArgs());
+					OnDataBitsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -179,7 +179,7 @@ namespace YAT.Gui.Controls
 				{
 					this.parity = value;
 					SetControls();
-					OnParityChanged(new EventArgs());
+					OnParityChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -197,7 +197,7 @@ namespace YAT.Gui.Controls
 				{
 					this.stopBits = value;
 					SetControls();
-					OnStopBitsChanged(new EventArgs());
+					OnStopBitsChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -215,7 +215,7 @@ namespace YAT.Gui.Controls
 				{
 					this.flowControl = value;
 					SetControls();
-					OnFlowControlChanged(new EventArgs());
+					OnFlowControlChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -232,7 +232,7 @@ namespace YAT.Gui.Controls
 				{
 					this.autoReopen = value;
 					SetControls();
-					OnAutoReopenChanged(new EventArgs());
+					OnAutoReopenChanged(EventArgs.Empty);
 				}
 			}
 		}

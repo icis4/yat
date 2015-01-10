@@ -368,7 +368,7 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnStarted(new EventArgs());
+				OnStarted(EventArgs.Empty);
 				return (MainResult.Success);
 			}
 			else
@@ -915,7 +915,7 @@ namespace YAT.Model
 				{
 					if (this.workspace.Start())
 					{
-						OnStarted(new EventArgs());
+						OnStarted(EventArgs.Empty);
 						return (true);
 					}
 					return (false);
@@ -942,7 +942,7 @@ namespace YAT.Model
 					if (this.workspace.ActiveTerminal.Start())
 					{
 						if (newWorkspaceSoSignalStarted)
-							OnStarted(new EventArgs());
+							OnStarted(EventArgs.Empty);
 						
 						return (true);
 					}
@@ -1028,7 +1028,7 @@ namespace YAT.Model
 				success = ApplicationSettings.Close();
 
 				// Signal the exit:
-				OnExited(new EventArgs());
+				OnExited(EventArgs.Empty);
 
 				// Ensure that all resources of the workspace get disposed of:
 				Dispose();
