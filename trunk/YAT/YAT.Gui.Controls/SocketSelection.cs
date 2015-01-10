@@ -177,7 +177,7 @@ namespace YAT.Gui.Controls
 				{
 					this.remoteHost = value;
 					SetControls();
-					OnRemoteHostChanged(new EventArgs());
+					OnRemoteHostChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -203,7 +203,7 @@ namespace YAT.Gui.Controls
 				{
 					this.remoteTcpPort = value;
 					SetControls();
-					OnRemoteTcpPortChanged(new EventArgs());
+					OnRemoteTcpPortChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -221,7 +221,7 @@ namespace YAT.Gui.Controls
 				{
 					this.remoteUdpPort = value;
 					SetControls();
-					OnRemoteUdpPortChanged(new EventArgs());
+					OnRemoteUdpPortChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -244,7 +244,7 @@ namespace YAT.Gui.Controls
 						this.resolvedLocalIPAddress = IPAddress.None;
 
 					SetControls();
-					OnLocalInterfaceChanged(new EventArgs());
+					OnLocalInterfaceChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -270,7 +270,7 @@ namespace YAT.Gui.Controls
 				{
 					this.localTcpPort = value;
 					SetControls();
-					OnLocalTcpPortChanged(new EventArgs());
+					OnLocalTcpPortChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -288,7 +288,7 @@ namespace YAT.Gui.Controls
 				{
 					this.localUdpPort = value;
 					SetControls();
-					OnLocalUdpPortChanged(new EventArgs());
+					OnLocalUdpPortChanged(EventArgs.Empty);
 				}
 			}
 		}

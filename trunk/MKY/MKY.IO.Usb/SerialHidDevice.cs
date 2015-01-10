@@ -549,7 +549,7 @@ namespace MKY.IO.Usb
 			if (CreateStream())
 			{
 				SetStateSynchronized(State.ConnectedAndOpened);
-				OnOpened(new EventArgs());
+				OnOpened(EventArgs.Empty);
 				return (true);
 			}
 			else
@@ -580,7 +580,7 @@ namespace MKY.IO.Usb
 			else
 				SetStateSynchronized(State.DisconnectedAndClosed);
 
-			OnClosed(new EventArgs());
+			OnClosed(EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -742,7 +742,7 @@ namespace MKY.IO.Usb
 				catch (IOException)
 				{
 					WriteDebugMessageLine("Disconnect detected while reading from device.");
-					OnDisconnected(new EventArgs()); // Includes Close().
+					OnDisconnected(EventArgs.Empty); // Includes Close().
 				}
 				catch (Exception ex)
 				{
@@ -795,7 +795,7 @@ namespace MKY.IO.Usb
 				// Ensure not to forward any events during closing anymore.
 				while (this.receiveThreadRunFlag && IsOpen && (BytesAvailable > 0) && !IsDisposed)
 				{
-					OnDataReceived(new EventArgs());
+					OnDataReceived(EventArgs.Empty);
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataReceived' events are fired consecutively.
@@ -820,7 +820,7 @@ namespace MKY.IO.Usb
 				foreach (byte[] report in output.Reports)
 					this.stream.Write(report, 0, report.Length);
 
-				OnDataSent(new EventArgs());
+				OnDataSent(EventArgs.Empty);
 			}
 			catch (Exception ex)
 			{
@@ -905,7 +905,7 @@ namespace MKY.IO.Usb
 				// Force reinitialize with new device info.
 				Reinitialize(e.DeviceInfo);
 
-				OnConnected(new EventArgs());
+				OnConnected(EventArgs.Empty);
 
 				if (AutoOpen)
 					Open();
@@ -919,7 +919,7 @@ namespace MKY.IO.Usb
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
-				OnDisconnected(new EventArgs()); // Includes Close().
+				OnDisconnected(EventArgs.Empty); // Includes Close().
 		}
 
 		#endregion

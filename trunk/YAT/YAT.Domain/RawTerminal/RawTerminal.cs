@@ -606,12 +606,12 @@ namespace YAT.Domain
 
 		private void io_IOChanged(object sender, EventArgs e)
 		{
-			OnIOChanged(new EventArgs());
+			OnIOChanged(EventArgs.Empty);
 		}
 
 		private void io_IOControlChanged(object sender, EventArgs e)
 		{
-			OnIOControlChanged(new EventArgs());
+			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)

@@ -100,7 +100,7 @@ namespace YAT.Gui.Controls
 				{
 					this.autoOpen = value;
 					SetControls();
-					OnAutoOpenChanged(new EventArgs());
+					OnAutoOpenChanged(EventArgs.Empty);
 				}
 			}
 		}

@@ -549,7 +549,7 @@ namespace MKY.IO.Usb
 				// Force reinitialize with new device info.
 				Reinitialize(e.DeviceInfo);
 
-				OnConnected(new EventArgs());
+				OnConnected(EventArgs.Empty);
 			}
 		}
 
@@ -560,7 +560,7 @@ namespace MKY.IO.Usb
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
-				OnDisconnected(new EventArgs());
+				OnDisconnected(EventArgs.Empty);
 		}
 
 		#endregion

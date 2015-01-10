@@ -182,7 +182,7 @@ namespace YAT.Gui.Controls
 					this.isValidated = false;
 				}
 
-				OnCommandChanged(new EventArgs());
+				OnCommandChanged(EventArgs.Empty);
 				SetControls();
 			}
 		}
@@ -264,7 +264,7 @@ namespace YAT.Gui.Controls
 		protected virtual void SetEditFocusState(FocusState editFocusSet)
 		{
 			this.editFocusState = editFocusSet;
-			OnEditFocusStateChanged(new EventArgs());
+			OnEditFocusStateChanged(EventArgs.Empty);
 		}
 
 		#endregion
@@ -591,7 +591,7 @@ namespace YAT.Gui.Controls
 			this.command = command;
 
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		/// <remarks>
@@ -602,7 +602,7 @@ namespace YAT.Gui.Controls
 			this.command = new Command(commandLine);
 
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		private void CreatePartialCommand(string partialCommand)
@@ -615,7 +615,7 @@ namespace YAT.Gui.Controls
 				this.partialCommandLine += partialCommand;
 
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		private void CreatePartialEolCommand()
@@ -623,7 +623,7 @@ namespace YAT.Gui.Controls
 			this.command = new Command(true, this.partialCommandLine);
 
 			SetControls();
-			OnCommandChanged(new EventArgs());
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		private void ResetPartialCommand()
@@ -698,14 +698,14 @@ namespace YAT.Gui.Controls
 		{
 			if (this.editFocusState == FocusState.Inactive)
 			{
-				OnSendCommandRequest(new EventArgs());
+				OnSendCommandRequest(EventArgs.Empty);
 			}
 			else
 			{
 				// Notifying the send state is needed when command is automatically
 				//   modified (e.g. cleared) after send.
 				this.sendIsRequested = true;
-				OnSendCommandRequest(new EventArgs());
+				OnSendCommandRequest(EventArgs.Empty);
 				this.sendIsRequested = false;
 			}
 		}

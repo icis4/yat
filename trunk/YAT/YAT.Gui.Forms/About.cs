@@ -120,7 +120,7 @@ namespace YAT.Gui.Forms
 			textAfter =                                                                                                                     ".";
 			linkStart = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
-			linkLabel_HHD.Links.Add(linkStart, textLink.Length, "http://www.serial-port-monitor.com/");
+			linkLabel_HHD.Links.Add(linkStart, textLink.Length, "http://freeserialanalyzer.com/");
 			linkLabel_HHD.Text += textAfter;
 
 			// VSPE.

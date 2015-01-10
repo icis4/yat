@@ -771,7 +771,7 @@ namespace MKY.IO.Serial.SerialPort
 
 				// Immediately invoke the event, invoke it normally = synchronously:
 				if (signalXOnXOff || signalXOnXOffCount)
-					OnIOControlChanged(new EventArgs());
+					OnIOControlChanged(EventArgs.Empty);
 
 				// Signal send thread:
 				this.sendThreadEvent.Set();
@@ -951,7 +951,7 @@ namespace MKY.IO.Serial.SerialPort
 			lock (this.outputIsXOnSyncObj)
 				this.outputIsXOn = true;
 
-			OnIOControlChanged(new EventArgs());
+			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -1000,7 +1000,7 @@ namespace MKY.IO.Serial.SerialPort
 			Interlocked.Exchange(ref this.receivedXOnCount, 0);
 			Interlocked.Exchange(ref this.receivedXOffCount, 0);
 
-			OnIOControlChanged(new EventArgs());
+			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -1084,8 +1084,8 @@ namespace MKY.IO.Serial.SerialPort
 			else
 				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
-			OnIOChanged(new EventArgs());
-			OnIOControlChanged(new EventArgs());
+			OnIOChanged(EventArgs.Empty);
+			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		#endregion
@@ -1398,7 +1398,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					// Immediately invoke the event, but invoke it asynchronously!
 					if (signalXOnXOff || signalXOnXOffCount)
-						OnIOControlChangedAsync(new EventArgs());
+						OnIOControlChangedAsync(EventArgs.Empty);
 
 					// Signal receive thread:
 					this.receiveThreadEvent.Set();
@@ -1493,7 +1493,7 @@ namespace MKY.IO.Serial.SerialPort
 		//   while(BytesAvailable > LastTimeBytesAvailable)
 		//   {
 		//       LastTimeBytesAvailable = BytesAvailable;
-		//       OnDataReceived(new EventArgs());
+		//       OnDataReceived(EventArgs.Empty);
 		//   }
 		// 
 		// This suggestions doesn't work because YAT shall show every single byte as soon as it get's received.
@@ -1542,18 +1542,18 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						case MKY.IO.Ports.SerialPinChange.InputBreak:
 							if (this.settings.NoSendOnInputBreak)
-								OnIOChanged(new EventArgs());
+								OnIOChanged(EventArgs.Empty);
 							break;
 
 						case MKY.IO.Ports.SerialPinChange.OutputBreak:
-							OnIOChanged(new EventArgs());
+							OnIOChanged(EventArgs.Empty);
 							break;
 
 						default:
 							// Do not fire general event, I/O control event is fired below.
 							break;
 					}
-					OnIOControlChanged(new EventArgs());
+					OnIOControlChanged(EventArgs.Empty);
 				}
 			}
 			catch (Exception ex)

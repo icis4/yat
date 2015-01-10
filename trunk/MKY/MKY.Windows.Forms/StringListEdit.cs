@@ -94,7 +94,7 @@ namespace MKY.Windows.Forms
 				listBox_StringList.Items.Clear();
 				listBox_StringList.Items.AddRange(value);
 				SetControls();
-				OnStringListChanged(new EventArgs());
+				OnStringListChanged(EventArgs.Empty);
 			}
 		}
 
@@ -128,7 +128,7 @@ namespace MKY.Windows.Forms
 					== DialogResult.OK)
 				{
 					listBox_StringList.SelectedItem = item;
-					OnStringListChanged(new EventArgs());
+					OnStringListChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -149,7 +149,7 @@ namespace MKY.Windows.Forms
 			{
 				listBox_StringList.Items.Add(item);
 				SetControls();
-				OnStringListChanged(new EventArgs());
+				OnStringListChanged(EventArgs.Empty);
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace MKY.Windows.Forms
 				listBox_StringList.Items.RemoveAt(selectedIndices[i]);
 
 			SetControls();
-			OnStringListChanged(new EventArgs());
+			OnStringListChanged(EventArgs.Empty);
 		}
 
 		private void button_MoveUp_Click(object sender, EventArgs e)
@@ -184,7 +184,7 @@ namespace MKY.Windows.Forms
 				this.isSettingControls.Leave();
 
 				SetControls();
-				OnStringListChanged(new EventArgs());
+				OnStringListChanged(EventArgs.Empty);
 			}
 		}
 
@@ -205,7 +205,7 @@ namespace MKY.Windows.Forms
 				this.isSettingControls.Leave();
 
 				SetControls();
-				OnStringListChanged(new EventArgs());
+				OnStringListChanged(EventArgs.Empty);
 			}
 		}
 

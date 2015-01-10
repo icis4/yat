@@ -476,7 +476,7 @@ namespace MKY.IO.Serial.Usb
 			if (this.device != null)
 			{
 				bool success = this.device.Start();
-				OnIOChanged(new EventArgs());
+				OnIOChanged(EventArgs.Empty);
 				return (success);
 			}
 			else
@@ -500,7 +500,7 @@ namespace MKY.IO.Serial.Usb
 						this.device = null;
 					}
 
-					OnIOChanged(new EventArgs());
+					OnIOChanged(EventArgs.Empty);
 				}
 				catch { }
 			}

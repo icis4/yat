@@ -2541,7 +2541,7 @@ namespace YAT.Gui.Forms
 				HandleImplicitSettings(e.Inner);
 			}
 
-			OnTerminalChanged(new EventArgs());
+			OnTerminalChanged(EventArgs.Empty);
 		}
 
 		private void HandleExplicitSettings(SettingsEventArgs e)
@@ -2764,7 +2764,7 @@ namespace YAT.Gui.Forms
 			SetTerminalControls();
 
 			ResetStatusText();
-			OnTerminalChanged(new EventArgs());
+			OnTerminalChanged(EventArgs.Empty);
 		}
 
 		private void terminal_IOControlChanged(object sender, EventArgs e)
@@ -2838,7 +2838,7 @@ namespace YAT.Gui.Forms
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			SetTerminalControls();
-			OnTerminalChanged(new EventArgs());
+			OnTerminalChanged(EventArgs.Empty);
 
 			bool showErrorModally = false;
 			Main main = (this.mdiParent as Main);

@@ -156,7 +156,7 @@ namespace YAT.Gui.Controls
 				{
 					this.terminalType = value;
 					SetControls();
-					OnTerminalTypeChanged(new EventArgs());
+					OnTerminalTypeChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -174,7 +174,7 @@ namespace YAT.Gui.Controls
 				{
 					this.ioType = value;
 					SetControls();
-					OnIOTypeChanged(new EventArgs());
+					OnIOTypeChanged(EventArgs.Empty);
 				}
 			}
 		}
