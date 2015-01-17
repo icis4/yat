@@ -60,16 +60,16 @@ namespace MKY.Drawing
 			if (rotationA == rotationB)
 				return (0);
 
-			if ((rotationA == RotateType.RotateNone) && (rotationB == RotateType.Rotate90)  ||
-				(rotationA == RotateType.Rotate90)   && (rotationB == RotateType.Rotate180) ||
-				(rotationA == RotateType.Rotate180)  && (rotationB == RotateType.Rotate270) ||
-				(rotationA == RotateType.Rotate270)  && (rotationB == RotateType.RotateNone))
+			if (((rotationA == RotateType.RotateNone) && (rotationB == RotateType.Rotate90))  ||
+				((rotationA == RotateType.Rotate90)   && (rotationB == RotateType.Rotate180)) ||
+				((rotationA == RotateType.Rotate180)  && (rotationB == RotateType.Rotate270)) ||
+				((rotationA == RotateType.Rotate270)  && (rotationB == RotateType.RotateNone)))
 				return (90);
 
-			if ((rotationA == RotateType.RotateNone) && (rotationB == RotateType.Rotate270)  ||
-				(rotationA == RotateType.Rotate90)   && (rotationB == RotateType.RotateNone) ||
-				(rotationA == RotateType.Rotate180)  && (rotationB == RotateType.Rotate90)   ||
-				(rotationA == RotateType.Rotate270)  && (rotationB == RotateType.Rotate180))
+			if (((rotationA == RotateType.RotateNone) && (rotationB == RotateType.Rotate270))  ||
+				((rotationA == RotateType.Rotate90)   && (rotationB == RotateType.RotateNone)) ||
+				((rotationA == RotateType.Rotate180)  && (rotationB == RotateType.Rotate90))   ||
+				((rotationA == RotateType.Rotate270)  && (rotationB == RotateType.Rotate180)))
 				return (270);
 
 			return (180);

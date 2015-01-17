@@ -58,25 +58,27 @@
 			// splitContainer_Commands.Panel1
 			// 
 			this.splitContainer_Commands.Panel1.Controls.Add(this.label_Shortcut);
-			this.splitContainer_Commands.Panel1MinSize = 19;
+			this.splitContainer_Commands.Panel1MinSize = 28;
 			// 
 			// splitContainer_Commands.Panel2
 			// 
 			this.splitContainer_Commands.Panel2.Controls.Add(this.splitContainer_Lower);
-			this.splitContainer_Commands.Size = new System.Drawing.Size(144, 335);
-			this.splitContainer_Commands.SplitterDistance = 19;
+			this.splitContainer_Commands.Size = new System.Drawing.Size(144, 344);
+			this.splitContainer_Commands.SplitterDistance = 28;
 			this.splitContainer_Commands.TabIndex = 0;
 			this.splitContainer_Commands.TabStop = false;
 			// 
 			// label_Shortcut
 			// 
 			this.label_Shortcut.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label_Shortcut.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Shortcut.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Shortcut.Location = new System.Drawing.Point(0, 0);
 			this.label_Shortcut.Name = "label_Shortcut";
-			this.label_Shortcut.Size = new System.Drawing.Size(144, 19);
+			this.label_Shortcut.Size = new System.Drawing.Size(144, 28);
 			this.label_Shortcut.TabIndex = 0;
-			this.label_Shortcut.Text = "Shift+F1..12";
-			this.label_Shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.label_Shortcut.Text = "Shift+F1..F12  to send\r\nAlt+Shift+F1..F12  to copy";
+			this.label_Shortcut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// splitContainer_Lower
 			// 
@@ -174,7 +176,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainer_Commands);
 			this.Name = "PredefinedCommands";
-			this.Size = new System.Drawing.Size(144, 335);
+			this.Size = new System.Drawing.Size(144, 344);
 			this.splitContainer_Commands.Panel1.ResumeLayout(false);
 			this.splitContainer_Commands.Panel2.ResumeLayout(false);
 			this.splitContainer_Commands.ResumeLayout(false);

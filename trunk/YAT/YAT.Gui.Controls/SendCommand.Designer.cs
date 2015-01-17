@@ -72,14 +72,13 @@
 			this.comboBox_Command.Name = "comboBox_Command";
 			this.comboBox_Command.Size = new System.Drawing.Size(319, 21);
 			this.comboBox_Command.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_Command, "Enter command, click arrow for recent commands, press <...> to enter multi line c" +
-					"ommand");
+			this.toolTip.SetToolTip(this.comboBox_Command, "Fill-in desired command, <Enter> to send,\r\n<Arrow Up/Down> or small triangle for " +
+					"recent\r\ncommands, <...> to enter multi line command");
 			this.comboBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Command_Validating);
 			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
 			this.comboBox_Command.Leave += new System.EventHandler(this.comboBox_Command_Leave);
 			this.comboBox_Command.Enter += new System.EventHandler(this.comboBox_Command_Enter);
 			this.comboBox_Command.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_Command_KeyPress);
-			this.comboBox_Command.DropDown += new System.EventHandler(this.comboBox_Command_DropDown);
 			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
 			// 
 			// splitContainer

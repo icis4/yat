@@ -125,6 +125,8 @@
     <Compile Include="Types\ObjectEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
     <Compile Include="Windows.Forms\ApplicationEx.cs" />
+    <Compile Include="Windows.Forms\ContextMenuStripShortcutWorkaround.cs" />
+    <Compile Include="Windows.Forms\KeysEx.cs" />
     <Compile Include="Windows.Forms\MessageBoxEx.cs" />
     <Compile Include="Windows.Forms\ModalBehavior.cs" />
     <Compile Include="Windows.Forms\LayoutInfo.cs" />

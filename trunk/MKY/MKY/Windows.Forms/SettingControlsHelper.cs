@@ -29,12 +29,15 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// <see cref="System.Windows.Forms"/> utility methods.
 	/// </summary>
+	/// <remarks>
+	/// Struct instead of class to allow same declaration as if this was just a simple bool.
+	/// </remarks>
 	public struct SettingControlsHelper
 	{
 		private int count;
 
 		/// <summary></summary>
-		public bool IsSettingsControls
+		public bool IsSettingControls
 		{
 			get { return (this.count > 0); }
 		}
@@ -58,7 +61,7 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates", Justification = "Special operator for much easier use of this helper class.")]
 		public static implicit operator bool(SettingControlsHelper isSettingControls)
 		{
-			return (isSettingControls.IsSettingsControls);
+			return (isSettingControls.IsSettingControls);
 		}
 
 		#region Object Members

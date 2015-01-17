@@ -113,9 +113,9 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
-		/// <summary>
-		/// Command always returns a Command object, it never returns <c>null</c>.
-		/// </summary>
+		/// <remarks>
+		/// This property always returns a <see cref="Command"/> object, it never returns <c>null</c>.
+		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Command FileCommand

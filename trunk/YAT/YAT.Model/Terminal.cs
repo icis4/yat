@@ -1669,6 +1669,7 @@ namespace YAT.Model
 		private static void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.Save();
 		}
 
@@ -2156,6 +2157,11 @@ namespace YAT.Model
 			Send(data, false);
 		}
 
+		private void SendEol()
+		{
+			Send("", true);
+		}
+
 		private void SendLine(string data)
 		{
 			Send(data, true);
@@ -2293,27 +2299,33 @@ namespace YAT.Model
 				}
 				else if (c.IsPartialText)
 				{
-					if (!c.IsPartialEolText)
-						Send(c.PartialText);
-					else
-						SendLine(""); // Simply add EOL to finalize a partial line.
+					Send(c.PartialText);
+				}
+				else if (c.IsPartialEol)
+				{
+					SendEol();
+				}
+				else
+				{
+					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type"));
 				}
 
-				// Copy line commands into history.
-				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialEolText)
+				// Copy line commands into recents.
+				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialEol)
 				{
 					// Clone to a normal single line command.
 					Command clone;
-					if (c.IsPartialEolText)
-						clone = new Command(c.Description, c.PartialText, c.DefaultRadix);
+					if (!c.IsPartialEol)
+						clone = new Command(c); // 'Normal' case.
 					else
-						clone = new Command(c);
+						clone = new Command(c.Description, c.PartialText, c.DefaultRadix);
 
 					// Put clone into history.
 					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
 						(
 							new RecentItem<Command>(clone)
 						);
+					this.settingsRoot.SendCommand.SetChanged(); // Manual change required because underlying collection is modified.
 				}
 			}
 		}
@@ -2402,6 +2414,7 @@ namespace YAT.Model
 					(
 						new RecentItem<Command>(clone)
 					);
+				this.settingsRoot.SendFile.SetChanged(); // Manual change required because underlying collection is modified.
 			}
 			catch (Exception ex)
 			{
@@ -2418,9 +2431,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Send Predefined
+		#region Terminal > Send and/or Copy Predefined
 		//------------------------------------------------------------------------------------------
-		// Terminal > Send Predefined
+		// Terminal > Send and/or Copy Predefined
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -2430,24 +2443,11 @@ namespace YAT.Model
 		/// <param name="command">Command 1..max.</param>
 		public virtual bool SendPredefined(int page, int command)
 		{
-			// Verify page index.
-			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
-			if ((page < 1) || (page > pages.Count))
+			// Verify arguments:
+			if (!VerifyPredefinedArguments(page, command))
 				return (false);
 
-			// Verify command index.
-			List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
-			bool isDefined =
-				(
-					(commands != null) &&
-					(commands.Count >= command) &&
-					(commands[command - 1] != null) &&
-					(commands[command - 1].IsDefined)
-				);
-			if (!isDefined)
-				return (false);
-
-			// Verify command.
+			// Verify and process command:
 			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidText)
 			{
@@ -2469,8 +2469,66 @@ namespace YAT.Model
 			}
 			else
 			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Copy the requested predefined command, not taking copy predefined settings
+		/// <see cref="Domain.Settings.SendSettings.CopyPredefined"/> into account.
+		/// </summary>
+		/// <param name="page">Page 1..max.</param>
+		/// <param name="command">Command 1..max.</param>
+		public virtual bool CopyPredefined(int page, int command)
+		{
+			// Verify arguments:
+			if (!VerifyPredefinedArguments(page, command))
+				return (false);
+
+			// Verify and process command:
+			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			if (c.IsValidText)
+			{
+				this.settingsRoot.SendCommand.Command = new Command(c);
 				return (true);
 			}
+			else if (c.IsValidFilePath)
+			{
+				this.settingsRoot.SendFile.Command = new Command(c);
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Verifies the requested predefined arguments.
+		/// </summary>
+		/// <param name="page">Page 1..max.</param>
+		/// <param name="command">Command 1..max.</param>
+		private bool VerifyPredefinedArguments(int page, int command)
+		{
+			// Verify page index:
+			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
+			if ((page < 1) || (page > pages.Count))
+				return (false);
+
+			// Verify command index:
+			List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
+			bool isDefined =
+				(
+					(commands != null) &&
+					(commands.Count >= command) &&
+					(commands[command - 1] != null) &&
+					(commands[command - 1].IsDefined)
+				);
+			if (!isDefined)
+				return (false);
+
+			// Success!
+			return (true);
 		}
 
 		#endregion

@@ -1119,6 +1119,7 @@ namespace YAT.Model
 		private static void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.Save();
 		}
 
