@@ -3,10 +3,10 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL$
-// $Author$
-// $Date$
-// $Revision$
+// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Windows.Forms/LayoutInfo.cs $
+// $Author: maettu_this $
+// $Date: 2013-02-03 20:59:28 +0100 (So, 03 Feb 2013) $
+// $Revision: 628 $
 // ------------------------------------------------------------------------------------------------
 // MKY Development Version 1.0.10
 // ------------------------------------------------------------------------------------------------
@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -31,30 +30,32 @@ namespace MKY.Windows.Forms
 	/// <see cref="System.Windows.Forms"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class ControlEx
+	public static class KeysEx
 	{
 		/// <summary>
-		/// An invalid index is represented by -1 in <see cref="System.Windows.Forms"/> controls.
+		/// Tries to convert the key data into the according function key value.
 		/// </summary>
-		public const int InvalidIndex = -1;
-
-		/// <summary>
-		/// Manual <see cref="FormStartPosition.CenterParent"/> because automatic doesn't work
-		/// if not shown as dialog.
-		/// </summary>
-		/// <param name="parent">Parent form.</param>
-		/// <param name="child">Child form to be placed to the center of the parent.</param>
-		/// <returns>Center parent location.</returns>
-		public static Point CalculateManualCenterParentLocation(Control parent, Control child)
+		/// <param name="keyData">A <see cref="Keys"/> value that represents a key.</param>
+		/// <param name="functionKey">The according function key value; 0 if no function key.</param>
+		/// <returns><c>true</c> if key data is a function key, <c>false</c> otherwise.</returns>
+		public static bool TryConvertFunctionKey(Keys keyData, out int functionKey)
 		{
-			int left = parent.Left + (parent.Width  / 2) - (child.Width  / 2);
-			int top  = parent.Top  + (parent.Height / 2) - (child.Height / 2);
-			return (new Point(left, top));
+			Keys keyCode = keyData & Keys.KeyCode;
+			if ((keyCode >= Keys.F1) && (keyCode <= Keys.F24))
+			{
+				functionKey = (int)keyCode - (int)Keys.F1 + 1; // F1 must result in 1 and so on.
+				return (true);
+			}
+			else
+			{
+				functionKey = 0;
+				return (false);
+			}
 		}
 	}
 }
 
 //==================================================================================================
 // End of
-// $URL$
+// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Windows.Forms/LayoutInfo.cs $
 //==================================================================================================

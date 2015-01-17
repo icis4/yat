@@ -34,13 +34,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Text;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Diagnostics;
 using MKY.Settings;
-using MKY.Time;
 using MKY.Windows.Forms;
 
 using YAT.Settings;
@@ -107,6 +105,7 @@ namespace YAT.Gui.Forms
 
 		// MDI:
 		private Form mdiParent;
+		private ContextMenuStripShortcutWorkaround contextMenuStripShortcutWorkaround;
 
 		// Terminal:
 		private Model.Terminal terminal;
@@ -178,6 +177,35 @@ namespace YAT.Gui.Forms
 			ResumeHandlingTerminalSettings();
 
 			WriteDebugMessageLine("Created");
+		}
+
+		#endregion
+
+		#region Form Special Keys
+		//==========================================================================================
+		// Form Special Keys
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (this.contextMenuStripShortcutWorkaround.ProcessShortcut(keyData))
+				return (true);
+
+			// In addition to predefined shortcuts in the menus, the shortcut Alt+Shift+F1..F12
+			// shall copy the according 'Predefined Command' to 'Send Command':
+			if ((keyData & Keys.Modifiers) == (Keys.Alt | Keys.Shift))
+			{
+				int functionKey;
+				if (KeysEx.TryConvertFunctionKey(keyData, out functionKey))
+				{
+					CopyPredefined(functionKey);
+					return (true);
+				}
+			}
+
+			return (base.ProcessCmdKey(ref msg, keyData));
 		}
 
 		#endregion
@@ -1298,7 +1326,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
 		{
-			SendPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture));
+			SendPredefined(int.Parse((string)(((ToolStripMenuItem)sender).Tag), CultureInfo.InvariantCulture));
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
@@ -1386,10 +1414,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
 		{
-			if (this.settingsRoot.Send.SendImmediately)
-				this.terminal.SendText(new Model.Types.Command(true, ""));
-			else
-				this.terminal.SendText();
+			this.terminal.SendText();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
@@ -1827,24 +1852,30 @@ namespace YAT.Gui.Forms
 		// View
 		//==========================================================================================
 
-		/// <summary>
-		/// Makes sure that context menus are at the right position upon first drop down. This is
-		/// a fix, it should be that way by default. However, due to some reasons, they sometimes
-		/// appear somewhere at the top-left corner of the screen if this fix isn't done.
-		/// </summary>
-		/// <remarks>
-		/// Is this a .NET bug?
-		/// 
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
 		private void FixContextMenus()
 		{
+			List<ContextMenuStrip> strips = new List<ContextMenuStrip>();
+			strips.Add(contextMenuStrip_Send);
+			strips.Add(contextMenuStrip_Radix);
+			strips.Add(contextMenuStrip_Monitor);
+			strips.Add(contextMenuStrip_Predefined);
+			strips.Add(contextMenuStrip_Preset);
+			strips.Add(contextMenuStrip_Status);
+
+			// Makes sure that context menus are at the right position upon first drop down. This is
+			// a fix, it should be that way by default. However, due to some reasons, they sometimes
+			// appear somewhere at the top-left corner of the screen if this fix isn't done.
 			SuspendLayout();
-			contextMenuStrip_Send.OwnerItem = null;
-			contextMenuStrip_Radix.OwnerItem = null;
-			contextMenuStrip_Monitor.OwnerItem = null;
-			contextMenuStrip_Predefined.OwnerItem = null;
+
+			foreach (ContextMenuStrip strip in strips)
+				strip.OwnerItem = null;
+			
 			ResumeLayout();
+
+			// Also fix the issue with shortcuts defined in context menus:
+			this.contextMenuStripShortcutWorkaround = new ContextMenuStripShortcutWorkaround();
+			foreach (ContextMenuStrip strip in strips)
+				this.contextMenuStripShortcutWorkaround.Add(strip);
 		}
 
 		private void InitializeControls()
@@ -2026,11 +2057,11 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Send_SetMenuItems();
 
 			this.isSettingControls.Enter();
-			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
 			send.Command                = this.settingsRoot.SendCommand.Command;
 			send.RecentCommands         = this.settingsRoot.SendCommand.RecentCommands;
 			send.FileCommand            = this.settingsRoot.SendFile.Command;
 			send.RecentFileCommands     = this.settingsRoot.SendFile.RecentCommands;
+			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
 			send.TerminalIsReadyToSend  = this.terminal.IsReadyToSend;
 			this.isSettingControls.Leave();
 		}
@@ -2453,14 +2484,31 @@ namespace YAT.Gui.Forms
 			predefined.Select();
 		}
 
-		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
-		private void SendPredefined(int page, int command)
+		private void CopyPredefined(int command)
 		{
-			if (!this.terminal.SendPredefined(page, command))
+			if (this.terminal.IsReadyToSend)
 			{
-				// If command is not valid, show settings dialog.
-				ShowPredefinedCommandSettings(page, command);
+				int page = predefined.SelectedPage;
+				if (!this.terminal.CopyPredefined(page, command))
+				{
+					// If command is not valid, show settings dialog.
+					ShowPredefinedCommandSettings(page, command);
+				}
+			}
+		}
+
+		/// <param name="command">Command 1..max.</param>
+		private void SendPredefined(int command)
+		{
+			if (this.terminal.IsReadyToSend)
+			{
+				int page = predefined.SelectedPage;
+				if (!this.terminal.SendPredefined(page, command))
+				{
+					// If command is not valid, show settings dialog.
+					ShowPredefinedCommandSettings(page, command);
+				}
 			}
 		}
 

@@ -87,6 +87,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
 		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
 		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
@@ -105,13 +106,13 @@ namespace YAT.Gui.Controls
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
+		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
 		private Domain.Parser.Modes parseMode = ParseModeDefault;
 
 		private FocusState editFocusState = FocusState.Inactive;
 		private bool isValidated;
-		private bool sendIsRequested;
 
 		private bool sendImmediately = SendImmediatelyDefault;
 		private string partialCommandLine;
@@ -161,9 +162,9 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
-		/// <summary>
-		/// Command always returns a Command object, it never returns <c>null</c>.
-		/// </summary>
+		/// <remarks>
+		/// This property always returns a <see cref="Command"/> object, it never returns <c>null</c>.
+		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Command Command
@@ -184,6 +185,7 @@ namespace YAT.Gui.Controls
 
 				OnCommandChanged(EventArgs.Empty);
 				SetControls();
+				SetCursorToEnd();
 			}
 		}
 
@@ -198,7 +200,9 @@ namespace YAT.Gui.Controls
 			{
 				this.recents = value;
 
-				// Don't call SetControls(), recents are shown at DropDown.
+				// Recents must immediately be updated, otherwise
+				// order will be wrong on arrow-up/down.
+				SetRecents();
 			}
 		}
 
@@ -226,6 +230,18 @@ namespace YAT.Gui.Controls
 			set
 			{
 				this.sendImmediately = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual Domain.TerminalType TerminalType
+		{
+			set
+			{
+				this.terminalType = value;
 				SetControls();
 			}
 		}
@@ -280,6 +296,12 @@ namespace YAT.Gui.Controls
 			comboBox_Command.Select();
 		}
 
+		/// <summary></summary>
+		public virtual void SetCursorToEnd()
+		{
+			comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
+		}
+
 		#endregion
 
 		#region Control Special Keys
@@ -297,16 +319,7 @@ namespace YAT.Gui.Controls
 				{
 					if (button_SendCommand.Enabled)
 					{
-						if (this.sendImmediately)
-						{
-							CreatePartialEolCommand();
-							RequestSendPartialEolCommand();
-						}
-						else
-						{
-							RequestSendCompleteCommand();
-						}
-
+						RequestSendCommand();
 						return (true);
 					}
 				}
@@ -340,9 +353,7 @@ namespace YAT.Gui.Controls
 			{
 				this.isStartingUp = false;
 				SetControls();
-
-				// Move cursor to end.
-				comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
+				SetCursorToEnd();
 			}
 		}
 
@@ -377,11 +388,6 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_Command_DropDown(object sender, EventArgs e)
-		{
-			SetRecents();
-		}
-
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
@@ -390,7 +396,7 @@ namespace YAT.Gui.Controls
 				this.isSettingControls.Enter();
 				comboBox_Command.Text      = "";
 				comboBox_Command.ForeColor = SystemColors.ControlText;
-				comboBox_Command.Font      = SystemFonts.DefaultFont; 
+				comboBox_Command.Font      = SystemFonts.DefaultFont;
 				this.isSettingControls.Leave();
 			}
 
@@ -436,7 +442,7 @@ namespace YAT.Gui.Controls
 				if (!this.sendImmediately)
 					this.isValidated = false;
 
-				SetToolTip();
+				SetButtonToolTip();
 			}
 		}
 
@@ -468,7 +474,6 @@ namespace YAT.Gui.Controls
 						else
 							SetEditFocusState(FocusState.HasFocus);
 
-						CreateSingleLineCommand(comboBox_Command.Text);
 						return;
 					}
 
@@ -484,7 +489,6 @@ namespace YAT.Gui.Controls
 						else
 							SetEditFocusState(FocusState.HasFocus);
 
-						CreateSingleLineCommand(comboBox_Command.Text);
 						return;
 					}
 
@@ -505,7 +509,10 @@ namespace YAT.Gui.Controls
 				{
 					RecentItem<Command> ri = (comboBox_Command.SelectedItem as RecentItem<Command>);
 					if (ri != null)
-						SetCommand(ri.Item);
+					{
+						this.command = ri.Item;
+						SetControls();
+					}
 				}
 			}
 		}
@@ -517,15 +524,7 @@ namespace YAT.Gui.Controls
 
 		private void button_SendCommand_Click(object sender, EventArgs e)
 		{
-			if (this.sendImmediately)
-			{
-				CreatePartialEolCommand();
-				RequestSendPartialEolCommand();
-			}
-			else
-			{
-				RequestSendCompleteCommand();
-			}
+			RequestSendCommand();
 		}
 
 		#endregion
@@ -534,6 +533,11 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
+
+		#region Private Methods > Set Controls
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Set Controls
+		//------------------------------------------------------------------------------------------
 
 		private void SetControls()
 		{
@@ -556,42 +560,62 @@ namespace YAT.Gui.Controls
 					comboBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
 				}
 			}
-			else if (this.sendIsRequested)
-			{   // Needed when command is modified (e.g. cleared) after send.
+			else
+			{
 				if (this.command.IsText)
-					comboBox_Command.Text  = this.command.SingleLineText;
+					comboBox_Command.Text = this.command.SingleLineText;
 				else
-					comboBox_Command.Text  = "";
+					comboBox_Command.Text = "";
 
 				comboBox_Command.ForeColor = SystemColors.ControlText;
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
 
-			SetText();
-			SetToolTip();
+			SetButtonText();
+			SetButtonToolTip();
 			button_SendCommand.Enabled = this.terminalIsReadyToSend;
 
 			this.isSettingControls.Leave();
 		}
 
-		private void SetText()
+		private void SetButtonText()
 		{
+			this.isSettingControls.Enter();
+
+			string text = "Send Command (F3)";
 			if (this.sendImmediately)
-				button_SendCommand.Text = "Send EOL (F3)";
-			else
-				button_SendCommand.Text = "Send Command (F3)";
+			{
+				switch (this.terminalType)
+				{
+					case Domain.TerminalType.Text: text = "Send EOL (F3)"; break;
+					default: /* Binary or <New> */ text = "Send (F3)";     break;
+				}
+			}
+			button_SendCommand.Text = text;
+
+			this.isSettingControls.Leave();
 		}
 
-		private void SetToolTip()
+		private void SetButtonToolTip()
 		{
-			string text = "";
-			if (!string.IsNullOrEmpty(comboBox_Command.Text))
-				text = comboBox_Command.Text;
+			this.isSettingControls.Enter();
 
+			string commandText = "";
+			if (!string.IsNullOrEmpty(comboBox_Command.Text))
+				commandText = comboBox_Command.Text;
+
+			string caption = @"Send """ + commandText + @"""";
 			if (this.sendImmediately)
-				toolTip.SetToolTip(button_SendCommand, "Send EOL");
-			else
-				toolTip.SetToolTip(button_SendCommand, @"Send """ + text + @"""");
+			{
+				switch (this.terminalType)
+				{
+					case Domain.TerminalType.Text: caption = "Send EOL"; break;
+					default: /* Binary or <New> */ caption = "Send";     break;
+				}
+			}
+			toolTip.SetToolTip(button_SendCommand, caption);
+
+			this.isSettingControls.Leave();
 		}
 
 		private void SetRecents()
@@ -602,53 +626,18 @@ namespace YAT.Gui.Controls
 			if (this.recents != null)
 				comboBox_Command.Items.AddRange(this.recents.ToArray());
 
+			// Immediately update the updated item list:
+			comboBox_Command.Refresh();
+
 			this.isSettingControls.Leave();
 		}
 
-		private void SetCommand(Command command)
-		{
-			this.command = command;
+		#endregion
 
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		/// <remarks>
-		/// Always create new command to ensure that not only command but also description is updated.
-		/// </remarks>
-		private void CreateSingleLineCommand(string commandLine)
-		{
-			this.command = new Command(commandLine);
-
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		private void CreatePartialCommand(string partialCommand)
-		{
-			this.command = new Command(partialCommand, true);
-
-			if (this.partialCommandLine == null)
-				this.partialCommandLine = partialCommand;
-			else
-				this.partialCommandLine += partialCommand;
-
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		private void CreatePartialEolCommand()
-		{
-			this.command = new Command(true, this.partialCommandLine);
-
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
-
-		private void ResetPartialCommand()
-		{
-			this.partialCommandLine = null;
-		}
+		#region Private Methods > Multi Line Command
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Multi Line Command
+		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
 		/// Almost duplicated code in <see cref="YAT.Gui.Controls.PredefinedCommandSettingsSet.ShowMultiLineCommandBox"/>.
@@ -674,8 +663,13 @@ namespace YAT.Gui.Controls
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
+
 				this.isValidated = true; // Command has been validated by multi line box.
-				SetCommand(f.CommandResult);
+				this.command = f.CommandResult;
+
+				SetControls();
+				OnCommandChanged(EventArgs.Empty);
+
 			}
 			else
 			{
@@ -685,49 +679,106 @@ namespace YAT.Gui.Controls
 			button_SendCommand.Select();
 		}
 
+		#endregion
+
+		#region Private Methods > Handle Command
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Handle Command
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Always create new command to ensure that not only command but also description is updated.
+		/// </remarks>
+		private void CreateSingleLineCommand()
+		{
+			this.command = new Command(comboBox_Command.Text);
+
+			SetControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		private void CreatePartialCommand(string partialCommand)
+		{
+			this.command = new Command(partialCommand, true);
+
+			if (this.partialCommandLine == null)
+				this.partialCommandLine = partialCommand;
+			else
+				this.partialCommandLine += partialCommand;
+
+			SetControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		private void CreatePartialEolCommand()
+		{
+			// Create a partial command based on the compiled partial command line:
+			this.command = new Command(true, this.partialCommandLine);
+
+			SetControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		private void ResetPartialCommand()
+		{
+			this.partialCommandLine = null;
+		}
+
+		#endregion
+
+		#region Private Methods > Request Send
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Request Send
+		//------------------------------------------------------------------------------------------
+
+		private void RequestSendCommand()
+		{
+			if (this.sendImmediately)
+			{
+				CreatePartialEolCommand();
+				RequestSendPartialEolCommand();
+			}
+			else
+			{
+				CreateSingleLineCommand();
+				RequestSendCompleteCommand();
+			}
+		}
+
 		private void RequestSendCompleteCommand()
 		{
 			ResetPartialCommand();
 
 			if (this.isValidated)
 			{
-				RequestSendCommand();
+				InvokeSendCommandRequest();
 			}
 			else
 			{
 				if (ValidateChildren())
-					RequestSendCommand();
+					InvokeSendCommandRequest();
 			}
 		}
 
 		/// <remarks>Required when sending immediately.</remarks>
 		private void RequestSendPartialCommand()
 		{
-			RequestSendCommand();
+			InvokeSendCommandRequest();
 		}
 
 		/// <remarks>Required when sending EOL immediately.</remarks>
 		private void RequestSendPartialEolCommand()
 		{
 			ResetPartialCommand();
-			RequestSendCommand();
+			InvokeSendCommandRequest();
 		}
 
-		private void RequestSendCommand()
+		private void InvokeSendCommandRequest()
 		{
-			if (this.editFocusState == FocusState.Inactive)
-			{
-				OnSendCommandRequest(EventArgs.Empty);
-			}
-			else
-			{
-				// Notifying the send state is needed when command is automatically
-				//   modified (e.g. cleared) after send.
-				this.sendIsRequested = true;
-				OnSendCommandRequest(EventArgs.Empty);
-				this.sendIsRequested = false;
-			}
+			OnSendCommandRequest(EventArgs.Empty);
 		}
+
+		#endregion
 
 		#endregion
 

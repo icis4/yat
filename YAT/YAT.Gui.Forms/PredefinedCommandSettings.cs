@@ -141,15 +141,6 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected override bool IsInputKey(Keys keyData)
-		{
-			if (keyData == Keys.F1)
-				return (false);
-			else
-				return (base.IsInputKey(keyData));
-		}
-
-		/// <summary></summary>
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -158,6 +149,7 @@ namespace YAT.Gui.Forms
 				ShowHelp();
 				return (true);
 			}
+
 			return (base.ProcessCmdKey(ref msg, keyData));
 		}
 

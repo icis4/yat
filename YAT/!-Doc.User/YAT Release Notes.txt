@@ -57,7 +57,7 @@ Start YAT by selecting "Start > Programs > YAT > YAT"
 2. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2013-xx-xx
+YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2015-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -65,6 +65,8 @@ New:
   can be specified in USB Ser/HID settings (feature request #193)
 - Write protected .yat files are marked '#' and are not attempted to be written automatically,
   write protected .yaw files are not attempted to be written either (feature request #194)
+- Predefined commands can now be copied to 'Send Command' using shortcuts Alt+Shift+Fx (feat. #218)
+- Tool tips added to command buttons (feature request #205, also related to feature request #220)
 
 Important changes:
 - Update to DejaVu fonts 2.34
@@ -86,7 +88,10 @@ Fixed bugs:
 - Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly
   restored when opening the terminal settings dialog (bug #259)
 - Duplicated and/or split display representation fixed (bugs #258, #264 and #265)
+- Shortcuts are now always routed to the correct terminal window (i.e. MDI child) (bug #152)
+- Handling of recent commands in 'Send Command' improved, arrows up/down properly work again
 - Representation of description of multi line commands in 'Send Command' improved
+- Issues with 'Send Immediately' fixed, additional test cases for 'Send Command' added (bug #276)
 - Exception while reading stream in YAT.Domain.Parser.Parser.TryParse() fixed (bug #261)
 - Exception while closing terminal or application in YAT.Domain.RawTerminal.Send() fixed (bug #267)
 - Memory leak when subsequently creating and closing terminals fixed (bug #263)
@@ -107,7 +112,6 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #29 and #30)
    > Issues with window list (bugs #31, #119, #180 and #213)
-   > Issue with re-routing shortcuts when activating a different MDI child (bug #152)
 - Long monitor contents are not displayed properly when horizontally scrolling using the scroll bar
   (bug #125)
 - Support for serial ports which are named other than "COM..." isn't supported by .NET

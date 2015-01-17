@@ -144,15 +144,30 @@ namespace MKY.Diagnostics
 
 		#endregion
 
-		/// <summary>
-		/// Standard output.
-		/// </summary>
-		public static TextWriterEx Out = new TextWriterEx(new ConsoleWrapper(Console.Out));
+		private static TextWriterEx staticOut = new TextWriterEx(new ConsoleWrapper(Console.Out));
+		private static TextWriterEx staticError = new TextWriterEx(new ConsoleWrapper(Console.Error));
 
 		/// <summary>
-		/// Error output.
+		/// Gets the standard output stream wrapped to output diagnostics.
 		/// </summary>
-		public static TextWriterEx Error = new TextWriterEx(new ConsoleWrapper(Console.Error));
+		/// <returns>
+		/// A <see cref="TextWriterEx"/> that represents the standard output stream.
+		/// </returns>
+		public static TextWriterEx Out
+		{
+			get { return (staticOut); }
+		}
+
+		/// <summary>
+		/// Gets the standard error stream wrapped to output diagnostics.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="TextWriterEx"/> that represents the standard error stream.
+		/// </returns>
+		public static TextWriterEx Error
+		{
+			get { return (staticError); }
+		}
 	}
 }
 

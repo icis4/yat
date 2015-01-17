@@ -134,7 +134,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Command always returns a Command object, it never returns <c>null</c>.
+		/// This property always returns a <see cref="Command"/> object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -142,14 +142,6 @@ namespace YAT.Gui.Controls
 		{
 			get { return (sendCommand.Command); }
 			set { sendCommand.Command = value;  }
-		}
-
-		/// <summary></summary>
-		[DefaultValue(SendCommand.SendImmediatelyDefault)]
-		public virtual bool SendCommandImmediately
-		{
-			get { return (sendCommand.SendImmediately); }
-			set { sendCommand.SendImmediately = value;  }
 		}
 
 		/// <summary></summary>
@@ -193,6 +185,14 @@ namespace YAT.Gui.Controls
 				this.terminalType = value;
 				SetControls();
 			}
+		}
+
+		/// <summary></summary>
+		[DefaultValue(SendCommand.SendImmediatelyDefault)]
+		public virtual bool SendCommandImmediately
+		{
+			get { return (sendCommand.SendImmediately); }
+			set { sendCommand.SendImmediately = value; }
 		}
 
 		/// <summary></summary>
@@ -296,12 +296,13 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
+			sendCommand.TerminalType          = this.terminalType;
 			sendCommand.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-			sendCommand.SplitterRatio = this.splitterRatio;
+			sendCommand.SplitterRatio         = this.splitterRatio;
 
-			sendFile.TerminalType = this.terminalType;
+			sendFile.TerminalType          = this.terminalType;
 			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-			sendFile.SplitterRatio = this.splitterRatio;
+			sendFile.SplitterRatio         = this.splitterRatio;
 		}
 
 		#endregion
