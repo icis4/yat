@@ -120,8 +120,10 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// This variable is used to get the difference between the actual and the desired rotation.
 		/// Without this, the image would need to be kept twice, with and without rotation. Upon a
-		/// change of a property, the image would have to be redrawn from the unrotated image.
+		/// change of a property, the image would have to be redrawn from the original image.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'rotationOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private RotateType ApplyImageRotation_rotationOld = RotationDefault;
 
 		private void ApplyImageRotationAfterRotationChange()

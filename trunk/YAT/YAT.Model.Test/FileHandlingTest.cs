@@ -1882,7 +1882,9 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		private int  main_MessageInputRequest_OK_counter; // = 0;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int main_MessageInputRequest_OK_counter; // = 0;
+
 		private void main_MessageInputRequest_OK(object sender, MessageInputEventArgs e)
 		{
 			e.Result = System.Windows.Forms.DialogResult.OK;
@@ -1890,7 +1892,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		private int  main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter; // = 0;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No_counter; // = 0;
+
 		private void main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No(object sender, WorkspaceEventArgs e)
 		{
 			e.Workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_No);
@@ -1898,7 +1902,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>Counter can be used to assert that handler indeed was called.</remarks>
-		private int  workspace_MessageInputRequest_No_counter; // = 0;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int workspace_MessageInputRequest_No_counter; // = 0;
+
 		private void workspace_MessageInputRequest_No(object sender, MessageInputEventArgs e)
 		{
 			e.Result = System.Windows.Forms.DialogResult.No;

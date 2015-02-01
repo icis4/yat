@@ -392,9 +392,10 @@ namespace YAT.Model
 			// Always create start requests to ensure that object exists.
 			this.startArgs = new MainStartArgs();
 
-			// 
 			// Process and validate command line arguments:
-			// 
+			if (this.commandLineArgs != null)
+				this.commandLineArgs.ProcessAndValidate();
+
 			// In normal operation this is the location where the command line arguments are
 			// processed and validated for a second time AFTER the application settings have been
 			// created/loaded. They have already been processed and validated for a first time
@@ -403,9 +404,6 @@ namespace YAT.Model
 			// 
 			// In case of automated testing, the command line arguments may also be processed and
 			// validated here for the first time.
-			// 
-			if (this.commandLineArgs != null)
-				this.commandLineArgs.ProcessAndValidate();
 
 			// Prio 0 = None:
 			if ((this.commandLineArgs == null) || this.commandLineArgs.NoArgs)
@@ -795,7 +793,7 @@ namespace YAT.Model
 		{
 			// These are temporary settings. Therefore, child items of these settings are not
 			// cloned below. They can simply be assigned and will then later be assigned back.
-			Domain.Settings.TerminalSettings terminalSettings = new Domain.Settings.TerminalSettings(); ;
+			Domain.Settings.TerminalSettings terminalSettings = new Domain.Settings.TerminalSettings();
 
 			terminalSettings.TerminalType = newTerminalSettings.TerminalType;
 			terminalSettings.IO.IOType    = newTerminalSettings.IOType;
@@ -844,7 +842,6 @@ namespace YAT.Model
 			{
 				return (false);
 			}
-
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]

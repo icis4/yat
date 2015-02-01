@@ -344,7 +344,7 @@ namespace YAT.Gui.Forms
 		// Private Methods
 		//==========================================================================================
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'ioTypeOld' indeed starts with an lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'ioTypeOld' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
 

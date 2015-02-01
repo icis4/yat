@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -54,18 +55,20 @@ namespace MKY.Windows.Forms.Test
 			label_ListBoxEx_VerticalScrollType.Text = e.Type.ToString();
 		}
 
-		private int button_ListBoxEx_AddChar_increment;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'increment' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private int button_ListBoxEx_AddChar_Click_increment;
 
 		private void button_ListBoxEx_AddChar_Click(object sender, EventArgs e)
 		{
 			ListBoxEx lbe = listBoxEx;
 			lbe.BeginUpdate();
 
-			string append = button_ListBoxEx_AddChar_increment.ToString();
+			string append = button_ListBoxEx_AddChar_Click_increment.ToString();
 			
-			button_ListBoxEx_AddChar_increment++;
-			if (button_ListBoxEx_AddChar_increment >= 10)
-				button_ListBoxEx_AddChar_increment = 0;
+			button_ListBoxEx_AddChar_Click_increment++;
+			if (button_ListBoxEx_AddChar_Click_increment >= 10)
+				button_ListBoxEx_AddChar_Click_increment = 0;
 
 			if (lbe.Items.Count > 0)
 			{

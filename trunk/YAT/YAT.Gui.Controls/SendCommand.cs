@@ -669,7 +669,6 @@ namespace YAT.Gui.Controls
 
 				SetControls();
 				OnCommandChanged(EventArgs.Empty);
-
 			}
 			else
 			{
