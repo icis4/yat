@@ -35,6 +35,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Security.Permissions;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -2512,17 +2513,39 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary>
+		/// Fixes issue described in bug #300 "Modal forms can be opened multiple times":
+		/// When no commands were defined yet, pressing Shift+F1 opens the 'Predefined' form, so far so good.
+		/// However, when pressing Shift+F1 again (while the 'Predefined' form is still open), the form opens a second time!
+		/// 
+		/// Saying hello to StyleCop ;-.
+		/// </summary>
+		/// <remarks>
+		/// Simple bool without any interlocked or monitor protection is totally sufficient,
+		/// as this method will always be called from the main thread.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool ShowPredefinedCommandSettings_formIsOpen = false;
+
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
-			PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, this.settingsRoot.TerminalType, this.settingsRoot.Send.ToParseMode(), page, command);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			if (!ShowPredefinedCommandSettings_formIsOpen)
 			{
-				Refresh();
-				this.settingsRoot.PredefinedCommand = f.SettingsResult;
-				this.settingsRoot.Predefined.SelectedPage = f.SelectedPage;
+				ShowPredefinedCommandSettings_formIsOpen = true;
+
+				PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, this.settingsRoot.TerminalType, this.settingsRoot.Send.ToParseMode(), page, command);
+				if (f.ShowDialog(this) == DialogResult.OK)
+				{
+					Refresh();
+					this.settingsRoot.PredefinedCommand = f.SettingsResult;
+					this.settingsRoot.Predefined.SelectedPage = f.SelectedPage;
+				}
+
+				ShowPredefinedCommandSettings_formIsOpen = false;
 			}
 		}
 
