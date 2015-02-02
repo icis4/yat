@@ -262,9 +262,10 @@ namespace YAT.Controller
 			bool showView;
 			bool showHelp;
 
-			// 
 			// Process and validate command line arguments:
-			// 
+			if (this.commandLineArgs != null)
+				this.commandLineArgs.ProcessAndValidate();
+
 			// In normal operation this is the location where the command line arguments are
 			// processed and validated for a first time, even BEFORE the application settings have
 			// been created/loaded. Then they will be processed and validated for a second time
@@ -273,9 +274,6 @@ namespace YAT.Controller
 			//
 			// In case of automated testing, the command line arguments will be processed and
 			// validated in PrepareRun() above, or also in YAT.Model.Main.
-			// 
-			if (this.commandLineArgs != null)
-				this.commandLineArgs.ProcessAndValidate();
 
 			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)

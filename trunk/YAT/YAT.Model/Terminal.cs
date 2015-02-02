@@ -150,6 +150,9 @@ namespace YAT.Model
 		private Rate txLineRate;
 		private Rate rxLineRate;
 
+		// Partial commands:
+		private string partialCommandLine;
+
 		#endregion
 
 		#region Events
@@ -1042,10 +1045,38 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Required to solve the issue described in bug #223 "Settings events should state the exact settings diff".
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'sendImmediatelyOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private bool settingsRoot_Changed_sendImmediatelyOld = Domain.Settings.SendSettings.SendImmediatelyDefault;
+
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			// Terminal files are never saved automatically. They are either auto saved on exit, or
-			// manually saved by the user.
+			// Note that GUI settings are handled in Gui.Forms.Terminal::settingsRoot_Changed().
+			// Below, only those settings that need to be managed by the model are handled.
+
+			if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
+			{
+				// Explicit settings have changed.
+				SettingsEventArgs explicitEventArgs = e.Inner;
+				if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Terminal))
+				{
+					// Terminal settings have changed.
+					SettingsEventArgs terminalEventArgs = explicitEventArgs.Inner;
+					if (ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.Send))
+					{
+						// Send settings have changed.
+						if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {
+							settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Send.SendImmediately;
+
+							// Send immediately has changed, reset the last command:
+							this.settingsRoot.SendCommand.Command.Clear();
+						}
+					}
+				}
+			}
 		}
 
 		#endregion
@@ -2271,10 +2302,18 @@ namespace YAT.Model
 			{
 				SendText(c);
 
-				// Clear command if desired.
+				// Clear command if desired:
 				if (!this.settingsRoot.Send.KeepCommand)
 					this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
 			}
+		}
+
+		/// <summary>
+		/// Sends partial text EOL.
+		/// </summary>
+		public virtual void SendPartialTextEol()
+		{
+			SendText(new Command(true));
 		}
 
 		/// <summary>
@@ -2299,33 +2338,45 @@ namespace YAT.Model
 				}
 				else if (c.IsPartialText)
 				{
-					Send(c.PartialText);
-				}
-				else if (c.IsPartialEol)
-				{
-					SendEol();
+					if (!c.IsPartialTextEol)
+					{
+						Send(c.PartialText);
+
+						// Compile the partial command line for later use:
+						if (string.IsNullOrEmpty(this.partialCommandLine))
+							this.partialCommandLine = string.Copy(c.PartialText);
+						else
+							this.partialCommandLine += c.PartialText;
+					}
+					else
+					{
+						SendEol();
+					}
 				}
 				else
 				{
 					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type"));
 				}
 
-				// Copy line commands into recents.
-				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialEol)
+				// Copy line commands into recents, include compiled partial commands:
+				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialTextEol)
 				{
-					// Clone to a normal single line command.
+					// Clone the command for the recents collection:
 					Command clone;
-					if (!c.IsPartialEol)
-						clone = new Command(c); // 'Normal' case.
-					else
-						clone = new Command(c.Description, c.PartialText, c.DefaultRadix);
+					if (!c.IsPartialTextEol)
+						clone = new Command(c); // 'Normal' case, simply clone the command.
+					else                        // Partial, create an equivalent single line command.
+						clone = new Command(this.partialCommandLine);
 
-					// Put clone into history.
+					// Put clone into recent history:
 					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
 						(
 							new RecentItem<Command>(clone)
 						);
 					this.settingsRoot.SendCommand.SetChanged(); // Manual change required because underlying collection is modified.
+
+					// Reset the partial command line:
+					this.partialCommandLine = null;
 				}
 			}
 		}

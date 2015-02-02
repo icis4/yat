@@ -133,6 +133,22 @@ namespace MKY.Test.Types
 				new SimpleType[] { new SimpleType(1, 1.1), new SimpleType(2, 1.2), new SimpleType(3, 1.3) },
 			};
 
+		private static readonly string[][] ArraysWithNull = new string[][]
+			{
+				new string[] { "AAA", "BBB" },
+				new string[] { "AAA", null },
+				new string[] { "AAA", null },
+				new string[] { null, null },
+				new string[] { null, null },
+			};
+
+		private static readonly string[][] ArraysOdd = new string[][]
+			{
+				new string[] { "AAA" },
+				new string[] { "AAA", "BBB" },
+				new string[] { "AAA", "BBB", "CCC" },
+			};
+
 		#endregion
 
 		#region Test Cases
@@ -160,6 +176,17 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[0], true) .SetName("ObjectArrays_ReferenceEquals"));
 				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[1], true) .SetName("ObjectArrays_ValueEquals"));
 				yield return (new TestCaseData(ObjectArrays[0], ObjectArrays[2], false).SetName("ObjectArrays_Differs"));
+
+				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[0], true) .SetName("ArraysWithNull_ReferenceEquals"));
+				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[1], false).SetName("ArraysWithNull_DiffersInNull"));
+				yield return (new TestCaseData(ArraysWithNull[1], ArraysWithNull[2], true) .SetName("ArraysWithNull_EqualsInNull"));
+				yield return (new TestCaseData(ArraysWithNull[0], ArraysWithNull[3], false).SetName("ArraysWithNull_DiffersInNull"));
+				yield return (new TestCaseData(ArraysWithNull[1], ArraysWithNull[3], false).SetName("ArraysWithNull_DiffersInNull"));
+				yield return (new TestCaseData(ArraysWithNull[3], ArraysWithNull[4], true) .SetName("ArraysWithNull_EqualsInNull"));
+
+				yield return (new TestCaseData(ArraysOdd[0], ArraysOdd[1], false).SetName("ArraysOdd_DiffersIn2nd"));
+				yield return (new TestCaseData(ArraysOdd[0], ArraysOdd[2], false).SetName("ArraysOdd_DiffersIn2ndAnd3rd"));
+				yield return (new TestCaseData(ArraysOdd[1], ArraysOdd[2], false).SetName("ArraysOdd_DiffersIn3rd"));
 			}
 		}
 

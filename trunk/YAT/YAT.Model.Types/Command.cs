@@ -79,7 +79,7 @@ namespace YAT.Model.Types
 		private string[]     commandLines;
 		private Domain.Radix defaultRadix;
 		private bool         isPartialText;
-		private bool         isPartialEol;
+		private bool         isPartialTextEol;
 		private bool         isFilePath;
 		private string       filePath;
 
@@ -103,21 +103,15 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public Command(string commandLine, bool isPartial)
+		public Command(string commandLine, bool isPartialText)
 		{
-			Initialize(true, "", new string[] { commandLine }, Domain.Radix.String, isPartial, false, false, "");
+			Initialize(true, "", new string[] { commandLine }, Domain.Radix.String, isPartialText, false, false, "");
 		}
 
 		/// <summary></summary>
-		public Command(bool isPartialEol)
+		public Command(bool isPartialTextEol)
 		{
-			Initialize(true, "", new string[] { "" }, Domain.Radix.String, true, isPartialEol, false, "");
-		}
-
-		/// <summary></summary>
-		public Command(bool isPartialEol, string completeCommandLine)
-		{
-			Initialize(true, "", new string[] { completeCommandLine }, Domain.Radix.String, true, isPartialEol, false, "");
+			Initialize(true, "", new string[] { "" }, Domain.Radix.String, isPartialTextEol, isPartialTextEol, false, "");
 		}
 
 		/// <summary></summary>
@@ -161,16 +155,16 @@ namespace YAT.Model.Types
 			Initialize(false, "", new string[] { "" }, Domain.Radix.String, false, false, false, "");
 		}
 
-		private void Initialize(bool isDefined, string description, string[] commandLines, Domain.Radix defaultRadix, bool isPartialText, bool isPartialEol, bool isFilePath, string filePath)
+		private void Initialize(bool isDefined, string description, string[] commandLines, Domain.Radix defaultRadix, bool isPartialText, bool isPartialTextEol, bool isFilePath, string filePath)
 		{
-			this.isDefined     = isDefined;
-			this.description   = description;
-			this.commandLines  = commandLines;
-			this.defaultRadix  = defaultRadix;
-			this.isPartialText = isPartialText;
-			this.isPartialEol  = isPartialEol;
-			this.isFilePath    = isFilePath;
-			this.filePath      = filePath;
+			this.isDefined        = isDefined;
+			this.description      = description;
+			this.commandLines     = commandLines;
+			this.defaultRadix     = defaultRadix;
+			this.isPartialText    = isPartialText;
+			this.isPartialTextEol = isPartialTextEol;
+			this.isFilePath       = isFilePath;
+			this.filePath         = filePath;
 		}
 
 		/// <summary></summary>
@@ -178,14 +172,14 @@ namespace YAT.Model.Types
 		{
 			if (rhs != null)
 			{
-				this.isDefined     = rhs.isDefined;
-				this.description   = rhs.description;
-				this.commandLines  = rhs.commandLines;
-				this.defaultRadix  = rhs.defaultRadix;
-				this.isPartialText = rhs.isPartialText;
-				this.isPartialEol  = rhs.isPartialEol;
-				this.isFilePath    = rhs.isFilePath;
-				this.filePath      = rhs.filePath;
+				this.isDefined        = rhs.isDefined;
+				this.description      = rhs.description;
+				this.commandLines     = rhs.commandLines;
+				this.defaultRadix     = rhs.defaultRadix;
+				this.isPartialText    = rhs.isPartialText;
+				this.isPartialTextEol = rhs.isPartialTextEol;
+				this.isFilePath       = rhs.isFilePath;
+				this.filePath         = rhs.filePath;
 			}
 			else
 			{
@@ -322,23 +316,23 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[XmlElement("IsPartialEol")]
-		public virtual bool IsPartialEol
+		[XmlElement("IsPartialTextEol")]
+		public virtual bool IsPartialTextEol
 		{
 			get
 			{
-				return (IsDefined && this.isPartialEol);
+				return (IsDefined && this.isPartialTextEol);
 			}
 			set
 			{
 				if (IsDefined)
 				{
-					this.isPartialEol = value;
+					this.isPartialTextEol = value;
 				}
 				else if (value) // Ensure that only a set flag defines the
 				{               // command during XML deserialization!
 					this.isDefined = true;
-					this.isPartialEol = value;
+					this.isPartialTextEol = value;
 				}
 				else
 				{
