@@ -70,19 +70,24 @@ namespace MKY
 			IEnumerator objAEnumerator = objA.GetEnumerator();
 			IEnumerator objBEnumerator = objB.GetEnumerator();
 
-			// check element by element
-			while (objAEnumerator.MoveNext() && (objAEnumerator.Current != null) &&
-				   objBEnumerator.MoveNext() && (objBEnumerator.Current != null))
+			// Check element by element:
+			while (objAEnumerator.MoveNext() && objBEnumerator.MoveNext())
 			{
+				if ((objAEnumerator.Current == null) && (objBEnumerator.Current == null))
+					continue; // Both 'null' is equal.
+
+				if ((objAEnumerator.Current == null) || (objBEnumerator.Current == null))
+					return (false); // Only one 'null' is not equal.
+
 				if (!objAEnumerator.Current.Equals(objBEnumerator.Current))
 					return (false);
 			}
 
-			// check that both enumerators are positioned after the last element
+			// Check that both enumerators are positioned after the last element:
 			if (!objAEnumerator.MoveNext() && !objBEnumerator.MoveNext())
 				return (true);
-
-			return (false);
+			else
+				return (false);
 		}
 
 		/// <summary>

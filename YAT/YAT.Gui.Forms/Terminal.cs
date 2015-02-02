@@ -447,7 +447,19 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
+			string sendCommandText = "Command";
+			bool sendCommandEnabled = this.settingsRoot.SendCommand.Command.IsValidText;
+			if (this.settingsRoot.Send.SendImmediately)
+			{
+				switch (this.settingsRoot.TerminalType)
+				{
+					case Domain.TerminalType.Text: sendCommandText = "EOL";    break;
+					default: /* Binary or <New> */ sendCommandEnabled = false; break;
+				}
+			}
+
+			toolStripMenuItem_TerminalMenu_Send_Command.Text    = sendCommandText;
+			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = sendCommandEnabled;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = this.settingsRoot.SendFile.Command.IsValidFilePath;
 
 			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
@@ -464,7 +476,10 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_Command_Click(object sender, EventArgs e)
 		{
-			this.terminal.SendText();
+			if (!this.settingsRoot.Send.SendImmediately)
+				this.terminal.SendText();
+			else
+				this.terminal.SendPartialTextEol();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
@@ -1395,7 +1410,19 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
+			string sendCommandText = "Send Command";
+			bool sendCommandEnabled = this.settingsRoot.SendCommand.Command.IsValidText;
+			if (this.settingsRoot.Send.SendImmediately)
+			{
+				switch (this.settingsRoot.TerminalType)
+				{
+					case Domain.TerminalType.Text: sendCommandText = "Send EOL"; break;
+					default: /* Binary or <New> */ sendCommandEnabled = false;   break;
+				}
+			}
+
+			toolStripMenuItem_SendContextMenu_SendCommand.Text    = sendCommandText;
+			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = sendCommandEnabled;
 			toolStripMenuItem_SendContextMenu_SendFile.Enabled    = this.settingsRoot.SendCommand.Command.IsValidFilePath;
 
 			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
@@ -1415,7 +1442,10 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
 		{
-			this.terminal.SendText();
+			if (!this.settingsRoot.Send.SendImmediately)
+				this.terminal.SendText();
+			else
+				this.terminal.SendPartialTextEol();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
@@ -2598,17 +2628,17 @@ namespace YAT.Gui.Forms
 
 			if (e.Inner == null)
 			{
-				// SettingsRoot changed.
-				// Nothing to do, no need to care about ProductVersion.
+				// Settings root has changed.
+				// Nothing to do, no need to care about 'ProductVersion' and such.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
 			{
-				// ExplicitSettings changed.
+				// Explicit settings have changed.
 				HandleExplicitSettings(e.Inner);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
 			{
-				// ImplicitSettings changed.
+				// Implicit settings have changed.
 				HandleImplicitSettings(e.Inner);
 			}
 

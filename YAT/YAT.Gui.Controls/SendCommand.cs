@@ -106,16 +106,15 @@ namespace YAT.Gui.Controls
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
+		private Domain.Parser.Modes parseMode = ParseModeDefault;
+		private bool sendImmediately = SendImmediatelyDefault;
+
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
-		private Domain.Parser.Modes parseMode = ParseModeDefault;
 
 		private FocusState editFocusState = FocusState.Inactive;
 		private bool isValidated;
-
-		private bool sendImmediately = SendImmediatelyDefault;
-		private string partialCommandLine;
 
 		#endregion
 
@@ -439,8 +438,10 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				if (!this.sendImmediately)
-					this.isValidated = false;
+				if (this.sendImmediately)
+					comboBox_Command.Text = ""; // Instantly reset the text.
+				else
+					this.isValidated = false; // Reset the validation flag.
 
 				SetButtonToolTip();
 			}
@@ -562,7 +563,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				if (this.command.IsText)
+				if (this.command.IsText && !this.command.IsPartialText)
 					comboBox_Command.Text = this.command.SingleLineText;
 				else
 					comboBox_Command.Text = "";
@@ -571,27 +572,21 @@ namespace YAT.Gui.Controls
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
 
-			SetButtonText();
-			SetButtonToolTip();
-			button_SendCommand.Enabled = this.terminalIsReadyToSend;
-
-			this.isSettingControls.Leave();
-		}
-
-		private void SetButtonText()
-		{
-			this.isSettingControls.Enter();
-
 			string text = "Send Command (F3)";
+			bool enabled = this.terminalIsReadyToSend;
 			if (this.sendImmediately)
 			{
 				switch (this.terminalType)
 				{
 					case Domain.TerminalType.Text: text = "Send EOL (F3)"; break;
-					default: /* Binary or <New> */ text = "Send (F3)";     break;
+					default: /* Binary or <New> */ enabled = false;        break;
 				}
 			}
+
 			button_SendCommand.Text = text;
+			button_SendCommand.Enabled = enabled;
+
+			SetButtonToolTip();
 
 			this.isSettingControls.Leave();
 		}
@@ -610,7 +605,7 @@ namespace YAT.Gui.Controls
 				switch (this.terminalType)
 				{
 					case Domain.TerminalType.Text: caption = "Send EOL"; break;
-					default: /* Binary or <New> */ caption = "Send";     break;
+					default: /* Binary or <New> */ caption = "";         break;
 				}
 			}
 			toolTip.SetToolTip(button_SendCommand, caption);
@@ -700,27 +695,16 @@ namespace YAT.Gui.Controls
 		{
 			this.command = new Command(partialCommand, true);
 
-			if (this.partialCommandLine == null)
-				this.partialCommandLine = partialCommand;
-			else
-				this.partialCommandLine += partialCommand;
-
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
 		private void CreatePartialEolCommand()
 		{
-			// Create a partial command based on the compiled partial command line:
-			this.command = new Command(true, this.partialCommandLine);
+			this.command = new Command(true);
 
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
-		}
-
-		private void ResetPartialCommand()
-		{
-			this.partialCommandLine = null;
 		}
 
 		#endregion
@@ -746,8 +730,6 @@ namespace YAT.Gui.Controls
 
 		private void RequestSendCompleteCommand()
 		{
-			ResetPartialCommand();
-
 			if (this.isValidated)
 			{
 				InvokeSendCommandRequest();
@@ -768,7 +750,6 @@ namespace YAT.Gui.Controls
 		/// <remarks>Required when sending EOL immediately.</remarks>
 		private void RequestSendPartialEolCommand()
 		{
-			ResetPartialCommand();
 			InvokeSendCommandRequest();
 		}
 
