@@ -572,6 +572,13 @@ namespace YAT.Gui.Controls
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
 
+			// Prepare the button properties based on state and settings.
+			//
+			// Attention: Similar code exists in the following locations:
+			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+			// Changes here may have to be applied there.
+
 			string text = "Send Command (F3)";
 			bool enabled = this.terminalIsReadyToSend;
 			if (this.sendImmediately)

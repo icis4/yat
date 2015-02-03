@@ -447,6 +447,13 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
+			// Prepare the menu item properties based on state and settings.
+			//
+			// Attention: Similar code exists in the following locations:
+			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+			//  > YAT.Gui.Controls.SendCommand.SetControls()
+			// Changes here may have to be applied there.
+
 			string sendCommandText = "Command";
 			bool sendCommandEnabled = this.settingsRoot.SendCommand.Command.IsValidText;
 			if (this.settingsRoot.Send.SendImmediately)
@@ -1409,6 +1416,13 @@ namespace YAT.Gui.Forms
 		private void contextMenuStrip_Send_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
+
+			// Prepare the menu item properties based on state and settings.
+			//
+			// Attention: Similar code exists in the following locations:
+			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+			//  > YAT.Gui.Controls.SendCommand.SetControls()
+			// Changes here may have to be applied there.
 
 			string sendCommandText = "Send Command";
 			bool sendCommandEnabled = this.settingsRoot.SendCommand.Command.IsValidText;
