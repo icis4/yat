@@ -15,7 +15,7 @@ REM  ---------------------------------------------------------------------------
 REM  See SVN change log for revision details.
 REM  See release notes for product version details.
 REM  ----------------------------------------------------------------------------------------------
-REM  Copyright © 2010-2013 Matthias Kläy.
+REM  Copyright © 2003-2015 Matthias Kläy.
 REM  All rights reserved.
 REM  ----------------------------------------------------------------------------------------------
 REM  This source code is licensed under the GNU LGPL.
