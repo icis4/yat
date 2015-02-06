@@ -24,7 +24,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Types for consistency with the Sytem namespace.
+// MKY.Collections for consistency with the 'System.Collections' namespace hierarchy.
 namespace MKY
 {
 	/// <summary>
