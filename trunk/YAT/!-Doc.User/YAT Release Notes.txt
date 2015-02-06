@@ -69,7 +69,7 @@ New:
 - Tool tips added to command buttons (feature request #205, also related to feature request #220)
 
 Important changes:
-- Update to DejaVu fonts 2.34
+- DejaVu fonts updated to 2.34
 - Error handling in case of deleted .yaw and .yat files improved (related to feature request #194)
 - \!(...) keywords can optionally be disabled (feature request #183)
 - Retrieving serial COM port captions from the system can optionally be disabled in 'Preferences'
@@ -83,6 +83,8 @@ Important changes:
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
 - Command line console output is now channeled to stdout or stderr depending on whether it is normal
   or error information (feature request #192)
+- Visual Studio upgraded to 2013 Community Edition (feature request #221)
+- NUnit updated to 2.64, other development tools (GhostDoc, StyleCop, FxCop) updated too
 
 Fixed bugs:
 - Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly

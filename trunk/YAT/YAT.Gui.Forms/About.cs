@@ -72,7 +72,7 @@ namespace YAT.Gui.Forms
 			textBefore = "Copyright © 2003-2004 ";
 			textLink   =                       "HSR Hochschule für Technik Rapperswil";
 			textAfter  =                                                            "." + Environment.NewLine +
-			             "Copyright © 2003-2013 Matthias Kläy.";
+			             "Copyright © 2003-2015 Matthias Kläy.";
 			linkLabel_Copyright.Text += textBefore;
 			linkStart = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
@@ -137,7 +137,7 @@ namespace YAT.Gui.Forms
 			// Environment.
 			linkLabel_Environment.Text = "";
 			textBefore = "YAT is developed with" + Environment.NewLine +
-						 "   > Microsoft Visual Studio 2008" + Environment.NewLine +
+						 "   > Microsoft Visual Studio 2013 Community Edition" + Environment.NewLine +
 						 "   > AnkhSVN" + Environment.NewLine +
 						 "   > NUnit" + Environment.NewLine +
 						 "   > System.IO.Ports serial port extension by Matthias Kläy" + Environment.NewLine +
@@ -207,7 +207,8 @@ namespace YAT.Gui.Forms
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://dejavu.sourceforge.net/");
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "   > Microsoft StyleCop" + Environment.NewLine +
+			textBefore = "   > GhostDoc" + Environment.NewLine +
+						 "   > Microsoft StyleCop" + Environment.NewLine +
 						 "   > Microsoft FxCop";
 			linkLabel_Environment.Text += textBefore;
 
@@ -223,7 +224,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Text += textAfter;
 
 			// Author.
-			linkLabel_Author.Text = "2013, Matthias Kläy";
+			linkLabel_Author.Text = "2015, Matthias Kläy";
 
 			// License.
 			linkLabel_License.Text = "";

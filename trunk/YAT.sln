@@ -1,21 +1,18 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
 	ProjectSection(SolutionItems) = preProject
-		!-Doc.Developer\FxCopSetup.txt = !-Doc.Developer\FxCopSetup.txt
 		!-Doc.Developer\Guidelines.txt = !-Doc.Developer\Guidelines.txt
 		!-Doc.Developer\HowToAddTestProject.txt = !-Doc.Developer\HowToAddTestProject.txt
 		!-Doc.Developer\HowToExportArgoUML.txt = !-Doc.Developer\HowToExportArgoUML.txt
 		!-Doc.Developer\HowToRunAndDebugNUnitTests.txt = !-Doc.Developer\HowToRunAndDebugNUnitTests.txt
 		!-Doc.Developer\HowToUpdateYear.txt = !-Doc.Developer\HowToUpdateYear.txt
-		!-Doc.Developer\NUnitSetup.txt = !-Doc.Developer\NUnitSetup.txt
 		!-Doc.Developer\ProjectSetup.txt = !-Doc.Developer\ProjectSetup.txt
-		!-Doc.Developer\StyleCopSetup.txt = !-Doc.Developer\StyleCopSetup.txt
-		!-Doc.Developer\SVNSetup.txt = !-Doc.Developer\SVNSetup.txt
 		!-Doc.Developer\Template.cs = !-Doc.Developer\Template.cs
 		!-Doc.Developer\TipsAndTricks.txt = !-Doc.Developer\TipsAndTricks.txt
-		!-Doc.Developer\VisualStudioSetup.txt = !-Doc.Developer\VisualStudioSetup.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Scripts", "!-Scripts", "{08FEFDFE-B7C8-4D17-9C8F-3B3108242FB4}"
@@ -41,15 +38,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ALAZ", "ALAZ", "{1AFE4E73-E
 		ALAZ\Source\ALAZ.Version.cs = ALAZ\Source\ALAZ.Version.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj", "{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx.NetEx", "ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj", "{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-8299-493A-9A21-B9A1B5C5BA5C}"
 	ProjectSection(SolutionItems) = preProject
 		MKY\CustomDictionary.xml = MKY\CustomDictionary.xml
 		MKY\MKY.Version.cs = MKY\MKY.Version.cs
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
+	ProjectSection(SolutionItems) = preProject
+		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
+		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\CustomDictionary.xml = YAT\CustomDictionary.xml
+		YAT\YAT.Version.cs = YAT\YAT.Version.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.SourceForge", "!-Doc.SourceForge", "{E8A8F664-6F72-4139-A7B1-BB950EEC20AC}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.SourceForge\Description.txt = YAT\!-Doc.SourceForge\Description.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.User\YAT Release Notes.txt = YAT\!-Doc.User\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj", "{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx.NetEx", "ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj", "{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY", "MKY\MKY\MKY.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
 EndProject
@@ -89,32 +108,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms", "MKY\MK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj", "{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
-	ProjectSection(SolutionItems) = preProject
-		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
-		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.csproj", "{F7BFF679-5389-434C-81E4-7EE8530DF954}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\CustomDictionary.xml = YAT\CustomDictionary.xml
-		YAT\YAT.Version.cs = YAT\YAT.Version.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.SourceForge", "!-Doc.SourceForge", "{E8A8F664-6F72-4139-A7B1-BB950EEC20AC}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\!-Doc.SourceForge\Description.txt = YAT\!-Doc.SourceForge\Description.txt
-		YAT\!-Doc.SourceForge\HowToSetupSubversion.html = YAT\!-Doc.SourceForge\HowToSetupSubversion.html
-		YAT\!-Doc.SourceForge\RelatedTools.html = YAT\!-Doc.SourceForge\RelatedTools.html
-		YAT\!-Doc.SourceForge\ToolsAndVersions.html = YAT\!-Doc.SourceForge\ToolsAndVersions.html
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\!-Doc.User\YAT Release Notes.txt = YAT\!-Doc.User\YAT Release Notes.txt
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT", "YAT\YAT\YAT.csproj", "{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}"
 EndProject
@@ -163,6 +157,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YATConsole", "YAT\YATConsole\YATConsole.csproj", "{189787C4-AE83-4A89-BC74-8F34EF1DBE57}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup", "YAT\YAT.Setup\YAT.Setup.vdproj", "{F46DFE27-1F74-4558-AD39-E7EA74822483}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B01A8E-BCFE-4A8F-BA2B-3B15AC1BB2A3}"
+	ProjectSection(SolutionItems) = preProject
+		!-Tools\! Tools and Versions.txt = !-Tools\! Tools and Versions.txt
+		!-Tools\FxCop-Setup.txt = !-Tools\FxCop-Setup.txt
+		!-Tools\NUnit-Setup.txt = !-Tools\NUnit-Setup.txt
+		!-Tools\StyleCop-Setup.txt = !-Tools\StyleCop-Setup.txt
+		!-Tools\SVN-Properties - BinaryFiles.svnprops = !-Tools\SVN-Properties - BinaryFiles.svnprops
+		!-Tools\SVN-Properties - TaggedTextFiles.svnprops = !-Tools\SVN-Properties - TaggedTextFiles.svnprops
+		!-Tools\SVN-Setup.txt = !-Tools\SVN-Setup.txt
+		!-Tools\VisualStudio-Setup.txt = !-Tools\VisualStudio-Setup.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -1411,6 +1417,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{E8A8F664-6F72-4139-A7B1-BB950EEC20AC} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
+		{ABECE297-BF82-4016-93F9-DF7204BA05F5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2} = {1AFE4E73-E215-4331-9E03-F33F61E3F442}
 		{25162422-3B32-4FB3-8A99-6BCFBE30D9AE} = {1AFE4E73-E215-4331-9E03-F33F61E3F442}
 		{F489B948-95CF-49FE-B9AA-A51654F5688B} = {41ACF768-8299-493A-9A21-B9A1B5C5BA5C}
@@ -1433,8 +1441,6 @@ Global
 		{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50} = {41ACF768-8299-493A-9A21-B9A1B5C5BA5C}
 		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB} = {41ACF768-8299-493A-9A21-B9A1B5C5BA5C}
 		{F7BFF679-5389-434C-81E4-7EE8530DF954} = {3772E0E6-CACC-4C35-9026-60E65764BE41}
-		{E8A8F664-6F72-4139-A7B1-BB950EEC20AC} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
-		{ABECE297-BF82-4016-93F9-DF7204BA05F5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{E87405A5-8FB0-4CE0-9946-3A08205B5DE0} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{D639409C-0B93-494B-9A01-4FE79686FAD6} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
