@@ -13,8 +13,9 @@ Visual Studio
 -------------
 
 Tools > Options...
-  > Environment
-    > General > Theme = Light
+  > Environment > General
+    > Theme = Blue
+    > Turn off upper case in the menu bar
   > Text Editor
     > All Languages > General > Diplay > Line numers = true
     > C# > Tabs > Keep tabs

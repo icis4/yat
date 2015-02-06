@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace MKY.Recent
 {
@@ -60,13 +61,15 @@ namespace MKY.Recent
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Inserts the recent item at the beginning of the collection (least recent) and remove the
-		/// most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
+		/// Inserts the recent item at the beginning of the collection (least recent). The most
+		/// recent item will be removed in case the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
 		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
 		{
+			// Remove all equal items, as they are becoming more recent than the new item:
 			RemoveAll(li => (li == item));
 
+			// Ensure there is space for the item to be inserted:
 			while (Count >= Capacity)
 				RemoveMostRecent();
 
@@ -77,17 +80,63 @@ namespace MKY.Recent
 		/// Remove the most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
 		/// <returns>
-		/// <c>true</c> if an item is successfully removed; otherwise, <c>false</c>. This method also
-		/// returns <c>false</c> if no item was not found in the collection.
+		/// <c>true</c> if an item is successfully removed; otherwise, <c>false</c>.
+		/// <c>false</c> is also returned if no item was not found in the collection.
 		/// </returns>
 		public virtual bool RemoveMostRecent()
 		{
-			List<RecentItem<T>> sorted = new List<RecentItem<T>>(this);
-			sorted.Sort();
-			if (sorted.Count > 0)
-				return (Remove(sorted[sorted.Count - 1])); // remove last item in the collection
+			if (Count > 0)
+			{
+				List<RecentItem<T>> sorted = new List<RecentItem<T>>(this);
+				sorted.Sort();
+				return (Remove(sorted[sorted.Count - 1])); // Remove the last item in the collection.
+			}
 			else
+			{
 				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Removes all more recent duplicates from the collection, i.e. copies of items that have
+		/// an older time stamp.
+		/// </summary>
+		/// <returns>
+		/// The number of duplicates removed from the collection.
+		/// </returns>
+		public virtual int RemoveDuplicates()
+		{
+			// Keep the original item count:
+			int countWithDuplicates = Count;
+
+			// If there are indeed duplicates, take the long to remove the recent ones...
+			while (this.Distinct().ToList<RecentItem<T>>().Count < Count)
+			{
+				List<RecentItem<T>> duplicates = new List<RecentItem<T>>();
+
+				// Traverse the collection and search for duplicates:
+				for (int outer = 0; outer < (Count-1); outer++)
+				{
+					for (int inner = (outer+1); inner < Count; inner++)
+					{
+						if (this[inner].Item.Equals(this[outer].Item))
+						{
+							if (this[inner].TimeStamp < this[outer].TimeStamp)
+								duplicates.Add(this[inner]);
+							else
+								duplicates.Add(this[outer]);
+						}
+					}
+				}
+
+				// Remove the duplicates from the collection:
+				foreach (RecentItem<T> ri in duplicates)
+				{
+					Remove(ri);
+				}
+			}
+
+			return (countWithDuplicates - Count);
 		}
 
 		/// <summary>
@@ -95,15 +144,15 @@ namespace MKY.Recent
 		/// </summary>
 		public virtual void ValidateAll()
 		{
-			List<RecentItem<T>> invalidItems = new List<RecentItem<T>>();
+			List<RecentItem<T>> invalids = new List<RecentItem<T>>();
 			foreach (RecentItem<T> ri in this)
 			{
 				if (!ri.IsValid)
-					invalidItems.Add(ri);
+					invalids.Add(ri);
 			}
-			foreach (RecentItem<T> ri in invalidItems)
+			foreach (RecentItem<T> ri in invalids)
 			{
-				this.Remove(ri);
+				Remove(ri);
 			}
 		}
 
