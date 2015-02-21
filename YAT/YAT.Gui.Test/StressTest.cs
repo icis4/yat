@@ -189,8 +189,8 @@ namespace YAT.Gui.Test
 
 			using (Controller.Main main = new Main(args))
 			{
-				MainResult mainResult = main.Run(false, true);
-				Assert.AreEqual(MainResult.Success, mainResult);
+				Controller.Main.Result mainResult = main.Run(false, true);
+				Assert.AreEqual(Controller.Main.Result.Success, mainResult);
 			}
 		}
 
