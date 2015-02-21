@@ -518,7 +518,7 @@ namespace MKY.IO.Serial.Socket
 				Timeout.Infinite
 				);
 
-			this.socket.AddConnector("YAT TCP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+			this.socket.AddConnector("MKY TCP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously
 		}
 

@@ -25,6 +25,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using YAT.Utilities;
+
 namespace YAT.Settings.Application
 {
 	/// <summary></summary>
@@ -82,7 +84,7 @@ namespace YAT.Settings.Application
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return ("YAT local user settings"); }
+			get { return (ApplicationInfo.ProductName + " local user settings"); }
 			set { } // Do nothing.
 		}
 

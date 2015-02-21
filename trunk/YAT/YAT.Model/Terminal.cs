@@ -47,6 +47,7 @@ using YAT.Model.Utilities;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
+using YAT.Utilities;
 
 #endregion
 
@@ -1973,7 +1974,7 @@ namespace YAT.Model
 				{
 					case Domain.IOType.SerialPort:
 					{
-						yatTitle = "YAT hints:";
+						yatTitle = ApplicationInfo.ProductName + " hints:";
 						yatText  = "Make sure the selected serial port is available and not already in use. " +
 						           "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
 						break;
@@ -1983,19 +1984,19 @@ namespace YAT.Model
 					case Domain.IOType.TcpAutoSocket:
 					case Domain.IOType.Udp:
 					{
-						yatTitle = "YAT hint:";
+						yatTitle = ApplicationInfo.ProductName + " hint:";
 						yatText  = "Make sure the selected socket is not already in use.";
 						break;
 					}
 					case Domain.IOType.UsbSerialHid:
 					{
-						yatTitle = "YAT hint:";
+						yatTitle = ApplicationInfo.ProductName + " hint:";
 						yatText  = "Make sure the selected USB device is connected.";
 						break;
 					}
 					default:
 					{
-						yatTitle = "YAT error:";
+						yatTitle = ApplicationInfo.ProductName + " error:";
 						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown! " +
 						           "Please report this issue as described in YAT > Help > Submit Bug. Thanks.";
 						break;
@@ -3110,7 +3111,7 @@ namespace YAT.Model
 					(
 					"Unable to begin log."                               + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					"YAT hint:" + Environment.NewLine +
+					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
 					"Log file could already be in use.",
 					"Log File Error",
 					MessageBoxButtons.OK,
@@ -3134,7 +3135,7 @@ namespace YAT.Model
 					(
 					"Unable to clear log."                               + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					"YAT hint:" + Environment.NewLine +
+					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
 					"Log file could already be in use.",
 					"Log File Error",
 					MessageBoxButtons.OK,

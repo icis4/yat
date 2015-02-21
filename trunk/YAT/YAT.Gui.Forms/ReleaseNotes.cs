@@ -36,7 +36,7 @@ namespace YAT.Gui.Forms
 	/// <summary></summary>
 	public partial class ReleaseNotes : Form
 	{
-		private const string ReleaseNotesFileName = "YAT Release Notes.txt";
+		private const string ReleaseNotesFileName = ApplicationInfo.ProductName + " Release Notes.txt";
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
 		private readonly string ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
@@ -68,9 +68,7 @@ namespace YAT.Gui.Forms
 			}
 
 			// Set form title:
-			string text = ApplicationInfo.ProductName;
-			text += " Release Notes";
-			Text = text;
+			Text = ApplicationInfo.ProductName + " Release Notes";
 
 			// Open and fill release notes:
 			textBox_ReleaseNotes.Text = "";

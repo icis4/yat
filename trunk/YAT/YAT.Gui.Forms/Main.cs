@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 
 using MKY;
@@ -45,6 +46,7 @@ using MKY.Windows.Forms;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
+using YAT.Utilities;
 
 #endregion
 
@@ -103,7 +105,7 @@ namespace YAT.Gui.Forms
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
 		private ClosingState closingState = ClosingState.None;
-		private Model.MainResult result = Model.MainResult.Success;
+		private Model.Main.Result result = Model.Main.Result.Success;
 
 		// Model:
 		private Model.Main main;
@@ -179,7 +181,7 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public Model.MainResult Result
+		public Model.Main.Result Result
 		{
 			get { return (this.result); }
 		}
@@ -215,20 +217,21 @@ namespace YAT.Gui.Forms
 			// Start YAT according to the requested settings.
 			this.result = this.main.Start();
 
-			if (this.result != Model.MainResult.Success)
+			if (this.result != Model.Main.Result.Success)
 			{
 				bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
 				bool keepOpenOnError  = this.main.StartArgs.KeepOpenOnError;
 
 				switch (this.result)
 				{
-					case Model.MainResult.CommandLineError:
+					case Model.Main.Result.CommandLineError:
 					{
 						if (showErrorModally)
 						{
+							string executableName = Path.GetFileName(Application.ExecutablePath);
 							string message =
-								@"YAT could not be started because the given command line is invalid." + Environment.NewLine +
-								@"Use ""YAT.exe /?"" for command line help.";
+								ApplicationInfo.ProductName + " could not be started because the given command line is invalid." + Environment.NewLine +
+								@"Use """ + executableName + @" /?"" for command line help.";
 
 							MessageBoxEx.Show
 								(
@@ -242,14 +245,14 @@ namespace YAT.Gui.Forms
 						break;
 					}
 
-					case YAT.Model.MainResult.ApplicationStartError:
+					case Model.Main.Result.ApplicationStartError:
 					{
 						if (showErrorModally)
 						{
 							MessageBoxEx.Show
 								(
 								this,
-								"YAT could not successfully be started with the given settings in the current environment!",
+								ApplicationInfo.ProductName + " could not successfully be started with the given settings in the current environment!",
 								"Start Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
@@ -258,14 +261,14 @@ namespace YAT.Gui.Forms
 						break;
 					}
 
-					case YAT.Model.MainResult.ApplicationRunError:
+					case Model.Main.Result.ApplicationRunError:
 					{
 						if (showErrorModally)
 						{
 							MessageBoxEx.Show
 								(
 								this,
-								"YAT could not successfully execute the requested operation!",
+								ApplicationInfo.ProductName + " could not successfully execute the requested operation!",
 								"Execution Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
@@ -275,8 +278,8 @@ namespace YAT.Gui.Forms
 					}
 
 					// Do nothing in the following cases:
-					case YAT.Model.MainResult.ApplicationExitError:
-					case YAT.Model.MainResult.UnhandledException:
+					case Model.Main.Result.ApplicationExitError:
+					case Model.Main.Result.UnhandledException:
 					default:
 					{
 						break;
@@ -286,7 +289,7 @@ namespace YAT.Gui.Forms
 				if (!keepOpenOnError)
 					Close();
 			}
-			else // In case of Model.MainResult.Success.
+			else // In case of Model.Main.Result.Success.
 			{
 				if (this.workspace.TerminalCount == 0)
 				{
@@ -360,7 +363,7 @@ namespace YAT.Gui.Forms
 				this.closingState = ClosingState.IsClosingFromForm;
 
 				bool cancel;
-				Model.MainResult modelResult = this.main.Exit(out cancel);
+				Model.Main.Result modelResult = this.main.Exit(out cancel);
 				if (cancel)
 				{
 					e.Cancel = true;
@@ -1044,7 +1047,7 @@ namespace YAT.Gui.Forms
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex);
-					this.result = Model.MainResult.ApplicationRunError;
+					this.result = Model.Main.Result.ApplicationRunError;
 				}
 
 				if (!this.main.StartArgs.KeepOpen)
@@ -1057,13 +1060,13 @@ namespace YAT.Gui.Forms
 					catch (Exception ex)
 					{
 						DebugEx.WriteException(GetType(), ex);
-						this.result = Model.MainResult.ApplicationExitError;
+						this.result = Model.Main.Result.ApplicationExitError;
 					}
 				}
 			}
 			else
 			{
-				this.result = Model.MainResult.ApplicationRunError;
+				this.result = Model.Main.Result.ApplicationRunError;
 			}
 		}
 

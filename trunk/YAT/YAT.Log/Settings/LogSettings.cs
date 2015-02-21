@@ -36,6 +36,7 @@ using MKY.IO;
 
 using YAT.Settings;
 using YAT.Settings.Application;
+using YAT.Utilities;
 
 #endregion
 
@@ -151,7 +152,7 @@ namespace YAT.Log.Settings
 			base.SetMyDefaults();
 
 			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFilesPath;
-			RootFileName = "YAT-Log";
+			RootFileName = ApplicationInfo.ProductName + "-Log";
 
 			RawLogTx     = false;
 			RawLogBidir  = false;
