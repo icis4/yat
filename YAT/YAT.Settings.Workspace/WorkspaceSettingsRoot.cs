@@ -25,6 +25,7 @@ using System;
 using System.Xml.Serialization;
 
 using YAT.Model.Settings;
+using YAT.Utilities;
 
 namespace YAT.Settings.Workspace
 {
@@ -67,7 +68,7 @@ namespace YAT.Settings.Workspace
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return ("YAT Workspace Settings"); }
+			get { return (ApplicationInfo.ProductName + " Workspace Settings"); }
 			set { } // Do nothing.
 		}
 

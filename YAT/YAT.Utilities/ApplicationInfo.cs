@@ -31,7 +31,7 @@ namespace YAT.Utilities
 	public static class ApplicationInfo
 	{
 		/// <summary>The product name.</summary>
-		public static readonly string ProductName = "YAT";
+		public const string ProductName = "YAT";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Final";
@@ -59,6 +59,27 @@ namespace YAT.Utilities
 
 		/// <summary>The long variant of the complete product name including build description and version.</summary>
 		public static readonly string ProductNameLong = ProductName + " - Yet Another Terminal";
+
+		/// <summary>The complete logo (text) of the product.</summary>
+		public static readonly string[] ProductLogo =
+		{
+			ProductNameLong + ".",
+			"Operate, test and debug serial communications.",
+			"Supports RS-232/422/423/485...",
+			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
+			"",
+			"Visit YAT at http://sourceforge.net/projects/y-a-terminal.",
+			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
+			"",
+			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
+			"Copyright © 2003-2015 Matthias Kläy.",
+			"All rights reserved.",
+			"",
+			"YAT is licensed under the GNU LGPL.",
+			"See http://www.gnu.org/licenses/lgpl.html for license details.",
+			"",
+			ProductNameAndBuildNameAndVersion,
+		};
 	}
 }
 

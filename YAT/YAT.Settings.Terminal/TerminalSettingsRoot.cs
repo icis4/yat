@@ -25,6 +25,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using YAT.Utilities;
+
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
@@ -73,7 +75,7 @@ namespace YAT.Settings.Terminal
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return ("YAT Terminal Settings"); }
+			get { return (ApplicationInfo.ProductName + " Terminal Settings"); }
 			set { } // Do nothing.
 		}
 

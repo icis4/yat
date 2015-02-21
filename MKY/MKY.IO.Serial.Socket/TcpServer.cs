@@ -495,7 +495,7 @@ namespace MKY.IO.Serial.Socket
 				Timeout.Infinite
 				);
 
-			this.socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
+			this.socket.AddListener("MKY TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously.
 		}
 
