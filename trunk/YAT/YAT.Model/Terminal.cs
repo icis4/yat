@@ -1057,15 +1057,15 @@ namespace YAT.Model
 			// Note that GUI settings are handled in Gui.Forms.Terminal::settingsRoot_Changed().
 			// Below, only those settings that need to be managed by the model are handled.
 
-			if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
+			if ((e.Inner != null) && ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
 			{
 				// Explicit settings have changed.
 				SettingsEventArgs explicitEventArgs = e.Inner;
-				if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Terminal))
+				if ((explicitEventArgs.Inner != null) && ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Terminal))
 				{
 					// Terminal settings have changed.
 					SettingsEventArgs terminalEventArgs = explicitEventArgs.Inner;
-					if (ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.Send))
+					if ((terminalEventArgs.Inner != null) && ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.Send))
 					{
 						// Send settings have changed.
 						if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {

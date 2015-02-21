@@ -103,7 +103,7 @@ namespace YAT.Gui.Forms
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
 		private ClosingState closingState = ClosingState.None;
-		private Model.MainResult mainResult = Model.MainResult.Success;
+		private Model.MainResult result = Model.MainResult.Success;
 
 		// Model:
 		private Model.Main main;
@@ -179,9 +179,9 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public Model.MainResult MainResult
+		public Model.MainResult Result
 		{
-			get { return (this.mainResult); }
+			get { return (this.result); }
 		}
 
 		#endregion
@@ -213,14 +213,14 @@ namespace YAT.Gui.Forms
 			this.isStartingUp = false;
 
 			// Start YAT according to the requested settings.
-			this.mainResult = this.main.Start();
+			this.result = this.main.Start();
 
-			if (this.mainResult != Model.MainResult.Success)
+			if (this.result != Model.MainResult.Success)
 			{
 				bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
 				bool keepOpenOnError  = this.main.StartArgs.KeepOpenOnError;
 
-				switch (this.mainResult)
+				switch (this.result)
 				{
 					case Model.MainResult.CommandLineError:
 					{
@@ -360,7 +360,7 @@ namespace YAT.Gui.Forms
 				this.closingState = ClosingState.IsClosingFromForm;
 
 				bool cancel;
-				Model.MainResult result = this.main.Exit(out cancel);
+				Model.MainResult modelResult = this.main.Exit(out cancel);
 				if (cancel)
 				{
 					e.Cancel = true;
@@ -370,7 +370,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					this.mainResult = result;
+					this.result = modelResult;
 				}
 			}
 		}
@@ -1044,7 +1044,7 @@ namespace YAT.Gui.Forms
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex);
-					this.mainResult = Model.MainResult.ApplicationRunError;
+					this.result = Model.MainResult.ApplicationRunError;
 				}
 
 				if (!this.main.StartArgs.KeepOpen)
@@ -1057,13 +1057,13 @@ namespace YAT.Gui.Forms
 					catch (Exception ex)
 					{
 						DebugEx.WriteException(GetType(), ex);
-						this.mainResult = Model.MainResult.ApplicationExitError;
+						this.result = Model.MainResult.ApplicationExitError;
 					}
 				}
 			}
 			else
 			{
-				this.mainResult = Model.MainResult.ApplicationRunError;
+				this.result = Model.MainResult.ApplicationRunError;
 			}
 		}
 
