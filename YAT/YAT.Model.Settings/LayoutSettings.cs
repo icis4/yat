@@ -93,11 +93,11 @@ namespace YAT.Model.Settings
 			BidirMonitorPanelIsVisible = true;
 			RxMonitorPanelIsVisible    = false;
 			MonitorOrientation         = Orientation.Vertical;
-			TxMonitorSplitterRatio     = (float)1 / 3;
-			RxMonitorSplitterRatio     = (float)1 / 2;
+			TxMonitorSplitterRatio     = (float)1/3;
+			RxMonitorSplitterRatio     = (float)1/2;
 
 			PredefinedPanelIsVisible   = true;
-			PredefinedSplitterRatio    = (float)3 / 4;
+			PredefinedSplitterRatio    = (float)3/4;
 
 			SendCommandPanelIsVisible  = true;
 			SendFilePanelIsVisible     = true;

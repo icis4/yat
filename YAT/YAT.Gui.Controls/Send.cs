@@ -52,7 +52,8 @@ namespace YAT.Gui.Controls
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
 		private const bool TerminalIsReadyToSendDefault = false;
-		private const float SplitterRatioDefault = (float)0.75;
+		private const int SplitterDistanceDefault = 353; // Designer requires that this is a constant.
+		                                                 // Set same value as underlying elements (less the left margin of 3).
 
 		#endregion
 
@@ -63,7 +64,7 @@ namespace YAT.Gui.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
-		private float splitterRatio = SplitterRatioDefault;
+		private int splitterDistance = SplitterDistanceDefault;
 
 		#endregion
 
@@ -224,13 +225,13 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		[DefaultValue(SplitterRatioDefault)]
-		public virtual float SplitterRatio
+		[DefaultValue(SplitterDistanceDefault)]
+		public virtual int SplitterDistance
 		{
-			get { return (this.splitterRatio); }
+			get { return (this.splitterDistance); }
 			set
 			{
-				this.splitterRatio = value;
+				this.splitterDistance = value;
 				SetControls();
 			}
 		}
@@ -298,11 +299,11 @@ namespace YAT.Gui.Controls
 		{
 			sendCommand.TerminalType          = this.terminalType;
 			sendCommand.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-			sendCommand.SplitterRatio         = this.splitterRatio;
+			sendCommand.SplitterDistance      = this.splitterDistance - sendCommand.Left;
 
 			sendFile.TerminalType          = this.terminalType;
 			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-			sendFile.SplitterRatio         = this.splitterRatio;
+			sendFile.SplitterDistance      = this.splitterDistance - sendFile.Left;
 		}
 
 		#endregion

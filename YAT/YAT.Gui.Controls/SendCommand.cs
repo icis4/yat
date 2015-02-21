@@ -89,7 +89,8 @@ namespace YAT.Gui.Controls
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
 		private const bool TerminalIsReadyToSendDefault = false;
-		private const float SplitterRatioDefault = (float)0.75;
+		private const int SplitterDistanceDefault = 356; // Designer requires that this is a constant.
+		                                                 // Set same value as splitContainer.SplitterDistance is designed.
 		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
 
 		/// <summary></summary>
@@ -111,7 +112,7 @@ namespace YAT.Gui.Controls
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
-		private float splitterRatio = SplitterRatioDefault;
+		private int splitterDistance = SplitterDistanceDefault;
 
 		private FocusState editFocusState = FocusState.Inactive;
 		private bool isValidated;
@@ -269,15 +270,15 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		[DefaultValue(SplitterRatioDefault)]
-		public virtual float SplitterRatio
+		[DefaultValue(SplitterDistanceDefault)]
+		public virtual int SplitterDistance
 		{
-			get { return (this.splitterRatio); }
+			get { return (this.splitterDistance); }
 			set
 			{
-				if (this.splitterRatio != value)
+				if (this.splitterDistance != value)
 				{
-					this.splitterRatio = value;
+					this.splitterDistance = value;
 					SetControls();
 				}
 			}
@@ -554,7 +555,7 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((int)(this.splitterRatio * splitContainer.Width), 0, splitContainer.Width);
+			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
 
 			if (this.editFocusState == FocusState.Inactive)
 			{

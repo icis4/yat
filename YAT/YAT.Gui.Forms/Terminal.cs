@@ -1959,7 +1959,7 @@ namespace YAT.Gui.Forms
 
 		private void ViewRearrange()
 		{
-			// Simply set defaults, settings event handler will then call LayoutTerminal().
+			// Simply set defaults, settings event handler will then call LayoutTerminal():
 			this.settingsRoot.Layout.SetDefaults();
 		}
 
@@ -1968,29 +1968,29 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 			SuspendLayout();
 
-			// splitContainer_Predefined.
+			// splitContainer_Predefined:
 			if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
 			{
 				splitContainer_Predefined.Panel2Collapsed = false;
-				splitContainer_Predefined.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width), 0, splitContainer_Predefined.Width);
+				splitContainer_Predefined.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width), 0, (splitContainer_Predefined.Width - 1));
 			}
 			else
 			{
 				splitContainer_Predefined.Panel2Collapsed = true;
 			}
 
-			// splitContainer_TxMonitor and splitContainer_RxMonitor.
+			// splitContainer_TxMonitor and splitContainer_RxMonitor:
 			// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
 			bool txIsVisible = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 			bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
 			bool rxIsVisible = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
-			// Orientation.
+			// Orientation:
 			Orientation orientation = this.settingsRoot.Layout.MonitorOrientation;
 			splitContainer_TxMonitor.Orientation = orientation;
 			splitContainer_RxMonitor.Orientation = orientation;
 
-			// Tx split contains Tx and Bidir+Rx.
+			// Tx split contains Tx and Bidir+Rx:
 			if (txIsVisible)
 			{
 				splitContainer_TxMonitor.Panel1Collapsed = false;
@@ -2003,7 +2003,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_TxMonitor.Height;
 
-					splitContainer_TxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight), 0, widthOrHeight);
+					splitContainer_TxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight), 0, (widthOrHeight - 1));
 				}
 			}
 			else
@@ -2012,7 +2012,7 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
 
-			// Rx split contains Bidir and Rx.
+			// Rx split contains Bidir and Rx:
 			if (bidirIsVisible)
 			{
 				splitContainer_RxMonitor.Panel1Collapsed = false;
@@ -2025,7 +2025,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_RxMonitor.Height;
 
-					splitContainer_RxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight), 0, widthOrHeight);
+					splitContainer_RxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight), 0, (widthOrHeight - 1));
 				}
 			}
 			else
@@ -2034,7 +2034,7 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 
-			// splitContainer_Terminal and splitContainer_SendCommand.
+			// splitContainer_Terminal and splitContainer_SendCommand:
 			if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				splitContainer_Terminal.Panel2Collapsed = false;
@@ -2048,23 +2048,28 @@ namespace YAT.Gui.Forms
 				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 3);
 			}
 
-			// Set send panel size depending on one or two sub-panels.
+			// Set send panel size depending on one or two sub-panels:
 			if (this.settingsRoot.Layout.SendCommandPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 97;
 				splitContainer_Terminal.Panel2MinSize = height;
-				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, splitContainer_Terminal.Height);
+				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
 			else if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 48;
 				splitContainer_Terminal.Panel2MinSize = height;
-				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, splitContainer_Terminal.Height);
+				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
 
 			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendCommandPanelIsVisible;
-			send.FilePanelIsVisible = this.settingsRoot.Layout.SendFilePanelIsVisible;
-			send.SplitterRatio = this.settingsRoot.Layout.PredefinedSplitterRatio;
+			send.FilePanelIsVisible    = this.settingsRoot.Layout.SendFilePanelIsVisible;
+
+			// Calculate absolute splitter position (distance) from ratio, including
+			// offset to get send buttons pixel-accurate below predefined buttons:
+			const int predefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
+			int absoluteX = (splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left);
+			send.SplitterDistance = Int32Ex.LimitToBounds((absoluteX - send.Left + predefinedOffset), 0, (send.Width - 1));
 
 			ResumeLayout();
 			this.isSettingControls.Leave();
