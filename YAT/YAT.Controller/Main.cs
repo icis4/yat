@@ -257,7 +257,7 @@ namespace YAT.Controller
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private MainResult Run(bool runFromConsole)
 		{
-			MainResult mainResult;
+			MainResult result;
 			bool showLogo;
 			bool showView;
 			bool showHelp;
@@ -278,7 +278,7 @@ namespace YAT.Controller
 			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
 			{
-				mainResult = MainResult.Success;
+				result = MainResult.Success;
 				showLogo = true;
 				showView = true; // By default, start YAT with view.
 				showHelp = false;
@@ -286,7 +286,7 @@ namespace YAT.Controller
 			// Prio 1 = Invalid:
 			else if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
 			{
-				mainResult = MainResult.CommandLineError;
+				result = MainResult.CommandLineError;
 				showLogo = true;
 				showView = false; // YAT will not be started, instead the help will be shown.
 				showHelp = true;
@@ -294,7 +294,7 @@ namespace YAT.Controller
 			// Prio 2 = Valid:
 			else
 			{
-				mainResult = MainResult.Success;
+				result = MainResult.Success;
 				showLogo = this.commandLineArgs.ShowLogo;
 				showView = this.commandLineArgs.ShowView;
 				showHelp = this.commandLineArgs.HelpIsRequested;
@@ -310,10 +310,10 @@ namespace YAT.Controller
 			}
 			else
 			{
-				mainResult = Run(runFromConsole, showView);
+				result = Run(runFromConsole, showView);
 			}
 
-			return (mainResult);
+			return (result);
 		}
 
 		/// <summary>
@@ -384,11 +384,11 @@ namespace YAT.Controller
 		{
 			AssertNotDisposed();
 
-			MainResult mainResult;
+			MainResult result;
 
 			if (!runFromConsole && runWithView)
 			{
-				mainResult = RunFullyWithView();                        // 1, 2, 7
+				result = RunFullyWithView();                        // 1, 2, 7
 			}
 			else
 			{
@@ -396,14 +396,14 @@ namespace YAT.Controller
 				this.commandLineArgs.Override("NonInteractive", true);
 
 				if (     runFromConsole && runWithView)
-					mainResult = RunWithViewButOutputErrorsOnConsole(); // 3, 4, 7
+					result = RunWithViewButOutputErrorsOnConsole(); // 3, 4, 7
 				else if (runFromConsole && !runWithView)
-					mainResult = RunFullyFromConsole();                 // 5, 6, 7
+					result = RunFullyFromConsole();                 // 5, 6, 7
 				else
-					mainResult = RunInvisible();                        //       7
+					result = RunInvisible();                        //       7
 			}
 
-			if (mainResult == MainResult.CommandLineError)
+			if (result == MainResult.CommandLineError)
 			{
 				if (runWithView)
 					ShowMessageBoxHelp(true);
@@ -411,7 +411,7 @@ namespace YAT.Controller
 					ShowConsoleHelp(true);
 			}
 
-			return (mainResult);
+			return (result);
 		}
 
 		#endregion
@@ -480,8 +480,8 @@ namespace YAT.Controller
 
 						Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
-						Model.MainResult result = view.MainResult;
-						return (ConvertToMainResult(result));
+						Model.MainResult viewResult = view.Result;
+						return (ConvertToMainResult(viewResult));
 					}
 				}
 				catch (Exception ex)
@@ -605,8 +605,8 @@ namespace YAT.Controller
 
 						Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
-						Model.MainResult result = view.MainResult;
-						return (ConvertToMainResult(result));
+						Model.MainResult viewResult = view.Result;
+						return (ConvertToMainResult(viewResult));
 					}
 				}
 				catch (Exception ex)

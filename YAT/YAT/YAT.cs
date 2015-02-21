@@ -81,8 +81,8 @@ namespace YAT
 		private static int Main(string[] commandLineArgs)
 		{
 			Controller.Main main = new Controller.Main(commandLineArgs);
-			Controller.MainResult result = main.RunNormally();
-			return ((int)result);
+			Controller.MainResult mainResult = main.RunNormally();
+			return ((int)mainResult);
 		}
 	}
 }
