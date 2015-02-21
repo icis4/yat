@@ -56,6 +56,34 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : IDisposable, IGuidProvider
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+		// warnings for each undocumented member below. Documenting each member makes little sense
+		// since they pretty much tell their purpose and documentation tags between the members
+		// makes the code less readable.
+		#pragma warning disable 1591
+
+		/// <summary>
+		/// Enumeration of all the main result return codes.
+		/// </summary>
+		public enum Result
+		{
+			Success,
+			CommandLineError,
+			ApplicationStartError,
+			ApplicationRunError,
+			ApplicationExitError,
+			UnhandledException,
+		}
+
+		#pragma warning restore 1591
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -259,15 +287,15 @@ namespace YAT.Model
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		public virtual MainResult PrepareStart()
+		public virtual Result PrepareStart()
 		{
 			AssertNotDisposed();
 
 			// Process command line args into start requests:
 			if (ProcessCommandLineArgsIntoStartRequests())
-				return (MainResult.Success);
+				return (Result.Success);
 			else
-				return (MainResult.CommandLineError);
+				return (Result.CommandLineError);
 		}
 
 		/// <summary>
@@ -279,13 +307,13 @@ namespace YAT.Model
 		/// <returns>
 		/// Returns <c>true</c> if either operation succeeded, <c>false</c> otherwise.
 		/// </returns>
-		public virtual MainResult Start()
+		public virtual Result Start()
 		{
 			AssertNotDisposed();
 
 			// Process command line args into start requests:
 			if (!ProcessCommandLineArgsIntoStartRequests())
-				return (MainResult.CommandLineError);
+				return (Result.CommandLineError);
 
 			// Start YAT according to the start requests:
 			bool success = false;
@@ -343,7 +371,7 @@ namespace YAT.Model
 							// Do not yet create a new empty workspace, it will be created when
 							// needed. Not creating it now allows the user to exit YAT, restore
 							// the .yaw file, and try again.
-							return (MainResult.ApplicationStartError);
+							return (Main.Result.ApplicationStartError);
 						}
 					}
 				}
@@ -369,11 +397,11 @@ namespace YAT.Model
 			if (success)
 			{
 				OnStarted(EventArgs.Empty);
-				return (MainResult.Success);
+				return (Result.Success);
 			}
 			else
 			{
-				return (MainResult.ApplicationStartError);
+				return (Result.ApplicationStartError);
 			}
 		}
 
@@ -1000,7 +1028,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
-		public virtual MainResult Exit()
+		public virtual Result Exit()
 		{
 			bool cancel;
 			return (Exit(out cancel));
@@ -1009,7 +1037,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
-		public virtual MainResult Exit(out bool cancel)
+		public virtual Result Exit(out bool cancel)
 		{
 			bool success;
 			if (this.workspace != null)
@@ -1032,15 +1060,15 @@ namespace YAT.Model
 				Dispose();
 
 				if (success)
-					return (MainResult.Success);
+					return (Result.Success);
 				else
-					return (MainResult.ApplicationExitError);
+					return (Result.ApplicationExitError);
 			}
 			else
 			{
 				OnTimedStatusTextRequest("Exit cancelled.");
 				cancel = true;
-				return (MainResult.ApplicationExitError);
+				return (Result.ApplicationExitError);
 			}
 		}
 

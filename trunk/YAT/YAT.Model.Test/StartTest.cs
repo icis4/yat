@@ -274,7 +274,7 @@ namespace YAT.Model.Test
 			string invalidFilePath = "MyFile.txt";
 			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + invalidFilePath })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 
 				Assert.IsNull(main.StartArgs.WorkspaceSettings);
 				Assert.IsNull(main.StartArgs.TerminalSettings);
@@ -629,7 +629,7 @@ namespace YAT.Model.Test
 
 			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 
 				Assert.IsFalse(main.StartArgs.TileHorizontal);
 				Assert.IsFalse(main.StartArgs.TileVertical);
@@ -649,22 +649,22 @@ namespace YAT.Model.Test
 		{
 			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Blablabla" })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 
 			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "+r" })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 
 			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "-+Recent" })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 
 			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "+-Recent" })))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 		}
 
@@ -679,12 +679,12 @@ namespace YAT.Model.Test
 
 		private static void PrepareMainAndVerifyResult(Model.Main main)
 		{
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareMainAndVerifyResult(main, Main.Result.Success);
 		}
 
-		private static void PrepareMainAndVerifyResult(Model.Main main, MainResult expectedMainResult)
+		private static void PrepareMainAndVerifyResult(Model.Main main, Model.Main.Result expectedMainResult)
 		{
-			MainResult mainResult = main.PrepareStart();
+			Model.Main.Result mainResult = main.PrepareStart();
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 

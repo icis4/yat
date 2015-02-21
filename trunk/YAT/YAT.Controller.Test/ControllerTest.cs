@@ -113,9 +113,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestEmptyCommandLine()
 		{
-			using (Controller.Main main = new Main(EmptyArgs))
+			using (Controller.Main main = new Controller.Main(EmptyArgs))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(main, Controller.Main.Result.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -133,9 +133,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArg()
 		{
-			using (Controller.Main main = new Main(TerminalArgs))
+			using (Controller.Main main = new Controller.Main(TerminalArgs))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(main, Controller.Main.Result.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -153,9 +153,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestWorkspaceCommandLineArg()
 		{
-			using (Controller.Main main = new Main(WorkspaceArgs))
+			using (Controller.Main main = new Controller.Main(WorkspaceArgs))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(main, Controller.Main.Result.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -315,7 +315,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(null))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(main, Main.Result.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -336,7 +336,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(new string[] { "--NoLogo" }))
 			{
-				PrepareMainAndVerifyResult(main, MainResult.Success);
+				PrepareMainAndVerifyResult(main, Main.Result.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineLogoIsRequested);
@@ -352,31 +352,31 @@ namespace YAT.Controller.Test
 		// Private Methods
 		//==========================================================================================
 
-		private static void PrepareMainAndVerifyResult(Controller.Main main, MainResult expectedMainResult)
+		private static void PrepareMainAndVerifyResult(Controller.Main main, Controller.Main.Result expectedMainResult)
 		{
-			MainResult mainResult = main.PrepareRun();
+			Controller.Main.Result mainResult = main.PrepareRun();
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
 		private static void RunAndVerifyApplicationWithView(Controller.Main main)
 		{
-			RunAndVerifyApplicationWithView(main, MainResult.Success);
+			RunAndVerifyApplicationWithView(main, Main.Result.Success);
 		}
 
-		private static void RunAndVerifyApplicationWithView(Controller.Main main, MainResult expectedMainResult)
+		private static void RunAndVerifyApplicationWithView(Controller.Main main, Controller.Main.Result expectedMainResult)
 		{
-			MainResult mainResult = main.Run(false, true);
+			Controller.Main.Result mainResult = main.Run(false, true);
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
 		private static void RunAndVerifyApplicationWithoutView(Controller.Main main)
 		{
-			RunAndVerifyApplicationWithoutView(main, MainResult.Success);
+			RunAndVerifyApplicationWithoutView(main, Controller.Main.Result.Success);
 		}
 
-		private static void RunAndVerifyApplicationWithoutView(Controller.Main main, MainResult expectedMainResult)
+		private static void RunAndVerifyApplicationWithoutView(Controller.Main main, Controller.Main.Result expectedMainResult)
 		{
-			MainResult mainResult = main.Run(false, false);
+			Controller.Main.Result mainResult = main.Run(false, false);
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 

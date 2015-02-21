@@ -105,7 +105,6 @@
     </Compile>
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="MainResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
