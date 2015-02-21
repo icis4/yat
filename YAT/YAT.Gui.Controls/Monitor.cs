@@ -636,13 +636,15 @@ namespace YAT.Gui.Controls
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			// Ctrl+A = Select All is implemented directly within the monitor since it is a common shortcut.
-			// Ctrl+Shift+N = Select None must not be implemented in here, but by the parent form instead.
+			// Ctrl+A = Select All is implemented directly within here since it is a common shortcut.
 			if (keyData == (Keys.Control | Keys.A))
 			{
 				SelectAll();
 				return (true);
 			}
+
+			// Ctrl+Shift+N = Select None not needs to be implemented in here, it can be implemented
+			// by the parent form as a normal menu shortcut.
 
 			return (base.ProcessCmdKey(ref msg, keyData));
 		}

@@ -376,8 +376,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = (monitorIsDefined && editIsNotActive);
 			toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = (monitorIsDefined && editIsNotActive);
 			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && editIsNotActive);
-			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      = monitorIsDefined;
-			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           = monitorIsDefined;
+			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      =  monitorIsDefined;
+			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           =  monitorIsDefined;
 
 			this.isSettingControls.Leave();
 		}
