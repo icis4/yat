@@ -413,6 +413,7 @@
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(173, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -501,47 +502,47 @@
 			this.toolStripMenuItem_RadixContextMenu_Tx_String.Checked = true;
 			this.toolStripMenuItem_RadixContextMenu_Tx_String.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_RadixContextMenu_Tx_String.Name = "toolStripMenuItem_RadixContextMenu_Tx_String";
-			this.toolStripMenuItem_RadixContextMenu_Tx_String.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Tx_String.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Tx_String.Text = "&String";
 			this.toolStripMenuItem_RadixContextMenu_Tx_String.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Tx_String_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_Char
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Tx_Char.Name = "toolStripMenuItem_RadixContextMenu_Tx_Char";
-			this.toolStripMenuItem_RadixContextMenu_Tx_Char.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Tx_Char.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Tx_Char.Text = "&Character";
 			this.toolStripMenuItem_RadixContextMenu_Tx_Char.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Tx_Char_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_Separator_1
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Tx_Separator_1.Name = "toolStripMenuItem_RadixContextMenu_Tx_Separator_1";
-			this.toolStripMenuItem_RadixContextMenu_Tx_Separator_1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_RadixContextMenu_Tx_Separator_1.Size = new System.Drawing.Size(139, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_Bin
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Tx_Bin.Name = "toolStripMenuItem_RadixContextMenu_Tx_Bin";
-			this.toolStripMenuItem_RadixContextMenu_Tx_Bin.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Tx_Bin.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Tx_Bin.Text = "&Binary";
 			this.toolStripMenuItem_RadixContextMenu_Tx_Bin.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Tx_Bin_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_Oct
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Tx_Oct.Name = "toolStripMenuItem_RadixContextMenu_Tx_Oct";
-			this.toolStripMenuItem_RadixContextMenu_Tx_Oct.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Tx_Oct.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Tx_Oct.Text = "&Octal";
 			this.toolStripMenuItem_RadixContextMenu_Tx_Oct.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Tx_Oct_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_Dec
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Tx_Dec.Name = "toolStripMenuItem_RadixContextMenu_Tx_Dec";
-			this.toolStripMenuItem_RadixContextMenu_Tx_Dec.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Tx_Dec.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Tx_Dec.Text = "&Decimal";
 			this.toolStripMenuItem_RadixContextMenu_Tx_Dec.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Tx_Dec_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_Hex
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Tx_Hex.Name = "toolStripMenuItem_RadixContextMenu_Tx_Hex";
-			this.toolStripMenuItem_RadixContextMenu_Tx_Hex.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Tx_Hex.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Tx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Tx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Tx_Hex_Click);
 			// 
@@ -564,47 +565,47 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_String.Checked = true;
 			this.toolStripMenuItem_RadixContextMenu_Rx_String.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_RadixContextMenu_Rx_String.Name = "toolStripMenuItem_RadixContextMenu_Rx_String";
-			this.toolStripMenuItem_RadixContextMenu_Rx_String.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Rx_String.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_String.Text = "&String";
 			this.toolStripMenuItem_RadixContextMenu_Rx_String.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_String_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_Char
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Rx_Char.Name = "toolStripMenuItem_RadixContextMenu_Rx_Char";
-			this.toolStripMenuItem_RadixContextMenu_Rx_Char.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Rx_Char.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_Char.Text = "&Character";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Char.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Char_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_Separator_1
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Rx_Separator_1.Name = "toolStripMenuItem_RadixContextMenu_Rx_Separator_1";
-			this.toolStripMenuItem_RadixContextMenu_Rx_Separator_1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_RadixContextMenu_Rx_Separator_1.Size = new System.Drawing.Size(139, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_Bin
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Rx_Bin.Name = "toolStripMenuItem_RadixContextMenu_Rx_Bin";
-			this.toolStripMenuItem_RadixContextMenu_Rx_Bin.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Rx_Bin.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_Bin.Text = "&Binary";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Bin.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Bin_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_Oct
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct.Name = "toolStripMenuItem_RadixContextMenu_Rx_Oct";
-			this.toolStripMenuItem_RadixContextMenu_Rx_Oct.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Rx_Oct.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct.Text = "&Octal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Oct_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_Dec
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec.Name = "toolStripMenuItem_RadixContextMenu_Rx_Dec";
-			this.toolStripMenuItem_RadixContextMenu_Rx_Dec.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Rx_Dec.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec.Text = "&Decimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Dec_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_Hex
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Name = "toolStripMenuItem_RadixContextMenu_Rx_Hex";
-			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
 			// 
@@ -787,7 +788,8 @@
             this.toolStripMenuItem_PredefinedContextMenu_Separator_4,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(221, 446);
+			this.contextMenuStrip_Predefined.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_Predefined;
+			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(221, 424);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Command_1
@@ -805,7 +807,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Name = "toolStripMenuItem_PredefinedContextMenu_Command_2";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F2)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Tag = "2";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Text = "&2: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -815,7 +817,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Name = "toolStripMenuItem_PredefinedContextMenu_Command_3";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_3.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Tag = "3";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Text = "&3: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -825,7 +827,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Name = "toolStripMenuItem_PredefinedContextMenu_Command_4";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_4.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F4)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Tag = "4";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Text = "&4: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -835,7 +837,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Name = "toolStripMenuItem_PredefinedContextMenu_Command_5";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_5.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Tag = "5";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Text = "&5: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -845,7 +847,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Name = "toolStripMenuItem_PredefinedContextMenu_Command_6";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_6.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F6)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Tag = "6";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Text = "&6: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -855,7 +857,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Name = "toolStripMenuItem_PredefinedContextMenu_Command_7";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_7.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F7)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Tag = "7";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Text = "&7: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -865,7 +867,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Name = "toolStripMenuItem_PredefinedContextMenu_Command_8";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_8.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F8)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Tag = "8";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Text = "&8: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -875,7 +877,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Name = "toolStripMenuItem_PredefinedContextMenu_Command_9";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_9.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F9)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Tag = "9";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Text = "&9: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -885,7 +887,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Name = "toolStripMenuItem_PredefinedContextMenu_Command_10";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_10.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F10)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Tag = "10";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Text = "1&0: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -895,7 +897,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Name = "toolStripMenuItem_PredefinedContextMenu_Command_11";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_11.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F11)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Tag = "11";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Text = "11: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -905,7 +907,7 @@
 			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Name = "toolStripMenuItem_PredefinedContextMenu_Command_12";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_12.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F12)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Tag = "12";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Text = "12: <Undefined>";
 			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
@@ -913,7 +915,7 @@
 			// toolStripMenuItem_PredefinedContextMenu_Separator_1
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_1.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_1";
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_1.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_1.Size = new System.Drawing.Size(217, 6);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Page
 			// 
@@ -934,14 +936,14 @@
             this.toolStripMenuItem_PredefinedContextMenu_Page_11,
             this.toolStripMenuItem_PredefinedContextMenu_Page_12});
 			this.toolStripMenuItem_PredefinedContextMenu_Page.Name = "toolStripMenuItem_PredefinedContextMenu_Page";
-			this.toolStripMenuItem_PredefinedContextMenu_Page.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Page.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page.Text = "&Page";
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Page_Next
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Next";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.Right)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Right)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Text = "&Next";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Next_Click);
@@ -949,8 +951,8 @@
 			// toolStripMenuItem_PredefinedContextMenu_Page_Previous
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Previous";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.Left)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Left)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Text = "&Previous";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click);
@@ -964,8 +966,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Name = "toolStripMenuItem_PredefinedContextMenu_Page_1";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F1)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F1)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Tag = "1";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_1.Text = "&1: <Undefined>";
@@ -975,8 +977,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Name = "toolStripMenuItem_PredefinedContextMenu_Page_2";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F2)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F2)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Tag = "2";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_2.Text = "&2: <Undefined>";
@@ -986,8 +988,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Name = "toolStripMenuItem_PredefinedContextMenu_Page_3";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F3)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F3)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Tag = "3";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_3.Text = "&3: <Undefined>";
@@ -997,8 +999,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Name = "toolStripMenuItem_PredefinedContextMenu_Page_4";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F4)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_4.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F4)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Tag = "4";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_4.Text = "&4: <Undefined>";
@@ -1008,8 +1010,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Name = "toolStripMenuItem_PredefinedContextMenu_Page_5";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_5.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F5)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_5.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F5)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Tag = "5";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_5.Text = "&5: <Undefined>";
@@ -1019,8 +1021,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Name = "toolStripMenuItem_PredefinedContextMenu_Page_6";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_6.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F6)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_6.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F6)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Tag = "6";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_6.Text = "&6: <Undefined>";
@@ -1030,8 +1032,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Name = "toolStripMenuItem_PredefinedContextMenu_Page_7";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_7.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F7)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_7.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F7)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Tag = "7";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_7.Text = "&7: <Undefined>";
@@ -1041,8 +1043,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Name = "toolStripMenuItem_PredefinedContextMenu_Page_8";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_8.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F8)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_8.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F8)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Tag = "8";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_8.Text = "&8: <Undefined>";
@@ -1052,8 +1054,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Name = "toolStripMenuItem_PredefinedContextMenu_Page_9";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_9.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F9)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_9.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F9)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Tag = "9";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_9.Text = "&9: <Undefined>";
@@ -1063,8 +1065,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Name = "toolStripMenuItem_PredefinedContextMenu_Page_10";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_10.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F10)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_10.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F10)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Tag = "10";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_10.Text = "1&0: <Undefined>";
@@ -1074,8 +1076,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Name = "toolStripMenuItem_PredefinedContextMenu_Page_11";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_11.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F11)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_11.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F11)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Tag = "11";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_11.Text = "11: <Undefined>";
@@ -1085,8 +1087,8 @@
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Enabled = false;
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Name = "toolStripMenuItem_PredefinedContextMenu_Page_12";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_12.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.F12)));
+			this.toolStripMenuItem_PredefinedContextMenu_Page_12.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.F12)));
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Size = new System.Drawing.Size(247, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Tag = "12";
 			this.toolStripMenuItem_PredefinedContextMenu_Page_12.Text = "12: <Undefined>";
@@ -1095,24 +1097,24 @@
 			// toolStripMenuItem_PredefinedContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_2.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_2";
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_2.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_2.Size = new System.Drawing.Size(217, 6);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Define
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Define.Name = "toolStripMenuItem_PredefinedContextMenu_Define";
-			this.toolStripMenuItem_PredefinedContextMenu_Define.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Define.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Define.Text = "Define...";
 			this.toolStripMenuItem_PredefinedContextMenu_Define.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Define_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Separator_3
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_3.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_3";
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_3.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_3.Size = new System.Drawing.Size(217, 6);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Name = "toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand";
-			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Text = "Copy to Send Command";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand_Click);
 			// 
@@ -1127,19 +1129,19 @@
 			// toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Name = "toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile";
-			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Text = "Copy from Send File";
 			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Separator_4
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Separator_4.Name = "toolStripMenuItem_PredefinedContextMenu_Separator_4";
-			this.toolStripMenuItem_PredefinedContextMenu_Separator_4.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem_PredefinedContextMenu_Separator_4.Size = new System.Drawing.Size(217, 6);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Hide
 			// 
 			this.toolStripMenuItem_PredefinedContextMenu_Hide.Name = "toolStripMenuItem_PredefinedContextMenu_Hide";
-			this.toolStripMenuItem_PredefinedContextMenu_Hide.Size = new System.Drawing.Size(258, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Hide.Size = new System.Drawing.Size(220, 22);
 			this.toolStripMenuItem_PredefinedContextMenu_Hide.Text = "Hide";
 			this.toolStripMenuItem_PredefinedContextMenu_Hide.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Hide_Click);
 			// 
@@ -1221,8 +1223,8 @@
 			// toolStripMenuItem_SendContextMenu_KeepCommand
 			// 
 			this.toolStripMenuItem_SendContextMenu_KeepCommand.Name = "toolStripMenuItem_SendContextMenu_KeepCommand";
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.K)));
+			this.toolStripMenuItem_SendContextMenu_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.K)));
 			this.toolStripMenuItem_SendContextMenu_KeepCommand.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_SendContextMenu_KeepCommand.Text = "Keep Command After Send";
 			this.toolStripMenuItem_SendContextMenu_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_KeepCommand_Click);
@@ -1230,8 +1232,8 @@
 			// toolStripMenuItem_SendContextMenu_CopyPredefined
 			// 
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Name = "toolStripMenuItem_SendContextMenu_CopyPredefined";
-			this.toolStripMenuItem_SendContextMenu_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined To Send Command";
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyPredefined_Click);
@@ -1239,8 +1241,8 @@
 			// toolStripMenuItem_SendContextMenu_SendImmediately
 			// 
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Name = "toolStripMenuItem_SendContextMenu_SendImmediately";
-			this.toolStripMenuItem_SendContextMenu_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.I)));
+			this.toolStripMenuItem_SendContextMenu_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.I)));
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Text = "Send Each Character Immediately";
 			this.toolStripMenuItem_SendContextMenu_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SendImmediately_Click);
@@ -1329,8 +1331,8 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Image = global::YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Name = "toolStripMenuItem_TerminalMenu_Terminal_Start";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.O)));
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.O)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Size = new System.Drawing.Size(213, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Text = "&Open Port";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Start_Click);
@@ -1339,8 +1341,8 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.C)));
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.C)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(213, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "C&lose Port";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Stop_Click);
@@ -1375,8 +1377,8 @@
 			// toolStripMenuItem_TerminalMenu_Terminal_SelectNone
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Name = "toolStripMenuItem_TerminalMenu_Terminal_SelectNone";
-			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.N)));
+			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.N)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Size = new System.Drawing.Size(213, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Text = "Select &None";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone_Click);
@@ -1422,8 +1424,8 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Properties_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Name = "toolStripMenuItem_TerminalMenu_Terminal_Settings";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.S)));
+			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Size = new System.Drawing.Size(213, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Text = "&Settings...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Settings_Click);
@@ -1445,6 +1447,7 @@
             this.toolStripMenuItem_PresetContextMenu_Preset_5,
             this.toolStripMenuItem_PresetContextMenu_Preset_6});
 			this.contextMenuStrip_Preset.Name = "contextMenuStrip_Preset";
+			this.contextMenuStrip_Preset.OwnerItem = this.toolStripMenuItem_TerminalMenu_Terminal_Presets;
 			this.contextMenuStrip_Preset.Size = new System.Drawing.Size(234, 136);
 			this.contextMenuStrip_Preset.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Preset_Opening);
 			// 
@@ -1543,8 +1546,8 @@
 			// toolStripMenuItem_TerminalMenu_Send_KeepCommand
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Name = "toolStripMenuItem_TerminalMenu_Send_KeepCommand";
-			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.K)));
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.K)));
 			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Text = "&Keep Command After Send";
 			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_KeepCommand_Click);
@@ -1552,8 +1555,8 @@
 			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined To Send Command";
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
@@ -1561,8 +1564,8 @@
 			// toolStripMenuItem_TerminalMenu_Send_SendImmediately
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Name = "toolStripMenuItem_TerminalMenu_Send_SendImmediately";
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.I)));
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.I)));
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Text = "Send Each Character &Immediately";
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click);
@@ -1586,8 +1589,8 @@
 			// toolStripMenuItem_TerminalMenu_Log_Begin
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Name = "toolStripMenuItem_TerminalMenu_Log_Begin";
-			this.toolStripMenuItem_TerminalMenu_Log_Begin.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.B)));
+			this.toolStripMenuItem_TerminalMenu_Log_Begin.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.B)));
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Size = new System.Drawing.Size(177, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Text = "&Begin";
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Begin_Click);
@@ -1596,8 +1599,8 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_End.Enabled = false;
 			this.toolStripMenuItem_TerminalMenu_Log_End.Name = "toolStripMenuItem_TerminalMenu_Log_End";
-			this.toolStripMenuItem_TerminalMenu_Log_End.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.E)));
+			this.toolStripMenuItem_TerminalMenu_Log_End.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.E)));
 			this.toolStripMenuItem_TerminalMenu_Log_End.Size = new System.Drawing.Size(177, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_End.Text = "&End";
 			this.toolStripMenuItem_TerminalMenu_Log_End.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_End_Click);
@@ -2018,9 +2021,9 @@
 			// 
 			// toolStripStatusLabel_TerminalStatus_ConnectionState
 			// 
-			this.toolStripStatusLabel_TerminalStatus_ConnectionState.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -2032,18 +2035,18 @@
 			// toolStripStatusLabel_TerminalStatus_Separator1
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Separator1.AutoSize = false;
-			this.toolStripStatusLabel_TerminalStatus_Separator1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_Separator1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_Separator1.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_Separator1.Name = "toolStripStatusLabel_TerminalStatus_Separator1";
 			this.toolStripStatusLabel_TerminalStatus_Separator1.Size = new System.Drawing.Size(4, 20);
 			// 
 			// toolStripStatusLabel_TerminalStatus_RFR
 			// 
-			this.toolStripStatusLabel_TerminalStatus_RFR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_RFR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_RFR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_RFR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_RFR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2054,14 +2057,14 @@
 			this.toolStripStatusLabel_TerminalStatus_RFR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RFR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.toolStripStatusLabel_TerminalStatus_RFR.ToolTipText = "Ready For Receiving (Out) which is now the official name of the formerly called R" +
-				"TS (Request To Send) control line";
+    "TS (Request To Send) control line";
 			this.toolStripStatusLabel_TerminalStatus_RFR.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_RFR_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_CTS
 			// 
-			this.toolStripStatusLabel_TerminalStatus_CTS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_CTS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_CTS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_CTS.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_CTS.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
@@ -2076,9 +2079,9 @@
 			// 
 			// toolStripStatusLabel_TerminalStatus_DTR
 			// 
-			this.toolStripStatusLabel_TerminalStatus_DTR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_DTR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DTR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_DTR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Off_12x12;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2093,9 +2096,9 @@
 			// 
 			// toolStripStatusLabel_TerminalStatus_DSR
 			// 
-			this.toolStripStatusLabel_TerminalStatus_DSR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_DSR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DSR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_DSR.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_DSR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Off_12x12;
@@ -2110,9 +2113,9 @@
 			// 
 			// toolStripStatusLabel_TerminalStatus_DCD
 			// 
-			this.toolStripStatusLabel_TerminalStatus_DCD.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_DCD.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DCD.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_DCD.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_DCD.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Off_12x12;
@@ -2128,18 +2131,18 @@
 			// toolStripStatusLabel_TerminalStatus_Separator2
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Separator2.AutoSize = false;
-			this.toolStripStatusLabel_TerminalStatus_Separator2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_Separator2.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_Separator2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_Separator2.Name = "toolStripStatusLabel_TerminalStatus_Separator2";
 			this.toolStripStatusLabel_TerminalStatus_Separator2.Size = new System.Drawing.Size(4, 20);
 			// 
 			// toolStripStatusLabel_TerminalStatus_InputXOnXOff
 			// 
-			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2154,9 +2157,9 @@
 			// 
 			// toolStripStatusLabel_TerminalStatus_OutputXOnXOff
 			// 
-			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
@@ -2172,18 +2175,18 @@
 			// toolStripStatusLabel_TerminalStatus_Separator3
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Separator3.AutoSize = false;
-			this.toolStripStatusLabel_TerminalStatus_Separator3.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_Separator3.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_Separator3.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_Separator3.Name = "toolStripStatusLabel_TerminalStatus_Separator3";
 			this.toolStripStatusLabel_TerminalStatus_Separator3.Size = new System.Drawing.Size(4, 20);
 			// 
 			// toolStripStatusLabel_TerminalStatus_InputBreak
 			// 
-			this.toolStripStatusLabel_TerminalStatus_InputBreak.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_InputBreak.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
@@ -2198,9 +2201,9 @@
 			// 
 			// toolStripStatusLabel_TerminalStatus_OutputBreak
 			// 
-			this.toolStripStatusLabel_TerminalStatus_OutputBreak.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_OutputBreak.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2250,9 +2253,9 @@
 			// splitContainer_Predefined.Panel2
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
-			this.splitContainer_Predefined.Panel2MinSize = 136;
+			this.splitContainer_Predefined.Panel2MinSize = 144;
 			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 390);
-			this.splitContainer_Predefined.SplitterDistance = 536;
+			this.splitContainer_Predefined.SplitterDistance = 525;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
 			this.splitContainer_Predefined.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_Predefined_SplitterMoved);
@@ -2264,7 +2267,7 @@
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(536, 390);
+			this.panel_Monitor.Size = new System.Drawing.Size(525, 390);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2275,7 +2278,7 @@
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 387);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 387);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2295,8 +2298,8 @@
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(526, 371);
-			this.splitContainer_TxMonitor.SplitterDistance = 172;
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 371);
+			this.splitContainer_TxMonitor.SplitterDistance = 168;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
 			this.splitContainer_TxMonitor.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_TxMonitor_SplitterMoved);
@@ -2308,7 +2311,7 @@
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 371);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 371);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2319,7 +2322,7 @@
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(166, 368);
+			this.monitor_Tx.Size = new System.Drawing.Size(162, 368);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
@@ -2339,8 +2342,8 @@
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(350, 371);
-			this.splitContainer_RxMonitor.SplitterDistance = 175;
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 371);
+			this.splitContainer_RxMonitor.SplitterDistance = 171;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
 			this.splitContainer_RxMonitor.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_RxMonitor_SplitterMoved);
@@ -2352,7 +2355,7 @@
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 371);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 371);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2363,7 +2366,7 @@
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(169, 368);
+			this.monitor_Bidir.Size = new System.Drawing.Size(165, 368);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
@@ -2375,7 +2378,7 @@
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 371);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 371);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2386,7 +2389,7 @@
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(165, 368);
+			this.monitor_Rx.Size = new System.Drawing.Size(162, 368);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
@@ -2398,7 +2401,7 @@
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(172, 390);
+			this.panel_Predefined.Size = new System.Drawing.Size(183, 390);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2408,7 +2411,7 @@
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 387);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 387);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2418,11 +2421,11 @@
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(162, 368);
+			this.predefined.Size = new System.Drawing.Size(173, 368);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
-			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
+			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
 			// 
 			// panel_Send
 			// 
@@ -2442,11 +2445,11 @@
 			this.send.Name = "send";
 			this.send.Size = new System.Drawing.Size(706, 94);
 			this.send.TabIndex = 0;
-			this.send.EditFocusStateChanged += new System.EventHandler(this.send_EditFocusStateChanged);
-			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
-			this.send.FileCommandChanged += new System.EventHandler(this.send_FileCommandChanged);
-			this.send.SendCommandRequest += new System.EventHandler(this.send_SendCommandRequest);
 			this.send.CommandChanged += new System.EventHandler(this.send_CommandChanged);
+			this.send.EditFocusStateChanged += new System.EventHandler(this.send_EditFocusStateChanged);
+			this.send.SendCommandRequest += new System.EventHandler(this.send_SendCommandRequest);
+			this.send.FileCommandChanged += new System.EventHandler(this.send_FileCommandChanged);
+			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
 			// 
 			// timer_RfrLuminescence
 			// 
@@ -2463,12 +2466,12 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "Terminal";
 			this.Text = "Terminal";
-			this.SizeChanged += new System.EventHandler(this.Terminal_SizeChanged);
-			this.Shown += new System.EventHandler(this.Terminal_Shown);
 			this.Activated += new System.EventHandler(this.Terminal_Activated);
-			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Terminal_FormClosed);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Terminal_FormClosing);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Terminal_FormClosed);
+			this.Shown += new System.EventHandler(this.Terminal_Shown);
 			this.LocationChanged += new System.EventHandler(this.Terminal_LocationChanged);
+			this.SizeChanged += new System.EventHandler(this.Terminal_SizeChanged);
 			this.contextMenuStrip_Monitor.ResumeLayout(false);
 			this.contextMenuStrip_Radix.ResumeLayout(false);
 			this.contextMenuStrip_Predefined.ResumeLayout(false);
