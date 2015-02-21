@@ -659,7 +659,7 @@ namespace MKY.IO.Serial.Socket
 		/// <param name="e">
 		/// Information about the data that has been sent.
 		/// <remarks>
-		/// Note that the original ALAZ implementation always keeps <paramref name="e.Buffer"/> at
+		/// Note that the original ALAZ implementation always keeps 'e.Buffer' at
 		/// <c>null</c> whereas the modified version contains a filled data buffer.
 		/// </remarks>
 		/// </param>
