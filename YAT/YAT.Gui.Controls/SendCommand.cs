@@ -182,9 +182,8 @@ namespace YAT.Gui.Controls
 					this.isValidated = false;
 				}
 
-				OnCommandChanged(EventArgs.Empty);
 				SetControls();
-				SetCursorToEnd();
+				OnCommandChanged(EventArgs.Empty);
 			}
 		}
 
@@ -214,8 +213,11 @@ namespace YAT.Gui.Controls
 			get { return (this.parseMode); }
 			set
 			{
-				this.parseMode = value;
-				SetControls();
+				if (this.parseMode != value)
+				{
+					this.parseMode = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -228,8 +230,11 @@ namespace YAT.Gui.Controls
 			get { return (this.sendImmediately); }
 			set
 			{
-				this.sendImmediately = value;
-				SetControls();
+				if (this.sendImmediately != value)
+				{
+					this.sendImmediately = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -240,8 +245,11 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				this.terminalType = value;
-				SetControls();
+				if (this.terminalType != value)
+				{
+					this.terminalType = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -252,8 +260,11 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				this.terminalIsReadyToSend = value;
-				SetControls();
+				if (this.terminalIsReadyToSend != value)
+				{
+					this.terminalIsReadyToSend = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -264,8 +275,11 @@ namespace YAT.Gui.Controls
 			get { return (this.splitterRatio); }
 			set
 			{
-				this.splitterRatio = value;
-				SetControls();
+				if (this.splitterRatio != value)
+				{
+					this.splitterRatio = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -293,12 +307,6 @@ namespace YAT.Gui.Controls
 		public virtual void SelectInput()
 		{
 			comboBox_Command.Select();
-		}
-
-		/// <summary></summary>
-		public virtual void SetCursorToEnd()
-		{
-			comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
 		}
 
 		#endregion
@@ -352,7 +360,9 @@ namespace YAT.Gui.Controls
 			{
 				this.isStartingUp = false;
 				SetControls();
-				SetCursorToEnd();
+
+				// Move cursor to the end of the input box:
+				comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
 			}
 		}
 
@@ -624,12 +634,20 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
+			// Keep cursor position and selection because Items.Clear() will reset this:
+			int selectionStart  = comboBox_Command.SelectionStart;
+			int selectionLength = comboBox_Command.SelectionLength;
+
 			comboBox_Command.Items.Clear();
 			if (this.recents != null)
 				comboBox_Command.Items.AddRange(this.recents.ToArray());
 
 			// Immediately update the updated item list:
 			comboBox_Command.Refresh();
+
+			// Restore cursor position and selection:
+			comboBox_Command.SelectionLength = selectionLength;
+			comboBox_Command.SelectionStart = selectionStart;
 
 			this.isSettingControls.Leave();
 		}

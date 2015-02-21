@@ -162,7 +162,7 @@ namespace YAT.Gui.Controls
 		public virtual Command FileCommand
 		{
 			get { return (sendFile.FileCommand); }
-			set	{ sendFile.FileCommand = value;  }
+			set { sendFile.FileCommand = value;  }
 		}
 
 		/// <summary></summary>
