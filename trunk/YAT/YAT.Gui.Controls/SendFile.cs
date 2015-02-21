@@ -128,8 +128,8 @@ namespace YAT.Gui.Controls
 				else
 					this.fileCommand = new Command();
 
-				OnFileCommandChanged(EventArgs.Empty);
 				SetControls();
+				OnFileCommandChanged(EventArgs.Empty);
 			}
 		}
 
