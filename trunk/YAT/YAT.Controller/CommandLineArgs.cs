@@ -31,6 +31,8 @@ using System.Diagnostics.CodeAnalysis;
 
 using MKY.CommandLine;
 
+using YAT.Utilities;
+
 #endregion
 
 namespace YAT.Controller
@@ -53,7 +55,7 @@ namespace YAT.Controller
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NoView", ShortName = "nv", Description = "Start the YAT application just on the console, without any GUI at all.")]
+		[OptionArg(Name = "NoView", ShortName = "nv", Description = "Start the " + ApplicationInfo.ProductName + " application just on the console, without any GUI at all.")]
 		public bool NoView;
 
 		/// <summary></summary>

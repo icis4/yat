@@ -38,6 +38,7 @@ using MKY.CommandLine;
 
 using YAT.Settings;
 using YAT.Settings.Application;
+using YAT.Utilities;
 
 #endregion
 
@@ -56,8 +57,8 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[ValueArg(Description = "Open the given YAT workspace (.yaw) or terminal (.yat).")]
-		[OptionArg(Name = "Open", ShortName = "o", Description = "Open the given YAT workspace (.yaw) or terminal (.yat).")]
+		[ValueArg(Description = "Open the given workspace (.yaw) or terminal (.yat).")]
+		[OptionArg(Name = "Open", ShortName = "o", Description = "Open the given workspace (.yaw) or terminal (.yat).")]
 		public string RequestedFilePath;
 
 		/// <summary></summary>
@@ -267,24 +268,24 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep YAT open after performing the requested operation.")]
+		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep " + ApplicationInfo.ProductName + " open after performing the requested operation.")]
 		public bool KeepOpen;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep YAT open in case there is an error while performing the requested operation.")]
+		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep " + ApplicationInfo.ProductName + " open in case there is an error while performing the requested operation.")]
 		public bool KeepOpenOnError;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the YAT application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
-			"For YAT.exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
-			"For YATConsole.exe, interaction is always disabled, i.e. this option has no effect.")]
+		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationInfo.ProductName + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationInfo.ProductName + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationInfo.ProductName + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start YAT but neither show any dialog nor perform any operation.")]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationInfo.ProductName + " but neither show any dialog nor perform any operation.")]
 		public bool Empty;
 
 		#endregion
@@ -403,36 +404,42 @@ namespace YAT.Model
 		/// </summary>
 		public override string GetHelpText(int maxWidth)
 		{
+			string anyWorkspace = "<Workspace>" + YAT.Settings.ExtensionSettings.WorkspaceFile;
+			string anyTerminal  = "<Terminal>"  + YAT.Settings.ExtensionSettings.TerminalFile;
+
+			string myWorkspace = "MyWorkspace" + YAT.Settings.ExtensionSettings.WorkspaceFile;
+			string myTerminal  = "MyTerminal"  + YAT.Settings.ExtensionSettings.TerminalFile;
+
 			string name = Application.ProductName;
 			StringBuilder helpText = new StringBuilder();
 
-			helpText.AppendLine(                                "Usage:");
+			helpText.AppendLine(                                 "Usage:");
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + "[.exe] [<Workspace>.yaw|<Terminal>.yat] [<Options>]"));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + "[.exe] [" + anyWorkspace + "|" + anyTerminal + "] [<Options>]"));
 			helpText.AppendLine();
 			helpText.AppendLine();
-			helpText.AppendLine(                                "Usage examples:");
+			helpText.AppendLine(                                 "Usage examples:");
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " MyWorkspace.yaw"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the given workspace."));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myWorkspace));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and open the given workspace."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " MyTerminal.yat"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the given terminal."));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and open the given terminal."));
 			helpText.AppendLine();
-			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " MyTerminal.yat /b=19200"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT with the given terminal, but change the baud rate to 19200 baud."));
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal + " /b=19200"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " with the given terminal, but change the baud rate to 19200 baud."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /r"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the most recent file."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and open the most recent file."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /n /p=1 /b=19200"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and create a new terminal on COM1 using 19200 baud."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and create a new terminal on COM1 using 19200 baud."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and show the 'New Terminal' dialog."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and show the 'New Terminal' dialog."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /e"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT but neither show any dialog nor perform any operation."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " but neither show any dialog nor perform any operation."));
 			helpText.AppendLine();
 
 			helpText.Append(base.GetHelpText(maxWidth));
