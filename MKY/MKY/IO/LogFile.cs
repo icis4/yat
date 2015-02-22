@@ -144,8 +144,8 @@ namespace MKY.IO
 			try
 			{
 				lock (this.writer)
-				{
-					this.writer.WriteLine(now.ToString("HH:mm:ss.", DateTimeFormatInfo.InvariantInfo) + string.Format(DateTimeFormatInfo.InvariantInfo, "{0:000}", now.Millisecond) + "  " + line);
+				{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
+					this.writer.WriteLine(now.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + "  " + line);
 					this.writer.Flush();
 				}
 			}

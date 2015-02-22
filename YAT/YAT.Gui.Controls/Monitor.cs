@@ -961,9 +961,9 @@ namespace YAT.Gui.Controls
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(TimeSpanEx.FormatTimeSpan(this.connectTime));
+			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.connectTime));
 			sb.Append(Environment.NewLine);
-			sb.Append(TimeSpanEx.FormatTimeSpan(this.totalConnectTime));
+			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.totalConnectTime));
 
 			label_TimeStatus.Text = sb.ToString();
 			label_TimeStatus.Visible = this.showTimeStatus;

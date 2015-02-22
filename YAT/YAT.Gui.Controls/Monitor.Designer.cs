@@ -92,9 +92,9 @@
 			this.label_TimeStatus.Name = "label_TimeStatus";
 			this.label_TimeStatus.Size = new System.Drawing.Size(136, 30);
 			this.label_TimeStatus.TabIndex = 0;
-			this.label_TimeStatus.Text = "hh:mm:ss\r\nhh:mm:ss";
+			this.label_TimeStatus.Text = "m:ss\r\nm:ss";
 			this.label_TimeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip.SetToolTip(this.label_TimeStatus, "Connect time (hh:mm:ss)\r\nTotal connect time (hh:mm:ss)");
+			this.toolTip.SetToolTip(this.label_TimeStatus, "Connect time (m:ss)\r\nTotal connect time (m:ss)");
 			// 
 			// label_CountStatus
 			// 

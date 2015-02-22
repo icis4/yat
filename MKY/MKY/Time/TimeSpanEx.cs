@@ -39,21 +39,47 @@ namespace MKY
 		/// <summary>
 		/// Returns time span formatted with "d:hh:mm:ss".
 		/// </summary>
-		public static string FormatTimeSpan(TimeSpan timeSpan)
+		public static string FormatInvariantTimeSpan(TimeSpan timeSpan)
 		{
-			return (FormatTimeSpan(timeSpan, false));
+			return (FormatInvariantTimeSpan(timeSpan, false, false, false));
 		}
 
 		/// <summary>
-		/// Returns time span formatted with "d:hh:mm:ss[.hh]".
+		/// Returns time span formatted with "d:hh:mm:ss[.f]".
 		/// </summary>
-		public static string FormatTimeSpan(TimeSpan timeSpan, bool hundredths)
+		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths)
+		{
+			return (FormatInvariantTimeSpan(timeSpan, tenths, false, false));
+		}
+
+		/// <summary>
+		/// Returns time span formatted with "d:hh:mm:ss[.f[f]]".
+		/// </summary>
+		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths, bool hundredths)
+		{
+			return (FormatInvariantTimeSpan(timeSpan, tenths, hundredths, false));
+		}
+
+		/// <summary>
+		/// Returns time span formatted with "d:hh:mm:ss[.f[f[f]]]".
+		/// </summary>
+		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths, bool hundredths, bool thousandths)
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if (hundredths)
+			if (thousandths)
+			{
+				sb.Insert(0, (timeSpan.Milliseconds / 1).ToString("D3", CultureInfo.InvariantCulture));
+				sb.Insert(0, ".");
+			}
+			else if (hundredths)
 			{
 				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
+				sb.Insert(0, ".");
+			}
+			else if (tenths)
+			{
+				sb.Insert(0, (timeSpan.Milliseconds / 100).ToString("D1", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 

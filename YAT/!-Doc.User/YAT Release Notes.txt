@@ -69,9 +69,9 @@ New:
 - Tool tips added to command buttons (feature request #205, also related to feature request #220)
 
 Important changes:
-- DejaVu fonts updated to 2.34
 - Error handling in case of deleted .yaw and .yat files improved (related to feature request #194)
 - \!(...) keywords can optionally be disabled (feature request #183)
+- Time stamps are now output in milliseconds to improve readability (feature request #196)
 - Retrieving serial COM port captions from the system can optionally be disabled in 'Preferences'
   Disabling can be useful on computers where discovery of serial COM ports takes too long
 - Serial COM port XOn/XOff flow control chars can optionally be hidden for 'Manual Software' and
@@ -83,6 +83,7 @@ Important changes:
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
 - Command line console output is now channeled to stdout or stderr depending on whether it is normal
   or error information (feature request #192)
+- DejaVu fonts updated to 2.34
 - Visual Studio upgraded to 2013 Community Edition (feature request #221)
 - NUnit updated to 2.64, other development tools (GhostDoc, StyleCop, FxCop) updated too
 
