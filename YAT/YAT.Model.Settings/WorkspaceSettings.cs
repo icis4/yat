@@ -27,12 +27,15 @@ using System.Xml.Serialization;
 
 using MKY;
 
+using YAT.Model.Types;
+
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
 	public class WorkspaceSettings : MKY.Settings.SettingsItem
 	{
+		private WorkspaceLayout layout;
 		private GuidList<TerminalSettingsItem> terminalSettings;
 
 		/// <summary></summary>
@@ -58,6 +61,7 @@ namespace YAT.Model.Settings
 		public WorkspaceSettings(WorkspaceSettings rhs)
 			: base(rhs)
 		{
+			Layout           = rhs.Layout;
 			TerminalSettings = new GuidList<TerminalSettingsItem>(rhs.TerminalSettings);
 			ClearChanged();
 		}
@@ -69,6 +73,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
+			Layout           = WorkspaceLayout.Manual;
 			TerminalSettings = new GuidList<TerminalSettingsItem>();
 		}
 
@@ -76,6 +81,21 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("Layout")]
+		public WorkspaceLayout Layout
+		{
+			get { return (this.layout); }
+			set
+			{
+				if (this.layout != value)
+				{
+					this.layout = value;
+					SetChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
@@ -118,6 +138,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
+				(Layout           == other.Layout) &&
 				(TerminalSettings == other.TerminalSettings)
 			);
 		}
@@ -135,6 +156,7 @@ namespace YAT.Model.Settings
 			(
 				base.GetHashCode() ^
 
+				Layout          .GetHashCode() ^
 				TerminalSettings.GetHashCode()
 			);
 		}

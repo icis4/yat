@@ -43,6 +43,7 @@ using MKY.Settings;
 using MKY.Time;
 using MKY.Windows.Forms;
 
+using YAT.Model.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -104,6 +105,7 @@ namespace YAT.Gui.Forms
 		// Startup/Update/Closing:
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
+		private bool isLayoutingMdi = false;
 		private ClosingState closingState = ClosingState.None;
 		private Model.Main.Result result = Model.Main.Result.Success;
 
@@ -306,11 +308,13 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					// If workspace contains terminals, and requested, tile the terminal forms accordingly:
-					if      (this.main.StartArgs.TileHorizontal)
-						LayoutMdi(MdiLayout.TileHorizontal);
+					// If workspace contains terminals, and if requested, arrange them accordingly:
+					if (this.main.StartArgs.TileHorizontal)
+						LayoutTerminals(WorkspaceLayout.TileHorizontal);
 					else if (this.main.StartArgs.TileVertical)
-						LayoutMdi(MdiLayout.TileVertical);
+						LayoutTerminals(WorkspaceLayout.TileVertical);
+					else
+						LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
 				}
 
 				// Automatically trigger transmit data if desired:
@@ -332,6 +336,12 @@ namespace YAT.Gui.Forms
 		{
 			if (!IsStartingUp)
 				SaveWindowSettings();
+		}
+
+		private void Main_Resize(object sender, EventArgs e)
+		{
+			if (!IsStartingUp)
+				ResizeTerminals();
 		}
 
 		private void Main_MdiChildActivate(object sender, EventArgs e)
@@ -549,10 +559,9 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			bool childIsReady = (ActiveMdiChild != null);
-			toolStripMenuItem_MainMenu_Window_Cascade.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
-			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled = childIsReady;
-			toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled   = childIsReady;
 
 			this.isSettingControls.Leave();
 
@@ -574,24 +583,19 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_Window_Cascade_Click(object sender, EventArgs e)
 		{
-			LayoutMdi(MdiLayout.Cascade);
+			SetTerminalLayout(WorkspaceLayout.Cascade);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_TileHorizontal_Click(object sender, EventArgs e)
 		{
-			LayoutMdi(MdiLayout.TileHorizontal);
+			SetTerminalLayout(WorkspaceLayout.TileHorizontal);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_TileVertical_Click(object sender, EventArgs e)
 		{
-			LayoutMdi(MdiLayout.TileVertical);
+			SetTerminalLayout(WorkspaceLayout.TileVertical);
 		}
-
-		private void toolStripMenuItem_MainMenu_Window_ArrangeIcons_Click(object sender, EventArgs e)
-		{
-			LayoutMdi(MdiLayout.ArrangeIcons);
-		}
-
+		
 		#endregion
 
 		#region Controls Event Handlers > Main Menu > Help
@@ -1054,7 +1058,7 @@ namespace YAT.Gui.Forms
 				{
 					try
 					{
-						SetFixedStatusText("Automatically closing YAT");
+						SetFixedStatusText("Automatically closing " + ApplicationInfo.ProductName);
 						Close();
 					}
 					catch (Exception ex)
@@ -1538,6 +1542,66 @@ namespace YAT.Gui.Forms
 			return (dr);
 		}
 
+		/// <summary>
+		/// Sets the terminal layout including forwarding the setting to the workspace.
+		/// </summary>
+		private void SetTerminalLayout(WorkspaceLayout layout)
+		{
+			// Only notify the workspace, so it can keep the setting. But layouting itself is done
+			// here as the MDI functionality is an integral part of the Windows.Forms environment.
+			this.workspace.NotifyLayout(layout);
+
+			LayoutTerminals(layout);
+		}
+
+		/// <summary>
+		/// Performs the layout operation on the terminals.
+		/// </summary>
+		/// <remarks>
+		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
+		/// </remarks>
+		private void LayoutTerminals(WorkspaceLayout layout)
+		{
+			switch (layout)
+			{
+				case WorkspaceLayout.Manual:
+					// Nothing to do. Manual layout is kept as is.
+					break;
+
+				case WorkspaceLayout.Cascade:
+				case WorkspaceLayout.TileHorizontal:
+				case WorkspaceLayout.TileVertical:
+					LayoutMdi((WorkspaceLayoutEx)layout);
+					break;
+
+				default:
+					throw (new InvalidOperationException("Invalid workspace layout"));
+			}
+		}
+
+		private void ResizeTerminals()
+		{
+			// Simply forward the resize request to the MDI layout engine:
+			LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
+		}
+
+		/// <summary>
+		/// Arranges the multiple-document interface (MDI) child forms within the MDI parent form.
+		/// </summary>
+		/// <param name="value">
+		/// One of the <see cref="MdiLayout"/> values that defines the layout of MDI child forms.
+		/// </param>
+		/// <remarks>
+		/// This overridden method remembers that the MDI layout is currently ongoing. This is
+		/// required when handling terminal (MDI child) layout/resize events.
+		/// </remarks>
+		protected new void LayoutMdi(MdiLayout value)
+		{
+			this.isLayoutingMdi = true;
+			base.LayoutMdi(value);
+			this.isLayoutingMdi = false;
+		}
+
 		#endregion
 
 		#region Workspace > Lifetime
@@ -1655,6 +1719,7 @@ namespace YAT.Gui.Forms
 
 			terminalMdiChild.Changed    += new EventHandler(terminalMdiChild_Changed);
 			terminalMdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(terminalMdiChild_Saved);
+			terminalMdiChild.Resize     += new EventHandler(terminalMdiChild_Resize);
 			terminalMdiChild.FormClosed += new FormClosedEventHandler(terminalMdiChild_FormClosed);
 		}
 
@@ -1662,6 +1727,7 @@ namespace YAT.Gui.Forms
 		{
 			terminalMdiChild.Changed    -= new EventHandler(terminalMdiChild_Changed);
 			terminalMdiChild.Saved      -= new EventHandler<Model.SavedEventArgs>(terminalMdiChild_Saved);
+			terminalMdiChild.Resize     -= new EventHandler(terminalMdiChild_Resize);
 			terminalMdiChild.FormClosed -= new FormClosedEventHandler(terminalMdiChild_FormClosed);
 
 			// Do not set terminalMdiChild.MdiParent to null. Doing so results in a detached non-
@@ -1688,6 +1754,12 @@ namespace YAT.Gui.Forms
 				SetTimedStatus(Status.ChildSaved);
 
 			SetChildControls();
+		}
+
+		private void terminalMdiChild_Resize(object sender, EventArgs e)
+		{
+			if (!isLayoutingMdi)
+				SetTerminalLayout(WorkspaceLayout.Manual);
 		}
 
 		private void terminalMdiChild_FormClosed(object sender, FormClosedEventArgs e)

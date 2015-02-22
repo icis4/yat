@@ -77,8 +77,6 @@
 			this.toolStripMenuItem_MainMenu_Window_Cascade = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Window_TileHorizontal = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Window_TileVertical = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_Window_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Contents = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
@@ -487,9 +485,7 @@
 			this.toolStripMenuItem_MainMenu_Window.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_MainMenu_Window_Cascade,
             this.toolStripMenuItem_MainMenu_Window_TileHorizontal,
-            this.toolStripMenuItem_MainMenu_Window_TileVertical,
-            this.toolStripMenuItem_MainMenu_Window_Separator_1,
-            this.toolStripMenuItem_MainMenu_Window_ArrangeIcons});
+            this.toolStripMenuItem_MainMenu_Window_TileVertical});
 			this.toolStripMenuItem_MainMenu_Window.MergeIndex = 5;
 			this.toolStripMenuItem_MainMenu_Window.Name = "toolStripMenuItem_MainMenu_Window";
 			this.toolStripMenuItem_MainMenu_Window.Size = new System.Drawing.Size(63, 20);
@@ -525,19 +521,6 @@
 			this.toolStripMenuItem_MainMenu_Window_TileVertical.Size = new System.Drawing.Size(217, 22);
 			this.toolStripMenuItem_MainMenu_Window_TileVertical.Text = "Tile &Vertical";
 			this.toolStripMenuItem_MainMenu_Window_TileVertical.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Window_TileVertical_Click);
-			// 
-			// toolStripMenuItem_MainMenu_Window_Separator_1
-			// 
-			this.toolStripMenuItem_MainMenu_Window_Separator_1.Name = "toolStripMenuItem_MainMenu_Window_Separator_1";
-			this.toolStripMenuItem_MainMenu_Window_Separator_1.Size = new System.Drawing.Size(214, 6);
-			// 
-			// toolStripMenuItem_MainMenu_Window_ArrangeIcons
-			// 
-			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = false;
-			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons.Name = "toolStripMenuItem_MainMenu_Window_ArrangeIcons";
-			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons.Size = new System.Drawing.Size(217, 22);
-			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons.Text = "&Arrange Icons";
-			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Window_ArrangeIcons_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help
 			// 
@@ -662,7 +645,7 @@
 			// 
 			this.toolStripStatusLabel_MainStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_MainStatus_Status.Name = "toolStripStatusLabel_MainStatus_Status";
-			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(699, 19);
+			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(730, 19);
 			this.toolStripStatusLabel_MainStatus_Status.Spring = true;
 			this.toolStripStatusLabel_MainStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_MainStatus_Status.ToolTipText = "Program Status";
@@ -978,6 +961,7 @@
 			this.Shown += new System.EventHandler(this.Main_Shown);
 			this.LocationChanged += new System.EventHandler(this.Main_LocationChanged);
 			this.SizeChanged += new System.EventHandler(this.Main_SizeChanged);
+			this.Resize += new System.EventHandler(this.Main_Resize);
 			this.contextMenuStrip_Main.ResumeLayout(false);
 			this.contextMenuStrip_FileRecent.ResumeLayout(false);
 			this.menuStrip_Main.ResumeLayout(false);
@@ -1020,8 +1004,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_TileHorizontal;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_Cascade;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_TileVertical;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Window_Separator_1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_ArrangeIcons;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Contents;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_1;
