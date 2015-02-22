@@ -48,7 +48,7 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
 			this.button_Close = new System.Windows.Forms.Button();
-			this.linkLabel_HHD = new System.Windows.Forms.LinkLabel();
+			this.linkLabel_Monitoring = new System.Windows.Forms.LinkLabel();
 			this.label_Separator1 = new System.Windows.Forms.Label();
 			this.pictureBox_Product = new System.Windows.Forms.PictureBox();
 			this.label_Separator2 = new System.Windows.Forms.Label();
@@ -63,7 +63,7 @@
 			this.linkLabel_Author = new System.Windows.Forms.LinkLabel();
 			this.pictureBox_License = new System.Windows.Forms.PictureBox();
 			this.linkLabel_License = new System.Windows.Forms.LinkLabel();
-			this.linkLabel_VSPE = new System.Windows.Forms.LinkLabel();
+			this.linkLabel_VirtualPorts = new System.Windows.Forms.LinkLabel();
 			this.label_ExecuteManualTest1 = new System.Windows.Forms.Label();
 			this.label_ExecuteManualTest2 = new System.Windows.Forms.Label();
 			this.label_ExecuteManualTest3 = new System.Windows.Forms.Label();
@@ -82,21 +82,21 @@
 			this.button_Close.TabIndex = 0;
 			this.button_Close.Text = "Close";
 			// 
-			// linkLabel_HHD
+			// linkLabel_Monitoring
 			// 
-			this.linkLabel_HHD.AutoSize = true;
-			this.linkLabel_HHD.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_HHD.Location = new System.Drawing.Point(12, 160);
-			this.linkLabel_HHD.Name = "linkLabel_HHD";
-			this.linkLabel_HHD.Size = new System.Drawing.Size(573, 26);
-			this.linkLabel_HHD.TabIndex = 8;
-			this.linkLabel_HHD.Text = resources.GetString("linkLabel_HHD.Text");
-			this.linkLabel_HHD.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
+			this.linkLabel_Monitoring.AutoSize = true;
+			this.linkLabel_Monitoring.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.linkLabel_Monitoring.Location = new System.Drawing.Point(12, 160);
+			this.linkLabel_Monitoring.Name = "linkLabel_Monitoring";
+			this.linkLabel_Monitoring.Size = new System.Drawing.Size(573, 26);
+			this.linkLabel_Monitoring.TabIndex = 8;
+			this.linkLabel_Monitoring.Text = resources.GetString("linkLabel_Monitoring.Text");
+			this.linkLabel_Monitoring.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// label_Separator1
 			// 
-			this.label_Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Separator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Separator1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator1.Location = new System.Drawing.Point(9, 61);
 			this.label_Separator1.Name = "label_Separator1";
@@ -117,8 +117,8 @@
 			// 
 			// label_Separator2
 			// 
-			this.label_Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Separator2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Separator2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator2.Location = new System.Drawing.Point(9, 135);
 			this.label_Separator2.Name = "label_Separator2";
@@ -140,8 +140,8 @@
 			// 
 			// linkLabel_Copyright
 			// 
-			this.linkLabel_Copyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel_Copyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_Copyright.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Copyright.Location = new System.Drawing.Point(67, 22);
 			this.linkLabel_Copyright.Name = "linkLabel_Copyright";
@@ -152,8 +152,8 @@
 			// 
 			// label_Separator3
 			// 
-			this.label_Separator3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Separator3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Separator3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator3.Location = new System.Drawing.Point(9, 222);
 			this.label_Separator3.Name = "label_Separator3";
@@ -171,7 +171,7 @@
 			this.linkLabel_Platform.Size = new System.Drawing.Size(477, 13);
 			this.linkLabel_Platform.TabIndex = 6;
 			this.linkLabel_Platform.Text = "For .NET <VERSION> on Windows 2000 and later. Currently running on .NET runtime <" +
-				"VERSION>.";
+    "VERSION>.";
 			this.linkLabel_Platform.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Title
@@ -252,16 +252,16 @@
 			this.linkLabel_License.Text = "YAT is licensed under the GNU LGPL.";
 			this.linkLabel_License.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
-			// linkLabel_VSPE
+			// linkLabel_VirtualPorts
 			// 
-			this.linkLabel_VSPE.AutoSize = true;
-			this.linkLabel_VSPE.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_VSPE.Location = new System.Drawing.Point(12, 196);
-			this.linkLabel_VSPE.Name = "linkLabel_VSPE";
-			this.linkLabel_VSPE.Size = new System.Drawing.Size(512, 26);
-			this.linkLabel_VSPE.TabIndex = 9;
-			this.linkLabel_VSPE.Text = resources.GetString("linkLabel_VSPE.Text");
-			this.linkLabel_VSPE.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
+			this.linkLabel_VirtualPorts.AutoSize = true;
+			this.linkLabel_VirtualPorts.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.linkLabel_VirtualPorts.Location = new System.Drawing.Point(12, 196);
+			this.linkLabel_VirtualPorts.Name = "linkLabel_VirtualPorts";
+			this.linkLabel_VirtualPorts.Size = new System.Drawing.Size(579, 26);
+			this.linkLabel_VirtualPorts.TabIndex = 9;
+			this.linkLabel_VirtualPorts.Text = resources.GetString("linkLabel_VirtualPorts.Text");
+			this.linkLabel_VirtualPorts.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// label_ExecuteManualTest1
 			// 
@@ -316,8 +316,8 @@
 			this.Controls.Add(this.label_Separator3);
 			this.Controls.Add(this.label_Separator2);
 			this.Controls.Add(this.label_Separator1);
-			this.Controls.Add(this.linkLabel_VSPE);
-			this.Controls.Add(this.linkLabel_HHD);
+			this.Controls.Add(this.linkLabel_VirtualPorts);
+			this.Controls.Add(this.linkLabel_Monitoring);
 			this.Controls.Add(this.linkLabel_Copyright);
 			this.Controls.Add(this.pictureBox_Product);
 			this.Controls.Add(this.button_Close);
@@ -339,7 +339,7 @@
 
 		private System.Windows.Forms.Button button_Close;
 		private System.Windows.Forms.PictureBox pictureBox_Product;
-		private System.Windows.Forms.LinkLabel linkLabel_HHD;
+		private System.Windows.Forms.LinkLabel linkLabel_Monitoring;
 		private System.Windows.Forms.Label label_Separator1;
 		private System.Windows.Forms.Label label_Separator2;
 		private System.Windows.Forms.LinkLabel linkLabel_Description;
@@ -353,7 +353,7 @@
 		private System.Windows.Forms.LinkLabel linkLabel_Author;
 		private System.Windows.Forms.PictureBox pictureBox_License;
 		private System.Windows.Forms.LinkLabel linkLabel_License;
-		private System.Windows.Forms.LinkLabel linkLabel_VSPE;
+		private System.Windows.Forms.LinkLabel linkLabel_VirtualPorts;
 		private System.Windows.Forms.Label label_ExecuteManualTest1;
 		private System.Windows.Forms.Label label_ExecuteManualTest2;
 		private System.Windows.Forms.Label label_ExecuteManualTest3;

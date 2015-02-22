@@ -61,13 +61,13 @@ namespace YAT.Gui.Forms
 			string textAfter = "";
 			int linkStart = 0;
 
-			// Form.
+			// Form:
 			Text = ApplicationInfo.ProductNameLong;
 
-			// Title.
+			// Title:
 			linkLabel_Title.Text = ApplicationInfo.ProductNameAndBuildNameAndVersion;
 
-			// Copyright.
+			// Copyright:
 			linkLabel_Copyright.Text = "";
 			textBefore = "Copyright © 2003-2004 ";
 			textLink   =                       "HSR Hochschule für Technik Rapperswil";
@@ -79,10 +79,10 @@ namespace YAT.Gui.Forms
 			linkLabel_Copyright.Links.Add(linkStart, textLink.Length, "http://www.hsr.ch/");
 			linkLabel_Copyright.Text += textAfter;
 
-			// Trademark.
+			// Trademark:
 			linkLabel_Trademark.Text = "All rights reserved.";
 
-			// Description.
+			// Description:
 			linkLabel_Description.Text = "";
 			textBefore = "YAT is a by-product of the ";
 			textLink   =                            "Swiss federal KTI/CTI";
@@ -102,39 +102,53 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Links.Add(linkStart, textLink.Length, "http://www.mt.com/");
 			linkLabel_Description.Text += textAfter;
 
-			// Platform.
+			// Platform:
 			linkLabel_Platform.Text = "For .NET framework 3.5 on Windows 2000 and later. Currently running on .NET runtime " + Environment.Version + " (CLR version).";
 
-			// HHD.
-			linkLabel_HHD.Text = "";
+			// Serial monitoring:
+			linkLabel_Monitoring.Text = "";
 			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and" + Environment.NewLine +
 						 "a device, or between two devices, check out ";
-			textLink   =                                           "HHD Monitoring Studio";
-			textAfter  =                                                                ". It's worth the bucks. Or ";
-			linkLabel_HHD.Text += textBefore;
-			linkStart = linkLabel_HHD.Text.Length;
-			linkLabel_HHD.Text += textLink;
-			linkLabel_HHD.Links.Add(linkStart, textLink.Length, "http://www.hhdsoftware.com/");
-			linkLabel_HHD.Text += textAfter;
-			textLink =                                                                                             "download the free edition";
-			textAfter =                                                                                                                     ".";
-			linkStart = linkLabel_HHD.Text.Length;
-			linkLabel_HHD.Text += textLink;
-			linkLabel_HHD.Links.Add(linkStart, textLink.Length, "http://freeserialanalyzer.com/");
-			linkLabel_HHD.Text += textAfter;
+			textLink   =                                             "HHD Monitoring Studio";
+			textAfter  =                                                                  ". It's worth the bucks. Or download the ";
+			linkLabel_Monitoring.Text += textBefore;
+			linkStart = linkLabel_Monitoring.Text.Length;
+			linkLabel_Monitoring.Text += textLink;
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://www.hhdsoftware.com/");
+			linkLabel_Monitoring.Text += textAfter;
+			textLink  =                                                                                                           "free edition";
+			textAfter =                                                                                                                       ".";
+			linkStart = linkLabel_Monitoring.Text.Length;
+			linkLabel_Monitoring.Text += textLink;
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://freeserialanalyzer.com/");
+			linkLabel_Monitoring.Text += textAfter;
 
-			// VSPE.
-			linkLabel_VSPE.Text = "";
-			textBefore = "If you're also looking for a tool to create and manage additional virtual COM ports, check out"  + Environment.NewLine;
-			textLink   = "Eterlogic Virtual Serial Ports Emulator";
-			textAfter  =                                         ". Supports virtual connected ports, mapping to TCP/IP, port sharing,...";
-			linkLabel_VSPE.Text += textBefore;
-			linkStart = linkLabel_VSPE.Text.Length;
-			linkLabel_VSPE.Text += textLink;
-			linkLabel_VSPE.Links.Add(linkStart, textLink.Length, "http://www.eterlogic.com/Products.VSPE.html");
-			linkLabel_VSPE.Text += textAfter;
+			// Virtual serial ports:
+			linkLabel_VirtualPorts.Text = "";
+			textBefore = "If you're looking for a tool to create and manage virtual COM ports, check out ";
+			textLink   =                                                                                "Eterlogic VSPE";
+			textAfter  =                                                                                              ", ";
+			linkLabel_VirtualPorts.Text += textBefore;
+			linkStart = linkLabel_VirtualPorts.Text.Length;
+			linkLabel_VirtualPorts.Text += textLink;
+			linkLabel_VirtualPorts.Links.Add(linkStart, textLink.Length, "http://www.eterlogic.com/Products.VSPE.html");
+			linkLabel_VirtualPorts.Text += textAfter;
+			textLink  =                                                                                                 "TALtech TCP/Com";
+			textAfter =                                                                                                                ", or" + Environment.NewLine;
+			linkStart = linkLabel_VirtualPorts.Text.Length;
+			linkLabel_VirtualPorts.Text += textLink;
+			linkLabel_VirtualPorts.Links.Add(linkStart, textLink.Length, "http://www.taltech.com/tcpcom");
+			linkLabel_VirtualPorts.Text += textAfter;
+			textBefore = "the open source ";
+			textLink   =                 "com0com+hub4com";
+			textAfter  =                                ". They all support mapping COM to TCP/IP, port sharing, virtually connected ports,...";
+			linkLabel_VirtualPorts.Text += textBefore;
+			linkStart = linkLabel_VirtualPorts.Text.Length;
+			linkLabel_VirtualPorts.Text += textLink;
+			linkLabel_VirtualPorts.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/com0com/");
+			linkLabel_VirtualPorts.Text += textAfter;
 
-			// Environment.
+			// Environment:
 			linkLabel_Environment.Text = "";
 			textBefore = "YAT is developed with" + Environment.NewLine +
 						 "   > Microsoft Visual Studio 2013 Community Edition" + Environment.NewLine +
@@ -212,7 +226,7 @@ namespace YAT.Gui.Forms
 						 "   > Microsoft FxCop";
 			linkLabel_Environment.Text += textBefore;
 
-			// Home.
+			// Home:
 			linkLabel_Home.Text = "";
 			textBefore = "Visit YAT on ";
 			textLink   =              "SourceForge.net";
@@ -223,10 +237,10 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Links.Add(linkStart, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
 			linkLabel_Home.Text += textAfter;
 
-			// Author.
+			// Author:
 			linkLabel_Author.Text = "2015, Matthias Kläy";
 
-			// License.
+			// License:
 			linkLabel_License.Text = "";
 			textBefore = "YAT is licensed under the ";
 			textLink   =                           "GNU LGPL";
