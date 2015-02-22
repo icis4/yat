@@ -172,20 +172,20 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TimeStamp()
-				: base("(" + DateTime.Now.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
-			{
+				: base("(" + DateTime.Now.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + ")")
+			{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
 			}
 
 			/// <summary></summary>
 			public TimeStamp(DateTime timeStamp)
-				: base("(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
-			{
+				: base("(" + timeStamp.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + ")")
+			{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
 			}
 
 			/// <summary></summary>
 			public TimeStamp(SerialDirection direction, DateTime timeStamp)
-				: base(direction, "(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
-			{
+				: base(direction, "(" + timeStamp.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + ")")
+			{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
 			}
 
 			/// <summary></summary>

@@ -233,7 +233,7 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			return (TimeSpanEx.FormatTimeSpan(TimeSpan, true));
+			return (TimeSpanEx.FormatInvariantTimeSpan(TimeSpan, true, true));
 		}
 
 		#endregion
