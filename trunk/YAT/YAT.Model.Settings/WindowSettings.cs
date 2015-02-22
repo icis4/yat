@@ -154,9 +154,9 @@ namespace YAT.Model.Settings
 				(
 					base.Equals(other) && // Compare all settings nodes.
 
-					(this.state    == other.state) &&
-					(this.location == other.location) &&
-					(this.size     == other.size)
+					(State    == other.State) &&
+					(Location == other.Location) &&
+					(Size     == other.Size)
 				);
 			}
 			else

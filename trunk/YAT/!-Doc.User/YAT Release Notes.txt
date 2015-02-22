@@ -67,6 +67,8 @@ New:
   write protected .yaw files are not attempted to be written either (feature request #194)
 - Predefined commands can now be copied to 'Send Command' using shortcuts Alt+Shift+Fx (feat. #218)
 - Tool tips added to command buttons (feature request #205, also related to feature request #220)
+- Terminal window setting (manual/cascade/tile) is now stored in the workspace and re-applied when
+  starting YAT or re-sizing the main form (feature requests #40, #141 and #170)
 
 Important changes:
 - \!(...) keywords can optionally be disabled (feature request #183)
@@ -83,7 +85,7 @@ Important changes:
   dialog to fixed values, independent on the values that were selected before (related to bug #262)
 - Command line console output is now channeled to stdout or stderr depending on whether it is normal
   or error information (feature request #192)
-- More information on virtual serial port tools added to 'About' (feature request #198)
+- More information on virtual serial port tools added to 'Help > About' (feature request #198)
 - DejaVu fonts updated to 2.34
 - Visual Studio upgraded to 2013 Community Edition (feature request #221)
 - NUnit updated to 2.64, other development tools (GhostDoc, StyleCop, FxCop) updated too

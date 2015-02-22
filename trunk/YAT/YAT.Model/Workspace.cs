@@ -42,12 +42,11 @@ using MKY.IO;
 using MKY.Settings;
 
 using YAT.Model.Settings;
-
+using YAT.Model.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
-
 using YAT.Utilities;
 
 #endregion
@@ -1121,6 +1120,23 @@ namespace YAT.Model
 			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.Save();
+		}
+
+		#endregion
+
+		#region Layout
+		//==========================================================================================
+		// Layout
+		//==========================================================================================
+
+		/// <summary>
+		/// Notifies the workspace about a change in the layout, so it can keep the setting. But
+		/// layouting itself is done in the form as the MDI functionality is an integral part of
+		/// the Windows.Forms environment.
+		/// </summary>
+		public virtual void NotifyLayout(WorkspaceLayout layout)
+		{
+			this.settingsRoot.Workspace.Layout = layout;
 		}
 
 		#endregion

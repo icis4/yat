@@ -96,6 +96,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +104,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Command.cs" />
+    <Compile Include="WorkspaceLayout.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="FontFormat.cs" />
     <Compile Include="PredefinedCommandPage.cs" />
@@ -121,6 +123,10 @@
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Utilities\YAT.Utilities.csproj">
+      <Project>{5e374ff3-3ce6-4fd2-b41c-679329ff05a5}</Project>
+      <Name>YAT.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
