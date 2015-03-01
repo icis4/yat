@@ -47,7 +47,7 @@ namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
-	[DefaultEvent("SendFileCommandRequest")]
+	[DefaultEvent("SendCommandRequest")]
 	public partial class SendFile : UserControl
 	{
 		#region Constants
@@ -68,7 +68,7 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private Command fileCommand = new Command();
+		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
@@ -83,13 +83,13 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the FileCommand property is changed.")]
-		public event EventHandler FileCommandChanged;
+		[Description("Event raised when the Command property is changed.")]
+		public event EventHandler CommandChanged;
 
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the file is requested.")]
-		public event EventHandler SendFileCommandRequest;
+		public event EventHandler SendCommandRequest;
 
 		#endregion
 
@@ -118,18 +118,21 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Command FileCommand
+		public virtual Command Command
 		{
-			get { return (this.fileCommand); }
+			get { return (this.command); }
 			set
 			{
-				if (value != null)
-					this.fileCommand = value;
-				else
-					this.fileCommand = new Command();
+				if (this.command != value)
+				{
+					if (value != null)
+						this.command = value;
+					else
+						this.command = new Command();
 
-				SetControls();
-				OnFileCommandChanged(EventArgs.Empty);
+					SetControls();
+					OnCommandChanged(EventArgs.Empty);
+				}
 			}
 		}
 
@@ -142,8 +145,11 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				this.recents = value;
-				SetControls();
+				if (this.recents != value)
+				{
+					this.recents = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -154,8 +160,11 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				this.terminalType = value;
-				SetControls();
+				if (this.terminalType != value)
+				{
+					this.terminalType = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -166,8 +175,11 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				this.terminalIsReadyToSend = value;
-				SetControls();
+				if (this.terminalIsReadyToSend != value)
+				{
+					this.terminalIsReadyToSend = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -178,8 +190,11 @@ namespace YAT.Gui.Controls
 			get { return (this.splitterDistance); }
 			set
 			{
-				this.splitterDistance = value;
-				SetControls();
+				if (this.splitterDistance != value)
+				{
+					this.splitterDistance = value;
+					SetControls();
+				}
 			}
 		}
 
@@ -198,7 +213,7 @@ namespace YAT.Gui.Controls
 				{
 					RecentItem<Command> ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
 					if (ri != null)
-						SetFileCommand(ri.Item);
+						SetCommand(ri.Item);
 				}
 			}
 		}
@@ -233,7 +248,7 @@ namespace YAT.Gui.Controls
 			else
 				pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
 
-			if (this.fileCommand.IsFilePath)
+			if (this.command.IsFilePath)
 			{
 				pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
 				pathComboBox_FilePath.Font      = SystemFonts.DefaultFont;
@@ -242,7 +257,7 @@ namespace YAT.Gui.Controls
 				for (int i = 0; i < pathComboBox_FilePath.Items.Count; i++)
 				{
 					RecentItem<Command> r = pathComboBox_FilePath.Items[i] as RecentItem<Command>;
-					if ((r != null) && (r.Item == this.fileCommand))
+					if ((r != null) && (r.Item == this.command))
 					{
 						index = i;
 						break;
@@ -257,7 +272,7 @@ namespace YAT.Gui.Controls
 				pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
 			}
 
-			if (this.fileCommand.IsValidFilePath)
+			if (this.command.IsValidFilePath)
 				button_SendFile.Enabled = this.terminalIsReadyToSend;
 			else
 				button_SendFile.Enabled = false;
@@ -265,15 +280,15 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Leave();
 		}
 
-		private void SetFileCommand(Command fileCommand)
+		private void SetCommand(Command command)
 		{
-			this.fileCommand = fileCommand;
+			this.command = command;
 
-			if (!this.recents.Contains(fileCommand))
-				this.recents.Add(fileCommand);
+			if (!this.recents.Contains(command))
+				this.recents.Add(command);
 
 			SetControls();
-			OnFileCommandChanged(EventArgs.Empty);
+			OnCommandChanged(EventArgs.Empty);
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
@@ -307,7 +322,7 @@ namespace YAT.Gui.Controls
 				ApplicationSettings.LocalUserSettings.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				SetFileCommand(new Command(ofd.FileName, true, ofd.FileName));
+				SetCommand(new Command(ofd.FileName, true, ofd.FileName));
 			}
 			else
 			{
@@ -321,7 +336,7 @@ namespace YAT.Gui.Controls
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void RequestSendCommand()
 		{
-			if (!this.fileCommand.IsValidFilePath)
+			if (!this.command.IsValidFilePath)
 			{
 				if (MessageBoxEx.Show
 					(
@@ -343,9 +358,9 @@ namespace YAT.Gui.Controls
 				}
 			}
 
-			if (this.fileCommand.IsValidFilePath)
+			if (this.command.IsValidFilePath)
 			{
-				OnSendFileCommandRequest(EventArgs.Empty);
+				OnSendCommandRequest(EventArgs.Empty);
 			}
 			else
 			{
@@ -368,15 +383,15 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnFileCommandChanged(EventArgs e)
+		protected virtual void OnCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(FileCommandChanged, this, e);
+			EventHelper.FireSync(CommandChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendFileCommandRequest(EventArgs e)
+		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
-			EventHelper.FireSync(SendFileCommandRequest, this, e);
+			EventHelper.FireSync(SendCommandRequest, this, e);
 		}
 
 		#endregion
