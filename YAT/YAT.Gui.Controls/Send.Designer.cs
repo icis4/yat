@@ -104,8 +104,8 @@
 			this.sendFile.Name = "sendFile";
 			this.sendFile.Size = new System.Drawing.Size(706, 27);
 			this.sendFile.TabIndex = 0;
-			this.sendFile.SendFileCommandRequest += new System.EventHandler(this.sendFile_SendFileCommandRequest);
-			this.sendFile.FileCommandChanged += new System.EventHandler(this.sendFile_FileCommandChanged);
+			this.sendFile.SendCommandRequest += new System.EventHandler(this.sendFile_SendCommandRequest);
+			this.sendFile.CommandChanged += new System.EventHandler(this.sendFile_CommandChanged);
 			// 
 			// Send
 			// 

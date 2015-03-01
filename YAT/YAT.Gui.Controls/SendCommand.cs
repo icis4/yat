@@ -172,19 +172,23 @@ namespace YAT.Gui.Controls
 			get { return (this.command); }
 			set
 			{
-				if (value != null)
+				if (this.command != value)
 				{
-					this.command = value;
-					this.isValidated = value.IsValidText;
-				}
-				else
-				{
-					this.command = new Command();
-					this.isValidated = false;
-				}
+					if (value != null)
+					{
+						this.command = value;
+						this.isValidated = value.IsValidText;
+					}
+					else
+					{
+						this.command = new Command();
+						this.isValidated = false;
+					}
 
-				SetControls();
-				OnCommandChanged(EventArgs.Empty);
+					SetControls();
+					SetCursorToEnd();
+					OnCommandChanged(EventArgs.Empty);
+				}
 			}
 		}
 
@@ -197,11 +201,14 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				this.recents = value;
+				if (this.recents != value)
+				{
+					this.recents = value;
 
-				// Recents must immediately be updated, otherwise
-				// order will be wrong on arrow-up/down.
-				SetRecents();
+					// Recents must immediately be updated, otherwise
+					// order will be wrong on arrow-up/down.
+					SetRecents();
+				}
 			}
 		}
 
@@ -364,9 +371,7 @@ namespace YAT.Gui.Controls
 			{
 				this.isStartingUp = false;
 				SetControls();
-
-				// Move cursor to the end of the input box:
-				comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
+				SetCursorToEnd();
 			}
 		}
 
@@ -491,6 +496,7 @@ namespace YAT.Gui.Controls
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
+							CreateSingleLineCommand(comboBox_Command.Text);
 							return;
 						}
 
@@ -504,6 +510,7 @@ namespace YAT.Gui.Controls
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
+							CreateSingleLineCommand(comboBox_Command.Text);
 							return;
 						}
 
@@ -661,6 +668,15 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Leave();
 		}
 
+		private void SetCursorToEnd()
+		{
+			this.isSettingControls.Enter();
+
+			comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
+
+			this.isSettingControls.Leave();
+		}
+
 		#endregion
 
 		#region Private Methods > Multi Line Command
@@ -717,14 +733,17 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Always create new command to ensure that not only command but also description is updated.
 		/// </remarks>
-		private void CreateSingleLineCommand()
+		private void CreateSingleLineCommand(string singleLineCommand)
 		{
-			this.command = new Command(comboBox_Command.Text);
+			this.command = new Command(singleLineCommand);
 
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
+		/// <remarks>
+		/// Always create new command to ensure that not only command but also description is updated.
+		/// </remarks>
 		private void CreatePartialCommand(string partialCommand)
 		{
 			this.command = new Command(partialCommand, true);
@@ -733,6 +752,9 @@ namespace YAT.Gui.Controls
 			OnCommandChanged(EventArgs.Empty);
 		}
 
+		/// <remarks>
+		/// Always create new command to ensure that not only command but also description is updated.
+		/// </remarks>
 		private void CreatePartialEolCommand()
 		{
 			this.command = new Command(true);
@@ -757,7 +779,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				CreateSingleLineCommand();
+				// No need to create the command again, it has already been created on validation.
 				RequestSendCompleteCommand();
 			}
 		}

@@ -162,8 +162,8 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Command FileCommand
 		{
-			get { return (sendFile.FileCommand); }
-			set { sendFile.FileCommand = value;  }
+			get { return (sendFile.Command); }
+			set { sendFile.Command = value;  }
 		}
 
 		/// <summary></summary>
@@ -276,12 +276,12 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers > Send File
 		//------------------------------------------------------------------------------------------
 
-		private void sendFile_FileCommandChanged(object sender, EventArgs e)
+		private void sendFile_CommandChanged(object sender, EventArgs e)
 		{
 			OnFileCommandChanged(e);
 		}
 
-		private void sendFile_SendFileCommandRequest(object sender, EventArgs e)
+		private void sendFile_SendCommandRequest(object sender, EventArgs e)
 		{
 			OnSendFileCommandRequest(e);
 		}
