@@ -86,9 +86,30 @@ namespace YAT.Log
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[Serializable]
 	public class FileNameSeparator : IEquatable<FileNameSeparator>
 	{
+		#region String Definitions
+
+		private const string Underscore_string          = "_";
+		private const string Underscore_description     = "Underscore (_)";
+
+		private const string Dash_string                = "-";
+		private const string Dash_description           = "Dash (-)";
+		private const string DashWithSpaces_string      = " - ";
+		private const string DashWithSpaces_description = "Dash with spaces ( - )";
+
+		private const string Ball_string                = "°";
+		private const string Ball_description           = "Ball (°)";
+		private const string BallWithSpaces_string      = " ° ";
+		private const string BallWithSpaces_description = "Ball with spaces ( ° )";
+
+		private const string None_string                = "";
+		private const string None_description           = "None";
+
+		#endregion
+
 		private string separator;
 		private string description;
 
@@ -178,46 +199,28 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public const string UnderscoreToString = "Underscore (_)";
-
-		/// <summary></summary>
-		public const string DashToString = "Dash (-)";
-
-		/// <summary></summary>
-		public const string DashWithSpacesToString = "Dash with spaces ( - )";
-
-		/// <summary></summary>
-		public const string BallToString = "Ball (°)";
-
-		/// <summary></summary>
-		public const string BallWithSpacesToString = "Ball with spaces ( ° )";
-
-		/// <summary></summary>
-		public const string NoneToString = "None";
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
+		public static readonly FileNameSeparator Underscore = new FileNameSeparator(Underscore_string, Underscore_description);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator Underscore = new FileNameSeparator("_", UnderscoreToString);
+		public static readonly FileNameSeparator Dash = new FileNameSeparator(Dash_string, Dash_description);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator Dash = new FileNameSeparator("-", DashToString);
+		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(DashWithSpaces_string, DashWithSpaces_description);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(" - ", DashWithSpacesToString);
+		public static readonly FileNameSeparator Ball = new FileNameSeparator(Ball_string, Ball_description);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator Ball = new FileNameSeparator("°", BallToString);
+		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(BallWithSpaces_string, BallWithSpaces_description);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(" ° ", BallWithSpacesToString);
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator None = new FileNameSeparator("", NoneToString);
+		public static readonly FileNameSeparator None = new FileNameSeparator(None_string, None_description);
 
 		/// <summary></summary>
 		public static ReadOnlyCollection<FileNameSeparator> Items
@@ -252,13 +255,13 @@ namespace YAT.Log
 		{
 			switch (description)
 			{
-				case UnderscoreToString:     return (Underscore);
-				case DashToString:           return (Dash);
-				case DashWithSpacesToString: return (DashWithSpaces);
-				case BallToString:           return (Ball);
-				case BallWithSpacesToString: return (BallWithSpaces);
-				case NoneToString:           return (None);
-				default:                     return (new FileNameSeparator(description, description));
+				case Underscore_description:     return (Underscore);
+				case Dash_description:           return (Dash);
+				case DashWithSpaces_description: return (DashWithSpaces);
+				case Ball_description:           return (Ball);
+				case BallWithSpaces_description: return (BallWithSpaces);
+				case None_description:           return (None);
+				default:                         return (new FileNameSeparator(description, description));
 			}
 		}
 
@@ -267,22 +270,66 @@ namespace YAT.Log
 		#region Parse
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Opposed to the convention of the .NET framework, whitespace is NOT
+		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
 		/// </remarks>
 		public static FileNameSeparator Parse(string s)
 		{
+			FileNameSeparator result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' is no valid file name separator string"));
+		}
+
+		/// <remarks>
+		/// Opposed to the convention of the .NET framework, whitespace is NOT
+		/// trimmed from <paramref name="s"/> as certain separators contain spaces.
+		/// </remarks>
+		public static bool TryParse(string s, out FileNameSeparator result)
+		{
 			s = s.Trim();
 
-			switch (s)
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_description))
 			{
-				case UnderscoreToString:     return (Underscore);
-				case DashToString:           return (Dash);
-				case DashWithSpacesToString: return (DashWithSpaces);
-				case BallToString:           return (Ball);
-				case BallWithSpacesToString: return (BallWithSpaces);
-				case NoneToString:           return (None);
-				default: return (new FileNameSeparator(s));
+				result = Underscore;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_description))
+			{
+				result = Dash;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_description))
+			{
+				result = DashWithSpaces;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_description))
+			{
+				result = Ball;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_description))
+			{
+				result = BallWithSpaces;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
+			{
+				result = None;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
 			}
 		}
 
