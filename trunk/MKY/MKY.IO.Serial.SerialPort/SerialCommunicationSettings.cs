@@ -25,6 +25,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using MKY.IO.Ports;
+
 namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
@@ -52,11 +54,25 @@ namespace MKY.IO.Serial.SerialPort
 		private System.IO.Ports.StopBits stopBits;
 		private SerialFlowControl flowControl;
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates new port settings with defaults.
+		/// </summary>
 		public SerialCommunicationSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl)
+		{
+			BaudRate    = baudRate;
+			DataBits    = dataBits;
+			Parity      = parity;
+			StopBits    = stopBits;
+			FlowControl = flowControl;
 		}
 
 		/// <summary></summary>
@@ -67,6 +83,9 @@ namespace MKY.IO.Serial.SerialPort
 			ClearChanged();
 		}
 
+		/// <summary>
+		/// Creates new port settings from <paramref name="rhs"/>.
+		/// </summary>
 		/// <remarks>
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
@@ -323,6 +342,61 @@ namespace MKY.IO.Serial.SerialPort
 			);
 		}
 
+		/// <summary>
+		/// Parses <paramref name="s"/> for serial communication settings and returns a corresponding settings object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static SerialCommunicationSettings Parse(string s)
+		{
+			SerialCommunicationSettings result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' does not specify valid serial communication settings"));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for serial communication settings and returns a corresponding settings object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SerialCommunicationSettings settings)
+		{
+			string delimiters = "/,;";
+			string[] sa = s.Trim().Split(delimiters.ToCharArray());
+			if (sa.Length == 5)
+			{
+				BaudRateEx baudRate;
+				if (BaudRateEx.TryParse(sa[0], out baudRate))
+				{
+					DataBitsEx dataBits;
+					if (DataBitsEx.TryParse(sa[1], out dataBits))
+					{
+						ParityEx parity;
+						if (ParityEx.TryParse(sa[2], out parity))
+						{
+							StopBitsEx stopBits;
+							if (StopBitsEx.TryParse(sa[3], out stopBits))
+							{
+								SerialFlowControlEx flowControl;
+								if (SerialFlowControlEx.TryParse(sa[4], out flowControl))
+								{
+									settings = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits, flowControl);
+									return (true);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			settings = null;
+			return (false);
+		}
+
 		#region Object Members > Extensions
 		//------------------------------------------------------------------------------------------
 		// Object Members > Extensions
@@ -336,19 +410,6 @@ namespace MKY.IO.Serial.SerialPort
 				BaudRate                            + ", " +
 				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
 				((MKY.IO.Ports.ParityEx)  Parity).ToShortString()
-			);
-		}
-
-		/// <summary></summary>
-		public virtual string ToLongString()
-		{
-			return
-			(
-				BaudRate                            + ", " +
-				((MKY.IO.Ports.DataBitsEx)DataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)  Parity)   + ", " +
-				((MKY.IO.Ports.StopBitsEx)StopBits) + ", " +
-				((SerialFlowControlEx)    FlowControl)
 			);
 		}
 

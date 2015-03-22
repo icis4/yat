@@ -93,11 +93,32 @@ namespace MKY.IO.Serial.SerialPort
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates new port settings with defaults.
+		/// </summary>
 		public SerialPortSettings()
 		{
 			SetMyDefaults();
 			InitializeNodes();
+			ClearChanged();
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SerialPortSettings(SerialPortId portId, SerialCommunicationSettings communication)
+		{
+			SetMyDefaults();
+			InitializeNodes();
+
+			// Attention: Port ID can be null (if no COM ports are available on system).
+			if (portId != null)
+				PortId = new SerialPortId(portId);
+			else
+				PortId = null;
+
+			Communication = new SerialCommunicationSettings(communication);
+
 			ClearChanged();
 		}
 
@@ -115,6 +136,9 @@ namespace MKY.IO.Serial.SerialPort
 			Communication = new SerialCommunicationSettings(SettingsType);
 		}
 
+		/// <summary>
+		/// Creates new port settings from <paramref name="rhs"/>.
+		/// </summary>
 		/// <remarks>
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
@@ -336,6 +360,61 @@ namespace MKY.IO.Serial.SerialPort
 				return (PortId);
 			else
 				return (Undefined);
+		}
+
+		/// <summary>
+		/// Returns port ID and port settings as a single string.
+		/// </summary>
+		public virtual string ToShortString()
+		{
+			return
+			(
+				PortId.ToString() + ", " +
+				Communication.ToString()
+			);
+		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for short serial port settings and returns a corresponding settings object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static SerialPortSettings ParseShort(string s)
+		{
+			SerialPortSettings result;
+			if (TryParseShort(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' does not specify valid short serial port settings"));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for short serial port settings and returns a corresponding settings object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseShort(string s, out SerialPortSettings settings)
+		{
+			string delimiters = "/,;";
+			string[] sa = s.Trim().Split(delimiters.ToCharArray(), 2);
+			if (sa.Length == 2)
+			{
+				SerialPortId portId;
+				if (SerialPortId.TryParse(sa[0], out portId))
+				{
+					SerialCommunicationSettings communication;
+					if (SerialCommunicationSettings.TryParse(sa[1], out communication))
+					{
+						settings = new SerialPortSettings(portId, communication);
+						return (true);
+					}
+				}
+			}
+
+			settings = null;
+			return (false);
 		}
 
 		#endregion
