@@ -281,13 +281,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Delay must be at least 1 ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -318,13 +318,14 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Line interval must be at least 1 line!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
+
 					e.Cancel = true;
 				}
 			}
@@ -355,13 +356,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Timeout must be at least 1 ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}

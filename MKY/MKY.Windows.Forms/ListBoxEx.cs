@@ -123,12 +123,12 @@ namespace MKY.Windows.Forms
 					if (DesignMode)
 					{
 						dr = MessageBoxEx.Show
-							(
+						(
 							"Note that horizontal auto scroll is limited to environments which implement the Win32 API.",
 							"Warning",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Warning
-							);
+						);
 					}
 					if (dr == DialogResult.OK)
 					{

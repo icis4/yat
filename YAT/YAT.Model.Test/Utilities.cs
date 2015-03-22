@@ -494,13 +494,13 @@ namespace YAT.Model.Test
 						string strB = ArrayEx.ElementsToString(lineB.ToArray());
 
 						Trace.Write
-							(
+						(
 							"A:" + Environment.NewLine + strA + Environment.NewLine +
 							"B:" + Environment.NewLine + strB + Environment.NewLine
-							);
+						);
 
 						Assert.Fail
-							(
+						(
 							"Length of line " + i + " mismatches:" + Environment.NewLine +
 							"Expected = " + expectedElementCount + " elements, " +
 							"A = " + lineA.Count + " elements, " +
@@ -509,7 +509,7 @@ namespace YAT.Model.Test
 							"A = " + lineA.DataCount + " data, " +
 							"B = " + lineB.DataCount + " data." + Environment.NewLine +
 							@"See ""Output"" for details."
-							);
+						);
 					}
 				}
 			}
@@ -524,19 +524,19 @@ namespace YAT.Model.Test
 					sbB.Append(ArrayEx.ElementsToString(lineB.ToArray()));
 
 				Trace.Write
-					(
+				(
 					"A:" + Environment.NewLine + sbA + Environment.NewLine +
 					"B:" + Environment.NewLine + sbB + Environment.NewLine
-					);
+				);
 
 				Assert.Fail
-					(
+				(
 					"Line count mismatches: " + Environment.NewLine +
 					"Expected = " + expectedLineCount + " lines, " +
 					"A = " + linesA.Count + " lines, " +
 					"B = " + linesB.Count + " lines." + Environment.NewLine +
 					@"See ""Output"" for details."
-					);
+				);
 			}
 		}
 

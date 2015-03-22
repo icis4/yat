@@ -1317,12 +1317,12 @@ namespace YAT.Model
 							reason + " Would you like to save the file at another location or cancel?";
 
 						DialogResult dr = OnMessageInputRequest
-							(
+						(
 							message,
 							"File Error",
 							MessageBoxButtons.YesNoCancel,
 							MessageBoxIcon.Question
-							);
+						);
 
 						switch (dr)
 						{
@@ -1430,12 +1430,12 @@ namespace YAT.Model
 						"File error message:" + Environment.NewLine + ex.InnerException.Message;
 
 					OnMessageInputRequest
-						(
+					(
 						message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					OnTimedStatusTextRequest("Terminal not saved!");
 				}
@@ -1451,12 +1451,12 @@ namespace YAT.Model
 						"System error message:" + Environment.NewLine + ex.Message;
 
 					OnMessageInputRequest
-						(
+					(
 						message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					OnTimedStatusTextRequest("Terminal not saved!");
 				}
@@ -1609,12 +1609,12 @@ namespace YAT.Model
 			if (!success && doSave && !this.settingsRoot.AutoSaved)
 			{
 				DialogResult dr = OnMessageInputRequest
-					(
+				(
 					"Save terminal?",
 					AutoName,
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
-					);
+				);
 
 				switch (dr)
 				{                                    // Do normal/manual save.
@@ -2024,12 +2024,12 @@ namespace YAT.Model
 					yatText;
 
 				OnMessageInputRequest
-					(
+				(
 					message,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 
 				OnTimedStatusTextRequest("Terminal not started!");
 			}
@@ -2070,12 +2070,12 @@ namespace YAT.Model
 			{
 				OnTimedStatusTextRequest("Error stopping terminal!");
 				OnMessageInputRequest
-					(
+				(
 					"Unable to stop terminal:" + Environment.NewLine + Environment.NewLine + ex.Message,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 				OnTimedStatusTextRequest("Terminal not stopped!");
 			}
 
@@ -2186,13 +2186,13 @@ namespace YAT.Model
 				string title;
 				PrepareSendMessageInputRequest(out text, out title);
 				OnMessageInputRequest
-					(
+				(
 					text + Environment.NewLine + Environment.NewLine +
 					"System error message:" + Environment.NewLine + ex.Message,
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 
 				OnTimedStatusTextRequest("Data not sent!");
 			}
@@ -2239,13 +2239,13 @@ namespace YAT.Model
 				string title;
 				PrepareSendMessageInputRequest(out text, out title);
 				OnMessageInputRequest
-					(
+				(
 					text + Environment.NewLine + Environment.NewLine +
 					"System error message:" + Environment.NewLine + ex.Message,
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 
 				OnTimedStatusTextRequest("Data not sent!");
 			}
@@ -2253,13 +2253,13 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error sending " + sendStatusText + "!");
 				OnMessageInputRequest
-					(
+				(
 					"Bad data format:" + Environment.NewLine +
 					ex.Message,
 					"Format Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 				OnTimedStatusTextRequest("Data not sent!");
 			}
 		}
@@ -2384,10 +2384,7 @@ namespace YAT.Model
 						clone = new Command(this.partialCommandLine);
 
 					// Put clone into recent history:
-					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
-						(
-							new RecentItem<Command>(clone)
-						);
+					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
 					this.settingsRoot.SendCommand.SetChanged(); // Manual change required because underlying collection is modified.
 
 					// Reset the partial command line:
@@ -2476,22 +2473,19 @@ namespace YAT.Model
 
 				// Put file into history.
 				Command clone = new Command(c);
-				this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
-					(
-						new RecentItem<Command>(clone)
-					);
+				this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
 				this.settingsRoot.SendFile.SetChanged(); // Manual change required because underlying collection is modified.
 			}
 			catch (Exception ex)
 			{
 				OnMessageInputRequest
-					(
+				(
 					"Error while accessing file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 					"System error message:"      + Environment.NewLine + ex.Message,
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 			}
 		}
 
@@ -2584,12 +2578,13 @@ namespace YAT.Model
 			// Verify command index:
 			List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
 			bool isDefined =
-				(
-					(commands != null) &&
-					(commands.Count >= command) &&
-					(commands[command - 1] != null) &&
-					(commands[command - 1].IsDefined)
-				);
+			(
+				(commands != null) &&
+				(commands.Count >= command) &&
+				(commands[command - 1] != null) &&
+				(commands[command - 1].IsDefined)
+			);
+
 			if (!isDefined)
 				return (false);
 
@@ -3122,7 +3117,7 @@ namespace YAT.Model
 			catch (System.IO.IOException ex)
 			{
 				OnMessageInputRequest
-					(
+				(
 					"Unable to begin log."                               + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
 					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
@@ -3130,7 +3125,7 @@ namespace YAT.Model
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
-					);
+				);
 
 				return (false);
 			}
@@ -3146,7 +3141,7 @@ namespace YAT.Model
 			catch (System.IO.IOException ex)
 			{
 				OnMessageInputRequest
-					(
+				(
 					"Unable to clear log."                               + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
 					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
@@ -3154,7 +3149,7 @@ namespace YAT.Model
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
-					);
+				);
 			}
 		}
 
@@ -3177,13 +3172,13 @@ namespace YAT.Model
 			catch (System.IO.IOException ex)
 			{
 				OnMessageInputRequest
-					(
+				(
 					"Unable to end log." + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message,
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
-					);
+				);
 			}
 		}
 

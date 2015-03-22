@@ -493,13 +493,13 @@ namespace YAT.Gui.Forms
 					invalidPrintable.ToString() + " are not allowed in file names.";
 
 				MessageBoxEx.Show
-					(
+				(
 					this,
 					message,
 					"Invalid Characters",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation
-					);
+				);
 
 				return (false);
 			}
@@ -510,13 +510,13 @@ namespace YAT.Gui.Forms
 		private void ExtensionConflictMessage()
 		{
 			MessageBoxEx.Show
-				(
+			(
 				this,
 				"To avoid naming conflicts, raw and neat log files must have different extensions. Choose a different extension.",
 				"Extension Conflict",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Exclamation
-				);
+			);
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]

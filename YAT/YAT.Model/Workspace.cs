@@ -682,13 +682,13 @@ namespace YAT.Model
 							reason = "The file no longer exists.";
 
 						DialogResult dr = OnMessageInputRequest
-							(
+						(
 							"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 							reason + " Would you like to save the file at another location or cancel?",
 							"File Error",
 							MessageBoxButtons.YesNoCancel,
 							MessageBoxIcon.Question
-							);
+						);
 
 						switch (dr)
 						{
@@ -804,14 +804,14 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
-						(
+					(
 						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message:"  + Environment.NewLine + ex.Message                            + Environment.NewLine + Environment.NewLine +
 						"File error message:" + Environment.NewLine + ex.InnerException.Message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 			}
@@ -821,13 +821,13 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
-						(
+					(
 						"Unable to save file"   + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 						"System error message:" + Environment.NewLine + ex.Message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 			}
@@ -1019,12 +1019,12 @@ namespace YAT.Model
 			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace && !this.settingsRoot.AutoSaved)
 			{
 				DialogResult dr = OnMessageInputRequest
-					(
+				(
 					"Save workspace?",
 					AutoName,
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
-					);
+				);
 
 				switch (dr)
 				{
@@ -1304,12 +1304,12 @@ namespace YAT.Model
 
 							OnFixedStatusTextRequest("Error opening terminal!");
 							DialogResult result = OnMessageInputRequest
-								(
+							(
 								errorMessage + Environment.NewLine + "Continue loading workspace?",
 								"Terminal File Error",
 								MessageBoxButtons.YesNo,
 								MessageBoxIcon.Exclamation
-								);
+							);
 							OnTimedStatusTextRequest("Terminal not opened!");
 
 							if (result == DialogResult.No)
@@ -1355,12 +1355,12 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error opening terminal!");
 				OnMessageInputRequest
-					(
+				(
 					errorMessage,
 					"Terminal File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
-					);
+				);
 				OnTimedStatusTextRequest("Terminal not opened!");
 				return (false);
 			}
@@ -1491,12 +1491,12 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Terminal is already open.");
 					OnMessageInputRequest
-						(
+					(
 						"Terminal is already open and will not be re-openend.",
 						"Terminal Warning",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
-						);
+					);
 					OnTimedStatusTextRequest("Terminal not re-opened.");
 					return (false);
 				}

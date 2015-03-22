@@ -410,13 +410,13 @@ namespace YAT.Model.Types
 			get
 			{
 				return
-					(
+				(
 					IsDefined &&
 					!IsFilePath &&
 					(this.commandLines != null) &&
 					(this.commandLines.Length >= 1) &&
 					(this.commandLines[0] != null)
-					);
+				);
 			}
 		}
 

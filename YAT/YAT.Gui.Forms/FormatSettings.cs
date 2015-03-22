@@ -329,13 +329,14 @@ namespace YAT.Gui.Forms
 					catch (ArgumentException)
 					{
 						DialogResult result = MessageBoxEx.Show
-							(
+						(
 							this,
 							"Font '" + fd.Font.Name + "' does not support regular style. Choose a different font.",
 							"Font Not Supported",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Exclamation
-							);
+						);
+
 						cancel = (result != DialogResult.OK);
 					}
 				}

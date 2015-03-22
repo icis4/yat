@@ -595,11 +595,11 @@ namespace YAT.Domain.Parser
 					default:
 					{
 						formatException = new FormatException
-							(
+						(
 							@"Character '" + (char)parseChar + "'" +
 							@"[\d(" + parseChar + ")] is " +
 							@"not a valid character"
-							);
+						);
 						return (false);
 					}
 				}

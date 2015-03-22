@@ -216,13 +216,13 @@ namespace MKY.IO.Ports
 		public override string ToString()
 		{
 			return
-				(
+			(
 				((BaudRateEx) BaudRate) + ", " +
 				((DataBitsEx) DataBits) + ", " +
 				((ParityEx)   Parity)   + ", " +
 				((StopBitsEx) StopBits) + ", " +
 				((HandshakeEx)Handshake).ToShortString()
-				);
+			);
 		}
 
 		/// <summary>

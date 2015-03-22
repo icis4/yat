@@ -139,13 +139,13 @@ namespace YAT.Gui.Controls
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Length must be at least 1 byte!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 					e.Cancel = true;
 				}
 			}
@@ -211,13 +211,13 @@ namespace YAT.Gui.Controls
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Line break timeout must be a positive number!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 					e.Cancel = true;
 				}
 			}

@@ -269,13 +269,13 @@ namespace YAT.Gui.Controls
 								"The setting has been defaulted to the first available device.";
 
 							MessageBoxEx.Show
-								(
+							(
 								this,
 								message,
 								"USB device not available",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
-								);
+							);
 						}
 					}
 				}
@@ -286,13 +286,13 @@ namespace YAT.Gui.Controls
 					DeviceInfo = null;
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"No Ser/HID capable USB devices available.",
 						"No USB Ser/HID devices",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
-						);
+					);
 				}
 
 				this.isSettingControls.Leave();

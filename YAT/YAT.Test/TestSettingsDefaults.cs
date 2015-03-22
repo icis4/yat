@@ -47,32 +47,32 @@ namespace YAT.Test
 
 			// MKY.IO.Ports.Test
 			CreateAssemblySections
-				(
+			(
 				c,
 				MKY.IO.Ports.Test.SettingsConstants.ConfigurationGroupName,
 				MKY.IO.Ports.Test.SettingsConstants.ConfigurationsGroupName,
 				new MKY.IO.Ports.Test.SettingsSection()
-				);
+			);
 
 			// MKY.IO.Serial.Test
 
 			// MKY.IO.Usb.Test
 			CreateAssemblySections
-				(
+			(
 				c,
 				MKY.IO.Usb.Test.SettingsConstants.ConfigurationGroupName,
 				MKY.IO.Usb.Test.SettingsConstants.ConfigurationsGroupName,
 				new MKY.IO.Usb.Test.SettingsSection()
-				);
+			);
 
 			// MKY.Net.Test
 			CreateAssemblySections
-				(
+			(
 				c,
 				MKY.Net.Test.SettingsConstants.ConfigurationGroupName,
 				MKY.Net.Test.SettingsConstants.ConfigurationsGroupName,
 				new MKY.Net.Test.SettingsSection()
-				);
+			);
 
 			// MKY.Test
 			// MKY.Windows.Forms.Test

@@ -235,13 +235,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"There must be at least 1 line displayed!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -336,13 +336,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Chunk size must be at least 1 byte!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -374,13 +374,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Delay must be at least 1 ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -400,13 +400,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Delay must be at least 1 ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -437,13 +437,13 @@ namespace YAT.Gui.Forms
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Repeat must be at least 2 times! Or set to " + repeatInfinite + " for infinite repeating.",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}

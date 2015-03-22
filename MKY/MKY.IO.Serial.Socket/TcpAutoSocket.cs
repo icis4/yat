@@ -662,10 +662,10 @@ namespace MKY.IO.Serial.Socket
 			else
 			{
 				AutoSocketError
-					(
+				(
 					"AutoSocket could neither be started as client nor server," + Environment.NewLine +
 					"TCP/IP address/port is not available."
-					);
+				);
 			}
 		}
 

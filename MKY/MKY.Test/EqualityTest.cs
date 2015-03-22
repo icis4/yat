@@ -345,9 +345,9 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString()
-					);
+				);
 			}
 
 			/// <summary>
@@ -427,9 +427,9 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString()
-					);
+				);
 			}
 
 			/// <summary>
@@ -673,10 +673,10 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
-					);
+				);
 			}
 
 			/// <summary>
@@ -854,10 +854,10 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
-					);
+				);
 			}
 
 			/// <summary>
@@ -1090,10 +1090,10 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
-					);
+				);
 			}
 
 			/// <summary>
@@ -1239,10 +1239,10 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "        2:Base = " + base.ToString() +
 					Environment.NewLine + "        2:C    = " + this.C.ToString(CultureInfo.InvariantCulture)
-					);
+				);
 			}
 
 			/// <summary>
@@ -1486,10 +1486,10 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
-					);
+				);
 			}
 
 			/// <summary>
@@ -1739,10 +1739,10 @@ namespace MKY.Test
 			public override string ToString()
 			{
 				return
-					(
+				(
 					Environment.NewLine + "      1:Base = " + base.ToString() +
 					Environment.NewLine + "      1:B    = " + B.ToString(CultureInfo.InvariantCulture)
-					);
+				);
 			}
 
 			/// <summary>

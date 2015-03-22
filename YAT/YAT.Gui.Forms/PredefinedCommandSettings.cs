@@ -592,13 +592,13 @@ namespace YAT.Gui.Forms
 		private void ShowHelp()
 		{
 			MessageBoxEx.Show
-				(
+			(
 				this,
 				"Command Format:" + Environment.NewLine + Environment.NewLine + Domain.Parser.Parser.FormatHelp,
 				"Command Format Help",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
-				);
+			);
 		}
 
 		#endregion

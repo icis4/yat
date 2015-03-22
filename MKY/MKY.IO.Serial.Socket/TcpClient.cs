@@ -507,7 +507,7 @@ namespace MKY.IO.Serial.Socket
 			StartDataSentThread();
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
-				(
+			(
 				ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 				(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
 				ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
@@ -516,7 +516,7 @@ namespace MKY.IO.Serial.Socket
 				SocketDefaults.MessageBufferSize,
 				Timeout.Infinite,
 				Timeout.Infinite
-				);
+			);
 
 			this.socket.AddConnector("MKY TCP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously

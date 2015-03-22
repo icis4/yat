@@ -134,11 +134,11 @@ namespace YAT.Settings.Application
 			try
 			{
 				staticSettingsHandler = new ApplicationSettingsHandler<EmptySettingsItem, LocalUserSettingsRoot, EmptySettingsItem>
-					(
+				(
 					ApplicationSettingsFileAccess.None,
 					fileAccess,
 					ApplicationSettingsFileAccess.None
-					);
+				);
 
 				return (true);
 			}

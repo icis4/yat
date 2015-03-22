@@ -309,13 +309,13 @@ namespace YAT.Gui.Controls
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Serial port name is invalid",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 					e.Cancel = true;
 				}
 			}
@@ -468,13 +468,13 @@ namespace YAT.Gui.Controls
 									"The setting has been defaulted to the first available port.";
 
 								MessageBoxEx.Show
-									(
+								(
 									this,
 									message,
 									"Serial COM port not available",
 									MessageBoxButtons.OK,
 									MessageBoxIcon.Warning
-									);
+								);
 							}
 						}
 					}
@@ -489,13 +489,13 @@ namespace YAT.Gui.Controls
 							"Check the serial COM ports of your system.";
 
 						MessageBoxEx.Show
-							(
+						(
 							this,
 							message,
 							"No serial COM ports",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
-							);
+						);
 					}
 				}
 				catch
@@ -506,13 +506,13 @@ namespace YAT.Gui.Controls
 						"If you cannot solve the issue, tell YAT not to detect ports that are in use. To do so, go to 'File > Preferences...' and disable 'detect ports that are in use'.";
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Error with serial COM ports",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 				}
 
 				this.isSettingControls.Leave();

@@ -110,13 +110,13 @@ namespace YAT.Gui.Utilities
 				}
 
 				MessageBoxEx.Show
-					(
+				(
 					owner,
 					sb.ToString(),
 					"Invalid " + description,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation
-					);
+				);
 
 				return (false);
 			}
