@@ -73,7 +73,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Creates new port settings with specified argument.
+		/// Creates new port settings with specified arguments.
 		/// </summary>
 		public SerialPortSettings(BaudRate baudRate, DataBits dataBits, Parity parity, StopBits stopBits, Handshake handshake)
 		{
@@ -85,7 +85,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Creates new port settings from "rhs".
+		/// Creates new port settings from <paramref name="rhs"/>.
 		/// </summary>
 		public SerialPortSettings(SerialPortSettings rhs)
 		{
@@ -226,38 +226,25 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Parses s for the first integer number and returns the corresponding port.
+		/// Parses <paramref name="s"/> for serial port settings and returns a corresponding settings object.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static SerialPortSettings Parse(string s)
 		{
-			SerialPortSettings settings = new SerialPortSettings();
-
-			string delimiters = "/,;";
-			string[] sa = s.Split(delimiters.ToCharArray());
-			if (sa.Length == 5)
-			{
-				settings.baudRate  = BaudRateEx .Parse(sa[0]);
-				settings.dataBits  = DataBitsEx .Parse(sa[1]);
-				settings.parity    = ParityEx   .Parse(sa[2]);
-				settings.stopBits  = StopBitsEx .Parse(sa[3]);
-				settings.handshake = HandshakeEx.Parse(sa[4]);
-
-				return (settings);
-			}
-
-			return (null);
+			SerialPortSettings result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' does not specify valid serial port settings"));
 		}
 
 		/// <summary>
-		/// Parses s for the first integer number and returns the corresponding port.
+		/// Tries to parse <paramref name="s"/> for serial port settings and returns a corresponding settings object.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out SerialPortSettings settings)
 		{
@@ -314,7 +301,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Returns port settings summary.
+		/// Returns port settings as a single string. The string is limited to the basic settings.
 		/// </summary>
 		public virtual string ToShortString()
 		{
@@ -322,22 +309,7 @@ namespace MKY.IO.Ports
 			(
 				((BaudRateEx)this.baudRate).ToString() + ", " +
 				((DataBitsEx)this.dataBits).ToString() + ", " +
-				((ParityEx)this.parity).ToShortString()
-			);
-		}
-
-		/// <summary>
-		/// Returns port settings summary.
-		/// </summary>
-		public virtual string ToLongString()
-		{
-			return
-			(
-				((BaudRateEx)this.baudRate).ToString() + ", " +
-				((DataBitsEx)this.dataBits).ToString() + ", " +
-				((ParityEx)this.parity).ToShortString() + ", " +
-				((StopBitsEx)this.stopBits).ToString() + ", " +
-				((HandshakeEx)this.handshake).ToShortString()
+				((ParityEx)  this.parity)  .ToShortString()
 			);
 		}
 

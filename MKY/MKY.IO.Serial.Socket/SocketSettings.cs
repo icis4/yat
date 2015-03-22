@@ -112,10 +112,32 @@ namespace MKY.IO.Serial.Socket
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Creates new port settings with defaults.
+		/// </summary>
 		public SocketSettings()
 		{
 			SetMyDefaults();
+			ClearChanged();
+		}
+
+		/// <summary>
+		/// Creates new port settings with specified arguments.
+		/// </summary>
+		public SocketSettings(SocketHostType hostType, string remoteHost, int remoteTcpPort, int remoteUdpPort, string localInterface, int localTcpPort, int localUdpPort, AutoRetry tcpClientAutoReconnect)
+		{
+			HostType               = hostType;
+
+			RemoteHost             = remoteHost;
+			RemoteTcpPort          = remoteTcpPort;
+			RemoteUdpPort          = remoteUdpPort;
+
+			LocalInterface         = localInterface;
+			LocalTcpPort           = localTcpPort;
+			LocalUdpPort           = localUdpPort;
+
+			TcpClientAutoReconnect = tcpClientAutoReconnect;
+
 			ClearChanged();
 		}
 
@@ -127,6 +149,9 @@ namespace MKY.IO.Serial.Socket
 			ClearChanged();
 		}
 
+		/// <summary>
+		/// Creates new port settings from <paramref name="rhs"/>.
+		/// </summary>
 		/// <remarks>
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
@@ -475,6 +500,75 @@ namespace MKY.IO.Serial.Socket
 				this.tcpClientAutoReconnect
 			);
 		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for socket settings and returns a corresponding settings object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static SocketSettings Parse(string s)
+		{
+			SocketSettings result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' does not specify valid socket settings"));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for socket settings and returns a corresponding settings object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SocketSettings settings)
+		{
+			string delimiters = "/,;";
+			string[] sa = s.Trim().Split(delimiters.ToCharArray());
+			if (sa.Length == 5)
+			{
+				SocketHostTypeEx hostType;
+				if (SocketHostTypeEx.TryParse(sa[0], out hostType))
+				{
+					string remoteHost = sa[1].Trim();
+
+					int remoteTcpPort;
+					if (int.TryParse(sa[2], out remoteTcpPort))
+					{
+						int remoteUdpPort;
+						if (int.TryParse(sa[3], out remoteUdpPort))
+						{
+							string localInterface = sa[4].Trim();
+
+							int localTcpPort;
+							if (int.TryParse(sa[5], out localTcpPort))
+							{
+								int localUdpPort;
+								if (int.TryParse(sa[6], out localUdpPort))
+								{
+									bool arEnabled;
+									if (bool.TryParse(sa[7], out arEnabled))
+									{
+										int arInterval;
+										if (int.TryParse(sa[8], out arInterval))
+										{
+											AutoRetry ar = new AutoRetry(arEnabled, arInterval);
+											settings = new SocketSettings(hostType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localTcpPort, localUdpPort, ar);
+											return (true);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			settings = null;
+			return (false);
+		}
+
 
 		#region Object Members > Extensions
 		//------------------------------------------------------------------------------------------
