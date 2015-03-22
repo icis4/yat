@@ -484,7 +484,7 @@ namespace MKY.IO.Serial.Socket
 			StartDataSentThread();
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer
-				(
+			(
 				ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 				(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
 				ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
@@ -493,7 +493,7 @@ namespace MKY.IO.Serial.Socket
 				SocketDefaults.MessageBufferSize,
 				Timeout.Infinite,
 				Timeout.Infinite
-				);
+			);
 
 			this.socket.AddListener("MKY TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously.

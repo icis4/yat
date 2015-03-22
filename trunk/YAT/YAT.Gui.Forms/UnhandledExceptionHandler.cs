@@ -149,13 +149,13 @@ namespace YAT.Gui.Forms
 			else
 			{
 				MessageBoxEx.Show
-					(
+				(
 					owner,
 					originMessage,
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 			}
 
 			if (mayBeContinued)

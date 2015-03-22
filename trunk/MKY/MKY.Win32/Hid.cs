@@ -733,7 +733,7 @@ namespace MKY.Win32
 		public static bool CreateSharedQueryOnlyDeviceHandle(string devicePath, out SafeFileHandle deviceHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
-				(
+			(
 				devicePath,
 				FileIO.NativeTypes.Access.QUERY_ONLY,
 				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
@@ -741,7 +741,7 @@ namespace MKY.Win32
 				FileIO.NativeTypes.CreationDisposition.OPEN_EXISTING,
 				FileIO.NativeTypes.AttributesAndFlags.NONE,
 				IntPtr.Zero
-				);
+			);
 
 			if (!h.IsInvalid)
 			{
@@ -767,7 +767,7 @@ namespace MKY.Win32
 		public static bool CreateSharedReadWriteHandle(string devicePath, out SafeFileHandle readHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
-				(
+			(
 				devicePath,
 				FileIO.NativeTypes.Access.GENERIC_READ_WRITE,
 				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
@@ -775,7 +775,7 @@ namespace MKY.Win32
 				FileIO.NativeTypes.CreationDisposition.OPEN_EXISTING,
 				FileIO.NativeTypes.AttributesAndFlags.FLAG_OVERLAPPED,
 				IntPtr.Zero
-				);
+			);
 
 			if (!h.IsInvalid)
 			{

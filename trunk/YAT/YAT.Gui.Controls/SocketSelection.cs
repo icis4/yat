@@ -389,13 +389,13 @@ namespace YAT.Gui.Controls
 								"System error message:" + Environment.NewLine + ex.Message;
 
 							MessageBoxEx.Show
-								(
+							(
 								this,
 								message,
 								"Invalid Input",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Error
-								);
+							);
 
 							e.Cancel = true;
 						}
@@ -436,13 +436,13 @@ namespace YAT.Gui.Controls
 						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".";
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -487,13 +487,13 @@ namespace YAT.Gui.Controls
 						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".";
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}
@@ -580,13 +580,13 @@ namespace YAT.Gui.Controls
 								"The setting has been defaulted to the first available interface.";
 
 							MessageBoxEx.Show
-								(
+							(
 								this,
 								message,
 								"Interface not available",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
-								);
+							);
 						}
 					}
 				}
@@ -597,13 +597,13 @@ namespace YAT.Gui.Controls
 					LocalInterface = null;
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"No local network interfaces available, check network system settings.",
 						"No interfaces",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
-						);
+					);
 				}
 
 				this.isSettingControls.Leave();

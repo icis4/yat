@@ -120,7 +120,7 @@ namespace MKY.Win32
 		public static bool GetUsbHandle(string devicePath, out SafeFileHandle usbHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
-				(
+			(
 				devicePath,
 				FileIO.NativeTypes.Access.GENERIC_READ_WRITE,
 				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
@@ -128,7 +128,7 @@ namespace MKY.Win32
 				FileIO.NativeTypes.CreationDisposition.OPEN_EXISTING,
 				FileIO.NativeTypes.AttributesAndFlags.FLAG_OVERLAPPED,
 				IntPtr.Zero
-				);
+			);
 
 			if (!h.IsInvalid)
 			{

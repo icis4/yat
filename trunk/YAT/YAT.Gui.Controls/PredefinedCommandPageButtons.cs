@@ -276,12 +276,12 @@ namespace YAT.Gui.Controls
 		private void CommandRequest(int command)
 		{
 			bool isDefined =
-				(
+			(
 				(this.commands != null) &&
 				(this.commands.Count >= command) &&
 				(this.commands[command - 1] != null) &&
 				(this.commands[command - 1].IsDefined)
-				);
+			);
 
 			if (isDefined)
 				RequestSendCommand(command);

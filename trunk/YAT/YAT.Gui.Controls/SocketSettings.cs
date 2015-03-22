@@ -196,13 +196,13 @@ namespace YAT.Gui.Controls
 				else
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 
 					e.Cancel = true;
 				}

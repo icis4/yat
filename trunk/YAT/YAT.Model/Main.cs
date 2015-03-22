@@ -361,12 +361,12 @@ namespace YAT.Model
 							sb.AppendLine("A new empty workspace will be created.");
 
 							OnMessageInputRequest
-								(
+							(
 								sb.ToString(),
 								"Workspace File Error",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Stop
-								);
+							);
 
 							// Do not yet create a new empty workspace, it will be created when
 							// needed. Not creating it now allows the user to exit YAT, restore
@@ -982,13 +982,13 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Unknown file type!");
 				OnMessageInputRequest
-					(
+				(
 					"File" + Environment.NewLine + filePath + Environment.NewLine +
 					"has unknown type!",
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
-					);
+				);
 				OnTimedStatusTextRequest("No file opened!");
 				return (false);
 			}
@@ -1182,35 +1182,35 @@ namespace YAT.Model
 				if (ex is System.Xml.XmlException)
 				{
 					OnMessageInputRequest
-						(
+					(
 						"Unable to open file" + Environment.NewLine + filePath   + Environment.NewLine + Environment.NewLine +
 						"XML error message:"  + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message:" + Environment.NewLine + ex.InnerException.Message,
 						"Invalid Workspace File",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Stop
-						);
+					);
 				}
 				else if (ex is Exception)
 				{
 					OnMessageInputRequest
-						(
+					(
 						"Unable to open file"   + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 						"System error message:" + Environment.NewLine + ex.Message,
 						"Invalid Workspace File",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Stop
-						);
+					);
 				}
 				else
 				{
 					OnMessageInputRequest
-						(
+					(
 						"Unable to open file" + Environment.NewLine + filePath,
 						"Invalid Workspace File",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Stop
-						);
+					);
 				}
 				OnTimedStatusTextRequest("No workspace opened!");
 				return (false);
@@ -1302,12 +1302,12 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Workspace is already open.");
 					OnMessageInputRequest
-						(
+					(
 						"Workspace is already open and will not be re-openend.",
 						"Workspace Warning",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
-						);
+					);
 					OnTimedStatusTextRequest("Workspace not re-opened.");
 					return (false);
 				}

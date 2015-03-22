@@ -326,13 +326,13 @@ namespace YAT.Gui.Forms
 		{
 			// \fixme: Replace MessageBox with a real help.
 			MessageBoxEx.Show
-				(
+			(
 				this,
 				YAT.Gui.Controls.TerminalSelection.NewTerminalHelpText,
 				"New Terminal Help",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
-				);
+			);
 		}
 
 		#endregion

@@ -365,13 +365,13 @@ namespace YAT.Gui.Controls
 			else
 			{
 				MessageBoxEx.Show
-					(
+				(
 					this,
 					"File does not exist, no data has been sent!",
 					"No File",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
-					);
+				);
 			}
 		}
 

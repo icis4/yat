@@ -430,34 +430,34 @@ namespace MKY.Settings
 			if (typeof(TCommonSettings) != typeof(EmptySettingsItem))
 			{
 				this.commonSettings = new Handler<TCommonSettings>
-					(
+				(
 					CommonName,
 					Application.CommonAppDataPath + Path.DirectorySeparatorChar + CommonFileName,
 					commonSettingsFileAccess,
 					GetType()
-					);
+				);
 			}
 
 			if (typeof(TLocalUserSettings) != typeof(EmptySettingsItem))
 			{
 				this.localUserSettings = new Handler<TLocalUserSettings>
-					(
+				(
 					LocalUserName,
 					Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + LocalUserFileName,
 					localUserSettingsFileAccess,
 					GetType()
-					);
+				);
 			}
 
 			if (typeof(TRoamingUserSettings) != typeof(EmptySettingsItem))
 			{
 				this.roamingUserSettings = new Handler<TRoamingUserSettings>
-					(
+				(
 					RoamingUserName,
 					Application.UserAppDataPath + Path.DirectorySeparatorChar + RoamingUserFileName,
 					roamingUserSettingsFileAccess,
 					GetType()
-					);
+				);
 			}
 		}
 

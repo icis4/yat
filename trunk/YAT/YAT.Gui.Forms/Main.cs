@@ -236,13 +236,13 @@ namespace YAT.Gui.Forms
 								@"Use """ + executableName + @" /?"" for command line help.";
 
 							MessageBoxEx.Show
-								(
+							(
 								this,
 								message,
 								"Invalid Command Line",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
-								);
+							);
 						}
 						break;
 					}
@@ -252,13 +252,13 @@ namespace YAT.Gui.Forms
 						if (showErrorModally)
 						{
 							MessageBoxEx.Show
-								(
+							(
 								this,
 								ApplicationInfo.ProductName + " could not successfully be started with the given settings in the current environment!",
 								"Start Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
-								);
+							);
 						}
 						break;
 					}
@@ -268,13 +268,13 @@ namespace YAT.Gui.Forms
 						if (showErrorModally)
 						{
 							MessageBoxEx.Show
-								(
+							(
 								this,
 								ApplicationInfo.ProductName + " could not successfully execute the requested operation!",
 								"Execution Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
-								);
+							);
 						}
 						break;
 					}

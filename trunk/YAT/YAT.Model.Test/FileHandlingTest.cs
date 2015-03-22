@@ -515,14 +515,14 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 not opened from file!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2, terminal3 },
 					new bool[]     { true,      true,      true      }, // Exists.
 					new bool[]     { false,     true,      true      }  // Auto.
-					);
+				);
 
 				string autoTerminal3FilePath = terminal3.SettingsFilePath;
 				success = terminal3.Close();
@@ -534,14 +534,14 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
-					);
+				);
 			}
 			#endregion
 
@@ -565,14 +565,14 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
-					);
+				);
 
 				success = workspace.Save();
 				Assert.IsTrue(success, uc + "Workspace could not be saved!");
@@ -582,14 +582,14 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
-					);
+				);
 			}
 			#endregion
 
@@ -614,14 +614,14 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
-					);
+				);
 
 				// Install callback handler that sets the normal file path for terminal 2:
 				terminal2.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal2_SaveAsFileDialogRequest_SaveAs);
@@ -635,7 +635,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(File.Exists(autoTerminal2FilePath), uc + "Auto terminal 2 file not deleted!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
@@ -643,13 +643,13 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     false     }  // Auto.
-					);
+				);
 
 				success = (main.Exit() == Main.Result.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
@@ -657,7 +657,7 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     false     }  // Auto.
-					);
+				);
 			}
 			#endregion
 
@@ -681,7 +681,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal2, uc + "Terminal 2 not opened from file!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
@@ -689,7 +689,7 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     false     }  // Auto.
-					);
+				);
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal 3 could not be created!");
@@ -705,7 +705,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
@@ -713,7 +713,7 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2, terminal3 },
 					new bool[]     { true,      true,      true      }, // Exists.
 					new bool[]     { false,     false,     false     }  // Auto.
-					);
+				);
 			}
 			#endregion
 
@@ -739,7 +739,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 not opened from file!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
@@ -747,7 +747,7 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2, terminal3 },
 					new bool[]     { true,      true,      true      }, // Exists.
 					new bool[]     { false,     false,     false     }  // Auto.
-					);
+				);
 
 				success = terminal3.Close();
 				Assert.IsTrue(success, uc + "Terminal 3 could not be closed!");
@@ -757,7 +757,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
@@ -765,7 +765,7 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2, terminal3 },
 					new bool[]     { true,      true,      true      }, // Exists.
 					new bool[]     { false,     false,     false     }  // Auto.
-					);
+				);
 			}
 			#endregion
 		}
@@ -822,14 +822,14 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     false     }  // Auto.
-					);
+				);
 			}
 			#endregion
 
@@ -894,14 +894,14 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					uc,
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     true      }  // Auto.
-					);
+				);
 			}
 			#endregion
 
@@ -1524,7 +1524,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles
-					(
+				(
 					step,
 					workspace,
 					true,
@@ -1532,7 +1532,7 @@ namespace YAT.Model.Test
 					new Terminal[] { terminal1, terminal2 },
 					new bool[]     { true,      true      }, // Exists.
 					new bool[]     { false,     false     }  // Auto.
-					);
+				);
 
 				string filePath = this.normalWorkspaceFilePath;
 				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");

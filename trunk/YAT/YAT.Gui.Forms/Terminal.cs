@@ -2467,13 +2467,13 @@ namespace YAT.Gui.Forms
 					"System error message:"       + Environment.NewLine + e.Message;
 
 				MessageBoxEx.Show
-					(
+				(
 					this,
 					message,
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
-					);
+				);
 
 				SetTimedStatusText("Data not saved!");
 			}
@@ -2523,13 +2523,13 @@ namespace YAT.Gui.Forms
 						"System error message:" + Environment.NewLine + ex.Message;
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Print Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
-						);
+					);
 
 					SetTimedStatusText("Data not printed!");
 				}
@@ -2985,13 +2985,13 @@ namespace YAT.Gui.Forms
 				if (showErrorModally)
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						e.Message,
 						"Terminal Warning",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
-						);
+					);
 				}
 			}
 			else
@@ -3001,13 +3001,13 @@ namespace YAT.Gui.Forms
 				if (showErrorModally)
 				{
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						e.Message,
 						"Terminal Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
 				}
 			}
 		}

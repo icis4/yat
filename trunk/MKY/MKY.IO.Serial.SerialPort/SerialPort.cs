@@ -411,10 +411,10 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				return
-					(
+				(
 						!IsDisposed && IsStarted && !IsOpen &&
 						this.settings.AutoReopen.Enabled
-					);
+				);
 			}
 		}
 
@@ -924,11 +924,11 @@ namespace MKY.IO.Serial.SerialPort
 							if ((this.sendQueue.Count > 0) && isOutputBreak && !isOutputBreakOldAndErrorHasBeenSignaled)
 							{
 								OnIOError(new IOErrorEventArgs
-									(
+								(
 									ErrorSeverity.Acceptable,
 									Direction.Output,
 									"No data can be sent while port is in output break state")
-									);
+								);
 
 								isOutputBreakOldAndErrorHasBeenSignaled = true;
 							}

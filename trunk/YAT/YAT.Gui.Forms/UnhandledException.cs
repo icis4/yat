@@ -121,13 +121,14 @@ namespace YAT.Gui.Forms
 						"Ensure that clipboard is not in use and try again.";
 
 					DialogResult userInput = MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Clipboard Error",
 						MessageBoxButtons.RetryCancel,
 						MessageBoxIcon.Error
-						);
+					);
+
 					retry = (userInput == DialogResult.Retry);
 				}
 				catch (ThreadStateException)
@@ -137,13 +138,14 @@ namespace YAT.Gui.Forms
 						"Copy the exception information manually.";
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Asynchronous Thread",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Information
-						);
+					);
+
 					retry = false;
 				}
 				catch (Exception ex)
@@ -154,13 +156,14 @@ namespace YAT.Gui.Forms
 						"System error message:" + Environment.NewLine + ex.Message;
 
 					MessageBoxEx.Show
-						(
+					(
 						this,
 						message,
 						"Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
-						);
+					);
+
 					retry = false;
 				}
 			}

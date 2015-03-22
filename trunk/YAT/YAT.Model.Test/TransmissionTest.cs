@@ -714,11 +714,11 @@ namespace YAT.Model.Test
 		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
 		{
 			Assert.Fail
-				(
+			(
 				"Unexpected message input request:" + Environment.NewLine + Environment.NewLine +
 				e.Caption + Environment.NewLine + Environment.NewLine +
 				e.Text
-				);
+			);
 		}
 
 		#endregion
