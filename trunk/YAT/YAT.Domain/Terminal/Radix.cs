@@ -172,58 +172,65 @@ namespace YAT.Domain
 
 		#region Parse
 
-		/// <summary></summary>
-		public static RadixEx Parse(string radix)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static RadixEx Parse(string s)
 		{
 			RadixEx result;
-
-			if (TryParse(radix, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("radix", radix, "Invalid radix."));
+				throw (new FormatException("'" + s + "' is no valid radix string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string radix, out RadixEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out RadixEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(radix, Bin_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Bin_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Bin_string))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_string))
 			{
 				result = new RadixEx(Radix.Bin);
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Oct_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Oct_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Oct_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_string))
 			{
 				result = new RadixEx(Radix.Oct);
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Dec_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Dec_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Dec_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_string))
 			{
 				result = new RadixEx(Radix.Dec);
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Hex_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Hex_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Hex_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_string))
 			{
 				result = new RadixEx(Radix.Hex);
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Char_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Char_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, Char_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Char_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Char_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Char_string))
 			{
 				result = new RadixEx(Radix.Char);
 				return (false);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(radix, String_stringShort) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, String_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(radix, String_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, String_string))
 			{
 				result = new RadixEx(Radix.String);
 				return (false);

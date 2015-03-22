@@ -107,28 +107,35 @@ namespace YAT.Domain
 
 		#region Parse
 
-		/// <summary></summary>
-		public static TerminalTypeEx Parse(string type)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static TerminalTypeEx Parse(string s)
 		{
 			TerminalTypeEx result;
-
-			if (TryParse(type, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("type", type, "Invalid type."));
+				throw (new FormatException("'" + s + "' is no valid terminal type string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string type, out TerminalTypeEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out TerminalTypeEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(type, Text_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(type, Text_stringShort))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Text_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Text_stringShort))
 			{
 				result = new TerminalTypeEx(TerminalType.Text);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, Binary_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(type, Binary_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Binary_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Binary_stringShort))
 			{
 				result = new TerminalTypeEx(TerminalType.Binary);
 				return (true);

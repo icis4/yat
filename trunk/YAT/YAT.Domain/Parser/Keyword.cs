@@ -137,61 +137,68 @@ namespace YAT.Domain.Parser
 
 		#region Parse
 
-		/// <summary></summary>
-		public static KeywordEx Parse(string keyword)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static KeywordEx Parse(string s)
 		{
 			KeywordEx result;
-
-			if (TryParse(keyword, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("keyword", keyword, "Invalid keyword."));
+				throw (new FormatException("'" + s + "' is no valid keyword string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string keyword, out KeywordEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out KeywordEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(keyword, Clear_string))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
 			{
 				result = new KeywordEx(Keyword.Clear);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, Delay_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Delay_string))
 			{
 				result = new KeywordEx(Keyword.Delay);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, LineDelay_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineDelay_string))
 			{
 				result = new KeywordEx(Keyword.LineDelay);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, LineRepeat_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineRepeat_string))
 			{
 				result = new KeywordEx(Keyword.LineRepeat);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, Eol_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Eol_string))
 			{
 				result = new KeywordEx(Keyword.Eol);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, NoEol_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, NoEol_string))
 			{
 				result = new KeywordEx(Keyword.NoEol);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, OutputBreakOn_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOn_string))
 			{
 				result = new KeywordEx(Keyword.OutputBreakOn);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, OutputBreakOff_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOff_string))
 			{
 				result = new KeywordEx(Keyword.OutputBreakOff);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, OutputBreakToggle_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakToggle_string))
 			{
 				result = new KeywordEx(Keyword.OutputBreakToggle);
 				return (true);

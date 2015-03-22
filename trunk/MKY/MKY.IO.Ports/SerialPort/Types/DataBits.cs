@@ -97,17 +97,27 @@ namespace MKY.IO.Ports
 
 		#region Parse/Form
 
-		/// <summary></summary>
-		public static DataBitsEx Parse(string bits)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static DataBitsEx Parse(string s)
 		{
-			return ((DataBitsEx)int.Parse(bits, CultureInfo.InvariantCulture));
+			DataBitsEx result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' is no valid data bits string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string bits, out DataBitsEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out DataBitsEx result)
 		{
 			int intResult;
-			if (int.TryParse(bits, out intResult))
+			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 				return (TryFrom(intResult, out result));
 
 			result = null;

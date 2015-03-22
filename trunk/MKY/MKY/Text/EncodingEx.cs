@@ -1056,15 +1056,17 @@ namespace MKY.Text
 			return (new EncodingEx((SupportedEncoding)codePage));
 		}
 
-		/// <summary></summary>
-		public static EncodingEx Parse(string encoding)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static EncodingEx Parse(string s)
 		{
 			EncodingEx result;
-
-			if (TryParse(encoding, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("encoding", encoding, "Invalid encoding."));
+				throw (new FormatException("'" + s + "' is no valid encoding string"));
 		}
 
 		/// <summary></summary>
@@ -1073,12 +1075,17 @@ namespace MKY.Text
 			return (Parse(encoding.CodePage));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string encoding, out EncodingEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out EncodingEx result)
 		{
+			s = s.Trim();
+
 			foreach (EncodingInfoEx info in staticInfos)
 			{
-				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.BetterDisplayName))
+				if (StringEx.EqualsOrdinalIgnoreCase(s, info.BetterDisplayName))
 				{
 					result = new EncodingEx(info.SupportedEncoding);
 					return (true);
@@ -1087,13 +1094,13 @@ namespace MKY.Text
 
 			foreach (EncodingInfo info in Encoding.GetEncodings())
 			{
-				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.Name))
+				if (StringEx.EqualsOrdinalIgnoreCase(s, info.Name))
 				{
 					result = new EncodingEx((SupportedEncoding)info.CodePage);
 					return (true);
 				}
 
-				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.DisplayName))
+				if (StringEx.EqualsOrdinalIgnoreCase(s, info.DisplayName))
 				{
 					result = new EncodingEx((SupportedEncoding)info.CodePage);
 					return (true);

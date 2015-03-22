@@ -108,28 +108,35 @@ namespace YAT.Domain
 
 		#region Parse
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public static EndiannessEx Parse(string endianness)
+		public static EndiannessEx Parse(string s)
 		{
 			EndiannessEx result;
-
-			if (TryParse(endianness, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("endianness", endianness, "Invalid endianness."));
+				throw (new FormatException("'" + s + "' is no valid endianness string"));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public static bool TryParse(string endianness, out EndiannessEx result)
+		public static bool TryParse(string s, out EndiannessEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(endianness, BigEndian_string))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, BigEndian_string))
 			{
 				result = new EndiannessEx(Endianness.BigEndian);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(endianness, LittleEndian_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LittleEndian_string))
 			{
 				result = new EndiannessEx(Endianness.LittleEndian);
 				return (true);

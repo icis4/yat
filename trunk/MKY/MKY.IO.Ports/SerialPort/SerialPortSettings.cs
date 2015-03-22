@@ -228,6 +228,10 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding port.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static SerialPortSettings Parse(string s)
 		{
 			SerialPortSettings settings = new SerialPortSettings();
@@ -251,10 +255,14 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding port.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static bool TryParse(string s, out SerialPortSettings settings)
 		{
 			string delimiters = "/,;";
-			string[] sa = s.Split(delimiters.ToCharArray());
+			string[] sa = s.Trim().Split(delimiters.ToCharArray());
 			if (sa.Length == 5)
 			{
 				BaudRateEx baudRate;

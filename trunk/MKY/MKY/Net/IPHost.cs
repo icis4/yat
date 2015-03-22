@@ -144,39 +144,47 @@ namespace MKY.Net
 
 		#region Parse
 
-		/// <summary></summary>
-		public static IPHost Parse(string host)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static IPHost Parse(string s)
 		{
 			IPHost result;
 
-			if (TryParse(host, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("host", host, "Invalid host."));
+				throw (new FormatException("'" + s + "' is no valid host string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string host, out IPHost result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out IPHost result)
 		{
+			s = s.Trim();
+
 			IPAddress address;
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(host, Localhost_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(host, Localhost_stringNice))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice))
 			{
 				result = new IPHost(IPHostType.Localhost);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(host, IPv4Localhost_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv4Localhost_string))
 			{
 				result = new IPHost(IPHostType.IPv4Localhost);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(host, IPv6Localhost_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv6Localhost_string))
 			{
 				result = new IPHost(IPHostType.IPv6Localhost);
 				return (true);
 			}
-			else if (IPAddress.TryParse(host, out address))
+			else if (IPAddress.TryParse(s, out address))
 			{
 				result = new IPHost(address);
 				return (true);

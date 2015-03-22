@@ -67,21 +67,29 @@ namespace MKY.Text
 		/// Converts an escape sequence into according character code. Case-insensitive.
 		/// </summary>
 		/// <exception cref="FormatException">Thrown if escape sequence unknown.</exception>
-		public static byte Parse(string escape)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static byte Parse(string s)
 		{
 			byte result;
-			if (!TryParse(escape, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + escape + "' is no valid escape sequence"));
+				throw (new FormatException("'" + s + "' is no valid escape sequence"));
 		}
 
 		/// <summary>
 		/// Converts an escape sequence into according character code. Case-insensitive.
 		/// </summary>
-		public static bool TryParse(string escape, out byte result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out byte result)
 		{
-			switch (escape.ToUpper(CultureInfo.InvariantCulture))
+			switch (s.Trim().ToUpper(CultureInfo.InvariantCulture))
 			{
 				case @"\0": result = 0x00; return (true);
 				case @"\a": result = 0x07; return (true);

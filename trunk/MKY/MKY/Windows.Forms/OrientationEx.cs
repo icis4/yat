@@ -86,26 +86,33 @@ namespace MKY.Windows.Forms
 
 		#region Parse
 
-		/// <summary></summary>
-		public static OrientationEx Parse(string orientation)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static OrientationEx Parse(string s)
 		{
 			OrientationEx result;
-
-			if (TryParse(orientation, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("orientation", orientation, "Invalid orientation."));
+				throw (new FormatException("'" + s + "' is no valid orientation string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string orientation, out OrientationEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out OrientationEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(orientation, Horizontal_string))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
 			{
 				result = new OrientationEx(Orientation.Horizontal);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(orientation, Vertical_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Vertical_string))
 			{
 				result = new OrientationEx(Orientation.Vertical);
 				return (true);

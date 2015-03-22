@@ -463,24 +463,32 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding device.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static DeviceInfo Parse(string s)
 		{
 			DeviceInfo result;
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(s + " does not specify a valid USB device ID"));
+				throw (new FormatException("'" + s + "' does not specify a valid USB device ID"));
 		}
 
 		/// <summary>
 		/// Tries to parse s for the first integer number and returns the corresponding device.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static bool TryParse(string s, out DeviceInfo result)
 		{
-			Match m;
+			s = s.Trim();
 
 			// e.g. "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
-			m = VendorIdRegex.Match(s);
+			Match m = VendorIdRegex.Match(s);
 			if (m.Success)
 			{
 				int vendorId;

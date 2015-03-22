@@ -131,21 +131,29 @@ namespace MKY.Text
 		/// Converts an ASCII mnemonic into according code. Case-insensitive.
 		/// </summary>
 		/// <exception cref="FormatException">Thrown if mnemonic unknown.</exception>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="mnemonic"/>.
+		/// </remarks>
 		public static byte Parse(string mnemonic)
 		{
 			byte result;
-			if (!TryParse(mnemonic, out result))
+			if (TryParse(mnemonic, out result))
 				return (result);
 			else
-				throw (new FormatException("Mnemonic '" + mnemonic + "' is no ASCII control mnemonic"));
+				throw (new FormatException("'" + mnemonic + "' is no ASCII control mnemonic"));
 		}
 
 		/// <summary>
 		/// Converts an ASCII mnemonic into according code. Case-insensitive.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="mnemonic"/>.
+		/// </remarks>
 		public static bool TryParse(string mnemonic, out byte result)
 		{
-			switch (mnemonic.ToUpper(CultureInfo.InvariantCulture))
+			switch (mnemonic.Trim().ToUpper(CultureInfo.InvariantCulture))
 			{
 				case "NUL": result = 0x00; return (true);
 				case "SOH": result = 0x01; return (true);

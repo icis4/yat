@@ -119,43 +119,50 @@ namespace MKY.IO.Ports
 
 		#region Parse
 
-		/// <summary></summary>
-		public static HandshakeEx Parse(string handshake)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static HandshakeEx Parse(string s)
 		{
 			HandshakeEx result;
-
-			if (TryParse(handshake, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("handshake", handshake, "Invalid handshake."));
+				throw (new FormatException("'" + s + "' is no valid handshake string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string handshake, out HandshakeEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out HandshakeEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase   (handshake, None_string) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, None_stringAlternatives))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.None);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (handshake, RfrCts_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (handshake, RfrCts_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, RfrCts_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RfrCts_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, RfrCts_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RfrCts_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.RequestToSend);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (handshake, XOnXOff_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (handshake, XOnXOff_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, XOnXOff_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, XOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, XOnXOff_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, XOnXOff_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.XOnXOff);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (handshake, RfrCtsXOnXOff_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (handshake, RfrCtsXOnXOff_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, RfrCtsXOnXOff_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RfrCtsXOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, RfrCtsXOnXOff_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RfrCtsXOnXOff_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.RequestToSendXOnXOff);
 				return (true);

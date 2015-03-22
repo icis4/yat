@@ -113,13 +113,39 @@ namespace YAT.Domain
 
 		#region Parse
 
-		/// <summary></summary>
-		public static new ControlCharRadixEx Parse(string radix)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static new ControlCharRadixEx Parse(string s)
 		{
-			if (StringEx.EqualsOrdinalIgnoreCase(radix, AsciiMnemonic_string))
-				return (new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic));
+			ControlCharRadixEx result;
+			if (TryParse(s, out result))
+				return (result);
 			else
-				return ((ControlCharRadixEx)RadixEx.Parse(radix));
+				throw (new FormatException("'" + s + "' is no valid control char radix string"));
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out ControlCharRadixEx result)
+		{
+			s = s.Trim();
+
+			if (StringEx.EqualsOrdinalIgnoreCase(s, AsciiMnemonic_string))
+			{
+				result = new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic);
+				return (false);
+			}
+			else
+			{
+				RadixEx radix;
+				bool ret = RadixEx.TryParse(s, out radix);
+				result = (ControlCharRadixEx)radix;
+				return (ret);
+			}
 		}
 
 		#endregion

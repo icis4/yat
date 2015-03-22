@@ -93,17 +93,27 @@ namespace MKY.IO.Ports
 
 		#region Parse/From
 
-		/// <summary></summary>
-		public static StopBitsEx Parse(string bits)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static StopBitsEx Parse(string s)
 		{
-			return ((StopBitsEx)(double.Parse(bits, CultureInfo.InvariantCulture)));
+			StopBitsEx result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' is no valid stop bits string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string bits, out StopBitsEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out StopBitsEx result)
 		{
 			double doubleResult;
-			if (double.TryParse(bits, out doubleResult))
+			if (double.TryParse(s, out doubleResult)) // TryParse() trims whitespace.
 				return (TryFrom(doubleResult, out result));
 
 			result = null;

@@ -81,16 +81,16 @@ namespace MKY
 	///         return (a.ToArray());
 	///     }
 	///
-	///     public static ModeEx Parse(string mode)
+	///     public static ModeEx Parse(string s)
 	///     {
-	///         return ((ModeEx)int.Parse(mode));
+	///         return ((ModeEx)int.Parse(s));
 	///     }
 	///
-	///     public static bool TryParse(string mode, out ModeEx result)
+	///     public static bool TryParse(string s, out ModeEx result)
 	///     {
 	///         int intResult;
 	///
-	///         if (int.TryParse(mode, out intResult))
+	///         if (int.TryParse(s.Trim(), out intResult))
 	///         {
 	///             result = (ModeEx)intResult;
 	///             return (true);

@@ -114,46 +114,53 @@ namespace MKY.IO.Ports
 
 		#region Parse
 
-		/// <summary></summary>
-		public static ParityEx Parse(string parity)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static ParityEx Parse(string s)
 		{
 			ParityEx result;
-
-			if (TryParse(parity, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("parity", parity, "Invalid parity."));
+				throw (new FormatException("'" + s + "' is no valid parity string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string parity, out ParityEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out ParityEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(parity, Even_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(parity, Even_stringShort))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Even_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Even_stringShort))
 			{
 				result = new ParityEx(Parity.Even);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(parity, Odd_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(parity, Odd_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Odd_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Odd_stringShort))
 			{
 				result = new ParityEx(Parity.Odd);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(parity, None_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(parity, None_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringShort))
 			{
 				result = new ParityEx(Parity.None);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(parity, Mark_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(parity, Mark_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Mark_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Mark_stringShort))
 			{
 				result = new ParityEx(Parity.Mark);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(parity, Space_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(parity, Space_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringShort))
 			{
 				result = new ParityEx(Parity.Space);
 				return (true);
