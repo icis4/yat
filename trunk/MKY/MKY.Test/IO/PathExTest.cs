@@ -465,9 +465,29 @@ namespace MKY.Test.IO
 		// Tests
 		//==========================================================================================
 
-		#region Tests > Combine()
+		#region Tests > Append...()
 		//------------------------------------------------------------------------------------------
-		// Tests > Combine()
+		// Tests > Append...()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestAppendPostfixToFileName()
+		{
+			string postfix             =                 "_1";
+			string filePath            = @"X:\MyDir\MyFile.abc";
+			string filePathWithPostfix = @"X:\MyDir\MyFile_1.abc";
+
+			filePath = PathEx.AppendPostfixToFileName(filePath, postfix);
+
+			Assert.AreEqual(filePathWithPostfix, filePath, "AppendPostfixToFileName() has failed");
+		}
+
+		#endregion
+
+		#region Tests > Combine...()
+		//------------------------------------------------------------------------------------------
+		// Tests > Combine...()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -528,9 +548,9 @@ namespace MKY.Test.IO
 
 		#endregion
 
-		#region Tests > Compare()
+		#region Tests > Compare...()
 		//------------------------------------------------------------------------------------------
-		// Tests > Compare()
+		// Tests > Compare...()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
