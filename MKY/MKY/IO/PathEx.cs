@@ -69,7 +69,92 @@ namespace MKY.IO
 
 		#endregion
 
-		#region LimitPath()
+		#region InvalidPathRoot
+
+		/// <summary>
+		/// Returns an invalid path root.
+		/// </summary>
+		public static string InvalidPathRoot
+		{
+			get
+			{
+				if (EnvironmentEx.IsWindows)
+				{
+					// Explicitly implemented to emphasize logic and order of the operation below.
+					// Do not use A, B and C because they have a dedicated meaning on Windows.
+					// Implemented as const string to improve performance when calling this method.
+					const string RootLetters = @"Z Y X W V U T S R Q P O N M L K J I H G F E D";
+					List<string> existingPathRoots = new List<string>(Directory.GetLogicalDrives());
+					foreach (string rootLetter in RootLetters.Split())
+					{
+						string currentPathRoot = rootLetter + Path.VolumeSeparatorChar + Path.DirectorySeparatorChar;
+						if (!existingPathRoots.Contains(currentPathRoot))
+							return (currentPathRoot);
+					}
+
+					// All local path roots seem valid, create a random remote path root:
+					while (true)
+					{
+						// E.g. \\SomeRandName\
+						string randomPathRoot = Path.DirectorySeparatorChar + Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
+						if (!Directory.Exists(randomPathRoot))
+							return (randomPathRoot);
+					}
+				}
+				else
+				{
+					while (true)
+					{
+						// E.g. /SomeRandName/
+						string randomPathRoot = Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
+						if (!Directory.Exists(randomPathRoot))
+							return (randomPathRoot);
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region ConvertPathToPlatform()
+
+		/// <summary>
+		/// Convert non-platform separators according to platform.
+		/// </summary>
+		public static string ConvertToPlatform(string path)
+		{
+			// e.g. replace '/' by '\'
+			return (path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
+		}
+
+		#endregion
+
+		#region Equals()
+
+		/// <summary>
+		/// Compares two specified path string dependent on the operating systems policies.
+		/// </summary>
+		public static bool Equals(string pathA, string pathB)
+		{
+			switch (Environment.OSVersion.Platform)
+			{
+				case PlatformID.Win32S:
+				case PlatformID.Win32Windows:
+				case PlatformID.Win32NT:
+				case PlatformID.WinCE:
+				case PlatformID.Xbox:
+					return (string.Compare(pathA, pathB, StringComparison.OrdinalIgnoreCase) == 0);
+
+				case PlatformID.Unix:
+				case PlatformID.MacOSX:
+				default:
+					return (string.Compare(pathA, pathB, StringComparison.Ordinal) == 0);
+			}
+		}
+
+		#endregion
+
+		#region Limit...()
 
 		/// <summary>
 		/// Limits a folder or file path to the specified max length.
@@ -106,63 +191,26 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Equals()
+		#region Append...()
 
 		/// <summary>
-		/// Compares two specified path string dependent on the operating systems policies.
+		/// Appends a folder or file path to the specified max length.
 		/// </summary>
-		public static bool Equals(string pathA, string pathB)
+		/// <example>
+		/// <code>
+		/// string filePath = "C:\\Temp\\MyFile.txt";
+		/// filePath = PathEx.AppendPostfixToFileName(filePath, "_ABC");
+		/// </code>
+		/// 'filePath' will now be "C:\\Temp\\MyFile_ABC.txt".
+		/// </example>
+		/// <param name="filePath">Path to the file.</param>
+		/// <param name="fileNamePostfix">Postfix that shall be appended to the file name.</param>
+		/// <returns>The resulting file path.</returns>
+		public static string AppendPostfixToFileName(string filePath, string fileNamePostfix)
 		{
-			switch (Environment.OSVersion.Platform)
-			{
-				case PlatformID.Win32S:
-				case PlatformID.Win32Windows:
-				case PlatformID.Win32NT:
-				case PlatformID.WinCE:
-				case PlatformID.Xbox:
-					return (string.Compare(pathA, pathB, StringComparison.OrdinalIgnoreCase) == 0);
-
-				case PlatformID.Unix:
-				case PlatformID.MacOSX:
-				default:
-					return (string.Compare(pathA, pathB, StringComparison.Ordinal) == 0);
-			}
-		}
-
-		#endregion
-
-		#region Swap()
-
-		/// <summary>
-		/// Swaps two existing files.
-		/// </summary>
-		public static bool SwapExistingFiles(string filePathA, string filePathB)
-		{
-			if (!File.Exists(filePathA))
-				return (false);
-
-			if (!File.Exists(filePathB))
-				return (false);
-
-			// Both files exist, swap them:
-			string filePathTemp = FileEx.MakeUniqueFileName(filePathA);
-			File.Move(filePathA, filePathTemp);
-			File.Move(filePathB, filePathA);
-			File.Move(filePathTemp, filePathB);
-			return (true);
-		}
-
-		#endregion
-
-		#region ConvertPathToPlatform()
-
-		/// <summary>
-		/// Convert non-platform separators according to platform.
-		/// </summary>
-		private static string ConvertToPlatform(string path)
-		{
-			// e.g. replace '/' by '\'
-			return (path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
+			string extension = Path.GetExtension(filePath);
+			string filePathWithoutExtension = filePath.Substring(0, (filePath.Length - extension.Length));
+			return (filePathWithoutExtension + fileNamePostfix + extension);
 		}
 
 		#endregion
@@ -714,49 +762,25 @@ namespace MKY.IO
 
 		#endregion
 
-		#region InvalidPathRoot
+		#region Swap()
 
 		/// <summary>
-		/// Returns an invalid path root.
+		/// Swaps two existing files.
 		/// </summary>
-		public static string InvalidPathRoot
+		public static bool SwapExistingFiles(string filePathA, string filePathB)
 		{
-			get
-			{
-				if (EnvironmentEx.IsWindows)
-				{
-					// Explicitly implemented to emphasize logic and order of the operation below.
-					// Do not use A, B and C because they have a dedicated meaning on Windows.
-					// Implemented as const string to improve performance when calling this method.
-					const string RootLetters = @"Z Y X W V U T S R Q P O N M L K J I H G F E D";
-					List<string> existingPathRoots = new List<string>(Directory.GetLogicalDrives());
-					foreach (string rootLetter in RootLetters.Split())
-					{
-						string currentPathRoot = rootLetter + Path.VolumeSeparatorChar + Path.DirectorySeparatorChar;
-						if (!existingPathRoots.Contains(currentPathRoot))
-							return (currentPathRoot);
-					}
+			if (!File.Exists(filePathA))
+				return (false);
 
-					// All local path roots seem valid, create a random remote path root:
-					while (true)
-					{
-						// E.g. \\SomeRandName\
-						string randomPathRoot = Path.DirectorySeparatorChar + Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
-						if (!Directory.Exists(randomPathRoot))
-							return (randomPathRoot);
-					}
-				}
-				else
-				{
-					while (true)
-					{
-						// E.g. /SomeRandName/
-						string randomPathRoot = Path.DirectorySeparatorChar + Path.GetRandomFileName() + Path.DirectorySeparatorChar;
-						if (!Directory.Exists(randomPathRoot))
-							return (randomPathRoot);
-					}
-				}
-			}
+			if (!File.Exists(filePathB))
+				return (false);
+
+			// Both files exist, swap them:
+			string filePathTemp = FileEx.MakeUniqueFileName(filePathA);
+			File.Move(filePathA, filePathTemp);
+			File.Move(filePathB, filePathA);
+			File.Move(filePathTemp, filePathB);
+			return (true);
 		}
 
 		#endregion
