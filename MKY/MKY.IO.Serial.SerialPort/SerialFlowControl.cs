@@ -147,44 +147,51 @@ namespace MKY.IO.Serial.SerialPort
 
 		#region Parse
 
-		/// <summary></summary>
-		public static new SerialFlowControlEx Parse(string flowControl)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static new SerialFlowControlEx Parse(string s)
 		{
 			SerialFlowControlEx result;
-
-			if (TryParse(flowControl, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("flowControl", flowControl, "Invalid flow control."));
+				throw (new FormatException("'" + s + "' is no valid serial flow control string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string flowControl, out SerialFlowControlEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SerialFlowControlEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualHardware_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualHardware_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, ManualHardware_stringAlternatives))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualHardware_stringAlternatives))
 			{
 				result = new SerialFlowControlEx(SerialFlowControl.ManualHardware);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualSoftware_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualSoftware_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, ManualSoftware_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ManualSoftware_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualSoftware_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualSoftware_stringAlternatives))
 			{
 				result = new SerialFlowControlEx(SerialFlowControl.ManualSoftware);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualCombined_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualCombined_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, ManualCombined_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ManualCombined_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualCombined_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualCombined_stringAlternatives))
 			{
 				result = new SerialFlowControlEx(SerialFlowControl.ManualCombined);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, RS485_stringAlternatives))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RS485_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (s, RS485_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RS485_stringAlternatives))
 			{
 				result = new SerialFlowControlEx(SerialFlowControl.RS485);
 				return (true);
@@ -192,7 +199,7 @@ namespace MKY.IO.Serial.SerialPort
 			else
 			{
 				Ports.HandshakeEx handshake;
-				if (Ports.HandshakeEx.TryParse(flowControl, out handshake))
+				if (Ports.HandshakeEx.TryParse(s, out handshake))
 				{
 					result = new SerialFlowControlEx((SerialFlowControl)(System.IO.Ports.Handshake)handshake);
 					return (true);

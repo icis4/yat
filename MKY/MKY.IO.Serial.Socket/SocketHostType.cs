@@ -113,36 +113,43 @@ namespace MKY.IO.Serial.Socket
 
 		#region Parse
 
-		/// <summary></summary>
-		public static SocketHostTypeEx Parse(string type)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static SocketHostTypeEx Parse(string s)
 		{
 			SocketHostTypeEx result;
-
-			if (TryParse(type, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("type", type, "Invalid type."));
+				throw (new FormatException("'" + s + "' is no valid socket host type string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string type, out SocketHostTypeEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SocketHostTypeEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(type, TcpClient_string))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.TcpClient);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpServer_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.TcpServer);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpAutoSocket_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.TcpAutoSocket);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, Udp_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.Udp);
 				return (true);

@@ -266,17 +266,22 @@ namespace YAT.Log
 
 		#region Parse
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static FileNameSeparator Parse(string s)
 		{
+			s = s.Trim();
+
 			switch (s)
 			{
-				case UnderscoreToString: return (Underscore);
-				case DashToString: return (Dash);
+				case UnderscoreToString:     return (Underscore);
+				case DashToString:           return (Dash);
 				case DashWithSpacesToString: return (DashWithSpaces);
-				case BallToString: return (Ball);
+				case BallToString:           return (Ball);
 				case BallWithSpacesToString: return (BallWithSpaces);
-				case NoneToString: return (None);
+				case NoneToString:           return (None);
 				default: return (new FileNameSeparator(s));
 			}
 		}

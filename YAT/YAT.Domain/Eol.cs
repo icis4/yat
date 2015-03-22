@@ -166,58 +166,65 @@ namespace YAT.Domain
 
 		#region Parse
 
-		/// <summary></summary>
-		public static EolEx Parse(string eol)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static EolEx Parse(string s)
 		{
 			EolEx result;
-
-			if (TryParse(eol, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("eol", eol, "Invalid EOL."));
+				throw (new FormatException("'" + s + "' is no valid EOL string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string eol, out EolEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out EolEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(eol, None_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, None_stringSequence))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringSequence))
 			{
 				result = new EolEx(Eol.None);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Cr_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, Cr_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cr_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Cr_stringNative))
 			{
 				result = new EolEx(Eol.Cr);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Lf_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, Lf_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Lf_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Lf_stringNative))
 			{
 				result = new EolEx(Eol.Lf);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(eol, CrLf_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, CrLf_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CrLf_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, CrLf_stringNative))
 			{
 				result = new EolEx(Eol.CrLf);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(eol, LfCr_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, LfCr_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LfCr_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, LfCr_stringNative))
 			{
 				result = new EolEx(Eol.LfCr);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Tab_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, Tab_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tab_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Tab_stringNative))
 			{
 				result = new EolEx(Eol.Tab);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Nul_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(eol, Nul_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Nul_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Nul_stringNative))
 			{
 				result = new EolEx(Eol.Nul);
 				return (true);

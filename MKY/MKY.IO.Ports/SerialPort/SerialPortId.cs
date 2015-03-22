@@ -484,6 +484,10 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding port.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static SerialPortId Parse(string s)
 		{
 			SerialPortId result;
@@ -492,14 +496,20 @@ namespace MKY.IO.Ports
 			else if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(s + " does not specify a valid serial port ID"));
+				throw (new FormatException("'" + s + "' does not specify a valid serial port ID"));
 		}
 
 		/// <summary>
 		/// Tries to parse s for the first integer number and returns the corresponding port.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static bool TryParse(string s, out SerialPortId result)
 		{
+			s = s.Trim();
+
 			// e.g. "COM1"
 			if (TryParseStandardPortName(s, out result))
 				return (true);

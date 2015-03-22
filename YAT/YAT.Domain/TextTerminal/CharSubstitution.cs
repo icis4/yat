@@ -111,31 +111,38 @@ namespace YAT.Domain
 
 		#region Parse
 
-		/// <summary></summary>
-		public static CharSubstitutionEx Parse(string substitution)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static CharSubstitutionEx Parse(string s)
 		{
 			CharSubstitutionEx result;
-
-			if (TryParse(substitution, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("substitution", substitution, "Invalid substitution."));
+				throw (new FormatException("'" + s + "' is no valid char substitution string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string substitution, out CharSubstitutionEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out CharSubstitutionEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(substitution, None_string))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.None);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(substitution, ToUpper_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.ToUpper);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(substitution, ToLower_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToLower_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.ToLower);
 				return (true);

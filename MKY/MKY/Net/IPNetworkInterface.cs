@@ -226,42 +226,50 @@ namespace MKY.Net
 
 		#region Parse
 
-		/// <summary></summary>
-		public static IPNetworkInterface Parse(string networkInterface)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static IPNetworkInterface Parse(string s)
 		{
 			IPNetworkInterface result;
 
-			if (TryParse(networkInterface, out result))
+			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("networkInterface", networkInterface, "Invalid network interface."));
+				throw (new FormatException("'" + s + "' is no valid network interface string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string networkInterface, out IPNetworkInterface result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out IPNetworkInterface result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(networkInterface, Any_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(networkInterface, Any_stringNice))
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringNice))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 				return (true);
 			}
-			else if (networkInterface.Contains(IPv4Any_string))
+			else if (s.Contains(IPv4Any_string))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv4Any);
 				return (true);
 			}
-			else if (networkInterface.Contains(IPv4Loopback_string))
+			else if (s.Contains(IPv4Loopback_string))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv4Loopback);
 				return (true);
 			}
-			else if (networkInterface.Contains(IPv6Any_string))
+			else if (s.Contains(IPv6Any_string))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv6Any);
 				return (true);
 			}
-			else if (networkInterface.Contains(IPv6Loopback_string))
+			else if (s.Contains(IPv6Loopback_string))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv6Loopback);
 				return (true);
@@ -269,10 +277,10 @@ namespace MKY.Net
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(networkInterface, out address))
+				if (IPAddress.TryParse(s, out address))
 					result = new IPNetworkInterface(address, "");
 				else
-					result = new IPNetworkInterface(IPAddress.None, networkInterface);
+					result = new IPNetworkInterface(IPAddress.None, s);
 
 				return (true);
 			}

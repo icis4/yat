@@ -151,17 +151,27 @@ namespace MKY.IO.Ports
 
 		#region Parse/Form
 
-		/// <summary></summary>
-		public static BaudRateEx Parse(string baudRate)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static BaudRateEx Parse(string s)
 		{
-			return ((BaudRateEx)int.Parse(baudRate, CultureInfo.InvariantCulture));
+			BaudRateEx result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' is no valid baud rate string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string baudRate, out BaudRateEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out BaudRateEx result)
 		{
 			int intResult;
-			if (int.TryParse(baudRate, out intResult))
+			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 				return (TryFrom(intResult, out result));
 			
 			result = null;

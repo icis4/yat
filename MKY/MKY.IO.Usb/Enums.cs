@@ -297,18 +297,27 @@ namespace MKY.IO.Usb
 
 		#region Parse
 
-		/// <summary></summary>
-		public static HidUsagePageEx Parse(string page)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static HidUsagePageEx Parse(string s)
 		{
-			return ((HidUsagePageEx)int.Parse(page, CultureInfo.InvariantCulture));
+			HidUsagePageEx result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' is no valid HID usage page string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string page, out HidUsagePageEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out HidUsagePageEx result)
 		{
 			int intResult;
-
-			if (int.TryParse(page, out intResult))
+			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 			{
 				result = (HidUsagePageEx)intResult;
 				return (true);
@@ -413,18 +422,27 @@ namespace MKY.IO.Usb
 
 		#region Parse
 
-		/// <summary></summary>
-		public static HidUsageIdEx Parse(string usage)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static HidUsageIdEx Parse(string s)
 		{
-			return ((HidUsageIdEx)int.Parse(usage, CultureInfo.InvariantCulture));
+			HidUsageIdEx result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException("'" + s + "' is no valid HID usage ID string"));
 		}
 
-		/// <summary></summary>
-		public static bool TryParse(string usage, out HidUsageIdEx result)
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out HidUsageIdEx result)
 		{
 			int intResult;
-
-			if (int.TryParse(usage, out intResult))
+			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 			{
 				result = (HidUsageIdEx)intResult;
 				return (true);

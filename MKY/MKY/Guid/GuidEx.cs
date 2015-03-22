@@ -45,12 +45,16 @@ namespace MKY
 		/// <summary>
 		/// Tries to create and return a GUID from the file path if possible.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework,
+		/// whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static bool TryParse(string str, out Guid guid)
+		public static bool TryParse(string s, out Guid guid)
 		{
 			try
 			{
-				guid = new Guid(str);
+				guid = new Guid(s.Trim());
 				return (true);
 			}
 			catch
