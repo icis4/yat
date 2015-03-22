@@ -86,7 +86,9 @@ namespace YAT.Domain.Parser
 			Environment.NewLine +
 			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @")""" + Environment.NewLine +
 			Environment.NewLine +
-			@"Delay sending ""Send something\!(" + (KeywordEx)Keyword.Delay + @")Send delayed"" according to advanced settings" + Environment.NewLine +
+			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @")Send delayed"" according to advanced settings" + Environment.NewLine +
+			@"Delay after ""Send something and then delay\!(" + (KeywordEx)Keyword.LineDelay + @")"" according to advanced settings" + Environment.NewLine +
+			@"Repeat ""Send something multiple times\!(" + (KeywordEx)Keyword.LineRepeat + @")"" according to advanced settings" + Environment.NewLine +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""" + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""" + Environment.NewLine +

@@ -146,18 +146,18 @@ namespace MKY.IO.Serial
 		bool IsOpen { get; }
 
 		/// <summary>
-		/// Gets a value indicating whether the underlying I/O instance is ready to send and
-		/// receive data.
+		/// Gets a value indicating whether the underlying I/O instance is transmissive, i.e.
+		/// ready to send and receive data.
 		/// </summary>
 		/// <remarks>
 		/// This property has been added since the meaning of <see cref="IsConnected"/> and
 		/// <see cref="IsOpen"/> differ depending on the underlying I/O instance.
 		/// </remarks>
 		/// <returns>
-		/// <c>true</c> if the underlying I/O instance is ready to send and receive data as of
-		/// the most recent operation; otherwise, <c>false</c>.
+		/// <c>true</c> if the underlying I/O instance is transmissive, i.e. ready to send and
+		/// receive data as of the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsReadyToSend { get; }
+		bool IsTransmissive { get; }
 
 		/// <summary>
 		/// Gets the underlying I/O instance.

@@ -74,10 +74,10 @@ namespace YAT.Gui.Forms
 
 		private enum ClosingState
 		{
-			/// <summary>/// Normal operation of the form.</summary>
+			/// <summary>Normal operation of the form.</summary>
 			None,
 
-			/// <summary>/// Closing has been initiated by a form event.</summary>
+			/// <summary>Closing has been initiated by a form event.</summary>
 			IsClosingFromForm,
 
 			/// <summary>Closing has been initiated by a model event.</summary>

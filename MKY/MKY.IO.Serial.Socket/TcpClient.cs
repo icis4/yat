@@ -357,7 +357,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get { return (IsConnected); }
 		}
@@ -411,7 +411,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (!IsStarted)
+			if (IsStopped)
 			{
 				WriteDebugMessageLine("Starting...");
 				StartSocket();
@@ -615,6 +615,7 @@ namespace MKY.IO.Serial.Socket
 					this.dataSentThreadRunFlag = true;
 					this.dataSentThreadEvent = new AutoResetEvent(false);
 					this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
+					this.dataSentThread.Name = ToShortEndPointString() + " DataSent Thread";
 					this.dataSentThread.Start();
 				}
 			}
@@ -750,7 +751,7 @@ namespace MKY.IO.Serial.Socket
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.dataSentThreadRunFlag && IsOpen && !IsDisposed)
+				while (IsOpen && this.dataSentThreadRunFlag && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.dataSentQueue)

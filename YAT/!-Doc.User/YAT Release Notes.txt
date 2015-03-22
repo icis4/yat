@@ -61,6 +61,7 @@ YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2015-xx-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
+- Keyword \!(LineRepeat) added, count can be configured in advanced settings (feat. #13 and #162)
 - Support for variants of USB Ser/HID (e.g TI MSP430 HID Datapipe Interface) added, report content
   can be specified in USB Ser/HID settings (feature request #193)
 - Write protected .yat files are marked '#' and are not attempted to be written automatically,
@@ -134,6 +135,7 @@ Limitations and known issues:
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
   a test environment would be needed to run USB Ser/HID on unixoids (feature request #119)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
+- Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
 - Text terminals: Wait for answer line not yet implemented (feature request #19)
 - Direct mode does not yet support special formats and commands (feature request #10)
 - XML logging not yet implemented, definition of schema pending (bugs #26 and #27)

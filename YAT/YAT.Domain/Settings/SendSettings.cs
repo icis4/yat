@@ -31,6 +31,9 @@ namespace YAT.Domain.Settings
 	public class SendSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
+		public const int LineRepeatInfinite = -1;
+
+		/// <summary></summary>
 		public const bool KeepCommandDefault = true;
 
 		/// <summary></summary>
@@ -46,6 +49,9 @@ namespace YAT.Domain.Settings
 		public const int DefaultLineDelayDefault = 100;
 
 		/// <summary></summary>
+		public const int DefaultLineRepeatDefault = LineRepeatInfinite;
+
+		/// <summary></summary>
 		public const bool DisableKeywordsDefault = false;
 
 		private bool keepCommand;
@@ -53,6 +59,7 @@ namespace YAT.Domain.Settings
 		private bool sendImmediately;
 		private int defaultDelay;
 		private int defaultLineDelay;
+		private int defaultLineRepeat;
 		private bool disableKeywords;
 
 		/// <summary></summary>
@@ -77,12 +84,13 @@ namespace YAT.Domain.Settings
 		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
-			KeepCommand      = rhs.keepCommand;
-			CopyPredefined   = rhs.copyPredefined;
-			SendImmediately  = rhs.sendImmediately;
-			DefaultDelay     = rhs.DefaultDelay;
-			DefaultLineDelay = rhs.DefaultLineDelay;
-			DisableKeywords  = rhs.DisableKeywords;
+			KeepCommand       = rhs.keepCommand;
+			CopyPredefined    = rhs.copyPredefined;
+			SendImmediately   = rhs.sendImmediately;
+			DefaultDelay      = rhs.DefaultDelay;
+			DefaultLineDelay  = rhs.DefaultLineDelay;
+			DefaultLineRepeat = rhs.DefaultLineRepeat;
+			DisableKeywords   = rhs.DisableKeywords;
 
 			ClearChanged();
 		}
@@ -94,12 +102,13 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			KeepCommand      = KeepCommandDefault;
-			CopyPredefined   = CopyPredefinedDefault;
-			SendImmediately  = SendImmediatelyDefault;
-			DefaultDelay     = DefaultDelayDefault;
-			DefaultLineDelay = DefaultLineDelayDefault;
-			DisableKeywords  = DisableKeywordsDefault;
+			KeepCommand       = KeepCommandDefault;
+			CopyPredefined    = CopyPredefinedDefault;
+			SendImmediately   = SendImmediatelyDefault;
+			DefaultDelay      = DefaultDelayDefault;
+			DefaultLineDelay  = DefaultLineDelayDefault;
+			DefaultLineRepeat = DefaultLineRepeatDefault;
+			DisableKeywords   = DisableKeywordsDefault;
 		}
 
 		#region Properties
@@ -183,6 +192,21 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("DefaultLineRepeat")]
+		public virtual int DefaultLineRepeat
+		{
+			get { return (this.defaultLineRepeat); }
+			set
+			{
+				if (this.defaultLineRepeat != value)
+				{
+					this.defaultLineRepeat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("DisableKeywords")]
 		public virtual bool DisableKeywords
 		{
@@ -237,12 +261,13 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(KeepCommand      == other.KeepCommand) &&
-				(CopyPredefined   == other.CopyPredefined) &&
-				(SendImmediately  == other.SendImmediately) &&
-				(DefaultDelay     == other.DefaultDelay) &&
-				(DefaultLineDelay == other.DefaultLineDelay) &&
-				(DisableKeywords  == other.DisableKeywords)
+				(KeepCommand       == other.KeepCommand) &&
+				(CopyPredefined    == other.CopyPredefined) &&
+				(SendImmediately   == other.SendImmediately) &&
+				(DefaultDelay      == other.DefaultDelay) &&
+				(DefaultLineDelay  == other.DefaultLineDelay) &&
+				(DefaultLineRepeat == other.DefaultLineRepeat) &&
+				(DisableKeywords   == other.DisableKeywords)
 			);
 		}
 
@@ -259,12 +284,13 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				KeepCommand     .GetHashCode() ^
-				CopyPredefined  .GetHashCode() ^
-				SendImmediately .GetHashCode() ^
-				DefaultDelay    .GetHashCode() ^
-				DefaultLineDelay.GetHashCode() ^
-				DisableKeywords .GetHashCode()
+				KeepCommand      .GetHashCode() ^
+				CopyPredefined   .GetHashCode() ^
+				SendImmediately  .GetHashCode() ^
+				DefaultDelay     .GetHashCode() ^
+				DefaultLineDelay .GetHashCode() ^
+				DefaultLineRepeat.GetHashCode() ^
+				DisableKeywords  .GetHashCode()
 			);
 		}
 

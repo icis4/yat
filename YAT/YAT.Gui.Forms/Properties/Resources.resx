@@ -172,6 +172,12 @@
   <data name="Image_FolderOptions_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_FolderOptions_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Image_Green_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Status\Image_Green_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Grey_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Status\Image_Grey_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Image_LGPLv3_147x51" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GPL\Image_LGPLv3_147x51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -183,12 +189,6 @@
   </data>
   <data name="Image_NewDocument_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_NewDocument_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Off_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Status\Image_Off_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_On_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Status\Image_On_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_OpenDocument_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_OpenDocument_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -207,6 +207,9 @@
   </data>
   <data name="Image_Properties_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Properties_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Red_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Status\Image_Red_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_SaveDocument_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_SaveDocument_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -237,5 +240,8 @@
   </data>
   <data name="Image_YAT_64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\YAT\Image_YAT_64x64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Yellow_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Status\Image_Yellow_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

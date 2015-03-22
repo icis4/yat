@@ -290,8 +290,6 @@ namespace YAT.Domain
 		protected override void ProcessParsableSendItem(ParsableSendItem item)
 		{
 			string textToParse = item.Data;
-			bool sendEol = item.IsLine;
-			bool performLineDelay = false;
 
 			// Check for EOL comment indicators:
 			if (TextTerminalSettings.EolComment.SkipComment)
@@ -304,79 +302,51 @@ namespace YAT.Domain
 						textToParse = StringEx.Left(textToParse, index);
 
 						if (TextTerminalSettings.EolComment.SkipWhiteSpace)
-							textToParse = textToParse.TrimEnd(null); // <c>null</c> means white-spaces.
+							textToParse = textToParse.TrimEnd(null); // 'null' means white-spaces.
 					}
 				}
 			}
 
-			// Parse string and execute keywords:
+			// Parse the item string:
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 			if (p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed))
+				ProcessParsedSendItem(item, parseResult);
+			else
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+		}
+
+		/// <remarks>Shall not be called if keywords are disabled.</remarks>
+		protected override void ProcessInLineKeywords(Parser.KeywordResult result)
+		{
+			switch (result.Keyword)
 			{
-				foreach (Parser.Result ri in parseResult)
+				case Parser.Keyword.Eol:
 				{
-					Parser.ByteArrayResult bar = ri as Parser.ByteArrayResult;
-					if (bar != null)
-					{
-						ForwardDataToRawTerminal(bar.ByteArray);
-					}
-					else // if keyword result (will not occur if keywords are disabled while parsing)
-					{
-						Parser.KeywordResult kr = ri as Parser.KeywordResult;
-						if (kr != null)
-						{
-							switch (kr.Keyword)
-							{
-								// Process end-of-line keywords:
-								case Parser.Keyword.LineDelay:
-								{
-									performLineDelay = true;
-									break;
-								}
-
-								case Parser.Keyword.NoEol:
-								{
-									sendEol = false;
-									break;
-								}
-
-								// Process text terminal specific in-line keywords:
-								case Parser.Keyword.Eol:
-								{
-									ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
-									break;
-								}
-
-								// Process other in-line keywords:
-								default:
-								{
-									ProcessInLineKeywords(kr);
-									break;
-								}
-							}
-						}
-					}
+					ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+					break;
 				}
 
-				// Finalize the line:
-				if (sendEol)
-					ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+				default:
+				{
+					base.ProcessInLineKeywords(result);
+					break;
+				}
 			}
-			else
-			{
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
-			}
+		}
 
-			// Process delay settings independent on parser success:
-			int accumulatedLineDelay = 0;
-			if (performLineDelay)
-			{
-				int delay = TerminalSettings.Send.DefaultLineDelay;
-				Thread.Sleep(delay);
-				accumulatedLineDelay += delay;
-			}
+		/// <summary></summary>
+		protected override void ProcessLineEnd(bool sendEol)
+		{
+			if (sendEol)
+				ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+		}
+
+		/// <summary></summary>
+		protected override int ProcessLineDelay(bool performLineDelay)
+		{
+			int accumulatedLineDelay = base.ProcessLineDelay(performLineDelay);
 
 			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
 			{
@@ -394,6 +364,8 @@ namespace YAT.Domain
 					}
 				}
 			}
+
+			return (accumulatedLineDelay);
 		}
 
 		#endregion

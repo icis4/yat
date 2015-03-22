@@ -44,6 +44,7 @@ namespace YAT.Domain.Parser
 		Clear,
 		Delay,
 		LineDelay,
+		LineRepeat,
 		Eol,
 		NoEol,
 		OutputBreakOn,
@@ -68,6 +69,7 @@ namespace YAT.Domain.Parser
 		private const string Clear_string             = "Clear";
 		private const string Delay_string             = "Delay";
 		private const string LineDelay_string         = "LineDelay";
+		private const string LineRepeat_string        = "LineRepeat";
 		private const string Eol_string               = "EOL";
 		private const string NoEol_string             = "NoEOL";
 		private const string OutputBreakOn_string     = "OutputBreakOn";
@@ -96,9 +98,10 @@ namespace YAT.Domain.Parser
 		{
 			switch ((Keyword)UnderlyingEnum)
 			{
-				case Keyword.Clear:     return (Clear_string);
-				case Keyword.Delay:     return (Delay_string);
-				case Keyword.LineDelay: return (LineDelay_string);
+				case Keyword.Clear:      return (Clear_string);
+				case Keyword.Delay:      return (Delay_string);
+				case Keyword.LineDelay:  return (LineDelay_string);
+				case Keyword.LineRepeat: return (LineRepeat_string);
 
 				case Keyword.Eol:   return (Eol_string);
 				case Keyword.NoEol: return (NoEol_string);
@@ -121,6 +124,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.Clear));
 			a.Add(new KeywordEx(Keyword.Delay));
 			a.Add(new KeywordEx(Keyword.LineDelay));
+			a.Add(new KeywordEx(Keyword.LineRepeat));
 			a.Add(new KeywordEx(Keyword.Eol));
 			a.Add(new KeywordEx(Keyword.NoEol));
 			a.Add(new KeywordEx(Keyword.OutputBreakOn));
@@ -160,6 +164,11 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, LineDelay_string))
 			{
 				result = new KeywordEx(Keyword.LineDelay);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, LineRepeat_string))
+			{
+				result = new KeywordEx(Keyword.LineRepeat);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, Eol_string))

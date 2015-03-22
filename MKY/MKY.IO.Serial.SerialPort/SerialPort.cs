@@ -447,7 +447,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get
 			{
@@ -669,7 +669,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (!IsStarted)
+			if (IsStopped)
 			{
 				WriteDebugMessageLine("Starting...");
 				try
@@ -823,7 +823,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					// Inner loop, runs as long as there is data in the send queue.
 					// Ensure not to forward any events during closing anymore.
-					while (this.sendThreadRunFlag && IsReadyToSend)
+					while (IsTransmissive && this.sendThreadRunFlag && !IsDisposed)
 					{
 						// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
 						// an exception when trying to write while in output break!
@@ -1265,6 +1265,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = ToShortPortString() + " Send Thread";
 					this.sendThread.Start();
 				}
 			}
@@ -1277,6 +1278,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.sendThread.Name = ToShortPortString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}
@@ -1459,7 +1461,7 @@ namespace MKY.IO.Serial.SerialPort
 				// This is considered an acceptable CPU load.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.receiveThreadRunFlag && IsOpen && !IsDisposed)
+				while (IsOpen && this.receiveThreadRunFlag && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.receiveQueue)

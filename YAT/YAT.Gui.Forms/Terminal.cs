@@ -70,14 +70,23 @@ namespace YAT.Gui.Forms
 
 		private enum ClosingState
 		{
-			/// <summary>/// Normal operation of the form.</summary>
+			/// <summary>Normal operation of the form.</summary>
 			None,
 
-			/// <summary>/// Closing has been initiated by a form event.</summary>
+			/// <summary>Closing has been initiated by a form event.</summary>
 			IsClosingFromForm,
 
 			/// <summary>Closing has been initiated by a model event.</summary>
-			IsClosingFromModel,
+			IsClosingFromModel
+		}
+
+		private enum IOStatusIndicatorControl
+		{
+			/// <summary>I/O indicator is steady.</summary>
+			Steady,
+
+			/// <summary>I/O indicator is flashing.</summary>
+			Flashing
 		}
 
 		#endregion
@@ -118,6 +127,9 @@ namespace YAT.Gui.Forms
 		private TerminalSettingsRoot settingsRoot;
 		private bool handlingTerminalSettingsIsSuspended; // = false; // A simple flag is sufficient as
 		                                                              // the form is ISynchronizeInvoke.
+		// Status
+		private bool ioStatusIndicatorFlashingIsOn; // = false;
+
 		#endregion
 
 		#region Events
@@ -465,9 +477,11 @@ namespace YAT.Gui.Forms
 				}
 			}
 
+			bool sendFileEnabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
+
 			toolStripMenuItem_TerminalMenu_Send_Command.Text    = sendCommandText;
-			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = sendCommandEnabled;
-			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = this.settingsRoot.SendFile.Command.IsValidFilePath;
+			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = sendCommandEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = sendFileEnabled    && this.terminal.IsReadyToSend;
 
 			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
@@ -1230,7 +1244,7 @@ namespace YAT.Gui.Forms
 			if (pageCount > 0)
 			{
 				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = (predefined.SelectedPage < pages.Count);
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled     = (predefined.SelectedPage < pages.Count);
 			}
 			else
 			{
@@ -1263,7 +1277,7 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
 			{
 				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-				bool isValid = (isDefined && this.terminal.IsOpen && commands[i].IsValid);
+				bool isValid = (isDefined && commands[i].IsValid && this.terminal.IsReadyToSend);
 
 				if (isDefined)
 				{
@@ -1435,9 +1449,11 @@ namespace YAT.Gui.Forms
 				}
 			}
 
+			bool sendFileEnabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
+
 			toolStripMenuItem_SendContextMenu_SendCommand.Text    = sendCommandText;
-			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = sendCommandEnabled;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled    = this.settingsRoot.SendCommand.Command.IsValidFilePath;
+			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = sendCommandEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_SendContextMenu_SendFile.Enabled    = sendFileEnabled    && this.terminal.IsReadyToSend;
 
 			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
 			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
@@ -2537,14 +2553,11 @@ namespace YAT.Gui.Forms
 		/// <param name="command">Command 1..max.</param>
 		private void CopyPredefined(int command)
 		{
-			if (this.terminal.IsReadyToSend)
+			int page = predefined.SelectedPage;
+			if (!this.terminal.CopyPredefined(page, command))
 			{
-				int page = predefined.SelectedPage;
-				if (!this.terminal.CopyPredefined(page, command))
-				{
-					// If command is not valid, show settings dialog.
-					ShowPredefinedCommandSettings(page, command);
-				}
+				// If command is not valid, show settings dialog.
+				ShowPredefinedCommandSettings(page, command);
 			}
 		}
 
@@ -3189,23 +3202,76 @@ namespace YAT.Gui.Forms
 
 		private void SetIOStatus()
 		{
-			Image on  = Properties.Resources.Image_On_12x12;
-			Image off = Properties.Resources.Image_Off_12x12;
+			Image on  = Properties.Resources.Image_Green_12x12;
+			Image off = Properties.Resources.Image_Red_12x12;
 
 			if (TerminalIsAvailable)
 			{
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled =  this.terminal.IsStarted;
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Image   = (this.terminal.IsReadyToSend ? on : off);
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled =  this.terminal.IsStarted;
 
-				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
+				if (this.terminal.IsTransmissive)
+				{
+					if (this.terminal.IsReadyToSend)
+					{
+						ResetIOStatusFlashing();
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
+					}
+					else // = SendingIsOngoing
+					{
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
+						// Do not directly access the image, it will be flashed by the timer below.
+						// Directly accessing the image could result in irregular flashing.
+						StartIOStatusFlashing();
+					}
+				}
+				else
+				{
+					ResetIOStatusFlashing();
+					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
+					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
+				}
+
+				toolStripStatusLabel_TerminalStatus_IOStatusText.Text = this.terminal.IOStatusText;
 			}
 			else
 			{
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = false;
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Image   = off;
+				ResetIOStatusFlashing();
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = false;
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag     = IOStatusIndicatorControl.Steady;
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image   = off;
 
-				toolStripStatusLabel_TerminalStatus_IOStatus.Text = "";
+				toolStripStatusLabel_TerminalStatus_IOStatusText.Text = "";
 			}
+		}
+
+		private void StartIOStatusFlashing()
+		{
+			timer_IOStatusIndicator.Enabled = true;
+		}
+
+		private void timer_IOStatusIndicator_Tick(object sender, EventArgs e)
+		{
+			if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag != null)
+			{
+				// Only handle the image if flashing is desired:
+				IOStatusIndicatorControl tag = (IOStatusIndicatorControl)toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag;
+				if (tag == IOStatusIndicatorControl.Flashing)
+				{
+					ioStatusIndicatorFlashingIsOn = !ioStatusIndicatorFlashingIsOn; // Toggle flashing phase (initially 'false').
+
+					Image onPhase  = Properties.Resources.Image_Green_12x12;
+					Image offPhase = Properties.Resources.Image_Grey_12x12;
+
+					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = (ioStatusIndicatorFlashingIsOn ? onPhase : offPhase);
+				}
+			}
+		}
+
+		private void ResetIOStatusFlashing()
+		{
+			timer_IOStatusIndicator.Enabled = false;
+			ioStatusIndicatorFlashingIsOn = false; // Reset flashing phase (initially 'false').
 		}
 
 		private void SetIOControlControls()
@@ -3260,8 +3326,8 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
 				}
 
-				Image on = Properties.Resources.Image_On_12x12;
-				Image off = Properties.Resources.Image_Off_12x12;
+				Image on  = Properties.Resources.Image_Green_12x12;
+				Image off = Properties.Resources.Image_Red_12x12;
 
 				if (isOpen)
 				{
@@ -3291,7 +3357,7 @@ namespace YAT.Gui.Forms
 					MKY.IO.Serial.SerialPort.IXOnXOffHandler x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 					if (x != null)
 					{
-					////indicateXOnXOff = x.XOnXOffIsInUse;
+					////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
 						outputIsXOn     = x.OutputIsXOn;
 						inputIsXOn      = x.InputIsXOn;
 					}
@@ -3360,17 +3426,23 @@ namespace YAT.Gui.Forms
 		private void TriggerRfrLuminescence()
 		{
 			timer_RfrLuminescence.Enabled = false;
-			toolStripStatusLabel_TerminalStatus_RFR.Image = Properties.Resources.Image_On_12x12;
+			toolStripStatusLabel_TerminalStatus_RFR.Image = Properties.Resources.Image_Green_12x12;
 			timer_RfrLuminescence.Interval = RfrLuminescenceInterval;
 			timer_RfrLuminescence.Enabled = true;
+		}
+
+		private void timer_RfrLuminescence_Tick(object sender, EventArgs e)
+		{
+			timer_RfrLuminescence.Enabled = false;
+			ResetRfr();
 		}
 
 		private void ResetRfr()
 		{
 			bool isOpen = this.terminal.IsOpen;
 
-			Image on = Properties.Resources.Image_On_12x12;
-			Image off = Properties.Resources.Image_Off_12x12;
+			Image on  = Properties.Resources.Image_Green_12x12;
+			Image off = Properties.Resources.Image_Red_12x12;
 
 			if (isOpen)
 			{
@@ -3385,12 +3457,6 @@ namespace YAT.Gui.Forms
 			{
 				toolStripStatusLabel_TerminalStatus_RFR.Image = off;
 			}
-		}
-
-		private void timer_RfrLuminescence_Tick(object sender, EventArgs e)
-		{
-			timer_RfrLuminescence.Enabled = false;
-			ResetRfr();
 		}
 
 		#endregion
@@ -3463,7 +3529,7 @@ namespace YAT.Gui.Forms
 
 		private void SetFixedStatusText(string text)
 		{
-			timer_Status.Enabled = false;
+			timer_StatusText.Enabled = false;
 			toolStripStatusLabel_TerminalStatus_Status.Text = text;
 		}
 
@@ -3474,10 +3540,10 @@ namespace YAT.Gui.Forms
 
 		private void SetTimedStatusText(string text)
 		{
-			timer_Status.Enabled = false;
+			timer_StatusText.Enabled = false;
 			toolStripStatusLabel_TerminalStatus_Status.Text = text;
-			timer_Status.Interval = TimedStatusInterval;
-			timer_Status.Enabled = true;
+			timer_StatusText.Interval = TimedStatusInterval;
+			timer_StatusText.Enabled = true;
 		}
 
 		private void SetTimedStatus(Status status)
@@ -3490,9 +3556,9 @@ namespace YAT.Gui.Forms
 			SetFixedStatus(Status.Default);
 		}
 
-		private void timer_Status_Tick(object sender, EventArgs e)
+		private void timer_StatusText_Tick(object sender, EventArgs e)
 		{
-			timer_Status.Enabled = false;
+			timer_StatusText.Enabled = false;
 			ResetStatusText();
 		}
 

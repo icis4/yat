@@ -287,7 +287,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get { return (IsOpen); }
 		}
@@ -315,7 +315,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (!IsStarted)
+			if (IsStopped)
 				return (TryCreateAndStartDevice());
 
 			return (true);
@@ -386,7 +386,7 @@ namespace MKY.IO.Serial.Usb
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend && !IsDisposed)
+				while (IsTransmissive && this.sendThreadRunFlag && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -523,6 +523,7 @@ namespace MKY.IO.Serial.Usb
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = ToShortDeviceInfoString() + " Send Thread";
 					this.sendThread.Start();
 				}
 			}
@@ -535,6 +536,7 @@ namespace MKY.IO.Serial.Usb
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.receiveThread.Name = ToShortDeviceInfoString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}
@@ -673,7 +675,7 @@ namespace MKY.IO.Serial.Usb
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.receiveThreadRunFlag && IsOpen && !IsDisposed)
+				while (IsOpen && this.receiveThreadRunFlag && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.receiveQueue)

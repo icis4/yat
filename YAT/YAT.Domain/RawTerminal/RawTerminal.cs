@@ -288,14 +288,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.io != null)
-					return (this.io.IsReadyToSend);
+					return (this.io.IsTransmissive);
 				else
 					return (false);
 			}
@@ -360,7 +360,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			if (IsReadyToSend)
+			if (IsTransmissive)
 			{
 				// Enqueue and signal the send operation BEFORE actually sending the data. This
 				// ensures that an outgoing request is shown above the corresponding incoming
@@ -379,7 +379,13 @@ namespace YAT.Domain
 			}
 			else
 			{
-				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Output, "No data can currently be sent!"));
+				string message;
+				if (data.Length <= 1)
+					message = data.Length + " byte not sent anymore as terminal has been closed";
+				else
+					message = data.Length + " bytes not sent anymore as terminal has been closed";
+
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, message));
 			}
 		}
 

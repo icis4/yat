@@ -408,6 +408,7 @@ namespace YAT.Gui.Controls
 						// Start retrieving on different thread.
 						this.retrieveDescriptionsThread = new RetrievePortCaptionsThread(ports);
 						Thread t = new Thread(new ThreadStart(this.retrieveDescriptionsThread.GetPortCaptionsFromSystem));
+						t.Name = "Get Serial Port Captions From System";
 						t.Start();
 
 						while (this.retrieveDescriptionsThread.IsRetrieving)
@@ -428,6 +429,7 @@ namespace YAT.Gui.Controls
 						// Start scanning on different thread.
 						this.markPortsInUseThread = new MarkPortsInUseThread(ports);
 						Thread t = new Thread(new ThreadStart(this.markPortsInUseThread.MarkPortsInUse));
+						t.Name = "Mark Serial Ports In Use";
 						t.Start();
 
 						while (this.markPortsInUseThread.IsScanning)

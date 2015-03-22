@@ -377,7 +377,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get { return (IsConnected); }
 		}
@@ -507,7 +507,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			AssertNotDisposed();
 
-			if (IsReadyToSend)
+			if (IsTransmissive)
 			{
 				if      (IsClient)
 					this.client.Send(data);

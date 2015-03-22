@@ -473,6 +473,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool IsTransmissive
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsTransmissive);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsReadyToSend
 		{
 			get
