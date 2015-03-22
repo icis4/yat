@@ -68,8 +68,7 @@ namespace MKY.Text
 		/// </summary>
 		/// <exception cref="FormatException">Thrown if escape sequence unknown.</exception>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static byte Parse(string s)
 		{
@@ -84,8 +83,7 @@ namespace MKY.Text
 		/// Converts an escape sequence into according character code. Case-insensitive.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out byte result)
 		{

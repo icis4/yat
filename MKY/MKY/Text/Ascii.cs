@@ -132,8 +132,7 @@ namespace MKY.Text
 		/// </summary>
 		/// <exception cref="FormatException">Thrown if mnemonic unknown.</exception>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="mnemonic"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="mnemonic"/>.
 		/// </remarks>
 		public static byte Parse(string mnemonic)
 		{
@@ -148,8 +147,7 @@ namespace MKY.Text
 		/// Converts an ASCII mnemonic into according code. Case-insensitive.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="mnemonic"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="mnemonic"/>.
 		/// </remarks>
 		public static bool TryParse(string mnemonic, out byte result)
 		{

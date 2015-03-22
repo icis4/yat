@@ -482,11 +482,10 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Parses s for the first integer number and returns the corresponding port.
+		/// Parses <paramref name="s"/> for the first integer number and returns the corresponding port ID.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static SerialPortId Parse(string s)
 		{
@@ -500,11 +499,10 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to parse s for the first integer number and returns the corresponding port.
+		/// Tries to parse <paramref name="s"/> for the first integer number and returns the corresponding port ID.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out SerialPortId result)
 		{
@@ -528,7 +526,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Parses s for the first integer number and returns the corresponding port.
+		/// Parses <paramref name="s"/> for the first integer number and returns the corresponding port.
 		/// </summary>
 		public static SerialPortId ParseStandardPortName(string s)
 		{
@@ -540,7 +538,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to parse s for the first integer number and returns the corresponding port.
+		/// Tries to parse <paramref name="s"/> for the first integer number and returns the corresponding port.
 		/// </summary>
 		public static bool TryParseStandardPortName(string s, out SerialPortId result)
 		{
