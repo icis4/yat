@@ -148,8 +148,7 @@ namespace MKY.IO.Serial.SerialPort
 		#region Parse
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static new SerialFlowControlEx Parse(string s)
 		{
@@ -161,8 +160,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out SerialFlowControlEx result)
 		{

@@ -461,11 +461,10 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Parses s for the first integer number and returns the corresponding device.
+		/// Parses <paramref name="s"/> for VID / PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static DeviceInfo Parse(string s)
 		{
@@ -477,11 +476,10 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Tries to parse s for the first integer number and returns the corresponding device.
+		/// Tries to parse <paramref name="s"/> for VID / PID and returns a corresponding device ID object.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out DeviceInfo result)
 		{

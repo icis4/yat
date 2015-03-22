@@ -108,8 +108,7 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static TerminalTypeEx Parse(string s)
 		{
@@ -121,8 +120,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out TerminalTypeEx result)
 		{

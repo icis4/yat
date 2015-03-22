@@ -298,8 +298,7 @@ namespace MKY.IO.Usb
 		#region Parse
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static HidUsagePageEx Parse(string s)
 		{
@@ -311,8 +310,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out HidUsagePageEx result)
 		{
@@ -423,8 +421,7 @@ namespace MKY.IO.Usb
 		#region Parse
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static HidUsageIdEx Parse(string s)
 		{
@@ -436,8 +433,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out HidUsageIdEx result)
 		{

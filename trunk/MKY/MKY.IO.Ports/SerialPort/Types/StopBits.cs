@@ -94,8 +94,7 @@ namespace MKY.IO.Ports
 		#region Parse/From
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static StopBitsEx Parse(string s)
 		{
@@ -107,8 +106,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <remarks>
-		/// Following the convention of the .NET framework,
-		/// whitespace is trimmed from <paramref name="s"/>.
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out StopBitsEx result)
 		{
