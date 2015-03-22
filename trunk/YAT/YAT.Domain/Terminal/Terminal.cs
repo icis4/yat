@@ -57,24 +57,6 @@ namespace YAT.Domain
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Terminal : IDisposable
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string RxFramingErrorString        = "RX FRAMING ERROR";
-		private const string RxBufferOverrunErrorString  = "RX BUFFER OVERRUN";
-		private const string RxBufferOverflowErrorString = "RX BUFFER OVERFLOW";
-		private const string RxParityErrorString         = "RX PARITY ERROR";
-		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
-
-		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 3000;
-
-		private const string Undefined = "<Undefined>";
-
-		#endregion
-
 		#region Constant Help Text
 		//==========================================================================================
 		// Constant Help Text
@@ -106,7 +88,114 @@ namespace YAT.Domain
 		// Static Fields
 		//==========================================================================================
 
+		/// <summary>
+		/// ID to uniquely name the threads of each terminal. Start at 1000 to distinguish this ID
+		/// from the 'real' terminal ID (in Model.Terminal).
+		/// </summary>
+		private static int staticId = 1000;
+
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		#endregion
+
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		/// <summary>
+		/// While sending, the 'IOChanged' event must be raised if intensive processing is done.
+		/// This is required because a client may want to indicate that time intensive sending is
+		/// currently ongoing and no further data shall be sent.
+		/// The event shall be raised if the time lag will significantly be noticable by the user
+		/// (i.e. >= 400 ms). But the event shall be raised BEFORE the actual time lag. This helper
+		/// struct manages the state and the various criteria.
+		/// </summary>
+		/// <remarks>
+		/// Struct to improve performance as a struct only needs to be created once.
+		/// </remarks>
+		private struct IOChangedEventHelper
+		{
+			/// <summary></summary>
+			public bool EventMustBeRaised;
+
+			private DateTime initialTimeStamp;
+
+			/// <summary></summary>
+			public void Initialize()
+			{
+				this.EventMustBeRaised = false;
+				this.initialTimeStamp = DateTime.Now;
+			}
+
+			/// <summary></summary>
+			public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize)
+			{
+				// Only let the event get raised if it has'nt been yet:
+				if (!this.EventMustBeRaised &&
+					(chunkSize >= 400)) // 400 Bytes @ 9600 Baud ~= 400 ms
+				{
+					this.EventMustBeRaised = true;
+					return (true);
+				}
+
+				return (false);
+			}
+
+			/// <summary></summary>
+			public bool RaiseEventIfDelayIsAboveThreshold(int delay)
+			{
+				// Only let the event get raised if it has'nt been yet:
+				if (!this.EventMustBeRaised &&
+					(delay >= 400)) // 400 ms
+				{
+					this.EventMustBeRaised = true;
+					return (true);
+				}
+
+				return (false);
+			}
+
+			/// <summary></summary>
+			public bool RaiseEventIfTotalTimeLagIsAboveThreshold()
+			{
+				TimeSpan totalTimeLag = (DateTime.Now - initialTimeStamp);
+
+				// Let the event get raised in any case. This ensures the terminal
+				// state gets properly updated during an ongoing long delay:
+				if (totalTimeLag.Milliseconds >= 400) // 400 ms
+				{
+					this.EventMustBeRaised = true;
+					return (true);
+				}
+
+				return (false);
+			}
+
+			/// <summary></summary>
+			public void EventMustBeRaisedBecauseStatusHasBeenAccessed()
+			{
+				this.EventMustBeRaised = true;
+			}
+		}
+
+		#endregion
+
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string RxFramingErrorString        = "RX FRAMING ERROR";
+		private const string RxBufferOverrunErrorString  = "RX BUFFER OVERRUN";
+		private const string RxBufferOverflowErrorString = "RX BUFFER OVERFLOW";
+		private const string RxParityErrorString         = "RX PARITY ERROR";
+		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
+
+		private const int ThreadWaitInterval = 1;
+		private const int ThreadWaitTimeout = 3000;
+
+		private const string Undefined = "<Undefined>";
 
 		#endregion
 
@@ -128,10 +217,14 @@ namespace YAT.Domain
 		private Thread sendThread;
 		private object sendThreadSyncObj = new object();
 
-		private object repositorySyncObj = new object();
+		private bool sendingIsEnabled;
+		private bool sendingIsOngoing;
+		private IOChangedEventHelper ioChangedEventHelper;
+
 		private DisplayRepository txRepository;
 		private DisplayRepository bidirRepository;
 		private DisplayRepository rxRepository;
+		private object repositorySyncObj = new object();
 
 		private bool eventsSuspendedForReload;
 
@@ -295,6 +388,7 @@ namespace YAT.Domain
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = "Terminal [" + ++staticId + "] Send Thread";
 					this.sendThread.Start();
 				}
 			}
@@ -405,16 +499,29 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.rawTerminal != null)
-					return (this.rawTerminal.IsReadyToSend);
+					return (this.rawTerminal.IsTransmissive);
 				else
 					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsReadyToSend
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				this.ioChangedEventHelper.EventMustBeRaisedBecauseStatusHasBeenAccessed();
+
+				return (IsTransmissive && !this.sendingIsOngoing);
 			}
 		}
 
@@ -463,32 +570,69 @@ namespace YAT.Domain
 		// Methods > Start/Stop/Close
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <summary>
+		/// Start the terminal. To stop it again, call <see cref="Stop()"/>.
+		/// </summary>
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
 
-			// Do not clear the send queue, it already got cleared when stopping. This setup
-			// potentially allows to call Send() and buffer data before starting the terminal.
+			if (IsStopped)
+			{
+				// Do not clear the send queue, it already got cleared when stopping. This setup
+				// potentially allows to call Send() and buffer data before starting the terminal.
 
-			return (this.rawTerminal.Start());
+				bool startResult = this.rawTerminal.Start();
+
+				// Signal that send processing may start/resume:
+				sendingIsEnabled = true;
+
+				return (startResult);
+			}
+			else
+			{
+				return (true); // Return 'true' as terminal has already been started.
+			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Stop the terminal. To start it again, call <see cref="Start()"/>.
+		/// Or call <see cref="Close()"/> to definitely close the terminal.
+		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
 
-			lock (this.sendQueue)
+			if (IsStarted)
 			{
-				this.sendQueue.Clear();
-			}
+				// Signal that send processing must stop/pause:
+				sendingIsEnabled = false;
 
-			this.rawTerminal.Stop();
+				// Note that send processing may continue for some instants, until the send thread
+				// has noticed that it should stop/pause. The system (e.g. event handling) must be
+				// able to deal with this design!
+				// An alternative approach would be to lock/synchronize here, i.e. wait until the
+				// send thread has indeed stopped. However, this results in dead-locks if Stop()
+				// is called from the same thread where the ..Sent events get invoked (e.g. the UI
+				// thread).
+
+				this.rawTerminal.Stop();
+
+				lock (this.sendQueue)
+				{
+					this.sendQueue.Clear();
+				}
+			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Definitely close the terminal. After closing, the terminal cannot be started anymore
+		/// and must be terminated.
+		/// </summary>
+		/// <remarks>
+		/// This method is required to stop the send thread prior to calling <see cref="Dispose()"/>.
+		/// </remarks>
 		public virtual void Close()
 		{
 			AssertNotDisposed();
@@ -576,7 +720,7 @@ namespace YAT.Domain
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend && !IsDisposed)
+				while (this.sendingIsEnabled && this.sendThreadRunFlag && !IsDisposed)
 				{
 					SendItem[] pendingItems;
 					lock (this.sendQueue)
@@ -588,8 +732,18 @@ namespace YAT.Domain
 						this.sendQueue.Clear();
 					}
 
-					foreach (SendItem si in pendingItems)
-						ProcessSendItem(si);
+					if (pendingItems.Length > 0)
+					{
+						this.ioChangedEventHelper.Initialize();
+						this.sendingIsOngoing = true;
+
+						foreach (SendItem si in pendingItems)
+							ProcessSendItem(si);
+
+						this.sendingIsOngoing = false;
+						if (this.ioChangedEventHelper.EventMustBeRaised)
+							OnIOChanged(EventArgs.Empty); // Again raise the event to indicate that
+					}                                     //   sending is no longer ongoing.
 				}
 			}
 
@@ -626,18 +780,37 @@ namespace YAT.Domain
 		protected virtual void ProcessParsableSendItem(ParsableSendItem item)
 		{
 			string textToParse = item.Data;
-			bool performLineDelay = false;
 
+			// Parse the item string:
 			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 			if (p.TryParse(textToParse, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed))
+				ProcessParsedSendItem(item, parseResult);
+			else
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessParsedSendItem(ParsableSendItem item, Parser.Result[] parseResult)
+		{
+			bool sendEol = item.IsLine;
+			bool performLineDelay = false;
+			bool performLineRepeat = false;
+			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Domain.Settings.SendSettings.LineRepeatInfinite);
+			int lineRepeatRemaining = TerminalSettings.Send.DefaultLineRepeat;
+
+			do // Process at least once, potentially repeat.
 			{
 				foreach (Parser.Result ri in parseResult)
 				{
 					Parser.ByteArrayResult bar = ri as Parser.ByteArrayResult;
 					if (bar != null)
 					{
+						// Raise the 'IOChanged' event if a large chunk is about to be sent:
+						if (this.ioChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bar.ByteArray.Length))
+							OnIOChanged(EventArgs.Empty);
+
 						ForwardDataToRawTerminal(bar.ByteArray);
 					}
 					else // if keyword result (will not occur if keywords are disabled while parsing)
@@ -647,10 +820,22 @@ namespace YAT.Domain
 						{
 							switch (kr.Keyword)
 							{
-								// Process end-of-line keywords:
+								// Process line related keywords:
+								case Parser.Keyword.NoEol:
+								{
+									sendEol = false;
+									break;
+								}
+
 								case Parser.Keyword.LineDelay:
 								{
 									performLineDelay = true;
+									break;
+								}
+
+								case Parser.Keyword.LineRepeat:
+								{
+									performLineRepeat = true;
 									break;
 								}
 
@@ -663,16 +848,29 @@ namespace YAT.Domain
 							}
 						}
 					}
+
+					// Raise the 'IOChanged' event if sending already takes quite long:
+					if (this.ioChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+						OnIOChanged(EventArgs.Empty);
+				}
+
+				// Break if terminal has stopped or closed! Note that breaking is done prior
+				// to a potential Sleep() or repeat.
+				if (!(this.sendingIsEnabled && this.sendThreadRunFlag && !IsDisposed))
+					break;
+
+				// Finalize the line:
+				ProcessLineEnd(sendEol);
+				ProcessLineDelay(performLineDelay);
+
+				// Process repeat:
+				if (!lineRepeatIsInfinite)
+				{
+					if (lineRepeatRemaining > 0)
+						lineRepeatRemaining--;
 				}
 			}
-			else
-			{
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
-			}
-
-			// Finalize the line.
-			if (performLineDelay)
-				Thread.Sleep(TerminalSettings.Send.DefaultLineDelay);
+			while (performLineRepeat && (lineRepeatIsInfinite || (lineRepeatRemaining > 0)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -688,7 +886,13 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Delay:
 				{
-					Thread.Sleep(this.terminalSettings.Send.DefaultDelay);
+					int delay = this.terminalSettings.Send.DefaultDelay;
+
+					// Raise the 'IOChanged' event if sending is about to be delayed:
+					if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
+						OnIOChanged(EventArgs.Empty);
+
+					Thread.Sleep(delay);
 					break;
 				}
 
@@ -734,16 +938,39 @@ namespace YAT.Domain
 					break;
 				}
 
-				default:
+				default: // = Unknown or not-yet-supported keyword.
 				{
-					// Add space if necessary.
-					if (ElementsAreSeparate(SerialDirection.Tx))
+					if (ElementsAreSeparate(SerialDirection.Tx)) // Add space if necessary.
 						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Space());
 
 					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + " keyword is not yet supported"));
 					break;
 				}
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessLineEnd(bool sendEol)
+		{
+			// Nothing to do (yet).
+		}
+
+		/// <summary></summary>
+		protected virtual int ProcessLineDelay(bool performLineDelay)
+		{
+			if (performLineDelay)
+			{
+				int delay = this.terminalSettings.Send.DefaultLineDelay;
+
+				// Raise the 'IOChanged' event if sending is about to be delayed:
+				if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
+					OnIOChanged(EventArgs.Empty);
+
+				Thread.Sleep(delay);
+				return (delay);
+			}
+
+			return (0);
 		}
 
 		/// <summary>
@@ -1466,10 +1693,12 @@ namespace YAT.Domain
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Input))
 			{
 				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(e.Message));
+				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.LineBreak());
 			}
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Output))
 			{
 				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(e.Message));
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.LineBreak());
 			}
 			else
 			{

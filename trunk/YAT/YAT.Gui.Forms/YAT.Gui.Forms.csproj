@@ -393,9 +393,11 @@
     <None Include="Properties\DataSources\YAT.Gui.Utilities.AsciiTable.datasource" />
     <None Include="Resources\GPL\Image_LGPLv3_88x31.png" />
     <None Include="Resources\GPL\Image_LGPLv3_147x51.png" />
-    <Content Include="Resources\Status\Image_Off_12x12.png" />
-    <Content Include="Resources\Status\Image_On_12x12.png" />
+    <None Include="Resources\Status\Image_Grey_12x12.png" />
+    <Content Include="Resources\Status\Image_Red_12x12.png" />
+    <Content Include="Resources\Status\Image_Green_12x12.png" />
     <None Include="Resources\Tool\Image_ArrowRight_16x16.png" />
+    <None Include="Resources\Status\Image_Yellow_12x12.png" />
     <Content Include="Resources\Tool\Image_ArrowRight_24x24.png" />
     <Content Include="Resources\Tool\Image_CopyToClipboard_16x16.png" />
     <Content Include="Resources\Tool\Image_CopyToClipboard_24x24.png" />

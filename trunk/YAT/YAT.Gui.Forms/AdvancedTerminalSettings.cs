@@ -413,6 +413,43 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void textBox_DefaultLineRepeat_TextChanged(object sender, EventArgs e)
+		{
+			int repeat;
+			if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && (repeat < 0))
+				label_DefaultLineRepeatUnit.Text = "= infinite";
+			else
+				label_DefaultLineRepeatUnit.Text = "times";
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_DefaultLineRepeat_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				const int repeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
+
+				int repeat;
+				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 2) || (repeat == repeatInfinite)))
+				{
+					this.settingsInEdit.Terminal.Send.DefaultLineRepeat = repeat;
+				}
+				else
+				{
+					MessageBoxEx.Show
+						(
+						this,
+						"Repeat must be at least 2 times! Or set to " + repeatInfinite + " for infinite repeating.",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+
+					e.Cancel = true;
+				}
+			}
+		}
+
 		private void checkBox_DisableKeywords_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -516,7 +553,7 @@ namespace YAT.Gui.Forms
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
 			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
-			groupBox_Display_XOnXOff.Enabled            = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
 			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharReplace.HideXOnXOff;
 
 			// Communication:
@@ -541,15 +578,20 @@ namespace YAT.Gui.Forms
 			checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
-			label_DefaultDelay.Enabled         = !disableKeywords;
-			label_DefaultDelayUnit.Enabled     = !disableKeywords;
-			textBox_DefaultDelay.Enabled       = !disableKeywords;
-			textBox_DefaultDelay.Text          = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
-			label_DefaultLineDelay.Enabled     = !disableKeywords;
-			label_DefaultLineDelayUnit.Enabled = !disableKeywords;
-			textBox_DefaultLineDelay.Enabled   = !disableKeywords;
-			textBox_DefaultLineDelay.Text      = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
-			checkBox_DisableKeywords.Checked   = disableKeywords;
+			// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
+			label_DefaultDelay.Enabled          = !disableKeywords;
+			label_DefaultDelayUnit.Enabled      = !disableKeywords;
+			textBox_DefaultDelay.Enabled        = !disableKeywords;
+			textBox_DefaultDelay.Text           = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
+			label_DefaultLineDelay.Enabled      = !disableKeywords;
+			label_DefaultLineDelayUnit.Enabled  = !disableKeywords;
+			textBox_DefaultLineDelay.Enabled    = !disableKeywords;
+			textBox_DefaultLineDelay.Text       = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
+			label_DefaultLineRepeat.Enabled     = !disableKeywords;
+			label_DefaultLineRepeatUnit.Enabled = !disableKeywords;
+			textBox_DefaultLineRepeat.Enabled   = !disableKeywords;
+			textBox_DefaultLineRepeat.Text      = this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.InvariantCulture);
+			checkBox_DisableKeywords.Checked    = disableKeywords;
 
 			// User:
 			textBox_UserName.Text = this.settingsInEdit.UserName;

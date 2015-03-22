@@ -327,7 +327,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReadyToSend
+		public virtual bool IsTransmissive
 		{
 			get { return (IsOpen); }
 		}
@@ -355,7 +355,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (!IsStarted)
+			if (IsStopped)
 			{
 				WriteDebugMessageLine("Starting...");
 				StartSocket();
@@ -440,7 +440,7 @@ namespace MKY.IO.Serial.Socket
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendThreadRunFlag && IsReadyToSend && !IsDisposed)
+				while (IsTransmissive && this.sendThreadRunFlag && !IsDisposed)
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -532,6 +532,7 @@ namespace MKY.IO.Serial.Socket
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = ToShortEndPointString() + " Send Thread";
 					this.sendThread.Start();
 				}
 			}

@@ -647,6 +647,7 @@ namespace MKY.IO.Usb
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
+					this.receiveThread.Name = ToShortString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}
@@ -793,7 +794,7 @@ namespace MKY.IO.Usb
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (this.receiveThreadRunFlag && IsOpen && (BytesAvailable > 0) && !IsDisposed)
+				while (IsOpen && (BytesAvailable > 0) && this.receiveThreadRunFlag && !IsDisposed)
 				{
 					OnDataReceived(EventArgs.Empty);
 

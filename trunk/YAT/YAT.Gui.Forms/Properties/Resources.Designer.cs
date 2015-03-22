@@ -243,6 +243,26 @@ namespace YAT.Gui.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Green_12x12 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Green_12x12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Grey_12x12 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Grey_12x12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_LGPLv3_147x51 {
             get {
                 object obj = ResourceManager.GetObject("Image_LGPLv3_147x51", resourceCulture);
@@ -276,26 +296,6 @@ namespace YAT.Gui.Forms.Properties {
         internal static System.Drawing.Bitmap Image_NewDocument_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_NewDocument_24x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Image_Off_12x12 {
-            get {
-                object obj = ResourceManager.GetObject("Image_Off_12x12", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Image_On_12x12 {
-            get {
-                object obj = ResourceManager.GetObject("Image_On_12x12", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -356,6 +356,16 @@ namespace YAT.Gui.Forms.Properties {
         internal static System.Drawing.Bitmap Image_Properties_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_Properties_24x24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Red_12x12 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Red_12x12", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -456,6 +466,16 @@ namespace YAT.Gui.Forms.Properties {
         internal static System.Drawing.Bitmap Image_YAT_64x64 {
             get {
                 object obj = ResourceManager.GetObject("Image_YAT_64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_Yellow_12x12 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Yellow_12x12", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

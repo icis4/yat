@@ -538,6 +538,8 @@ namespace YAT.Gui.Controls
 					if (ri != null)
 					{
 						this.command = ri.Item;
+
+						OnCommandChanged(EventArgs.Empty);
 						SetControls();
 					}
 				}
