@@ -1,0 +1,46 @@
+
+Evaluation 2015-03..04
+----------------------
+
+YAT initially used the VS2003..2008 integrated installer functionality (VSI). But VS2013 no longer contained this. Therefore, alternatives were evaluated to pre-releasing YAT 1.99.31 for Raffi Zingg.
+
+InstallShield Limited Edition
+ + Prepared by VS2013 as the official replacement of the VSI
+ - Registration and download didn't work at first
+ - Boasts to contain more features than VSI
+ - Doesn't allow to choose 'All Users' !!! => KILLER
+
+InstallAware
+ + Congenial ideas and management
+ - Too limited in free version => KILLER
+
+WiX
+ + Likely to be very powerful
+ - Steep learning curve, XML, XML, XML... => NOT REALLY AN OPTION
+
+WiX Edit
+ + Looks promising at first
+ - Not supporting latest WiX
+ - Not supporting file types, fonts,... => KILLER
+
+InstallForge
+ + Looks promising at first
+ - Not supporting file types, fonts,... => KILLER
+
+VS2008 VSI again
+ + Works
+ - Maybe not up to date regarding Win8,...
+ - Not possible to integrate into YAT.sln => NAJA
+
+Orca
+ + Possible to view (and edit) the VS2008 VSI generated .msi
+ - Not possible to trick the InstallShield Limited Edition generated .exe
+
+So ?!?
+
+Then, browsing the web once more (to complain at Microsoft regarding the limitations of the InstallShield Limited Edition), finally, finally:
+ > "Microsoft Visual Studio Installer Projects"
+ > "This official Microsoft extension provides support for Visual Studio Installer Projects in Visual Studio 2013"
+ => https://visualstudiogallery.msdn.microsoft.com/9abe329c-9bba-44a1-be59-0fbf6151054d
+
+ :-))

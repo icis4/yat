@@ -88,8 +88,9 @@ Important changes:
   or error information (feature request #192)
 - More information on virtual serial port tools added to 'Help > About' (feature request #198)
 - DejaVu fonts updated to 2.34
-- Visual Studio upgraded to 2013 Community Edition (feature request #221)
+- Visual Studio upgraded to 2013 Community Edition, incl. installer (VSI) (feature request #221)
 - NUnit updated to 2.64, other development tools (GhostDoc, StyleCop, FxCop) updated too
+- Installer/setup improved, now using YAT specific banner and texts
 
 Fixed bugs:
 - Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly
