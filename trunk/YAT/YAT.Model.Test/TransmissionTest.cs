@@ -137,6 +137,9 @@ namespace YAT.Model.Test
 
 		private static readonly Utilities.TestSet SingleNoEolCommand;
 		private static readonly Utilities.TestSet DoubleNoEolCommand;
+		private static readonly Utilities.TestSet StillEolCommand1;
+		private static readonly Utilities.TestSet StillEolCommand2;
+		private static readonly Utilities.TestSet StillEolCommand3;
 
 		private static readonly Utilities.TestSet ControlCharCommand1;
 		private static readonly Utilities.TestSet ControlCharCommand2;
@@ -168,6 +171,9 @@ namespace YAT.Model.Test
 
 			SingleNoEolCommand  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 1, new int[] { 1 }, new int[] { 1 }, true);                                 // There is always 1 line.
 			DoubleNoEolCommand  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 1 }, new int[] { 2 }, true); // There is always 1 line.
+			StillEolCommand1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"), 2, new int[] { 1, 0 }, new int[] { 0, 0 }, true);
+			StillEolCommand2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"), 2, new int[] { 2, 0 }, new int[] { 1, 0 }, true);
+			StillEolCommand3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"), 2, new int[] { 2, 1 }, new int[] { 1, 1 }, true);
 
 			ControlCharCommand1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
 			ControlCharCommand2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
