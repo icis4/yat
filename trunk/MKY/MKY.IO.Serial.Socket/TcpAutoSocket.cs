@@ -606,7 +606,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartConnecting()
 		{
 			int randomDelay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
-			WriteDebugMessageLine("Delaying connecting by " + randomDelay + "ms.");
+			WriteDebugMessageLine("Delaying connecting by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
 			SetStateSynchronizedAndNotify(SocketState.Connecting);
@@ -629,7 +629,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartListening()
 		{
 			int randomDelay = staticRandom.Next(MinListenDelay, MaxListenDelay);
-			WriteDebugMessageLine("Delaying listening by " + randomDelay + "ms.");
+			WriteDebugMessageLine("Delaying listening by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
 			SetStateSynchronizedAndNotify(SocketState.StartingListening);
