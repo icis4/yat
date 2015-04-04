@@ -90,7 +90,8 @@ Important changes:
 - DejaVu fonts updated to 2.34
 - Visual Studio upgraded to 2013 Community Edition, incl. installer (VSI) (feature request #221)
 - NUnit updated to 2.64, other development tools (GhostDoc, StyleCop, FxCop) updated too
-- Installer/setup improved, now using YAT specific banner and texts
+- Installer split into separate packages for x86 and x64 (feature requests #175 and #191)
+- Installer improved, now using YAT specific banner and texts (related to requests #175 and #191)
 
 Fixed bugs:
 - Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly
