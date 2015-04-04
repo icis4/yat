@@ -197,18 +197,14 @@ namespace YAT.Gui.Controls
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual RecentItemCollection<Command> RecentCommands
+		public virtual RecentItemCollection<Command> Recents
 		{
 			set
 			{
-				if (this.recents != value)
-				{
-					this.recents = value;
+				// Do not check if (this.recents != value) because the collection will always be the same!
 
-					// Recents must immediately be updated, otherwise
-					// order will be wrong on arrow-up/down.
-					SetRecents();
-				}
+				this.recents = value;
+				SetRecents(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
 			}
 		}
 

@@ -167,7 +167,8 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// Opposed to the convention of the .NET framework, whitespace is NOT
+		/// trimmed from <paramref name="s"/> as all EOL sequences are whitespaces.
 		/// </remarks>
 		public static EolEx Parse(string s)
 		{
@@ -179,11 +180,12 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// Opposed to the convention of the .NET framework, whitespace is NOT
+		/// trimmed from <paramref name="s"/> as all EOL sequences are whitespaces.
 		/// </remarks>
 		public static bool TryParse(string s, out EolEx result)
 		{
-			s = s.Trim();
+			// Do not s = s.Trim(); due to reason described above.
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringSequence))

@@ -288,7 +288,7 @@ namespace YAT.Log
 		/// </remarks>
 		public static bool TryParse(string s, out FileNameSeparator result)
 		{
-			s = s.Trim();
+			// Do not s = s.Trim(); due to reason described above.
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_description))

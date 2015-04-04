@@ -141,15 +141,14 @@ namespace YAT.Gui.Controls
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual RecentItemCollection<Command> RecentCommands
+		public virtual RecentItemCollection<Command> Recents
 		{
 			set
 			{
-				if (this.recents != value)
-				{
-					this.recents = value;
-					SetControls();
-				}
+				// Do not check if (this.recents != value) because the collection will always be the same!
+
+				this.recents = value;
+				SetControls();
 			}
 		}
 
