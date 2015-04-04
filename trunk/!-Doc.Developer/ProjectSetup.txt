@@ -1,7 +1,6 @@
 ﻿
-All projects within YAT contain 'Any CPU', x86 as well as x64 configurations.
-YAT itself only uses the 'Any CPU' configuration, this also is the configuration being released.
-See below for reasons for the x86 and x64 configurations.
+Most projects within YAT contain 'Any CPU', x86 as well as x64 configurations.
+See below for details on 'Any CPU' as well as x86 and x64.
 
 
 Project > Build > General
@@ -25,67 +24,6 @@ Project > Build > Output
 		No XML documentation
 
 
-.vcproj contents
-----------------
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Debug\<<PROJECT>>.XML</DocumentationFile>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Release\<<PROJECT>>.XML</DocumentationFile>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <ErrorReport>prompt</ErrorReport>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <ErrorReport>prompt</ErrorReport>
-    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-
 x86 and x64
 -----------
 There are use cases where YAT sub-projects/assemblies are used in conjunction with non-managed C++
@@ -95,16 +33,17 @@ that is excuted on the embedded system. To support such use cases, YAT...
 ...projects contain x86 (and x64) configurations.
 ...a YAT assembly based solution can build and release x86 (and x64) configurations.
 
-However, YAT...
-...still builds and releases 'Any CPU' only
+(Still, 'AnyCPU' configurations are kept for those users who directly use YAT projects/code.)
 
-In general:
+To provide this support to the end user, YAT must be built with x86 and x64 respectively, And, it
+must also be distributed as such.
+
+Rules:
 > x86 EXEs/DLLs must be combined with x86 DLLs
 > x64 EXEs/DLLs must be combined with x64 DLLs
 > 'Any CPU' EXEs/DLLs must be combined with 'Any CPU' DLLs
 
-Remarks:
+Optimization:
 > 'Any CPU' enables the .NET CLR to perform target-dependent optimizations
 > There are different opinions on the real benefits of such optimizations, you find pro's and con's
 > Nevertheless, the optimizations could at least result in better speed
-> In VS2010 there still are 'Any CPU', x86 as well as x64 configurations
