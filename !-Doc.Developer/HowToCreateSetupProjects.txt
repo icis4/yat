@@ -32,10 +32,10 @@ Setup project configuration
 5. Set x86 and x64 as 'TargetPlatform'
 6. Configure the project
     > Outputs:
-       > x86\Setup\YAT-x86.msi
-       > x86\Setup with Prerequisites\YAT-x86.msi
-       > x64\Setup\YAT-x64.msi
-       > x64\Setup with Prerequisites\YAT-x64.msi
+       > Setup.x86\YAT-x86.msi
+       > Setup.x86 with Prerequisites\YAT-x86.msi
+       > Setup.x64\YAT-x64.msi
+       > Setup.x64 with Prerequisites\YAT-x64.msi
     > Optimization:
        > Setup = Speed
        > Setup with Prerequisites = Size
