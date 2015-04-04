@@ -2,19 +2,20 @@
 NUnit
 -----
 
-Tools
-  > Settings
-    > IDE Support
-      > Visual Studio
-        > Enable = true
-
-View
-  > Tree
-    > Show Checkboxes
+Settings
+ > Gui
+    > Tree Display
+       > Tree Images = Visual Studio
+       > Show Checkboxes
+    > Text Output
+       > Enable Trace Output
+ > IDE Support
+    > Visual Studio
+       > Enable = true
 
 Categories
-  > Add all N/A categories to the 'Selected Categories'
-  > Tick 'Exclude these categories'
+ > Add all N/A categories to the 'Selected Categories'
+ > Tick 'Exclude these categories'
 
 
 YAT test suite

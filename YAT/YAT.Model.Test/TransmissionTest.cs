@@ -169,11 +169,11 @@ namespace YAT.Model.Test
 			EolPartsCommand     = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 }, new int[] { 2, 1, 2, 5 }, true);
 			EolOnlyCommand      = new Utilities.TestSet(new Types.Command(new string[] { @"A", @"B", @"", @"C" }),            4, new int[] { 2, 2, 1, 2 }, new int[] { 1, 1, 0, 1 }, true);
 
-			SingleNoEolCommand  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 1, new int[] { 1 }, new int[] { 1 }, true);                                 // There is always 1 line.
-			DoubleNoEolCommand  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 1 }, new int[] { 2 }, true); // There is always 1 line.
-			StillEolCommand1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"), 2, new int[] { 1, 0 }, new int[] { 0, 0 }, true);
-			StillEolCommand2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"), 2, new int[] { 2, 0 }, new int[] { 1, 0 }, true);
-			StillEolCommand3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"), 2, new int[] { 2, 1 }, new int[] { 1, 1 }, true);
+			SingleNoEolCommand  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"),                                 1, new int[] { 1 },    new int[] { 1 },    true); // There is always 1 line.
+			DoubleNoEolCommand  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 1 },    new int[] { 2 },    true); // There is always 1 line.
+			StillEolCommand1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"),                          1, new int[] { 1 },    new int[] { 0 },    true);
+			StillEolCommand2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"),                         1, new int[] { 2 },    new int[] { 1 },    true);
+			StillEolCommand3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        2, new int[] { 2, 1 }, new int[] { 1, 1 }, true);
 
 			ControlCharCommand1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
 			ControlCharCommand2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
@@ -215,6 +215,9 @@ namespace YAT.Model.Test
 
 					yield return (new TestCaseData(kvp.Key, SingleNoEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_SingleNoEolTransmission"));
 					yield return (new TestCaseData(kvp.Key, DoubleNoEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleNoEolTransmission"));
+					yield return (new TestCaseData(kvp.Key, StillEolCommand1,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_StillEolCommand1"));
+					yield return (new TestCaseData(kvp.Key, StillEolCommand2,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_StillEolCommand2"));
+					yield return (new TestCaseData(kvp.Key, StillEolCommand3,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_StillEolCommand3"));
 
 					yield return (new TestCaseData(kvp.Key, ControlCharCommand1, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_ControlCharCommand1"));
 					yield return (new TestCaseData(kvp.Key, ControlCharCommand2, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_ControlCharCommand2"));

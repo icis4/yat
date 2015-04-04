@@ -480,7 +480,7 @@ namespace YAT.Model.Test
 					Domain.DisplayLine lineA = linesA[i];
 					Domain.DisplayLine lineB = linesB[i];
 
-					if ((lineB.Count == lineA.Count) &&
+					if ((lineB.Count     == lineA.Count) &&
 						(lineB.Count     == expectedElementCount) &&
 						(lineB.DataCount == lineA.DataCount) &&
 						(lineB.DataCount == expectedDataCount))
@@ -493,7 +493,7 @@ namespace YAT.Model.Test
 						string strA = ArrayEx.ElementsToString(lineA.ToArray());
 						string strB = ArrayEx.ElementsToString(lineB.ToArray());
 
-						Trace.Write
+						Console.Error.Write
 						(
 							"A:" + Environment.NewLine + strA + Environment.NewLine +
 							"B:" + Environment.NewLine + strB + Environment.NewLine
@@ -523,7 +523,7 @@ namespace YAT.Model.Test
 				foreach (Domain.DisplayLine lineB in linesB)
 					sbB.Append(ArrayEx.ElementsToString(lineB.ToArray()));
 
-				Trace.Write
+				Console.Error.Write
 				(
 					"A:" + Environment.NewLine + sbA + Environment.NewLine +
 					"B:" + Environment.NewLine + sbB + Environment.NewLine

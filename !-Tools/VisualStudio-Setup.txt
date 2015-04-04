@@ -43,11 +43,20 @@ Place StyleCop settings into solution folder and inherit settings in each projec
 NUnit as external tool
 ----------------------
 
-Tools
-  > External Tools
-    > Add"
-      > Title       = "NUnit"
-      > Command     = "<NUnitInstallPath>\bin\<Platform>\nunit.exe"
-      > Arguments   = "$(SolutionFileName)"
-      > Initial Dir = "$(SolutionDir)"
-    > Confirm "OK"
+Tools > External Tools
+ > Add
+    > Title       = "NUnit"
+    > Command     = "<NUnitInstallPath>\bin\nunit.exe"
+    > Arguments   = "YAT.nunit"
+    > Initial Dir = "$(SolutionDir)"
+    > "OK"
+
+
+Shortcuts
+---------
+
+Tools > Options
+ > Environment > Keyboard
+    > Show "Tools.External"
+       > Command4 (NUnit)
+          > Alt+N (Global)
