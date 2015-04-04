@@ -168,6 +168,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B0
 		!-Tools\VisualStudio-Setup.txt = !-Tools\VisualStudio-Setup.txt
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x64", "YAT\YAT.Setup\YAT.Setup.x64.vdproj", "{54F71988-3626-43F1-88C9-6A49EF275417}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup.x86", "YAT\YAT.Setup\YAT.Setup.x86.vdproj", "{D33931A1-0F8B-4524-A5D1-3891B88C21E5}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -1443,6 +1447,46 @@ Global
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|Any CPU.ActiveCfg = Release|Any CPU
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|x64.ActiveCfg = Release|x64
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57}.Setup|x86.ActiveCfg = Release|x86
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug Test|Any CPU.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug Test|x64.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug Test|x86.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug|Any CPU.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug|x64.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Debug|x86.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Release Test|Any CPU.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Release Test|x64.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Release Test|x86.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Release|Any CPU.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Release|x64.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Release|x86.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|Any CPU.ActiveCfg = Setup with Prerequisites
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|Any CPU.Build.0 = Setup with Prerequisites
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|x64.ActiveCfg = Setup with Prerequisites
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup with Prerequisites|x86.ActiveCfg = Setup with Prerequisites
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|Any CPU.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|Any CPU.Build.0 = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|x64.ActiveCfg = Setup
+		{54F71988-3626-43F1-88C9-6A49EF275417}.Setup|x86.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug Test|Any CPU.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug Test|x64.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug Test|x86.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug|Any CPU.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug|x64.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Debug|x86.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Release Test|Any CPU.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Release Test|x64.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Release Test|x86.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Release|Any CPU.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Release|x64.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Release|x86.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup with Prerequisites|Any CPU.ActiveCfg = Setup with Prerequisites
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup with Prerequisites|x64.ActiveCfg = Setup with Prerequisites
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup with Prerequisites|x86.ActiveCfg = Setup with Prerequisites
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup with Prerequisites|x86.Build.0 = Setup with Prerequisites
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup|Any CPU.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup|x64.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup|x86.ActiveCfg = Setup
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5}.Setup|x86.Build.0 = Setup
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1495,5 +1539,7 @@ Global
 		{1E91D8B1-CFE6-4914-BDCF-AA204773CECA} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{189787C4-AE83-4A89-BC74-8F34EF1DBE57} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
+		{54F71988-3626-43F1-88C9-6A49EF275417} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
+		{D33931A1-0F8B-4524-A5D1-3891B88C21E5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 	EndGlobalSection
 EndGlobal

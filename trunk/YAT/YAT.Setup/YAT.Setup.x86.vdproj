@@ -16,12 +16,12 @@
     }
     "Configurations"
     {
-        "Debug"
+        "Setup"
         {
-        "DisplayName" = "8:Debug"
-        "IsDebugOnly" = "11:TRUE"
+        "DisplayName" = "8:Setup"
+        "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\YAT.Setup.x86.msi"
+        "OutputFilename" = "8:Setup\\YAT.Setup.x86.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -32,12 +32,12 @@
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
         }
-        "Release"
+        "Setup with Prerequisites"
         {
-        "DisplayName" = "8:Release"
+        "DisplayName" = "8:Setup with Prerequisites"
         "IsDebugOnly" = "11:FALSE"
-        "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\YAT.Setup.x86.msi"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Setup with Prerequisites\\YAT.Setup.x86.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
