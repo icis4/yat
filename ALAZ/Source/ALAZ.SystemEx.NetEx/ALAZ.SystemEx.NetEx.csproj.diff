@@ -86,7 +86,7 @@
        <RequiredTargetFramework>3.0</RequiredTargetFramework>
      </Reference>
      <Reference Include="System.Web" />
--    <Reference Include="System.XML" />
+-    <Reference Include="System.Xml" />
    </ItemGroup>
    <ItemGroup>
 +    <Compile Include="..\ALAZ.Version.cs">
