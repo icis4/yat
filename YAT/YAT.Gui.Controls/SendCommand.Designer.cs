@@ -53,8 +53,8 @@
 			// 
 			// button_SendCommand
 			// 
-			this.button_SendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.button_SendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_SendCommand.Enabled = false;
 			this.button_SendCommand.Location = new System.Drawing.Point(3, 3);
 			this.button_SendCommand.Name = "button_SendCommand";
@@ -66,20 +66,20 @@
 			// 
 			// comboBox_Command
 			// 
-			this.comboBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Command.Location = new System.Drawing.Point(3, 3);
 			this.comboBox_Command.Name = "comboBox_Command";
 			this.comboBox_Command.Size = new System.Drawing.Size(319, 21);
 			this.comboBox_Command.TabIndex = 1;
 			this.toolTip.SetToolTip(this.comboBox_Command, "Fill-in desired command, <Enter> to send,\r\n<Arrow Up/Down> or small triangle for " +
-					"recent\r\ncommands, <...> to enter multi line command");
-			this.comboBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Command_Validating);
+        "recent\r\ncommands, <...> to enter multi line command");
 			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
-			this.comboBox_Command.Leave += new System.EventHandler(this.comboBox_Command_Leave);
+			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
 			this.comboBox_Command.Enter += new System.EventHandler(this.comboBox_Command_Enter);
 			this.comboBox_Command.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_Command_KeyPress);
-			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
+			this.comboBox_Command.Leave += new System.EventHandler(this.comboBox_Command_Leave);
+			this.comboBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Command_Validating);
 			// 
 			// splitContainer
 			// 
@@ -109,8 +109,8 @@
 			this.Name = "SendCommand";
 			this.Size = new System.Drawing.Size(540, 27);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SendCommand_Paint);
-			this.Leave += new System.EventHandler(this.SendCommand_Leave);
 			this.Enter += new System.EventHandler(this.SendCommand_Enter);
+			this.Leave += new System.EventHandler(this.SendCommand_Leave);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			this.splitContainer.ResumeLayout(false);

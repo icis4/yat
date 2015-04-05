@@ -58,17 +58,17 @@
 			// 
 			// fastListBox_Monitor
 			// 
-			this.fastListBox_Monitor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.fastListBox_Monitor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.fastListBox_Monitor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.fastListBox_Monitor.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.fastListBox_Monitor.HorizontalScrollbar = true;
 			this.fastListBox_Monitor.IntegralHeight = false;
-			this.fastListBox_Monitor.Location = new System.Drawing.Point(22, 33);
+			this.fastListBox_Monitor.Location = new System.Drawing.Point(22, 34);
 			this.fastListBox_Monitor.Name = "fastListBox_Monitor";
 			this.fastListBox_Monitor.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.fastListBox_Monitor.Size = new System.Drawing.Size(278, 167);
+			this.fastListBox_Monitor.Size = new System.Drawing.Size(278, 166);
 			this.fastListBox_Monitor.TabIndex = 1;
 			this.fastListBox_Monitor.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fastListBox_Monitor_DrawItem);
 			this.fastListBox_Monitor.Leave += new System.EventHandler(this.fastListBox_Monitor_Leave);
@@ -82,7 +82,7 @@
 			this.panel_Picture.Location = new System.Drawing.Point(0, 0);
 			this.panel_Picture.Name = "panel_Picture";
 			this.panel_Picture.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.panel_Picture.Size = new System.Drawing.Size(300, 33);
+			this.panel_Picture.Size = new System.Drawing.Size(300, 34);
 			this.panel_Picture.TabIndex = 0;
 			// 
 			// label_TimeStatus
@@ -116,24 +116,24 @@
 			this.pictureBox_Monitor.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_Bidir_28x28_Green;
 			this.pictureBox_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox_Monitor.Name = "pictureBox_Monitor";
-			this.pictureBox_Monitor.Size = new System.Drawing.Size(300, 30);
+			this.pictureBox_Monitor.Size = new System.Drawing.Size(300, 31);
 			this.pictureBox_Monitor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
 			this.pictureBox_Monitor.TabIndex = 1;
 			this.pictureBox_Monitor.TabStop = false;
 			// 
 			// fastListBox_LineNumbers
 			// 
-			this.fastListBox_LineNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)));
+			this.fastListBox_LineNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.fastListBox_LineNumbers.BackColor = System.Drawing.SystemColors.Control;
 			this.fastListBox_LineNumbers.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.fastListBox_LineNumbers.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.fastListBox_LineNumbers.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.fastListBox_LineNumbers.IntegralHeight = false;
-			this.fastListBox_LineNumbers.Location = new System.Drawing.Point(0, 33);
+			this.fastListBox_LineNumbers.Location = new System.Drawing.Point(0, 34);
 			this.fastListBox_LineNumbers.Name = "fastListBox_LineNumbers";
 			this.fastListBox_LineNumbers.ScrollAlwaysVisible = true;
-			this.fastListBox_LineNumbers.Size = new System.Drawing.Size(40, 167);
+			this.fastListBox_LineNumbers.Size = new System.Drawing.Size(40, 166);
 			this.fastListBox_LineNumbers.TabIndex = 0;
 			this.fastListBox_LineNumbers.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.fastListBox_LineNumbers_DrawItem);
 			// 

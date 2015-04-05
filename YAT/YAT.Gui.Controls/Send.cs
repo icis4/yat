@@ -184,7 +184,7 @@ namespace YAT.Gui.Controls
 			set
 			{
 				this.terminalType = value;
-				SetControls();
+				SetTerminalControls();
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace YAT.Gui.Controls
 			set
 			{
 				this.terminalIsReadyToSend = value;
-				SetControls();
+				SetTerminalControls();
 			}
 		}
 
@@ -231,8 +231,12 @@ namespace YAT.Gui.Controls
 			get { return (this.splitterDistance); }
 			set
 			{
+				// Do not check if (this.splitterDistance != value) because the distance (position)
+				// will be limited to the control's width, and that may change AFTER the distance
+				// has been set.
+
 				this.splitterDistance = value;
-				SetControls();
+				SetSplitterControls();
 			}
 		}
 
@@ -297,13 +301,23 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
+			SetTerminalControls();
+			SetSplitterControls();
+		}
+
+		private void SetTerminalControls()
+		{
 			sendCommand.TerminalType          = this.terminalType;
 			sendCommand.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-			sendCommand.SplitterDistance      = this.splitterDistance - sendCommand.Left;
 
 			sendFile.TerminalType          = this.terminalType;
 			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-			sendFile.SplitterDistance      = this.splitterDistance - sendFile.Left;
+		}
+
+		private void SetSplitterControls()
+		{
+			sendCommand.SplitterDistance = this.splitterDistance - sendCommand.Left;
+			sendFile.SplitterDistance    = this.splitterDistance - sendFile.Left;
 		}
 
 		#endregion

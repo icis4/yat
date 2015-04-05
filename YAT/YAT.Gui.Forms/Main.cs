@@ -1547,11 +1547,21 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void SetTerminalLayout(WorkspaceLayout layout)
 		{
-			// Only notify the workspace, so it can keep the setting. But layouting itself is done
-			// here as the MDI functionality is an integral part of the Windows.Forms environment.
-			this.workspace.NotifyLayout(layout);
+			if (this.workspace != null)
+			{
+				// Only notify the workspace, so it can keep the setting. But layouting itself is done
+				// here as the MDI functionality is an integral part of the Windows.Forms environment.
+				this.workspace.NotifyLayout(layout);
 
-			LayoutTerminals(layout);
+				LayoutTerminals(layout);
+			}
+		}
+
+		private void ResizeTerminals()
+		{
+			// Simply forward the resize request to the MDI layout engine:
+			if (this.workspace != null)
+				LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
 		}
 
 		/// <summary>
@@ -1577,12 +1587,6 @@ namespace YAT.Gui.Forms
 				default:
 					throw (new InvalidOperationException("Invalid workspace layout"));
 			}
-		}
-
-		private void ResizeTerminals()
-		{
-			// Simply forward the resize request to the MDI layout engine:
-			LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
 		}
 
 		/// <summary>
