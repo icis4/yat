@@ -279,11 +279,12 @@ namespace YAT.Gui.Controls
 			get { return (this.splitterDistance); }
 			set
 			{
-				if (this.splitterDistance != value)
-				{
-					this.splitterDistance = value;
-					SetControls();
-				}
+				// Do not check if (this.splitterDistance != value) because the distance (position)
+				// will be limited to the control's width, and that may change AFTER the distance
+				// has been set.
+
+				this.splitterDistance = value;
+				SetSplitter();
 			}
 		}
 
@@ -564,11 +565,18 @@ namespace YAT.Gui.Controls
 		// Private Methods > Set Controls
 		//------------------------------------------------------------------------------------------
 
+		private void SetSplitter()
+		{
+			this.isSettingControls.Enter();
+			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
+			this.isSettingControls.Leave();
+		}
+
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
 
-			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
+			SetSplitter();
 
 			if (this.editFocusState == EditFocusState.EditIsInactive)
 			{

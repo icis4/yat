@@ -216,6 +216,7 @@
 			this.Controls.Add(this.button_Command_3);
 			this.Controls.Add(this.button_Command_2);
 			this.Controls.Add(this.button_Command_1);
+			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 3);
 			this.Name = "PredefinedCommandPageButtons";
 			this.Size = new System.Drawing.Size(176, 264);
 			this.ResumeLayout(false);

@@ -1681,6 +1681,11 @@ namespace YAT.Gui.Forms
 			this.terminal.SendFile();
 		}
 
+		private void send_SizeChanged(object sender, EventArgs e)
+		{
+			LayoutSend();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > Status
@@ -2081,14 +2086,20 @@ namespace YAT.Gui.Forms
 			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendCommandPanelIsVisible;
 			send.FilePanelIsVisible    = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-			// Calculate absolute splitter position (distance) from ratio, including
-			// offset to get send buttons pixel-accurate below predefined buttons:
-			const int predefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
-			int absoluteX = (splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left);
-			send.SplitterDistance = Int32Ex.LimitToBounds((absoluteX - send.Left + predefinedOffset), 0, (send.Width - 1));
+			LayoutSend();
 
 			ResumeLayout();
 			this.isSettingControls.Leave();
+		}
+
+		private void LayoutSend()
+		{
+			// Calculate absolute splitter position (distance) of predefined splitter,
+			// including offset to get send buttons pixel-accurate below predefined buttons:
+			const int predefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
+			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
+			int relativeX = absoluteX - send.Left + predefinedOffset;
+			send.SplitterDistance = Int32Ex.LimitToBounds(relativeX, 0, (send.Width - 1));
 		}
 
 		private void SetDisplayControls()
