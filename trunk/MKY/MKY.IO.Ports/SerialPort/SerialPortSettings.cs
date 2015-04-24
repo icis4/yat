@@ -226,6 +226,19 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
+		/// Returns port settings as a single string. The string is limited to the basic settings.
+		/// </summary>
+		public virtual string ToShortString()
+		{
+			return
+			(
+				((BaudRateEx)this.baudRate).ToString() + ", " +
+				((DataBitsEx)this.dataBits).ToString() + ", " +
+				((ParityEx)  this.parity)  .ToShortString()
+			);
+		}
+
+		/// <summary>
 		/// Parses <paramref name="s"/> for serial port settings and returns a corresponding settings object.
 		/// </summary>
 		/// <remarks>
@@ -298,19 +311,6 @@ namespace MKY.IO.Ports
 		public long PacketDuration
 		{
 			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
-		}
-
-		/// <summary>
-		/// Returns port settings as a single string. The string is limited to the basic settings.
-		/// </summary>
-		public virtual string ToShortString()
-		{
-			return
-			(
-				((BaudRateEx)this.baudRate).ToString() + ", " +
-				((DataBitsEx)this.dataBits).ToString() + ", " +
-				((ParityEx)  this.parity)  .ToShortString()
-			);
 		}
 
 		#region Comparison Operators

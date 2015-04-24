@@ -177,7 +177,8 @@ namespace YAT.Gui.Controls
 		public SerialPortSelection()
 		{
 			InitializeComponent();
-			SetControls();
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
