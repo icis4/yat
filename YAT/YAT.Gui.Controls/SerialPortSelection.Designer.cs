@@ -51,8 +51,8 @@
 			// 
 			// comboBox_Port
 			// 
-			this.comboBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Port.ItemHeight = 13;
 			this.comboBox_Port.Location = new System.Drawing.Point(6, 22);
 			this.comboBox_Port.Name = "comboBox_Port";
@@ -67,7 +67,7 @@
 			this.label_Port.Name = "label_Port";
 			this.label_Port.Size = new System.Drawing.Size(58, 13);
 			this.label_Port.TabIndex = 0;
-			this.label_Port.Text = "Serial Port:";
+			this.label_Port.Text = "&Serial Port:";
 			// 
 			// timer_ShowScanDialog
 			// 
@@ -88,8 +88,8 @@
 			this.Controls.Add(this.label_Port);
 			this.Name = "SerialPortSelection";
 			this.Size = new System.Drawing.Size(285, 46);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SerialPortSelection_Paint);
 			this.EnabledChanged += new System.EventHandler(this.SerialPortSelection_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SerialPortSelection_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

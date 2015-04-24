@@ -49,8 +49,8 @@
 			// 
 			// comboBox_Device
 			// 
-			this.comboBox_Device.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Device.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Device.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Device.ItemHeight = 13;
 			this.comboBox_Device.Location = new System.Drawing.Point(6, 22);
@@ -64,9 +64,9 @@
 			this.label_Device.AutoSize = true;
 			this.label_Device.Location = new System.Drawing.Point(3, 6);
 			this.label_Device.Name = "label_Device";
-			this.label_Device.Size = new System.Drawing.Size(112, 13);
+			this.label_Device.Size = new System.Drawing.Size(66, 13);
 			this.label_Device.TabIndex = 0;
-			this.label_Device.Text = "USB Ser/HID Device:";
+			this.label_Device.Text = "HID De&vice:";
 			// 
 			// UsbSerialHidDeviceSelection
 			// 
@@ -77,8 +77,8 @@
 			this.Controls.Add(this.label_Device);
 			this.Name = "UsbSerialHidDeviceSelection";
 			this.Size = new System.Drawing.Size(285, 46);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbSerialHidPortSelection_Paint);
 			this.EnabledChanged += new System.EventHandler(this.UsbSerialHidDeviceSelection_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbSerialHidPortSelection_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

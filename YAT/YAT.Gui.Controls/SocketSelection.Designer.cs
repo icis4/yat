@@ -46,7 +46,7 @@
 			this.label_RemoteHost.Name = "label_RemoteHost";
 			this.label_RemoteHost.Size = new System.Drawing.Size(72, 13);
 			this.label_RemoteHost.TabIndex = 0;
-			this.label_RemoteHost.Text = "Remote Host:";
+			this.label_RemoteHost.Text = "Remote &Host:";
 			// 
 			// label_RemotePort
 			// 
@@ -55,12 +55,12 @@
 			this.label_RemotePort.Name = "label_RemotePort";
 			this.label_RemotePort.Size = new System.Drawing.Size(93, 13);
 			this.label_RemotePort.TabIndex = 2;
-			this.label_RemotePort.Text = "Remote TCP Port:";
+			this.label_RemotePort.Text = "&Remote TCP Port:";
 			// 
 			// textBox_RemotePort
 			// 
-			this.textBox_RemotePort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_RemotePort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_RemotePort.Location = new System.Drawing.Point(101, 30);
 			this.textBox_RemotePort.Name = "textBox_RemotePort";
 			this.textBox_RemotePort.Size = new System.Drawing.Size(156, 20);
@@ -69,8 +69,8 @@
 			// 
 			// comboBox_RemoteHost
 			// 
-			this.comboBox_RemoteHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_RemoteHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_RemoteHost.Location = new System.Drawing.Point(101, 3);
 			this.comboBox_RemoteHost.Name = "comboBox_RemoteHost";
 			this.comboBox_RemoteHost.Size = new System.Drawing.Size(156, 21);
@@ -79,8 +79,8 @@
 			// 
 			// textBox_LocalPort
 			// 
-			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_LocalPort.Location = new System.Drawing.Point(101, 102);
 			this.textBox_LocalPort.Name = "textBox_LocalPort";
 			this.textBox_LocalPort.Size = new System.Drawing.Size(156, 20);
@@ -94,7 +94,7 @@
 			this.label_LocalPort.Name = "label_LocalPort";
 			this.label_LocalPort.Size = new System.Drawing.Size(82, 13);
 			this.label_LocalPort.TabIndex = 7;
-			this.label_LocalPort.Text = "Local TCP Port:";
+			this.label_LocalPort.Text = "&Local TCP Port:";
 			// 
 			// label_LocalInterface
 			// 
@@ -103,12 +103,12 @@
 			this.label_LocalInterface.Name = "label_LocalInterface";
 			this.label_LocalInterface.Size = new System.Drawing.Size(81, 13);
 			this.label_LocalInterface.TabIndex = 4;
-			this.label_LocalInterface.Text = "Local Interface:";
+			this.label_LocalInterface.Text = "Local &Interface:";
 			// 
 			// comboBox_LocalInterface
 			// 
-			this.comboBox_LocalInterface.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_LocalInterface.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_LocalInterface.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_LocalInterface.Location = new System.Drawing.Point(6, 75);
 			this.comboBox_LocalInterface.Name = "comboBox_LocalInterface";
@@ -142,8 +142,8 @@
 			this.Controls.Add(this.label_RemoteHost);
 			this.Name = "SocketSelection";
 			this.Size = new System.Drawing.Size(285, 125);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSelection_Paint);
 			this.EnabledChanged += new System.EventHandler(this.SocketSelection_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSelection_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -85,7 +85,8 @@ namespace YAT.Gui.Controls
 		public SocketSettings()
 		{
 			InitializeComponent();
-			SetControls();
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
