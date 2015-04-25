@@ -544,7 +544,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
 
 			checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString(NumberFormatInfo.CurrentInfo);
+			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString();
 
 			// Char replace:
 			bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;

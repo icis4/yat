@@ -487,17 +487,17 @@ namespace YAT.Gui.Forms
 			checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
 
 			// Transmit.
-			bool delayEnabled = this.settingsInEdit.LineSendDelay.Enabled;
-			checkBox_Delay.Checked = delayEnabled;
-			textBox_Delay.Enabled = delayEnabled;
-			textBox_Delay.Text = this.settingsInEdit.LineSendDelay.Delay.ToString(NumberFormatInfo.CurrentInfo);
+			bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
+			checkBox_Delay.Checked        = delayEnabled;
+			textBox_Delay.Enabled         = delayEnabled;
+			textBox_Delay.Text            = this.settingsInEdit.LineSendDelay.Delay.ToString();
 			textBox_DelayInterval.Enabled = delayEnabled;
-			textBox_DelayInterval.Text = this.settingsInEdit.LineSendDelay.LineInterval.ToString(NumberFormatInfo.CurrentInfo);
+			textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString();
 
-			bool waitEnabled = this.settingsInEdit.WaitForResponse.Enabled;
+			bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
 			checkBox_WaitForResponse.Checked = waitEnabled;
-			textBox_WaitForResponse.Enabled = waitEnabled;
-			textBox_WaitForResponse.Text = this.settingsInEdit.WaitForResponse.Timeout.ToString(NumberFormatInfo.CurrentInfo);
+			textBox_WaitForResponse.Enabled  = waitEnabled;
+			textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString();
 
 			switch (this.settingsInEdit.CharSubstitution)
 			{

@@ -234,7 +234,7 @@ namespace YAT.Gui.Controls
 
 			string autoReconnectIntervalText;
 			if (enabledTcpClient)
-				autoReconnectIntervalText = this.tcpClientAutoReconnect.Interval.ToString(NumberFormatInfo.CurrentInfo);
+				autoReconnectIntervalText = this.tcpClientAutoReconnect.Interval.ToString();
 			else
 				autoReconnectIntervalText = "";
 
