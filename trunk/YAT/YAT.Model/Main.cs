@@ -823,46 +823,50 @@ namespace YAT.Model
 			// cloned below. They can simply be assigned and will then later be assigned back.
 			Domain.Settings.TerminalSettings terminalSettings = new Domain.Settings.TerminalSettings();
 
-			terminalSettings.TerminalType = newTerminalSettings.TerminalType;
-			terminalSettings.IO.IOType    = newTerminalSettings.IOType;
+			terminalSettings.TerminalType                       = newTerminalSettings.TerminalType;
+			terminalSettings.IO.IOType                          = newTerminalSettings.IOType;
 
-			terminalSettings.IO.SerialPort.PortId        = newTerminalSettings.SerialPortId;
-			terminalSettings.IO.SerialPort.Communication = newTerminalSettings.SerialPortCommunication;
-			terminalSettings.IO.SerialPort.AutoReopen    = newTerminalSettings.SerialPortAutoReopen;
+			terminalSettings.IO.SerialPort.PortId               = newTerminalSettings.SerialPortId;
+			terminalSettings.IO.SerialPort.Communication        = newTerminalSettings.SerialPortCommunication;
+			terminalSettings.IO.SerialPort.AutoReopen           = newTerminalSettings.SerialPortAutoReopen;
 
-			terminalSettings.IO.Socket.RemoteHost             = newTerminalSettings.SocketRemoteHost;
-			terminalSettings.IO.Socket.RemoteTcpPort          = newTerminalSettings.SocketRemoteTcpPort;
-			terminalSettings.IO.Socket.RemoteUdpPort          = newTerminalSettings.SocketRemoteUdpPort;
-			terminalSettings.IO.Socket.LocalInterface         = newTerminalSettings.SocketLocalInterface;
-			terminalSettings.IO.Socket.LocalTcpPort           = newTerminalSettings.SocketLocalTcpPort;
-			terminalSettings.IO.Socket.LocalUdpPort           = newTerminalSettings.SocketLocalUdpPort;
-			terminalSettings.IO.Socket.TcpClientAutoReconnect = newTerminalSettings.TcpClientAutoReconnect;
+			terminalSettings.IO.Socket.RemoteHost               = newTerminalSettings.SocketRemoteHost;
+			terminalSettings.IO.Socket.RemoteTcpPort            = newTerminalSettings.SocketRemoteTcpPort;
+			terminalSettings.IO.Socket.RemoteUdpPort            = newTerminalSettings.SocketRemoteUdpPort;
+			terminalSettings.IO.Socket.LocalInterface           = newTerminalSettings.SocketLocalInterface;
+			terminalSettings.IO.Socket.LocalTcpPort             = newTerminalSettings.SocketLocalTcpPort;
+			terminalSettings.IO.Socket.LocalUdpPort             = newTerminalSettings.SocketLocalUdpPort;
+			terminalSettings.IO.Socket.TcpClientAutoReconnect   = newTerminalSettings.TcpClientAutoReconnect;
 
-			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = newTerminalSettings.UsbSerialHidDeviceInfo;
-			terminalSettings.IO.UsbSerialHidDevice.AutoOpen   = newTerminalSettings.UsbSerialHidAutoOpen;
+			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo   = newTerminalSettings.UsbSerialHidDeviceInfo;
+			terminalSettings.IO.UsbSerialHidDevice.ReportFormat = newTerminalSettings.UsbSerialHidReportFormat;
+			terminalSettings.IO.UsbSerialHidDevice.RxIdUsage    = newTerminalSettings.UsbSerialHidRxIdUsage;
+			terminalSettings.IO.UsbSerialHidDevice.AutoOpen     = newTerminalSettings.UsbSerialHidAutoOpen;
 
 			bool terminalIsStarted = newTerminalSettings.StartTerminal;
 			bool logIsStarted      = false; // Doesn't matter, new terminal settings do not have this option.
 
 			if (ProcessCommandLineArgsIntoExistingTerminalSettings(terminalSettings, ref terminalIsStarted, ref logIsStarted))
 			{
-				newTerminalSettings.TerminalType = terminalSettings.TerminalType;
-				newTerminalSettings.IOType       = terminalSettings.IO.IOType;
+				newTerminalSettings.TerminalType             = terminalSettings.TerminalType;
+				newTerminalSettings.IOType                   = terminalSettings.IO.IOType;
 
-				newTerminalSettings.SerialPortId            = terminalSettings.IO.SerialPort.PortId;
-				newTerminalSettings.SerialPortCommunication = terminalSettings.IO.SerialPort.Communication;
-				newTerminalSettings.SerialPortAutoReopen    = terminalSettings.IO.SerialPort.AutoReopen;
+				newTerminalSettings.SerialPortId             = terminalSettings.IO.SerialPort.PortId;
+				newTerminalSettings.SerialPortCommunication  = terminalSettings.IO.SerialPort.Communication;
+				newTerminalSettings.SerialPortAutoReopen     = terminalSettings.IO.SerialPort.AutoReopen;
 
-				newTerminalSettings.SocketRemoteHost       = terminalSettings.IO.Socket.RemoteHost;
-				newTerminalSettings.SocketRemoteTcpPort    = terminalSettings.IO.Socket.RemoteTcpPort;
-				newTerminalSettings.SocketRemoteUdpPort    = terminalSettings.IO.Socket.RemoteUdpPort;
-				newTerminalSettings.SocketLocalInterface   = terminalSettings.IO.Socket.LocalInterface;
-				newTerminalSettings.SocketLocalTcpPort     = terminalSettings.IO.Socket.LocalTcpPort;
-				newTerminalSettings.SocketLocalUdpPort     = terminalSettings.IO.Socket.LocalUdpPort;
-				newTerminalSettings.TcpClientAutoReconnect = terminalSettings.IO.Socket.TcpClientAutoReconnect;
+				newTerminalSettings.SocketRemoteHost         = terminalSettings.IO.Socket.RemoteHost;
+				newTerminalSettings.SocketRemoteTcpPort      = terminalSettings.IO.Socket.RemoteTcpPort;
+				newTerminalSettings.SocketRemoteUdpPort      = terminalSettings.IO.Socket.RemoteUdpPort;
+				newTerminalSettings.SocketLocalInterface     = terminalSettings.IO.Socket.LocalInterface;
+				newTerminalSettings.SocketLocalTcpPort       = terminalSettings.IO.Socket.LocalTcpPort;
+				newTerminalSettings.SocketLocalUdpPort       = terminalSettings.IO.Socket.LocalUdpPort;
+				newTerminalSettings.TcpClientAutoReconnect   = terminalSettings.IO.Socket.TcpClientAutoReconnect;
 
-				newTerminalSettings.UsbSerialHidDeviceInfo = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
-				newTerminalSettings.UsbSerialHidAutoOpen   = terminalSettings.IO.UsbSerialHidDevice.AutoOpen;
+				newTerminalSettings.UsbSerialHidDeviceInfo   = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
+				newTerminalSettings.UsbSerialHidReportFormat = terminalSettings.IO.UsbSerialHidDevice.ReportFormat;
+				newTerminalSettings.UsbSerialHidRxIdUsage    = terminalSettings.IO.UsbSerialHidDevice.RxIdUsage;
+				newTerminalSettings.UsbSerialHidAutoOpen     = terminalSettings.IO.UsbSerialHidDevice.AutoOpen;
 
 				return (true);
 			}

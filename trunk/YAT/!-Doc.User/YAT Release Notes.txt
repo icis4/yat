@@ -62,8 +62,8 @@ YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2015-xx-xx
 
 New:
 - Keyword \!(LineRepeat) added, count can be configured in advanced settings (feat. #13 and #162)
-- Support for variants of USB Ser/HID (e.g TI MSP430 HID Datapipe Interface) added, report content
-  can be specified in USB Ser/HID settings (feature request #193)
+- Support for variants of USB Ser/HID (e.g TI MSP430 HID API) added, report format can be specified
+  in the USB Ser/HID settings (feature requests #193 and #209)
 - Write protected .yat files are marked '#' and are not attempted to be written automatically,
   write protected .yaw files are not attempted to be written either (feature request #194)
 - Predefined commands can now be copied to 'Send Command' using shortcuts Alt+Shift+Fx (feat. #218)

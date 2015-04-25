@@ -3,6 +3,13 @@ Memory Leaks
 ------------
 
 http://www.codeproject.com/Articles/19490/Memory-Leak-Detection-in-NET
-> Stack
-> Unmanaged Heap
-> Managed Heap
+ > Stack
+ > Unmanaged Heap
+ > Managed Heap
+
+
+Windows.Forms
+-------------
+
+Horizontal or vertical 3D line
+ => Use label with 3D border and height/width = 2

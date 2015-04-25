@@ -256,9 +256,9 @@ namespace MKY.IO.Usb
 		private HidUsagePage usagePage;
 		private HidUsageId   usageId;
 
-		private int inputReportLength;
-		private int outputReportLength;
-		private int featureReportLength;
+		private int inputReportByteLength;
+		private int outputReportByteLength;
+		private int featureReportByteLength;
 
 		private int linkCollectionNodes;
 		private int inputButtonCaps;
@@ -341,9 +341,9 @@ namespace MKY.IO.Usb
 						this.usagePage = (HidUsagePageEx)capabilities.UsagePage;
 						this.usageId   = (HidUsageIdEx)  capabilities.Usage; // The Win32 HIDP_CAPS structure is named 'Usage', not 'UsageId'.
 
-						this.inputReportLength   = capabilities.InputReportByteLength;
-						this.outputReportLength  = capabilities.OutputReportByteLength;
-						this.featureReportLength = capabilities.FeatureReportByteLength;
+						this.inputReportByteLength   = capabilities.InputReportByteLength;
+						this.outputReportByteLength  = capabilities.OutputReportByteLength;
+						this.featureReportByteLength = capabilities.FeatureReportByteLength;
 
 						this.linkCollectionNodes = capabilities.NumberLinkCollectionNodes;
 						this.inputButtonCaps     = capabilities.NumberInputButtonCaps;
@@ -451,21 +451,21 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public virtual int InputReportLength
+		public virtual int InputReportByteLength
 		{
-			get { return (this.inputReportLength); }
+			get { return (this.inputReportByteLength); }
 		}
 
 		/// <summary></summary>
-		public virtual int OutputReportLength
+		public virtual int OutputReportByteLength
 		{
-			get { return (this.outputReportLength); }
+			get { return (this.outputReportByteLength); }
 		}
 
 		/// <summary></summary>
-		public virtual int FeatureReportLength
+		public virtual int FeatureReportByteLength
 		{
-			get { return (this.featureReportLength); }
+			get { return (this.featureReportByteLength); }
 		}
 
 		/// <summary></summary>

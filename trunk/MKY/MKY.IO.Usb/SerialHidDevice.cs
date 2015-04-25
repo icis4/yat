@@ -72,6 +72,12 @@ namespace MKY.IO.Usb
 		// Constants
 		//==========================================================================================
 
+		/// <summary>
+		/// By default, the USB device is automatically opened as soon as it gets connected to the
+		/// computer, given this device object is up and running.
+		/// </summary>
+		public const bool AutoOpenDefault = true;
+
 		private const int ReceiveQueueInitialCapacity = 4096;
 
 		private const int ThreadWaitInterval = 1;
@@ -249,7 +255,10 @@ namespace MKY.IO.Usb
 		private State state = State.Reset;
 		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
-		private bool autoOpen;
+		private SerialHidReportFormat reportFormat = new SerialHidReportFormat();
+		private SerialHidRxIdUsage    rxIdUsage    = new SerialHidRxIdUsage();
+
+		private bool autoOpen = AutoOpenDefault;
 
 		/// <remarks>
 		/// It's just a single stream object, but it contains the basically independent input and
@@ -389,6 +398,44 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
+		/// Indicates the HID report format of the current device.
+		/// </summary>
+		public virtual SerialHidReportFormat ReportFormat
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.reportFormat);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.reportFormat = value;
+			}
+		}
+
+		/// <summary>
+		/// Indicates how the ID is used while receiving.
+		/// </summary>
+		public virtual SerialHidRxIdUsage RxIdUsage
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.rxIdUsage);
+			}
+			set
+			{
+				AssertNotDisposed();
+
+				this.rxIdUsage = value;
+			}
+		}
+
+		/// <summary>
 		/// Indicates whether the device automatically tries to open.
 		/// </summary>
 		/// <returns>
@@ -404,7 +451,7 @@ namespace MKY.IO.Usb
 			}
 			set
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+				AssertNotDisposed();
 
 				this.autoOpen = value;
 			}
@@ -692,7 +739,7 @@ namespace MKY.IO.Usb
 			if (!Win32.Hid.FlushQueue(readWriteHandle))
 				return (false);
 
-			this.stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportLength, true);
+			this.stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportByteLength, true);
 
 			// Immediately start reading.
 			BeginAsyncRead();
@@ -702,8 +749,8 @@ namespace MKY.IO.Usb
 
 		private void BeginAsyncRead()
 		{
-			byte[] inputReportBuffer = new byte[InputReportLength];
-			this.stream.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
+			byte[] inputReportBuffer = new byte[InputReportByteLength];
+			this.stream.BeginRead(inputReportBuffer, 0, InputReportByteLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -717,25 +764,43 @@ namespace MKY.IO.Usb
 
 					// Retrieve the read data and finalize read. In case of an exception during
 					// the read, the call of EndRead() throws it. If this happens, e.g. due to
-					// disconnect, exception is caught further down and stream is closed.
+					// disconnect, exception is caught further down and stream is closed:
 					byte[] inputReportBuffer = (byte[])result.AsyncState;
 					this.stream.EndRead(result);
 
-					// Convert the input report into usable data.
+					// Convert the input report into usable data:
 					SerialHidInputReportContainer input = new SerialHidInputReportContainer(this);
-					input.CreateDataFromReport(inputReportBuffer, true);
+					input.ProcessReport(this.reportFormat, inputReportBuffer);
 
-					// Don't care about report ID, Ser/HID only supports report 0.
-
-					// Read data on this thread.
-					lock (this.receiveQueue)
+					// Evaluate whether report can be accepted, based on ID and configuration:
+					bool acceptReport = true;
+					if (this.reportFormat.UseId)
 					{
-						foreach (byte b in input.Data)
-							this.receiveQueue.Enqueue(b);
+						if (!this.rxIdUsage.SeparateRxId) // Common case = Same ID for Tx and Rx.
+						{
+							acceptReport = (input.Id == this.reportFormat.Id);
+						}
+						else // Special case = Separate ID for Rx.
+						{
+							if (this.rxIdUsage.AnyRxId)
+								acceptReport = true;
+							else
+								acceptReport = (input.Id == this.rxIdUsage.RxId);
+						}
 					}
 
-					// Signal receive thread:
-					this.receiveThreadEvent.Set();
+					if (acceptReport)
+					{
+						// Read data on this thread:
+						lock (this.receiveQueue)
+						{
+							foreach (byte b in input.Payload)
+								this.receiveQueue.Enqueue(b);
+						}
+
+						// Signal receive thread:
+						this.receiveThreadEvent.Set();
+					}
 
 					// Trigger the next async read.
 					BeginAsyncRead();
@@ -808,15 +873,12 @@ namespace MKY.IO.Usb
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void Write(byte[] data)
+		private void Write(byte[] payload)
 		{
 			try
 			{
-				// Report ID is fixed, Ser/HID only supports report 0.
-				byte reportId = 0;
-
 				SerialHidOutputReportContainer output = new SerialHidOutputReportContainer(this);
-				output.CreateReportsFromData(reportId, data);
+				output.CreateReports(this.reportFormat, payload);
 
 				foreach (byte[] report in output.Reports)
 					this.stream.Write(report, 0, report.Length);

@@ -21,10 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Xml.Serialization;
 
 using MKY.IO.Usb;
+
+#endregion
 
 namespace MKY.IO.Serial.Usb
 {
@@ -32,13 +39,36 @@ namespace MKY.IO.Serial.Usb
 	[Serializable]
 	public class SerialHidDeviceSettings : MKY.Settings.SettingsItem
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
 		/// <summary></summary>
-		public const bool AutoOpenDefault = true;
+		public const bool AutoOpenDefault = IO.Usb.SerialHidDevice.AutoOpenDefault;
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
 		private const string Undefined = "<Undefined>";
 
 		private DeviceInfo deviceInfo;
+
+		private SerialHidReportFormat reportFormat;
+		private SerialHidRxIdUsage rxIdUsage;
+
 		private bool autoOpen;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public SerialHidDeviceSettings()
@@ -68,7 +98,10 @@ namespace MKY.IO.Serial.Usb
 			else
 				DeviceInfo = null;
 
-			AutoOpen = rhs.autoOpen;
+			ReportFormat = new SerialHidReportFormat(rhs.ReportFormat);
+			RxIdUsage    = new SerialHidRxIdUsage   (rhs.RxIdUsage);
+
+			AutoOpen = rhs.AutoOpen;
 
 			ClearChanged();
 		}
@@ -82,8 +115,13 @@ namespace MKY.IO.Serial.Usb
 
 			DeviceInfo = new DeviceInfo(); // Required for XML serialization.
 
+			ReportFormat = new SerialHidReportFormat();
+			RxIdUsage    = new SerialHidRxIdUsage();
+
 			AutoOpen = AutoOpenDefault;
 		}
+
+		#endregion
 
 		#region Properties
 		//==========================================================================================
@@ -100,6 +138,36 @@ namespace MKY.IO.Serial.Usb
 				if (this.deviceInfo != value)
 				{
 					this.deviceInfo = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ReportFormat")]
+		public virtual SerialHidReportFormat ReportFormat
+		{
+			get { return (this.reportFormat); }
+			set
+			{
+				if (this.reportFormat != value)
+				{
+					this.reportFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RxIdUsage")]
+		public virtual SerialHidRxIdUsage RxIdUsage
+		{
+			get { return (this.rxIdUsage); }
+			set
+			{
+				if (this.rxIdUsage != value)
+				{
+					this.rxIdUsage = value;
 					SetChanged();
 				}
 			}
@@ -144,8 +212,10 @@ namespace MKY.IO.Serial.Usb
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(DeviceInfo == other.DeviceInfo) &&
-				(AutoOpen   == other.AutoOpen)
+				(DeviceInfo   == other.DeviceInfo) &&
+				(ReportFormat == other.ReportFormat) &&
+				(RxIdUsage    == other.RxIdUsage) &&
+				(AutoOpen     == other.AutoOpen)
 			);
 		}
 
@@ -167,7 +237,9 @@ namespace MKY.IO.Serial.Usb
 				base.GetHashCode() ^
 
 				deviceInfoHashCode ^
-				AutoOpen.GetHashCode()
+				ReportFormat.GetHashCode() ^
+				RxIdUsage   .GetHashCode() ^
+				AutoOpen    .GetHashCode()
 			);
 		}
 
