@@ -664,12 +664,12 @@ namespace YAT.Gui.Controls
 			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket)))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remoteTcpPort.ToString(NumberFormatInfo.CurrentInfo);
+				textBox_RemotePort.Text = this.remoteTcpPort.ToString();
 			}
 			else if (!DesignMode && Enabled && (this.hostType == SocketHostType.Udp))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remoteUdpPort.ToString(NumberFormatInfo.CurrentInfo);
+				textBox_RemotePort.Text = this.remoteUdpPort.ToString();
 			}
 			else
 			{

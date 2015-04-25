@@ -673,7 +673,7 @@ namespace YAT.Model
 									sb.Append(" - ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(":");
-									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+									sb.Append(s.RemotePort.ToString());
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected");
 								}
@@ -681,7 +681,7 @@ namespace YAT.Model
 								{
 									sb.Append(" - ");
 									sb.Append("Server:");
-									sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
+									sb.Append(s.LocalPort.ToString());
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Listening");
 								}
@@ -689,14 +689,14 @@ namespace YAT.Model
 								{
 									sb.Append(" - ");
 									sb.Append("Starting on port ");
-									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+									sb.Append(s.RemotePort.ToString());
 								}
 							}
 							else
 							{
 								sb.Append(" - ");
 								sb.Append("AutoSocket:");
-								sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+								sb.Append(s.RemotePort.ToString());
 								sb.Append(" - ");
 								sb.Append("Disconnected");
 							}
@@ -709,10 +709,10 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
-							sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+							sb.Append(s.RemotePort.ToString());
 							sb.Append(" - ");
 							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
+							sb.Append(s.LocalPort.ToString());
 							sb.Append(" - ");
 							sb.Append(IsOpen ? "Open" : "Closed");
 							break;
@@ -824,7 +824,7 @@ namespace YAT.Model
 									}
 									else
 									{
-										sb.Append(count.ToString(NumberFormatInfo.CurrentInfo));
+										sb.Append(count.ToString());
 										sb.Append(" clients");
 									}
 								}
@@ -838,7 +838,7 @@ namespace YAT.Model
 								sb.Append("closed");
 							}
 							sb.Append(" on local port ");
-							sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
+							sb.Append(s.LocalPort.ToString());
 							break;
 						}
 
@@ -864,20 +864,20 @@ namespace YAT.Model
 									sb.Append("connected to ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+									sb.Append(s.RemotePort.ToString());
 								}
 								else if (isServer)
 								{
 									sb.Append(IsConnected ? "connected" : "listening");
 									sb.Append(" on local port ");
-									sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
+									sb.Append(s.LocalPort.ToString());
 								}
 								else
 								{
 									sb.Append("starting to connect to ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+									sb.Append(s.RemotePort.ToString());
 								}
 							}
 							else
@@ -885,7 +885,7 @@ namespace YAT.Model
 								sb.Append("disconnected from ");
 								sb.Append(s.ResolvedRemoteIPAddress.ToString());
 								sb.Append(" on remote port ");
-								sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+								sb.Append(s.RemotePort.ToString());
 							}
 							break;
 						}
@@ -898,9 +898,9 @@ namespace YAT.Model
 							sb.Append(" for sending to ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString(NumberFormatInfo.CurrentInfo));
+							sb.Append(s.RemotePort.ToString());
 							sb.Append(" and receiving on local port ");
-							sb.Append(s.LocalPort.ToString(NumberFormatInfo.CurrentInfo));
+							sb.Append(s.LocalPort.ToString());
 							break;
 						}
 

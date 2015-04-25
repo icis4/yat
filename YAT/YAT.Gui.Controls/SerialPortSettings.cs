@@ -43,6 +43,10 @@ namespace YAT.Gui.Controls
 	[DefaultEvent("BaudRateChanged")]
 	public partial class SerialPortSettings : UserControl
 	{
+		// \fixme
+		// This settings control should be simplified to use SerialPort.SerialCommunicationSettings
+		// instead of replicating all contained items.
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -53,6 +57,7 @@ namespace YAT.Gui.Controls
 		private const System.IO.Ports.Parity                     ParityDefault      = System.IO.Ports.Parity.None;
 		private const System.IO.Ports.StopBits                   StopBitsDefault    = System.IO.Ports.StopBits.One;
 		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
+		private static MKY.IO.Serial.AutoRetry                   AutoReopenDefault  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -68,7 +73,7 @@ namespace YAT.Gui.Controls
 		private System.IO.Ports.Parity                     parity      = ParityDefault;
 		private System.IO.Ports.StopBits                   stopBits    = StopBitsDefault;
 		private MKY.IO.Serial.SerialPort.SerialFlowControl flowControl = FlowControlDefault;
-		private MKY.IO.Serial.AutoRetry                    autoReopen  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+		private MKY.IO.Serial.AutoRetry                    autoReopen  = AutoReopenDefault;
 
 		#endregion
 
@@ -220,9 +225,13 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <see cref="AutoReopenDefault"/> cannot be used as designer default value because it is
+		/// an object but not constant.
+		/// </remarks>
 		[Category("Serial Port")]
 		[Description("Auto reopen optione.")]
+		[Browsable(false)]
 		public virtual MKY.IO.Serial.AutoRetry AutoReopen
 		{
 			get { return (this.autoReopen); }
@@ -429,7 +438,7 @@ namespace YAT.Gui.Controls
 				bool autoReopenEnabled = this.autoReopen.Enabled;
 				checkBox_AutoReopen.Checked = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString(NumberFormatInfo.CurrentInfo);
+				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
 			}
 			else
 			{
