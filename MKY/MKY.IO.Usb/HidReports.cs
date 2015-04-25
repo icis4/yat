@@ -28,7 +28,7 @@ namespace MKY.IO.Usb
 	public abstract class HidReportContainer
 	{
 		private HidDevice device;
-		private int maxLength;
+		private int maxByteLength;
 
 		/// <summary>
 		/// Creates a report container and stores the reference to the device in use as well as
@@ -37,7 +37,7 @@ namespace MKY.IO.Usb
 		protected HidReportContainer(HidDevice device, int maxLength)
 		{
 			this.device = device;
-			this.maxLength = maxLength;
+			this.maxByteLength = maxLength;
 		}
 
 		/// <summary>
@@ -49,11 +49,11 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// The maximum length of a report. The length is given by the device capabilities.
+		/// The maximum byte length of a report. The length is given by the device capabilities.
 		/// </summary>
-		public int MaxLength
+		public int MaxByteLength
 		{
-			get { return (this.maxLength); }
+			get { return (this.maxByteLength); }
 		}
 	}
 }

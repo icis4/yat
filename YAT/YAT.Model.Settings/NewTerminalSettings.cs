@@ -48,6 +48,8 @@ namespace YAT.Model.Settings
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
 
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
+		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
+		private MKY.IO.Usb.SerialHidRxIdUsage usbSerialHidRxIdUsage;
 		private bool usbSerialHidAutoOpen;
 
 		private bool startTerminal;
@@ -81,25 +83,26 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType            = rhs.TerminalType;
-			IOType                  = rhs.IOType;
+			TerminalType             = rhs.TerminalType;
+			IOType                   = rhs.IOType;
 
-			SerialPortId            = rhs.SerialPortId;
-			SerialPortCommunication = rhs.SerialPortCommunication;
-			SerialPortAutoReopen    = rhs.SerialPortAutoReopen;
+			SerialPortId             = rhs.SerialPortId;
+			SerialPortCommunication  = rhs.SerialPortCommunication;
+			SerialPortAutoReopen     = rhs.SerialPortAutoReopen;
 
-			SocketRemoteHost        = rhs.SocketRemoteHost;
-			SocketRemoteTcpPort     = rhs.SocketRemoteTcpPort;
-			SocketRemoteUdpPort     = rhs.SocketRemoteUdpPort;
-			SocketLocalInterface    = rhs.SocketLocalInterface;
-			SocketLocalTcpPort      = rhs.SocketLocalTcpPort;
-			SocketLocalUdpPort      = rhs.SocketLocalUdpPort;
-			TcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
+			SocketRemoteHost         = rhs.SocketRemoteHost;
+			SocketRemoteTcpPort      = rhs.SocketRemoteTcpPort;
+			SocketRemoteUdpPort      = rhs.SocketRemoteUdpPort;
+			SocketLocalInterface     = rhs.SocketLocalInterface;
+			SocketLocalTcpPort       = rhs.SocketLocalTcpPort;
+			SocketLocalUdpPort       = rhs.SocketLocalUdpPort;
+			TcpClientAutoReconnect   = rhs.TcpClientAutoReconnect;
 
-			UsbSerialHidDeviceInfo  = rhs.UsbSerialHidDeviceInfo;
-			UsbSerialHidAutoOpen    = rhs.UsbSerialHidAutoOpen;
+			UsbSerialHidDeviceInfo   = rhs.UsbSerialHidDeviceInfo;
+			UsbSerialHidReportFormat = rhs.UsbSerialHidReportFormat;
+			UsbSerialHidAutoOpen     = rhs.UsbSerialHidAutoOpen;
 
-			StartTerminal           = rhs.StartTerminal;
+			StartTerminal            = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -131,6 +134,7 @@ namespace YAT.Model.Settings
 			TcpClientAutoReconnect  = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 
 			UsbSerialHidDeviceInfo  = null;
+			//// UsbSerialHidReportFormat is attached as settings object.
 			UsbSerialHidAutoOpen    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
 			StartTerminal           = true;
@@ -385,6 +389,36 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("UsbSerialHidReportFormat")]
+		public virtual MKY.IO.Usb.SerialHidReportFormat UsbSerialHidReportFormat
+		{
+			get { return (this.usbSerialHidReportFormat); }
+			set
+			{
+				if (this.usbSerialHidReportFormat != value)
+				{
+					this.usbSerialHidReportFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("UsbSerialHidRxIdUsage")]
+		public virtual MKY.IO.Usb.SerialHidRxIdUsage UsbSerialHidRxIdUsage
+		{
+			get { return (this.usbSerialHidRxIdUsage); }
+			set
+			{
+				if (this.usbSerialHidRxIdUsage != value)
+				{
+					this.usbSerialHidRxIdUsage = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("UsbSerialHidAutoOpen")]
 		public virtual bool UsbSerialHidAutoOpen
 		{
@@ -438,25 +472,26 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(TerminalType == other.TerminalType) &&
-				(IOType       == other.IOType) &&
+				(TerminalType             == other.TerminalType) &&
+				(IOType                   == other.IOType) &&
 
-				(SerialPortId            == other.SerialPortId) &&
-				(SerialPortCommunication == other.SerialPortCommunication) &&
-				(SerialPortAutoReopen    == other.SerialPortAutoReopen) &&
+				(SerialPortId             == other.SerialPortId) &&
+				(SerialPortCommunication  == other.SerialPortCommunication) &&
+				(SerialPortAutoReopen     == other.SerialPortAutoReopen) &&
 
-				(SocketRemoteHost       == other.SocketRemoteHost) &&
-				(SocketRemoteTcpPort    == other.SocketRemoteTcpPort) &&
-				(SocketRemoteUdpPort    == other.SocketRemoteUdpPort) &&
-				(SocketLocalInterface   == other.SocketLocalInterface) &&
-				(SocketLocalTcpPort     == other.SocketLocalTcpPort) &&
-				(SocketLocalUdpPort     == other.SocketLocalUdpPort) &&
-				(TcpClientAutoReconnect == other.TcpClientAutoReconnect) &&
+				(SocketRemoteHost         == other.SocketRemoteHost) &&
+				(SocketRemoteTcpPort      == other.SocketRemoteTcpPort) &&
+				(SocketRemoteUdpPort      == other.SocketRemoteUdpPort) &&
+				(SocketLocalInterface     == other.SocketLocalInterface) &&
+				(SocketLocalTcpPort       == other.SocketLocalTcpPort) &&
+				(SocketLocalUdpPort       == other.SocketLocalUdpPort) &&
+				(TcpClientAutoReconnect   == other.TcpClientAutoReconnect) &&
 
-				(UsbSerialHidDeviceInfo == other.UsbSerialHidDeviceInfo) &&
-				(UsbSerialHidAutoOpen   == other.UsbSerialHidAutoOpen) &&
+				(UsbSerialHidDeviceInfo   == other.UsbSerialHidDeviceInfo) &&
+				(UsbSerialHidReportFormat == other.UsbSerialHidReportFormat) &&
+				(UsbSerialHidAutoOpen     == other.UsbSerialHidAutoOpen) &&
 
-				(StartTerminal == other.StartTerminal)
+				(StartTerminal            == other.StartTerminal)
 			);
 		}
 
@@ -479,27 +514,28 @@ namespace YAT.Model.Settings
 
 			return
 			(
-				base.GetHashCode() ^
+				base                    .GetHashCode() ^
 
-				TerminalType.GetHashCode() ^
-				IOType      .GetHashCode() ^
+				TerminalType            .GetHashCode() ^
+				IOType                  .GetHashCode() ^
 
 				serialPortIdHashCode ^
-				SerialPortCommunication.GetHashCode() ^
-				SerialPortAutoReopen   .GetHashCode() ^
+				SerialPortCommunication .GetHashCode() ^
+				SerialPortAutoReopen    .GetHashCode() ^
 
-				SocketRemoteHost      .GetHashCode() ^
-				SocketRemoteTcpPort   .GetHashCode() ^
-				SocketRemoteUdpPort   .GetHashCode() ^
-				SocketLocalInterface  .GetHashCode() ^
-				SocketLocalTcpPort    .GetHashCode() ^
-				SocketLocalUdpPort    .GetHashCode() ^
-				TcpClientAutoReconnect.GetHashCode() ^
+				SocketRemoteHost        .GetHashCode() ^
+				SocketRemoteTcpPort     .GetHashCode() ^
+				SocketRemoteUdpPort     .GetHashCode() ^
+				SocketLocalInterface    .GetHashCode() ^
+				SocketLocalTcpPort      .GetHashCode() ^
+				SocketLocalUdpPort      .GetHashCode() ^
+				TcpClientAutoReconnect  .GetHashCode() ^
 
 				usbSerialHidDeviceInfoHashCode ^
-				UsbSerialHidAutoOpen.GetHashCode() ^
+				UsbSerialHidReportFormat.GetHashCode() ^
+				UsbSerialHidAutoOpen    .GetHashCode() ^
 
-				StartTerminal       .GetHashCode()
+				StartTerminal           .GetHashCode()
 			);
 		}
 

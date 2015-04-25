@@ -117,4 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="reportFormatPreview.Format" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFJNS1kuSU8uVXNiLCBWZXJzaW9uPTEuMC4xMC4yNTA3NiwgQ3Vs
+        dHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAgTUtZLklPLlVz
+        Yi5TZXJpYWxIaWRSZXBvcnRGb3JtYXQFAAAABXVzZUlkAmlkGHByZXBlbmRQYXlsb2FkQnl0ZUxlbmd0
+        aBVhcHBlbmRUZXJtaW5hdGluZ1plcm8OZmlsbExhc3RSZXBvcnQAAAAAAAECAQEBAgAAAAEAAQEBCw==
+</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>62</value>
+  </metadata>
 </root>
