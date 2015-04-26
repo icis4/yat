@@ -490,22 +490,26 @@ namespace MKY.IO.Serial.Usb
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void DisposeDeviceAndThreads()
 		{
-			if (this.device != null)
+			try
 			{
-				try
+				lock (this.deviceSyncObj)
 				{
-					StopThreads();
-
-					lock (this.deviceSyncObj)
+					if (this.device != null)
 					{
 						this.device.Dispose();
 						this.device = null;
 					}
-
-					OnIOChanged(EventArgs.Empty);
 				}
-				catch { }
 			}
+			catch { }
+
+			try
+			{
+				StopThreads();
+			}
+			catch { }
+
+			OnIOChanged(EventArgs.Empty);
 		}
 
 		#endregion
@@ -525,7 +529,7 @@ namespace MKY.IO.Serial.Usb
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
-					this.sendThread.Name = ToShortDeviceInfoString() + " Send Thread";
+					this.sendThread.Name = ToDeviceInfoString() + " Send Thread";
 					this.sendThread.Start();
 				}
 			}
@@ -538,7 +542,7 @@ namespace MKY.IO.Serial.Usb
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-					this.receiveThread.Name = ToShortDeviceInfoString() + " Receive Thread";
+					this.receiveThread.Name = ToDeviceInfoString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}

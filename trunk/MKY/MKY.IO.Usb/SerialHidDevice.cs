@@ -694,7 +694,7 @@ namespace MKY.IO.Usb
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-					this.receiveThread.Name = ToShortString() + " Receive Thread";
+					this.receiveThread.Name = ToString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}
@@ -813,15 +813,17 @@ namespace MKY.IO.Usb
 					// Trigger the next async read.
 					BeginAsyncRead();
 				}
-				catch (IOException)
+				catch (IOException ex) // Includes Close().
 				{
-					WriteDebugMessageLine("Disconnect detected while reading from device.");
-					OnDisconnected(EventArgs.Empty); // Includes Close().
+					string message = "Disconnect detected while reading from device.";
+					DebugEx.WriteException(GetType(), ex, message);
+					OnDisconnected(EventArgs.Empty);
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(GetType(), ex); // Includes Close().
-					OnIOError(new ErrorEventArgs("Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString()));
+					string message = "Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString();
+					DebugEx.WriteException(GetType(), ex, message);
+					OnIOError(new ErrorEventArgs(message));
 				}
 			}
 		}
@@ -895,8 +897,9 @@ namespace MKY.IO.Usb
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex); // Includes Close().
-				OnIOError(new ErrorEventArgs("Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString()));
+				string message = "Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString();
+				DebugEx.WriteException(GetType(), ex);
+				OnIOError(new ErrorEventArgs(message));
 			}
 		}
 

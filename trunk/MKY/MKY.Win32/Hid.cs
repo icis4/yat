@@ -259,16 +259,14 @@ namespace MKY.Win32
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDD_ATTRIBUTES
 			{
-				public Int32 Size;
-				[CLSCompliant(false)]
-				public UInt16 VendorID;
-				[CLSCompliant(false)]
-				public UInt16 ProductID;
-				[CLSCompliant(false)]
-				public UInt16 VersionNumber;
+				public UInt32 Size; // ULONG = 32 bits
+				public UInt16 VendorID; // USHORT = 16 bits
+				public UInt16 ProductID; // USHORT
+				public UInt16 VersionNumber; // USHORT
 			}
 
 			// HIDD_CONFIGURATION is reserved for internal system use
@@ -276,29 +274,30 @@ namespace MKY.Win32
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_CAPS
-			{
-				public Int16 Usage;     // \attention: The Win32 HIDP_CAPS structure contains 'Usage' before 'UsagePage', even though it should be vice-versa from a USB logic point of view!
-				public Int16 UsagePage; // \attention: The Win32 HIDP_CAPS structure contains 'UsagePage' after 'Usage', even though it should be vice-versa from a USB logic point of view!
-				public Int16 InputReportByteLength;
-				public Int16 OutputReportByteLength;
-				public Int16 FeatureReportByteLength;
+			{       // USAGE = USHORT = 16 bits
+				public UInt16 Usage;     // \attention: The Win32 HIDP_CAPS structure contains 'Usage' before 'UsagePage', even though it should be vice-versa from a USB logic point of view!
+				public UInt16 UsagePage; // \attention: The Win32 HIDP_CAPS structure contains 'UsagePage' after 'Usage', even though it should be vice-versa from a USB logic point of view!
+				public UInt16 InputReportByteLength; // All USHORT = 16 bits
+				public UInt16 OutputReportByteLength;
+				public UInt16 FeatureReportByteLength;
 				[MarshalAs(UnmanagedType.ByValArray, SizeConst = 17)]
-				public Int16[] Reserved;
-				public Int16 NumberLinkCollectionNodes;
-				public Int16 NumberInputButtonCaps;
-				public Int16 NumberInputValueCaps;
+				public UInt16[] Reserved;
+				public UInt16 NumberLinkCollectionNodes;
+				public UInt16 NumberInputButtonCaps;
+				public UInt16 NumberInputValueCaps;
 				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-				public Int16 NumberInputDataIndices;
-				public Int16 NumberOutputButtonCaps;
-				public Int16 NumberOutputValueCaps;
+				public UInt16 NumberInputDataIndices;
+				public UInt16 NumberOutputButtonCaps;
+				public UInt16 NumberOutputValueCaps;
 				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-				public Int16 NumberOutputDataIndices;
-				public Int16 NumberFeatureButtonCaps;
-				public Int16 NumberFeatureValueCaps;
+				public UInt16 NumberOutputDataIndices;
+				public UInt16 NumberFeatureButtonCaps;
+				public UInt16 NumberFeatureValueCaps;
 				[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-				public Int16 NumberFeatureDataIndices;
+				public UInt16 NumberFeatureDataIndices;
 			}
 
 			/// <summary>
@@ -313,7 +312,7 @@ namespace MKY.Win32
 			}
 
 			/// <summary>
-			/// The HIDP_REPORT_TYPE enumeration type is used to specify a HID report type.
+			/// The HIDP_STATUS enumeration type is used to specify a HID report type.
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values are given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Underlying type is given by the Win32 API.")]
@@ -332,41 +331,39 @@ namespace MKY.Win32
 			/// </summary>
 			[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "All native types are nested on purpose, to emphasize their native nature.")]
 			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Dont' care.")]
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_VALUE_CAPS
 			{
-				public Int16 UsagePage;
-				public byte  ReportID;
-				public Int32 IsAlias;
-				public Int16 BitField;
-				public Int16 LinkCollection;
-				public Int16 LinkUsage;
-				public Int16 LinkUsagePage;
-				public Int32 IsRange;
-				public Int32 IsStringRange;
-				public Int32 IsDesignatorRange;
-				public Int32 IsAbsolute;
-				public Int32 HasNull;
-				public byte  Reserved;
-				public Int16 BitSize;
-				public Int16 ReportCount;
-				public Int16 Reserved2;
-				public Int16 Reserved3;
-				public Int16 Reserved4;
-				public Int16 Reserved5;
-				public Int16 Reserved6;
-				public Int32 LogicalMin;
-				public Int32 LogicalMax;
-				public Int32 PhysicalMin;
-				public Int32 PhysicalMax;
-				public Int16 UsageMin;
-				public Int16 UsageMax;
-				public Int16 StringMin;
-				public Int16 StringMax;
-				public Int16 DesignatorMin;
-				public Int16 DesignatorMax;
-				public Int16 DataIndexMin;
-				public Int16 DataIndexMax;
+				public UInt16 UsagePage;      // USAGE = USHORT = 16 bits
+				public byte   ReportID;       // UCHAR
+				public int    IsAlias;        // BOOLEAN
+				public UInt16 BitField;       // USHORT = 16 bits
+				public UInt16 LinkCollection; //   "
+				public UInt16 LinkUsage;      // USAGE = USHORT = 16 bits
+				public UInt16 LinkUsagePage;  //   "
+				public int    IsRange;           // BOOLEAN
+				public int    IsStringRange;     //    "
+				public int    IsDesignatorRange; //    "
+				public int    IsAbsolute;        //    "
+				public int    HasNull;           //    "
+				public byte   Reserved;    // UCHAR
+				public UInt16 BitSize;     // USHORT = 16 bits
+				public UInt16 ReportCount; //   "
+				[MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+				public UInt16 Reserved2;   // USHORT
+				public Int32 LogicalMin;   // LONG
+				public Int32 LogicalMax;   //  "
+				public Int32 PhysicalMin;  //  "
+				public Int32 PhysicalMax;  //  "
+				public UInt16 UsageMin;    // USAGE = USHORT = 16 bits
+				public UInt16 UsageMax;    //   "
+				public UInt16 StringMin;   // USHORT = 16 bits
+				public UInt16 StringMax;   //   "
+				public UInt16 DesignatorMin; // USHORT = 16 bits
+				public UInt16 DesignatorMax; //   "
+				public UInt16 DataIndexMin;  //   "
+				public UInt16 DataIndexMax;  //   "
 			}
 
 			#pragma warning restore 1591
@@ -415,6 +412,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return", Justification = "Return is actually marshalled as 'UnmanagedType.Bool' which should be good enough.")]
+			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[return: MarshalAs(UnmanagedType.Bool)]
 			public static extern Boolean HidD_GetAttributes([In] SafeFileHandle HidDeviceObject, [In, Out] ref NativeTypes.HIDD_ATTRIBUTES Attributes);
@@ -655,6 +653,7 @@ namespace MKY.Win32
 			/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
+			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 HidP_GetCaps([In] IntPtr PreparsedData, [In, Out] ref NativeTypes.HIDP_CAPS Capabilities);
 
@@ -970,6 +969,7 @@ namespace MKY.Win32
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native pointer.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
+		[CLSCompliant(false)]
 		public static bool GetDeviceCapabilities(SafeFileHandle deviceHandle, ref NativeTypes.HIDP_CAPS capabilities)
 		{
 			IntPtr pPreparsedData = new IntPtr();

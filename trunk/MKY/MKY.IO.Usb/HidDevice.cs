@@ -366,6 +366,8 @@ namespace MKY.IO.Usb
 							string name = Enum.GetName(typeof(HidUsagePage), this.usagePage);
 							if (!string.IsNullOrEmpty(name))
 								usagePageName = name;
+							else if (this.usagePage.GetHashCode() >= 0xFF00) // Vendor-defined usage page.
+								usagePageName = "VendorDefined";
 						}
 						catch { }
 
@@ -375,6 +377,8 @@ namespace MKY.IO.Usb
 							string name = Enum.GetName(typeof(HidUsageId), this.usageId);
 							if (!string.IsNullOrEmpty(name))
 								usageIdName = name;
+							else if (this.usagePage.GetHashCode() >= 0xFF00) // Vendor-defined usage page also
+								usageIdName = "VendorDefined";               //   results in vendor-defined usage.
 						}
 						catch { }
 

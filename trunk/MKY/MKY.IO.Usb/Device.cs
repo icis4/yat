@@ -165,7 +165,7 @@ namespace MKY.IO.Usb
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
 			Win32.Hid.NativeTypes.HIDD_ATTRIBUTES attributes = new Win32.Hid.NativeTypes.HIDD_ATTRIBUTES();
-			attributes.Size = Marshal.SizeOf(attributes);
+			attributes.Size = (UInt32)Marshal.SizeOf(attributes);
 
 			if (Win32.Hid.NativeMethods.HidD_GetAttributes(deviceHandle, ref attributes))
 			{
