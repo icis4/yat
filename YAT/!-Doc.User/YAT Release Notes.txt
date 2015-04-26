@@ -94,9 +94,10 @@ Important changes:
 - Installer improved, now using YAT specific banner and texts (related to requests #175 and #191)
 
 Fixed bugs:
+- Duplicated and/or split display representation fixed (bugs #258, #264 and #265)
 - Manually entered serial COM port, remote TCP/IP host or USB Ser/HID device is now properly
   restored when opening the terminal settings dialog (bug #259)
-- Duplicated and/or split display representation fixed (bugs #258, #264 and #265)
+- Manually entered non-standard baud rate is properly restored in settings dialog again (bug #283)
 - Shortcuts are now always routed to the correct terminal window (i.e. MDI child) (bug #152)
 - Handling of recent commands in 'Send Command' improved, arrows up/down properly work again
 - Representation of description of multi line commands in 'Send Command' improved
