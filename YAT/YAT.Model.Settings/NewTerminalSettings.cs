@@ -100,6 +100,7 @@ namespace YAT.Model.Settings
 
 			UsbSerialHidDeviceInfo   = rhs.UsbSerialHidDeviceInfo;
 			UsbSerialHidReportFormat = rhs.UsbSerialHidReportFormat;
+			UsbSerialHidRxIdUsage    = rhs.UsbSerialHidRxIdUsage;
 			UsbSerialHidAutoOpen     = rhs.UsbSerialHidAutoOpen;
 
 			StartTerminal            = rhs.StartTerminal;
@@ -118,26 +119,27 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalType            = Domain.Settings.TerminalSettings.TerminalTypefault;
-			IOType                  = Domain.IOType.SerialPort;
+			TerminalType             = Domain.Settings.TerminalSettings.TerminalTypefault;
+			IOType                   = Domain.IOType.SerialPort;
 
-			SerialPortId            = MKY.IO.Ports.SerialPortId.FirstStandardPort;
+			SerialPortId             = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 			//// SerialPortCommunication is attached as settings object.
-			SerialPortAutoReopen    = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+			SerialPortAutoReopen     = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
-			SocketRemoteHost        = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
-			SocketRemoteTcpPort     = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
-			SocketRemoteUdpPort     = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
-			SocketLocalInterface    = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
-			SocketLocalTcpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
-			SocketLocalUdpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
-			TcpClientAutoReconnect  = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+			SocketRemoteHost         = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
+			SocketRemoteTcpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
+			SocketRemoteUdpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
+			SocketLocalInterface     = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+			SocketLocalTcpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
+			SocketLocalUdpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
+			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 
-			UsbSerialHidDeviceInfo  = null;
-			//// UsbSerialHidReportFormat is attached as settings object.
-			UsbSerialHidAutoOpen    = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
+			UsbSerialHidDeviceInfo   = null;
+			UsbSerialHidReportFormat = new MKY.IO.Usb.SerialHidReportFormat();
+			UsbSerialHidRxIdUsage    = new MKY.IO.Usb.SerialHidRxIdUsage();
+			UsbSerialHidAutoOpen     = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
-			StartTerminal           = true;
+			StartTerminal            = true;
 		}
 
 		#region Properties
@@ -489,6 +491,7 @@ namespace YAT.Model.Settings
 
 				(UsbSerialHidDeviceInfo   == other.UsbSerialHidDeviceInfo) &&
 				(UsbSerialHidReportFormat == other.UsbSerialHidReportFormat) &&
+				(UsbSerialHidRxIdUsage    == other.UsbSerialHidRxIdUsage) &&
 				(UsbSerialHidAutoOpen     == other.UsbSerialHidAutoOpen) &&
 
 				(StartTerminal            == other.StartTerminal)
@@ -533,6 +536,7 @@ namespace YAT.Model.Settings
 
 				usbSerialHidDeviceInfoHashCode ^
 				UsbSerialHidReportFormat.GetHashCode() ^
+				UsbSerialHidRxIdUsage   .GetHashCode() ^
 				UsbSerialHidAutoOpen    .GetHashCode() ^
 
 				StartTerminal           .GetHashCode()
