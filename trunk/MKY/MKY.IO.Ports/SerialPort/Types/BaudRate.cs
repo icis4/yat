@@ -112,7 +112,10 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
+			if (this == BaudRate.UserDefined)
+				return (this.userDefinedBaudRate.ToString(CultureInfo.InvariantCulture));
+			else
+				return (UnderlyingEnum.GetHashCode().ToString(CultureInfo.InvariantCulture));
 		}
 
 		#endregion

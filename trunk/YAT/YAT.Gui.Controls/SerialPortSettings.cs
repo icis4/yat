@@ -47,6 +47,10 @@ namespace YAT.Gui.Controls
 		// This settings control should be simplified to use SerialPort.SerialCommunicationSettings
 		// instead of replicating all contained items.
 
+		// \fixme
+		// This settings control should use Ports.BaudRate instead of int. Same applies to the
+		// NewTerminal and TerminalSettings forms. No clue why this shouldn't work...
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -410,11 +414,11 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			MKY.IO.Ports.BaudRateEx baudRate = (MKY.IO.Ports.BaudRateEx)this.baudRate;
-			if (Enabled && (baudRate != MKY.IO.Ports.BaudRate.UserDefined))
-				comboBox_BaudRate.SelectedItem = baudRate;
+			MKY.IO.Ports.BaudRateEx baudRate = this.baudRate;
+			if (Enabled && (baudRate == MKY.IO.Ports.BaudRate.UserDefined))
+				comboBox_BaudRate.Text = baudRate;
 			else if (Enabled)
-				comboBox_BaudRate.Text = (MKY.IO.Ports.BaudRateEx)this.baudRate;
+				comboBox_BaudRate.SelectedItem = baudRate;
 			else
 				comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
 
