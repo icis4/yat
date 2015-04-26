@@ -178,6 +178,8 @@ namespace YAT.Gui.Forms
 			this.usbSerialHidDeviceSettings.RxIdUsage = ((MKY.IO.Usb.SerialHidRxIdUsage)(resources.GetObject("usbSerialHidDeviceSettings.RxIdUsage")));
 			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 227);
 			this.usbSerialHidDeviceSettings.TabIndex = 3;
+			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
+			this.usbSerialHidDeviceSettings.RxIdUsageChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_RxIdUsageChanged);
 			this.usbSerialHidDeviceSettings.AutoOpenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoOpenChanged);
 			// 
 			// usbSerialHidDeviceSelection

@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the Sytem namespace.
@@ -143,7 +144,7 @@ namespace MKY
 		/// <summary>
 		/// Returns whether <paramref name="str"/> contains any of the <paramref name="searchChars"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Chars", Justification = "Parameter naming as similar string methods.")]
 		public static bool ContainsAny(string str, char[] searchChars)
 		{
 			return (str.IndexOfAny(searchChars) >= 0);
@@ -442,6 +443,63 @@ namespace MKY
 			}
 
 			return (chunks.ToArray());
+		}
+
+		#endregion
+
+		#region StartsWith
+		//------------------------------------------------------------------------------------------
+		// StartsWith
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified
+		/// search strings when compared using the specified culture.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="compareStrings">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
+		public static bool StartsWithAny(string str, string[] compareStrings)
+		{
+			return (StartsWithAny(str, compareStrings, false, null));
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified
+		/// search strings when compared using the specified culture.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="compareStrings">The strings to compare with.</param>
+		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
+		public static bool StartsWithAny(string str, string[] compareStrings, bool ignoreCase)
+		{
+			return (StartsWithAny(str, compareStrings, ignoreCase, null));
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified
+		/// search strings when compared using the specified culture.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="compareStrings">The strings to compare with.</param>
+		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
+		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
+		public static bool StartsWithAny(string str, string[] compareStrings, bool ignoreCase, CultureInfo culture)
+		{
+			foreach (string compareString in compareStrings)
+			{
+				if (str.StartsWith(compareString, ignoreCase, culture))
+					return (true); // Match.
+			}
+			return (false); // No match.
 		}
 
 		#endregion

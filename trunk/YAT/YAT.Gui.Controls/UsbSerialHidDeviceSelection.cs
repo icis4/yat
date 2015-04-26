@@ -255,29 +255,29 @@ namespace YAT.Gui.Controls
 					}
 					else
 					{
-						string deviceInfoNoLongerAvailable = this.deviceInfo;
-
 						// Ensure that the settings item is defaulted and shown by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
 						DeviceInfo = devices[0];
-
 						comboBox_Device.SelectedIndex = 0;
 
-						if (!string.IsNullOrEmpty(deviceInfoNoLongerAvailable))
-						{
-							string message =
-								"The given USB device " + deviceInfoNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+						string message;
+						if (this.deviceInfo != null)
+							message =
+								"The given USB device " + this.deviceInfo + " is currently not available." + Environment.NewLine + Environment.NewLine +
+								"The setting has been defaulted to the first available device.";
+						else
+							message =
+								"The former USB device is currently not available." + Environment.NewLine + Environment.NewLine +
 								"The setting has been defaulted to the first available device.";
 
-							MessageBoxEx.Show
-							(
-								this,
-								message,
-								"USB device not available",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
+						MessageBoxEx.Show
+						(
+							this,
+							message,
+							"USB device not available",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+						);
 					}
 				}
 				else
@@ -289,8 +289,8 @@ namespace YAT.Gui.Controls
 					MessageBoxEx.Show
 					(
 						this,
-						"No Ser/HID capable USB devices available.",
-						"No USB Ser/HID devices",
+						"No HID capable USB devices available.",
+						"No USB HID devices",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
 					);

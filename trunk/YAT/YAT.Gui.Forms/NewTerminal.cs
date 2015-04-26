@@ -21,11 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -236,7 +243,26 @@ namespace YAT.Gui.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
+			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
+			this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo = deviceInfo;
+
+			// Try to automatically select one of the report format presets:
+			if (deviceInfo != null)
+			{
+				MKY.IO.Usb.SerialHidReportFormatPresetEx preset;
+				if (MKY.IO.Usb.SerialHidReportFormatPresetEx.TryParse(deviceInfo, out preset))
+					usbSerialHidDeviceSettings.ReportFormat = preset.ToReportFormat();
+			}
+		}
+
+		private void usbSerialHidDeviceSettings_ReportFormatChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.UsbSerialHidReportFormat = usbSerialHidDeviceSettings.ReportFormat;
+		}
+
+		private void usbSerialHidDeviceSettings_RxIdUsageChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage = usbSerialHidDeviceSettings.RxIdUsage;
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
