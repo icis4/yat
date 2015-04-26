@@ -1298,12 +1298,20 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.sendThread != null)
 				{
 					// Ensure that send thread has stopped after the stop request:
-					int timeoutCounter = 0;
-					while (!this.sendThread.Join(ThreadWaitInterval))
+					try
 					{
-						this.sendThreadEvent.Set();
-						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-							throw (new TimeoutException("Send thread hasn't properly stopped"));
+						int timeoutCounter = 0;
+						while (!this.sendThread.Join(ThreadWaitInterval))
+						{
+							this.sendThreadEvent.Set();
+							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+								throw (new TimeoutException("Send thread hasn't properly stopped"));
+						}
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started"
+						// since the thread needs to be shut down anyway.
 					}
 
 					this.sendThreadEvent.Close();
@@ -1316,12 +1324,20 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.receiveThread != null)
 				{
 					// Ensure that receive thread has stopped after the stop request:
-					int timeoutCounter = 0;
-					while (!this.receiveThread.Join(ThreadWaitInterval))
+					try
 					{
-						this.receiveThreadEvent.Set();
-						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-							throw (new TimeoutException("Receive thread hasn't properly stopped"));
+						int timeoutCounter = 0;
+						while (!this.receiveThread.Join(ThreadWaitInterval))
+						{
+							this.receiveThreadEvent.Set();
+							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+								throw (new TimeoutException("Receive thread hasn't properly stopped"));
+						}
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started"
+						// since the thread needs to be shut down anyway.
 					}
 
 					this.receiveThreadEvent.Close();

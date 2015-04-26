@@ -709,12 +709,20 @@ namespace MKY.IO.Usb
 					this.receiveThreadRunFlag = false;
 
 					// Ensure that receive thread has stopped after the stop request:
-					int timeoutCounter = 0;
-					while (!this.receiveThread.Join(ThreadWaitInterval))
+					try
 					{
-						this.receiveThreadEvent.Set();
-						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-							throw (new TimeoutException("Receive thread hasn't properly stopped"));
+						int timeoutCounter = 0;
+						while (!this.receiveThread.Join(ThreadWaitInterval))
+						{
+							this.receiveThreadEvent.Set();
+							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+								throw (new TimeoutException("Receive thread hasn't properly stopped"));
+						}
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started"
+						// since the thread needs to be shut down anyway.
 					}
 
 					this.receiveThreadEvent.Close();

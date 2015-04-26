@@ -630,12 +630,20 @@ namespace MKY.IO.Serial.Socket
 					this.dataSentThreadRunFlag = false;
 
 					// Ensure that thread has stopped after the stop request:
-					int timeoutCounter = 0;
-					while (!this.dataSentThread.Join(ThreadWaitInterval))
+					try
 					{
-						this.dataSentThreadEvent.Set();
-						if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-							throw (new TimeoutException("Data sent thread hasn't properly stopped"));
+						int timeoutCounter = 0;
+						while (!this.dataSentThread.Join(ThreadWaitInterval))
+						{
+							this.dataSentThreadEvent.Set();
+							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
+								throw (new TimeoutException("Data sent thread hasn't properly stopped"));
+						}
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started"
+						// since the thread needs to be shut down anyway.
 					}
 
 					this.dataSentThreadEvent.Close();
