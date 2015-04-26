@@ -1278,7 +1278,7 @@ namespace MKY.IO.Serial.SerialPort
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
-					this.sendThread.Name = ToShortPortString() + " Receive Thread";
+					this.receiveThread.Name = ToShortPortString() + " Receive Thread";
 					this.receiveThread.Start();
 				}
 			}
