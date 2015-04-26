@@ -68,23 +68,23 @@ namespace MKY.IO.Usb
 	{
 		#region String Definitions
 
-		private const string None_string           = "<No preset selected>";
-		private const string None_stringStart      = "<No";
+		private const string             None_string      =   "<No preset selected>";
+		private static readonly string[] None_stringStart = { "No", "<No" }; // Covers "None", "<None"
 
-		private const string Plain_string          = "Plain = Payload only";
-		private const string Plain_stringStart     = "Plain";
+		private const string             Plain_string      =   "Plain = Payload only";
+		private static readonly string[] Plain_stringStart = { "Plain", "<Plain" };
 
-		private const string Common_string         = "Common = ID + Payload";
-		private const string Common_stringStart    = "Common";
+		private const string             Common_string      =   "Common = ID + Payload";
+		private static readonly string[] Common_stringStart = { "Common", "<Common" };
 
-		private const string MT_SerHid_string      = "MT Ser/HID";
-		private const string MT_SerHid_stringStart = "MT";
+		private const string             MT_SerHid_string      =   "MT Ser/HID";
+		private static readonly string[] MT_SerHid_stringStart = { "MT", "METTLER TOLEDO", "Mettler-Toledo" };
 
-		private const string TI_HidApi_string      = "TI HID API";
-		private const string TI_HidApi_stringStart = "TI";
+		private const string             TI_HidApi_string      =   "TI HID API";
+		private static readonly string[] TI_HidApi_stringStart = { "TI", "Texas Instruments" };
 
-		private const string YAT_string            = "YAT default";
-		private const string YAT_stringStart       = "YAT";
+		private const string             YAT_string      =   "YAT default";
+		private static readonly string[] YAT_stringStart = { "YAT" };
 
 		#endregion
 
@@ -167,32 +167,32 @@ namespace MKY.IO.Usb
 		{
 			s = s.Trim();
 
-			if      (s.StartsWith(None_stringStart))
+			if      (StringEx.StartsWithAny(s, None_stringStart, true))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.None);
 				return (true);
 			}
-			else if (s.StartsWith(Plain_stringStart))
+			else if (StringEx.StartsWithAny(s, Plain_stringStart, true))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Plain);
 				return (true);
 			}
-			else if (s.StartsWith(Common_stringStart))
+			else if (StringEx.StartsWithAny(s, Common_stringStart, true))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Common);
 				return (true);
 			}
-			else if (s.StartsWith(MT_SerHid_stringStart))
+			else if (StringEx.StartsWithAny(s, MT_SerHid_stringStart, true))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.MT_SerHid);
 				return (true);
 			}
-			else if (s.StartsWith(TI_HidApi_stringStart))
+			else if (StringEx.StartsWithAny(s, TI_HidApi_stringStart, true))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.TI_HidApi);
 				return (true);
 			}
-			else if (s.StartsWith(YAT_stringStart))
+			else if (StringEx.StartsWithAny(s, YAT_stringStart, true))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.YAT);
 				return (true);
