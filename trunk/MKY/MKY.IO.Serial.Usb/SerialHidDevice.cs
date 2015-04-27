@@ -452,7 +452,7 @@ namespace MKY.IO.Serial.Usb
 				lock (this.deviceSyncObj)
 				{
 					// Ensure to create device info from VID/PID/SNR since system path is not saved.
-					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialNumber);
+					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialString);
 					this.device.ReportFormat = this.settings.ReportFormat;
 					this.device.RxIdUsage    = this.settings.RxIdUsage;
 					this.device.AutoOpen     = this.settings.AutoOpen;

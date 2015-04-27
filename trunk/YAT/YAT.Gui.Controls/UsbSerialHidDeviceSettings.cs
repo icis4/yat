@@ -319,9 +319,13 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
+			////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
+
+				// Windows HID.dll requires that outgoing reports are always filled!
+				// Still, enable the check box in order to make tool tip visible to the user.
+
 				SetControls();
-				OnReportFormatChanged(EventArgs.Empty);
+			////OnReportFormatChanged(EventArgs.Empty);
 			}
 		}
 
@@ -421,7 +425,10 @@ namespace YAT.Gui.Controls
 
 			checkBox_PrependPayloadByteLength.Checked = (Enabled ? this.reportFormat.PrependPayloadByteLength : false);
 			checkBox_AppendTerminatingZero.Checked    = (Enabled ? this.reportFormat.AppendTerminatingZero : false);
-			checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
+		////checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
+
+			// Windows HID.dll requires that outgoing reports are always filled!
+			checkBox_FillLastReport.Checked = true;
 
 			reportFormatPreview.Enabled = Enabled;
 			reportFormatPreview.Format = this.reportFormat;

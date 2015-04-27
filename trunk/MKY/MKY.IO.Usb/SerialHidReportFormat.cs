@@ -56,8 +56,11 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public const bool AppendTerminatingZeroDefault = false;
 
-		/// <summary></summary>
-		public const bool FillLastReportDefault = false;
+		/// <remarks>
+		/// It is a requirement for most systems to fill each report to the advertised byte length.
+		/// Also, Windows HID.dll requires that outgoing reports are always filled!
+		/// </remarks>
+		public const bool FillLastReportDefault = true;
 
 		#endregion
 

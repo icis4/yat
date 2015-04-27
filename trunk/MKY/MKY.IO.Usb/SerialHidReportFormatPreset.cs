@@ -86,6 +86,9 @@ namespace MKY.IO.Usb
 		private const string             YAT_string      =   "YAT default";
 		private static readonly string[] YAT_stringStart = { "YAT" };
 
+		/// <summary></summary>
+		public const string UserSummary = @"""Plain"", ""Common"", ""MT"", ""TI"" and ""YAT""";
+
 		#endregion
 
 		#region Constants
@@ -214,12 +217,12 @@ namespace MKY.IO.Usb
 		{
 			switch ((SerialHidReportFormatPreset)UnderlyingEnum)
 			{
-				case SerialHidReportFormatPreset.None:		return (new SerialHidReportFormat(true,  0x00,  false, false, false)); // = Common.
-				case SerialHidReportFormatPreset.Plain:		return (new SerialHidReportFormat(false, 0x00,  false, false, false));
-				case SerialHidReportFormatPreset.Common:	return (new SerialHidReportFormat(true,  0x00,  false, false, false));
+				case SerialHidReportFormatPreset.None:		return (new SerialHidReportFormat(true,  0x00,  false, false, true )); // = Common.
+				case SerialHidReportFormatPreset.Plain:		return (new SerialHidReportFormat(false, 0x00,  false, false, true ));
+				case SerialHidReportFormatPreset.Common:	return (new SerialHidReportFormat(true,  0x00,  false, false, true ));
 				case SerialHidReportFormatPreset.MT_SerHid:	return (new SerialHidReportFormat(true,  0x00,  false, true,  true ));
-				case SerialHidReportFormatPreset.TI_HidApi: return (new SerialHidReportFormat(true,  TI_ID, true,  false, false));
-				case SerialHidReportFormatPreset.YAT:		return (new SerialHidReportFormat(true,  0x00,  false, false, false)); // = Common.
+				case SerialHidReportFormatPreset.TI_HidApi: return (new SerialHidReportFormat(true,  TI_ID, true,  false, true ));
+				case SerialHidReportFormatPreset.YAT:		return (new SerialHidReportFormat(true,  0x00,  false, false, true )); // = Common.
 			}
 			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
@@ -237,10 +240,10 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static SerialHidReportFormatPreset FromReportFormat(bool useId, byte id, bool prependPayloadByteLength, bool appendTerminatingZero, bool fillLastReport)
 		{
-			if (!useId && (id == 0x00)  && !prependPayloadByteLength && !appendTerminatingZero && !fillLastReport) return (SerialHidReportFormatPreset.Plain);
-			if ( useId && (id == 0x00)  && !prependPayloadByteLength && !appendTerminatingZero && !fillLastReport) return (SerialHidReportFormatPreset.Common);
+			if (!useId && (id == 0x00)  && !prependPayloadByteLength && !appendTerminatingZero &&  fillLastReport) return (SerialHidReportFormatPreset.Plain);
+			if ( useId && (id == 0x00)  && !prependPayloadByteLength && !appendTerminatingZero &&  fillLastReport) return (SerialHidReportFormatPreset.Common);
 			if ( useId && (id == 0x00)  && !prependPayloadByteLength &&  appendTerminatingZero &&  fillLastReport) return (SerialHidReportFormatPreset.MT_SerHid);
-			if ( useId && (id == TI_ID) &&  prependPayloadByteLength && !appendTerminatingZero && !fillLastReport) return (SerialHidReportFormatPreset.TI_HidApi);
+			if ( useId && (id == TI_ID) &&  prependPayloadByteLength && !appendTerminatingZero &&  fillLastReport) return (SerialHidReportFormatPreset.TI_HidApi);
 			
 			// Any other case:
 			return (SerialHidReportFormatPreset.None);

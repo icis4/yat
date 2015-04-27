@@ -765,7 +765,7 @@ namespace YAT.Model
 				bool productIdIsGiven = this.commandLineArgs.OptionIsGiven("ProductId");
 				if (vendorIdIsGiven || productIdIsGiven)
 				{
-					// Both vendor and product ID must be given!
+					// Both VID and PID must be given!
 					if (vendorIdIsGiven && productIdIsGiven)
 					{
 						int vendorId;
@@ -783,12 +783,20 @@ namespace YAT.Model
 						if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
 							return (false);
 
-						terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
+						// The SNR is optional:
+						if (!this.commandLineArgs.OptionIsGiven("SerialString"))
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
+						else
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId, this.commandLineArgs.SerialString);
 					}
 					else
 					{
 						return (false);
 					}
+				}
+				if (this.commandLineArgs.OptionIsGiven("FormatPreset"))
+				{
+					terminalSettings.IO.UsbSerialHidDevice.ReportFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
 				}
 				if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
 				{

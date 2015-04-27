@@ -52,7 +52,7 @@ namespace MKY.IO.Usb
 		string Product { get; }
 
 		/// <summary></summary>
-		string SerialNumber { get; }
+		string Serial { get; }
 
 		/// <summary></summary>
 		string ToString();

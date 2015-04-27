@@ -165,28 +165,29 @@ namespace MKY.IO.Usb
 			bool reportIsFull = false;
 
 			// Create the reports and accumulate the length:
-			int accumulatedLength = 0;
-			while (accumulatedLength < (payload.Length))
+			int accumulatedPayloadLength = 0;
+			while (accumulatedPayloadLength < (payload.Length))
 			{
 				// Evaluate the required lengths:
-				int remainingLength = payload.Length - accumulatedLength;
-				int payloadLength = ((remainingLength <= usableLength) ? remainingLength : usableLength);
+				int remainingPayloadLength = payload.Length - accumulatedPayloadLength;
+				int payloadLength = ((remainingPayloadLength <= usableLength) ? remainingPayloadLength : usableLength);
 				reportIsFull = (payloadLength == usableLength);
 
 				// Create the report, one or two bytes may be used by the report header,
 				// an additional byte may be needed for the terminating zero:
-				int effectiveLength;
+				int effectiveLength = format.HeaderByteLength + payloadLength;
 				if (format.AppendTerminatingZero)
-					effectiveLength = (reportIsFull ? (format.HeaderByteLength + payloadLength) : (format.HeaderByteLength + payloadLength + 1));
-				else
-					effectiveLength = (format.HeaderByteLength + payloadLength);
+					effectiveLength += 1;
 
-				// If requested, create a full report, some devices do not work otherwise:
+				// If requested, create a full report, many systems don't work otherwise:
 				byte[] report;
-				if (format.FillLastReport)
-					report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
-				else
-					report = new byte[effectiveLength]; // C# value-type arrays are initialized to 0.
+			////if (format.FillLastReport)
+			////	report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
+			////else
+			////	report = new byte[effectiveLength]; // C# value-type arrays are initialized to 0.
+
+				// Windows HID.dll requires that outgoing reports are always filled!
+				report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
 
 				// If requested, copy the ID into the first byte of the report:
 				if (format.UseId)
@@ -202,7 +203,7 @@ namespace MKY.IO.Usb
 				}
 
 				// Copy the payload data into the remaining space of the report:
-				Array.Copy(payload, accumulatedLength, report, format.HeaderByteLength, payloadLength);
+				Array.Copy(payload, accumulatedPayloadLength, report, format.HeaderByteLength, payloadLength);
 
 				// There is no need to add the terminating zero if requested, the report array has
 				// already been initialized with zeros upon creation.
@@ -211,7 +212,7 @@ namespace MKY.IO.Usb
 				reports.Add(report);
 
 				// Forward to next report:
-				accumulatedLength += payloadLength;
+				accumulatedPayloadLength += payloadLength;
 			}
 
 			// According to the USB specifications, a terminating report must be added in case the
