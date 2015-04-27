@@ -335,6 +335,7 @@ namespace YAT.Gui.Controls
 					if (button_SendCommand.Enabled)
 					{
 						RequestSendCommand();
+						SetCursorToEnd();
 						return (true);
 					}
 				}
@@ -551,6 +552,7 @@ namespace YAT.Gui.Controls
 		private void button_SendCommand_Click(object sender, EventArgs e)
 		{
 			RequestSendCommand();
+			SetCursorToEnd();
 		}
 
 		#endregion
