@@ -107,12 +107,15 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// String descriptor types.
 	/// </summary>
+	/// <remarks>
+	/// Replication of private enum 'Win32.Hid.StringDescriptorIndex' for less coupling to Win32.Hid assembly.
+	/// </remarks>
 	public enum StringDescriptorIndex
 	{
 		LanguageIds  = 0,
 		Manufacturer = 1,
 		Product      = 2,
-		SerialNumber = 3,
+		Serial       = 3,
 	}
 
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Item names are given by USB.")]

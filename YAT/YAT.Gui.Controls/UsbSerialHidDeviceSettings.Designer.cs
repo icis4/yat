@@ -41,8 +41,8 @@
 			this.textBox_Id = new System.Windows.Forms.TextBox();
 			this.checkBox_SeparateRxId = new System.Windows.Forms.CheckBox();
 			this.textBox_RxId = new System.Windows.Forms.TextBox();
-			this.label_Line = new System.Windows.Forms.Label();
 			this.comboBox_Preset = new System.Windows.Forms.ComboBox();
+			this.label_Line = new System.Windows.Forms.Label();
 			this.label_Preset = new System.Windows.Forms.Label();
 			this.label_Preview_1 = new System.Windows.Forms.Label();
 			this.label_Preview_2 = new System.Windows.Forms.Label();
@@ -95,9 +95,9 @@
 			this.checkBox_UseId.Size = new System.Drawing.Size(55, 17);
 			this.checkBox_UseId.TabIndex = 1;
 			this.checkBox_UseId.Text = "Tx &ID:";
-			this.toolTip.SetToolTip(this.checkBox_UseId, "Most devices expect a ID at the beginning of each report. This ID may be used to " +
-        "identify multiple logical channels over the same HID interface, or multiple chan" +
-        "nels to increase the bitrate.");
+			this.toolTip.SetToolTip(this.checkBox_UseId, "Most devices expect a ID at the beginning of each report. This\r\nID may be used to" +
+        " identify multiple logical channels over the\r\nsame HID interface, or multiple ch" +
+        "annels to increase the bitrate.");
 			this.checkBox_UseId.UseVisualStyleBackColor = true;
 			this.checkBox_UseId.CheckedChanged += new System.EventHandler(this.checkBox_UseId_CheckedChanged);
 			// 
@@ -111,9 +111,9 @@
 			this.checkBox_PrependPayloadByteLength.Size = new System.Drawing.Size(138, 17);
 			this.checkBox_PrependPayloadByteLength.TabIndex = 5;
 			this.checkBox_PrependPayloadByteLength.Text = "Prepend payload &length";
-			this.toolTip.SetToolTip(this.checkBox_PrependPayloadByteLength, "Some devices require to indicate the payload length before the payload starts. Th" +
-        "e length only relates to the current report, not the total length of all reports" +
-        ".");
+			this.toolTip.SetToolTip(this.checkBox_PrependPayloadByteLength, "Some devices require to indicate the payload length before the payload starts.\r\nT" +
+        "he length only relates to the current report, not the total length of all report" +
+        "s.");
 			this.checkBox_PrependPayloadByteLength.UseVisualStyleBackColor = true;
 			this.checkBox_PrependPayloadByteLength.CheckedChanged += new System.EventHandler(this.checkBox_PrependPayloadByteLength_CheckedChanged);
 			// 
@@ -127,8 +127,8 @@
 			this.checkBox_AppendTerminatingZero.Size = new System.Drawing.Size(140, 17);
 			this.checkBox_AppendTerminatingZero.TabIndex = 6;
 			this.checkBox_AppendTerminatingZero.Text = "Append terminating &zero";
-			this.toolTip.SetToolTip(this.checkBox_AppendTerminatingZero, "Append a terminating zero after the last payload byte. Only useful for text/strin" +
-        "g based protocols.");
+			this.toolTip.SetToolTip(this.checkBox_AppendTerminatingZero, "Append a terminating zero after the last payload byte.\r\nOnly useful for text/stri" +
+        "ng based protocols.");
 			this.checkBox_AppendTerminatingZero.UseVisualStyleBackColor = true;
 			this.checkBox_AppendTerminatingZero.CheckedChanged += new System.EventHandler(this.checkBox_AppendTerminatingZero_CheckedChanged);
 			// 
@@ -142,8 +142,9 @@
 			this.checkBox_FillLastReport.Size = new System.Drawing.Size(87, 17);
 			this.checkBox_FillLastReport.TabIndex = 7;
 			this.checkBox_FillLastReport.Text = "&Fill last report";
-			this.toolTip.SetToolTip(this.checkBox_FillLastReport, "Some devices require that all reports are filled, i.e. completed to the specified" +
-        " report length. Only useful for text/string based protocols.");
+			this.toolTip.SetToolTip(this.checkBox_FillLastReport, "Many devices require that all reports are filled, i.e. completed to the specified" +
+        " report length.\r\n\r\nThis is also a requirement of the Windows HID.dll thus always" +
+        " kept enabled.");
 			this.checkBox_FillLastReport.UseVisualStyleBackColor = true;
 			this.checkBox_FillLastReport.CheckedChanged += new System.EventHandler(this.checkBox_FillLastReport_CheckedChanged);
 			// 
@@ -166,7 +167,8 @@
 			this.checkBox_SeparateRxId.Size = new System.Drawing.Size(56, 17);
 			this.checkBox_SeparateRxId.TabIndex = 3;
 			this.checkBox_SeparateRxId.Text = "Rx I&D:";
-			this.toolTip.SetToolTip(this.checkBox_SeparateRxId, "Enable this option to accept a different ID than the Tx ID; or to accept any ID.");
+			this.toolTip.SetToolTip(this.checkBox_SeparateRxId, "Enable this option to accept a different ID than the Tx ID;\r\nor to accept any ID." +
+        "");
 			this.checkBox_SeparateRxId.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateRxId.CheckedChanged += new System.EventHandler(this.checkBox_SeparateRxId_CheckedChanged);
 			// 
@@ -182,16 +184,6 @@
         "o accept any ID.");
 			this.textBox_RxId.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_RxId_Validating);
 			// 
-			// label_Line
-			// 
-			this.label_Line.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_Line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.label_Line.Location = new System.Drawing.Point(3, 208);
-			this.label_Line.Name = "label_Line";
-			this.label_Line.Size = new System.Drawing.Size(254, 2);
-			this.label_Line.TabIndex = 19;
-			// 
 			// comboBox_Preset
 			// 
 			this.comboBox_Preset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -205,6 +197,16 @@
 			this.toolTip.SetToolTip(this.comboBox_Preset, "For the ease of use, select a preset from the list.\r\n\r\nContact YAT via \"Help > Re" +
         "quest Feature\" to request additional presets.");
 			this.comboBox_Preset.SelectedIndexChanged += new System.EventHandler(this.comboBox_Preset_SelectedIndexChanged);
+			// 
+			// label_Line
+			// 
+			this.label_Line.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.label_Line.Location = new System.Drawing.Point(3, 208);
+			this.label_Line.Name = "label_Line";
+			this.label_Line.Size = new System.Drawing.Size(254, 2);
+			this.label_Line.TabIndex = 19;
 			// 
 			// label_Preset
 			// 

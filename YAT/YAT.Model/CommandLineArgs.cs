@@ -35,6 +35,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.CommandLine;
+using MKY.IO.Usb;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -143,6 +144,13 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "npar", Description =
+			"When device is lost, e.g. a USB/Serial converter, try to reopen the port every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 2000. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
+			"By default, this feature is enabled and set to 2000 milliseconds. Only applies to serial COM ports.")]
+		public int SerialPortAutoReopen;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "RemoteHost", ShortName = "rh", Description =
 			"The desired remote IP host. Must be a valid IPv4 or IPv6 address or an alias like 'localhost'. The default value is 'localhost'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP or UDP terminals.")]
@@ -181,6 +189,15 @@ namespace YAT.Model
 		public int LocalPort;
 
 		/// <remarks>
+		/// Name is intentionally written 'TCP' instead of 'Tcp' for better readability.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "TCPAutoReconnect", ShortName = "tar", Description =
+			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
+			"By default, this feature is disabled. Only applies to TCP clients.")]
+		public int TcpAutoReconnect;
+
+		/// <remarks>
 		/// The values in the description must be provided directly instead of referencing their respective code items
 		/// <see cref="MKY.IO.Usb.DeviceInfo.FirstVendorIdString"/> and <see cref="MKY.IO.Usb.DeviceInfo.LastVendorIdString"/>
 		/// because attribute arguments must be constant.
@@ -204,19 +221,17 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "npar", Description =
-			"When device is lost, e.g. a USB/Serial converter, try to reopen the port every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 2000. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is enabled and set to 2000 milliseconds. Only applies to serial COM ports.")]
-		public int SerialPortAutoReopen;
+		[OptionArg(Name = "SerialString", ShortName = "SNR", Description =
+			"The desired USB device serial string, or serial number (SNR). The default value is the SNR of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to USB Ser/HID.")]
+		public string SerialString;
 
-		/// <remarks>
-		/// Name is intentionally written 'TCP' instead of 'Tcp' for better readability.
-		/// </remarks>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "TCPAutoReconnect", ShortName = "tar", Description =
-			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is disabled. Only applies to TCP clients.")]
-		public int TcpAutoReconnect;
+		[OptionArg(Name = "FormatPreset", ShortName = "fp", Description =
+			"One of the presets to specify the report format USB Ser/HID. Valid values are " + SerialHidReportFormatPresetEx.UserSummary + "." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to USB Ser/HID.")]
+		public string FormatPreset;
 
 		/// <remarks>
 		/// Name is intentionally written 'USB' instead of 'Usb' for better readability.

@@ -255,11 +255,7 @@ namespace YAT.Gui.Controls
 					}
 					else
 					{
-						// Ensure that the settings item is defaulted and shown by SetControls().
-						// Set property instead of member to ensure that changed event is fired.
-						DeviceInfo = devices[0];
-						comboBox_Device.SelectedIndex = 0;
-
+						// Compose the message (that includes the former device info) BEFORE defaulting!
 						string message;
 						if (this.deviceInfo != null)
 							message =
@@ -269,6 +265,11 @@ namespace YAT.Gui.Controls
 							message =
 								"The former USB device is currently not available." + Environment.NewLine + Environment.NewLine +
 								"The setting has been defaulted to the first available device.";
+
+						// Ensure that the settings item is defaulted and shown by SetControls().
+						// Set property instead of member to ensure that changed event is fired.
+						DeviceInfo = devices[0];
+						comboBox_Device.SelectedIndex = 0;
 
 						MessageBoxEx.Show
 						(

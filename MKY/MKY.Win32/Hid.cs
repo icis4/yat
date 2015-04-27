@@ -568,17 +568,19 @@ namespace MKY.Win32
 			[return: MarshalAs(UnmanagedType.Bool)]
 			private static extern Boolean HidD_GetProductString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 
-			/// <summary></summary>
+			/// <remarks>
+			/// USB specifies that serial is a string, not limited to a number!
+			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-			public static bool HidD_GetSerialNumberString(SafeFileHandle HidDeviceObject, out string SerialNumber)
+			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string SerialString)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 				if (HidD_GetSerialNumberString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
-					SerialNumber = s.ToString();
+					SerialString = s.ToString();
 					return (true);
 				}
-				SerialNumber = "";
+				SerialString = "";
 				return (false);
 			}
 
@@ -695,12 +697,15 @@ namespace MKY.Win32
 		/// <summary>
 		/// String descriptor types.
 		/// </summary>
+		/// <remarks>
+		/// Replicated in 'IO.Usb.StringDescriptorIndex' for less coupling to this assembly.
+		/// </remarks>
 		private enum StringDescriptorIndex
 		{
 			LanguageIds  = 0,
 			Manufacturer = 1,
 			Product      = 2,
-			SerialNumber = 3,
+			Serial       = 3,
 		}
 
 		#pragma warning restore 1591
@@ -809,9 +814,9 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetSerialNumberString(SafeFileHandle deviceHandle, out string serialNumber)
+		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serialString)
 		{
-			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialNumberString, out serialNumber));
+			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serialString));
 		}
 
 		/// <summary>
@@ -840,7 +845,7 @@ namespace MKY.Win32
 				{
 					// Retrieve content string.
 					string contentString;
-					if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialNumberString().
+					if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialString().
 					{
 						if (contentString != languageString) // Looks like a proper invariant string.
 						{
