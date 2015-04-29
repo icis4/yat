@@ -572,15 +572,15 @@ namespace MKY.Win32
 			/// USB specifies that serial is a string, not limited to a number!
 			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string SerialString)
+			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string Serial)
 			{
 				StringBuilder s = new StringBuilder(Usb.Descriptors.MaxStringDescriptorCharLength);
 				if (HidD_GetSerialNumberString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
-					SerialString = s.ToString();
+					Serial = s.ToString();
 					return (true);
 				}
-				SerialString = "";
+				Serial = "";
 				return (false);
 			}
 
@@ -814,13 +814,13 @@ namespace MKY.Win32
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serialString)
+		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serial)
 		{
-			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serialString));
+			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial));
 		}
 
 		/// <summary>
-		/// Gets one of the standard strings (manufacturer, product, serial number).
+		/// Gets one of the standard strings (manufacturer, product, serial).
 		/// </summary>
 		/// <remarks>
 		/// \fixme (2010-03-14 / mky):

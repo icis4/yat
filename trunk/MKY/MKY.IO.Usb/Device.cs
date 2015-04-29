@@ -180,19 +180,19 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns manufacturer, product and serial number strings of a given path.
+		/// Returns manufacturer, product and serial strings of a given path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serialString)
+		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serial)
 		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serialString))
+					if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial))
 						return (true);
 				}
 				finally
@@ -203,7 +203,7 @@ namespace MKY.IO.Usb
 
 			manufacturer = "";
 			product      = "";
-			serialString = "";
+			serial       = "";
 			return (false);
 		}
 
@@ -241,7 +241,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serialString)
+		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
 		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
@@ -249,7 +249,7 @@ namespace MKY.IO.Usb
 				try
 				{
 					if (GetVidAndPidFromHandle(deviceHandle, out vendorId, out productId))
-						if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serialString))
+						if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial))
 							return (true);
 				}
 				finally
@@ -262,7 +262,7 @@ namespace MKY.IO.Usb
 			productId    = 0;
 			manufacturer = "";
 			product      = "";
-			serialString = "";
+			serial       = "";
 			return (false);
 		}
 
@@ -278,10 +278,10 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
 		public static DeviceInfo GetDeviceInfoFromVidAndPid(int vendorId, int productId)
 		{
-			string path, manufacturer, product, serialString;
+			string path, manufacturer, product, serial;
 
-			if (GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serialString))
-				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serialString));
+			if (GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 			else
 				return (null);
 		}
@@ -297,14 +297,14 @@ namespace MKY.IO.Usb
 		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
 		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
-		/// <param name="serialString">Retrieved serial string, or "" if no appropriate device was found.</param>
+		/// <param name="serial">Retrieved serial string, or "" if no appropriate device was found.</param>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serialString)
+		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serial)
 		{
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
 			{
@@ -313,7 +313,7 @@ namespace MKY.IO.Usb
 					path         = device.Path;
 					manufacturer = device.Manufacturer;
 					product      = device.Product;
-					serialString = device.SerialString;
+					serial       = device.Serial;
 
 					return (true);
 				}
@@ -322,34 +322,34 @@ namespace MKY.IO.Usb
 			path         = "";
 			manufacturer = "";
 			product      = "";
-			serialString = "";
+			serial       = "";
 
 			return (false);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID and serial number.
+		/// Returns the information of the device with the given VID and PID and serial string.
 		/// or <c>null</c> if no device could be found on the give path.
 		/// </summary>
 		/// <returns>Retrieved device info, or <c>null</c> if no appropriate device was found.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialString)
+		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
 
-			if (GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serialString, out path, out manufacturer, out product))
-				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serialString));
+			if (GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID and serial number.
+		/// Returns the information of the device with the given VID and PID and serial string.
 		/// </summary>
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
-		/// <param name="serialString">Given serial string.</param>
+		/// <param name="serial">Given serial string.</param>
 		/// <param name="path">Retrieved system path, or "" if no appropriate device was found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no appropriate device was found.</param>
 		/// <param name="product">Retrieved product, or "" if no appropriate device was found.</param>
@@ -358,11 +358,13 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Vid", Justification = "'VID' is a common term in USB.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pid", Justification = "'PID' is a common term in USB.")]
-		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialString, out string path, out string manufacturer, out string product)
+		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serial, out string path, out string manufacturer, out string product)
 		{
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
 			{
-				if ((device.VendorId == vendorId) && (device.ProductId == productId) && (StringEx.EqualsOrdinal(device.SerialString, serialString)))
+				if ((device.VendorId == vendorId) &&
+					(device.ProductId == productId) &&
+					(StringEx.EqualsOrdinalIgnoreCase(device.Serial, serial))) // Case-insensitive (i.e. Windows behaviour).
 				{
 					path         = device.Path;
 					manufacturer = device.Manufacturer;
@@ -561,10 +563,11 @@ namespace MKY.IO.Usb
 
 			int vendorId, productId;
 			string manufacturer, product, serial;
-			GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial);
-
-			this.deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serial);
-			Initialize();
+			if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			{
+				this.deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serial);
+				Initialize();
+			}
 		}
 
 		/// <summary></summary>
@@ -579,11 +582,11 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		protected Device(Guid classGuid, int vendorId, int productId, string serialString)
+		protected Device(Guid classGuid, int vendorId, int productId, string serial)
 		{
 			UnusedArg.PreventAnalysisWarning(classGuid); // The USB class GUID arg is forseen for future use.
 
-			this.deviceInfo = new DeviceInfo(vendorId, productId, serialString);
+			this.deviceInfo = new DeviceInfo(vendorId, productId, serial);
 			Initialize();
 		}
 
@@ -778,7 +781,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public virtual string Serial
 		{
-			get { return (this.deviceInfo.SerialString); }
+			get { return (this.deviceInfo.Serial); }
 		}
 
 		#endregion
