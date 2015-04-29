@@ -83,7 +83,7 @@ namespace MKY.IO.Usb
 		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		/// <summary></summary>
-		public const string DefaultSerialString = "";
+		public const string DefaultSerial = "";
 
 		/// <summary></summary>
 		public const string DefaultSeparator = " - ";
@@ -97,12 +97,12 @@ namespace MKY.IO.Usb
 
 		private string path;
 
-		private int vendorId = DefaultVendorId;
+		private int vendorId  = DefaultVendorId;
 		private int productId = DefaultProductId;
 
 		private string manufacturer;
 		private string product;
-		private string serialString = DefaultSerialString; // Required for XML serialization.
+		private string serial = DefaultSerial; // Required for XML serialization.
 
 		#endregion
 
@@ -122,37 +122,37 @@ namespace MKY.IO.Usb
 		public DeviceInfo(string path)
 		{
 			int vendorId, productId;
-			string manufacturer, product, serialString;
-			Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serialString);
-			Initialize(path, vendorId, productId, manufacturer, product, serialString);
+			string manufacturer, product, serial;
+			if (Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+				Initialize(path, vendorId, productId, manufacturer, product, serial);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(int vendorId, int productId)
 		{
-			string path, manufacturer, product, serialString;
-			Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serialString);
-			Initialize(path, vendorId, productId, manufacturer, product, serialString);
+			string path, manufacturer, product, serial;
+			if (Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+				Initialize(path, vendorId, productId, manufacturer, product, serial);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-		public DeviceInfo(int vendorId, int productId, string serialString)
+		public DeviceInfo(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
-			Device.GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serialString, out path, out manufacturer, out product);
-			Initialize(path, vendorId, productId, manufacturer, product, serialString);
+			if (Device.GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+				Initialize(path, vendorId, productId, manufacturer, product, serial);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serialString)
+		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
-			Initialize(path, vendorId, productId, manufacturer, product, serialString);
+			Initialize(path, vendorId, productId, manufacturer, product, serial);
 		}
 
-		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serialString)
+		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
 				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
@@ -166,7 +166,7 @@ namespace MKY.IO.Usb
 
 			this.manufacturer = manufacturer;
 			this.product      = product;
-			this.serialString = serialString;
+			this.serial       = serial;
 		}
 
 		/// <summary></summary>
@@ -180,7 +180,7 @@ namespace MKY.IO.Usb
 
 			this.manufacturer = rhs.manufacturer;
 			this.product      = rhs.product;
-			this.serialString = rhs.serialString;
+			this.serial       = rhs.serial;
 		}
 
 		#endregion
@@ -244,12 +244,16 @@ namespace MKY.IO.Usb
 			set { this.product = value;  }
 		}
 
-		/// <summary></summary>
-		[XmlElement("SerialString")]
-		public virtual string SerialString
+		/// <remarks>
+		/// Keeping "SerialNumber" for the XML element for backward-compatibility to older versions.
+		/// Note that the USB standard also uses the term "SerialNumber" which not really makes
+		/// sense as the value can be any unicode (UTF-8 ??) encoded string.
+		/// </remarks>
+		[XmlElement("SerialNumber")]
+		public virtual string Serial
 		{
-			get { return (this.serialString); }
-			set { this.serialString = value;  }
+			get { return (this.serial); }
+			set { this.serial = value;  }
 		}
 
 		#endregion
@@ -267,16 +271,16 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool TryValidate()
 		{
-			if      (this.path.Length > 0)
+			if (this.path.Length > 0)
 			{
-				return (Device.GetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serialString));
+				return (Device.GetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serial));
 			}
 			else if ((this.vendorId != 0) && (this.productId != 0))
 			{
-				if (this.serialString.Length > 0)
-					return (Device.GetDeviceInfoFromVidAndPidAndSerial(this.vendorId, this.productId, this.serialString, out this.path, out this.manufacturer, out this.product));
+				if (this.serial.Length > 0)
+					return (Device.GetDeviceInfoFromVidAndPidAndSerial(this.vendorId, this.productId, this.serial, out this.path, out this.manufacturer, out this.product));
 				else
-					return (Device.GetDeviceInfoFromVidAndPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serialString));
+					return (Device.GetDeviceInfoFromVidAndPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serial));
 			}
 			else
 			{
@@ -320,7 +324,7 @@ namespace MKY.IO.Usb
 			(
 				(VendorId     == other.VendorId) &&
 				(ProductId    == other.ProductId) &&
-				(SerialString == other.SerialString)
+				(Serial == other.Serial)
 			);
 		}
 
@@ -400,12 +404,12 @@ namespace MKY.IO.Usb
 				sb.Append(")");
 			}
 
-			if (!string.IsNullOrEmpty(SerialString))
+			if (!string.IsNullOrEmpty(Serial))
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) "
 
-				sb.Append(SerialString);         // "Company (VID:0ABC) Product (PID:1234) 000123A"
+				sb.Append(Serial);               // "Company (VID:0ABC) Product (PID:1234) 000123A"
 			}
 
 			return (sb.ToString());
@@ -528,7 +532,7 @@ namespace MKY.IO.Usb
 				else if (ProductId != other.ProductId)
 					return (ProductId.CompareTo(other.ProductId));
 				else
-					return (StringEx.CompareOrdinalIgnoreCase(SerialString, other.SerialString));
+					return (StringEx.CompareOrdinalIgnoreCase(Serial, other.Serial)); // Case-insensitive (i.e. Windows behaviour).
 			}
 			else
 			{

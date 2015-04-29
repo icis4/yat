@@ -293,8 +293,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public HidDevice(int vendorId, int productId, string serialString)
-			: base(HidGuid, vendorId, productId, serialString)
+		public HidDevice(int vendorId, int productId, string serial)
+			: base(HidGuid, vendorId, productId, serial)
 		{
 			Initialize();
 		}
