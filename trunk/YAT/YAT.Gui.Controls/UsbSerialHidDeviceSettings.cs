@@ -115,6 +115,7 @@ namespace YAT.Gui.Controls
 		[Category("USB Ser/HID")]
 		[Description("The report format.")]
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidReportFormat ReportFormat
 		{
 			get { return (this.reportFormat); }
@@ -133,6 +134,7 @@ namespace YAT.Gui.Controls
 		[Category("USB Ser/HID")]
 		[Description("The Rx ID usage.")]
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Usb.SerialHidRxIdUsage RxIdUsage
 		{
 			get { return (this.rxIdUsage); }
@@ -319,11 +321,19 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-			////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
-
 				// Windows HID.dll requires that outgoing reports are always filled!
 				// Still, enable the check box in order to make tool tip visible to the user.
+				MessageBoxEx.Show
+				(
+					this,
+					"The Windows HID infrastructure requires that outgoing reports are always filled. " +
+					"As a consequence, this option must be kept enabled.",
+					"Limitation of Windows HID",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
 
+			////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
 				SetControls();
 			////OnReportFormatChanged(EventArgs.Empty);
 			}
