@@ -142,9 +142,7 @@
 			this.checkBox_FillLastReport.Size = new System.Drawing.Size(87, 17);
 			this.checkBox_FillLastReport.TabIndex = 7;
 			this.checkBox_FillLastReport.Text = "&Fill last report";
-			this.toolTip.SetToolTip(this.checkBox_FillLastReport, "Many devices require that all reports are filled, i.e. completed to the specified" +
-        " report length.\r\n\r\nThis is also a requirement of the Windows HID.dll thus always" +
-        " kept enabled.");
+			this.toolTip.SetToolTip(this.checkBox_FillLastReport, resources.GetString("checkBox_FillLastReport.ToolTip"));
 			this.checkBox_FillLastReport.UseVisualStyleBackColor = true;
 			this.checkBox_FillLastReport.CheckedChanged += new System.EventHandler(this.checkBox_FillLastReport_CheckedChanged);
 			// 
@@ -306,7 +304,6 @@
 			// 
 			this.reportFormatPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.reportFormatPreview.Format = ((MKY.IO.Usb.SerialHidReportFormat)(resources.GetObject("reportFormatPreview.Format")));
 			this.reportFormatPreview.Location = new System.Drawing.Point(3, 77);
 			this.reportFormatPreview.Name = "reportFormatPreview";
 			this.reportFormatPreview.Size = new System.Drawing.Size(254, 88);
