@@ -21,6 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// \remind MKY 2013-05-25 (related to feature request #163)
+// Ideally, the two properties 'HorizontalAutoScroll' and 'VerticalAutoScroll' and the corresponding
+// automatism would be supported by this ListBox extension. However, no feasible implementation has
+// been found. Therefore, it was decided to skip the automatism and simply provide the necessary
+// methods that allow the user of this control to trigger the auto scroll.
+
+// Enable to continue working/testing with an automatic horizontally scrolling list box:
+//#define ENABLE_HORIZONTAL_AUTO_SCROLL
+
 #region Using
 //==================================================================================================
 // Using
@@ -45,6 +58,8 @@ namespace MKY.Windows.Forms
 	[DesignerCategory("Windows Forms")]
 	public class ListBoxEx : ListBox
 	{
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+	
 		#region General
 		//==========================================================================================
 		// General
@@ -56,6 +71,8 @@ namespace MKY.Windows.Forms
 		}
 
 		#endregion
+
+#endif
 
 		#region Selection
 		//==========================================================================================
@@ -78,6 +95,8 @@ namespace MKY.Windows.Forms
 		// Scroll
 		//==========================================================================================
 
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+
 		#region Scroll > Events
 		//------------------------------------------------------------------------------------------
 		// Scroll > Events
@@ -97,17 +116,14 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
+#endif
+
 		#region Scroll > Properties
 		//------------------------------------------------------------------------------------------
 		// Scroll > Properties
 		//------------------------------------------------------------------------------------------
 
-		// \remind MKY 2013-05-25 (related to feature request #163)
-		// Ideally, the following two properties and the corresponding automatism would be supported
-		// by this ListBox extension. However, no feasible performant implementation has been found.
-		// Therefore, it was decided to skip the automatism and simply provide the necessary methods
-		// that allow the user of this control to trigger the auto scroll.
-#if (FALSE)
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 		/// <summary></summary>
 		[Category("Scroll")]
 		[Description("Enables or disables horizontal auto scroll.")]
@@ -171,11 +187,7 @@ namespace MKY.Windows.Forms
 		// Scroll > Methods
 		//------------------------------------------------------------------------------------------
 
-		// \remind MKY 2013-05-25 (related to feature request #163)
-		// No feasible way to implement horizontal auto scroll found. There are Win32 API functions
-		// to move the position of the scroll bar itself, and to scroll rectangles, but it is not
-		// feasible to do the whole translation from .NET Windows.Forms to Win32. Giving up.
-#if (FALSE)
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 		/// <summary>
 		/// Horizontally scroll the list to the beginning of the scroll extent, taking
 		/// <see cref="RightToLeft"/> into account.
@@ -316,6 +328,8 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
+
 		#region Scroll > Overridden Methods
 		//------------------------------------------------------------------------------------------
 		// Scroll > Overridden Methods
@@ -432,6 +446,8 @@ namespace MKY.Windows.Forms
 		}
 
 		#endregion
+
+#endif
 
 		#endregion
 	}
