@@ -84,17 +84,24 @@ namespace YAT.Model.Test
 		// TransmissionTypes
 		//==========================================================================================
 
+		private static readonly string[] SerialPortsAreInterconnectedAB = new string[]
+		{
+			MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortAIsAvailable,
+			MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortBIsAvailable,
+			MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortsAreInterconnected
+		};
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		public static IEnumerable<KeyValuePair<TransmissionType, string>> GetItems
+		public static IEnumerable<KeyValuePair<TransmissionType, string[]>> GetItems
 		{
 			get
 			{
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.SerialPort,                           MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortsAreInterconnected));
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          MKY.Net.Test.SettingsCategoryStrings.IPv4LoopbackIsAvailable));
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          MKY.Net.Test.SettingsCategoryStrings.IPv6LoopbackIsAvailable));
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, MKY.Net.Test.SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable));
-				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, MKY.Net.Test.SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.SerialPort, SerialPortsAreInterconnectedAB));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          new string[] { MKY.Net.Test.SettingsCategoryStrings.IPv4LoopbackIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          new string[] { MKY.Net.Test.SettingsCategoryStrings.IPv6LoopbackIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, new string[] { MKY.Net.Test.SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, new string[] { MKY.Net.Test.SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable }));
 			}
 		}
 
@@ -189,40 +196,54 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		private static IEnumerable<KeyValuePair<TestCaseData, string[]>> TestCasesWithoutCategory
+		{
+			get
+			{
+				foreach (KeyValuePair<TransmissionType, string[]> kvp in TransmissionTypes.GetItems)
+				{
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, SingleLineCommand,   1).SetName(kvp.Key + "_SingleLineTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, DoubleLineCommand,   1).SetName(kvp.Key + "_DoubleLineTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, DoubleLineCommand,   2).SetName(kvp.Key + "_DoubleLineDoubleTransmission"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, TripleLineCommand,   1).SetName(kvp.Key + "_TripleLineTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, TripleLineCommand,   3).SetName(kvp.Key + "_TripleLineTripleTransmission"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, MultiLineCommand,    1).SetName(kvp.Key + "_MultiLineTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, MultiLineCommand, TestCommandLines.Length).SetName(kvp.Key + "_MultiLineMultiTransmission"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, MultiEolCommand,     1).SetName(kvp.Key + "_MultiEolTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, MixedEolCommand,     1).SetName(kvp.Key + "_MixedEolTransmission"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, EolPartsCommand,     1).SetName(kvp.Key + "_EolPartsTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, EolOnlyCommand,      1).SetName(kvp.Key + "_EolOnlyTransmission"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, SingleNoEolCommand,  1).SetName(kvp.Key + "_SingleNoEolTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, DoubleNoEolCommand,  1).SetName(kvp.Key + "_DoubleNoEolTransmission"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, StillEolCommand1,    1).SetName(kvp.Key + "_StillEolCommand1"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, StillEolCommand2,    1).SetName(kvp.Key + "_StillEolCommand2"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, StillEolCommand3,    1).SetName(kvp.Key + "_StillEolCommand3"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, ControlCharCommand1, 1).SetName(kvp.Key + "_ControlCharCommand1"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, ControlCharCommand2, 1).SetName(kvp.Key + "_ControlCharCommand2"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, ControlCharCommand3, 1).SetName(kvp.Key + "_ControlCharCommand3"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, ClearCommand,        1).SetName(kvp.Key + "_ClearCommand"), kvp.Value));
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
 			get
 			{
-				foreach (KeyValuePair<TransmissionType, string> kvp in TransmissionTypes.GetItems)
+				foreach (KeyValuePair<TestCaseData, string[]> kvp in TestCasesWithoutCategory)
 				{
-					yield return (new TestCaseData(kvp.Key, SingleLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_SingleLineTransmission"));
+					foreach (string cat in kvp.Value)
+						kvp.Key.SetCategory(cat);
 
-					yield return (new TestCaseData(kvp.Key, DoubleLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleLineTransmission"));
-					yield return (new TestCaseData(kvp.Key, DoubleLineCommand, 2).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleLineDoubleTransmission"));
-
-					yield return (new TestCaseData(kvp.Key, TripleLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_TripleLineTransmission"));
-					yield return (new TestCaseData(kvp.Key, TripleLineCommand, 3).SetCategory(kvp.Value).SetName(kvp.Key + "_TripleLineTripleTransmission"));
-
-					yield return (new TestCaseData(kvp.Key, MultiLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_MultiLineTransmission"));
-					yield return (new TestCaseData(kvp.Key, MultiLineCommand, TestCommandLines.Length).SetCategory(kvp.Value).SetName(kvp.Key + "_MultiLineMultiTransmission"));
-
-					yield return (new TestCaseData(kvp.Key, MultiEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_MultiEolTransmission"));
-					yield return (new TestCaseData(kvp.Key, MixedEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_MixedEolTransmission"));
-
-					yield return (new TestCaseData(kvp.Key, EolPartsCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_EolPartsTransmission"));
-					yield return (new TestCaseData(kvp.Key, EolOnlyCommand,  1).SetCategory(kvp.Value).SetName(kvp.Key + "_EolOnlyTransmission"));
-
-					yield return (new TestCaseData(kvp.Key, SingleNoEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_SingleNoEolTransmission"));
-					yield return (new TestCaseData(kvp.Key, DoubleNoEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleNoEolTransmission"));
-					yield return (new TestCaseData(kvp.Key, StillEolCommand1,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_StillEolCommand1"));
-					yield return (new TestCaseData(kvp.Key, StillEolCommand2,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_StillEolCommand2"));
-					yield return (new TestCaseData(kvp.Key, StillEolCommand3,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_StillEolCommand3"));
-
-					yield return (new TestCaseData(kvp.Key, ControlCharCommand1, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_ControlCharCommand1"));
-					yield return (new TestCaseData(kvp.Key, ControlCharCommand2, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_ControlCharCommand2"));
-					yield return (new TestCaseData(kvp.Key, ControlCharCommand3, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_ControlCharCommand3"));
-
-					yield return (new TestCaseData(kvp.Key, ClearCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_ClearCommand"));
+					yield return (kvp.Key);
 				}
 			}
 		}
@@ -378,17 +399,32 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		private static IEnumerable<KeyValuePair<TestCaseData, string[]>> TestCasesWithoutCategory
+		{
+			get
+			{
+				foreach (KeyValuePair<TransmissionType, string[]> kvp in TransmissionTypes.GetItems)
+				{
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, PingPongCommand,   1).SetName(kvp.Key + "_PingPong1"),  kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, PingPongCommand,  10).SetName(kvp.Key + "_PingPong10"), kvp.Value));
+
+				//	yield return (new TestCaseData(kvp.Key, PingPongCommand, 100).SetCategory(kvp.Value).SetName(kvp.Key + "_PingPong100"));
+				//	Takes several minutes and doesn't reproduce bugs #3284550>#194 and #3480565>#221, therefore disabled.
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
 			get
 			{
-				foreach (KeyValuePair<TransmissionType, string> kvp in TransmissionTypes.GetItems)
+				foreach (KeyValuePair<TestCaseData, string[]> kvp in TestCasesWithoutCategory)
 				{
-					yield return (new TestCaseData(kvp.Key, PingPongCommand,   1).SetCategory(kvp.Value).SetName(kvp.Key + "_PingPong1"));
-					yield return (new TestCaseData(kvp.Key, PingPongCommand,  10).SetCategory(kvp.Value).SetName(kvp.Key + "_PingPong10"));
+					foreach (string cat in kvp.Value)
+						kvp.Key.SetCategory(cat);
 
-				//	yield return (new TestCaseData(kvp.Key, PingPongCommand, 100).SetCategory(kvp.Value).SetName(kvp.Key + "_PingPong100"));
-				//	Takes several minutes and doesn't reproduce bugs #3284550>#194 and #3480565>#221, therefore disabled.
+					yield return (kvp.Key);
 				}
 			}
 		}
