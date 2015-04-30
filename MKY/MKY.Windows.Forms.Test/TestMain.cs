@@ -41,6 +41,8 @@ namespace MKY.Windows.Forms.Test
 			Application.Run(new WindowsFormsTest());
 		}
 	}
+
+	#error "To build and run this test application, ENABLE_HORIZONTAL_AUTO_SCROLL must be enabled in MKY.Windows.Forms.ListBoxEx"
 }
 
 //==================================================================================================

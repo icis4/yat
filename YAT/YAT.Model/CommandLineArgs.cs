@@ -220,6 +220,7 @@ namespace YAT.Model
 		public string ProductId;
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Names = new string[] { "SerialString", "SerialNumber" }, ShortName = "SNR", Description =
 			"The desired USB device serial string -aka- serial number (SNR). The default value is the SNR of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
