@@ -251,6 +251,8 @@ namespace MKY.IO.Serial.Socket
 		~TcpAutoSocket()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -608,16 +610,20 @@ namespace MKY.IO.Serial.Socket
 			WriteDebugMessageLine("Delaying connecting by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
-			SetStateSynchronizedAndNotify(SocketState.Connecting);
-			CreateClient(this.remoteIPAddress, this.remotePort);
-			try
+			// Only continue if socket is still up and running after the delay!
+			if (!IsDisposed && IsStarted)
 			{
-				this.client.Start(); // Client will be started asynchronously
-			}
-			catch
-			{
-				DestroyClient();
-				StartListening();
+				SetStateSynchronizedAndNotify(SocketState.Connecting);
+				CreateClient(this.remoteIPAddress, this.remotePort);
+				try
+				{
+					this.client.Start(); // Client will be started asynchronously.
+				}
+				catch
+				{
+					DestroyClient();
+					StartListening();
+				}
 			}
 		}
 
@@ -631,16 +637,20 @@ namespace MKY.IO.Serial.Socket
 			WriteDebugMessageLine("Delaying listening by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
-			SetStateSynchronizedAndNotify(SocketState.StartingListening);
-			CreateServer(this.localIPAddress, this.localPort);
-			try
+			// Only continue if socket is still up and running after the delay!
+			if (!IsDisposed && IsStarted)
 			{
-				this.server.Start(); // Server will be started asynchronously
-			}
-			catch
-			{
-				DestroyServer();
-				RequestTryAgain();
+				SetStateSynchronizedAndNotify(SocketState.StartingListening);
+				CreateServer(this.localIPAddress, this.localPort);
+				try
+				{
+					this.server.Start(); // Server will be started asynchronously.
+				}
+				catch
+				{
+					DestroyServer();
+					RequestTryAgain();
+				}
 			}
 		}
 
@@ -662,6 +672,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				AutoSocketError
 				(
+					ErrorSeverity.Acceptable,
 					"AutoSocket could neither be started as client nor server," + Environment.NewLine +
 					"TCP/IP address/port is not available."
 				);
@@ -688,12 +699,12 @@ namespace MKY.IO.Serial.Socket
 			SetStateSynchronizedAndNotify(SocketState.Reset);
 		}
 
-		private void AutoSocketError(string message)
+		private void AutoSocketError(ErrorSeverity severity, string message)
 		{
 			DisposeSockets();
 
 			SetStateSynchronizedAndNotify(SocketState.Error);
-			OnIOError(new IOErrorEventArgs(message));
+			OnIOError(new IOErrorEventArgs(severity, message));
 		}
 
 		#endregion
@@ -745,7 +756,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.Connecting:
 				{
-					if (this.client.IsConnected)      // If IO changed during startup,
+					if (this.client.IsConnected)      // If I/O changed during startup,
 					{                                 //   check for connected and change state.
 						SetStateSynchronizedAndNotify(SocketState.Connected);
 					}
@@ -753,7 +764,7 @@ namespace MKY.IO.Serial.Socket
 				}
 				case SocketState.Connected:
 				{
-					if (this.client.IsConnected)      // If IO changed during client operation
+					if (this.client.IsConnected)      // If I/O changed during client operation
 					{                                 //   and client is connected to a server,
 						OnIOChanged(e);               //   simply forward the event.
 					}
@@ -851,19 +862,19 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.StartingListening:
 				{
-					if (this.server.IsStarted)                    // If IO changed during startup,
+					if (this.server.IsStarted)                    // If I/O changed during startup,
 						SetStateSynchronizedAndNotify(SocketState.Listening); //   check for start and change state
 					break;
 				}
 				case SocketState.Listening:
 				{
-					if (this.server.ConnectedClientCount > 0)     // If IO changed during listening,
+					if (this.server.ConnectedClientCount > 0)     // If I/O changed during listening,
 						SetStateSynchronizedAndNotify(SocketState.Accepted);  //   change state to accepted if
 					break;                                        //   clients are connected
 				}
 				case SocketState.Accepted:
 				{
-					if (this.server.ConnectedClientCount <= 0)    // If IO changed during accepted,
+					if (this.server.ConnectedClientCount <= 0)    // If I/O changed during accepted,
 						SetStateSynchronizedAndNotify(SocketState.Listening); //   change state to listening if
 					break;                                        //   no clients are connected
 				}

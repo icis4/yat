@@ -532,7 +532,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
-				Assert.IsTrue(main.StartArgs.PerformOperationOnRequestedTerminal);
+				Assert.IsTrue (main.StartArgs.PerformOperationOnRequestedTerminal);
 
 				Assert.IsFalse(main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);

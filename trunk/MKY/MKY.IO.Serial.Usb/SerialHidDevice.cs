@@ -174,6 +174,8 @@ namespace MKY.IO.Serial.Usb
 		~SerialHidDevice()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -722,7 +724,7 @@ namespace MKY.IO.Serial.Usb
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
 		{
-			OnIOError(new IOErrorEventArgs(e.Message));
+			OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, e.Message));
 		}
 
 		#endregion

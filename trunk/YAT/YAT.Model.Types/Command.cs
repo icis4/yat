@@ -456,13 +456,15 @@ namespace YAT.Model.Types
 				if (!IsText)
 					return (false);
 
-				Domain.Parser.Parser p = new Domain.Parser.Parser(this.defaultRadix);
-				foreach (string commandLine in this.commandLines)
+				using (Domain.Parser.Parser p = new Domain.Parser.Parser(this.defaultRadix))
 				{
-					if (!p.TryParse(commandLine))
-						return (false);
+					foreach (string commandLine in this.commandLines)
+					{
+						if (!p.TryParse(commandLine))
+							return (false);
+					}
+					return (true);
 				}
-				return (true);
 			}
 		}
 

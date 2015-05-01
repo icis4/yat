@@ -148,6 +148,8 @@ namespace YAT.Domain.Parser
 			~ParserState()
 			{
 				Dispose(false);
+
+				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 			}
 
 			/// <summary></summary>
@@ -1039,18 +1041,7 @@ namespace YAT.Domain.Parser
 		{
 			if (!this.isDisposed)
 			{
-				// In any case, dispose of the writers as they were created in the constructor:
-				if (this.reader != null)
-					this.reader.Dispose();
-
-				if (this.byteArrayWriter != null)
-					this.byteArrayWriter.Dispose();
-
-				if (this.state != null)
-					this.state.Dispose();
-
-				if (this.nestedChildParser != null)
-					this.nestedChildParser.Dispose();
+				DisposeAndReset();
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -1058,10 +1049,6 @@ namespace YAT.Domain.Parser
 				}
 
 				// Set state to disposed:
-				this.reader = null;
-				this.byteArrayWriter = null;
-				this.state = null;
-				this.nestedChildParser = null;
 				this.isDisposed = true;
 			}
 		}
@@ -1070,6 +1057,10 @@ namespace YAT.Domain.Parser
 		~Parser()
 		{
 			Dispose(false);
+
+			// \fixme (2015-05-01 / MKY)
+			// #302 "Ensure that Dispose() is called in any case"
+		////System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -1099,8 +1090,7 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			Parser child = new Parser(parserState, parent);
-			return (child);
+			return (new Parser(parserState, parent));
 		}
 
 		#endregion
@@ -1128,7 +1118,13 @@ namespace YAT.Domain.Parser
 		private ParserState State
 		{
 			get { return (this.state); }
-			set { this.state = value; }
+			set
+			{
+				if (this.state != null)
+					this.state.Dispose();
+
+				this.state = value;
+			}
 		}
 
 		/// <summary></summary>
@@ -1507,6 +1503,8 @@ namespace YAT.Domain.Parser
 
 		private void InitializeTopLevelParse(string value, Modes modes)
 		{
+			DisposeAndReset();
+
 			this.modes           = modes;
 
 			this.reader          = new StringReader(value);
@@ -1521,6 +1519,8 @@ namespace YAT.Domain.Parser
 
 		private void InitializeNestedParse(ParserState parserState, Parser parent)
 		{
+			DisposeAndReset();
+
 			this.encoding        = parent.encoding;
 			this.defaultRadix    = parent.defaultRadix;
 			this.modes           = parent.modes;
@@ -1534,6 +1534,26 @@ namespace YAT.Domain.Parser
 			this.isKeywordParser = false;
 
 			this.hasFinished     = false;
+		}
+
+		private void DisposeAndReset()
+		{
+			if (this.reader != null)
+				this.reader.Dispose();
+
+			if (this.byteArrayWriter != null)
+				this.byteArrayWriter.Dispose();
+
+			if (this.state != null)
+				this.state.Dispose();
+
+			if (this.nestedChildParser != null)
+				this.nestedChildParser.Dispose();
+
+			this.reader = null;
+			this.byteArrayWriter = null;
+			this.state = null;
+			this.nestedChildParser = null;
 		}
 
 		/// <summary>

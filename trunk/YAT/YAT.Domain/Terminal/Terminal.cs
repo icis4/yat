@@ -354,6 +354,8 @@ namespace YAT.Domain
 		~Terminal()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -790,10 +792,14 @@ namespace YAT.Domain
 			string textToParse = item.Data;
 
 			// Parse the item string:
-			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
+			bool hasSucceeded;
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (p.TryParse(textToParse, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed))
+
+			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness))
+				hasSucceeded = p.TryParse(textToParse, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed);
+
+			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
 				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
@@ -1925,7 +1931,7 @@ namespace YAT.Domain
 		[Conditional("DEBUG")]
 		protected virtual void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + message);
+			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + ToShortIOString() + "': " + message);
 		}
 
 		#endregion

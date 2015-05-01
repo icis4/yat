@@ -182,7 +182,7 @@ namespace YAT.Domain
 			// - EOL >= 1
 			// - Queue >= 1
 
-			// \fixme (2010-04-01 / mky):
+			// \fixme (2010-04-01 / MKY):
 			// Weird InvalidOperationException when receiving large chunks of data.
 			try
 			{

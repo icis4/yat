@@ -73,9 +73,13 @@ namespace YAT.Gui.Utilities
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, out string parsedText)
 		{
-			Domain.Parser.Parser p = new Domain.Parser.Parser();
+			bool hasSucceeded;
 			Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
-			if (p.TryParse(textToValidate, modes, out parsedText, ref formatException))
+
+			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
+				hasSucceeded = p.TryParse(textToValidate, modes, out parsedText, ref formatException);
+
+			if (hasSucceeded)
 			{
 				return (true);
 			}

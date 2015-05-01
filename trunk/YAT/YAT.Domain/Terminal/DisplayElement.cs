@@ -543,7 +543,7 @@ namespace YAT.Domain
 			if (!AcceptsAppendOf(de))
 				throw (new InvalidOperationException("Cannot append because the given element cannot be appended to this element"));
 
-			// \fixme (2010-04-01 / mky):
+			// \fixme (2010-04-01 / MKY):
 			// Weird ArgumentException when receiving large chunks of data.
 			try
 			{

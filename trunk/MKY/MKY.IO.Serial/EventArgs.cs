@@ -123,12 +123,6 @@ namespace MKY.IO.Serial
 		private string message;
 
 		/// <summary></summary>
-		public IOErrorEventArgs(string message)
-			: this(ErrorSeverity.Severe, message)
-		{
-		}
-
-		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, string message)
 			: this(severity, Direction.Any, message)
 		{
@@ -167,8 +161,8 @@ namespace MKY.IO.Serial
 		private System.IO.Ports.SerialError serialPortError;
 
 		/// <summary></summary>
-		public SerialPortErrorEventArgs(string message, System.IO.Ports.SerialError serialPortError)
-			: base(message)
+		public SerialPortErrorEventArgs(ErrorSeverity severity, Direction direction, string message, System.IO.Ports.SerialError serialPortError)
+			: base(severity, direction, message)
 		{
 			this.serialPortError = serialPortError;
 		}

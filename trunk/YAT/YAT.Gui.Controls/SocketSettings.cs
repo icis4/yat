@@ -113,7 +113,7 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Socket")]
-		[Description("Sets TCP client auto reconnect.")]
+		[Description("Sets TCP/IP Client auto reconnect.")]
 		public MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }

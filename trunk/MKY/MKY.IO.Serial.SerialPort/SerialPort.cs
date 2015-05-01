@@ -326,6 +326,8 @@ namespace MKY.IO.Serial.SerialPort
 		~SerialPort()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -1598,17 +1600,19 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void port_ErrorReceivedAsync(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
+			ErrorSeverity severity = ErrorSeverity.Severe;
+			Direction direction;
 			string message;
 			switch (e.EventType)
 			{
-				case System.IO.Ports.SerialError.Frame:    message = "Serial port input framing error!";            break;
-				case System.IO.Ports.SerialError.Overrun:  message = "Serial port input character buffer overrun!"; break;
-				case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";          break;
-				case System.IO.Ports.SerialError.RXParity: message = "Serial port input parity error!";             break;
-				case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";             break;
-				default:                                   message = "Unknown serial port error!";                  break;
+				case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Serial port input framing error!";            break;
+				case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Serial port input character buffer overrun!"; break;
+				case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Serial port input buffer overflow!";          break;
+				case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Serial port input parity error!";             break;
+				case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Serial port output buffer full!";             break;
+				default:   severity = ErrorSeverity.Fatal; direction = Direction.Any;    message = "Unknown serial port error!";                  break;
 			}
-			OnIOError(new SerialPortErrorEventArgs(message, e.EventType));
+			OnIOError(new SerialPortErrorEventArgs(severity, direction, message, e.EventType));
 		}
 
 		#endregion
