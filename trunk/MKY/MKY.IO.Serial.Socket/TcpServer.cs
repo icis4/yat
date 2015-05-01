@@ -580,7 +580,6 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.dataSentThread == null)
 				{
-					// Start thread:
 					this.dataSentThreadRunFlag = true;
 					this.dataSentThreadEvent = new AutoResetEvent(false);
 					this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
