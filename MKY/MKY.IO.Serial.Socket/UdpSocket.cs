@@ -109,6 +109,7 @@ namespace MKY.IO.Serial.Socket
 
 		private System.Net.IPEndPoint endPoint;
 		private System.Net.Sockets.UdpClient socket;
+		private object socketSyncObj = new object();
 
 		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
@@ -183,7 +184,7 @@ namespace MKY.IO.Serial.Socket
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					DisposeSocketAndThreads();
+					DisposeSocketAndThread();
 				}
 
 				// Set state to disposed:
@@ -509,27 +510,21 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartSocket()
 		{
-			StartSendThread();
-
 			SetStateSynchronizedAndNotify(SocketState.Opening);
-
-			this.endPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
-			this.socket = new System.Net.Sockets.UdpClient(this.localPort);
-			this.socket.Connect(this.endPoint);
-
+			CreateThreadAndSocket();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 
 			// Immediately begin receiving data.
 			BeginReceive();
 		}
 
-		private void StartSendThread()
+		private void CreateThreadAndSocket()
 		{
+			// Create and start thread:
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread == null)
 				{
-					// Start thread:
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
@@ -537,20 +532,36 @@ namespace MKY.IO.Serial.Socket
 					this.sendThread.Start();
 				}
 			}
+
+			// Create socket:
+			lock (this.socketSyncObj)
+			{
+				this.endPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+				this.socket = new System.Net.Sockets.UdpClient(this.localPort);
+				this.socket.Connect(this.endPoint);
+			}
 		}
 
 		private void StopSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Closing);
-			DisposeSocketAndThreads();
+			DisposeSocketAndThread();
 			SetStateSynchronizedAndNotify(SocketState.Closed);
 		}
 
-		private void DisposeSocketAndThreads()
+		private void DisposeSocketAndThread()
 		{
-			this.socket.Close();
-			this.socket = null;
+			// Close and dispose socket:
+			lock (this.socketSyncObj)
+			{
+				if (this.socket != null)
+				{
+					this.socket.Close();
+					this.socket = null;
+				}
+			}
 
+			// Stop and dispose thread:
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread != null)
@@ -584,7 +595,7 @@ namespace MKY.IO.Serial.Socket
 
 		private void SocketError()
 		{
-			DisposeSocketAndThreads();
+			DisposeSocketAndThread();
 			SetStateSynchronizedAndNotify(SocketState.Error);
 		}
 
@@ -597,8 +608,11 @@ namespace MKY.IO.Serial.Socket
 
 		private void BeginReceive()
 		{
-			AsyncReceiveState state = new AsyncReceiveState(this.endPoint, this.socket);
-			this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
+			lock (this.socketSyncObj)
+			{
+				AsyncReceiveState state = new AsyncReceiveState(this.endPoint, this.socket);
+				this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
+			}
 		}
 
 		private void ReceiveCallback(IAsyncResult ar)

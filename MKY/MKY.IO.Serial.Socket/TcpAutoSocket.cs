@@ -610,7 +610,11 @@ namespace MKY.IO.Serial.Socket
 			WriteDebugMessageLine("Delaying connecting by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
-			// Only continue if socket is still up and running after the delay!
+			// Only continue if socket is still up and running after the delay! Required because
+			// re-connecting happens automatically when connection gets lost. If two AutoSockets
+			// are interconnected, and both are shut down, the sequence of the operation is not
+			// defined. It is likely that Stop() is called while the thread is delayed above. In
+			// such case, neither a client nor a server shall be created nor started.
 			if (!IsDisposed && IsStarted)
 			{
 				SetStateSynchronizedAndNotify(SocketState.Connecting);
@@ -637,7 +641,11 @@ namespace MKY.IO.Serial.Socket
 			WriteDebugMessageLine("Delaying listening by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
-			// Only continue if socket is still up and running after the delay!
+			// Only continue if socket is still up and running after the delay! Required because
+			// re-connecting happens automatically when connection gets lost. If two AutoSockets
+			// are interconnected, and both are shut down, the sequence of the operation is not
+			// defined. It is likely that Stop() is called while the thread is delayed above. In
+			// such case, neither a client nor a server shall be created nor started.
 			if (!IsDisposed && IsStarted)
 			{
 				SetStateSynchronizedAndNotify(SocketState.StartingListening);
