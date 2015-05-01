@@ -130,10 +130,6 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
-      <Project>{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}</Project>
-      <Name>MKY.Windows.Forms.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\YAT.Controller.Test\YAT.Controller.Test.csproj">
       <Project>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</Project>
       <Name>YAT.Controller.Test</Name>
