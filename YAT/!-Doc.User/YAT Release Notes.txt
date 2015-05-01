@@ -103,6 +103,7 @@ Fixed bugs:
 - Handling of recent commands in 'Send Command' improved, arrows up/down properly work again
 - Representation of description of multi line commands in 'Send Command' improved
 - Issues with 'Send Immediately' fixed, additional test cases for 'Send Command' added (bug #276)
+- Issue with escape sequences after C-style escape fixed (bug #290)
 - Exception while reading stream in YAT.Domain.Parser.Parser.TryParse() fixed (bug #261)
 - Exception while closing terminal or application in YAT.Domain.RawTerminal.Send() fixed (bug #267)
 - Memory leak when subsequently creating and closing terminals fixed (bug #263)

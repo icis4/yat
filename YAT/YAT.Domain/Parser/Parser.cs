@@ -836,7 +836,7 @@ namespace YAT.Domain.Parser
 
 				parser.HasFinished = true;
 				ChangeState(parser, null);
-				return (true);
+				return (false); // Return 'false' to indicate that the current 'parseChar' has not been processed yet!
 			}
 
 			/// <summary>
@@ -922,13 +922,17 @@ namespace YAT.Domain.Parser
 			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
-				if (!parser.NestedParser.State.TryParse(parser.NestedParser, parseChar, ref formatException))
-					return (false);
+				bool parseCharHasBeenParsed = parser.NestedParser.State.TryParse(parser.NestedParser, parseChar, ref formatException);
 
 				if (parser.NestedParser.HasFinished) // Regain parser "focus".
+				{
 					ChangeState(parser, new DefaultState());
 
-				return (true);
+					if (!parseCharHasBeenParsed) // Again try to parse the character with the 'new' parser:
+						parseCharHasBeenParsed = parser.State.TryParse(parser, parseChar, ref formatException);
+				}
+
+				return (parseCharHasBeenParsed);
 			}
 		}
 

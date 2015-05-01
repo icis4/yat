@@ -75,7 +75,7 @@ namespace YAT.Test
 			);
 
 			// MKY.Test
-			// MKY.Windows.Forms.Test
+			// Do not include MKY.Windows.Forms.Test as it is a separate .exe project.
 
 			// YAT.Controller.Test
 			// YAT.Domain.Test

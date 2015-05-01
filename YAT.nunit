@@ -21,7 +21,6 @@
     <assembly path="MKY\MKY.Win32\bin\Debug\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\Debug\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\Debug\MKY.Windows.Forms.dll" />
-    <assembly path="MKY\MKY.Windows.Forms.Test\bin\Debug\MKY.Windows.Forms.Test.exe" />
     <assembly path="NUnit\NUnit\bin\Debug\NUnit.dll" />
     <assembly path="YAT\YAT\bin\Debug\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\Debug\YAT.Controller.dll" />
@@ -68,7 +67,6 @@
     <assembly path="MKY\MKY.Win32\bin\Release\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\Release\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\Release\MKY.Windows.Forms.dll" />
-    <assembly path="MKY\MKY.Windows.Forms.Test\bin\Release\MKY.Windows.Forms.Test.exe" />
     <assembly path="NUnit\NUnit\bin\Release\NUnit.dll" />
     <assembly path="YAT\YAT\bin\Release\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\Release\YAT.Controller.dll" />
@@ -115,7 +113,6 @@
     <assembly path="MKY\MKY.Win32\bin\x64\Debug\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\x64\Debug\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\x64\Debug\MKY.Windows.Forms.dll" />
-    <assembly path="MKY\MKY.Windows.Forms.Test\bin\x64\Debug\MKY.Windows.Forms.Test.exe" />
     <assembly path="NUnit\NUnit\bin\x64\Debug\NUnit.dll" />
     <assembly path="YAT\YAT\bin\x64\Debug\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\x64\Debug\YAT.Controller.dll" />
@@ -162,7 +159,6 @@
     <assembly path="MKY\MKY.Win32\bin\x64\Release\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\x64\Release\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\x64\Release\MKY.Windows.Forms.dll" />
-    <assembly path="MKY\MKY.Windows.Forms.Test\bin\x64\Release\MKY.Windows.Forms.Test.exe" />
     <assembly path="NUnit\NUnit\bin\x64\Release\NUnit.dll" />
     <assembly path="YAT\YAT\bin\x64\Release\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\x64\Release\YAT.Controller.dll" />
@@ -209,7 +205,6 @@
     <assembly path="MKY\MKY.Win32\bin\x86\Debug\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\x86\Debug\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\x86\Debug\MKY.Windows.Forms.dll" />
-    <assembly path="MKY\MKY.Windows.Forms.Test\bin\x86\Debug\MKY.Windows.Forms.Test.exe" />
     <assembly path="NUnit\NUnit\bin\x86\Debug\NUnit.dll" />
     <assembly path="YAT\YAT\bin\x86\Debug\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\x86\Debug\YAT.Controller.dll" />
@@ -256,7 +251,6 @@
     <assembly path="MKY\MKY.Win32\bin\x86\Release\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\x86\Release\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\x86\Release\MKY.Windows.Forms.dll" />
-    <assembly path="MKY\MKY.Windows.Forms.Test\bin\x86\Release\MKY.Windows.Forms.Test.exe" />
     <assembly path="NUnit\NUnit\bin\x86\Release\NUnit.dll" />
     <assembly path="YAT\YAT\bin\x86\Release\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\x86\Release\YAT.Controller.dll" />
