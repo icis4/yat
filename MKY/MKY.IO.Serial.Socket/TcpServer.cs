@@ -40,7 +40,7 @@ using MKY.Diagnostics;
 namespace MKY.IO.Serial.Socket
 {
 	/// <remarks>
-	/// In case of YAT with the original ALAZ implementation, a TCP client created a deadlock on
+	/// In case of YAT with the original ALAZ implementation, a TCP/IP client created a deadlock on
 	/// shutdown. The situation:
 	/// 
 	/// 1. <see cref="Stop()"/> is called from a GUI/main thread
@@ -218,6 +218,8 @@ namespace MKY.IO.Serial.Socket
 		~TcpServer()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -494,7 +496,7 @@ namespace MKY.IO.Serial.Socket
 				Timeout.Infinite
 			);
 
-			this.socket.AddListener("MKY TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
+			this.socket.AddListener("MKY TCP/IP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously.
 		}
 
@@ -803,7 +805,10 @@ namespace MKY.IO.Serial.Socket
 				sb.AppendLine();
 				sb.AppendLine("Exception error message:");
 				sb.AppendLine(e.Exception.Message);
-				OnIOError(new IOErrorEventArgs(sb.ToString()));
+				string message = sb.ToString();
+				WriteDebugMessageLine(message);
+
+				OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, message));
 			}
 		}
 
@@ -824,7 +829,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP servers"));
+			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP/IP Servers"));
 		}
 
 		/// <summary></summary>

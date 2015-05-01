@@ -141,8 +141,7 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			SubstitutionParser p = new SubstitutionParser(parserState, parent);
-			return (p);
+			return (new SubstitutionParser(parserState, parent));
 		}
 
 		#endregion

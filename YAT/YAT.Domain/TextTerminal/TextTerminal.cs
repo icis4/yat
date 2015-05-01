@@ -308,10 +308,14 @@ namespace YAT.Domain
 			}
 
 			// Parse the item string:
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
+			bool hasSucceeded;
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed))
+
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding))
+				hasSucceeded = p.TryParse(textToParse, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out parseResult, out textSuccessfullyParsed);
+
+			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
 				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
@@ -379,24 +383,26 @@ namespace YAT.Domain
 		{
 			this.rxDecodingStream = new List<byte>();
 
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding);
 			byte[] txEol;
-			if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out txEol))
-			{
-				// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
-				// the EOL sequence when the user enters it. However, the user might manually edit the EOL
-				// sequence in a settings file.
-				TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
-				txEol = p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution);
-			}
 			byte[] rxEol;
-			if (!p.TryParse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out rxEol))
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding))
 			{
-				// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
-				// the EOL sequence when the user enters it. However, the user might manually edit the EOL
-				// sequence in a settings file.
-				TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
-				rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
+				if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out txEol))
+				{
+					// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
+					// the EOL sequence when the user enters it. However, the user might manually edit the EOL
+					// sequence in a settings file.
+					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
+					txEol = p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution);
+				}
+				if (!p.TryParse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out rxEol))
+				{
+					// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
+					// the EOL sequence when the user enters it. However, the user might manually edit the EOL
+					// sequence in a settings file.
+					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
+					rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
+				}
 			}
 			this.txLineState = new LineState(new EolQueue(txEol));
 			this.rxLineState = new LineState(new EolQueue(rxEol));

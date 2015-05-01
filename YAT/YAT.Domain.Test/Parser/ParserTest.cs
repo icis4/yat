@@ -196,9 +196,11 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
-			Domain.Parser.Parser parser = new Domain.Parser.Parser();
-			byte[] actualBytes = parser.Parse(s);
-			Assert.AreEqual(expectedBytes, actualBytes);
+			using (Domain.Parser.Parser parser = new Domain.Parser.Parser())
+			{
+				byte[] actualBytes = parser.Parse(s);
+				Assert.AreEqual(expectedBytes, actualBytes);
+			}
 		}
 
 		#endregion
@@ -213,9 +215,11 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesEncoding")]
 		public virtual void TestParserEncoding(Encoding encoding, string s, byte[] expectedBytes)
 		{
-			Domain.Parser.Parser parser = new Domain.Parser.Parser(encoding);
-			byte[] actualBytes = parser.Parse(s);
-			Assert.AreEqual(expectedBytes, actualBytes);
+			using (Domain.Parser.Parser parser = new Domain.Parser.Parser(encoding))
+			{
+				byte[] actualBytes = parser.Parse(s);
+				Assert.AreEqual(expectedBytes, actualBytes);
+			}
 		}
 
 		#endregion

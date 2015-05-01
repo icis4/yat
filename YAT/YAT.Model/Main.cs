@@ -201,6 +201,8 @@ namespace YAT.Model
 		~Main()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -1513,7 +1515,7 @@ namespace YAT.Model
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + Guid + "': " + message);
+			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + Guid + "': " + message);
 		}
 
 		#endregion

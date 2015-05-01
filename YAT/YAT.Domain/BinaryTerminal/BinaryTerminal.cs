@@ -104,6 +104,8 @@ namespace YAT.Domain
 			~LineBreakTimer()
 			{
 				Dispose(false);
+
+				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 			}
 
 			/// <summary></summary>
@@ -246,6 +248,8 @@ namespace YAT.Domain
 			~LineState()
 			{
 				Dispose(false);
+
+				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 			}
 
 			/// <summary></summary>
@@ -459,27 +463,28 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness);
-			LineBreakTimer t;
+			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness))
+			{
+				LineBreakTimer t;
 
-			// Tx.
-			byte[] txSequenceBreak;
-			if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreak.Sequence, out txSequenceBreak))
-				txSequenceBreak = null;
+				// Tx.
+				byte[] txSequenceBreak;
+				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreak.Sequence, out txSequenceBreak))
+					txSequenceBreak = null;
 
-			t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-			t.Timeout += new EventHandler(txTimer_Timeout);
+				t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
+				t.Timeout += new EventHandler(txTimer_Timeout);
+				this.txLineState = new LineState(new EolQueue(txSequenceBreak), DateTime.Now, t);
 
-			this.txLineState = new LineState(new EolQueue(txSequenceBreak), DateTime.Now, t);
+				// Rx.
+				byte[] rxSequenceBreak;
+				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreak.Sequence, out rxSequenceBreak))
+					rxSequenceBreak = null;
 
-			// Rx.
-			byte[] rxSequenceBreak;
-			if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreak.Sequence, out rxSequenceBreak))
-				rxSequenceBreak = null;
-
-			t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-			t.Timeout += new EventHandler(rxTimer_Timeout);
-			this.rxLineState = new LineState(new EolQueue(rxSequenceBreak), DateTime.Now, t);
+				t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
+				t.Timeout += new EventHandler(rxTimer_Timeout);
+				this.rxLineState = new LineState(new EolQueue(rxSequenceBreak), DateTime.Now, t);
+			}
 
 			this.bidirLineState = new BidirLineState(true, SerialDirection.Tx);
 		}

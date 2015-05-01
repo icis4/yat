@@ -336,6 +336,8 @@ namespace YAT.Model
 		~Terminal()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -788,7 +790,7 @@ namespace YAT.Model
 						case Domain.IOType.TcpClient:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP client is ");
+							sb.Append("TCP/IP Client is ");
 
 							if (IsConnected)
 								sb.Append("connected to ");
@@ -806,7 +808,7 @@ namespace YAT.Model
 						case Domain.IOType.TcpServer:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP server is ");
+							sb.Append("TCP/IP Server is ");
 							if (IsStarted)
 							{
 								if (IsConnected)
@@ -3336,7 +3338,7 @@ namespace YAT.Model
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + Guid + "' / '" + Caption + "': " + message);
+			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + Guid + "' / '" + Caption + "': " + message);
 		}
 
 		#endregion

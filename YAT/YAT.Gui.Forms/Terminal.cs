@@ -3590,7 +3590,7 @@ namespace YAT.Gui.Forms
 			else
 				caption = "<None>";
 
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + caption + "': " + message);
+			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + caption + "': " + message);
 		}
 
 		#endregion

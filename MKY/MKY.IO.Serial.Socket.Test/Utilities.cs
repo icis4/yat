@@ -128,7 +128,7 @@ namespace MKY.IO.Serial.Socket.Test
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPAddress.Loopback, localPort);
 			if (!server.Start())
-				Assert.Fail("TCP server could not be started!");
+				Assert.Fail("TCP/IP Server could not be started!");
 		}
 
 		internal static void StartTcpClient(out TcpClient client, int remotePort)
@@ -136,7 +136,7 @@ namespace MKY.IO.Serial.Socket.Test
 			// Create client and initiate asych start.
 			client = new TcpClient(IPAddress.Loopback, remotePort);
 			if (!client.Start())
-				Assert.Fail("TCP client could not be started!");
+				Assert.Fail("TCP/IP Client could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)

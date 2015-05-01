@@ -194,7 +194,7 @@ namespace MKY.Windows.Forms
 			}
 			catch (Exception ex)
 			{
-				// \fixme (2013-01-03 / mky)
+				// \fixme (2013-01-03 / MKY)
 				// A better solution than this try/catch should be found to deal with infrequently
 				// happening invocation exceptions, but for the moment it is better to catch than
 				// do nothing...
@@ -229,7 +229,7 @@ namespace MKY.Windows.Forms
 			}
 			catch (Exception ex)
 			{
-				// \fixme (2013-01-03 / mky)
+				// \fixme (2013-01-03 / MKY)
 				// A better solution than this try/catch should be found to deal with infrequently
 				// happening invocation exceptions, but for the moment it is better to catch than
 				// do nothing...
@@ -264,7 +264,7 @@ namespace MKY.Windows.Forms
 			}
 			catch (Exception ex)
 			{
-				// \fixme (2013-01-03 / mky)
+				// \fixme (2013-01-03 / MKY)
 				// A better solution than this try/catch should be found to deal with infrequently
 				// happening invocation exceptions, but for the moment it is better to catch than
 				// do nothing...

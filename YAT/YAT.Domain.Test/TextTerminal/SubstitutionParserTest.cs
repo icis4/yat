@@ -68,9 +68,11 @@ namespace YAT.Domain.Test.TextTerminal
 		[Test, TestCaseSource(typeof(SubstitutionParserTestData), "TestCases")]
 		public virtual void TestSubstitutionParser(CharSubstitution substitution, string s, byte[] expectedBytes)
 		{
-			Domain.Parser.SubstitutionParser parser = new Domain.Parser.SubstitutionParser();
-			byte[] actualBytes = parser.Parse(s, substitution);
-			Assert.AreEqual(expectedBytes, actualBytes);
+			using (Domain.Parser.SubstitutionParser parser = new Domain.Parser.SubstitutionParser())
+			{
+				byte[] actualBytes = parser.Parse(s, substitution);
+				Assert.AreEqual(expectedBytes, actualBytes);
+			}
 		}
 
 		#endregion

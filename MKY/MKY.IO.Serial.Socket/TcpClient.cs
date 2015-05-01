@@ -40,7 +40,7 @@ using MKY.Diagnostics;
 namespace MKY.IO.Serial.Socket
 {
 	/// <remarks>
-	/// In case of YAT with the original ALAZ implementation, a TCP client created a deadlock on
+	/// In case of YAT with the original ALAZ implementation, a TCP/IP client created a deadlock on
 	/// shutdown. The situation:
 	/// 
 	/// 1. <see cref="Stop()"/> is called from a GUI/main thread
@@ -242,6 +242,8 @@ namespace MKY.IO.Serial.Socket
 		~TcpClient()
 		{
 			Dispose(false);
+
+			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -517,7 +519,7 @@ namespace MKY.IO.Serial.Socket
 				Timeout.Infinite
 			);
 
-			this.socket.AddConnector("MKY TCP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+			this.socket.AddConnector("MKY TCP/IP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously
 		}
 
@@ -865,19 +867,22 @@ namespace MKY.IO.Serial.Socket
 
 						if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
 						{
-							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP Server " + this.remoteIPAddress + ":" + this.remotePort));
 						}
 						else
 						{
 							StringBuilder sb = new StringBuilder();
-							sb.AppendLine("The socket of this TCP/IP Client has fired an exception!");
+							sb.AppendLine("The socket of this TCP/IP client has fired an exception!");
 							sb.AppendLine();
 							sb.AppendLine("Exception type:");
 							sb.AppendLine(e.Exception.GetType().Name);
 							sb.AppendLine();
 							sb.AppendLine("Exception error message:");
 							sb.AppendLine(e.Exception.Message);
-							OnIOError(new IOErrorEventArgs(sb.ToString()));
+							string message = sb.ToString();
+							WriteDebugMessageLine(message);
+
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, message));
 						}
 					}
 				}
@@ -949,7 +954,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP clients"));
+			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP/IP Clients"));
 		}
 
 		/// <summary></summary>
