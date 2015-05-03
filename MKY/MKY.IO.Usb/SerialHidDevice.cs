@@ -137,8 +137,9 @@ namespace MKY.IO.Usb
 		// Static Methods > Device Notification
 		//------------------------------------------------------------------------------------------
 
-		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static int    staticDeviceNotificationCounter;
+		private static NativeMessageHandler staticDeviceNotificationHandler;
+
+		private static int    staticDeviceNotificationCounter; // = 0;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
 
@@ -159,14 +160,16 @@ namespace MKY.IO.Usb
 				// The first call to this method registers the notification.
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
-					else
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object"));
+
+					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
+					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
 				}
 
 				// Keep track of the register/unregister requests.
-				staticDeviceNotificationCounter++;
+				if (staticDeviceNotificationCounter < int.MaxValue)
+					staticDeviceNotificationCounter++;
 			}
 		}
 
@@ -184,11 +187,10 @@ namespace MKY.IO.Usb
 				// The last call to this method unregisters the notification.
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle != IntPtr.Zero)
-						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
-					else
+					if (staticDeviceNotificationHandle == IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object"));
 
+					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 					staticDeviceNotificationHandle = IntPtr.Zero;
 				}
 
@@ -202,7 +204,7 @@ namespace MKY.IO.Usb
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
-		private static void StaticDeviceNotificationHandler(ref Message m)
+		private static void StaticMessageCallback(ref Message m)
 		{
 			DeviceEvent de = MessageToDeviceEvent(ref m);
 
@@ -212,11 +214,12 @@ namespace MKY.IO.Usb
 				string devicePath;
 				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
-					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 					switch (de)
 					{
 						case DeviceEvent.Connected:
 						{
+							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
+
 							Debug.WriteLine("USB Ser/HID device connected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
@@ -229,10 +232,11 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
+							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath, false));
+
 							Debug.WriteLine("USB Ser/HID device disconnected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
-							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
 							EventHelper.FireAsync(DeviceDisconnected, typeof(SerialHidDevice), e);

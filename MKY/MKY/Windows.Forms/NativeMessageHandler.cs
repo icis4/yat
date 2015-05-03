@@ -21,10 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Permissions;
 using System.Windows.Forms;
+
+#endregion
 
 namespace MKY.Windows.Forms
 {
@@ -36,43 +44,125 @@ namespace MKY.Windows.Forms
 	/// </param>
 	[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "This design is given by the Windows.Forms message handling design.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-	public delegate void NativeMessageHandlerCallback(ref Message m);
+	public delegate void NativeMessageCallback(ref Message m);
 
 	/// <remarks>
 	/// Utility class that allows to process native messages.
 	/// </remarks>
 	public class NativeMessageHandler : NativeWindow
 	{
-		private NativeMessageHandlerCallback messageHandlerCallback;
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
 
-		/// <summary></summary>
-		public NativeMessageHandler(NativeMessageHandlerCallback messageHandlerCallback)
+		private static Form staticMainForm;
+		private static List<NativeMessageHandler> staticMessageHandlers = new List<NativeMessageHandler>();
+
+		#endregion
+
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
+		/// <remarks>
+		/// Using the term 'MainForm' as used for the argument of the <see>Application.Run</see>
+		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
+		/// </remarks>
+		public static void RegisterMainForm(Form mainForm)
 		{
-			this.messageHandlerCallback = messageHandlerCallback;
+			UnregisterMainForm();
+
+			staticMainForm = mainForm;
+
+			foreach (NativeMessageHandler handler in staticMessageHandlers)
+				handler.Register(mainForm);
 		}
 
-		/// <summary>
-		/// Gets the handle for this window.
-		/// </summary>
 		/// <remarks>
-		/// If no handle is associated, a new is create once upon first call of this property.
-		/// Attention:
-		/// Such handle must not be created within the constructor because that would lead
-		/// to exceptions in <see cref="WndProc"/>.
+		/// Using the term 'MainForm' as used for the argument of the <see>Application.Run</see>
+		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
 		/// </remarks>
-		/// <returns>
-		/// If successful, an System.IntPtr representing the handle to the associated
-		/// native Win32 window; otherwise, 0 if no handle is associated with the window.
-		/// </returns>
-		public new IntPtr Handle
+		public static void UnregisterMainForm()
 		{
-			get
-			{
-				if (base.Handle == IntPtr.Zero)
-					CreateHandle(new CreateParams());
+			foreach (NativeMessageHandler handler in staticMessageHandlers)
+				handler.Unregister();
+		}
 
-				return (base.Handle);
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private Form mainForm;
+		private NativeMessageCallback messageCallback;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		public NativeMessageHandler(NativeMessageCallback callback)
+		{
+			this.messageCallback = callback;
+			Register(staticMainForm);
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <remarks>
+		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
+		/// free'd but rather this handler gets closed.
+		/// </remarks>
+		protected void Register(Form mainForm)
+		{
+			if (mainForm.IsHandleCreated)
+				AssignHandle(mainForm.Handle);
+
+			this.mainForm = mainForm;
+			this.mainForm.HandleCreated   += mainForm_HandleCreated;
+			this.mainForm.HandleDestroyed += mainForm_HandleDestroyed;
+
+			staticMessageHandlers.Add(this);
+		}
+
+		/// <remarks>
+		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
+		/// free'd but rather this handler gets closed.
+		/// </remarks>
+		protected void Unregister()
+		{
+			staticMessageHandlers.Remove(this);
+
+			if (this.mainForm != null)
+			{
+				this.mainForm.HandleCreated   -= mainForm_HandleCreated;
+				this.mainForm.HandleDestroyed -= mainForm_HandleDestroyed;
+				this.mainForm = null;
 			}
+
+			ReleaseHandle();
+		}
+
+		/// <remarks>
+		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
+		/// free'd but rather this handler gets closed.
+		/// </remarks>
+		protected void Close()
+		{
+			Unregister();
+			this.messageCallback = null;
 		}
 
 		/// <summary>
@@ -87,14 +177,34 @@ namespace MKY.Windows.Forms
 		{
 			try
 			{
-				this.messageHandlerCallback(ref m);
-				base.WndProc(ref m);
+				messageCallback(ref m);
 			}
 			catch (Exception ex)
 			{
 				Diagnostics.DebugEx.WriteException(GetType(), ex);
 			}
+
+			base.WndProc(ref m);
 		}
+
+		#endregion
+
+		#region Event Handlers
+		//==========================================================================================
+		// Event Handlers
+		//==========================================================================================
+
+		private void mainForm_HandleCreated(object sender, EventArgs e)
+		{
+			AssignHandle(((Form)sender).Handle);
+		}
+
+		private void mainForm_HandleDestroyed(object sender, EventArgs e)
+		{
+			ReleaseHandle();
+		}
+
+		#endregion
 	}
 }
 
