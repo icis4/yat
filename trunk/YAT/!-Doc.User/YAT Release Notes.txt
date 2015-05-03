@@ -32,22 +32,22 @@ Contents
 1. Installation
 ====================================================================================================
 
-YAT uses the .NET Framework 3.5. Setup checks whether the .NET 3.5 runtime is installed on the
-computer and automatically installs it if not installed yet.
+YAT uses the .NET Framework 3.5 SP1. Setup checks whether the .NET 3.5 SP1 runtime is installed on
+the computer and automatically downloads and installs it if not installed yet.
 
-You can also download .NET from <http://www.microsoft.com/net/>. Browse to ".NET Framework 3.5",
-download and install it manually.
+You can also download .NET from <http://www.microsoft.com/net/downloads>. Go to "Earlier Versions"
+and browse for ".NET Framework 3.5 SP1", download and install it manually.
 
 Installing .NET requires administrator permissions.
 
-A) If Windows Installer is installed on the computer, run "Setup.msi"
-    1. Setup checks whether .NET 3.5 is installed and downloads and installs it if necessary
+A) If Windows Installer is installed on the computer, run "YAT-x86.msi" or "YAT-x64.msi"
+    1. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary
     2. Setup installs YAT, older versions of YAT are automatically replaced
 
-B) If Windows Installer is not installed on the computer, run "Setup.exe"
-    1. Setup checks whether Windows Installer 3.1 is installed and downloads and installs it if
+B) If Windows Installer is not installed on the computer, run "setup.exe"
+    1. Setup checks whether Windows Installer 4.5 is installed and downloads and installs it if
        necessary
-    2. Setup checks whether .NET 3.5 is installed and downloads and installs it if necessary
+    2. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary
     3. Setup installs YAT, older versions of YAT are automatically replaced
 
 Start YAT by selecting "Start > Programs > YAT > YAT"

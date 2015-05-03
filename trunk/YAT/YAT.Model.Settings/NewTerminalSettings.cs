@@ -326,6 +326,8 @@ namespace YAT.Model.Settings
 					case Domain.IOType.Udp:
 						SocketLocalUdpPort = value;
 						break;
+
+					// Ignore any other case.
 				}
 			}
 		}

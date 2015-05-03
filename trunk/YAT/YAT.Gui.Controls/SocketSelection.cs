@@ -415,13 +415,18 @@ namespace YAT.Gui.Controls
 				if (int.TryParse(textBox_RemotePort.Text, out port) &&
 					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
 				{
-					RemoteTcpPort = port;
-					RemoteUdpPort = port;
-
-					// Also set local port to same number.
-					if ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp))
+					if ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket))
 					{
+						RemoteTcpPort = port;
+
+						// Also set the local port to same number:
+						//  > For Client: Makes it easier setting the server settings for a same connection.
+						//  > For AutoSocket: Typically same port for client and server.
 						LocalTcpPort = port;
+					}
+					else if (this.hostType == SocketHostType.Udp)
+					{
+						RemoteUdpPort = port;
 
 						if (port < System.Net.IPEndPoint.MaxPort)
 							LocalUdpPort = port + 1;
@@ -471,13 +476,18 @@ namespace YAT.Gui.Controls
 				if (int.TryParse(textBox_LocalPort.Text, out port) &&
 					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
 				{
-					LocalTcpPort = port;
-					LocalUdpPort = port;
-
-					// Also set remote port to same number
-					if (this.hostType == SocketHostType.TcpServer)
+					if ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket))
 					{
-						RemoteTcpPort = port;
+						LocalTcpPort = port;
+
+						// Also set the remote port to same number:
+						//  > For Server: Makes it easier setting the client settings for a same connection.
+						if (this.hostType == SocketHostType.TcpServer)
+							RemoteTcpPort = port;
+					}
+					else if (this.hostType == SocketHostType.Udp)
+					{
+						LocalUdpPort = port;
 					}
 				}
 				else
