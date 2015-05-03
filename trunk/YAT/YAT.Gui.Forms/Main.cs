@@ -148,13 +148,16 @@ namespace YAT.Gui.Forms
 
 			InitializeControls();
 
-			// Link and attach to main model
+			// Register this form as the main form:
+			NativeMessageHandler.RegisterMainForm(this);
+
+			// Link and attach to main model:
 			this.main = main;
 			AttachMainEventHandlers();
 
 			Text = this.main.AutoName;
 
-			// Link and attach to terminal settings.
+			// Link and attach to terminal settings:
 			this.settingsRoot = ApplicationSettings.LocalUserSettings;
 			AttachSettingsEventHandlers();
 

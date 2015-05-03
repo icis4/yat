@@ -388,7 +388,8 @@ namespace MKY.IO.Usb
 		// Static Methods > Device Notification
 		//------------------------------------------------------------------------------------------
 
-		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		private static NativeMessageHandler staticDeviceNotificationHandler;
+
 		private static int    staticDeviceNotificationCounter; // = 0;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 		private static object staticDeviceNotificationSyncObj = new object();
@@ -405,21 +406,23 @@ namespace MKY.IO.Usb
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
-		public static void RegisterStaticDeviceNotificationHandler()
+		public static void RegisterStaticDeviceNotificationHandler(Guid classGuid)
 		{
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// The first call to this method registers the notification.
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
-					else
-						throw (new InvalidOperationException("Invalid state within USB HID Device object"));
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
+						throw (new InvalidOperationException("Invalid state within USB Device object"));
+
+					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
+					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, classGuid, out staticDeviceNotificationHandle);
 				}
 
 				// Keep track of the register/unregister requests.
-				staticDeviceNotificationCounter++;
+				if (staticDeviceNotificationCounter < int.MaxValue)
+					staticDeviceNotificationCounter++;
 			}
 		}
 
@@ -437,11 +440,10 @@ namespace MKY.IO.Usb
 				// The last call to this method unregisters the notification.
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle != IntPtr.Zero)
-						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
-					else
-						throw (new InvalidOperationException("Invalid state within USB HID Device object"));
+					if (staticDeviceNotificationHandle == IntPtr.Zero)
+						throw (new InvalidOperationException("Invalid state within USB Device object"));
 
+					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 					staticDeviceNotificationHandle = IntPtr.Zero;
 				}
 
@@ -455,7 +457,7 @@ namespace MKY.IO.Usb
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
-		private static void StaticDeviceNotificationHandler(ref Message m)
+		private static void StaticMessageCallback(ref Message m)
 		{
 			DeviceEvent de = MessageToDeviceEvent(ref m);
 
@@ -465,11 +467,12 @@ namespace MKY.IO.Usb
 				string devicePath;
 				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
-					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Any, new DeviceInfo(devicePath));
 					switch (de)
 					{
 						case DeviceEvent.Connected:
 						{
+							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Any, new DeviceInfo(devicePath));
+
 							Debug.WriteLine("USB device connected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
@@ -482,10 +485,11 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
+							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Any, new DeviceInfo(devicePath, false));
+
 							Debug.WriteLine("USB device disconnected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
-							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
 							EventHelper.FireAsync(DeviceDisconnected, typeof(Device), e);
@@ -523,6 +527,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		private bool isDisposed;
+		private Guid classGuid;
 		private DeviceInfo deviceInfo;
 		private bool isConnected;
 
@@ -559,7 +564,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		protected Device(Guid classGuid, string path)
 		{
-			UnusedArg.PreventAnalysisWarning(classGuid); // The USB class GUID arg is forseen for future use.
+			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
 			int vendorId, productId;
 			string manufacturer, product, serial;
@@ -574,7 +579,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		protected Device(Guid classGuid, int vendorId, int productId)
 		{
-			UnusedArg.PreventAnalysisWarning(classGuid); // The USB class GUID arg is forseen for future use.
+			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
 			this.deviceInfo = new DeviceInfo(vendorId, productId);
 			Initialize();
@@ -584,7 +589,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		protected Device(Guid classGuid, int vendorId, int productId, string serial)
 		{
-			UnusedArg.PreventAnalysisWarning(classGuid); // The USB class GUID arg is forseen for future use.
+			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
 			this.deviceInfo = new DeviceInfo(vendorId, productId, serial);
 			Initialize();
@@ -594,7 +599,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		protected Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
-			UnusedArg.PreventAnalysisWarning(classGuid); // The USB class GUID arg is forseen for future use.
+			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
 			this.deviceInfo = new DeviceInfo(deviceInfo);
 			Initialize();
@@ -610,7 +615,7 @@ namespace MKY.IO.Usb
 			// Only attach handlers if this is an instance of the general USB device class.
 			// If this instance is e.g. an HID device, handlers must be attached there.
 			if (GetType() == typeof(Device))
-				RegisterAndAttachStaticDeviceEventHandlers();
+				RegisterAndAttachStaticDeviceEventHandlers(this.classGuid);
 		}
 
 		/// <summary>
@@ -641,9 +646,9 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		private void RegisterAndAttachStaticDeviceEventHandlers()
+		private void RegisterAndAttachStaticDeviceEventHandlers(Guid classGuid)
 		{
-			RegisterStaticDeviceNotificationHandler();
+			RegisterStaticDeviceNotificationHandler(classGuid);
 			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
 		}

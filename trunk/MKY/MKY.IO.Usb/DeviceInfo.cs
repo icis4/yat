@@ -120,11 +120,21 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(string path)
+			: this(path, true)
 		{
-			int vendorId, productId;
-			string manufacturer, product, serial;
-			if (Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
-				Initialize(path, vendorId, productId, manufacturer, product, serial);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
+		public DeviceInfo(string path, bool getDeviceInfoFromSystem)
+		{
+			if (getDeviceInfoFromSystem)
+			{
+				int vendorId, productId;
+				string manufacturer, product, serial;
+				if (Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+					Initialize(path, vendorId, productId, manufacturer, product, serial);
+			}
 		}
 
 		/// <summary></summary>
