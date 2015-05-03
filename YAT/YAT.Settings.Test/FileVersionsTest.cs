@@ -28,6 +28,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY;
 using MKY.Settings;
 
 using NUnit.Framework;
@@ -1062,7 +1063,6 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "terminal2", Justification = "See ToDo's below.")]
 		private static void VerifySettingsCase08(Model.Workspace workspace)
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
@@ -1087,6 +1087,8 @@ namespace YAT.Settings.Test
 
 			// \todo:
 			// Add tests that verify that terminals are interconnected.
+
+			UnusedLocal.PreventAnalysisWarning(terminal2);
 
 			// \todo:
 			// Add tests that send the commands to terminal 2.

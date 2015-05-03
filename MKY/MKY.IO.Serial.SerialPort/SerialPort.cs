@@ -1536,7 +1536,6 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "cts", Justification = "Local variable 'cts' is required to force access to port to check whether the port is still alive.")]
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
@@ -1545,6 +1544,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Force access to port to check whether the port is still alive:
 				bool cts = this.port.CtsHolding;
+				UnusedLocal.PreventAnalysisWarning(cts);
 
 				if (IsOpen) // Ensure not to forward any events during closing anymore.
 				{
