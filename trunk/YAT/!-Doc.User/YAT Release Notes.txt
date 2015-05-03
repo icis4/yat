@@ -133,8 +133,10 @@ Limitations and known issues:
   on certain hardware, e.g. certain USB/RS-232 converters (bug #203)
 - Serial COM port manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may
   not be supported on Win7/64 on certain hardware, e.g. certain USB/RS-232 converters (bug #254)
-- Handling of serial COM port break states (feature ##109) may not be supported on certain
+- Handling of serial COM port break states (feature request #109) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
+- Use of internal serial COM port may lead to slowdown of the application on certain computers; due
+  to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown
 - USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they
   have different serial numbers, however, it is not yet possible to properly communicate with them
   simultaneously, this could be a bug or a limitation of the Win32 HID.dll (bug #169)

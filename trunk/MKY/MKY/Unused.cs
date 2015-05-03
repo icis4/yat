@@ -72,6 +72,25 @@ namespace MKY
 	}
 
 	/// <summary></summary>
+	public static class UnusedLocal
+	{
+		/// <summary>
+		/// Utility method that can be applied to unused local variables to prevent code analysis warnings (e.g. FxCop).
+		/// </summary>
+		/// <remarks>
+		/// Prevent FxCop "CA1804:RemoveUnusedLocals".
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static void PreventAnalysisWarning(object obj)
+		{
+			if (obj != null)
+				return;
+
+			// else return too...
+		}
+	}
+
+	/// <summary></summary>
 	public static class UnusedField
 	{
 		/// <summary>
