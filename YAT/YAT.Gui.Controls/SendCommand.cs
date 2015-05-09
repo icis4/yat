@@ -21,6 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Enables debug messages to debug this control (state changes, validation,...):
+//#define DEBUG_COMMAND
+
 #region Using
 //==================================================================================================
 // Using
@@ -28,6 +35,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
@@ -185,8 +193,7 @@ namespace YAT.Gui.Controls
 						this.isValidated = false;
 					}
 
-					SetControls();
-					SetCursorToEnd();
+					SetCommandControls();
 					OnCommandChanged(EventArgs.Empty);
 				}
 			}
@@ -204,7 +211,7 @@ namespace YAT.Gui.Controls
 				// Do not check if (this.recents != value) because the collection will always be the same!
 
 				this.recents = value;
-				SetRecents(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
+				SetRecentControls(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
 			}
 		}
 
@@ -220,7 +227,7 @@ namespace YAT.Gui.Controls
 				if (this.parseMode != value)
 				{
 					this.parseMode = value;
-					SetControls();
+					SetControlsExceptCommandAndRecents();
 				}
 			}
 		}
@@ -237,7 +244,7 @@ namespace YAT.Gui.Controls
 				if (this.sendImmediately != value)
 				{
 					this.sendImmediately = value;
-					SetControls();
+					SetControlsExceptCommandAndRecents();
 				}
 			}
 		}
@@ -252,7 +259,7 @@ namespace YAT.Gui.Controls
 				if (this.terminalType != value)
 				{
 					this.terminalType = value;
-					SetControls();
+					SetControlsExceptCommandAndRecents();
 				}
 			}
 		}
@@ -267,7 +274,7 @@ namespace YAT.Gui.Controls
 				if (this.terminalIsReadyToSend != value)
 				{
 					this.terminalIsReadyToSend = value;
-					SetControls();
+					SetControlsExceptCommandAndRecents();
 				}
 			}
 		}
@@ -284,7 +291,11 @@ namespace YAT.Gui.Controls
 				// has been set.
 
 				this.splitterDistance = value;
-				SetSplitter();
+
+				// No need to call SetControls(); as only the splitter will be moved, and that will
+				// not be accessed anywhere else.
+
+				splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
 			}
 		}
 
@@ -368,7 +379,9 @@ namespace YAT.Gui.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetControls();
+				SetControlsExceptCommandAndRecents();
+				SetCommandControls();
+				SetRecentControls();
 				SetCursorToEnd();
 			}
 		}
@@ -406,6 +419,8 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			// Clear "<Enter a command...>" if needed.
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
 			{
@@ -419,6 +434,8 @@ namespace YAT.Gui.Controls
 			SetEditFocusState(EditFocusState.EditHasFocus);
 
 			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
+
+			CommandDebugMessageLeave();
 		}
 
 		/// <remarks>
@@ -435,24 +452,34 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void comboBox_Command_Leave(object sender, EventArgs e)
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			if (this.isValidated)
 				SetEditFocusState(EditFocusState.EditIsInactive);
 			else
 				SetEditFocusState(EditFocusState.IsLeavingEdit);
+
+			CommandDebugMessageLeave();
 		}
 
 		private void comboBox_Command_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			if (this.sendImmediately)
 			{
 				this.isValidated = true;
 				CreatePartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture));
 				RequestSendPartialCommand();
 			}
+
+			CommandDebugMessageLeave();
 		}
 
 		private void comboBox_Command_TextChanged(object sender, EventArgs e)
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			if (!this.isSettingControls)
 			{
 				if (this.sendImmediately)
@@ -462,6 +489,8 @@ namespace YAT.Gui.Controls
 
 				SetButtonToolTip();
 			}
+
+			CommandDebugMessageLeave();
 		}
 
 		/// <remarks>
@@ -480,6 +509,8 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
+				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 				if (!this.isValidated)
 				{
 					// Postpone validation if focus is leaving the parent!
@@ -495,6 +526,8 @@ namespace YAT.Gui.Controls
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
 							CreateSingleLineCommand(comboBox_Command.Text);
+
+							CommandDebugMessageLeave();
 							return;
 						}
 
@@ -509,6 +542,8 @@ namespace YAT.Gui.Controls
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
 							CreateSingleLineCommand(comboBox_Command.Text);
+
+							CommandDebugMessageLeave();
 							return;
 						}
 
@@ -521,6 +556,8 @@ namespace YAT.Gui.Controls
 						SetEditFocusState(EditFocusState.EditIsInactive);
 					}
 				}
+
+				CommandDebugMessageLeave();
 			}
 		}
 
@@ -528,6 +565,8 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
+				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 				this.isValidated = true; // Commands in history have already been validated.
 
 				if (comboBox_Command.SelectedItem != null)
@@ -537,10 +576,12 @@ namespace YAT.Gui.Controls
 					{
 						this.command = ri.Item;
 
+						SetCommandControls();
 						OnCommandChanged(EventArgs.Empty);
-						SetControls();
 					}
 				}
+
+				CommandDebugMessageLeave();
 			}
 		}
 		
@@ -567,44 +608,12 @@ namespace YAT.Gui.Controls
 		// Private Methods > Set Controls
 		//------------------------------------------------------------------------------------------
 
-		private void SetSplitter()
+		/// <remarks>
+		/// This function 
+		/// </remarks>
+		private void SetControlsExceptCommandAndRecents()
 		{
 			this.isSettingControls.Enter();
-			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
-			this.isSettingControls.Leave();
-		}
-
-		private void SetControls()
-		{
-			this.isSettingControls.Enter();
-
-			SetSplitter();
-
-			if (this.editFocusState == EditFocusState.EditIsInactive)
-			{
-				if (this.command.IsText)
-				{
-					comboBox_Command.Text      = this.command.SingleLineText;
-					comboBox_Command.ForeColor = SystemColors.ControlText;
-					comboBox_Command.Font      = SystemFonts.DefaultFont;
-				}
-				else
-				{
-					comboBox_Command.Text      = Command.EnterCommandText;
-					comboBox_Command.ForeColor = SystemColors.GrayText;
-					comboBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
-				}
-			}
-			else
-			{
-				if (this.command.IsText && !this.command.IsPartialText)
-					comboBox_Command.Text = this.command.SingleLineText;
-				else
-					comboBox_Command.Text = "";
-
-				comboBox_Command.ForeColor = SystemColors.ControlText;
-				comboBox_Command.Font      = SystemFonts.DefaultFont;
-			}
 
 			// Prepare the button properties based on state and settings.
 			//
@@ -632,6 +641,46 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Leave();
 		}
 
+		/// <remarks>
+		/// Separate function as it is not needed to set this text on any change.
+		/// </remarks>
+		private void SetCommandControls()
+		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			this.isSettingControls.Enter();
+
+			if (this.editFocusState == EditFocusState.EditIsInactive)
+			{
+				if (this.command.IsText)
+				{
+					comboBox_Command.Text      = this.command.SingleLineText;
+					comboBox_Command.ForeColor = SystemColors.ControlText;
+					comboBox_Command.Font      = SystemFonts.DefaultFont;
+				}
+				else
+				{
+					comboBox_Command.Text      = Command.EnterCommandText;
+					comboBox_Command.ForeColor = SystemColors.GrayText;
+					comboBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
+				}
+			}
+			else
+			{
+				if (this.command.IsText && !this.command.IsPartialText)
+					comboBox_Command.Text = this.command.SingleLineText;
+				else
+					comboBox_Command.Text = "";
+
+				comboBox_Command.ForeColor = SystemColors.ControlText;
+				comboBox_Command.Font      = SystemFonts.DefaultFont;
+			}
+
+			SetButtonToolTip();
+
+			this.isSettingControls.Leave();
+			CommandDebugMessageLeave();
+		}
+
 		private void SetButtonToolTip()
 		{
 			this.isSettingControls.Enter();
@@ -649,13 +698,15 @@ namespace YAT.Gui.Controls
 					default: /* Binary or <New> */ caption = "";         break;
 				}
 			}
+
 			toolTip.SetToolTip(button_SendCommand, caption);
 
 			this.isSettingControls.Leave();
 		}
 
-		private void SetRecents()
+		private void SetRecentControls()
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			// Keep cursor position and selection because Items.Clear() will reset this:
@@ -674,15 +725,18 @@ namespace YAT.Gui.Controls
 			comboBox_Command.SelectionStart = selectionStart;
 
 			this.isSettingControls.Leave();
+			CommandDebugMessageLeave();
 		}
 
 		private void SetCursorToEnd()
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
 
 			this.isSettingControls.Leave();
+			CommandDebugMessageLeave();
 		}
 
 		#endregion
@@ -720,12 +774,12 @@ namespace YAT.Gui.Controls
 				this.isValidated = true; // Command has been validated by multi line box.
 				this.command = f.CommandResult;
 
-				SetControls();
+				SetCommandControls();
 				OnCommandChanged(EventArgs.Empty);
 			}
 			else
 			{
-				SetControls();
+				SetCommandControls();
 			}
 
 			button_SendCommand.Select();
@@ -745,7 +799,7 @@ namespace YAT.Gui.Controls
 		{
 			this.command = new Command(singleLineCommand);
 
-			SetControls();
+			SetCommandControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
@@ -756,7 +810,7 @@ namespace YAT.Gui.Controls
 		{
 			this.command = new Command(partialCommand, true);
 
-			SetControls();
+			SetCommandControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
@@ -767,7 +821,7 @@ namespace YAT.Gui.Controls
 		{
 			this.command = new Command(true);
 
-			SetControls();
+			SetCommandControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
@@ -847,6 +901,40 @@ namespace YAT.Gui.Controls
 		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
 			EventHelper.FireSync(SendCommandRequest, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COMMAND")]
+		protected virtual void CommandDebugMessageEnter(string methodName)
+		{
+			Debug.WriteLine(methodName);
+			Debug.Indent();
+
+			CommandDebugMessage();
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COMMAND")]
+		protected virtual void CommandDebugMessageLeave()
+		{
+			CommandDebugMessage();
+
+			Debug.Unindent();
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COMMAND")]
+		protected virtual void CommandDebugMessage()
+		{
+			Debug.WriteLine("Text   = " + comboBox_Command.Text);
+			Debug.WriteLine("Cursor @ " + comboBox_Command.SelectionStart);
 		}
 
 		#endregion
