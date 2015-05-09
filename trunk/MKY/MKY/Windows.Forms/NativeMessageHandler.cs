@@ -46,8 +46,15 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 	public delegate void NativeMessageCallback(ref Message m);
 
+	/// <summary>
+	/// Utility class that simlifies processing native messages. The class acts as an interface
+	/// between consumers of native messages and the main form. The main form is needed to provide
+	/// the window handle. Without this handle, consumers cannot properly register callbacks.
+	/// </summary>
 	/// <remarks>
-	/// Utility class that allows to process native messages.
+	/// This class helps to reduce the coupling among the main form and other parts of the system.
+	/// The main form and the consumer need to access this handler, but they don't need to know of
+	/// each other. Thus, this class implements a simple form of the meditor pattern.
 	/// </remarks>
 	public class NativeMessageHandler : NativeWindow
 	{

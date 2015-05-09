@@ -182,6 +182,8 @@ namespace YAT.Gui.Controls
 			{
 				if (this.command != value)
 				{
+					CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 					if (value != null)
 					{
 						this.command = value;
@@ -195,6 +197,8 @@ namespace YAT.Gui.Controls
 
 					SetCommandControls();
 					OnCommandChanged(EventArgs.Empty);
+
+					CommandDebugMessageLeave();
 				}
 			}
 		}
@@ -208,10 +212,14 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
+				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 				// Do not check if (this.recents != value) because the collection will always be the same!
 
 				this.recents = value;
-				SetRecentControls(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
+				SetRecentsControls(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
+
+				CommandDebugMessageLeave();
 			}
 		}
 
@@ -381,7 +389,7 @@ namespace YAT.Gui.Controls
 				this.isStartingUp = false;
 				SetControlsExceptCommandAndRecents();
 				SetCommandControls();
-				SetRecentControls();
+				SetRecentsControls();
 				SetCursorToEnd();
 			}
 		}
@@ -675,6 +683,7 @@ namespace YAT.Gui.Controls
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
 
+			SetCursorToEnd();
 			SetButtonToolTip();
 
 			this.isSettingControls.Leave();
@@ -704,12 +713,13 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Leave();
 		}
 
-		private void SetRecentControls()
+		private void SetRecentsControls()
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
-			// Keep cursor position and selection because Items.Clear() will reset this:
+			// Keep text field because Items.Clear() will reset this:
+			string text         = comboBox_Command.Text;
 			int selectionStart  = comboBox_Command.SelectionStart;
 			int selectionLength = comboBox_Command.SelectionLength;
 
@@ -720,9 +730,10 @@ namespace YAT.Gui.Controls
 			// Immediately update the updated item list:
 			comboBox_Command.Refresh();
 
-			// Restore cursor position and selection:
+			// Restore text field:
+			comboBox_Command.Text            = text;
+			comboBox_Command.SelectionStart  = selectionStart;
 			comboBox_Command.SelectionLength = selectionLength;
-			comboBox_Command.SelectionStart = selectionStart;
 
 			this.isSettingControls.Leave();
 			CommandDebugMessageLeave();
@@ -933,8 +944,12 @@ namespace YAT.Gui.Controls
 		[Conditional("DEBUG_COMMAND")]
 		protected virtual void CommandDebugMessage()
 		{
-			Debug.WriteLine("Text   = " + comboBox_Command.Text);
-			Debug.WriteLine("Cursor @ " + comboBox_Command.SelectionStart);
+			Debug.Write    ("Text    = "      + comboBox_Command.Text);
+			Debug.Write    (" with cursor @ " + comboBox_Command.SelectionStart);
+			Debug.WriteLine(" and sel.idx @ " + comboBox_Command.SelectedIndex);
+
+			if (this.recents != null)
+				Debug.WriteLine("Recents = " + ArrayEx.ElementsToString(this.recents.ToArray()));
 		}
 
 		#endregion
