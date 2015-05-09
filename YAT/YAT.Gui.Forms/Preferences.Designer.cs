@@ -36,6 +36,7 @@
 			this.checkBox_ShowChrono = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTerminalInfo = new System.Windows.Forms.CheckBox();
 			this.groupBox_Port = new System.Windows.Forms.GroupBox();
+			this.label_SerialPortDiscoveryRemarks = new System.Windows.Forms.Label();
 			this.checkBox_RetrieveSerialPortCaptions = new System.Windows.Forms.CheckBox();
 			this.label_SerialPortDiscovery = new System.Windows.Forms.Label();
 			this.checkBox_DetectSerialPortsInUse = new System.Windows.Forms.CheckBox();
@@ -43,7 +44,6 @@
 			this.checkBox_UseRelativePaths = new System.Windows.Forms.CheckBox();
 			this.checkBox_AutoSaveWorkspace = new System.Windows.Forms.CheckBox();
 			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
-			this.label_SerialPortDiscoveryRemarks = new System.Windows.Forms.Label();
 			this.groupBox_Preferences.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
 			this.groupBox_Port.SuspendLayout();
@@ -84,9 +84,9 @@
 			// 
 			// groupBox_Preferences
 			// 
-			this.groupBox_Preferences.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Preferences.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Main);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Port);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Workspace);
@@ -98,8 +98,8 @@
 			// 
 			// groupBox_Main
 			// 
-			this.groupBox_Main.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Main.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowChrono);
 			this.groupBox_Main.Controls.Add(this.checkBox_ShowTerminalInfo);
 			this.groupBox_Main.Location = new System.Drawing.Point(6, 14);
@@ -133,8 +133,8 @@
 			// 
 			// groupBox_Port
 			// 
-			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Port.Controls.Add(this.label_SerialPortDiscoveryRemarks);
 			this.groupBox_Port.Controls.Add(this.checkBox_RetrieveSerialPortCaptions);
 			this.groupBox_Port.Controls.Add(this.label_SerialPortDiscovery);
@@ -145,6 +145,21 @@
 			this.groupBox_Port.TabIndex = 2;
 			this.groupBox_Port.TabStop = false;
 			this.groupBox_Port.Text = "Port";
+			// 
+			// label_SerialPortDiscoveryRemarks
+			// 
+			this.label_SerialPortDiscoveryRemarks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_SerialPortDiscoveryRemarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_SerialPortDiscoveryRemarks.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_SerialPortDiscoveryRemarks.Location = new System.Drawing.Point(210, 19);
+			this.label_SerialPortDiscoveryRemarks.Name = "label_SerialPortDiscoveryRemarks";
+			this.label_SerialPortDiscoveryRemarks.Size = new System.Drawing.Size(179, 59);
+			this.label_SerialPortDiscoveryRemarks.TabIndex = 3;
+			this.label_SerialPortDiscoveryRemarks.Text = "On certain computers, discovery of serial ports takes several seconds. In such ca" +
+    "ses it can be useful to disable one or both of these options.";
+			this.label_SerialPortDiscoveryRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// checkBox_RetrieveSerialPortCaptions
 			// 
@@ -179,8 +194,8 @@
 			// 
 			// groupBox_Workspace
 			// 
-			this.groupBox_Workspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Workspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Workspace.Controls.Add(this.checkBox_UseRelativePaths);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoSaveWorkspace);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoOpenWorkspace);
@@ -223,20 +238,6 @@
 			this.checkBox_AutoOpenWorkspace.Text = "&Open last active workspace on startup";
 			this.checkBox_AutoOpenWorkspace.UseVisualStyleBackColor = true;
 			this.checkBox_AutoOpenWorkspace.CheckedChanged += new System.EventHandler(this.checkBox_AutoOpenWorkspace_CheckedChanged);
-			// 
-			// label_SerialPortDiscoveryRemarks
-			// 
-			this.label_SerialPortDiscoveryRemarks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.label_SerialPortDiscoveryRemarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_SerialPortDiscoveryRemarks.Location = new System.Drawing.Point(210, 19);
-			this.label_SerialPortDiscoveryRemarks.Name = "label_SerialPortDiscoveryRemarks";
-			this.label_SerialPortDiscoveryRemarks.Size = new System.Drawing.Size(179, 59);
-			this.label_SerialPortDiscoveryRemarks.TabIndex = 3;
-			this.label_SerialPortDiscoveryRemarks.Text = "On certain computers, discovery of serial ports takes several seconds. In such ca" +
-				"ses it can be useful to disable one or both of these options.";
-			this.label_SerialPortDiscoveryRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// Preferences
 			// 
