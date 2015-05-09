@@ -53,6 +53,8 @@ namespace MKY.IO.Ports
 		Baud009600 = 9600,
 		Baud014400 = 14400,
 		Baud019200 = 19200,
+		Baud028800 = 28800,
+		Baud033600 = 33600,
 		Baud038400 = 38400,
 		Baud057600 = 57600,
 		Baud115200 = 115200,
@@ -140,6 +142,8 @@ namespace MKY.IO.Ports
 			a.Add(new BaudRateEx(BaudRate.Baud009600));
 			a.Add(new BaudRateEx(BaudRate.Baud014400));
 			a.Add(new BaudRateEx(BaudRate.Baud019200));
+			a.Add(new BaudRateEx(BaudRate.Baud028800));
+			a.Add(new BaudRateEx(BaudRate.Baud033600));
 			a.Add(new BaudRateEx(BaudRate.Baud038400));
 			a.Add(new BaudRateEx(BaudRate.Baud057600));
 			a.Add(new BaudRateEx(BaudRate.Baud115200));
@@ -228,6 +232,8 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static implicit operator BaudRateEx(int baudRate)
 		{
+			// Sorted big to small for faster lookup of 'modern' baud rates.
+
 			if      (baudRate == (int)BaudRate.Baud921600) return (new BaudRateEx(BaudRate.Baud921600));
 			else if (baudRate == (int)BaudRate.Baud460800) return (new BaudRateEx(BaudRate.Baud460800));
 			else if (baudRate == (int)BaudRate.Baud230400) return (new BaudRateEx(BaudRate.Baud230400));
@@ -235,6 +241,8 @@ namespace MKY.IO.Ports
 			else if (baudRate == (int)BaudRate.Baud115200) return (new BaudRateEx(BaudRate.Baud115200));
 			else if (baudRate == (int)BaudRate.Baud057600) return (new BaudRateEx(BaudRate.Baud057600));
 			else if (baudRate == (int)BaudRate.Baud038400) return (new BaudRateEx(BaudRate.Baud038400));
+			else if (baudRate == (int)BaudRate.Baud033600) return (new BaudRateEx(BaudRate.Baud033600));
+			else if (baudRate == (int)BaudRate.Baud028800) return (new BaudRateEx(BaudRate.Baud028800));
 			else if (baudRate == (int)BaudRate.Baud019200) return (new BaudRateEx(BaudRate.Baud019200));
 			else if (baudRate == (int)BaudRate.Baud014400) return (new BaudRateEx(BaudRate.Baud014400));
 			else if (baudRate == (int)BaudRate.Baud009600) return (new BaudRateEx(BaudRate.Baud009600));
@@ -248,7 +256,7 @@ namespace MKY.IO.Ports
 			else if (baudRate == (int)BaudRate.Baud000134) return (new BaudRateEx(BaudRate.Baud000134));
 			else if (baudRate == (int)BaudRate.Baud000110) return (new BaudRateEx(BaudRate.Baud000110));
 			else if (baudRate == (int)BaudRate.Baud000075) return (new BaudRateEx(BaudRate.Baud000075));
-			else return (new BaudRateEx(baudRate));
+			else                                           return (new BaudRateEx(baudRate));
 		}
 
 		/// <summary></summary>
