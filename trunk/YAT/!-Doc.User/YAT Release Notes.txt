@@ -40,17 +40,17 @@ and browse for ".NET Framework 3.5 SP1", download and install it manually.
 
 Installing .NET requires administrator permissions.
 
-A) If Windows Installer is installed on the computer, run "YAT-x86.msi" or "YAT-x64.msi"
-    1. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary
-    2. Setup installs YAT, older versions of YAT are automatically replaced
+A) If Windows Installer is already installed, run "YAT-x86_(32-bit).msi" or "YAT-x64_(64-bit).msi":
+    1. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary.
+    2. Setup installs YAT, older versions of YAT are automatically replaced.
 
-B) If Windows Installer is not installed on the computer, run "setup.exe"
+B) If Windows Installer is not installed on the computer, run "setup.exe":
     1. Setup checks whether Windows Installer 4.5 is installed and downloads and installs it if
-       necessary
-    2. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary
-    3. Setup installs YAT, older versions of YAT are automatically replaced
+       necessary.
+    2. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary.
+    3. Setup installs YAT, older versions of YAT are automatically replaced.
 
-Start YAT by selecting "Start > Programs > YAT > YAT"
+Start YAT by selecting "Start > Programs > YAT > YAT".
 
 
 ====================================================================================================
@@ -105,16 +105,17 @@ Fixed bugs:
 - Representation of description of multi line commands in 'Send Command' improved
 - Issues with 'Send Command' fixed, additional test cases added (bugs #276, #282 and #291)
 - Issues with line break fixed (bugs #269 and #281)
-- Issue with escape sequences after C-style escape fixed (bug #290)
+- Issue with escape sequences following a C-style escape fixed (bug #290)
 - Exception while reading stream in YAT.Domain.Parser.Parser.TryParse() fixed (bug #261)
 - Exception while closing terminal or application in YAT.Domain.RawTerminal.Send() fixed (bug #267)
 - Exception while changing settings of a UDP/IP terminal fixed (bugs #289 and #301)
 - Memory leak when subsequently creating and closing terminals fixed (bug #263)
 - Excessive memory occupation after standby fixed (bug #243)
 - MissingMethodException of 'Boolean System.Threading.WaitHandle.WaitOne(Int32)' fixed by adding
-  .NET 3.5 SP1 as prerequisite to setup/installation (bug #273)
+  .NET 3.5 SP1 as prerequisite to setup/installer (bug #273)
 - Start from command line no longer always generates a terminal (bug #262)
 - InvalidOperationException when starting YAT with /r command line option fixed (bug #260)
+- NullReferenceException when starting YAT with /tf command line option fixed (bug #280)
 - ThreadException upon copy of exception data to clipboard fixed (bug #245)
 
 Limitations and known issues:
