@@ -1077,13 +1077,22 @@ namespace YAT.Settings.Test
 
 			page = terminal1.SettingsRoot.PredefinedCommand.Pages[0];
 			Assert.AreEqual("Page 1", page.PageName, "First predefined command pages has wrong name!");
-			Assert.AreEqual(2, page.Commands.Count, "First predefined command page doesn't contain 2 commands!");
+			Assert.AreEqual(5, page.Commands.Count, "First predefined command page doesn't contain 5 commands!");
 			command = page.Commands[0];
+			Assert.AreEqual("abc", command.Description);
+			Assert.AreEqual("abc", command.CommandLines[0]);
+			command = page.Commands[1];
 			Assert.AreEqual("äöü", command.Description);
 			Assert.AreEqual("äöü", command.CommandLines[0]);
-			command = page.Commands[1];
+			command = page.Commands[2];
 			Assert.AreEqual("ÄÖÜ", command.Description);
 			Assert.AreEqual("ÄÖÜ", command.CommandLines[0]);
+			command = page.Commands[3];
+			Assert.AreEqual("$£€", command.Description);
+			Assert.AreEqual("$£€", command.CommandLines[0]);
+			command = page.Commands[4];
+			Assert.AreEqual("čěř", command.Description);
+			Assert.AreEqual("čěř", command.CommandLines[0]);
 
 			// \todo:
 			// Add tests that verify that terminals are interconnected.
