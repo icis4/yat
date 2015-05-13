@@ -348,7 +348,7 @@
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Name = "toolStripMenuItem_MonitorContextMenu_Panels_Tx";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Text = "Transmit Panel";
+			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Text = "Send Panel";
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels_Bidir
@@ -1681,7 +1681,7 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Name = "toolStripMenuItem_TerminalMenu_View_Panels_Tx";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Text = "&Transmit Panel";
+			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Text = "&Send Panel";
 			this.toolStripMenuItem_TerminalMenu_View_Panels_Tx.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Bidir

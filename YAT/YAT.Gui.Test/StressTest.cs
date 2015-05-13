@@ -183,7 +183,7 @@ namespace YAT.Gui.Test
 			string[] args = new string[]
 				{
 					@"""" + workspaceSettingsFilePath + @"""",
-					@"-t0 """ + transmitFilePath + @""""
+					@"-t 0 -tf""" + transmitFilePath + @""""
 				};
 
 			using (Controller.Main main = new Main(args))

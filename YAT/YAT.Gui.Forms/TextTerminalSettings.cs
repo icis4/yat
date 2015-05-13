@@ -486,7 +486,7 @@ namespace YAT.Gui.Forms
 			// Display.
 			checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
 
-			// Transmit.
+			// Send.
 			bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
 			checkBox_Delay.Checked        = delayEnabled;
 			textBox_Delay.Enabled         = delayEnabled;
