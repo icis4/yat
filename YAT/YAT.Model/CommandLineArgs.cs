@@ -277,7 +277,7 @@ namespace YAT.Model
 			"This option only has an effect when opening a workspace that contains more than one terminal.")]
 		public int RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
 
-		/// <summary></summary>
+		/// <remarks>Using term 'Transmission' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Automatically transmit the given file using the terminal specified.")]
 		public string RequestedTransmitFilePath;
