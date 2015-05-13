@@ -193,10 +193,6 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Sends data to a the underlying I/O instance.
 		/// </summary>
-		/// <remarks>
-		/// Receive related code is located before send related code since I/O is a common term
-		/// where I comes before O.
-		/// </remarks>
 		/// <param name="data">
 		/// An array of type System.Byte that contains the data to be sent.
 		/// </param>

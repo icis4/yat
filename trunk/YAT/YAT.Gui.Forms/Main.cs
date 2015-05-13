@@ -1026,30 +1026,35 @@ namespace YAT.Gui.Forms
 		private void timer_PerformStartOperation_Tick(object sender, EventArgs e)
 		{
 			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;
-			if (this.workspace.GetTerminalByDynamicIndex(id) != null)
+			Model.Terminal terminal = this.workspace.GetTerminalByDynamicIndex(id);
+			if (terminal == null)
 			{
 				SetTimedStatusText("Trigger received, pending until terminal has been created...");
-				return;
+				return; // Pend!
 			}
-			if (!this.workspace.GetTerminalByDynamicIndex(id).IsConnected)
+			if (!terminal.IsStarted)
 			{
-				SetTimedStatusText("Trigger received, pending until terminal has connected...");
-				return;
+				SetTimedStatusText("Trigger received, pending until terminal has been started...");
+				return; // Pend!
+			}
+			if (!terminal.IsReadyToSend)
+			{
+				SetTimedStatusText("Trigger received, pending until terminal is ready to transmit...");
+				return; // Pend!
 			}
 
 			// Preconditions fullfilled.
 			timer_PerformStartOperation.Stop();
-			SetTimedStatusText("Trigger received, preparing transmit");
+			SetTimedStatusText("Trigger received, preparing automatic transmission...");
 
 			// Automatically transmit data if desired.
-			if (!string.IsNullOrEmpty(this.main.StartArgs.RequestedTransmitFilePath))
+			string filePath = this.main.StartArgs.RequestedTransmitFilePath;
+			if (!string.IsNullOrEmpty(filePath))
 			{
 				try
 				{
 					SetFixedStatusText("Automatically transmitting data on terminal " + id);
-
-					string filePath = this.main.StartArgs.RequestedTransmitFilePath;
-					this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
+					terminal.SendFile(new Model.Types.Command("", true, filePath));
 				}
 				catch (Exception ex)
 				{
