@@ -320,7 +320,7 @@ namespace YAT.Gui.Forms
 						LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
 				}
 
-				// Automatically trigger transmit data if desired:
+				// Automatically trigger start operation if desired:
 				if (this.main.StartArgs.PerformOperationOnRequestedTerminal)
 				{
 					SetFixedStatusText("Triggering start operation...");
@@ -1041,13 +1041,13 @@ namespace YAT.Gui.Forms
 			{
 				SetTimedStatusText("Trigger received, pending until terminal is ready to transmit...");
 				return; // Pend!
-			}
-
+			}									// Using term 'Transmission' to indicate potential
+												// 'intelligence' to send + receive/verify the data.
 			// Preconditions fullfilled.
 			timer_PerformStartOperation.Stop();
 			SetTimedStatusText("Trigger received, preparing automatic transmission...");
 
-			// Automatically transmit data if desired.
+			// Automatically transmit file if desired.
 			string filePath = this.main.StartArgs.RequestedTransmitFilePath;
 			if (!string.IsNullOrEmpty(filePath))
 			{
