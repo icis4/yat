@@ -26,7 +26,7 @@
 //==================================================================================================
 
 // Enables debug messages to debug this control (state changes, validation,...):
-//#define DEBUG_COMMAND
+// #define DEBUG_COMMAND
 
 #region Using
 //==================================================================================================
@@ -478,7 +478,7 @@ namespace YAT.Gui.Controls
 			{
 				this.isValidated = true;
 				CreatePartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture));
-				RequestSendPartialCommand();
+				InvokeSendCommandRequest();
 			}
 
 			CommandDebugMessageLeave();
@@ -585,7 +585,7 @@ namespace YAT.Gui.Controls
 						this.command = ri.Item;
 
 						SetCommandControls();
-						OnCommandChanged(EventArgs.Empty);
+						// Do not call OnCommandChanged(), event shall only be invoked when command is requested.
 					}
 				}
 
@@ -791,6 +791,7 @@ namespace YAT.Gui.Controls
 			else
 			{
 				SetCommandControls();
+				// Do not call OnCommandChanged(), nothing has changed.
 			}
 
 			button_SendCommand.Select();
@@ -802,6 +803,12 @@ namespace YAT.Gui.Controls
 		//------------------------------------------------------------------------------------------
 		// Private Methods > Handle Command
 		//------------------------------------------------------------------------------------------
+
+		private void ConfirmCommand()
+		{
+			SetCommandControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
 
 		/// <remarks>
 		/// Always create new command to ensure that not only command but also description is updated.
@@ -848,38 +855,21 @@ namespace YAT.Gui.Controls
 			if (this.sendImmediately)
 			{
 				CreatePartialEolCommand();
-				RequestSendPartialEolCommand();
-			}
-			else
-			{
-				// No need to create the command again, it has already been created on validation.
-				RequestSendCompleteCommand();
-			}
-		}
-
-		private void RequestSendCompleteCommand()
-		{
-			if (this.isValidated)
-			{
 				InvokeSendCommandRequest();
 			}
 			else
 			{
-				if (ValidateChildren())
+				if (this.isValidated)
+				{
+					ConfirmCommand(); // Required to invoke OnCommandChanged().
 					InvokeSendCommandRequest();
+				}
+				else
+				{
+					if (ValidateChildren()) // CreateSingleLineCommand() gets called here.
+						InvokeSendCommandRequest();
+				}
 			}
-		}
-
-		/// <remarks>Required when sending immediately.</remarks>
-		private void RequestSendPartialCommand()
-		{
-			InvokeSendCommandRequest();
-		}
-
-		/// <remarks>Required when sending EOL immediately.</remarks>
-		private void RequestSendPartialEolCommand()
-		{
-			InvokeSendCommandRequest();
 		}
 
 		private void InvokeSendCommandRequest()
