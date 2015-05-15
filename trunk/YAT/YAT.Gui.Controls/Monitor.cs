@@ -21,6 +21,14 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+// \remind MKY 2013-05-25 (related to feature request #163)
+// No feasible way to implement horizontal auto scroll found. There are Win32 API functions to move
+// the position of the scroll bar itself, and to scroll rectangles, but it is not feasible to do the
+// whole translation from .NET Windows.Forms to Win32. Giving up.
+
+// Enable to continue working/testing with an automatic horizontally scrolling list box:
+//#define ENABLE_HORIZONTAL_AUTO_SCROLL
+
 #region Using
 //==================================================================================================
 // Using
@@ -253,8 +261,34 @@ namespace YAT.Gui.Controls
 			{
 				if (this.formatSettings != value)
 				{
+					bool fontHasChanged = (this.formatSettings.Font != value.Font);
+
 					this.formatSettings = value;
-					SetFormatDependentControls();
+
+					if (fontHasChanged)
+					{
+						// Directly apply the new settings to the list boxes. This ensures that
+						// update is only done when required, as the update leads to move of list
+						// box to top, and re-drawing. Both takes time, and impacts the monitor
+						// behavior. Thus, only update if really needed.
+
+						ListBox lb;
+						Font f = this.formatSettings.Font;
+
+						lb = fastListBox_LineNumbers;
+						lb.BeginUpdate();
+						lb.Font = (Font)f.Clone();
+						lb.ItemHeight = f.Height;
+						lb.Invalidate();
+						lb.EndUpdate();
+
+						lb = fastListBox_Monitor;
+						lb.BeginUpdate();
+						lb.Font = (Font)f.Clone();
+						lb.ItemHeight = f.Height;
+						lb.Invalidate();
+						lb.EndUpdate();
+					}
 				}
 			}
 		}
@@ -522,24 +556,6 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void Reload()
-		{
-			ListBox lb = fastListBox_Monitor;
-
-			// Retrieve lines from list box:
-			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
-			foreach (object item in lb.Items)
-			{
-				Domain.DisplayLine line = item as Domain.DisplayLine;
-				lines.Add(line);
-			}
-
-			// Clear everything and perform reload:
-			Clear();
-			AddLines(lines);
-		}
-
-		/// <summary></summary>
 		public virtual void Reload(List<Domain.DisplayElement> elements)
 		{
 			Clear();
@@ -551,6 +567,24 @@ namespace YAT.Gui.Controls
 		{
 			Clear();
 			AddLines(lines);
+		}
+
+		/// <summary></summary>
+		public virtual void Reload()
+		{
+			ListBox lb = fastListBox_Monitor;
+
+			// Retrieve lines from list box:
+			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
+			foreach (object item in lb.Items)
+			{
+				Domain.DisplayLine line = item as Domain.DisplayLine;
+				if (line != null)
+					lines.Add(line);
+			}
+
+			// Clear and perform reload:
+			Reload(lines);
 		}
 
 		/// <summary></summary>
@@ -787,22 +821,16 @@ namespace YAT.Gui.Controls
 					{
 						lb.HorizontalExtent = requestedWidth;
 					}
-
+#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					// Perform horizontal auto scroll, but only on the last item.
-					// 
-					// \remind MKY 2013-05-25 (related to feature request #163)
-					// No feasible way to implement horizontal auto scroll found. There are Win32
-					// API functions to move the position of the scroll bar itself, and to scroll
-					// rectangles, but it is not feasible to do the whole translation from .NET
-					// Windows.Forms to Win32. Giving up.
-#if (FALSE)
 					if (e.Index == (lb.Items.Count - 1))
 					{
 						lb.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
 					}
 #endif
-					// Check whether the top index has changed, if yes, also scroll the line numbers.
-					// This especially is the case when the monitor gets cleared, the top index will become 0.
+					// Check whether the top index has changed, if so, also scroll the line numbers.
+					// This especially is the case when the monitor gets cleared, the top index will
+					// become 0.
 					if (fastListBox_Monitor_DrawItem_lastTopIndex != lb.TopIndex)
 					{
 						fastListBox_Monitor_DrawItem_lastTopIndex = lb.TopIndex;
@@ -927,34 +955,8 @@ namespace YAT.Gui.Controls
 				fastListBox_Monitor.Height = Height;
 			}
 
-			SetFormatDependentControls();
 			SetTimeStatusControls();
 			SetCountAndRateStatusControls();
-		}
-
-		private void SetFormatDependentControls()
-		{
-			ListBox lb;
-			Font f = this.formatSettings.Font;
-
-			lb = fastListBox_LineNumbers;
-			lb.BeginUpdate();
-			lb.Font = (Font)f.Clone();
-			lb.ItemHeight = f.Height;
-			lb.Invalidate();
-			lb.EndUpdate();
-
-			lb = fastListBox_Monitor;
-			lb.BeginUpdate();
-			lb.Font = (Font)f.Clone();
-			lb.ItemHeight = f.Height;
-			lb.Invalidate();
-			lb.EndUpdate();
-		}
-
-		private void SetLineNumbersControls()
-		{
-			ResizeAndRelocateListBoxes(this.currentLineNumberWidth);
 		}
 
 		private void SetTimeStatusControls()
@@ -1152,6 +1154,11 @@ namespace YAT.Gui.Controls
 					}
 				}
 			}
+		}
+
+		private void SetLineNumbersControls()
+		{
+			ResizeAndRelocateListBoxes(this.currentLineNumberWidth);
 		}
 
 		private void ClearAndResetListBoxes()
