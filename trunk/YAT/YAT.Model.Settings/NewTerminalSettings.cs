@@ -162,7 +162,6 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
 		[XmlElement("IOType")]
 		public virtual Domain.IOType IOType
 		{

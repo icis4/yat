@@ -75,6 +75,7 @@ Important changes:
 - \!(...) keywords can optionally be disabled (feature request #183)
 - Retrieving serial COM port captions from the system can optionally be disabled in 'Preferences'
   Disabling can be useful on computers where discovery of serial COM ports takes too long
+- Binary terminals no longer replace control characters by default (feature request #204)
 - Serial COM port XOn/XOff flow control chars can optionally be hidden for 'Manual Software' and
   'Manual Combined' (feature request #190)
 - Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and

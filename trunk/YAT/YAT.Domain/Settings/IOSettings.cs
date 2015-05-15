@@ -116,7 +116,6 @@ namespace YAT.Domain.Settings
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
 		[XmlElement("IOType")]
 		public virtual Domain.IOType IOType
 		{
@@ -126,11 +125,12 @@ namespace YAT.Domain.Settings
 				if (this.ioType != value)
 				{
 					this.ioType = value;
-					SetChanged();
 
-					// Always set socket settings host type as well.
-					if (this.socket != null)
-						this.socket.HostType = (Domain.IOTypeEx)value;
+					// Set socket host type as well:
+					if (Socket != null)
+						Socket.HostType = (Domain.IOTypeEx)value;
+
+					SetChanged();
 				}
 			}
 		}
