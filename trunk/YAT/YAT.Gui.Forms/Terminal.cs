@@ -382,6 +382,9 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
 			}
 
+			// Start/stop
+			toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = this.terminal.IsBusy;
+
 			// Edit
 			bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
 			bool editIsNotActive = (!send.EditIsActive);
@@ -407,6 +410,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_Terminal_Stop_Click(object sender, EventArgs e)
 		{
 			this.terminal.StopIO();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_Break_Click(object sender, EventArgs e)
+		{
+			this.terminal.Break();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Clear_Click(object sender, EventArgs e)

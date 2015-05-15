@@ -503,6 +503,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool IsBusy
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsBusy);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool LogIsStarted
 		{
 			get
@@ -2592,6 +2606,22 @@ namespace YAT.Model
 
 			// Success!
 			return (true);
+		}
+
+		#endregion
+
+		#region Terminal > Break
+		//------------------------------------------------------------------------------------------
+		// Terminal > Break
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Breaks all currently ongoing operations in the terminal.
+		/// </summary>
+		public virtual void Break()
+		{
+			OnFixedStatusTextRequest("Breaking operation...");
+			this.terminal.Break();
 		}
 
 		#endregion

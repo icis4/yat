@@ -116,6 +116,7 @@ namespace YAT.Domain.Settings
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("IOType")]
 		public virtual Domain.IOType IOType
 		{

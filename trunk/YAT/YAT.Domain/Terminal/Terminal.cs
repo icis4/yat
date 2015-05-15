@@ -193,7 +193,7 @@ namespace YAT.Domain
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
 		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 3000;
+		private const int ThreadWaitTimeout = 500;
 
 		private const string Undefined = "<Undefined>";
 
@@ -217,9 +217,11 @@ namespace YAT.Domain
 		private Thread sendThread;
 		private object sendThreadSyncObj = new object();
 
-		private bool sendingIsEnabled;
 		private bool sendingIsOngoing;
 		private IOChangedEventHelper ioChangedEventHelper;
+
+		private bool breakRequestFlag;
+		private object breakRequestFlagSynObj = new object();
 
 		private DisplayRepository txRepository;
 		private DisplayRepository bidirRepository;
@@ -536,6 +538,19 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool IsBusy
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				this.ioChangedEventHelper.EventMustBeRaisedBecauseStatusHasBeenAccessed();
+
+				return (IsTransmissive && this.sendingIsOngoing);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -594,9 +609,6 @@ namespace YAT.Domain
 
 				bool startResult = this.rawTerminal.Start();
 
-				// Signal that send processing may start/resume:
-				sendingIsEnabled = true;
-
 				return (startResult);
 			}
 			else
@@ -616,9 +628,6 @@ namespace YAT.Domain
 
 			if (IsStarted)
 			{
-				// Signal that send processing must stop/pause:
-				sendingIsEnabled = false;
-
 				// Note that send processing may continue for some instants, until the send thread
 				// has noticed that it should stop/pause. The system (e.g. event handling) must be
 				// able to deal with this design!
@@ -730,7 +739,7 @@ namespace YAT.Domain
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (this.sendingIsEnabled && this.sendThreadRunFlag && !IsDisposed)
+				while (IsReadyToSend && this.sendThreadRunFlag && !IsDisposed)
 				{
 					SendItem[] pendingItems;
 					lock (this.sendQueue)
@@ -868,13 +877,21 @@ namespace YAT.Domain
 						OnIOChanged(EventArgs.Empty);
 				}
 
-				// Break if terminal has stopped or closed! Note that breaking is done prior
-				// to a potential Sleep() or repeat.
-				if (!(this.sendingIsEnabled && this.sendThreadRunFlag && !IsDisposed))
-					break;
+				// --- Finalize the line ---
 
-				// Finalize the line:
 				ProcessLineEnd(sendEol);
+
+				// Break if requested or terminal has stopped or closed! Note that breaking is
+				// done prior to a potential Sleep() or repeat.
+				lock (this.breakRequestFlagSynObj)
+				{
+					if (this.breakRequestFlag || !(IsTransmissive && this.sendThreadRunFlag && !IsDisposed))
+					{
+						this.breakRequestFlag = false;
+						break;
+					}
+				}
+
 				ProcessLineDelay(performLineDelay);
 
 				// Process repeat:
@@ -1086,6 +1103,24 @@ namespace YAT.Domain
 				string leadMessage = "Unable to prepare data for sending:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
 				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Output, leadMessage + Environment.NewLine + ex.Message));
+			}
+		}
+
+		#endregion
+
+		#region Methods > Break
+		//------------------------------------------------------------------------------------------
+		// Methods > Break
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Breaks all currently ongoing operations in the terminal.
+		/// </summary>
+		public virtual void Break()
+		{
+			lock (this.breakRequestFlagSynObj)
+			{
+				this.breakRequestFlag = true;
 			}
 		}
 
