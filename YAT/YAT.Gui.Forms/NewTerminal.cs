@@ -125,12 +125,17 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > General
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Attention:
+		/// Same code exists in YAT.Gui.Forms.TerminalSettings.terminalSelection_TerminalTypeChanged().
+		/// Changes here may have to be applied there.
+		/// </remarks>
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.TerminalType terminalType = terminalSelection.TerminalType;
-				this.newTerminalSettingsInEdit.TerminalType = terminalType;
+				Domain.TerminalType tt = terminalSelection.TerminalType;
+				this.newTerminalSettingsInEdit.TerminalType = tt;
 				SetControls();
 			}
 		}
@@ -139,8 +144,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.IOType ioType = terminalSelection.IOType;
-				this.newTerminalSettingsInEdit.IOType = ioType;
+				this.newTerminalSettingsInEdit.IOType = terminalSelection.IOType;
 				SetControls();
 			}
 		}
@@ -312,20 +316,6 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen     = this.newTerminalSettings.UsbSerialHidAutoOpen;
 
 			this.terminalSettings.TerminalIsStarted = this.newTerminalSettings.StartTerminal;
-
-			switch (this.terminalSettings.TerminalType)
-			{
-				case Domain.TerminalType.Binary:
-					this.terminalSettings.Display.TxRadix = Domain.Radix.Hex;
-					this.terminalSettings.Display.RxRadix = Domain.Radix.Hex;
-					break;
-
-				case Domain.TerminalType.Text:
-				default:
-					this.terminalSettings.Display.TxRadix = Domain.Radix.String;
-					this.terminalSettings.Display.RxRadix = Domain.Radix.String;
-					break;
-			}
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)

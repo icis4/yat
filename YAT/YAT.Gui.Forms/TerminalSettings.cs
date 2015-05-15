@@ -121,22 +121,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.TerminalType tt = terminalSelection.TerminalType;
-				this.settingsInEdit.Terminal.TerminalType = tt;
-				switch (tt)
-				{
-					case Domain.TerminalType.Binary:
-						this.settingsInEdit.Terminal.Display.TxRadix = Domain.Radix.Hex;
-						this.settingsInEdit.Terminal.Display.RxRadix = Domain.Radix.Hex;
-						break;
-
-					case Domain.TerminalType.Text:
-					default:
-						this.settingsInEdit.Terminal.Display.TxRadix = Domain.Radix.String;
-						this.settingsInEdit.Terminal.Display.RxRadix = Domain.Radix.String;
-						break;
-				}
-
+				this.settingsInEdit.Terminal.TerminalType = terminalSelection.TerminalType;
 				SetControls();
 			}
 		}
@@ -145,9 +130,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.IOType ioType = terminalSelection.IOType;
-				this.settingsInEdit.Terminal.IO.IOType = ioType;
-				this.settingsInEdit.Terminal.IO.Socket.HostType = (Domain.IOTypeEx)ioType;
+				this.settingsInEdit.Terminal.IO.IOType = terminalSelection.IOType;
 				SetControls();
 			}
 		}
