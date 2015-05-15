@@ -29,6 +29,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -221,7 +222,7 @@ namespace YAT.Model.Types
 					else if (IsText)
 						return (SingleLineText);
 					else if (IsFilePath)
-						return (System.IO.Path.GetFileNameWithoutExtension(FilePath));
+						return (Path.GetFileNameWithoutExtension(FilePath));
 					else
 						return ("");
 				}
@@ -553,7 +554,7 @@ namespace YAT.Model.Types
 				if (!IsFilePath)
 					return (false);
 
-				return (System.IO.File.Exists(this.filePath));
+				return (File.Exists(this.filePath));
 			}
 		}
 
@@ -605,7 +606,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (Description);
+			return (SingleLineText);
 		}
 
 		/// <summary>
