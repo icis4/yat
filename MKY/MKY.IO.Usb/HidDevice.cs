@@ -162,7 +162,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB HID Device object"));
+						throw (new InvalidOperationException("Invalid state within USB HID Device object, please report this bug!"));
 
 					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
 					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidGuid, out staticDeviceNotificationHandle);
@@ -189,7 +189,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB HID Device object"));
+						throw (new InvalidOperationException("Invalid state within USB HID Device object, please report this bug!"));
 
 					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 					staticDeviceNotificationHandle = IntPtr.Zero;

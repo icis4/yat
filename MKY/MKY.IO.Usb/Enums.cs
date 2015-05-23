@@ -309,7 +309,7 @@ namespace MKY.IO.Usb
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid HID usage page string"));
+				throw (new FormatException(@"""" + s + @""" is no valid HID usage page string."));
 		}
 
 		/// <remarks>
@@ -432,7 +432,7 @@ namespace MKY.IO.Usb
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid HID usage ID string"));
+				throw (new FormatException(@"""" + s + @""" is no valid HID usage ID string."));
 		}
 
 		/// <remarks>

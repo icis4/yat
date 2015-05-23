@@ -156,7 +156,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid serial flow control string"));
+				throw (new FormatException(@"""" + s + @""" is no valid serial flow control string."));
 		}
 
 		/// <remarks>

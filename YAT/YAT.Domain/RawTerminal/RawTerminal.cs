@@ -185,7 +185,7 @@ namespace YAT.Domain
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -377,7 +377,16 @@ namespace YAT.Domain
 				OnRawElementSent(new RawElementEventArgs(re));
 
 				// Then send the data using the active I/O provider:
-				this.io.Send(data);
+				if (!this.io.Send(data))
+				{
+					string message;
+					if (data.Length <= 1)
+						message = data.Length + " byte could not sent!";
+					else
+						message = data.Length + " bytes could not sent!";
+
+					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Output, message));
+				}
 			}
 			else
 			{
@@ -408,7 +417,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    l = this.txRepository   .ToElements(); break;
 					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
 					case RepositoryType.Rx:    l = this.rxRepository   .ToElements(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
 				}
 			}
 			return (l);
@@ -432,7 +441,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
 				}
 				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
 
@@ -460,7 +469,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    s = this.txRepository   .ToString(indent); break;
 					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
 					case RepositoryType.Rx:    s = this.rxRepository   .ToString(indent); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
 				}
 			}
 

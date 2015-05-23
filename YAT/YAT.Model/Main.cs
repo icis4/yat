@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -154,9 +155,11 @@ namespace YAT.Model
 
 		private void Initialize()
 		{
+			WriteDebugMessageLine("Creating...");
+
 			this.guid = Guid.NewGuid();
 
-			WriteDebugMessageLine("Created");
+			WriteDebugMessageLine("...successfully created.");
 		}
 
 		#region Disposal
@@ -176,7 +179,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing.");
+				WriteDebugMessageLine("Disposing...");
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -194,6 +197,8 @@ namespace YAT.Model
 				// Set state to disposed:
 				this.workspace = null;
 				this.isDisposed = true;
+
+				WriteDebugMessageLine("...successfully disposed.");
 			}
 		}
 
@@ -215,7 +220,7 @@ namespace YAT.Model
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -1511,11 +1516,17 @@ namespace YAT.Model
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + Guid + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + Guid + "]",
+				message
+				));
 		}
 
 		#endregion

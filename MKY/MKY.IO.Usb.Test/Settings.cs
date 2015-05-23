@@ -139,7 +139,7 @@ namespace MKY.IO.Usb.Test
 		private void AssertNotReadOnly(string propertyName)
 		{
 			if (IsReadOnly())
-				throw (new ConfigurationErrorsException("The property " + propertyName + " is read only."));
+				throw (new ConfigurationErrorsException("The property " + propertyName + " is read only!"));
 		}
 
 		#endregion

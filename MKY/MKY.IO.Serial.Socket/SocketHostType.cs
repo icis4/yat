@@ -121,7 +121,7 @@ namespace MKY.IO.Serial.Socket
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid socket host type string"));
+				throw (new FormatException(@"""" + s + @""" is no valid socket host type string."));
 		}
 
 		/// <remarks>

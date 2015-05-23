@@ -87,7 +87,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (Text_string);
 				case TerminalType.Binary: return (Binary_string);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -116,7 +116,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid terminal type string"));
+				throw (new FormatException(@"""" + s + @""" is no valid terminal type string."));
 		}
 
 		/// <remarks>

@@ -724,14 +724,14 @@ namespace MKY.CommandLine
 					if (!SupportOptionArgs)
 					{
 						string message = "Option argument defined, but support for option arguments in not enabled in constructor call";
-						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+						Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 						throw (new RuntimeValidationException(message));
 					}
 
 					if (field.FieldType.IsArray && !SupportArrayOptionArgs)
 					{
 						string message = "Array option argument defined, but support for array option arguments in not enabled in constructor call";
-						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+						Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 						throw (new RuntimeValidationException(message));
 					}
 
@@ -740,7 +740,7 @@ namespace MKY.CommandLine
 						if (optionStrings.Contains(s))
 						{
 							string message = "Duplicate command line argument " + s;
-							Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+							Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 							throw (new RuntimeValidationException(message));
 						}
 						else
@@ -753,7 +753,7 @@ namespace MKY.CommandLine
 						if (optionStrings.Contains(s))
 						{
 							string message = "Duplicate command line argument " + s;
-							Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+							Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 							throw (new RuntimeValidationException(message));
 						}
 						else
@@ -767,7 +767,7 @@ namespace MKY.CommandLine
 					if (!SupportValueArgs)
 					{
 						string message = "Value argument defined, but support for value arguments in not enabled in constructor call";
-						Debug.WriteLine("Runtime validation failed for " + GetType() + ": " + message);
+						Debug.WriteLine("Runtime validation failed for " + GetType() + message);
 						throw (new RuntimeValidationException(message));
 					}
 				}
@@ -1006,7 +1006,7 @@ namespace MKY.CommandLine
 		public virtual bool OptionIsGiven(string name)
 		{
 			if (this.args == null)
-				throw (new InvalidOperationException("ProcessAndValidate() must be called first"));
+				throw (new InvalidOperationException("ProcessAndValidate() must be called first!"));
 
 			if (this.supportOptionArgs || this.supportArrayOptionArgs)
 			{

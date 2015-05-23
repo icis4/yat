@@ -54,7 +54,7 @@ namespace MKY.Windows.Forms
 			this.count--;
 
 			if (this.count < 0)
-				throw (new InvalidOperationException("SettingControlsHelper count has fallen below 0"));
+				throw (new InvalidOperationException("SettingControlsHelper count has fallen below 0!"));
 		}
 
 		/// <summary></summary>

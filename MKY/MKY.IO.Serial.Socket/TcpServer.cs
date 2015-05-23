@@ -20,6 +20,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Enable debugging of thread state:
+#define DEBUG_THREAD_STATE
+
+// Enable debugging of ALAZ socket shutdown:
+#define DEBUG_SOCKET_SHUTDOWN
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -29,6 +42,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 using System.Threading;
 
@@ -40,14 +54,14 @@ using MKY.Diagnostics;
 namespace MKY.IO.Serial.Socket
 {
 	/// <remarks>
-	/// In case of YAT with the original ALAZ implementation, a TCP/IP client created a deadlock on
-	/// shutdown. The situation:
+	/// In case of YAT with the original ALAZ implementation, TCP/IP Clients and servers created a
+	/// deadlock on shutdown. The situation:
 	/// 
-	/// 1. <see cref="Stop()"/> is called from a GUI/main thread
-	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks
-	/// 3. The 'OnDisconnected' event is fired
+	/// 1. <see cref="Stop()"/> is called from a GUI/main thread.
+	/// 2. 'ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections()' blocks.
+	/// 3. The 'OnDisconnected' event is fired.
 	/// 4. FireOnDisconnected() is blocked when trying to synchronize Invoke() onto the GUI/main
-	///    thread and a deadlock happens
+	///    thread and a deadlock happens.
 	/// 
 	/// Further down the calling chain, 'BaseSocketConnection.Active.get()' was also blocking.
 	/// 
@@ -55,9 +69,8 @@ namespace MKY.IO.Serial.Socket
 	/// non-blocking, by calling Stop() asynchronously and by suppressing the 'OnDisconnected' and
 	/// 'OnException' events while stopping.
 	/// 
-	/// These two issues were also reported back to Andre Luis Azevedo. But unfortunately he doesn't
-	/// reply and ALAZ seems to have come to a dead end. An alternative to ALAZ might need to be
-	/// found in the future.
+	/// These two issues were also reported back to Andre Luis Azevedo. But unfortunately ALAZ seems
+	/// to have come to a dead end. An alternative to ALAZ might need to be found in the future.
 	/// 
 	/// Note that the very same issue existed in <see cref="TcpClient"/>.
 	/// 
@@ -73,7 +86,12 @@ namespace MKY.IO.Serial.Socket
 
 		private enum SocketState
 		{
+			/// <summary>
+			/// The reset state is necessary to differentiate between not yet started or stopped
+			/// sockets versus started but disconnected sockets.
+			/// </summary>
 			Reset,
+
 			Listening,
 			Accepted,
 			Stopping,
@@ -89,18 +107,7 @@ namespace MKY.IO.Serial.Socket
 
 		private const int DataSentQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 3000;
-
-		#endregion
-
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private const int ThreadWaitTimeout = 200;
 
 		#endregion
 
@@ -121,8 +128,8 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Required to deal with the issues described in the remarks in the header of this class.
 		/// </remarks>
-		private bool eventHandlingIsSuppressedWhileStopping;
-		private ReaderWriterLockSlim eventHandlingIsSuppressedWhileStoppingLock = new ReaderWriterLockSlim();
+		private bool isStoppingAndDisposing;
+		private ReaderWriterLockSlim isStoppingAndDisposingLock = new ReaderWriterLockSlim();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketServer socket;
 		private List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection> socketConnections = new List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection>();
@@ -171,8 +178,14 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		public TcpServer(System.Net.IPAddress localIPAddress, int localPort)
+			: this(SocketBase.NextInstanceId, localIPAddress, localPort)
 		{
-			this.instanceId = staticInstanceCounter++;
+		}
+
+		/// <summary></summary>
+		public TcpServer(int instanceId, System.Net.IPAddress localIPAddress, int localPort)
+		{
+			this.instanceId = instanceId;
 
 			this.localIPAddress = localIPAddress;
 			this.localPort = localPort;
@@ -195,22 +208,19 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					SuppressEventsAndThenStopAndDisposeSocket();
-
-					// Do not yet dispose of socket, event lock, thread event and state lock because
-					// that may result in null ref exceptions during closing, due to the fact that
-					// ALAZ closes/disconnects asynchronously. Further investigation is required
-					// in order to further improve the behaviour on Stop()/Dispose().
+					SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread();
 				}
 
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				WriteDebugMessageLine("Disposed.");
+				WriteDebugMessageLine("...successfully disposed.");
 			}
 		}
 
@@ -232,7 +242,7 @@ namespace MKY.IO.Serial.Socket
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -273,10 +283,10 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Reset:
-					case SocketState.Stopping:
+					case SocketState.Stopping: // Stopping is considered 'Stopped' because it will eventually result to that.
 					case SocketState.Error:
 					{
 						return (true);
@@ -302,7 +312,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Accepted:
 					{
@@ -343,24 +353,24 @@ namespace MKY.IO.Serial.Socket
 			get { return (IsConnected); }
 		}
 
-		private bool EventHandlingIsSuppressedWhileStoppingSynchronized
+		private bool IsStoppingAndDisposingSynchronized
 		{
 			get
 			{
-				bool isSuppressed;
+				bool value;
 
-				this.eventHandlingIsSuppressedWhileStoppingLock.EnterReadLock();
-				isSuppressed = this.eventHandlingIsSuppressedWhileStopping;
-				this.eventHandlingIsSuppressedWhileStoppingLock.ExitReadLock();
+				this.isStoppingAndDisposingLock.EnterReadLock();
+				value = this.isStoppingAndDisposing;
+				this.isStoppingAndDisposingLock.ExitReadLock();
 
-				return (isSuppressed);
+				return (value);
 			}
 
 			set
 			{
-				this.eventHandlingIsSuppressedWhileStoppingLock.EnterWriteLock();
-				this.eventHandlingIsSuppressedWhileStopping = value;
-				this.eventHandlingIsSuppressedWhileStoppingLock.ExitWriteLock();
+				this.isStoppingAndDisposingLock.EnterWriteLock();
+				this.isStoppingAndDisposing = value;
+				this.isStoppingAndDisposingLock.ExitWriteLock();
 			}
 		}
 
@@ -395,7 +405,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Start() requested but state is " + GetStateSynchronized() + ".");
 				return (false);
 			}
 		}
@@ -409,18 +419,21 @@ namespace MKY.IO.Serial.Socket
 			if (IsStarted)
 			{
 				WriteDebugMessageLine("Stopping...");
+				SetStateSynchronizedAndNotify(SocketState.Stopping);
 
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				StopAndDisposeSocketWithoutSuppressingEvents();
+				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread();
+
+				SetStateSynchronizedAndNotify(SocketState.Reset);
 			}
 			else
 			{
-				WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Stop() requested but state is " + GetStateSynchronized() + ".");
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void Send(byte[] data)
+		public virtual bool Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
@@ -431,6 +444,12 @@ namespace MKY.IO.Serial.Socket
 					foreach (ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection connection in this.socketConnections)
 						connection.BeginSend(data);
 				}
+
+				return (true);
+			}
+			else
+			{
+				return (false);
 			}
 		}
 
@@ -455,14 +474,14 @@ namespace MKY.IO.Serial.Socket
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = this.state;
+			SocketState oldState = GetStateSynchronized();
 #endif
 			this.stateLock.EnterWriteLock();
 			this.state = state;
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ".");
 			else
 				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
@@ -476,9 +495,13 @@ namespace MKY.IO.Serial.Socket
 		// Socket Methods
 		//==========================================================================================
 
+		/// <remarks>
+		/// Note that starting is done asynchronously, opposed to stopping that is synchronously.
+		/// This difference is due to the issue described in the header of this class.
+		/// </remarks>
 		private void StartSocket()
 		{
-			EventHandlingIsSuppressedWhileStoppingSynchronized = false;
+			IsStoppingAndDisposingSynchronized = false;
 
 			SetStateSynchronizedAndNotify(SocketState.Listening);
 
@@ -501,69 +524,59 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
+		/// Note that starting is done asynchronously, opposed to stopping that is synchronously.
+		/// This difference is due to the issue described in the header of this class.
 		/// 
 		/// \attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
 		/// See remarks of the header of this class for details.
 		/// </remarks>
-		private void StopAndDisposeSocketWithoutSuppressingEvents()
+		private void SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread()
 		{
-			SetStateSynchronizedAndNotify(SocketState.Stopping);
+			IsStoppingAndDisposingSynchronized = true;
 
-			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionsAndThreadWithoutFiringEvents);
-			asyncInvoker.BeginInvoke(null, null);
-		}
-
-		/// <remarks>
-		/// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-		/// 
-		/// \attention:
-		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
-		/// See remarks of the header of this class for details.
-		/// </remarks>
-		private void SuppressEventsAndThenStopAndDisposeSocket()
-		{
-			EventHandlingIsSuppressedWhileStoppingSynchronized = true;
-
-			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionsAndThreadWithoutFiringEvents);
+			VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(StopAndDisposeSocketAndConnectionsAndThread);
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void StopAndDisposeSocketAndConnectionsAndThreadWithoutFiringEvents()
+		private void StopAndDisposeSocketAndConnectionsAndThread()
 		{
 			if (this.socket != null)
 			{
 				try
 				{
+					WriteDebugSocketShutdownMessageLine("Stopping socket...");
 					this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
+					WriteDebugSocketShutdownMessageLine("...successfully stopped.");
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(GetType(), ex);
+					DebugEx.WriteException(GetType(), ex, "Stopping socket of TCP/IP Server failed!");
 				}
 			}
 
-			if (this.socket != null) // If everything works as intended, the socket will already
-			{                        // have gotten disposed while handling the 'Disconnected'
-				try                  // event that is raised after the call to Stop() above.
+			if (this.socket != null) // Check again as socket could have been disposed in the meantime.
+			{
+				try
 				{
+					WriteDebugSocketShutdownMessageLine("Disposing socket...");
 					this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
+					WriteDebugSocketShutdownMessageLine("...successfully disposed.");
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(GetType(), ex);
+					DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP Server failed!");
 				}
-
-				this.socket = null;
 			}
+
+			this.socket = null;
 
 			lock (this.socketConnections)
-				this.socketConnections.Clear();
+				this.socketConnections.Clear(); // Note: List is kept throughout lifetime of this object.
 
-			// Finally, stop the thread. Must be done AFTER the socket got disposed to ensure that
-			// the last socket callbacks can still be properly processed.
+			// Finally, stop the thread. Must be done AFTER the socket got stopped (and disposed) to
+			// ensure that the last socket callbacks 'OnSent' can still be properly processed.
 			StopDataSentThread();
 		}
 
@@ -595,27 +608,44 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.dataSentThread != null)
 				{
+					WriteDebugThreadStateMessageLine("DataSentThread() gets stopped...");
+
 					this.dataSentThreadRunFlag = false;
 
 					// Ensure that thread has stopped after the stop request:
 					try
 					{
-						int timeoutCounter = 0;
-						while (!this.dataSentThread.Join(ThreadWaitInterval))
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.dataSentThread.Join(interval = SocketBase.Random.Next(5, 20)))
 						{
 							this.dataSentThreadEvent.Set();
-							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-								throw (new TimeoutException("Data sent thread hasn't properly stopped"));
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								WriteDebugThreadStateMessageLine("...failed! Aborting...");
+								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.dataSentThread.Abort();
+								break;
+							}
+
+							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
 					{
-						// Ignore thread state exceptions such as "Thread has not been started"
-						// since the thread needs to be shut down anyway.
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.dataSentThreadEvent.Close();
 					this.dataSentThread = null;
+
+					WriteDebugThreadStateMessageLine("...successfully terminated.");
 				}
 			}
 		}
@@ -709,17 +739,18 @@ namespace MKY.IO.Serial.Socket
 			{
 				try
 				{
-					// WaitOne() might wait forever in case the underlying I/O provider crashes,
-					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.dataSentThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
+					if (!this.dataSentThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)
 				{
 					// The mutex should never be abandoned, but in case it nevertheless happens,
 					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in DataSentThread()");
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in DataSentThread()!");
 					break;
 				}
 
@@ -759,25 +790,19 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			if (!EventHandlingIsSuppressedWhileStoppingSynchronized)
-			{
-				bool isConnected = false;
-				lock (this.socketConnections)
-				{
-					this.socketConnections.Remove(e.Connection);
-					isConnected = (this.socketConnections.Count > 0);
-				}
+			WriteDebugSocketShutdownMessageLine("Socket 'OnDisconnected' event!");
 
-				if (!isConnected)
-				{
-					SocketState state = GetStateSynchronized();
-					switch (state)
-					{
-						case SocketState.Accepted: SetStateSynchronizedAndNotify(SocketState.Listening); break;
-						case SocketState.Stopping: SetStateSynchronizedAndNotify(SocketState.Reset);     break;
-						default: break; // No state change in all other cases.
-					}
-				}
+			bool isConnected = false;
+			lock (this.socketConnections)
+			{
+				this.socketConnections.Remove(e.Connection);
+				isConnected = (this.socketConnections.Count > 0);
+			}
+
+			if (!isConnected && !IsStoppingAndDisposingSynchronized)
+			{
+				if (GetStateSynchronized() == SocketState.Listening)
+					SetStateSynchronizedAndNotify(SocketState.Listening);
 			}
 		}
 
@@ -789,10 +814,12 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			if (!EventHandlingIsSuppressedWhileStoppingSynchronized)
+			WriteDebugSocketShutdownMessageLine("Socket 'OnException' event!");
+
+			if (!IsStoppingAndDisposingSynchronized)
 			{
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				SuppressEventsAndThenStopAndDisposeSocket();
+				StopAndDisposeSocketAndConnectionsAndThread();
 
 				SetStateSynchronizedAndNotify(SocketState.Error);
 
@@ -828,7 +855,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP/IP Servers"));
+			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for TCP/IP Servers, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -888,11 +915,31 @@ namespace MKY.IO.Serial.Socket
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + "     (" + this.instanceId.ToString("D2", System.Globalization.CultureInfo.InvariantCulture) + ")(" + ToShortEndPointString() + "                  ): " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+				"[" + ToShortEndPointString() + "]",
+				message
+				));
+		}
+
+		[Conditional("DEBUG")]
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void WriteDebugThreadStateMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
+		}
+
+		[Conditional("DEBUG")]
+		[Conditional("DEBUG_SOCKET_SHUTDOWN")]
+		private void WriteDebugSocketShutdownMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
 		}
 
 		#endregion

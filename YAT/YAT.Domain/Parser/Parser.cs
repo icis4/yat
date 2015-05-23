@@ -162,7 +162,7 @@ namespace YAT.Domain.Parser
 			protected void AssertNotDisposed()
 			{
 				if (this.isDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 			}
 
 			#endregion
@@ -1073,7 +1073,7 @@ namespace YAT.Domain.Parser
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -1470,7 +1470,7 @@ namespace YAT.Domain.Parser
 				case Radix.Oct: success = UInt64Ex.TryParseOctal (tokenValue, out value); break;
 				case Radix.Dec: success = ulong.TryParse         (tokenValue, out value); break;
 				case Radix.Hex: success = ulong.TryParse         (tokenValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value); break;
-				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @""""));
+				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
 			}
 			if (success)
 			{
@@ -1487,9 +1487,9 @@ namespace YAT.Domain.Parser
 				case Radix.Oct: readable = "octal value";       break;
 				case Radix.Dec: readable = "decimal value";     break;
 				case Radix.Hex: readable = "hexadecimal value"; break;
-				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @""""));
+				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
 			}
-			formatException = new FormatException(@"Substring """ + token + @""" contains no valid " + readable);
+			formatException = new FormatException(@"Substring """ + token + @""" contains no valid " + readable + ".");
 			result = new byte[] { };
 			return (false);
 		}

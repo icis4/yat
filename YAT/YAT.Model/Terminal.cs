@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -250,6 +251,8 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
+			WriteDebugMessageLine("Creating...");
+
 			this.startArgs = startArgs;
 
 			if (guid != Guid.Empty)
@@ -283,7 +286,7 @@ namespace YAT.Model
 			// Create rates.
 			CreateRates();
 
-			WriteDebugMessageLine("Created");
+			WriteDebugMessageLine("...successfully created.");
 		}
 
 		#region Disposal
@@ -303,7 +306,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing.");
+				WriteDebugMessageLine("Disposing...");
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -329,6 +332,8 @@ namespace YAT.Model
 				this.log = null;
 				this.terminal = null;
 				this.isDisposed = true;
+
+				WriteDebugMessageLine("...successfully disposed.");
 			}
 		}
 
@@ -350,7 +355,7 @@ namespace YAT.Model
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -2117,7 +2122,7 @@ namespace YAT.Model
 				if (p != null)
 					p.ToggleRfr();
 				else
-					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port"));
+					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
 			}
 		}
 
@@ -2133,7 +2138,7 @@ namespace YAT.Model
 				if (p != null)
 					p.ToggleDtr();
 				else
-					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port"));
+					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
 			}
 		}
 
@@ -2160,7 +2165,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
+					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler!"));
 				}
 			}
 		}
@@ -2176,7 +2181,7 @@ namespace YAT.Model
 				if (p != null)
 					p.ToggleOutputBreak();
 				else
-					throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
+					throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
 			}
 		}
 
@@ -2307,7 +2312,7 @@ namespace YAT.Model
 					break;
 
 				default:
-					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation"));
+					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation!"));
 			}
 			textBuilder.Append(":");
 			titleBuilder.Append(" Error!");
@@ -2386,7 +2391,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type"));
+					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type!"));
 				}
 
 				// Copy line commands into recents, include compiled partial commands:
@@ -3364,11 +3369,17 @@ namespace YAT.Model
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + Guid + "' / '" + Caption + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + Guid + "]",
+				message
+				));
 		}
 
 		#endregion

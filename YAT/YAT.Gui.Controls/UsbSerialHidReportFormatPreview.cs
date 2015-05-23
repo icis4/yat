@@ -3,10 +3,10 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/YAT/YAT.Gui.Controls/UsbSerialHidDeviceSettings.cs $
-// $Author: maettu_this $
-// $Date: 2015-02-06 14:33:07 +0100 (Fr, 06 Feb 2015) $
-// $Revision: 680 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // YAT 2.0 Beta 4 Candidate 3 Development Version 1.99.31
 // ------------------------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ namespace YAT.Gui.Controls
 
 			int widthOffset = label_Id1.Width;
 			if (label_Id1.Width != label_Length1.Width)
-				throw (new ArgumentException("Labels must have equal width, but are " + label_Id1.Width + " and " + label_Length1.Width));
+				throw (new ArgumentException("Labels must have equal width, but are " + label_Id1.Width + " and " + label_Length1.Width + "!"));
 
 			this.payload1Text = new Dictionary<int, string>();
 			this.payload1Text.Add(widthOffset * 0, "P1'  P2'  ...........................................................  Pn'");
@@ -294,9 +294,9 @@ namespace YAT.Gui.Controls
 
 			widthOffset = label_Id2.Width;
 			if (label_Id2.Width != label_Length2.Width)
-				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_Length2.Width));
+				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_Length2.Width + "!"));
 			if (label_Id2.Width != label_TerminatingZero.Width)
-				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_TerminatingZero.Width));
+				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_TerminatingZero.Width + "!"));
 
 			this.fillerBytesText = new Dictionary<int, string>();
 			this.fillerBytesText.Add(widthOffset * 0 + label_Payload2.Width, "0  ..................................  0");
@@ -426,5 +426,5 @@ namespace YAT.Gui.Controls
 
 //==================================================================================================
 // End of
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/YAT/YAT.Gui.Controls/UsbSerialHidDeviceSettings.cs $
+// $URL$
 //==================================================================================================

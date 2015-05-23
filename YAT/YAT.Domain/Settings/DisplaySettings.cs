@@ -248,7 +248,7 @@ namespace YAT.Domain.Settings
 				if (this.txMaxLineCount != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1"));
+						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1."));
 
 					this.txMaxLineCount = value;
 					SetChanged();
@@ -266,7 +266,7 @@ namespace YAT.Domain.Settings
 				if (this.rxMaxLineCount != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1"));
+						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1."));
 
 					this.rxMaxLineCount = value;
 					SetChanged();

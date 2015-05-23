@@ -290,7 +290,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.Yes)
 			{
-				throw (new Exception("Unhandled synchronous exception test :: Outer exception", new Exception("Inner exception")));
+				throw (new Exception("Unhandled synchronous exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
 			}
 		}
 
@@ -320,7 +320,7 @@ namespace YAT.Gui.Forms
 		private void timer_ExecuteManualTest2_Tick(object sender, EventArgs e)
 		{
 			timer_ExecuteManualTest2.Stop();
-			throw (new Exception("Unhandled asynchronous synchronized exception test :: Outer exception", new Exception("Inner exception")));
+			throw (new Exception("Unhandled asynchronous synchronized exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
@@ -364,7 +364,7 @@ namespace YAT.Gui.Forms
 		private void timer_ExecuteManualTest3_Timeout(object obj)
 		{
 			timer_ExecuteManualTest3_Dispose();
-			throw (new Exception("Unhandled asynchronous non-synchronized exception test :: Outer exception", new Exception("Inner exception")));
+			throw (new Exception("Unhandled asynchronous non-synchronized exception test :: This is the outer exception.", new Exception("This is the inner exception.")));
 		}
 
 		private void timer_ExecuteManualTest3_Dispose()

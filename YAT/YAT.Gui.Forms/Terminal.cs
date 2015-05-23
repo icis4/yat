@@ -165,6 +165,8 @@ namespace YAT.Gui.Forms
 		/// <summary></summary>
 		public Terminal(Model.Terminal terminal)
 		{
+			WriteDebugMessageLine("Creating...");
+
 			InitializeComponent();
 
 			FixContextMenus();
@@ -189,7 +191,7 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.ForceChangeEvent();
 			ResumeHandlingTerminalSettings();
 
-			WriteDebugMessageLine("Created");
+			WriteDebugMessageLine("...successfully created.");
 		}
 
 		#endregion
@@ -996,7 +998,7 @@ namespace YAT.Gui.Forms
 			if (repositoryType != Domain.RepositoryType.None)
 				ClearMonitor(repositoryType);
 			else
-				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString()));
+				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString() + "!"));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
@@ -2391,7 +2393,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Invalid repository type"));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
 			}
 		}
 
@@ -3362,7 +3364,7 @@ namespace YAT.Gui.Forms
 					}
 					else
 					{
-						throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
+						throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
 					}
 
 					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485);
@@ -3588,17 +3590,23 @@ namespace YAT.Gui.Forms
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			string caption;
+			string guid;
 			if (this.terminal != null)
-				caption = this.terminal.Guid + "' / '" + this.terminal.Caption;
+				guid = this.terminal.Guid.ToString();
 			else
-				caption = "<None>";
+				guid = "<None>";
 
-			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + caption + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + guid + "]",
+				message
+				));
 		}
 
 		#endregion

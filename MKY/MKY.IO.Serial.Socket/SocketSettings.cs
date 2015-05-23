@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -28,6 +33,8 @@ using System.Net;
 using System.Xml.Serialization;
 
 using MKY.Net;
+
+#endregion
 
 namespace MKY.IO.Serial.Socket
 {
@@ -513,7 +520,7 @@ namespace MKY.IO.Serial.Socket
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' does not specify valid socket settings"));
+				throw (new FormatException(@"""" + s + @""" does not specify valid socket settings."));
 		}
 
 		/// <summary>
@@ -569,7 +576,6 @@ namespace MKY.IO.Serial.Socket
 			return (false);
 		}
 
-
 		#region Object Members > Extensions
 		//------------------------------------------------------------------------------------------
 		// Object Members > Extensions
@@ -581,10 +587,10 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (hostType)
 			{
-				case SocketHostType.TcpClient:     return (this.remoteHost + ":" + this.remoteTcpPort);
-				case SocketHostType.TcpServer:     return (this.localTcpPort.ToString(CultureInfo.InvariantCulture));
-				case SocketHostType.TcpAutoSocket: return (this.localTcpPort + " / " + this.remoteHost + ":" + this.remoteTcpPort);
-				case SocketHostType.Udp:           return (this.localUdpPort + " / " + this.remoteHost + ":" + this.remoteUdpPort);
+				case SocketHostType.TcpClient:     return (                                         IPHost.Decorate(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketHostType.TcpServer:     return ("Server:"  + this.localTcpPort.ToString(CultureInfo.InvariantCulture)                               );
+				case SocketHostType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.Decorate(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketHostType.Udp:           return ("Receive:" + this.localUdpPort + " / " + IPHost.Decorate(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                           return (Undefined);
 			}

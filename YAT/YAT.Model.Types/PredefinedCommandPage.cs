@@ -203,7 +203,7 @@ namespace YAT.Model.Types
 			if (other != null)
 				return (string.Compare(this.pageName, other.pageName, StringComparison.CurrentCulture));
 			else
-				throw (new ArgumentException("Object is not a PredefinedCommandPage"));
+				throw (new ArgumentException("Object is not a 'PredefinedCommandPage'!"));
 		}
 
 		#endregion

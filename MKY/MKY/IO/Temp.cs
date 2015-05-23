@@ -162,7 +162,7 @@ namespace MKY.IO
 				}
 
 				if (i >= Max)
-					throw (new OverflowException("Failed to create a temporary file name because there already are " + istr + " files in the directory"));
+					throw (new OverflowException("Failed to create a temporary file name because there already are " + istr + " files in the directory!"));
 			}
 
 			// Optionally output the file path for debugging purposes.

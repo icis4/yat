@@ -487,7 +487,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
 				}
 			}
 		}

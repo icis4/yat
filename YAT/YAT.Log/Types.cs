@@ -279,7 +279,7 @@ namespace YAT.Log
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid file name separator string"));
+				throw (new FormatException(@"""" + s + @""" is no valid file name separator string."));
 		}
 
 		/// <remarks>

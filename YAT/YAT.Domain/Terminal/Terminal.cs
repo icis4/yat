@@ -21,6 +21,16 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Enable debugging of thread state:
+////#define DEBUG_THREAD_STATE
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -88,12 +98,7 @@ namespace YAT.Domain
 		// Static Fields
 		//==========================================================================================
 
-		/// <summary>
-		/// ID to uniquely name the threads of each terminal. Start at 1000 to distinguish this ID
-		/// from the 'real' terminal ID (in Model.Terminal).
-		/// </summary>
-		private static int staticId = 1000;
-
+		private static int staticInstanceCounter;
 		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
@@ -192,8 +197,7 @@ namespace YAT.Domain
 		private const string RxParityErrorString         = "RX PARITY ERROR";
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
-		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 500;
+		private const int ThreadWaitTimeout = 200;
 
 		private const string Undefined = "<Undefined>";
 
@@ -204,6 +208,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
+		private int instanceId;
 		private bool isDisposed;
 
 		private Settings.TerminalSettings terminalSettings;
@@ -280,7 +285,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			this.txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
+			this.instanceId = staticInstanceCounter++;
+
+			this.txRepository = new DisplayRepository(settings.Display.TxMaxLineCount);
 			this.bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
 			this.rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
 
@@ -290,14 +297,14 @@ namespace YAT.Domain
 		////this.eventsSuspendedForReload has been initialized to false.
 
 			CreateAndStartSendThread();
-
-			WriteDebugMessageLine("Created.");
 		}
 
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
-			this.txRepository    = new DisplayRepository(terminal.txRepository);
+			this.instanceId = staticInstanceCounter++;
+
+			this.txRepository = new DisplayRepository(terminal.txRepository);
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
 			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
 
@@ -311,8 +318,6 @@ namespace YAT.Domain
 			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
 
 			CreateAndStartSendThread();
-
-			WriteDebugMessageLine("Created.");
 		}
 
 		#region Disposal
@@ -332,8 +337,6 @@ namespace YAT.Domain
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing.");
-
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -370,7 +373,7 @@ namespace YAT.Domain
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -386,15 +389,24 @@ namespace YAT.Domain
 		{
 			lock (this.sendThreadSyncObj)
 			{
+				WriteDebugThreadStateMessageLine("SendThread() gets created...");
+
 				if (this.sendThread == null)
 				{
-					// Start thread:
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
-					this.sendThread.Name = "Terminal [" + ++staticId + "] Send Thread";
-					this.sendThread.Start();
+					this.sendThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Thread";
+					this.sendThread.Start(); // Offset with 1000 to distinguish this ID from the 'real' terminal ID.
+
+					WriteDebugThreadStateMessageLine("...successfully created.");
 				}
+#if (DEBUG)
+				else
+				{
+					WriteDebugThreadStateMessageLine("...failed as it already exists.");
+				}
+#endif
 			}
 		}
 
@@ -404,28 +416,51 @@ namespace YAT.Domain
 			{
 				if (this.sendThread != null)
 				{
+					WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
+
 					this.sendThreadRunFlag = false;
 
 					// Ensure that send thread has stopped after the stop request:
 					try
 					{
-						int timeoutCounter = 0;
-						while (!this.sendThread.Join(ThreadWaitInterval))
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
 						{
 							this.sendThreadEvent.Set();
-							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-								throw (new TimeoutException("Send thread hasn't properly stopped"));
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								WriteDebugThreadStateMessageLine("...failed! Aborting...");
+								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.sendThread.Abort();
+								break;
+							}
+
+							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
 					{
-						// Ignore thread state exceptions such as "Thread has not been started"
-						// since the thread needs to be shut down anyway.
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThreadEvent.Close();
 					this.sendThread = null;
+
+					WriteDebugThreadStateMessageLine("...successfully terminated.");
 				}
+#if (DEBUG)
+				else
+				{
+					WriteDebugThreadStateMessageLine("...not necessary as it doesn't exist anymore.");
+				}
+#endif
 			}
 		}
 
@@ -716,16 +751,17 @@ namespace YAT.Domain
 		/// </remarks>
 		private void SendThread()
 		{
-			WriteDebugMessageLine("SendThread() has started.");
+			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.sendThreadRunFlag && !IsDisposed)
 			{
 				try
 				{
-					// WaitOne() might wait forever in case the underlying I/O provider crashes,
-					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-					// therefore, only wait for a certain period and then poll the run flag again.
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
 					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
@@ -733,7 +769,7 @@ namespace YAT.Domain
 				{
 					// The mutex should never be abandoned, but in case it nevertheless happens,
 					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
 					break;
 				}
 
@@ -766,7 +802,7 @@ namespace YAT.Domain
 				}
 			}
 
-			WriteDebugMessageLine("SendThread() has terminated.");
+			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -783,7 +819,7 @@ namespace YAT.Domain
 				if (psi != null)
 					ProcessParsableSendItem(psi);
 				else
-					throw (new InvalidOperationException("Invalid send item type " + item.GetType()));
+					throw (new InvalidOperationException("Invalid send item type " + item.GetType() + "."));
 			}
 		}
 
@@ -1066,7 +1102,15 @@ namespace YAT.Domain
 			catch (ObjectDisposedException ex)
 			{
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("ObjectDisposedException while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("'ObjectDisposedException' while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
+				sb.AppendLine();
+				DebugEx.WriteException(GetType(), ex, sb.ToString());
+			}
+			catch (ThreadAbortException ex)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
 				sb.AppendLine();
 				DebugEx.WriteException(GetType(), ex, sb.ToString());
@@ -1227,7 +1271,7 @@ namespace YAT.Domain
 					}
 					break;
 				}
-				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
+				default: throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
 			}
 
 			if (!error)
@@ -1305,7 +1349,7 @@ namespace YAT.Domain
 					else
 						return (b.ToString("X2", CultureInfo.InvariantCulture));
 				}
-				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
+				default: throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
 			}
 		}
 
@@ -1331,7 +1375,7 @@ namespace YAT.Domain
 				case Radix.Hex:    return (true);
 				case Radix.Char:   return (true);
 				case Radix.String: return (false);
-				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
+				default: throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
 			}
 		}
 
@@ -1459,7 +1503,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1476,7 +1520,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .DataCount);
 					case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
 					case RepositoryType.Rx:    return (this.rxRepository   .DataCount);
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1493,7 +1537,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .Count);
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
 					case RepositoryType.Rx:    return (this.rxRepository   .Count);
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1510,7 +1554,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .ToElements());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1527,7 +1571,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1544,7 +1588,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository.   LastLineAuxiliary());
 					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
 					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1561,7 +1605,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1584,7 +1628,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .ToString(indent));
 					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
 					case RepositoryType.Rx:    return (this.rxRepository   .ToString(indent));
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1966,7 +2010,21 @@ namespace YAT.Domain
 		[Conditional("DEBUG")]
 		protected virtual void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + ToShortIOString() + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+				"[" + ToShortIOString() + "]",
+				message
+				));
+		}
+
+		[Conditional("DEBUG")]
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void WriteDebugThreadStateMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
 		}
 
 		#endregion

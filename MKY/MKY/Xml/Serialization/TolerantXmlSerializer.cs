@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
 //==================================================================================================
 // Configuration
 //==================================================================================================
@@ -30,6 +31,8 @@
 // - Comment out for normal operation
 //#define WRITE_DOCUMENTS_TO_FILES
 //#define WRITE_SCHEMAS_TO_FILES
+
+#endregion
 
 #region Using
 //==================================================================================================
@@ -85,7 +88,7 @@ namespace MKY.Xml.Serialization
 			}
 			else if (this.type.IsInterface)
 			{
-				throw (new InvalidOperationException("Interfaces cannot be serialized"));
+				throw (new InvalidOperationException("Interfaces cannot be serialized!"));
 			}
 			else // IsClass
 			{
@@ -99,7 +102,7 @@ namespace MKY.Xml.Serialization
 					if (ci != null)
 						obj = ci.Invoke(new object[] { });
 					else
-						throw (new NotImplementedException("Tolerant serialization of type " + this.type.ToString() + " is not yet implemented"));
+						throw (new NotImplementedException("Tolerant serialization of type " + this.type.ToString() + " is not yet implemented!"));
 				}
 			}
 
@@ -300,7 +303,7 @@ namespace MKY.Xml.Serialization
 					case XPathNodeType.Attribute:
 					{
 						// Attributes are handled by TryToCopyValue().
-						throw (new InvalidOperationException("Programm execution must never get here"));
+						throw (new InvalidOperationException("Programm execution must never get here, please report this bug!"));
 					}
 
 					case XPathNodeType.Root:

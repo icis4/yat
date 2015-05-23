@@ -71,7 +71,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
 				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -102,7 +102,7 @@ namespace MKY.IO.Ports
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid stop bits string"));
+				throw (new FormatException(@"""" + s + @""" is no valid stop bits string."));
 		}
 
 		/// <remarks>
@@ -171,7 +171,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, please report this bug!"));
 		}
 
 		/// <summary></summary>

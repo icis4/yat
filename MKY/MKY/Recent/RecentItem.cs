@@ -191,7 +191,7 @@ namespace MKY.Recent
 			if (other != null)
 				return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
 			else
-				throw (new ArgumentException("Object is not a RecentItem"));
+				throw (new ArgumentException("Object is not a RecentItem!"));
 		}
 
 		#endregion

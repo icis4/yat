@@ -122,7 +122,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid control char radix string"));
+				throw (new FormatException(@"""" + s + @""" is no valid control char radix string."));
 		}
 
 		/// <remarks>

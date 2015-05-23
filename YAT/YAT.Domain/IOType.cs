@@ -147,7 +147,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid I/O type string"));
+				throw (new FormatException(@"""" + s + @""" is no valid I/O type string."));
 		}
 
 		/// <remarks>

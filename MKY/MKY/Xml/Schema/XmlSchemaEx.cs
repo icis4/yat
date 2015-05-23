@@ -79,7 +79,7 @@ namespace MKY.Xml.Schema
 		private static void ValidationCallback(object sender, ValidationEventArgs args)
 		{
 			if (args.Severity == XmlSeverityType.Error)
-				throw (new InvalidOperationException("Validation of the XML schema for a GUID should never have failed"));
+				throw (new InvalidOperationException("Validation of the XML schema for a GUID should never have failed!"));
 		}
 	}
 }

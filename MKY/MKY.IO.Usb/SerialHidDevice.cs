@@ -20,6 +20,16 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Enable debugging of thread state:
+////#define DEBUG_THREAD_STATE
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -29,6 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -80,8 +91,7 @@ namespace MKY.IO.Usb
 
 		private const int ReceiveQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 3000;
+		private const int ThreadWaitTimeout = 200;
 
 		#endregion
 
@@ -161,7 +171,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object"));
+						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object, please report this bug!"));
 
 					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
 					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
@@ -188,7 +198,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object"));
+						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object, please report this bug!"));
 
 					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 					staticDeviceNotificationHandle = IntPtr.Zero;
@@ -694,7 +704,6 @@ namespace MKY.IO.Usb
 			{
 				if (this.receiveThread == null)
 				{
-					// Start receive thread:
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
@@ -710,27 +719,44 @@ namespace MKY.IO.Usb
 			{
 				if (this.receiveThread != null)
 				{
+					WriteDebugThreadStateMessageLine("ReceiveThread() gets stopped...");
+
 					this.receiveThreadRunFlag = false;
 
 					// Ensure that receive thread has stopped after the stop request:
 					try
 					{
-						int timeoutCounter = 0;
-						while (!this.receiveThread.Join(ThreadWaitInterval))
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
 						{
 							this.receiveThreadEvent.Set();
-							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-								throw (new TimeoutException("Receive thread hasn't properly stopped"));
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								WriteDebugThreadStateMessageLine("...failed! Aborting...");
+								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.receiveThread.Abort();
+								break;
+							}
+
+							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
 					{
-						// Ignore thread state exceptions such as "Thread has not been started"
-						// since the thread needs to be shut down anyway.
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThreadEvent.Close();
 					this.receiveThread = null;
+
+					WriteDebugThreadStateMessageLine("...successfully terminated.");
 				}
 			}
 		}
@@ -847,16 +873,17 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private void ReceiveThread()
 		{
-			WriteDebugMessageLine("ReceiveThread() has started.");
+			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.receiveThreadRunFlag && !IsDisposed)
 			{
 				try
 				{
-					// WaitOne() might wait forever in case the underlying I/O provider crashes,
-					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-					// therefore, only wait for a certain period and then poll the run flag again.
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
 					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
@@ -864,7 +891,7 @@ namespace MKY.IO.Usb
 				{
 					// The mutex should never be abandoned, but in case it nevertheless happens,
 					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()");
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
 					break;
 				}
 
@@ -883,7 +910,7 @@ namespace MKY.IO.Usb
 				}
 			}
 
-			WriteDebugMessageLine("ReceiveThread() has terminated.");
+			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -1058,11 +1085,24 @@ namespace MKY.IO.Usb
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + " '" + ToString() + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + ToString() + "]",
+				message
+				));
+		}
+
+		[Conditional("DEBUG")]
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void WriteDebugThreadStateMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
 		}
 
 		#endregion
