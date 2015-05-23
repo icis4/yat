@@ -21,3 +21,6 @@ Testing
   > WinPcap        4.1.3
   > VSPE           0.938.4.846
     (Alternative: com0com + hub4com)
+
+----------------
+2015-02-06 / MKY
