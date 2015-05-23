@@ -115,9 +115,9 @@ namespace MKY.Recent
 				List<RecentItem<T>> duplicates = new List<RecentItem<T>>();
 
 				// Traverse the collection and search for duplicates:
-				for (int outer = 0; outer < (Count-1); outer++)
+				for (int outer = 0; outer < (Count - 1); outer++)
 				{
-					for (int inner = (outer+1); inner < Count; inner++)
+					for (int inner = (outer + 1); inner < Count; inner++)
 					{
 						if (this[inner].Item.Equals(this[outer].Item))
 						{

@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 #endregion
@@ -59,7 +60,10 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// It is a requirement for most systems to fill each report to the advertised byte length.
 		/// Also, Windows HID.dll requires that outgoing reports are always filled!
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A DLL file is just '.dll'...")]
 		public const bool FillLastReportDefault = true;
 
 		#endregion

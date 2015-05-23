@@ -1241,6 +1241,7 @@ namespace YAT.Gui.Controls
 		/// an update and then adjust the rate on the duration.Could be tried if
 		/// the calculation applied now doesn't work well.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'inbetween'?")]
 		private void CalculateUpdateRate()
 		{
 			int maxRate = Math.Max(this.txByteRateStatus, this.rxByteRateStatus);

@@ -156,6 +156,7 @@ namespace MKY.IO.Serial
 		/// <c>true</c> if the underlying I/O instance is transmissive, i.e. ready to send and
 		/// receive data as of the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'transmissive'?")]
 		bool IsTransmissive { get; }
 
 		/// <summary>
@@ -182,6 +183,7 @@ namespace MKY.IO.Serial
 		/// For UDP/IP sockets, the socket gets opened.
 		/// For Ser/HID devices, the device gets created.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 		bool Start();
 
 		/// <summary>
@@ -193,6 +195,7 @@ namespace MKY.IO.Serial
 		/// For UDP/IP sockets, the socket gets closed.
 		/// For Ser/HID devices, the device gets closed.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		void Stop();
 

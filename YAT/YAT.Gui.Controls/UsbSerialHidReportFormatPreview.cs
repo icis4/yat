@@ -106,7 +106,7 @@ namespace YAT.Gui.Controls
 			InitializeComponent();
 
 			InitializeControls();
-			// SetControls() is initially called in the 'Paint' event handler.
+			//// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -288,9 +288,9 @@ namespace YAT.Gui.Controls
 				throw (new ArgumentException("Labels must have equal width, but are " + label_Id1.Width + " and " + label_Length1.Width + "!"));
 
 			this.payload1Text = new Dictionary<int, string>();
-			this.payload1Text.Add(widthOffset * 0, "P1'  P2'  ...........................................................  Pn'");
-			this.payload1Text.Add(widthOffset * 1, "P1'  P2'  ...................................................  Pn'");
-			this.payload1Text.Add(widthOffset * 2, "P1'  P2'  ...........................................  Pn'");
+			this.payload1Text.Add((widthOffset * 0), "P1'  P2'  ...........................................................  Pn'");
+			this.payload1Text.Add((widthOffset * 1), "P1'  P2'  ...................................................  Pn'");
+			this.payload1Text.Add((widthOffset * 2), "P1'  P2'  ...........................................  Pn'");
 
 			widthOffset = label_Id2.Width;
 			if (label_Id2.Width != label_Length2.Width)
@@ -299,10 +299,10 @@ namespace YAT.Gui.Controls
 				throw (new ArgumentException("Labels must have equal width, but are " + label_Id2.Width + " and " + label_TerminatingZero.Width + "!"));
 
 			this.fillerBytesText = new Dictionary<int, string>();
-			this.fillerBytesText.Add(widthOffset * 0 + label_Payload2.Width, "0  ..................................  0");
-			this.fillerBytesText.Add(widthOffset * 1 + label_Payload2.Width, "0  ..........................  0");
-			this.fillerBytesText.Add(widthOffset * 2 + label_Payload2.Width, "0  ..................  0");
-			this.fillerBytesText.Add(widthOffset * 3 + label_Payload2.Width, "0  ..........  0");
+			this.fillerBytesText.Add((widthOffset * 0) + label_Payload2.Width, "0  ..................................  0");
+			this.fillerBytesText.Add((widthOffset * 1) + label_Payload2.Width, "0  ..........................  0");
+			this.fillerBytesText.Add((widthOffset * 2) + label_Payload2.Width, "0  ..................  0");
+			this.fillerBytesText.Add((widthOffset * 3) + label_Payload2.Width, "0  ..........  0");
 		}
 
 		private void SetControls()

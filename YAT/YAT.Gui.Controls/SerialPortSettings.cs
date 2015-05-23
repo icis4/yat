@@ -61,7 +61,7 @@ namespace YAT.Gui.Controls
 		private const System.IO.Ports.Parity                     ParityDefault      = System.IO.Ports.Parity.None;
 		private const System.IO.Ports.StopBits                   StopBitsDefault    = System.IO.Ports.StopBits.One;
 		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialPort.SerialFlowControl.None;
-		private static MKY.IO.Serial.AutoRetry                   AutoReopenDefault  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+		private static readonly MKY.IO.Serial.AutoRetry          AutoReopenDefault  = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -129,7 +129,7 @@ namespace YAT.Gui.Controls
 			InitializeComponent();
 
 			InitializeControls();
-			// SetControls() is initially called in the 'Paint' event handler.
+			//// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

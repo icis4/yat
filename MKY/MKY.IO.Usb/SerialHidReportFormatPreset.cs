@@ -96,6 +96,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// The TI HID API identifier is specified to 0x3F according to http://www.ti.com/lit/an/slaa453/slaa453.pdf.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may spell 'ti' like this, and may contain 'slaa'...")]
 		public const byte TI_ID = 0x3F;
 
 		#endregion
@@ -107,8 +108,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected SerialHidReportFormatPresetEx(SerialHidReportFormatPreset SerialHidReportFormatPreset)
-			: base(SerialHidReportFormatPreset)
+		protected SerialHidReportFormatPresetEx(SerialHidReportFormatPreset preset)
+			: base(preset)
 		{
 		}
 

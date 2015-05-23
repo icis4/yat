@@ -1519,14 +1519,19 @@ namespace YAT.Model
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"",
-				"[" + Guid + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"",
+					"[" + Guid + "]",
+					message
+				)
+			);
 		}
 
 		#endregion

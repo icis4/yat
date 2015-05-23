@@ -36,6 +36,7 @@ namespace MKY
 	/// 
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Int32 just *is* 'int'...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class Int32Ex
 	{

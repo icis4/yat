@@ -22,12 +22,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB Ser/HID device infos.
+	/// List containing USB Ser/HID device information.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 	[Serializable]
 	public class SerialHidDeviceCollection : HidDeviceCollection
 	{
@@ -45,6 +47,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fills list with the available USB Ser/HID devices.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 		public override void FillWithAvailableDevices()
 		{
 			Clear();

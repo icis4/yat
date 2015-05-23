@@ -427,10 +427,10 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				const int repeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
+				const int RepeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
 
 				int repeat;
-				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 2) || (repeat == repeatInfinite)))
+				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 2) || (repeat == RepeatInfinite)))
 				{
 					this.settingsInEdit.Terminal.Send.DefaultLineRepeat = repeat;
 				}
@@ -439,7 +439,7 @@ namespace YAT.Gui.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Repeat must be at least 2 times! Or set to " + repeatInfinite + " for infinite repeating.",
+						"Repeat must be at least 2 times! Or set to " + RepeatInfinite + " for infinite repeating.",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -578,7 +578,7 @@ namespace YAT.Gui.Forms
 			checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
-			// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
+			//// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
 			label_DefaultDelay.Enabled          = !disableKeywords;
 			label_DefaultDelayUnit.Enabled      = !disableKeywords;
 			textBox_DefaultDelay.Enabled        = !disableKeywords;

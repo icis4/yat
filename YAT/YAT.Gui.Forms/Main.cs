@@ -1495,6 +1495,7 @@ namespace YAT.Gui.Forms
 		/// This is for symmetricity with 'Save Workspace' and 'Save Workspace As...'. However, it
 		/// is also possible to select a workspace file using the 'normal' 'File Open' method.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'symmetricity'?")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowOpenWorkspaceFromFileDialog()
 		{
@@ -1881,14 +1882,19 @@ namespace YAT.Gui.Forms
 			else
 				guid = "<None>";
 
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"",
-				"[" + guid + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"",
+					"[" + guid + "]",
+					message
+				)
+			);
 		}
 
 		#endregion

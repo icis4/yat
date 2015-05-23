@@ -26,7 +26,7 @@ using System.Collections.Generic;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB device infos.
+	/// List containing USB device information.
 	/// </summary>
 	[Serializable]
 	public class DeviceCollection : List<DeviceInfo>

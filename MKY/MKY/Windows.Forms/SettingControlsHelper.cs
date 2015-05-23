@@ -32,6 +32,7 @@ namespace MKY.Windows.Forms
 	/// <remarks>
 	/// Struct instead of class to allow same declaration as if this was just a simple bool.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
 	public struct SettingControlsHelper
 	{
 		private int count;

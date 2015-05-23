@@ -134,6 +134,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		public static string Decorate(IPAddress a)
 		{
 			switch (a.AddressFamily)
@@ -146,6 +147,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		public static string Decorate(string s)
 		{
 			IPHost host;

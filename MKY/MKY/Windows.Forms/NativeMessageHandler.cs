@@ -47,14 +47,14 @@ namespace MKY.Windows.Forms
 	public delegate void NativeMessageCallback(ref Message m);
 
 	/// <summary>
-	/// Utility class that simlifies processing native messages. The class acts as an interface
+	/// Utility class that simplifies processing native messages. The class acts as an interface
 	/// between consumers of native messages and the main form. The main form is needed to provide
 	/// the window handle. Without this handle, consumers cannot properly register callbacks.
 	/// </summary>
 	/// <remarks>
 	/// This class helps to reduce the coupling among the main form and other parts of the system.
 	/// The main form and the consumer need to access this handler, but they don't need to know of
-	/// each other. Thus, this class implements a simple form of the meditor pattern.
+	/// each other. Thus, this class implements a simple form of the mediator pattern.
 	/// </remarks>
 	public class NativeMessageHandler : NativeWindow
 	{
@@ -132,6 +132,7 @@ namespace MKY.Windows.Forms
 		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
 		/// free'd but rather this handler gets closed.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Just relax in the 'free'd' world...")]
 		protected void Register(Form mainForm)
 		{
 			if (mainForm.IsHandleCreated)
@@ -148,6 +149,7 @@ namespace MKY.Windows.Forms
 		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
 		/// free'd but rather this handler gets closed.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Just relax in the 'free'd' world...")]
 		protected void Unregister()
 		{
 			staticMessageHandlers.Remove(this);
@@ -166,6 +168,7 @@ namespace MKY.Windows.Forms
 		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
 		/// free'd but rather this handler gets closed.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Just relax in the 'free'd' world...")]
 		protected void Close()
 		{
 			Unregister();

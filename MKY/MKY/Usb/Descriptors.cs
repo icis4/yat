@@ -62,7 +62,7 @@ namespace MKY.Usb
 		//==========================================================================================
 
 		/// <summary>
-		/// Retrieves available culture infos from language string.
+		/// Retrieves available culture information from language string.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The parameter shall clearly state what it represents.")]
 		public static CultureInfo[] GetCultureInfoFromLanguageString(string languageString)

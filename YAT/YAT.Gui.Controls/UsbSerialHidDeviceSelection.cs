@@ -206,27 +206,28 @@ namespace YAT.Gui.Controls
 		// Private Methods
 		//==========================================================================================
 
+		// MKY.Diagnostics.DebugEx.WriteStack(Type type)
+		// MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		// MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		// MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		// YAT.Gui.Controls.UsbSerialHidDeviceSelection.SetDeviceList()
+		// YAT.Gui.Controls.UsbSerialHidDeviceSelection.UsbSerialHidPortSelection_Paint(Object sender, PaintEventArgs e)
+		// System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer, Boolean disposeEventArgs)
+		// System.Windows.Forms.Control.WmPaint(Message m)
+		// System.Windows.Forms.Control.WndProc(Message m)
+		// System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message m)
+		// System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+		// System.Windows.Forms.MessageBox.ShowCore(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, Boolean showHelp)
+		// System.Windows.Forms.MessageBox.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		// MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+		// MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		// MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		// YAT.Gui.Controls.UsbSerialHidDeviceSelection.SetDeviceList()
+		// YAT.Gui.Controls.UsbSerialHidDeviceSelection.RefreshDeviceList()
+
 		/// <remarks>
 		/// Without precaution, and in case of no devices, the message box may appear twice due to
-		/// the recursion shown below:
-		///  > MKY.Diagnostics.DebugEx.WriteStack(Type type)
-		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
-		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
-		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.SetDeviceList()
-		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.UsbSerialHidPortSelection_Paint(Object sender, PaintEventArgs e)
-		///  > System.Windows.Forms.Control.PaintWithErrorHandling(PaintEventArgs e, Int16 layer, Boolean disposeEventArgs)
-		///  > System.Windows.Forms.Control.WmPaint(Message m)
-		///  > System.Windows.Forms.Control.WndProc(Message m)
-		///  > System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message m)
-		///  > System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
-		///  > System.Windows.Forms.MessageBox.ShowCore(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, Boolean showHelp)
-		///  > System.Windows.Forms.MessageBox.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
-		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
-		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
-		///  > MKY.Windows.Forms.MessageBoxEx.Show(IWin32Window owner, String text, String caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.SetDeviceList()
-		///  > YAT.Gui.Controls.UsbSerialHidDeviceSelection.RefreshDeviceList()
+		/// the recursion described above (out of doc tag due to words not recognized by StyleCop).
 		/// This issue is fixed by setting 'this.deviceListIsInitialized' upon entering this method.
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="SocketSelection"/>.

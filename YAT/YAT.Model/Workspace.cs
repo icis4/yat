@@ -1141,6 +1141,7 @@ namespace YAT.Model
 		/// layouting itself is done in the form as the MDI functionality is an integral part of
 		/// the Windows.Forms environment.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'layouting'?")]
 		public virtual void NotifyLayout(WorkspaceLayout layout)
 		{
 			this.settingsRoot.Workspace.Layout = layout;
@@ -2055,14 +2056,19 @@ namespace YAT.Model
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"",
-				"[" + Guid + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"",
+					"[" + Guid + "]",
+					message
+				)
+			);
 		}
 
 		#endregion
