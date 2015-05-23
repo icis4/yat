@@ -153,7 +153,7 @@ namespace YAT.Log
 			protected void AssertNotDisposed()
 			{
 				if (this.isDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 			}
 
 			#endregion
@@ -238,7 +238,7 @@ namespace YAT.Log
 						this.fileStream = File.Open(this.file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 				}
 				else
-					throw (new ArgumentException("Write mode not supported"));
+					throw (new ArgumentException("Write mode not supported!"));
 
 				OpenWriter(this.fileStream);
 				this.isStarted = true;
@@ -553,7 +553,7 @@ namespace YAT.Log
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

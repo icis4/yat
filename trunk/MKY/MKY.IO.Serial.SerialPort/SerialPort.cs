@@ -21,6 +21,16 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Enable debugging of thread state:
+////#define DEBUG_THREAD_STATE
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -30,6 +40,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 
 using MKY.Contracts;
@@ -156,9 +167,7 @@ namespace MKY.IO.Serial.SerialPort
 		private const int SendQueueInitialCapacity = 4096;
 		private const int ReceiveQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 3000;
-
+		private const int ThreadWaitTimeout = 200;
 		private const int AliveInterval = 500;
 
 		private const string Undefined = "<Undefined>";
@@ -340,7 +349,7 @@ namespace MKY.IO.Serial.SerialPort
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -370,7 +379,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case State.Reset:
 					case State.Error:
@@ -392,7 +401,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case State.Closed:
 					case State.Opened:
@@ -686,7 +695,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Start() requested but state is " + GetStateSynchronized() + ".");
 			}
 
 			return (true); // Return 'true' in any case since port is open in the end.
@@ -704,20 +713,20 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Stop() requested but state is " + GetStateSynchronized() + ".");
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void Send(byte data)
+		protected virtual bool Send(byte data)
 		{
 			// AssertNotDisposed() is called by 'Send()' below.
 
-			Send(new byte[] { data });
+			return (Send(new byte[] { data }));
 		}
 
 		/// <summary></summary>
-		public virtual void Send(byte[] data)
+		public virtual bool Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
@@ -777,6 +786,12 @@ namespace MKY.IO.Serial.SerialPort
 
 				// Signal send thread:
 				this.sendThreadEvent.Set();
+
+				return (true);
+			}
+			else
+			{
+				return (false);
 			}
 		}
 
@@ -798,7 +813,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
 
-			WriteDebugMessageLine("SendThread() has started.");
+			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// If access to port throws exception, port has been shut down, e.g. USB to serial converter
 			// was disconnected.
@@ -809,9 +824,10 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					try
 					{
-						// WaitOne() might wait forever in case the underlying I/O provider crashes,
-						// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-						// therefore, only wait for a certain period and then poll the run flag again.
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
 						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 							continue;
 					}
@@ -819,7 +835,7 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						// The mutex should never be abandoned, but in case it nevertheless happens,
 						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
 						break;
 					}
 
@@ -904,7 +920,7 @@ namespace MKY.IO.Serial.SerialPort
 									// This try-catch works around YAT issue #255 "Manual software
 									// flow control may lead to data loss in case of too long XOff"
 									if (this.settings.Communication.FlowControlUsesXOnXOff)
-										DebugEx.WriteException(GetType(), ex, "SendThread() has provoked a timeout while writing to the port, ignoring the issue since it got caused due to XOff");
+										DebugEx.WriteException(GetType(), ex, "SendThread() has provoked a timeout while writing to the port, ignoring the issue since it got caused due to XOff.");
 									else
 										throw; // Re-throw!
 								}
@@ -940,11 +956,11 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port");
+				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port.");
 				RestartOrResetPortAndThreads();
 			}
 
-			WriteDebugMessageLine("SendThread() has terminated.");
+			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -1075,14 +1091,14 @@ namespace MKY.IO.Serial.SerialPort
 		private void SetStateSynchronizedAndNotify(State state)
 		{
 #if (DEBUG)
-			State oldState = this.state;
+			State oldState = GetStateSynchronized();
 #endif
 			this.stateLock.EnterWriteLock();
 			this.state = state;
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ".");
 			else
 				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
@@ -1263,7 +1279,6 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (this.sendThread == null)
 				{
-					// Start send thread:
 					this.sendThreadRunFlag = true;
 					this.sendThreadEvent = new AutoResetEvent(false);
 					this.sendThread = new Thread(new ThreadStart(SendThread));
@@ -1276,7 +1291,6 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (this.receiveThread == null)
 				{
-					// Start receive thread:
 					this.receiveThreadRunFlag = true;
 					this.receiveThreadEvent = new AutoResetEvent(false);
 					this.receiveThread = new Thread(new ThreadStart(ReceiveThread));
@@ -1299,25 +1313,42 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (this.sendThread != null)
 				{
+					WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
+
 					// Ensure that send thread has stopped after the stop request:
 					try
 					{
-						int timeoutCounter = 0;
-						while (!this.sendThread.Join(ThreadWaitInterval))
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
 						{
 							this.sendThreadEvent.Set();
-							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-								throw (new TimeoutException("Send thread hasn't properly stopped"));
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								WriteDebugThreadStateMessageLine("...failed! Aborting...");
+								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.sendThread.Abort();
+								break;
+							}
+
+							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
 					{
-						// Ignore thread state exceptions such as "Thread has not been started"
-						// since the thread needs to be shut down anyway.
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThreadEvent.Close();
 					this.sendThread = null;
+
+					WriteDebugThreadStateMessageLine("...successfully terminated.");
 				}
 			}
 
@@ -1325,25 +1356,42 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (this.receiveThread != null)
 				{
+					WriteDebugThreadStateMessageLine("ReceiveThread() gets stopped...");
+
 					// Ensure that receive thread has stopped after the stop request:
 					try
 					{
-						int timeoutCounter = 0;
-						while (!this.receiveThread.Join(ThreadWaitInterval))
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
 						{
 							this.receiveThreadEvent.Set();
-							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-								throw (new TimeoutException("Receive thread hasn't properly stopped"));
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								WriteDebugThreadStateMessageLine("...failed! Aborting...");
+								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.receiveThread.Abort();
+								break;
+							}
+
+							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
 					{
-						// Ignore thread state exceptions such as "Thread has not been started"
-						// since the thread needs to be shut down anyway.
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThreadEvent.Close();
 					this.receiveThread = null;
+
+					WriteDebugThreadStateMessageLine("...successfully terminated.");
 				}
 			}
 		}
@@ -1426,7 +1474,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port");
+				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port.");
 				RestartOrResetPortAndThreads();
 			}
 		}
@@ -1447,16 +1495,17 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		private void ReceiveThread()
 		{
-			WriteDebugMessageLine("ReceiveThread() has started.");
+			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.receiveThreadRunFlag && !IsDisposed)
 			{
 				try
 				{
-					// WaitOne() might wait forever in case the underlying I/O provider crashes,
-					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-					// therefore, only wait for a certain period and then poll the run flag again.
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
 					if (!this.receiveThreadEvent.WaitOne(staticRandom.Next(50, 200)))
 						continue;
 				}
@@ -1464,7 +1513,7 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					// The mutex should never be abandoned, but in case it nevertheless happens,
 					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()");
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in ReceiveThread()!");
 					break;
 				}
 
@@ -1499,7 +1548,7 @@ namespace MKY.IO.Serial.SerialPort
 				}
 			}
 
-			WriteDebugMessageLine("ReceiveThread() has terminated.");
+			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
 		}
 
 		// Additional information to the 'DataReceived' event
@@ -1578,7 +1627,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "PinChangedAsync() has detected shutdown of port");
+				DebugEx.WriteException(GetType(), ex, "PinChangedAsync() has detected shutdown of port.");
 				RestartOrResetPortAndThreads();
 			}
 		}
@@ -1805,11 +1854,24 @@ namespace MKY.IO.Serial.SerialPort
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + ToShortPortString() + "]",
+				message
+				));
+		}
+
+		[Conditional("DEBUG")]
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void WriteDebugThreadStateMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
 		}
 
 		#endregion

@@ -71,7 +71,7 @@ namespace MKY.Net
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("remoteHost", (IPHostType)ipHost, "Unknown IP host type"));
+						throw (new ArgumentOutOfRangeException("remoteHost", (IPHostType)ipHost, "Unknown IP host type!"));
 					}
 				}
 			}
@@ -115,7 +115,7 @@ namespace MKY.Net
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("localInterface", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
+						throw (new ArgumentOutOfRangeException("localInterface", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type!"));
 					}
 				}
 			}

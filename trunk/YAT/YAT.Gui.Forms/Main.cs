@@ -34,6 +34,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -144,6 +145,8 @@ namespace YAT.Gui.Forms
 		/// <summary></summary>
 		public Main(Model.Main main)
 		{
+			WriteDebugMessageLine("Creating...");
+
 			InitializeComponent();
 
 			InitializeControls();
@@ -165,7 +168,7 @@ namespace YAT.Gui.Forms
 
 			SetControls();
 
-			WriteDebugMessageLine("Created");
+			WriteDebugMessageLine("...successfully created.");
 		}
 
 		#endregion
@@ -1462,7 +1465,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					throw (new InvalidOperationException("Programm execution must never get here"));
+					throw (new InvalidOperationException("Program execution should never get here, please report this bug!"));
 				}
 			}
 			else
@@ -1593,7 +1596,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new InvalidOperationException("Invalid workspace layout"));
+					throw (new InvalidOperationException("Program execution should never get here, " + layout + " is an invalid workspace layout!"));
 			}
 		}
 
@@ -1869,17 +1872,23 @@ namespace YAT.Gui.Forms
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			string caption;
+			string guid;
 			if (this.main != null)
-				caption = this.main.Guid.ToString();
+				guid = this.main.Guid.ToString();
 			else
-				caption = "<None>";
+				guid = "<None>";
 
-			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + caption + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + guid + "]",
+				message
+				));
 		}
 
 		#endregion

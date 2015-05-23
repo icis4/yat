@@ -177,7 +177,10 @@ namespace MKY.IO.Serial
 		/// Starts the I/O provider.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, the port is opened.
+		/// For serial ports, the port gets opened.
+		/// For TCP/IP sockets, the socket gets created and starts connecting/listening.
+		/// For UDP/IP sockets, the socket gets opened.
+		/// For Ser/HID devices, the device gets created.
 		/// </remarks>
 		bool Start();
 
@@ -185,7 +188,10 @@ namespace MKY.IO.Serial
 		/// Stops the I/O provider.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, the port is closed.
+		/// For serial ports, the port gets closed.
+		/// For TCP/IP sockets, the socket gets closed.
+		/// For UDP/IP sockets, the socket gets closed.
+		/// For Ser/HID devices, the device gets closed.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		void Stop();
@@ -196,7 +202,10 @@ namespace MKY.IO.Serial
 		/// <param name="data">
 		/// An array of type System.Byte that contains the data to be sent.
 		/// </param>
-		void Send(byte[] data);
+		/// <returns>
+		/// <c>true</c> if data has successfully been sent; otherwise, <c>false</c>.
+		/// </returns>
+		bool Send(byte[] data);
 
 		#endregion
 	}

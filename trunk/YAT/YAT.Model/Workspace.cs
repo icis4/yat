@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -146,6 +147,8 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Workspace(WorkspaceStartArgs startArgs, DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
+			WriteDebugMessageLine("Creating...");
+
 			this.startArgs = startArgs;
 
 			if (guid != Guid.Empty)
@@ -159,7 +162,7 @@ namespace YAT.Model
 			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
 
-			WriteDebugMessageLine("Created");
+			WriteDebugMessageLine("...successfully created.");
 		}
 
 		#region Disposal
@@ -179,7 +182,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing.");
+				WriteDebugMessageLine("Disposing...");
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -208,6 +211,8 @@ namespace YAT.Model
 				// Set state to disposed:
 				this.terminals = null;
 				this.isDisposed = true;
+
+				WriteDebugMessageLine("...successfully disposed.");
 			}
 		}
 
@@ -229,7 +234,7 @@ namespace YAT.Model
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -1639,7 +1644,7 @@ namespace YAT.Model
 			}
 
 			// If both fail, no good! It means that there are more than 2'000'000'000 terminals ;-)
-			throw (new OverflowException("Constant index of terminals exceeded"));
+			throw (new OverflowException("Constant index of terminals exceeded!"));
 		}
 
 		private void RemoveFromFixedIndices(Terminal terminal)
@@ -1664,7 +1669,7 @@ namespace YAT.Model
 				if (kvp.Value == terminal)
 					return (kvp.Key);
 			}
-			throw (new ArgumentOutOfRangeException("terminal", terminal, "Terminal not found in index table"));
+			throw (new ArgumentOutOfRangeException("terminal", terminal, "Terminal not found in index table!"));
 		}
 
 		/// <summary>
@@ -2047,11 +2052,17 @@ namespace YAT.Model
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-38}", GetType()) + " '" + Guid + "': " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"",
+				"[" + Guid + "]",
+				message
+				));
 		}
 
 		#endregion

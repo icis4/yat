@@ -333,7 +333,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         }
                         catch (NullReferenceException ex)
                         {
-                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
                         }
 
                         // ----- \remind  END  -----
@@ -1782,7 +1782,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   }
                   catch (NullReferenceException ex)
                   {
-                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
                   }
                   finally
                   {
@@ -1791,22 +1791,22 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                           if (FSocketConnections.Count <= 0)
                               FWaitConnectionsDisposing.Set();
                           else
-                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes.");
                       }
                       catch (NullReferenceException ex)
                       {
-                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
                       }
                       catch (ObjectDisposedException ex)
                       {
-                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
                       }
                       finally
                       {
                           if (FSocketConnectionsSync != null)
                               FSocketConnectionsSync.ExitWriteLock();
                           else
-                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes.");
                       }
 
                   }
@@ -1910,7 +1910,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               }
               catch (Exception ex)
               {
-                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
+                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
               }
 
               // ----- \remind  END  -----

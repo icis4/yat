@@ -20,6 +20,16 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Enable debugging of thread state:
+#define DEBUG_THREAD_STATE
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -30,10 +40,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Net;
 
 #endregion
 
@@ -77,18 +89,7 @@ namespace MKY.IO.Serial.Socket
 
 		private const int SendQueueInitialCapacity = 4096;
 
-		private const int ThreadWaitInterval = 1;
-		private const int ThreadWaitTimeout = 3000;
-
-		#endregion
-
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private const int ThreadWaitTimeout = 200;
 
 		#endregion
 
@@ -155,8 +156,14 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
+			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort)
 		{
-			this.instanceId = staticInstanceCounter++;
+		}
+
+		/// <summary></summary>
+		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
+		{
+			this.instanceId = instanceId;
 
 			this.remoteIPAddress = remoteIPAddress;
 			this.remotePort = remotePort;
@@ -180,6 +187,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
@@ -190,7 +199,7 @@ namespace MKY.IO.Serial.Socket
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				WriteDebugMessageLine("Disposed.");
+				WriteDebugMessageLine("...successfully disposed.");
 			}
 		}
 
@@ -212,7 +221,7 @@ namespace MKY.IO.Serial.Socket
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -264,7 +273,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Closed:
 					case SocketState.Error:
@@ -286,7 +295,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Opening:
 					case SocketState.Opened:
@@ -308,7 +317,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Opened:
 					{
@@ -365,9 +374,19 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Start() requested but state is " + GetStateSynchronized() + ".");
 				return (false);
 			}
+		}
+
+		private void StartSocket()
+		{
+			SetStateSynchronizedAndNotify(SocketState.Opening);
+			CreateThreadAndSocket();
+			SetStateSynchronizedAndNotify(SocketState.Opened);
+
+			// Immediately begin receiving data.
+			BeginReceive();
 		}
 
 		/// <summary></summary>
@@ -383,12 +402,19 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
+				WriteDebugMessageLine("Stop() requested but state is " + GetStateSynchronized() + ".");
 			}
 		}
 
+		private void StopSocket()
+		{
+			SetStateSynchronizedAndNotify(SocketState.Closing);
+			DisposeSocketAndThread();
+			SetStateSynchronizedAndNotify(SocketState.Closed);
+		}
+
 		/// <summary></summary>
-		public virtual void Send(byte[] data)
+		public virtual bool Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
@@ -402,6 +428,12 @@ namespace MKY.IO.Serial.Socket
 
 				// Signal send thread:
 				this.sendThreadEvent.Set();
+
+				return (true);
+			}
+			else
+			{
+				return (false);
 			}
 		}
 
@@ -419,24 +451,25 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		private void SendThread()
 		{
-			WriteDebugMessageLine("SendThread() has started.");
+			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
 			while (this.sendThreadRunFlag && !IsDisposed)
 			{
 				try
 				{
-					// WaitOne() might wait forever in case the underlying I/O provider crashes,
-					// or if the overlying client isn't able or forgets to call Stop() or Dispose(),
-					// therefore, only wait for a certain period and then poll the run flag again.
-					if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
+					if (!this.sendThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
 						continue;
 				}
 				catch (AbandonedMutexException ex)
 				{
 					// The mutex should never be abandoned, but in case it nevertheless happens,
 					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()");
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in SendThread()!");
 					break;
 				}
 
@@ -463,7 +496,7 @@ namespace MKY.IO.Serial.Socket
 				}
 			}
 
-			WriteDebugMessageLine("SendThread() has terminated.");
+			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
 
 		#endregion
@@ -487,14 +520,14 @@ namespace MKY.IO.Serial.Socket
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = this.state;
+			SocketState oldState = GetStateSynchronized();
 #endif
 			this.stateLock.EnterWriteLock();
 			this.state = state;
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ".");
 			else
 				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
@@ -507,16 +540,6 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 		// Socket Methods
 		//==========================================================================================
-
-		private void StartSocket()
-		{
-			SetStateSynchronizedAndNotify(SocketState.Opening);
-			CreateThreadAndSocket();
-			SetStateSynchronizedAndNotify(SocketState.Opened);
-
-			// Immediately begin receiving data.
-			BeginReceive();
-		}
 
 		private void CreateThreadAndSocket()
 		{
@@ -542,13 +565,6 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		private void StopSocket()
-		{
-			SetStateSynchronizedAndNotify(SocketState.Closing);
-			DisposeSocketAndThread();
-			SetStateSynchronizedAndNotify(SocketState.Closed);
-		}
-
 		private void DisposeSocketAndThread()
 		{
 			// Close and dispose socket:
@@ -566,6 +582,8 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.sendThread != null)
 				{
+					WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
+
 					// Stop the thread. Must be done AFTER the socket got closed to ensure that
 					// the last socket callbacks can still be properly processed.
 					this.sendThreadRunFlag = false;
@@ -573,30 +591,39 @@ namespace MKY.IO.Serial.Socket
 					// Ensure that send thread has stopped after the stop request:
 					try
 					{
-						int timeoutCounter = 0;
-						while (!this.sendThread.Join(ThreadWaitInterval))
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendThread.Join(interval = SocketBase.Random.Next(5, 20)))
 						{
 							this.sendThreadEvent.Set();
-							if (++timeoutCounter >= (ThreadWaitTimeout / ThreadWaitInterval))
-								throw (new TimeoutException("Send thread hasn't properly stopped"));
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								WriteDebugThreadStateMessageLine("...failed! Aborting...");
+								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								this.sendThread.Abort();
+								break;
+							}
+
+							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
 					{
-						// Ignore thread state exceptions such as "Thread has not been started"
-						// since the thread needs to be shut down anyway.
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThreadEvent.Close();
 					this.sendThread = null;
+
+					WriteDebugThreadStateMessageLine("...successfully terminated.");
 				}
 			}
-		}
-
-		private void SocketError()
-		{
-			DisposeSocketAndThread();
-			SetStateSynchronizedAndNotify(SocketState.Error);
 		}
 
 		#endregion
@@ -622,7 +649,7 @@ namespace MKY.IO.Serial.Socket
 			System.Net.Sockets.UdpClient socket = state.Socket;
 
 			// Ensure that async receive is discarded after close/dispose.
-			if (!isDisposed && (socket != null) && (this.state == SocketState.Opened))
+			if (!isDisposed && (socket != null) && (GetStateSynchronized() == SocketState.Opened))
 			{
 				byte[] data;
 				try
@@ -650,6 +677,12 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		private void SocketError()
+		{
+			DisposeSocketAndThread();
+			SetStateSynchronizedAndNotify(SocketState.Error);
+		}
+
 		#endregion
 
 		#region Event Invoking
@@ -667,7 +700,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for UDP sockets"));
+			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for UDP sockets, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -715,7 +748,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Receive:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
+			return ("Receive:" + this.localPort + " / " + IPHost.Decorate(this.remoteIPAddress) + ":" + this.remotePort);
 		}
 
 		#endregion
@@ -727,11 +760,24 @@ namespace MKY.IO.Serial.Socket
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + "     (" + this.instanceId.ToString("D2", System.Globalization.CultureInfo.InvariantCulture) + ")(" + ToShortEndPointString() + "): " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+				"[" + ToShortEndPointString() + "]",
+				message
+				));
+		}
+
+		[Conditional("DEBUG")]
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void WriteDebugThreadStateMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
 		}
 
 		#endregion

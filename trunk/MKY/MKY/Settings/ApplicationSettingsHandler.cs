@@ -222,7 +222,7 @@ namespace MKY.Settings
 			protected void AssertNotDisposed()
 			{
 				if (this.isDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 			}
 
 			#endregion
@@ -520,7 +520,7 @@ namespace MKY.Settings
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

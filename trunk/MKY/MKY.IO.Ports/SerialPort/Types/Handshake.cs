@@ -84,7 +84,7 @@ namespace MKY.IO.Ports
 				case Handshake.XOnXOff:              return (XOnXOff_string);
 				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_string);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -97,7 +97,7 @@ namespace MKY.IO.Ports
 				case Handshake.XOnXOff:              return (XOnXOff_stringShort);
 				case Handshake.RequestToSendXOnXOff: return (RfrCtsXOnXOff_stringShort);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -128,7 +128,7 @@ namespace MKY.IO.Ports
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid handshake string"));
+				throw (new FormatException(@"""" + s + @""" is no valid handshake string."));
 		}
 
 		/// <remarks>

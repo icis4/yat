@@ -81,7 +81,7 @@ namespace YAT.Gui.Forms
 			}
 			catch (Exception ex)
 			{
-				string errorText = "Error, unhandled exception data could not be retrieved.";
+				string errorText = "Error, unhandled exception data could not be retrieved!";
 				DebugEx.WriteException(GetType(), ex, errorText);
 				text.Write(errorText);
 			}

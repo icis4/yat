@@ -90,7 +90,7 @@ namespace YAT.Domain
 				case CharSubstitution.ToUpper: return (ToUpper_string);
 				case CharSubstitution.ToLower: return (ToLower_string);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -120,7 +120,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid char substitution string"));
+				throw (new FormatException(@"""" + s + @""" is no valid char substitution string."));
 		}
 
 		/// <remarks>

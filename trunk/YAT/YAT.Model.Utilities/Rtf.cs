@@ -147,7 +147,7 @@ namespace YAT.Model.Utilities
 			}
 			else
 			{
-				throw (new NotImplementedException("Unknown DisplayElement"));
+				throw (new NotImplementedException("Unknown DisplayElement!"));
 			}
 
 			// Handle line break according to current system.
@@ -240,7 +240,7 @@ namespace YAT.Model.Utilities
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

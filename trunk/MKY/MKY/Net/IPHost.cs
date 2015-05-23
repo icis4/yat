@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Sockets;
 
 namespace MKY.Net
 {
@@ -104,7 +105,7 @@ namespace MKY.Net
 					case IPHostType.IPv6Localhost: return (IPAddress.IPv6Loopback);
 					case IPHostType.Other:         return (this.otherAddress);
 				}
-				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 			}
 		}
 
@@ -113,7 +114,6 @@ namespace MKY.Net
 		#region ToString
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((IPHostType)UnderlyingEnum)
@@ -121,10 +121,41 @@ namespace MKY.Net
 				case IPHostType.Localhost:     return (Localhost_string);
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHostType.Other:         return (this.otherAddress.ToString());
+				case IPHostType.Other:         return (Decorate(this.otherAddress.ToString()));
+				default: throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
 		}
+
+		#region ToString > Extensions
+		//------------------------------------------------------------------------------------------
+		// ToString > Extensions
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
+		/// </summary>
+		public static string Decorate(IPAddress a)
+		{
+			switch (a.AddressFamily)
+			{
+				case AddressFamily.InterNetworkV6: return ("[" + a.ToString() + "]");
+				default:                           return (      a.ToString()      );
+			}
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
+		/// </summary>
+		public static string Decorate(string s)
+		{
+			IPHost host;
+			if (!string.IsNullOrEmpty(s) && IPHost.TryParse(s, out host))
+				return (Decorate(host.IPAddress));
+
+			return (s);
+		}
+
+		#endregion
 
 		#endregion
 
@@ -154,7 +185,7 @@ namespace MKY.Net
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid host string"));
+				throw (new FormatException(@"""" + s + @""" is no valid host string!"));
 		}
 
 		/// <remarks>

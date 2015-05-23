@@ -66,7 +66,7 @@ namespace MKY.Windows.Forms
 				case Orientation.Horizontal: return (Horizontal_string);
 				case Orientation.Vertical:   return (Vertical_string);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -95,7 +95,7 @@ namespace MKY.Windows.Forms
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid orientation string"));
+				throw (new FormatException(@"""" + s + @""" is no valid orientation string!"));
 		}
 
 		/// <remarks>

@@ -118,7 +118,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_string);
 				case Radix.String: return (String_string);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -133,7 +133,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringShort);
 				case Radix.String: return (String_stringShort);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -148,7 +148,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringMiddle);
 				case Radix.String: return (String_stringMiddle);
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -181,7 +181,7 @@ namespace YAT.Domain
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid radix string"));
+				throw (new FormatException(@"""" + s + @""" is no valid radix string."));
 		}
 
 		/// <remarks>

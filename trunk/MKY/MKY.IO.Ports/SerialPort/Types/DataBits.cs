@@ -106,7 +106,7 @@ namespace MKY.IO.Ports
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid data bits string"));
+				throw (new FormatException(@"""" + s + @""" is no valid data bits string."));
 		}
 
 		/// <remarks>

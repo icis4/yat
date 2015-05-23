@@ -165,9 +165,9 @@ namespace MKY.IO.Usb
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
-				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
+				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID."));
 			if ((productId < FirstProductId) || (productId > LastProductId))
-				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
+				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID."));
 
 			this.path = path;
 
@@ -486,7 +486,7 @@ namespace MKY.IO.Usb
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' does not specify a valid USB device ID"));
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
 		}
 
 		/// <summary>
@@ -546,7 +546,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				throw (new ArgumentException("Object is not a UsbDeviceId entry"));
+				throw (new ArgumentException(obj.ToString() + " is not a 'UsbDeviceId'!"));
 			}
 		}
 

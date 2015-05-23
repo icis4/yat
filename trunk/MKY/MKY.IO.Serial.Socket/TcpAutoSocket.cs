@@ -29,10 +29,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 using System.Threading;
 
 using MKY.Contracts;
+using MKY.Net;
 
 #endregion
 
@@ -45,59 +47,26 @@ namespace MKY.IO.Serial.Socket
 	/// are interconnected to each other.
 	/// </summary>
 	/// <remarks>
-	/// In case of YAT with the original ALAZ implementation, AutoSockets created a deadlock on
+	/// Initially, YAT AutoSockets with the original ALAZ implementation created a deadlock on
 	/// shutdown when two AutoSockets that were interconnected with each other. The situation:
 	/// 
-	/// a) The GUI/main thread requests stopping all terminals:
+	/// 1. The GUI/main thread requests stopping all terminals:
+	///     => YAT.Model.Workspace.CloseAllTerminals()
+	///         => MKY.IO.Serial.TcpAutoSocket.Stop()
+	///            => ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop()
+	///                => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get()
 	/// 
-	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
-	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 1446
-	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.BeginDisconnect() Line 558
-	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections() Line 351
-	/// ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop() Line 206
-	/// MKY.IO.Serial.TcpServer.StopSocket() Line 432
-	/// MKY.IO.Serial.TcpServer.Stop() Line 329
-	/// MKY.IO.Serial.TcpAutoSocket.StopSockets() Line 494
-	/// MKY.IO.Serial.TcpAutoSocket.StopAutoSocket() Line 619
-	/// MKY.IO.Serial.TcpAutoSocket.Stop() Line 419
-	/// YAT.Domain.RawTerminal.Stop() Line 298
-	/// YAT.Domain.Terminal.Stop() Line 314
-	/// YAT.Model.Terminal.StopIO(bool saveStatus = false) Line 1488
-	/// YAT.Model.Terminal.Close(bool isWorkspaceClose = true, bool autoSaveIsAllowed = true) Line 1155
-	/// YAT.Model.Workspace.CloseAllTerminals(bool isWorkspaceClose = true, bool autoSaveIsAllowed = true) Line 1215
-	/// YAT.Model.Workspace.Close(bool isMainExit = false) Line 665
-	/// YAT.Model.Workspace.Close() Line 625
-	/// YAT.Gui.Forms.Main.toolStripMenuItem_MainMenu_File_Workspace_Close_Click(object sender = {System.Windows.Forms.ToolStripMenuItem}, System.EventArgs e = {System.EventArgs}) Line 332
-	/// YAT.Controller.Main.Run(bool runWithView = true) Line 327
-	/// YAT.Controller.Main.Run() Line 261
-	/// YAT.YAT.Main(string[] commandLineArgs = {string[0]}) Line 63
-	/// 
-	/// b) As a result, the first AutoSocket shuts down, the second changes from 'Accepted' to
+	/// 2. As a result, the first AutoSocket shuts down, but the second changes from 'Accepted' to
 	///    'Listening' and tries to synchronize from the ALAZ socket event to the GUI/main thread:
+	///     => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected()
+	///         => MKY.IO.Serial.TcpAutoSocket.OnIOChanged()
+	///             => YAT.Model.Terminal.OnIOChanged()
+	///                 => Deadlock when synchronizing onto GUI/main thread !!!
 	/// 
-	/// MKY.EventHelper.InvokeSynchronized(System.ComponentModel.ISynchronizeInvoke sinkTarget = {YAT.Gui.Forms.Terminal}, System.Delegate sink = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 319
-	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 163
-	/// YAT.Model.Terminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 2195
-	/// YAT.Model.Terminal.terminal_IOChanged(object sender = {YAT.Domain.TextTerminal}, System.EventArgs e = {System.EventArgs}) Line 1261
-	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
-	/// YAT.Domain.Terminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 1049
-	/// YAT.Domain.Terminal.rawTerminal_IOChanged(object sender = {YAT.Domain.RawTerminal}, System.EventArgs e = {System.EventArgs}) Line 978
-	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
-	/// YAT.Domain.RawTerminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 601
-	/// YAT.Domain.RawTerminal.io_IOChanged(object sender = {MKY.IO.Serial.TcpAutoSocket}, System.EventArgs e = {System.EventArgs}) Line 557
-	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
-	/// MKY.IO.Serial.TcpAutoSocket.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 854
-	/// MKY.IO.Serial.TcpAutoSocket.SetStateSynchronizedAndNotify(MKY.IO.Serial.TcpAutoSocket.SocketState state = Listening) Line 476
-	/// MKY.IO.Serial.TcpAutoSocket.server_IOChanged(object sender = {MKY.IO.Serial.TcpServer}, System.EventArgs e = {System.EventArgs}) Line 804
-	/// MKY.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
-	/// MKY.IO.Serial.TcpServer.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 556
-	/// MKY.IO.Serial.TcpServer.SetStateSynchronizedAndNotify(MKY.IO.Serial.TcpServer.SocketState state = Listening) Line 395
-	/// MKY.IO.Serial.TcpServer.OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e = {ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs}) Line 525
-	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 535
-	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(object sender = {System.Net.Sockets.Socket}, System.Net.Sockets.SocketAsyncEventArgs e = null) Line 1501
-	/// 
-	/// Very similar issues existed when stopping <see cref="TcpClient"/> or <see cref="TcpServer"/>
-	/// objects stand-alone. See remarks of these classes for how all these issues have been solved.
+	/// The issue has been solved in <see cref="ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection"/>
+	/// as well as <see cref="TcpClient"/> or <see cref="TcpServer"/> by invoking Stop() and Dispose()
+	/// of socket and connections and thread asynchronously and without firing events. See remarks
+	/// of these classes for additional information.
 	/// </remarks>
 	public class TcpAutoSocket : IIOProvider, IDisposable
 	{
@@ -139,16 +108,6 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -170,6 +129,7 @@ namespace MKY.IO.Serial.Socket
 
 		private TcpClient client;
 		private TcpServer server;
+		private object socketSyncObj = new object();
 
 		#endregion
 
@@ -205,7 +165,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public TcpAutoSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, int localPort)
 		{
-			this.instanceId = staticInstanceCounter++;
+			this.instanceId = SocketBase.NextInstanceId;
 
 			this.remoteIPAddress = remoteIPAddress;
 			this.remotePort = remotePort;
@@ -230,10 +190,12 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
+				WriteDebugMessageLine("Disposing...");
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the items have already been disposed of.
+					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSockets();
 
 					// Do not yet dispose of state lock because that may result in null ref exceptions
@@ -243,7 +205,7 @@ namespace MKY.IO.Serial.Socket
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				WriteDebugMessageLine("Disposed.");
+				WriteDebugMessageLine("...successfully disposed.");
 			}
 		}
 
@@ -265,7 +227,7 @@ namespace MKY.IO.Serial.Socket
 		protected void AssertNotDisposed()
 		{
 			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -328,7 +290,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Reset:
 					case SocketState.Error:
@@ -356,7 +318,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Connected:
 					case SocketState.Accepted:
@@ -394,7 +356,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Connected:
 					{
@@ -419,7 +381,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				switch (this.state)
+				switch (GetStateSynchronized())
 				{
 					case SocketState.Listening:
 					case SocketState.Accepted:
@@ -441,12 +403,15 @@ namespace MKY.IO.Serial.Socket
 			{
 				AssertNotDisposed();
 
-				if (IsClient)
-					return (this.client.UnderlyingIOInstance);
-				else if (IsServer)
-					return (this.server.UnderlyingIOInstance);
-				else
-					return (null);
+				lock (this.socketSyncObj)
+				{
+					if (IsClient && (this.client != null))
+						return (this.client.UnderlyingIOInstance);
+					else if (IsServer && (this.server != null))
+						return (this.server.UnderlyingIOInstance);
+					else
+						return (null);
+				}
 			}
 		}
 
@@ -474,7 +439,7 @@ namespace MKY.IO.Serial.Socket
 				}
 				default:
 				{
-					WriteDebugMessageLine("Start() requested but state is " + this.state + ".");
+					WriteDebugMessageLine("Start() requested but state is " + state + ".");
 					return (false);
 				}
 			}
@@ -491,7 +456,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.Reset:
 				{
-					WriteDebugMessageLine("Stop() requested but state is " + this.state + ".");
+					WriteDebugMessageLine("Stop() requested but state is " + state + ".");
 					return;
 				}
 				default:
@@ -504,17 +469,22 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual void Send(byte[] data)
+		public virtual bool Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsTransmissive)
 			{
-				if      (IsClient)
-					this.client.Send(data);
-				else if (IsServer)
-					this.server.Send(data);
+				lock (this.socketSyncObj)
+				{
+					if (IsClient && (this.client != null))
+						return (this.client.Send(data));
+					else if (IsServer && (this.server != null))
+						return (this.server.Send(data));
+				}
 			}
+
+			return (false);
 		}
 
 		#endregion
@@ -538,7 +508,7 @@ namespace MKY.IO.Serial.Socket
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = this.state;
+			SocketState oldState = GetStateSynchronized();
 #endif
 			this.stateLock.EnterWriteLock();
 			this.state = state;
@@ -555,7 +525,7 @@ namespace MKY.IO.Serial.Socket
 				isClientOrServerString = "is neither client nor server";
 
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ", " + isClientOrServerString + ".");
+				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ", " + isClientOrServerString + ".");
 			else
 				WriteDebugMessageLine("State is still " + oldState + ".");
 #endif
@@ -569,19 +539,38 @@ namespace MKY.IO.Serial.Socket
 		// Socket Methods
 		//==========================================================================================
 
+		/// <remarks>
+		/// Note that the underlying sockets perform stopping synchronously, opposed to starting
+		/// that is done asynchronously. This difference is due to the issue described in the header
+		/// of this class.
+		/// </remarks>
+		private void StopAndDisposeSockets()
+		{
+			StopSockets();
+			DisposeSockets();
+		}
+
+		/// <remarks>
+		/// Note that the underlying sockets perform stopping synchronously, opposed to starting
+		/// that is done asynchronously. This difference is due to the issue described in the header
+		/// of this class.
+		/// </remarks>
 		private void StopSockets()
 		{
-			if (this.client != null)
-				this.client.Stop();
+			lock (this.socketSyncObj)
+			{
+				if (this.client != null)
+					this.client.Stop();
 
-			if (this.server != null)
-				this.server.Stop();
+				if (this.server != null)
+					this.server.Stop();
+			}
 		}
 
 		private void DisposeSockets()
 		{
-			DestroyClient();
-			DestroyServer();
+			DisposeClient();
+			DisposeServer();
 		}
 
 		#endregion
@@ -606,7 +595,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StartConnecting()
 		{
-			int randomDelay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
+			int randomDelay = SocketBase.Random.Next(MinConnectDelay, MaxConnectDelay);
 			WriteDebugMessageLine("Delaying connecting by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
@@ -619,14 +608,23 @@ namespace MKY.IO.Serial.Socket
 			{
 				SetStateSynchronizedAndNotify(SocketState.Connecting);
 				CreateClient(this.remoteIPAddress, this.remotePort);
+
+				bool startIsOngoing = false;
 				try
 				{
-					this.client.Start(); // Client will be started asynchronously.
+					lock (this.socketSyncObj)
+					{
+						if (this.client != null)
+							startIsOngoing = this.client.Start();
+					}
 				}
-				catch
+				finally
 				{
-					DestroyClient();
-					StartListening();
+					if (!startIsOngoing)
+					{
+						DisposeClient();
+						StartListening();
+					}
 				}
 			}
 		}
@@ -637,7 +635,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StartListening()
 		{
-			int randomDelay = staticRandom.Next(MinListenDelay, MaxListenDelay);
+			int randomDelay = SocketBase.Random.Next(MinListenDelay, MaxListenDelay);
 			WriteDebugMessageLine("Delaying listening by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
@@ -650,14 +648,23 @@ namespace MKY.IO.Serial.Socket
 			{
 				SetStateSynchronizedAndNotify(SocketState.StartingListening);
 				CreateServer(this.localIPAddress, this.localPort);
+
+				bool startIsOngoing = false;
 				try
 				{
-					this.server.Start(); // Server will be started asynchronously.
+					lock (this.socketSyncObj)
+					{
+						if (this.server != null)
+							startIsOngoing = this.server.Start(); // Server will be started asynchronously.
+					}
 				}
-				catch
+				finally
 				{
-					DestroyServer();
-					RequestTryAgain();
+					if (!startIsOngoing)
+					{
+						DisposeServer();
+						RequestTryAgain();
+					}
 				}
 			}
 		}
@@ -671,9 +678,11 @@ namespace MKY.IO.Serial.Socket
 				if (this.startCycleCounter <= MaxStartCycles)
 					tryAgain = true;
 			}
+
 			if (tryAgain)
 			{
 				WriteDebugMessageLine("Trying connect cycle #" + this.startCycleCounter + ".");
+
 				StartConnecting();
 			}
 			else
@@ -690,25 +699,21 @@ namespace MKY.IO.Serial.Socket
 		private void RestartAutoSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Restarting);
-
-			StopSockets();
-			DisposeSockets();
-
+			StopAndDisposeSockets();
 			StartAutoSocket();
 		}
 
 		private void StopAutoSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Stopping);
-
-			StopSockets();
-			DisposeSockets();
-
+			StopAndDisposeSockets();
 			SetStateSynchronizedAndNotify(SocketState.Reset);
 		}
 
 		private void AutoSocketError(ErrorSeverity severity, string message)
 		{
+			WriteDebugMessageLine(severity + " error in AutoSocket: " + Environment.NewLine + message);
+
 			DisposeSockets();
 
 			SetStateSynchronizedAndNotify(SocketState.Error);
@@ -729,25 +734,33 @@ namespace MKY.IO.Serial.Socket
 
 		private void CreateClient(System.Net.IPAddress remoteIPAddress, int remotePort)
 		{
-			this.client = new TcpClient(remoteIPAddress, remotePort);
+			DisposeClient();
 
-			this.client.IOChanged    += new EventHandler                       (this.client_IOChanged);
-			this.client.IOError      += new EventHandler<IOErrorEventArgs>     (this.client_IOError);
-			this.client.DataReceived += new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
-			this.client.DataSent     += new EventHandler<DataSentEventArgs>    (this.client_DataSent);
+			lock (this.socketSyncObj)
+			{
+				this.client = new TcpClient(this.instanceId, remoteIPAddress, remotePort);
+
+				this.client.IOChanged    += new EventHandler                       (this.client_IOChanged);
+				this.client.IOError      += new EventHandler<IOErrorEventArgs>     (this.client_IOError);
+				this.client.DataReceived += new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
+				this.client.DataSent     += new EventHandler<DataSentEventArgs>    (this.client_DataSent);
+			}
 		}
 
-		private void DestroyClient()
+		private void DisposeClient()
 		{
-			if (this.client != null)
+			lock (this.socketSyncObj)
 			{
-				this.client.IOChanged    -= new EventHandler                       (this.client_IOChanged);
-				this.client.IOError      -= new EventHandler<IOErrorEventArgs>     (this.client_IOError);
-				this.client.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
-				this.client.DataSent     -= new EventHandler<DataSentEventArgs>    (this.client_DataSent);
+				if (this.client != null)
+				{
+					this.client.IOChanged    -= new EventHandler                       (this.client_IOChanged);
+					this.client.IOError      -= new EventHandler<IOErrorEventArgs>     (this.client_IOError);
+					this.client.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.client_DataReceived);
+					this.client.DataSent     -= new EventHandler<DataSentEventArgs>    (this.client_DataSent);
 
-				this.client.Dispose();
-				this.client = null;
+					this.client.Dispose();
+					this.client = null;
+				}
 			}
 		}
 
@@ -760,27 +773,43 @@ namespace MKY.IO.Serial.Socket
 
 		private void client_IOChanged(object sender, EventArgs e)
 		{
-			switch (this.state)
+			switch (GetStateSynchronized())
 			{
 				case SocketState.Connecting:
 				{
-					if (this.client.IsConnected)      // If I/O changed during startup,
+					bool isConnected = false;
+					lock (this.socketSyncObj)
+					{
+						if (this.client != null)
+							isConnected = this.client.IsConnected;
+					}
+
+					if (isConnected)                  // If I/O changed during startup,
 					{                                 //   check for connected and change state.
 						SetStateSynchronizedAndNotify(SocketState.Connected);
 					}
+
 					break;
 				}
 				case SocketState.Connected:
 				{
-					if (this.client.IsConnected)      // If I/O changed during client operation
+					bool isConnected = false;
+					lock (this.socketSyncObj)
+					{
+						if (this.client != null)
+							isConnected = this.client.IsConnected;
+					}
+
+					if (isConnected)                  // If I/O changed during client operation
 					{                                 //   and client is connected to a server,
 						OnIOChanged(e);               //   simply forward the event.
 					}
 					else
 					{
-						DisposeSockets();             // If client lost connection to server,
+						DisposeClient();              // If client lost connection to server,
 						StartListening();             //   change to server operation.
 					}
+
 					break;
 				}
 			}
@@ -788,18 +817,18 @@ namespace MKY.IO.Serial.Socket
 
 		private void client_IOError(object sender, IOErrorEventArgs e)
 		{
-			switch (this.state)
+			switch (GetStateSynchronized())
 			{
 				case SocketState.Connecting:
 				case SocketState.ConnectingFailed:
 				{
-					DisposeSockets();                 // In case of error during startup,
+					DisposeClient();                  // In case of error during startup,
 					StartListening();                 //   try to start as server.
 					break;
 				}
 				case SocketState.Connected:
 				{
-					DisposeSockets();                 // In case of error during client operation,
+					DisposeClient();                  // In case of error during client operation,
 					StartConnecting();                //   restart AutoSocket.
 					break;
 				}
@@ -827,32 +856,40 @@ namespace MKY.IO.Serial.Socket
 		// Server
 		//==========================================================================================
 
-		#region Server > Events
+		#region Server > Lifetime
 		//------------------------------------------------------------------------------------------
-		// Server > Events
+		// Server > Lifetime
 		//------------------------------------------------------------------------------------------
 
 		private void CreateServer(System.Net.IPAddress localIPAddress, int localPort)
 		{
-			this.server = new TcpServer(localIPAddress, localPort);
+			DisposeServer();
 
-			this.server.IOChanged    += new EventHandler(this.server_IOChanged);
-			this.server.IOError      += new EventHandler<IOErrorEventArgs>(this.server_IOError);
-			this.server.DataReceived += new EventHandler<DataReceivedEventArgs>(this.server_DataReceived);
-			this.server.DataSent     += new EventHandler<DataSentEventArgs>(this.server_DataSent);
+			lock (this.socketSyncObj)
+			{
+				this.server = new TcpServer(this.instanceId, localIPAddress, localPort);
+
+				this.server.IOChanged    += new EventHandler(this.server_IOChanged);
+				this.server.IOError      += new EventHandler<IOErrorEventArgs>(this.server_IOError);
+				this.server.DataReceived += new EventHandler<DataReceivedEventArgs>(this.server_DataReceived);
+				this.server.DataSent     += new EventHandler<DataSentEventArgs>(this.server_DataSent);
+			}
 		}
 
-		private void DestroyServer()
+		private void DisposeServer()
 		{
-			if (this.server != null)
+			lock (this.socketSyncObj)
 			{
-				this.server.IOChanged    -= new EventHandler(this.server_IOChanged);
-				this.server.IOError      -= new EventHandler<IOErrorEventArgs>(this.server_IOError);
-				this.server.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.server_DataReceived);
-				this.server.DataSent     -= new EventHandler<DataSentEventArgs>(this.server_DataSent);
+				if (this.server != null)
+				{
+					this.server.IOChanged    -= new EventHandler(this.server_IOChanged);
+					this.server.IOError      -= new EventHandler<IOErrorEventArgs>(this.server_IOError);
+					this.server.DataReceived -= new EventHandler<DataReceivedEventArgs>(this.server_DataReceived);
+					this.server.DataSent     -= new EventHandler<DataSentEventArgs>(this.server_DataSent);
 
-				this.server.Dispose();
-				this.server = null;
+					this.server.Dispose();
+					this.server = null;
+				}
 			}
 		}
 
@@ -865,33 +902,62 @@ namespace MKY.IO.Serial.Socket
 
 		private void server_IOChanged(object sender, EventArgs e)
 		{
-			SocketState state = GetStateSynchronized();
-			switch (state)
+			switch (GetStateSynchronized())
 			{
 				case SocketState.StartingListening:
 				{
-					if (this.server.IsStarted)                    // If I/O changed during startup,
-						SetStateSynchronizedAndNotify(SocketState.Listening); //   check for start and change state
+					bool isStarted = false;
+					lock (this.socketSyncObj)
+					{
+						if (this.server != null)
+							isStarted = this.server.IsStarted;
+					}
+
+					if (isStarted)                    // If I/O changed during startup,
+					{                                 //   check for start and change state.
+						SetStateSynchronizedAndNotify(SocketState.Listening);
+					}
+
 					break;
 				}
 				case SocketState.Listening:
 				{
-					if (this.server.ConnectedClientCount > 0)     // If I/O changed during listening,
-						SetStateSynchronizedAndNotify(SocketState.Accepted);  //   change state to accepted if
-					break;                                        //   clients are connected
+					int connectedClientCount = 0;
+					lock (this.socketSyncObj)
+					{
+						if (this.server != null)
+							connectedClientCount = this.server.ConnectedClientCount;
+					}
+
+					if (connectedClientCount > 0)     // If I/O changed during listening, change state
+					{                                 //   to accepted if clients are connected.
+						SetStateSynchronizedAndNotify(SocketState.Accepted);
+					}
+
+					break;
 				}
 				case SocketState.Accepted:
 				{
-					if (this.server.ConnectedClientCount <= 0)    // If I/O changed during accepted,
-						SetStateSynchronizedAndNotify(SocketState.Listening); //   change state to listening if
-					break;                                        //   no clients are connected
+					int connectedClientCount = 0;
+					lock (this.socketSyncObj)
+					{
+						if (this.server != null)
+							connectedClientCount = this.server.ConnectedClientCount;
+					}
+
+					if (connectedClientCount <= 0)    // If I/O changed during accepted, change state
+					{                                 //   to listening if no clients are connected.
+						SetStateSynchronizedAndNotify(SocketState.Listening);
+					}
+
+					break;
 				}
 			}
 		}
 
 		private void server_IOError(object sender, IOErrorEventArgs e)
 		{
-			switch (this.state)
+			switch (GetStateSynchronized())
 			{
 				case SocketState.StartingListening:   // In case of error during startup,
 				{                                     //   increment start cycles and
@@ -901,7 +967,7 @@ namespace MKY.IO.Serial.Socket
 				case SocketState.Listening:
 				case SocketState.Accepted:
 				{
-					DisposeSockets();                 // In case of error during server operation,
+					DisposeServer();                  // In case of error during server operation,
 					StartConnecting();                //   restart AutoSocket
 					break;
 				}
@@ -939,7 +1005,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP AutoSockets"));
+			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for TCP AutoSockets, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -986,7 +1052,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Server:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
+			return ("Server:" + this.localPort + " / " + IPHost.Decorate(this.remoteIPAddress) + ":" + this.remotePort);
 		}
 
 		#endregion
@@ -998,11 +1064,17 @@ namespace MKY.IO.Serial.Socket
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(GetType() + " (" + this.instanceId.ToString("D2", System.Globalization.CultureInfo.InvariantCulture) + ")(" + ToShortEndPointString() + "): " + message);
+			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+				GetType(),
+				"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+				"[" + ToShortEndPointString() + "]",
+				message
+				));
 		}
 
 		#endregion

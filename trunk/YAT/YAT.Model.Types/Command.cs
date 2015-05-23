@@ -677,7 +677,7 @@ namespace YAT.Model.Types
 			if (other != null) // \todo (MKY 2013-05-12): Comparison should be based on 'this.commandLines'.
 				return (string.Compare(this.description, other.description, StringComparison.CurrentCulture));
 			else
-				throw (new ArgumentException("Object is not a Command entry"));
+				throw (new ArgumentException("Object is not a 'Command' entry!"));
 		}
 
 		#endregion

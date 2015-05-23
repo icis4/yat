@@ -264,7 +264,7 @@ namespace MKY.IO.Ports
 					(
 						"value",
 						value,
-						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber
+						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber + "."
 					));
 				}
 			}
@@ -495,7 +495,7 @@ namespace MKY.IO.Ports
 			else if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' does not specify a valid serial port ID"));
+				throw (new FormatException(@"""" + s + @""" does not specify a valid serial port ID."));
 		}
 
 		/// <summary>
@@ -534,7 +534,7 @@ namespace MKY.IO.Ports
 			if (TryParseStandardPortName(s, out result))
 				return (result);
 			else
-				throw (new FormatException(s + " does not specify a valid serial port ID"));
+				throw (new FormatException(s + " does not specify a valid serial port ID."));
 		}
 
 		/// <summary>
@@ -637,7 +637,7 @@ namespace MKY.IO.Ports
 			}
 			else
 			{
-				throw (new ArgumentException("Object is not a SerialPortId entry"));
+				throw (new ArgumentException(obj.ToString() + " does not specify a 'SerialPortId!"));
 			}
 		}
 

@@ -104,7 +104,7 @@ namespace MKY.IO.Ports
 				(
 					"baudRate",
 					baudRate,
-					"Baud rate must be a positive integral value"
+					"Baud rate must be a positive integral value."
 				));
 			}
 		}
@@ -167,7 +167,7 @@ namespace MKY.IO.Ports
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid baud rate string"));
+				throw (new FormatException(@"""" + s + @""" is no valid baud rate string."));
 		}
 
 		/// <remarks>

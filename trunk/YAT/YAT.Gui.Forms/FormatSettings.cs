@@ -265,7 +265,7 @@ namespace YAT.Gui.Forms
 				case 4: return (this.formatSettingsInEdit.TimeStampFormat);
 				case 5: return (this.formatSettingsInEdit.LengthFormat);
 				case 6: return (this.formatSettingsInEdit.ErrorFormat);
-				default: throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index."));
+				default: throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index!"));
 			}
 		}
 

@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
 //==================================================================================================
 // Configuration
 //==================================================================================================
@@ -29,6 +30,8 @@
 // - Uncomment to debug
 // - Comment out for normal operation
 //#define DEBUG_OPEN_CLOSE
+
+#endregion
 
 #region Using
 //==================================================================================================
@@ -253,7 +256,7 @@ namespace MKY.IO.Ports
 				if (base.PortName != value.Name)
 				{
 					if (IsOpen)
-						throw (new System.InvalidOperationException("The specified port is open."));
+						throw (new System.InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!"));
 
 					base.PortName = value.Name;
 					OnPortChanged(EventArgs.Empty);

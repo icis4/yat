@@ -756,7 +756,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.Name);
 				}
-				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 			}
 		}
 
@@ -777,7 +777,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.DisplayName);
 				}
-				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 			}
 		}
 
@@ -1065,7 +1065,7 @@ namespace MKY.Text
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid encoding string"));
+				throw (new FormatException(@"""" + s + @""" is no valid encoding string!"));
 		}
 
 		/// <summary></summary>

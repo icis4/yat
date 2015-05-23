@@ -386,7 +386,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (TryParseShort(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' does not specify valid short serial port settings"));
+				throw (new FormatException(@"""" + s + @""" does not specify valid short serial port settings."));
 		}
 
 		/// <summary>

@@ -131,7 +131,7 @@ namespace MKY.Drawing
 														return (RotateType.Rotate270);
 			}
 
-			throw (new ArgumentOutOfRangeException("rotateFlip", "Argument unknown"));
+			throw (new ArgumentOutOfRangeException("rotateFlip", "Argument unknown!"));
 		}
 
 		#endregion
@@ -197,7 +197,7 @@ namespace MKY.Drawing
 														return (FlipType.FlipY);
 			}
 
-			throw (new ArgumentOutOfRangeException("rotateFlip", "Argument unknown"));
+			throw (new ArgumentOutOfRangeException("rotateFlip", "Argument unknown!"));
 		}
 
 		#endregion

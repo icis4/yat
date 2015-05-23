@@ -354,7 +354,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' does not specify valid serial communication settings"));
+				throw (new FormatException(@"""" + s + @""" does not specify valid serial communication settings"));
 		}
 
 		/// <summary>

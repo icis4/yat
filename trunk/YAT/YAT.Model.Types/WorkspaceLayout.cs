@@ -129,11 +129,11 @@ namespace YAT.Model.Types
 		{
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
 			{
-				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout'"));
+				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout'!"));
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
-				default:                             throw (new InvalidOperationException("Invalid workspace layout"));
+				default:                             throw (new InvalidOperationException("Invalid workspace layout!"));
 			}
 		}
 
@@ -145,8 +145,8 @@ namespace YAT.Model.Types
 				case MdiLayout.Cascade:        return (new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
-				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationInfo.ProductName));
-				default:                       throw (new InvalidOperationException("Invalid MDI layout"));
+				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationInfo.ProductName + "!"));
+				default:                       throw (new InvalidOperationException("Invalid MDI layout!"));
 			}
 		}
 

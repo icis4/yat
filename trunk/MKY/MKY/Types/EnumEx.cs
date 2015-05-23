@@ -285,7 +285,7 @@ namespace MKY
 			if (other != null)
 				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
 			else
-				throw (new ArgumentException("Object is not a EnumEx"));
+				throw (new ArgumentException("Object is not a EnumEx!"));
 		}
 
 		#endregion
@@ -321,14 +321,14 @@ namespace MKY
 			Type[] ta = enumExType.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
 
 			if (ta.Length < 1)
-				throw (new TypeLoadException("No nested types found"));
+				throw (new TypeLoadException("No nested types found!"));
 
 			foreach (Type t in ta)
 			{
 				if (t.IsEnum)
 					return (t);
 			}
-			throw (new TypeLoadException("No nested enum found"));
+			throw (new TypeLoadException("No nested enum found!"));
 		}
 
 		/// <summary>

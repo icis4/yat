@@ -20,19 +20,52 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
+using MKY;
+
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
-	public static class SocketDefaults
+	internal static class SocketBase
 	{
-		/// <summary></summary>
-		public const int FrameSize = 1024;
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
 
-		/// <summary></summary>
-		public const int SocketBufferSize = 2 * FrameSize;
+		private static int staticInstanceCounter;
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
-		/// <summary></summary>
-		public const int MessageBufferSize = 16 * FrameSize;
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets the next instance identifier.
+		/// </summary>
+		/// <value>
+		/// The next instance identifier.
+		/// </value>
+		public static int NextInstanceId
+		{
+			get { return (staticInstanceCounter++); }
+		}
+
+		/// <summary>
+		/// Gets the random.
+		/// </summary>
+		/// <value>
+		/// The random.
+		/// </value>
+		public static Random Random
+		{
+			get { return (staticRandom); }
+		}
+
+		#endregion
 	}
 }
 

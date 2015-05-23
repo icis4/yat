@@ -358,12 +358,12 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			Domain.TerminalType terminalType = this.settingsInEdit.Terminal.TerminalType;
-			terminalSelection.TerminalType = terminalType;
+			Domain.TerminalType tt = this.settingsInEdit.Terminal.TerminalType;
+			terminalSelection.TerminalType = tt;
 
 			string button = "&";
 			string label = "";
-			switch (terminalType)
+			switch (tt)
 			{
 				case Domain.TerminalType.Text:
 					button += "Text";
@@ -380,7 +380,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new NotImplementedException("Invalid terminal type"));
+					throw (new NotImplementedException("Program execution should never get here, '" + tt + "' is an invalid terminal type, please report this bug!"));
 			}
 			button += " Settings...";
 			button_TextOrBinarySettings.Text = button;
@@ -441,7 +441,8 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTextOrBinarySettings()
 		{
-			switch (this.settingsInEdit.Terminal.TerminalType)
+			Domain.TerminalType tt = this.settingsInEdit.Terminal.TerminalType;
+			switch (tt)
 			{
 				case Domain.TerminalType.Text:
 				{
@@ -465,7 +466,7 @@ namespace YAT.Gui.Forms
 				}
 				default:
 				{
-					throw (new NotImplementedException("Invalid terminal type"));
+					throw (new NotImplementedException("Program execution should never get here, '" + tt + "' is an invalid terminal type, please report this bug!"));
 				}
 			}
 		}

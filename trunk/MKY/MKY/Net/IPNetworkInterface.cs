@@ -117,7 +117,7 @@ namespace MKY.Net
 					case IPNetworkInterfaceType.IPv6Loopback: return (IPAddress.IPv6Loopback);
 					case IPNetworkInterfaceType.Other:        return (this.otherAddress);
 				}
-				throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 			}
 		}
 
@@ -199,11 +199,11 @@ namespace MKY.Net
 						if (this.otherAddress != IPAddress.None)
 							return (this.otherAddress.ToString());
 						else
-							throw (new InvalidOperationException("IP address and interface description or both are undefined"));
+							throw (new InvalidOperationException("IP address and interface description or both are undefined!"));
 					}
 				}
 			}
-			throw (new InvalidOperationException("Code execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug"));
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#endregion
@@ -236,7 +236,7 @@ namespace MKY.Net
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException("'" + s + "' is no valid network interface string"));
+				throw (new FormatException(@"""" + s + @""" is no valid network interface string!"));
 		}
 
 		/// <remarks>

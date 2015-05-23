@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
 //==================================================================================================
 // Configuration
 //==================================================================================================
@@ -33,6 +34,8 @@
 
 // Enable to continue working/testing with an automatic horizontally scrolling list box:
 //#define ENABLE_HORIZONTAL_AUTO_SCROLL
+
+#endregion
 
 #region Using
 //==================================================================================================

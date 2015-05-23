@@ -73,7 +73,7 @@ namespace MKY.IO.Serial.Socket.Test
 						return (port);
 				}
 
-				throw (new OverflowException("No local TCP port available within range of 10000 through " + IPEndPoint.MaxPort));
+				throw (new OverflowException("No local TCP port available within range of 10000 through " + IPEndPoint.MaxPort + "!"));
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace MKY.IO.Serial.Socket.Test
 				}
 			}
 
-			throw (new OverflowException("No local UDP ports available within range of 10000 through " + IPEndPoint.MaxPort));
+			throw (new OverflowException("No local UDP ports available within range of 10000 through " + IPEndPoint.MaxPort + "!"));
 		}
 
 		#endregion

@@ -1086,7 +1086,7 @@ namespace YAT.Gui.Controls
 						continue;
 					}
 				}
-				throw (new InvalidOperationException("Invalid pending element(s) or line(s)"));
+				throw (new InvalidOperationException("Invalid pending element(s) or line(s)!"));
 			}
 
 			this.pendingElementsAndLines.Clear();

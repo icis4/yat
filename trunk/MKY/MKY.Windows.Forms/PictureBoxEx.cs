@@ -225,7 +225,7 @@ namespace MKY.Windows.Forms
 
 					default:
 					{
-						throw (new InvalidOperationException("Unknown SizeMode"));
+						throw (new InvalidOperationException("Program execution should never get here, unknown 'SizeMode', please report this bug!"));
 					}
 				}
 			}
@@ -269,7 +269,7 @@ namespace MKY.Windows.Forms
 
 					default:
 					{
-						throw (new InvalidOperationException("Unknown SizeMode"));
+						throw (new InvalidOperationException("Program execution should never get here, unknown 'SizeMode', please report this bug!"));
 					}
 				}
 			}
