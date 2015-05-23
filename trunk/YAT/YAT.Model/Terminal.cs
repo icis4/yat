@@ -89,7 +89,10 @@ namespace YAT.Model
 		// Static Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// 'StyleCop' asks to remove this static constructor. But 'Code Analysis' (FxCop) requires
+		/// the suppressions at this static constructor. So what...
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.Maintainability", "SA1409:RemoveUnnecessaryCode", Justification = "See below ;-) But unfortunately it seems that StyleCop doesn't allow a suppression at the constructor itself. So what...")]
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of 'staticSequentialIndexCounter' is not unnecesary, it is based on a constant that contains a default value!")]
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Well, kind of a code analysis deadlock ;-)")]
@@ -3372,14 +3375,19 @@ namespace YAT.Model
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"",
-				"[" + Guid + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"",
+					"[" + Guid + "]",
+					message
+				)
+			);
 		}
 
 		#endregion

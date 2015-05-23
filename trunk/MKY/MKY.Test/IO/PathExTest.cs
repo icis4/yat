@@ -36,6 +36,7 @@ namespace MKY.Test.IO
 	/// Ensure that test vectors potentially run on Windows and Unixoids.
 	/// I.e. use of DirectorySeparatorChar must be checked.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Unixoids' is a proper technical term.")]
 	public static class PathExTestData
 	{
 		#region Test Case Data Set

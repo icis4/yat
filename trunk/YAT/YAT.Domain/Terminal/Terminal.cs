@@ -93,16 +93,6 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
-
-		#endregion
-
 		#region Types
 		//==========================================================================================
 		// Types
@@ -112,13 +102,14 @@ namespace YAT.Domain
 		/// While sending, the 'IOChanged' event must be raised if intensive processing is done.
 		/// This is required because a client may want to indicate that time intensive sending is
 		/// currently ongoing and no further data shall be sent.
-		/// The event shall be raised if the time lag will significantly be noticable by the user
+		/// The event shall be raised if the time lag will significantly be noticeable by the user
 		/// (i.e. >= 400 ms). But the event shall be raised BEFORE the actual time lag. This helper
 		/// struct manages the state and the various criteria.
 		/// </summary>
 		/// <remarks>
 		/// Struct to improve performance as a struct only needs to be created once.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds...")]
 		private struct IOChangedEventHelper
 		{
 			/// <summary></summary>
@@ -200,6 +191,16 @@ namespace YAT.Domain
 		private const int ThreadWaitTimeout = 200;
 
 		private const string Undefined = "<Undefined>";
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static int staticInstanceCounter;
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 
@@ -2010,14 +2011,19 @@ namespace YAT.Domain
 		[Conditional("DEBUG")]
 		protected virtual void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
-				"[" + ToShortIOString() + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+					"[" + ToShortIOString() + "]",
+					message
+				)
+			);
 		}
 
 		[Conditional("DEBUG")]

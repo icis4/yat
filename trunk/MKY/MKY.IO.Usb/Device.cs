@@ -161,6 +161,7 @@ namespace MKY.IO.Usb
 			return (false);
 		}
 
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		private static bool GetVidAndPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.

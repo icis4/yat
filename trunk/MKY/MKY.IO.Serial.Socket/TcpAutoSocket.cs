@@ -68,6 +68,7 @@ namespace MKY.IO.Serial.Socket
 	/// of socket and connections and thread asynchronously and without firing events. See remarks
 	/// of these classes for additional information.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 	public class TcpAutoSocket : IIOProvider, IDisposable
 	{
 		#region Types
@@ -687,11 +688,14 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
+				string message =
+					"AutoSocket could neither be started as client nor server," + Environment.NewLine +
+					"TCP/IP address/port is not available.";
+
 				AutoSocketError
 				(
 					ErrorSeverity.Acceptable,
-					"AutoSocket could neither be started as client nor server," + Environment.NewLine +
-					"TCP/IP address/port is not available."
+					message
 				);
 			}
 		}
@@ -1067,14 +1071,19 @@ namespace MKY.IO.Serial.Socket
 		[Conditional("DEBUG")]
 		private void WriteDebugMessageLine(string message)
 		{
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
-				"[" + ToShortEndPointString() + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"#" + this.instanceId.ToString("D2", CultureInfo.InvariantCulture),
+					"[" + ToShortEndPointString() + "]",
+					message
+				)
+			);
 		}
 
 		#endregion

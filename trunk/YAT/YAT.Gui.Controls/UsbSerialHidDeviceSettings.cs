@@ -101,7 +101,7 @@ namespace YAT.Gui.Controls
 			InitializeComponent();
 
 			InitializeControls();
-			// SetControls() is initially called in the 'Paint' event handler.
+			//// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -321,13 +321,16 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
+				string message =
+					"The Windows HID infrastructure requires that outgoing reports are always filled. " +
+					"As a consequence, this option must be kept enabled.";
+
 				// Windows HID.dll requires that outgoing reports are always filled!
 				// Still, enable the check box in order to make tool tip visible to the user.
 				MessageBoxEx.Show
 				(
 					this,
-					"The Windows HID infrastructure requires that outgoing reports are always filled. " +
-					"As a consequence, this option must be kept enabled.",
+					message,
 					"Limitation of Windows HID",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information

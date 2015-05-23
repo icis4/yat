@@ -26,7 +26,7 @@ using System.Collections.Generic;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB HID device infos.
+	/// List containing USB HID device information.
 	/// </summary>
 	[Serializable]
 	public class HidDeviceCollection : DeviceCollection

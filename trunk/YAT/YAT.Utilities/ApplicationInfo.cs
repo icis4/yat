@@ -36,7 +36,7 @@ namespace YAT.Utilities
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Final";
 
-		/////// <summary>The product name postfix that describes the build.</summary>
+		/// <summary>The product name postfix that describes the build.</summary>
 		public const string ProductBuildName = " Gamma 1";
 
 		/////// <summary>The product name postfix that describes the build.</summary>

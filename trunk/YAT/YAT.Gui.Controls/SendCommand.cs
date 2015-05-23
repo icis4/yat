@@ -587,7 +587,7 @@ namespace YAT.Gui.Controls
 						this.command = ri.Item;
 
 						SetCommandControls();
-						// Do not call OnCommandChanged(), event shall only be invoked when command is requested.
+						//// Do not call OnCommandChanged(), event shall only be invoked when command is requested.
 					}
 				}
 
@@ -619,8 +619,9 @@ namespace YAT.Gui.Controls
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// This function 
+		/// This function sets all controls except command/recents which are specially treated.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'recents'?")]
 		private void SetControlsExceptCommandAndRecents()
 		{
 			this.isSettingControls.Enter();
@@ -793,7 +794,7 @@ namespace YAT.Gui.Controls
 			else
 			{
 				SetCommandControls();
-				// Do not call OnCommandChanged(), nothing has changed.
+				//// Do not call OnCommandChanged(), nothing has changed.
 			}
 
 			button_SendCommand.Select();

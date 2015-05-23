@@ -34,7 +34,7 @@ namespace MKY.Globalization
 	public static class CultureInfoEx
 	{
 		/// <summary>
-		/// Returns the most appropriate culture info from a collection of culture infos.
+		/// Returns the most appropriate culture info from a collection of culture information.
 		/// </summary>
 		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> items)
 		{

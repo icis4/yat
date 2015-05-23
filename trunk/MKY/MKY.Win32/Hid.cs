@@ -570,6 +570,8 @@ namespace MKY.Win32
 
 			/// <remarks>
 			/// USB specifies that serial is a string, not limited to a number!
+			/// 
+			/// Saying hello to StyleCop ;-.
 			/// </remarks>
 			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 			public static bool HidD_GetSerialString(SafeFileHandle HidDeviceObject, out string Serial)

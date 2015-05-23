@@ -33,6 +33,7 @@ using YAT.Model.Types;
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
 	[Serializable]
 	public class SendCommandSettings : MKY.Settings.SettingsItem
 	{
@@ -178,7 +179,6 @@ namespace YAT.Model.Settings
 		// Comparison ;-)
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg! But unfortunately StyleCop doesn't allow a suppression at the constant itself. So what...")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private const string EasterEggCommand = @"\easteregg";
 

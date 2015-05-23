@@ -37,6 +37,7 @@ namespace MKY.IO.Usb
 	/// USB device classes as defined by the USB standard.
 	/// See http://www.usb.org/developers/defined_class/ for latest list.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may spell 'usb' like this...")]
 	public enum DeviceClass : byte // 8 bits!
 	{
 		DeviceSpecific      = 0x00,

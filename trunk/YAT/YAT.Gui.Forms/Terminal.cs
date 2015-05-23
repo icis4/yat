@@ -2106,9 +2106,9 @@ namespace YAT.Gui.Forms
 		{
 			// Calculate absolute splitter position (distance) of predefined splitter,
 			// including offset to get send buttons pixel-accurate below predefined buttons:
-			const int predefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
+			const int PredefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
 			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
-			int relativeX = absoluteX - send.Left + predefinedOffset;
+			int relativeX = absoluteX - send.Left + PredefinedOffset;
 			send.SplitterDistance = Int32Ex.LimitToBounds(relativeX, 0, (send.Width - 1));
 		}
 
@@ -2609,6 +2609,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'formIsOpen' does start with a lower case letter.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Boolean just *is* 'bool'...")]
 		private bool ShowPredefinedCommandSettings_formIsOpen = false;
 
 		/// <param name="page">Page 1..max.</param>
@@ -3241,8 +3242,8 @@ namespace YAT.Gui.Forms
 					else // = SendingIsOngoing
 					{
 						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
-						// Do not directly access the image, it will be flashed by the timer below.
-						// Directly accessing the image could result in irregular flashing.
+						//// Do not directly access the image, it will be flashed by the timer below.
+						//// Directly accessing the image could result in irregular flashing.
 						StartIOStatusFlashing();
 					}
 				}
@@ -3599,14 +3600,19 @@ namespace YAT.Gui.Forms
 			else
 				guid = "<None>";
 
-			Debug.WriteLine(string.Format(" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
-				DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-				Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
-				GetType(),
-				"",
-				"[" + guid + "]",
-				message
-				));
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"",
+					"[" + guid + "]",
+					message
+				)
+			);
 		}
 
 		#endregion

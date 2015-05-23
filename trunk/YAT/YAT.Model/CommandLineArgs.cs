@@ -191,6 +191,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Name is intentionally written 'TCP' instead of 'Tcp' for better readability.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TCPAutoReconnect", ShortName = "tar", Description =
 			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
@@ -237,6 +238,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Name is intentionally written 'USB' instead of 'Usb' for better readability.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop, read above regarding 'Usb' ...")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "NoUSBAutoOpen", ShortName = "nuao", Description =
 			"When USB device is connected, don't automatically open it." + EnvironmentEx.NewLineConstWorkaround +

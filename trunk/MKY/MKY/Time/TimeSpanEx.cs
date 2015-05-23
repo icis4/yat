@@ -39,6 +39,7 @@ namespace MKY
 		/// <summary>
 		/// Returns time span formatted with "d:hh:mm:ss".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hh' and 'ss' just happen to be proper format strings...")]
 		public static string FormatInvariantTimeSpan(TimeSpan timeSpan)
 		{
 			return (FormatInvariantTimeSpan(timeSpan, false, false, false));
@@ -47,6 +48,7 @@ namespace MKY
 		/// <summary>
 		/// Returns time span formatted with "d:hh:mm:ss[.f]".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hh' and 'ss' just happen to be proper format strings...")]
 		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths)
 		{
 			return (FormatInvariantTimeSpan(timeSpan, tenths, false, false));
@@ -55,6 +57,7 @@ namespace MKY
 		/// <summary>
 		/// Returns time span formatted with "d:hh:mm:ss[.f[f]]".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hh' and 'ss' just happen to be proper format strings...")]
 		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths, bool hundredths)
 		{
 			return (FormatInvariantTimeSpan(timeSpan, tenths, hundredths, false));
@@ -63,6 +66,7 @@ namespace MKY
 		/// <summary>
 		/// Returns time span formatted with "d:hh:mm:ss[.f[f[f]]]".
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hh' and 'ss' just happen to be proper format strings...")]
 		public static string FormatInvariantTimeSpan(TimeSpan timeSpan, bool tenths, bool hundredths, bool thousandths)
 		{
 			StringBuilder sb = new StringBuilder();
