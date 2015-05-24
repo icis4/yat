@@ -35,7 +35,6 @@ namespace MKY.Data
 	/// this issue, it will therefore not be forgotten. Until this feature request is implemented,
 	/// changes to this class also have to be applied to <see cref="Settings.SettingsItem"/>.
 	/// </remarks>
-	[Serializable]
 	public abstract class DataItem : IEquatable<DataItem>
 	{
 		private List<DataItem> nodes;          // = null;

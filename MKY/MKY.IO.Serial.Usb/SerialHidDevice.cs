@@ -377,6 +377,7 @@ namespace MKY.IO.Serial.Usb
 		/// <remarks>
 		/// Will be signaled by <see cref="Send(byte[])"/> method above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
@@ -718,6 +719,7 @@ namespace MKY.IO.Serial.Usb
 		/// <remarks>
 		/// Will be signaled by <see cref="device_DataReceived"/> event above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
@@ -875,6 +877,7 @@ namespace MKY.IO.Serial.Usb
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

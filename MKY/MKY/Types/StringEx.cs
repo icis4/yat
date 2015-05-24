@@ -21,10 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+
+#endregion
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the Sytem namespace.
@@ -142,12 +149,12 @@ namespace MKY
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns whether <paramref name="str"/> contains any of the <paramref name="searchChars"/>.
+		/// Returns whether <paramref name="str"/> contains any of the <paramref name="anyOf"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Chars", Justification = "Parameter naming as similar string methods.")]
-		public static bool ContainsAny(string str, char[] searchChars)
+		public static bool ContainsAny(string str, char[] anyOf)
 		{
-			return (str.IndexOfAny(searchChars) >= 0);
+			return (str.IndexOfAny(anyOf) >= 0);
 		}
 
 		#endregion
@@ -457,13 +464,13 @@ namespace MKY
 		/// search strings when compared using the specified culture.
 		/// </summary>
 		/// <param name="str">The string.</param>
-		/// <param name="compareStrings">The strings to compare with.</param>
+		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
-		public static bool StartsWithAny(string str, string[] compareStrings)
+		public static bool StartsWithAny(string str, string[] values)
 		{
-			return (StartsWithAny(str, compareStrings, false, null));
+			return (StartsWithAny(str, values, false, null));
 		}
 
 		/// <summary>
@@ -471,14 +478,20 @@ namespace MKY
 		/// search strings when compared using the specified culture.
 		/// </summary>
 		/// <param name="str">The string.</param>
-		/// <param name="compareStrings">The strings to compare with.</param>
-		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
+		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
-		public static bool StartsWithAny(string str, string[] compareStrings, bool ignoreCase)
+		public static bool StartsWithAny(string str, string[] values, StringComparison comparisonType)
 		{
-			return (StartsWithAny(str, compareStrings, ignoreCase, null));
+			foreach (string value in values)
+			{
+				if (str.StartsWith(value, comparisonType))
+					return (true); // Match.
+			}
+			return (false); // No match.
 		}
 
 		/// <summary>
@@ -486,17 +499,17 @@ namespace MKY
 		/// search strings when compared using the specified culture.
 		/// </summary>
 		/// <param name="str">The string.</param>
-		/// <param name="compareStrings">The strings to compare with.</param>
+		/// <param name="values">The strings to compare with.</param>
 		/// <param name="ignoreCase">true to ignore case when comparing this string and value; otherwise, false.</param>
 		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
-		public static bool StartsWithAny(string str, string[] compareStrings, bool ignoreCase, CultureInfo culture)
+		public static bool StartsWithAny(string str, string[] values, bool ignoreCase, CultureInfo culture)
 		{
-			foreach (string compareString in compareStrings)
+			foreach (string value in values)
 			{
-				if (str.StartsWith(compareString, ignoreCase, culture))
+				if (str.StartsWith(value, ignoreCase, culture))
 					return (true); // Match.
 			}
 			return (false); // No match.

@@ -330,7 +330,7 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			if (TerminalIsAvailable)
-				toolStripMenuItem_TerminalMenu_File_Save.Enabled = this.terminal.SettingsFileIsWriteable;
+				toolStripMenuItem_TerminalMenu_File_Save.Enabled = this.terminal.SettingsFileIsWritable;
 			else
 				toolStripMenuItem_TerminalMenu_File_Save.Enabled = false;
 
@@ -1803,12 +1803,12 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public virtual bool SettingsFileIsWriteable
+		public virtual bool SettingsFileIsWritable
 		{
 			get
 			{
 				if (TerminalIsAvailable)
-					return (this.terminal.SettingsFileIsWriteable);
+					return (this.terminal.SettingsFileIsWritable);
 				else
 					return (true);
 			}
@@ -3604,6 +3604,7 @@ namespace YAT.Gui.Forms
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

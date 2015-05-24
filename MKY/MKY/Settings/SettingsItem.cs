@@ -51,7 +51,6 @@ namespace MKY.Settings
 	/// this issue, it will therefore not be forgotten. Until this feature request is implemented,
 	/// changes to this class also have to be applied to <see cref="Data.DataItem"/>.
 	/// </remarks>
-	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
 		private SettingsType settingsType;

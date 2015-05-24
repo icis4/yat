@@ -156,7 +156,8 @@ namespace MKY.IO.Serial
 		/// <c>true</c> if the underlying I/O instance is transmissive, i.e. ready to send and
 		/// receive data as of the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'transmissive'?")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Transmissive' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Transmissive", Justification = "'Transmissive' is a correct English term.")]
 		bool IsTransmissive { get; }
 
 		/// <summary>

@@ -20,16 +20,36 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
+
+#endregion
+
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+// Justification = "Used in case of 'ENABLE_HORIZONTAL_AUTO_SCROLL'. Not #if-able as this method is created by the designer."
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "MKY.Windows.Forms.Test.WindowsFormsTest.#listBoxEx_HorizontalScrolled(System.Object,System.Windows.Forms.ScrollEventArgs)")]
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope = "member", Target = "MKY.Windows.Forms.Test.WindowsFormsTest.#listBoxEx_VerticalScrolled(System.Object,System.Windows.Forms.ScrollEventArgs)")]
+
+#endregion
 
 namespace MKY.Windows.Forms.Test
 {
 	/// <summary>
 	/// Test form for <see cref="FastListBox"/>.
 	/// </summary>
+	[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Used in case of 'ENABLE_HORIZONTAL_AUTO_SCROLL'. Not #if-able as this method is created by the designer.")]
 	public partial class WindowsFormsTest : Form
 	{
 		/// <summary>
@@ -42,15 +62,15 @@ namespace MKY.Windows.Forms.Test
 
 		private void listBoxEx_HorizontalScrolled(object sender, ScrollEventArgs e)
 		{
-			label_ListBoxEx_HorizontalScrollPositionOld.Text = e.OldValue.ToString();
-			label_ListBoxEx_HorizontalScrollPositionNew.Text = e.NewValue.ToString();
+			label_ListBoxEx_HorizontalScrollPositionOld.Text = e.OldValue.ToString(CultureInfo.CurrentCulture);
+			label_ListBoxEx_HorizontalScrollPositionNew.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
 			label_ListBoxEx_HorizontalScrollType.Text = e.Type.ToString();
 		}
 
 		private void listBoxEx_VerticalScrolled(object sender, ScrollEventArgs e)
 		{
-			label_ListBoxEx_VerticalScrollPositionOld.Text = e.OldValue.ToString();
-			label_ListBoxEx_VerticalScrollPositionNew.Text = e.NewValue.ToString();
+			label_ListBoxEx_VerticalScrollPositionOld.Text = e.OldValue.ToString(CultureInfo.CurrentCulture);
+			label_ListBoxEx_VerticalScrollPositionNew.Text = e.NewValue.ToString(CultureInfo.CurrentCulture);
 			label_ListBoxEx_VerticalScrollType.Text = e.Type.ToString();
 		}
 
@@ -63,7 +83,7 @@ namespace MKY.Windows.Forms.Test
 			ListBoxEx lbe = listBoxEx;
 			lbe.BeginUpdate();
 
-			string append = button_ListBoxEx_AddChar_Click_increment.ToString();
+			string append = button_ListBoxEx_AddChar_Click_increment.ToString(CultureInfo.CurrentCulture);
 			
 			button_ListBoxEx_AddChar_Click_increment++;
 			if (button_ListBoxEx_AddChar_Click_increment >= 10)

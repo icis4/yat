@@ -36,6 +36,7 @@ namespace MKY.Drawing
 	/// <summary>
 	/// This enum reduces <see cref="RotateFlipType"/> to rotation.
 	/// </summary>
+	[SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags", Justification = "These are NOT flags!")]
 	public enum RotateType
 	{
 		RotateNone = RotateFlipType.RotateNoneFlipNone,
@@ -140,7 +141,7 @@ namespace MKY.Drawing
 	/// <summary>
 	/// This enum reduces <see cref="RotateFlipType"/> to flipping.
 	/// </summary>
-	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	[SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags", Justification = "These are NOT flags!")]
 	public enum FlipType
 	{
 		FlipNone = RotateFlipType.RotateNoneFlipNone,

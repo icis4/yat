@@ -495,13 +495,13 @@ namespace YAT.Gui.Forms
 
 			bool workspaceIsReady = (this.workspace != null);
 
-			bool workspaceFileIsWriteable = false;
+			bool workspaceFileIsWritable = false;
 			if (workspaceIsReady)
-				workspaceFileIsWriteable = this.workspace.SettingsFileIsWriteable;
+				workspaceFileIsWritable = this.workspace.SettingsFileIsWritable;
 
 			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled    = !workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
-			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWriteable;
+			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && workspaceFileIsWritable;
 			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
 
 			this.isSettingControls.Leave();
@@ -667,9 +667,9 @@ namespace YAT.Gui.Forms
 
 			bool childIsReady = (ActiveMdiChild != null);
 
-			bool terminalFileIsWriteable = false;
+			bool terminalFileIsWritable = false;
 			if (childIsReady)
-				terminalFileIsWriteable = ((Gui.Forms.Terminal)ActiveMdiChild).SettingsFileIsWriteable;
+				terminalFileIsWritable = ((Gui.Forms.Terminal)ActiveMdiChild).SettingsFileIsWritable;
 
 			bool terminalIsStopped = false;
 			if (childIsReady)
@@ -692,7 +692,7 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			toolStripButton_MainTool_File_Save.Enabled      = childIsReady && terminalFileIsWriteable;
+			toolStripButton_MainTool_File_Save.Enabled      = childIsReady && terminalFileIsWritable;
 			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && terminalIsStopped;
 			toolStripButton_MainTool_Terminal_Stop.Enabled  = childIsReady && terminalIsStarted;
 
@@ -1886,6 +1886,7 @@ namespace YAT.Gui.Forms
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

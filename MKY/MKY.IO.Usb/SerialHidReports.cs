@@ -162,7 +162,6 @@ namespace MKY.IO.Usb
 
 			// Create the temporary report container:
 			List<byte[]> reports = new List<byte[]>();
-			bool reportIsFull = false;
 
 			// Create the reports and accumulate the length:
 			int accumulatedPayloadLength = 0;
@@ -171,7 +170,6 @@ namespace MKY.IO.Usb
 				// Evaluate the required lengths:
 				int remainingPayloadLength = payload.Length - accumulatedPayloadLength;
 				int payloadLength = ((remainingPayloadLength <= usableLength) ? remainingPayloadLength : usableLength);
-				reportIsFull = (payloadLength == usableLength);
 
 				// Create the report, one or two bytes may be used by the report header,
 				// an additional byte may be needed for the terminating zero:

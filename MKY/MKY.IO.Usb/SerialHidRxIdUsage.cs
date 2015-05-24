@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 #endregion
@@ -36,6 +37,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Serial HID Rx ID setting.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 	[Serializable]
 	public class SerialHidRxIdUsage : IEquatable<SerialHidRxIdUsage>
 	{
@@ -45,12 +47,15 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		public const bool SeparateRxIdDefault = false;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		public const bool AnyRxIdDefault = false;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		public const byte RxIdDefault = SerialHidReportFormat.IdDefault;
 
 		#endregion
@@ -82,6 +87,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Creates new setting with specified arguments.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		public SerialHidRxIdUsage(bool separateRxId, bool anyRxId, byte rxId)
 		{
 			SeparateRxId = separateRxId;
@@ -114,6 +120,7 @@ namespace MKY.IO.Usb
 		#region Properties
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		[XmlElement("SeparateRxId")]
 		public bool SeparateRxId
 		{
@@ -122,6 +129,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		[XmlElement("AnyRxId")]
 		public bool AnyRxId
 		{
@@ -130,6 +138,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		[XmlElement("RxId")]
 		public byte RxId
 		{

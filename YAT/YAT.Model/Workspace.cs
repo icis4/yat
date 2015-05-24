@@ -314,14 +314,14 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool SettingsFileIsWriteable
+		public virtual bool SettingsFileIsWritable
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.settingsHandler != null)
-					return (this.settingsHandler.SettingsFileIsWriteable);
+					return (this.settingsHandler.SettingsFileIsWritable);
 				else
 					return (false);
 			}
@@ -680,10 +680,10 @@ namespace YAT.Model
 					}
 
 					// Ensure that normal files which are write-protected or no longer exist are 'Saved As'.
-					if (!SettingsFileIsWriteable || SettingsFileNoLongerExists)
+					if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
 					{
 						string reason;
-						if (!SettingsFileIsWriteable)
+						if (!SettingsFileIsWritable)
 							reason = "The file is write-protected.";
 						else
 							reason = "The file no longer exists.";
@@ -730,7 +730,7 @@ namespace YAT.Model
 			// Save if allowed so.
 			// -------------------------------------------------------------------------------------
 
-			if (this.settingsHandler.SettingsFileIsWriteable)
+			if (this.settingsHandler.SettingsFileIsWritable)
 				return (SaveToFile(isAutoSave, ""));
 			else
 				return (false); // Let save fail if file shall not be written.
@@ -1060,7 +1060,7 @@ namespace YAT.Model
 			}
 
 			// Write-protected file:
-			if (!successWithWorkspace && !this.settingsHandler.SettingsFileIsWriteable)
+			if (!successWithWorkspace && !this.settingsHandler.SettingsFileIsWritable)
 			{
 				successWithWorkspace = true; // Consider it successful if file shall not be saved.
 			}
@@ -1827,7 +1827,7 @@ namespace YAT.Model
 		private static bool EvaluateWhetherSaveIsFeasibleForThisTerminal(Terminal t)
 		{
 			// Save is not feasible for write-protected files:
-			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileIsWriteable)
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileIsWritable)
 				return (false);
 
 			// Save is not feasible for files which no longer exist:
@@ -1842,7 +1842,7 @@ namespace YAT.Model
 		{
 			// Save is not required for write-protected files...
 			// ...with no or only implicit changes would have to be saved:
-			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileIsWriteable)
+			if (t.SettingsFileHasAlreadyBeenNormallySaved && !t.SettingsFileIsWritable)
 				return (false);
 
 			// Save is not required if file does no longer exist...
@@ -2060,6 +2060,7 @@ namespace YAT.Model
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

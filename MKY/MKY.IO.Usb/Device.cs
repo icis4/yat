@@ -111,7 +111,7 @@ namespace MKY.IO.Usb
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid)
 		{
 			List<DeviceInfo> l = new List<DeviceInfo>();
@@ -407,6 +407,7 @@ namespace MKY.IO.Usb
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		public static void RegisterStaticDeviceNotificationHandler(Guid classGuid)
 		{
 			lock (staticDeviceNotificationSyncObj)
@@ -562,7 +563,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		protected Device(Guid classGuid, string path)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -577,7 +578,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		protected Device(Guid classGuid, int vendorId, int productId)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -587,7 +588,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		protected Device(Guid classGuid, int vendorId, int productId, string serial)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -597,7 +598,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		protected Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -647,6 +648,7 @@ namespace MKY.IO.Usb
 			}
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		private void RegisterAndAttachStaticDeviceEventHandlers(Guid classGuid)
 		{
 			RegisterStaticDeviceNotificationHandler(classGuid);

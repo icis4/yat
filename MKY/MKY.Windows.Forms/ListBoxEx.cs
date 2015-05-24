@@ -44,6 +44,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -58,6 +59,7 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a list box that extends <see cref="ListBox"/>.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[DesignerCategory("Windows Forms")]
 	public class ListBoxEx : ListBox
 	{
@@ -85,6 +87,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Select all indices within the list box.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
 		public void SelectAllIndices()
 		{
 			for (int i = 0; i < Items.Count; i++)

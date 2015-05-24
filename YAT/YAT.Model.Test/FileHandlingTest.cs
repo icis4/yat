@@ -1442,24 +1442,24 @@ namespace YAT.Model.Test
 			#endregion
 
 			#region Step 5
-			// - Make files writeable again and then perform steps 3 and 4 again
+			// - Make files writable again and then perform steps 3 and 4 again
 			{
 				step = "Step 5: ";
 				{
 					string filePath = this.normalWorkspaceFilePath;
 					File.SetAttributes(filePath, FileAttributes.Normal);
-					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");
+					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writable!");
 				}
 				{
 					string filePath = this.normalTerminal1FilePath;
 					File.SetAttributes(filePath, FileAttributes.Normal);
-					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Terminal file is not writeable!");
+					Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Terminal file is not writable!");
 				}
 			}
 			#endregion
 
 			#region Step 6
-			// - Subsequent start on writeable files
+			// - Subsequent start on writable files
 			//   => Implicit changes to terminal must be written again
 			using (Main main = new Main())
 			{
@@ -1485,13 +1485,13 @@ namespace YAT.Model.Test
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
 
 				string filePath = this.normalTerminal1FilePath;
-				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");
+				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writable!");
 				Assert.IsTrue((terminalTS != File.GetLastWriteTimeUtc(filePath)), "Terminal file time stamp still unchanged!");
 			}
 			#endregion
 
 			#region Step 7
-			// - Subsequent start on writeable files
+			// - Subsequent start on writable files
 			//   => Explicit changes to workspace must be written again
 			using (Main main = new Main())
 			{
@@ -1534,7 +1534,7 @@ namespace YAT.Model.Test
 				);
 
 				string filePath = this.normalWorkspaceFilePath;
-				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writeable!");
+				Assert.IsTrue(((File.GetAttributes(filePath) & FileAttributes.ReadOnly) == 0), "Workspace file is not writable!");
 				Assert.IsTrue((workspaceTS != File.GetLastWriteTimeUtc(filePath)), "Workspace file time stamp still unchanged!");
 			}
 			#endregion
