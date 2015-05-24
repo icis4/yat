@@ -204,6 +204,8 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "dataSentThreadEvent", Justification = "Disposed of in SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread().")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "socket", Justification = "Disposed of in SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread().")]
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!this.isDisposed)
@@ -215,6 +217,9 @@ namespace MKY.IO.Serial.Socket
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread();
+
+					this.stateLock.Dispose();
+					this.isStoppingAndDisposingLock.Dispose();
 				}
 
 				// Set state to disposed:
@@ -730,6 +735,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Will be signaled by <see cref="Send(byte[])"/> method above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void DataSentThread()
 		{
 			WriteDebugMessageLine("SendThread() has started.");
@@ -922,6 +928,7 @@ namespace MKY.IO.Serial.Socket
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

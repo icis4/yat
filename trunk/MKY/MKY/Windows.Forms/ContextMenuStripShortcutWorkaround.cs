@@ -44,9 +44,9 @@ namespace MKY.Windows.Forms
 		private Dictionary<Keys, ToolStripMenuItem> shortcutItems = new Dictionary<Keys, ToolStripMenuItem>();
 
 		/// <summary>
-		/// Add a context menu strip to the workaround and let its shortcut items get collected.
+		/// Add a tool strip to the workaround and let its shortcut items get collected.
 		/// </summary>
-		public void Add(ContextMenuStrip strip)
+		public void Add(ToolStrip strip)
 		{
 			foreach (ToolStripItem tsi in strip.Items)
 			{

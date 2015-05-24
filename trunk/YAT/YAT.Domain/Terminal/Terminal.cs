@@ -750,6 +750,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Will be signaled by <see cref="Send(SendItem)"/> method above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
@@ -2015,6 +2016,7 @@ namespace YAT.Domain
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

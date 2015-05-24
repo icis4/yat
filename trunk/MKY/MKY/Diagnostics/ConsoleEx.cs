@@ -44,6 +44,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// A console writer extension to <see cref="TextWriter"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Required by design to properly extend 'System.Console'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 		public class TextWriterEx
 		{

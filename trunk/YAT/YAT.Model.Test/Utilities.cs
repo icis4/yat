@@ -269,34 +269,34 @@ namespace YAT.Model.Test
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortBSettings()));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextMtSicsDeviceASettings()
+		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings()
 		{
-			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceAIsConnected)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceA));
+			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceAIsConnected)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceA));
 
-			Assert.Ignore("'MtSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MtSicsDeviceA' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and availabel if passing this test is required.");
 			return (null);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMtSicsDeviceASettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceASettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMtSicsDeviceASettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceASettings()));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextMtSicsDeviceBSettings()
+		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings()
 		{
-			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceBIsConnected)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MtSicsDeviceB));
+			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceBIsConnected)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceB));
 
-			Assert.Ignore("'MtSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MtSicsDeviceB' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and availabel if passing this test is required.");
 			return (null);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMtSicsDeviceBSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceBSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMtSicsDeviceBSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceBSettings()));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)

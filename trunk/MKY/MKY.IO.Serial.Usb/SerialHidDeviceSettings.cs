@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 using MKY.IO.Usb;
@@ -159,6 +160,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Rx", Justification = "'Rx' is a common term in serial communication.")]
 		[XmlElement("RxIdUsage")]
 		public virtual SerialHidRxIdUsage RxIdUsage
 		{

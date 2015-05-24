@@ -87,7 +87,7 @@ namespace MKY.IO.Serial.Socket
 			Listening,
 			ListeningFailed,
 			Accepted,
-			Restarting,
+		////Restarting,
 			Stopping,
 			Error,
 		}
@@ -199,8 +199,7 @@ namespace MKY.IO.Serial.Socket
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSockets();
 
-					// Do not yet dispose of state lock because that may result in null ref exceptions
-					// during closing, due to the fact that ALAZ closes/disconnects asynchronously.
+					this.stateLock.Dispose();
 				}
 
 				// Set state to disposed:
@@ -700,12 +699,12 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		private void RestartAutoSocket()
-		{
-			SetStateSynchronizedAndNotify(SocketState.Restarting);
-			StopAndDisposeSockets();
-			StartAutoSocket();
-		}
+	////private void RestartAutoSocket()
+	////{
+	////	SetStateSynchronizedAndNotify(SocketState.Restarting);
+	////	StopAndDisposeSockets();
+	////	StartAutoSocket();
+	////}
 
 		private void StopAutoSocket()
 		{
@@ -1075,6 +1074,7 @@ namespace MKY.IO.Serial.Socket
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

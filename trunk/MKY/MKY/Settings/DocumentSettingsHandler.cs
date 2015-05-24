@@ -159,15 +159,15 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether setting file is read-only.
+		/// Returns whether setting file is writable.
 		/// </summary>
-		public virtual bool SettingsFileIsWriteable
+		public virtual bool SettingsFileIsWritable
 		{
-			get { return (this.fileHandler.FileIsWriteable); }
+			get { return (this.fileHandler.FileIsWritable); }
 		}
 
 		/// <summary>
-		/// Returns whether setting file is writeable.
+		/// Returns whether setting file is read-only.
 		/// </summary>
 		public virtual bool SettingsFileIsReadOnly
 		{

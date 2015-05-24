@@ -558,7 +558,7 @@ namespace YAT.Model.Test
 	}
 
 	/// <summary></summary>
-	public static class MtSicsDeviceTransmissionTestData
+	public static class MTSicsDeviceTransmissionTestData
 	{
 		#region Constants
 		//==========================================================================================
@@ -576,7 +576,7 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
-		static MtSicsDeviceTransmissionTestData()
+		static MTSicsDeviceTransmissionTestData()
 		{
 			Commands = new List<Pair<Pair<string, string>, TimeSpan>>();
 			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S", @"S +"),  TimeSpan.FromSeconds(90.0 / 1000)));
@@ -598,7 +598,7 @@ namespace YAT.Model.Test
 			get
 			{
 				TransmissionType tt = TransmissionType.SerialPort;
-				string categoryDev = MKY.IO.Ports.Test.SettingsCategoryStrings.MtSicsDeviceAIsConnected;
+				string categoryDev = MKY.IO.Ports.Test.SettingsCategoryStrings.MTSicsDeviceAIsConnected;
 				string category01m = new NUnit.MinuteDurationCategoryAttribute( 1).Name;
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
 				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;
@@ -632,7 +632,7 @@ namespace YAT.Model.Test
 	/// and required when evaluating the test result.
 	/// </remarks>
 	[TestFixture]
-	public class MtSicsDeviceTransmissionTest
+	public class MTSicsDeviceTransmissionTest
 	{
 		#region Set Up Fixture
 		//==========================================================================================
@@ -675,13 +675,13 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(MtSicsDeviceTransmissionTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(MTSicsDeviceTransmissionTestData), "TestCases")]
 		public virtual void PerformTransmission(TransmissionType transmissionType, string stimulus, string expected, int transmissionCount)
 		{
 			switch (transmissionType)
 			{
 				case TransmissionType.SerialPort:
-					PerformTransmission(Utilities.GetStartedTextMtSicsDeviceASettings(), stimulus, expected, transmissionCount);
+					PerformTransmission(Utilities.GetStartedTextMTSicsDeviceASettings(), stimulus, expected, transmissionCount);
 					break;
 			}
 		}

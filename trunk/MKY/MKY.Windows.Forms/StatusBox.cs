@@ -242,6 +242,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Closes the status box.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static void AcceptAndClose()
 		{
 			try

@@ -324,6 +324,8 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					ResetPortAndThreads();
+
+					this.stateLock.Dispose();
 				}
 
 				// Set state to disposed:
@@ -809,6 +811,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Will be signaled by <see cref="Send(byte[])"/> method above, or by XOn/XOff while receiving.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
@@ -1493,6 +1496,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Will be signaled by <see cref="port_DataReceived"/> event above, or by XOn/XOff while
 		/// sending.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
@@ -1861,6 +1865,7 @@ namespace MKY.IO.Serial.SerialPort
 			(
 				string.Format
 				(
+					CultureInfo.CurrentCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

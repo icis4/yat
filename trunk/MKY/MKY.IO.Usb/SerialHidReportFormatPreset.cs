@@ -48,8 +48,14 @@ namespace MKY.IO.Usb
 		None,
 		Plain,
 		Common,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
 		MT_SerHid,
+
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
 		TI_HidApi,
+
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "YAT", Justification = "As always, there are exceptions to the rules...")]
 		YAT
 	}
 
@@ -97,6 +103,8 @@ namespace MKY.IO.Usb
 		/// The TI HID API identifier is specified to 0x3F according to http://www.ti.com/lit/an/slaa453/slaa453.pdf.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may spell 'ti' like this, and may contain 'slaa'...")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ID", Justification = "Underscore for improved readability.")]
 		public const byte TI_ID = 0x3F;
 
 		#endregion
@@ -171,32 +179,32 @@ namespace MKY.IO.Usb
 		{
 			s = s.Trim();
 
-			if      (StringEx.StartsWithAny(s, None_stringStart, true))
+			if      (StringEx.StartsWithAny(s, None_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.None);
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, Plain_stringStart, true))
+			else if (StringEx.StartsWithAny(s, Plain_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Plain);
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, Common_stringStart, true))
+			else if (StringEx.StartsWithAny(s, Common_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Common);
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, MT_SerHid_stringStart, true))
+			else if (StringEx.StartsWithAny(s, MT_SerHid_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.MT_SerHid);
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, TI_HidApi_stringStart, true))
+			else if (StringEx.StartsWithAny(s, TI_HidApi_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.TI_HidApi);
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, YAT_stringStart, true))
+			else if (StringEx.StartsWithAny(s, YAT_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.YAT);
 				return (true);

@@ -46,8 +46,106 @@ using System.Runtime.InteropServices;
 // Module-level FxCop suppressions
 //==================================================================================================
 
+// Justification = "The structure is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#bottom")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#right")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#left")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+RECT.#top")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#nMin")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#nPage")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#nPos")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#nTrackPos")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#nMax")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#fMask")]
+[module: SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#cbSize")]
+
 // Justification = "Naming is defined by the Win32 API."
-[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.DeviceManagement+NativeTypes+SCROLLINFO", MessageId = "SCROLLINFO")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO.#cbSize", MessageId = "cb")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#SetScrollInfo(System.IntPtr,System.Int32,MKY.Win32.Window+NativeTypes+SCROLLINFO&,System.Boolean)", MessageId = "lpsi")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#SetScrollInfo(System.IntPtr,System.Int32,MKY.Win32.Window+NativeTypes+SCROLLINFO&,System.Boolean)", MessageId = "hwnd")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#SetScrollInfo(System.IntPtr,System.Int32,MKY.Win32.Window+NativeTypes+SCROLLINFO&,System.Boolean)", MessageId = "f")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#ScrollWindowEx(System.IntPtr,System.Int32,System.Int32,MKY.Win32.Window+NativeTypes+RECT&,MKY.Win32.Window+NativeTypes+RECT&,System.IntPtr,MKY.Win32.Window+NativeTypes+RECT&,System.UInt32)", MessageId = "dy")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#ScrollWindowEx(System.IntPtr,System.Int32,System.Int32,MKY.Win32.Window+NativeTypes+RECT&,MKY.Win32.Window+NativeTypes+RECT&,System.IntPtr,MKY.Win32.Window+NativeTypes+RECT&,System.UInt32)", MessageId = "hrgn")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#ScrollWindowEx(System.IntPtr,System.Int32,System.Int32,MKY.Win32.Window+NativeTypes+RECT&,MKY.Win32.Window+NativeTypes+RECT&,System.IntPtr,MKY.Win32.Window+NativeTypes+RECT&,System.UInt32)", MessageId = "hwnd")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#ScrollWindowEx(System.IntPtr,System.Int32,System.Int32,MKY.Win32.Window+NativeTypes+RECT&,MKY.Win32.Window+NativeTypes+RECT&,System.IntPtr,MKY.Win32.Window+NativeTypes+RECT&,System.UInt32)", MessageId = "prc")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#GetScrollInfo(System.IntPtr,System.Int32,MKY.Win32.Window+NativeTypes+SCROLLINFO&)", MessageId = "lpsi")]
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeMethods.#GetScrollInfo(System.IntPtr,System.Int32,MKY.Win32.Window+NativeTypes+SCROLLINFO&)", MessageId = "hwnd")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#WM_HSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#WM_VSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SW_SCROLLCHILDREN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SW_INVALIDATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SW_ERASE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_HORZ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_VERT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_CTL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_BOTH")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINEUP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINELEFT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINEDOWN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINERIGHT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGEUP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGELEFT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGEDOWN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGERIGHT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_THUMBPOSITION")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_THUMBTRACK")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_TOP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LEFT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_BOTTOM")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_RIGHT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_ENDSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_RANGE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_PAGE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_POS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_DISABLENOSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_TRACKPOS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_ALL")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Window+NativeTypes+RECT", MessageId = "RECT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "MKY.Win32.Window+NativeTypes+SCROLLINFO", MessageId = "SCROLLINFO")]
+
+// Justification = "Naming is defined by the Win32 API."
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#WM_HSCROLL", MessageId = "HSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#WM_VSCROLL", MessageId = "VSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SW_SCROLLCHILDREN", MessageId = "SCROLLCHILDREN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SW_INVALIDATE", MessageId = "INVALIDATE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SW_ERASE", MessageId = "ERASE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_HORZ", MessageId = "HORZ")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_VERT", MessageId = "VERT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_CTL", MessageId = "CTL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_BOTH", MessageId = "BOTH")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINEUP", MessageId = "LINEUP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINELEFT", MessageId = "LINELEFT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINEDOWN", MessageId = "LINEDOWN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LINERIGHT", MessageId = "LINERIGHT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGEUP", MessageId = "PAGEUP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGELEFT", MessageId = "PAGELEFT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGEDOWN", MessageId = "PAGEDOWN")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_PAGERIGHT", MessageId = "PAGERIGHT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_THUMBPOSITION", MessageId = "THUMBPOSITION")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_THUMBTRACK", MessageId = "THUMBTRACK")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_TOP", MessageId = "TOP")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_LEFT", MessageId = "LEFT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_BOTTOM", MessageId = "BOTTOM")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_RIGHT", MessageId = "RIGHT")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SB_ENDSCROLL", MessageId = "ENDSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_RANGE", MessageId = "SIF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_RANGE", MessageId = "RANGE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_PAGE", MessageId = "SIF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_PAGE", MessageId = "PAGE")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_POS", MessageId = "SIF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_POS", MessageId = "POS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_DISABLENOSCROLL", MessageId = "SIF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_DISABLENOSCROLL", MessageId = "DISABLENOSCROLL")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_TRACKPOS", MessageId = "SIF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_TRACKPOS", MessageId = "TRACKPOS")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_ALL", MessageId = "SIF")]
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "MKY.Win32.Window+NativeConstants.#SIF_ALL", MessageId = "ALL")]
 
 #endregion
 
@@ -219,6 +317,7 @@ namespace MKY.Win32
 			/// If the function does not retrieve any values, the return value is zero.
 			/// To get extended error information, call <see cref="WinError.GetLastErrorCode"/>.
 			/// </returns>
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -250,17 +349,18 @@ namespace MKY.Win32
 			/// - <see cref="NativeConstants.SIF_PAGE"/>  Sets the scroll page to the value specified in the nPage member of the SCROLLINFO structure pointed to by lpsi.
 			/// - <see cref="NativeConstants.SIF_POS"/>   Sets the scroll position to the value specified in the nPos member of the SCROLLINFO structure pointed to by lpsi.
 			/// - <see cref="NativeConstants.SIF_RANGE"/> Sets the scroll range to the value specified in the nMin and nMax members of the SCROLLINFO structure pointed to by lpsi.
-			/// <param name="fRedraw">
 			/// </param>
+			/// <param name="fRedraw">
 			/// Specifies whether the scroll bar is redrawn to reflect the changes to the scroll bar. If this parameter is <c>true</c>, the scroll bar is redrawn, otherwise, it is not redrawn.
 			/// </param>
 			/// <returns>
 			/// The return value is the current position of the scroll box.
 			/// </returns>
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern Int32 SetScrollInfo([In] IntPtr hwnd, [In] Int32 fnBar, [In] ref NativeTypes.SCROLLINFO lpsi, [In] Boolean fRedraw);
+			public static extern Int32 SetScrollInfo([In] IntPtr hwnd, [In] Int32 fnBar, [In] ref NativeTypes.SCROLLINFO lpsi, [In, MarshalAs(UnmanagedType.Bool)] bool fRedraw);
 
 			/// <summary>
 			/// The ScrollWindowEx function scrolls the contents of the specified window's client area.
@@ -306,6 +406,11 @@ namespace MKY.Win32
 			/// If the function fails, the return value is ERROR. To get extended error information,
 			/// call <see cref="WinError.GetLastError"/>.
 			/// </returns>
+			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
+			[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' is used by the underlying Win32 'user32.dll'.")]
+			[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "flags", Justification = "Function signature is given by the Win32 API.")]
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]

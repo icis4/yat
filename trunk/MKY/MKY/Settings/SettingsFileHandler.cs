@@ -141,6 +141,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Returns whether the settings file is up to date.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool FileIsUpToDate
 		{
 			get
@@ -168,6 +169,8 @@ namespace MKY.Settings
 		/// <summary>
 		/// Returns whether setting file is readable.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
 		public virtual bool FileIsReadable
 		{
 			get
@@ -192,6 +195,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Returns whether setting file is read-only.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool FileIsReadOnly
 		{
 			get
@@ -202,7 +206,6 @@ namespace MKY.Settings
 
 				try
 				{
-					// Force exception if file is not accessible:
 					FileInfo fi = new FileInfo(this.filePath);
 					return (fi.IsReadOnly);
 				}
@@ -214,9 +217,9 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Returns whether setting file is writeable.
+		/// Returns whether setting file is writable.
 		/// </summary>
-		public virtual bool FileIsWriteable
+		public virtual bool FileIsWritable
 		{
 			get { return (!FileIsReadOnly); }
 		}
@@ -364,7 +367,7 @@ namespace MKY.Settings
 		{
 			bool success = false;
 
-			if (FilePathIsValid && FileIsWriteable)
+			if (FilePathIsValid && FileIsWritable)
 			{
 				string backup = filePath + IO.FileEx.BackupFileExtension;
 
