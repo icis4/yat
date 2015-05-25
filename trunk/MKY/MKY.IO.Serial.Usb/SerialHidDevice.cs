@@ -383,7 +383,7 @@ namespace MKY.IO.Serial.Usb
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag && !IsDisposed)
+			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -404,7 +404,7 @@ namespace MKY.IO.Serial.Usb
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (IsTransmissive && this.sendThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive) // Check 'IsDisposed' first!
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -725,7 +725,7 @@ namespace MKY.IO.Serial.Usb
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.receiveThreadRunFlag && !IsDisposed)
+			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -749,7 +749,7 @@ namespace MKY.IO.Serial.Usb
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (IsOpen && this.receiveThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.receiveThreadRunFlag && IsOpen) // Check 'IsDisposed' first!
 				{
 					byte[] data;
 					lock (this.receiveQueue)

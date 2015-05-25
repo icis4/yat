@@ -423,11 +423,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				return
-				(
-						!IsDisposed && IsStarted && !IsOpen &&
-						this.settings.AutoReopen.Enabled
-				);
+				return (!IsDisposed && IsStarted && !IsOpen && this.settings.AutoReopen.Enabled); // Check 'IsDisposed' first!
 			}
 		}
 
@@ -823,7 +819,7 @@ namespace MKY.IO.Serial.SerialPort
 			try
 			{
 				// Outer loop, requires another signal.
-				while (this.sendThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 				{
 					try
 					{
@@ -844,7 +840,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					// Inner loop, runs as long as there is data in the send queue.
 					// Ensure not to forward any events during closing anymore.
-					while (IsTransmissive && this.sendThreadRunFlag && !IsDisposed)
+					while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive) // Check 'IsDisposed' first!
 					{
 						// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
 						// an exception when trying to write while in output break!
@@ -1502,7 +1498,7 @@ namespace MKY.IO.Serial.SerialPort
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.receiveThreadRunFlag && !IsDisposed)
+			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -1532,7 +1528,7 @@ namespace MKY.IO.Serial.SerialPort
 				// This is considered an acceptable CPU load.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (IsOpen && this.receiveThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.receiveThreadRunFlag && IsOpen) // Check 'IsDisposed' first!
 				{
 					byte[] data;
 					lock (this.receiveQueue)
@@ -1700,7 +1696,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!IsDisposed && IsStarted)
+			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 			{
 				try
 				{

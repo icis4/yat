@@ -797,7 +797,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void AsyncReadCompleted(IAsyncResult result)
 		{
-			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore.
+			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -880,7 +880,7 @@ namespace MKY.IO.Usb
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.receiveThreadRunFlag && !IsDisposed)
+			while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -904,7 +904,7 @@ namespace MKY.IO.Usb
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (IsOpen && (BytesAvailable > 0) && this.receiveThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.receiveThreadRunFlag && IsOpen && (BytesAvailable > 0)) // Check 'IsDisposed' first!
 				{
 					OnDataReceived(EventArgs.Empty);
 

@@ -756,7 +756,7 @@ namespace YAT.Domain
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag && !IsDisposed)
+			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -777,7 +777,7 @@ namespace YAT.Domain
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (IsReadyToSend && this.sendThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend) // Check 'IsDisposed' first!
 				{
 					SendItem[] pendingItems;
 					lock (this.sendQueue)
@@ -923,7 +923,7 @@ namespace YAT.Domain
 				// done prior to a potential Sleep() or repeat.
 				lock (this.breakRequestFlagSynObj)
 				{
-					if (this.breakRequestFlag || !(IsTransmissive && this.sendThreadRunFlag && !IsDisposed))
+					if (this.breakRequestFlag || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
 					{
 						this.breakRequestFlag = false;
 						break;

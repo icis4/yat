@@ -204,8 +204,10 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "dataSentThreadEvent", Justification = "Disposed of in SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread().")]
-		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "socket", Justification = "Disposed of in SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread().")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "stateLock", Justification = "See comments below.")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "dataSentThreadEvent", Justification = "Disposed of asynchronously via SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread().")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "socket", Justification = "Disposed of asynchronously via SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread().")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "isStoppingAndDisposingLock", Justification = "See comments below.")]
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!this.isDisposed)
@@ -218,8 +220,10 @@ namespace MKY.IO.Serial.Socket
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread();
 
-					this.stateLock.Dispose();
-					this.isStoppingAndDisposingLock.Dispose();
+					// Do not dispose of state and shutdown locks because that will result in null
+					// ref exceptions during closing, due to the fact that ALAZ closes/disconnects
+					// asynchronously! No better solution has been found to this issue. And, who
+					// cares if these two locks don't get disposed (except FxCop ;-).
 				}
 
 				// Set state to disposed:
@@ -741,7 +745,7 @@ namespace MKY.IO.Serial.Socket
 			WriteDebugMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.dataSentThreadRunFlag && !IsDisposed)
+			while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -765,7 +769,7 @@ namespace MKY.IO.Serial.Socket
 				// 'OnDataReceived' event was being handled.
 				// 
 				// Ensure not to forward any events during closing anymore.
-				while (IsOpen && this.dataSentThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.dataSentThreadRunFlag && IsOpen) // Check 'IsDisposed' first!
 				{
 					byte[] data;
 					lock (this.dataSentQueue)
@@ -805,6 +809,8 @@ namespace MKY.IO.Serial.Socket
 				isConnected = (this.socketConnections.Count > 0);
 			}
 
+			// Note that state and shutdown locks do not get disposed in order to be still able to
+			// access while asynchronously closing/disconnecting. See Dispose() for more details.
 			if (!isConnected && !IsStoppingAndDisposingSynchronized)
 			{
 				if (GetStateSynchronized() == SocketState.Listening)
@@ -822,6 +828,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			WriteDebugSocketShutdownMessageLine("Socket 'OnException' event!");
 
+			// Note that state and shutdown locks do not get disposed in order to be still able to
+			// access while asynchronously closing/disconnecting. See Dispose() for more details.
 			if (!IsStoppingAndDisposingSynchronized)
 			{
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
