@@ -439,7 +439,7 @@ namespace YAT.Gui.Controls
 					string message =
 						"Remote port is invalid, valid values are numbers from " +
 						System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".";
+						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
 
 					MessageBoxEx.Show
 					(
@@ -495,7 +495,7 @@ namespace YAT.Gui.Controls
 					string message =
 						"Local port is invalid, valid values are numbers from " +
 						System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + ".";
+						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
 
 					MessageBoxEx.Show
 					(
@@ -675,12 +675,12 @@ namespace YAT.Gui.Controls
 			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket)))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remoteTcpPort.ToString();
+				textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
 			else if (!DesignMode && Enabled && (this.hostType == SocketHostType.Udp))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = this.remoteUdpPort.ToString();
+				textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
 			else
 			{
@@ -711,12 +711,12 @@ namespace YAT.Gui.Controls
 			if (Enabled && ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket)))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture);
+				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
 			else if (Enabled && (this.hostType == SocketHostType.Udp))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture);
+				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
 			else
 			{

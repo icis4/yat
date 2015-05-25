@@ -544,7 +544,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
 
 			checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString();
+			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString(CultureInfo.CurrentCulture);
 
 			// Char replace:
 			bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
@@ -570,7 +570,7 @@ namespace YAT.Gui.Forms
 			label_MaxSendChunkSizeUnit.Enabled   = isSerialPort;
 			label_MaxSendChunkSize.Enabled       = isSerialPort;
 			textBox_MaxSendChunkSize.Enabled     = isSerialPort;
-			textBox_MaxSendChunkSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize.ToString(CultureInfo.InvariantCulture);
+			textBox_MaxSendChunkSize.Text        = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendChunkSize.ToString(CultureInfo.CurrentCulture);
 
 			checkBox_NoSendOnOutputBreak.Enabled = isSerialPort;
 			checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
@@ -582,15 +582,15 @@ namespace YAT.Gui.Forms
 			label_DefaultDelay.Enabled          = !disableKeywords;
 			label_DefaultDelayUnit.Enabled      = !disableKeywords;
 			textBox_DefaultDelay.Enabled        = !disableKeywords;
-			textBox_DefaultDelay.Text           = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.InvariantCulture);
+			textBox_DefaultDelay.Text           = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
 			label_DefaultLineDelay.Enabled      = !disableKeywords;
 			label_DefaultLineDelayUnit.Enabled  = !disableKeywords;
 			textBox_DefaultLineDelay.Enabled    = !disableKeywords;
-			textBox_DefaultLineDelay.Text       = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.InvariantCulture);
+			textBox_DefaultLineDelay.Text       = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
 			label_DefaultLineRepeat.Enabled     = !disableKeywords;
 			label_DefaultLineRepeatUnit.Enabled = !disableKeywords;
 			textBox_DefaultLineRepeat.Enabled   = !disableKeywords;
-			textBox_DefaultLineRepeat.Text      = this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.InvariantCulture);
+			textBox_DefaultLineRepeat.Text      = this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
 			checkBox_DisableKeywords.Checked    = disableKeywords;
 
 			// User:

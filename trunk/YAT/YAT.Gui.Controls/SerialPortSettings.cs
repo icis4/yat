@@ -442,7 +442,7 @@ namespace YAT.Gui.Controls
 				bool autoReopenEnabled = this.autoReopen.Enabled;
 				checkBox_AutoReopen.Checked = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
+				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString(CultureInfo.CurrentCulture);
 			}
 			else
 			{

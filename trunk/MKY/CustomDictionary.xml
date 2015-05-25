@@ -15,6 +15,7 @@
       <Word>rhs</Word>
       <Word>Equatable</Word>
       <Word>Mergeable</Word>
+      <Word>Transmissive</Word>
       <Word>Sics</Word>
     </Recognized>
     <DiscreteExceptions>

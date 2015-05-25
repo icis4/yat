@@ -40,8 +40,8 @@ namespace YAT.Domain
 			{
 				case TerminalType.Text:   return (new TextTerminal  (settings));
 				case TerminalType.Binary: return (new BinaryTerminal(settings));
-				default: throw (new TypeLoadException("Program execution should never get here, " + settings.TerminalType + " is an invalid terminal type, please report this bug!"));
 			}
+			throw (new TypeLoadException("Program execution should never get here, " + settings.TerminalType + " is an invalid terminal type, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -51,8 +51,8 @@ namespace YAT.Domain
 			{
 				case TerminalType.Text:   return (new TextTerminal  (settings, terminal));
 				case TerminalType.Binary: return (new BinaryTerminal(settings, terminal));
-				default: throw (new ArgumentOutOfRangeException("settings", settings, "Program execution should never get here, " + settings.TerminalType + " is an invalid terminal type, please report this bug!"));
 			}
+			throw (new ArgumentOutOfRangeException("settings", settings, "Program execution should never get here, " + settings.TerminalType + " is an invalid terminal type, please report this bug!"));
 		}
 	}
 }

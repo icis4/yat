@@ -58,6 +58,7 @@ namespace YAT.Utilities
 		public static readonly string ProductNameLong = ProductName + " - Yet Another Terminal";
 
 		/// <summary>The complete logo (text) of the product.</summary>
+		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]
 		public static readonly string[] ProductLogo =
 		{
 			ProductNameLong + ".",

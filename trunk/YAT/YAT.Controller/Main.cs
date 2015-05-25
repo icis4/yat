@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -68,6 +69,7 @@ namespace YAT.Controller
 		/// <summary>
 		/// Enumeration of all the result return codes.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Intentionally using nested type, instead of replicating the parent's name to 'MainResult'.")]
 		public enum Result
 		{
 			Success                  =  0,
@@ -531,6 +533,7 @@ namespace YAT.Controller
 			}
 		}
 
+#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -554,6 +557,7 @@ namespace YAT.Controller
 				Application.Exit();
 			}
 		}
+#endif // !DEBUG
 
 		#endregion
 
@@ -646,6 +650,7 @@ namespace YAT.Controller
 				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
+#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -658,6 +663,7 @@ namespace YAT.Controller
 			if (ex != null)
 				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
+#endif // !DEBUG
 
 		#endregion
 
@@ -726,6 +732,7 @@ namespace YAT.Controller
 			} // Dispose of model to ensure immediate release of resources.
 		}
 
+#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 		/// <remarks>
 		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit or restart.
 		/// </remarks>
@@ -738,6 +745,7 @@ namespace YAT.Controller
 			if (ex != null)
 				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
+#endif // !DEBUG
 
 		#endregion
 

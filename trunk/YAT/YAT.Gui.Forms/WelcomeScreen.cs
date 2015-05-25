@@ -38,6 +38,15 @@ using YAT.Utilities;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.Gui.Forms.WelcomeScreen.#InitializeComponent()", Justification = "The timer is only used for a well-defined interval.")]
+
+#endregion
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -59,7 +68,6 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The application settings timer just invokes an asynchronous thread that loads the settings.")]
 		public WelcomeScreen()
 		{
 			InitializeComponent();

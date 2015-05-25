@@ -42,6 +42,7 @@ using YAT.Utilities;
 // Module-level FxCop suppressions
 //==================================================================================================
 
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.Gui.Forms.About.resources", MessageId = "Ltech", Justification = "'TALtech' just calls itself like this...")]
 [module: SuppressMessage("Microsoft.Naming", "CA1701:ResourceStringCompoundWordsShouldBeCasedCorrectly", Scope = "resource", Target = "YAT.Gui.Forms.About.resources", MessageId = "Toolbar", Justification = "What's wrong with 'Toolbar'? The web is full with this term!")]
 
 #endregion
@@ -361,6 +362,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		private void timer_ExecuteManualTest3_Timeout(object obj)
 		{
 			timer_ExecuteManualTest3_Dispose();

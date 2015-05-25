@@ -720,7 +720,7 @@ namespace YAT.Gui.Controls
 			{
 				if (e.Index >= 0)
 				{
-					string lineNumberString = ((e.Index + 1).ToString(CultureInfo.InvariantCulture));
+					string lineNumberString = ((e.Index + 1).ToString(CultureInfo.CurrentCulture));
 
 					ListBox lb = fastListBox_LineNumbers;
 					SizeF requestedSize;

@@ -239,7 +239,7 @@ namespace YAT.Gui.Controls
 			enabled = this.settings.LengthLineBreak.Enabled;
 			checkBox_LengthLineBreak.Checked = enabled;
 			textBox_LengthLineBreak.Enabled = enabled;
-			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.LineLength.ToString();
+			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.LineLength.ToString(CultureInfo.CurrentCulture);
 
 			enabled = this.settings.SequenceLineBreak.Enabled;
 			checkBox_SequenceLineBreak.Checked = enabled;
@@ -249,7 +249,7 @@ namespace YAT.Gui.Controls
 			enabled = this.settings.TimedLineBreak.Enabled;
 			checkBox_TimedLineBreak.Checked = enabled;
 			textBox_TimedLineBreakTimeout.Enabled = enabled;
-			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString();
+			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString(CultureInfo.CurrentCulture);
 
 			this.isSettingControls.Leave();
 		}

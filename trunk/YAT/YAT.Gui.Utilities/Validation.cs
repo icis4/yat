@@ -49,8 +49,8 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength)
 		{
 			string parsedText;
@@ -93,7 +93,7 @@ namespace YAT.Gui.Utilities
 				if (parsedText != null)
 				{
 					sb.Append(                         " is invalid at position ");
-					sb.Append(                                                 (parsedText.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
+					sb.Append(                                                 (parsedText.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
 					if (parsedText.Length > 0)
 					{
 						sb.Append(Environment.NewLine);

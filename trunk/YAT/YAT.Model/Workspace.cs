@@ -369,6 +369,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns an array of all terminals within workspace or <c>null</c> if there are no terminals.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Required for testing only.")]
 		public virtual Terminal[] Terminals
 		{
 			get
@@ -1374,6 +1375,7 @@ namespace YAT.Model
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out string errorMessage)
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settings;

@@ -40,6 +40,15 @@ using YAT.Settings.Application;
 
 #endregion
 
+#region Module-level FxCop suppressions
+//==================================================================================================
+// Module-level FxCop suppressions
+//==================================================================================================
+
+[module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.Gui.Controls.SerialPortSelection.#InitializeComponent()", Justification = "The timer is only used for a well-defined interval.")]
+
+#endregion
+
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>

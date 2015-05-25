@@ -78,8 +78,8 @@ namespace MKY.Text
 				case 0x1E: return ("RS");
 				case 0x1F: return ("US");
 				case 0x7F: return ("DEL");
-				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!"));
 			}
+			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!"));
 		}
 
 		/// <summary>
@@ -123,8 +123,8 @@ namespace MKY.Text
 				case 0x1E: return ("Record separator");
 				case 0x1F: return ("Unit separator");
 				case 0x7F: return ("Delete");
-				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!"));
 			}
+			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!"));
 		}
 
 		/// <summary>

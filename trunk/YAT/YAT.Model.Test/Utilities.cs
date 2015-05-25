@@ -278,26 +278,24 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceASettingsHandler()
-		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceASettings()));
-		}
+	////internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceASettingsHandler()
+	////{
+	////	return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceASettings()));
+	////}
 
-		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings()
-		{
-			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceBIsConnected)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceB));
+	////internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings()
+	////{
+	////	if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceBIsConnected)
+	////		return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceB));
+	////
+	////	Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and availabel if passing this test is required.");
+	////	return (null);
+	////}
 
-			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and availabel if passing this test is required.");
-			return (null);
-		}
-
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceBSettingsHandler()
-		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceBSettings()));
-		}
+	////internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceBSettingsHandler()
+	////{
+	////	return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceBSettings()));
+	////}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)
 		{
