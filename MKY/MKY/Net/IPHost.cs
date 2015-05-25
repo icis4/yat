@@ -123,8 +123,8 @@ namespace MKY.Net
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (Decorate(this.otherAddress.ToString()));
-				default: throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 			}
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
 
 		#region ToString > Extensions

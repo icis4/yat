@@ -1048,7 +1048,7 @@ namespace YAT.Domain
 		/// <param name="textToParse">The string to be parsed.</param>
 		/// <param name="parsedText">The substring that could successfully be parsed.</param>
 		/// <returns>The error message to display.</returns>
-		protected string CreateParserErrorMessage(string textToParse, string parsedText)
+		protected static string CreateParserErrorMessage(string textToParse, string parsedText)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -1093,6 +1093,7 @@ namespace YAT.Domain
 		/// \todo
 		/// Use a 'ReadOnlyCollection' instead of a byte array in 'RawTerminal', then remove this method.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected void ForwardDataToRawTerminal(byte[] data)
 		{
 			AssertNotDisposed();
@@ -1128,6 +1129,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
 		{
 			AssertNotDisposed();
@@ -1140,6 +1142,14 @@ namespace YAT.Domain
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendLine("ObjectDisposedException while trying to forward data to the underlying RawTerminal.");
+				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
+				sb.AppendLine();
+				DebugEx.WriteException(GetType(), ex, sb.ToString());
+			}
+			catch (ThreadAbortException ex)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
 				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
 				sb.AppendLine();
 				DebugEx.WriteException(GetType(), ex, sb.ToString());
@@ -1232,6 +1242,7 @@ namespace YAT.Domain
 					}
 					break;
 				}
+
 				case Radix.Char:
 				case Radix.String:
 				{
@@ -1273,7 +1284,11 @@ namespace YAT.Domain
 					}
 					break;
 				}
-				default: throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+				}
 			}
 
 			if (!error)
@@ -1351,7 +1366,10 @@ namespace YAT.Domain
 					else
 						return (b.ToString("X2", CultureInfo.InvariantCulture));
 				}
-				default: throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+				}
 			}
 		}
 
@@ -1377,8 +1395,8 @@ namespace YAT.Domain
 				case Radix.Hex:    return (true);
 				case Radix.Char:   return (true);
 				case Radix.String: return (false);
-				default: throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
 			}
+			throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -1522,8 +1540,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .DataCount);
 					case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
 					case RepositoryType.Rx:    return (this.rxRepository   .DataCount);
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1539,8 +1557,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .Count);
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
 					case RepositoryType.Rx:    return (this.rxRepository   .Count);
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1556,8 +1574,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .ToElements());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1573,8 +1591,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1590,8 +1608,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository.   LastLineAuxiliary());
 					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
 					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1607,8 +1625,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1630,8 +1648,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    return (this.txRepository   .ToString(indent));
 					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
 					case RepositoryType.Rx:    return (this.rxRepository   .ToString(indent));
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 

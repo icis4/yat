@@ -202,8 +202,13 @@ namespace MKY.Net
 							throw (new InvalidOperationException("IP address and interface description or both are undefined!"));
 					}
 				}
+
+				default:
+				{
+					throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+				}
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			
 		}
 
 		#endregion

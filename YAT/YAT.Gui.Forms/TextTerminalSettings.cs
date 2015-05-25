@@ -490,14 +490,14 @@ namespace YAT.Gui.Forms
 			bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
 			checkBox_Delay.Checked        = delayEnabled;
 			textBox_Delay.Enabled         = delayEnabled;
-			textBox_Delay.Text            = this.settingsInEdit.LineSendDelay.Delay.ToString();
+			textBox_Delay.Text            = this.settingsInEdit.LineSendDelay.Delay.ToString(CultureInfo.CurrentCulture);
 			textBox_DelayInterval.Enabled = delayEnabled;
-			textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString();
+			textBox_DelayInterval.Text    = this.settingsInEdit.LineSendDelay.LineInterval.ToString(CultureInfo.CurrentCulture);
 
 			bool waitEnabled                 = this.settingsInEdit.WaitForResponse.Enabled;
 			checkBox_WaitForResponse.Checked = waitEnabled;
 			textBox_WaitForResponse.Enabled  = waitEnabled;
-			textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString();
+			textBox_WaitForResponse.Text     = this.settingsInEdit.WaitForResponse.Timeout.ToString(CultureInfo.CurrentCulture);
 
 			switch (this.settingsInEdit.CharSubstitution)
 			{

@@ -98,10 +98,10 @@ namespace YAT.Gui.Forms
 				if (f.InvokeRequired)
 				{
 					ProvideExceptionToUserDelegate invoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
-					return ((UnhandledExceptionResult)f.Invoke(invoker, null, exception, originMessage, exceptionType, mayBeContinued));
+					return ((UnhandledExceptionResult)f.Invoke(invoker, owner, exception, originMessage, exceptionType, mayBeContinued));
 				}
 			}
-			return (ProvideExceptionToUserInvocation(null, exception, originMessage, exceptionType, mayBeContinued));
+			return (ProvideExceptionToUserInvocation(owner, exception, originMessage, exceptionType, mayBeContinued));
 		}
 
 		private delegate UnhandledExceptionResult ProvideExceptionToUserDelegate(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued);

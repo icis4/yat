@@ -55,7 +55,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const bool TerminalIsReadyToSendDefault = false;
 		private const int SplitterDistanceDefault = 356; // Designer requires that this is a constant.
 		                                                 // Set same value as splitContainer.SplitterDistance is designed.

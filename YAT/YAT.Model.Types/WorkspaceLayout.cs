@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -29,6 +34,8 @@ using System.Windows.Forms;
 using MKY;
 
 using YAT.Utilities;
+
+#endregion
 
 namespace YAT.Model.Types
 {
@@ -71,6 +78,15 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class WorkspaceLayoutEx : EnumEx
 	{
+		#region String Definitions
+
+		private const string Manual_string = "Manual";
+		private const string Cascade_string = "Cascade";
+		private const string TileHorizontal_string = "TileHorizontal";
+		private const string TileVertical_string = "TileVertical";
+
+		#endregion
+
 		/// <summary>Default is <see cref="WorkspaceLayout.Manual"/>.</summary>
 		public WorkspaceLayoutEx()
 			: base(WorkspaceLayout.Manual)
@@ -83,6 +99,24 @@ namespace YAT.Model.Types
 		{
 		}
 
+		#region ToString
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public override string ToString()
+		{
+			switch ((WorkspaceLayout)UnderlyingEnum)
+			{
+				case WorkspaceLayout.Manual:         return (Manual_string);
+				case WorkspaceLayout.Cascade:        return (Cascade_string);
+				case WorkspaceLayout.TileHorizontal: return (TileHorizontal_string);
+				case WorkspaceLayout.TileVertical:   return (TileVertical_string);
+			}
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+		}
+
+		#endregion
+
 		#region GetItems
 
 		/// <summary></summary>
@@ -94,6 +128,56 @@ namespace YAT.Model.Types
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
 			return (a.ToArray());
+		}
+
+		#endregion
+
+		#region Parse
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static WorkspaceLayoutEx Parse(string s)
+		{
+			WorkspaceLayoutEx result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" is no valid workspace layout string!"));
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out WorkspaceLayoutEx result)
+		{
+			s = s.Trim();
+
+			if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string))
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.Manual);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.Cascade);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileHorizontal_string))
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileVertical_string))
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.TileVertical);
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion
@@ -125,6 +209,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public static implicit operator MdiLayout(WorkspaceLayoutEx layout)
 		{
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
@@ -138,6 +223,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public static implicit operator WorkspaceLayoutEx(MdiLayout layout)
 		{
 			switch (layout)

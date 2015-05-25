@@ -97,7 +97,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const bool TerminalIsReadyToSendDefault = false;
 		private const int SplitterDistanceDefault = 356; // Designer requires that this is a constant.
 		                                                 // Set same value as splitContainer.SplitterDistance is designed.
@@ -479,7 +479,7 @@ namespace YAT.Gui.Controls
 			if (this.sendImmediately)
 			{
 				this.isValidated = true;
-				CreatePartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture));
+				CreatePartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for keys!
 				InvokeSendCommandRequest();
 			}
 

@@ -182,8 +182,8 @@ namespace YAT.Log.Settings
 			{
 				case LogFormat.Raw:  return ("Raw");
 				case LogFormat.Neat: return ("Neat");
-				default: throw (new ArgumentException("LogFormat '" + format + "' unknown!"));
 			}
+			throw (new ArgumentException("LogFormat '" + format + "' unknown!"));
 		}
 
 		private static string MakeChannel(LogChannelType channelType)
@@ -193,8 +193,8 @@ namespace YAT.Log.Settings
 				case LogChannelType.Tx:    return ("Tx");
 				case LogChannelType.Bidir: return ("Bidir");
 				case LogChannelType.Rx:    return ("Rx");
-				default: throw (new ArgumentException("LogChannelType '" + channelType + "' unknown!"));
 			}
+			throw (new ArgumentException("LogChannelType '" + channelType + "' unknown!"));
 		}
 
 		private string MakeSubdirectory(LogFormat format, LogChannelType channelType)

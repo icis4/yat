@@ -487,7 +487,7 @@ namespace YAT.Model.Types
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append("<");
-					sb.Append(MultiLineText.Length.ToString(CultureInfo.InvariantCulture));
+					sb.Append(MultiLineText.Length.ToString(CultureInfo.CurrentCulture));
 					sb.Append(" lines...>");
 					for (int i = 0; i < MultiLineText.Length; i++)
 					{

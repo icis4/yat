@@ -409,17 +409,17 @@ namespace YAT.Gui.Controls
 				textBox_Id.Enabled            =  Enabled;
 				textBox_RxId.Enabled          = (Enabled ? this.rxIdUsage.SeparateRxId : false);
 
-				textBox_Id.Text = this.reportFormat.Id.ToString();
+				textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
 				if (!this.rxIdUsage.SeparateRxId) // Common case = Same ID for Tx and Rx.
 				{
-					textBox_RxId.Text = this.reportFormat.Id.ToString();
+					textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
 				}
 				else // Special case = Separate ID for Rx.
 				{
 					if (this.rxIdUsage.AnyRxId)
 						textBox_RxId.Text = AnyIdIndication;
 					else
-						textBox_RxId.Text = this.rxIdUsage.RxId.ToString();
+						textBox_RxId.Text = this.rxIdUsage.RxId.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
 				}
 			}
 			else

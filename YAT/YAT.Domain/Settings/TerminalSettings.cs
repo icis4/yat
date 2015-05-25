@@ -31,7 +31,7 @@ namespace YAT.Domain.Settings
 	public class TerminalSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
-		public const TerminalType TerminalTypefault = TerminalType.Text;
+		public const TerminalType TerminalTypeDefault = TerminalType.Text;
 
 		private TerminalType terminalType;
 
@@ -106,7 +106,7 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalType = TerminalTypefault;
+			TerminalType = TerminalTypeDefault;
 		}
 
 		#region Properties

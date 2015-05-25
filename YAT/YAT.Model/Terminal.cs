@@ -272,7 +272,7 @@ namespace YAT.Model
 			// Set ID and user name.
 			this.sequentialIndex = ++staticSequentialIndexCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.InvariantCulture);
+				this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
 			else
 				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
@@ -647,7 +647,7 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture));
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							sb.Append(" - ");
 
 							if (IsConnected)
@@ -666,7 +666,7 @@ namespace YAT.Model
 
 							sb.Append(" - ");
 							sb.Append("Server:");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture));
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							sb.Append(" - ");
 
 							if (IsStarted)
@@ -697,7 +697,7 @@ namespace YAT.Model
 									sb.Append(" - ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(":");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected");
 								}
@@ -705,7 +705,7 @@ namespace YAT.Model
 								{
 									sb.Append(" - ");
 									sb.Append("Server:");
-									sb.Append(s.LocalPort.ToString());
+									sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Listening");
 								}
@@ -713,14 +713,14 @@ namespace YAT.Model
 								{
 									sb.Append(" - ");
 									sb.Append("Starting on port ");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								}
 							}
 							else
 							{
 								sb.Append(" - ");
 								sb.Append("AutoSocket:");
-								sb.Append(s.RemotePort.ToString());
+								sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								sb.Append(" - ");
 								sb.Append("Disconnected");
 							}
@@ -733,10 +733,10 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
-							sb.Append(s.RemotePort.ToString());
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							sb.Append(" - ");
 							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							sb.Append(" - ");
 							sb.Append(IsOpen ? "Open" : "Closed");
 							break;
@@ -823,7 +823,7 @@ namespace YAT.Model
 
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture));
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							break;
 						}
 
@@ -848,7 +848,7 @@ namespace YAT.Model
 									}
 									else
 									{
-										sb.Append(count.ToString());
+										sb.Append(count.ToString(CultureInfo.CurrentCulture));
 										sb.Append(" clients");
 									}
 								}
@@ -862,7 +862,7 @@ namespace YAT.Model
 								sb.Append("closed");
 							}
 							sb.Append(" on local port ");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							break;
 						}
 
@@ -888,20 +888,20 @@ namespace YAT.Model
 									sb.Append("connected to ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								}
 								else if (isServer)
 								{
 									sb.Append(IsConnected ? "connected" : "listening");
 									sb.Append(" on local port ");
-									sb.Append(s.LocalPort.ToString());
+									sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								}
 								else
 								{
 									sb.Append("starting to connect to ");
 									sb.Append(s.ResolvedRemoteIPAddress.ToString());
 									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString());
+									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								}
 							}
 							else
@@ -909,7 +909,7 @@ namespace YAT.Model
 								sb.Append("disconnected from ");
 								sb.Append(s.ResolvedRemoteIPAddress.ToString());
 								sb.Append(" on remote port ");
-								sb.Append(s.RemotePort.ToString());
+								sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							}
 							break;
 						}
@@ -922,9 +922,9 @@ namespace YAT.Model
 							sb.Append(" for sending to ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString());
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							sb.Append(" and receiving on local port ");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 							break;
 						}
 

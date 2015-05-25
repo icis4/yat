@@ -71,6 +71,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Enumeration of all the main result return codes.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Intentionally using nested type, instead of replicating the parent's name to 'MainResult'.")]
 		public enum Result
 		{
 			Success,

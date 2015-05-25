@@ -75,7 +75,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypefault;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 		private const Domain.Parser.Modes ParseModeDefault = Domain.Parser.Modes.Default;
 		private const string ShortcutStringDefault = "Shift+F1";
 
