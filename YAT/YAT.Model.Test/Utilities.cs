@@ -244,7 +244,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortAIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA));
 
-			Assert.Ignore("'SerialPortA' is not available, therefore this test is ignored. Ensure that 'SerialPortA' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'SerialPortA' is not available, therefore this test is ignored. Ensure that 'SerialPortA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -259,7 +259,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortBIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB));
 
-			Assert.Ignore("'SerialPortB' is not available, therefore this test is ignored. Ensure that 'SerialPortB' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'SerialPortB' is not available, therefore this test is ignored. Ensure that 'SerialPortB' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -274,7 +274,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceAIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceA));
 
-			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -288,7 +288,7 @@ namespace YAT.Model.Test
 	////	if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceBIsConnected)
 	////		return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceB));
 	////
-	////	Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and availabel if passing this test is required.");
+	////	Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 	////	return (null);
 	////}
 
@@ -345,7 +345,7 @@ namespace YAT.Model.Test
 			if (MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4InterfaceIsAvailable)
 				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4Interface));
 
-			Assert.Ignore("'SpecificIPv4Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv4Interface' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'SpecificIPv4Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv4Interface' is properly configured and available if passing this test is required.");
 			return (null);
 			*/
 		}
@@ -367,7 +367,7 @@ namespace YAT.Model.Test
 			if (MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6InterfaceIsAvailable)
 				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6Interface));
 
-			Assert.Ignore("'SpecificIPv6Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv6Interface' is properly configured and availabel if passing this test is required.");
+			Assert.Ignore("'SpecificIPv6Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv6Interface' is properly configured and available if passing this test is required.");
 			return (null);
 			*/
 		}
