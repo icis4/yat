@@ -1020,7 +1020,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen)      // Make sure to propagate event only if port is active.
+			if (!IsDisposed && IsOpen) // Make sure to propagate event only if port is active.
 				EventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
@@ -1029,7 +1029,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen)      // Make sure to propagate event only if port is active.
+			if (!IsDisposed && IsOpen) // Make sure to propagate event only if port is active.
 				EventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
 		}
 
@@ -1038,7 +1038,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen)      // Make sure to propagate event only if port is active.
+			if (!IsDisposed && IsOpen) // Make sure to propagate event only if port is active.
 				EventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 

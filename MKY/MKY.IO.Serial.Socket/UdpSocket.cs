@@ -457,7 +457,7 @@ namespace MKY.IO.Serial.Socket
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
-			while (this.sendThreadRunFlag && !IsDisposed)
+			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
 				{
@@ -478,7 +478,7 @@ namespace MKY.IO.Serial.Socket
 
 				// Inner loop, runs as long as there is data in the send queue.
 				// Ensure not to forward any events during closing anymore.
-				while (IsTransmissive && this.sendThreadRunFlag && !IsDisposed)
+				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive) // Check 'IsDisposed' first!
 				{
 					byte[] data;
 					lock (this.sendQueue)
@@ -652,7 +652,7 @@ namespace MKY.IO.Serial.Socket
 			System.Net.Sockets.UdpClient socket = state.Socket;
 
 			// Ensure that async receive is discarded after close/dispose.
-			if (!isDisposed && (socket != null) && (GetStateSynchronized() == SocketState.Opened))
+			if (!IsDisposed && (socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
 				byte[] data;
 				try

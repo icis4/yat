@@ -2929,7 +2929,7 @@ namespace YAT.Gui.Forms
 
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			// Ensure not to handle event during closing anymore.
+			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			if (!IsDisposed && TerminalIsAvailable)
 			{
 				monitor_Tx.ConnectTime         = this.terminal.ConnectTime;
@@ -2945,7 +2945,7 @@ namespace YAT.Gui.Forms
 
 		private void terminal_IOCountChanged(object sender, EventArgs e)
 		{
-			// Ensure not to handle event during closing anymore.
+			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			if (!IsDisposed && TerminalIsAvailable)
 			{
 				int txByteCount = this.terminal.TxByteCount;
@@ -2968,7 +2968,7 @@ namespace YAT.Gui.Forms
 
 		private void terminal_IORateChanged(object sender, EventArgs e)
 		{
-			// Ensure not to handle event during closing anymore.
+			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			if (!IsDisposed && TerminalIsAvailable)
 			{
 				int txByteRate = this.terminal.TxByteRate;

@@ -604,7 +604,7 @@ namespace MKY.IO.Serial.Socket
 			// are interconnected, and both are shut down, the sequence of the operation is not
 			// defined. It is likely that Stop() is called while the thread is delayed above. In
 			// such case, neither a client nor a server shall be created nor started.
-			if (!IsDisposed && IsStarted)
+			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 			{
 				SetStateSynchronizedAndNotify(SocketState.Connecting);
 				CreateClient(this.remoteIPAddress, this.remotePort);
@@ -644,7 +644,7 @@ namespace MKY.IO.Serial.Socket
 			// are interconnected, and both are shut down, the sequence of the operation is not
 			// defined. It is likely that Stop() is called while the thread is delayed above. In
 			// such case, neither a client nor a server shall be created nor started.
-			if (!IsDisposed && IsStarted)
+			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 			{
 				SetStateSynchronizedAndNotify(SocketState.StartingListening);
 				CreateServer(this.localIPAddress, this.localPort);
@@ -840,13 +840,13 @@ namespace MKY.IO.Serial.Socket
 
 		private void client_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsClient)
+			if (!IsDisposed && IsClient) // Check 'IsDisposed' first!
 				OnDataReceived(e);
 		}
 
 		private void client_DataSent(object sender, DataSentEventArgs e)
 		{
-			if (!IsDisposed && IsClient)
+			if (!IsDisposed && IsClient) // Check 'IsDisposed' first!
 				OnDataSent(e);
 		}
 
@@ -979,13 +979,13 @@ namespace MKY.IO.Serial.Socket
 
 		private void server_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsServer)
+			if (!IsDisposed && IsServer) // Check 'IsDisposed' first!
 				OnDataReceived(e);
 		}
 
 		private void server_DataSent(object sender, DataSentEventArgs e)
 		{
-			if (!IsDisposed && IsServer)
+			if (!IsDisposed && IsServer) // Check 'IsDisposed' first!
 				OnDataSent(e);
 		}
 
