@@ -104,7 +104,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Text += textAfter;
 
 			// Platform:
-			linkLabel_Platform.Text = "For .NET framework 3.5 on Windows 2000 and later. Currently running on .NET runtime " + Environment.Version + " (CLR version).";
+			linkLabel_Platform.Text = "For .NET framework 3.5 SP1 on Windows 2000 and later. Currently running on .NET runtime " + Environment.Version + " (CLR version).";
 
 			// Serial monitoring:
 			linkLabel_Monitoring.Text = "";

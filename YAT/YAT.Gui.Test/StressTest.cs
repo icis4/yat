@@ -39,6 +39,7 @@ using NUnit.Framework;
 
 using YAT.Controller;
 using YAT.Domain;
+using YAT.Model.Types;
 using YAT.Model.Settings;
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -103,12 +104,9 @@ namespace YAT.Gui.Test
 		/// <summary>
 		/// Starts an instance of YAT including GUI and verifies that contents are properly displayed.
 		/// </summary>
-		/// <remarks>
-		/// Test takes about 3 minutes.
-		/// </remarks>
 		[Test]
 		[StressCategory]
-		[InteractiveCategory]
+		[MinuteDurationCategory(1)]
 		public virtual void TestTransmissionDisplay()
 		{
 			string workspaceSettingsFilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);
@@ -125,6 +123,14 @@ namespace YAT.Gui.Test
 
 			terminalSettings1.Settings.IOType = IOType.TcpAutoSocket;
 			terminalSettings2.Settings.IOType = IOType.TcpAutoSocket;
+
+			terminalSettings1.Settings.Status.ShowConnectTime = true;
+			terminalSettings1.Settings.Status.ShowCountAndRate = true;
+			terminalSettings2.Settings.Status.ShowConnectTime = true;
+			terminalSettings2.Settings.Status.ShowCountAndRate = true;
+
+			terminalSettings1.Settings.TerminalIsStarted = true;
+			terminalSettings2.Settings.TerminalIsStarted = true;
 
 			terminalSettings1.Save();
 			terminalSettings2.Save();
@@ -144,6 +150,8 @@ namespace YAT.Gui.Test
 
 			workspaceSettings.Settings.TerminalSettings.Add(terminalSettings1Item);
 			workspaceSettings.Settings.TerminalSettings.Add(terminalSettings2Item);
+
+			workspaceSettings.Settings.Workspace.Layout = WorkspaceLayout.TileVertical;
 
 			workspaceSettings.Save();
 			Trace.WriteLine("Workspace file created:");
@@ -169,7 +177,7 @@ namespace YAT.Gui.Test
 						"ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz",
 					};
 
-				for (int i = 0; i < 1000; i++)
+				for (int i = 0; i < 500; i++)
 				{
 					foreach (string s in contents)
 						transmitFile.WriteLine(s);
@@ -181,14 +189,16 @@ namespace YAT.Gui.Test
 			Trace.Unindent();
 
 			string[] args = new string[]
-				{
-					@"""" + workspaceSettingsFilePath + @"""",
-					@"-t 0 -tf""" + transmitFilePath + @""""
-				};
+			{
+				@"""" + workspaceSettingsFilePath + @"""",
+				@"-tf=""" + transmitFilePath + @"""",
+				@"-t=0",
+				@"-ke"
+			};
 
 			using (Controller.Main main = new Main(args))
 			{
-				Controller.Main.Result mainResult = main.Run(false, true);
+				Controller.Main.Result mainResult = main.Run();
 				Assert.AreEqual(Controller.Main.Result.Success, mainResult);
 			}
 		}

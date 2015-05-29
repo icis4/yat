@@ -208,7 +208,6 @@ namespace MKY.Net
 					throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 				}
 			}
-			
 		}
 
 		#endregion

@@ -74,6 +74,7 @@ namespace YAT.Model.Types
 	/// <summary>
 	/// Extended enum WorkspaceLayoutEx.
 	/// </summary>
+	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	[Serializable]
 	public class WorkspaceLayoutEx : EnumEx

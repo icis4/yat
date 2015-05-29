@@ -303,11 +303,11 @@ namespace YAT.Model.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(OneWayTransmissionTestData), "TestCases")]
-		public virtual void PerformTransmission(TransmissionType tt, Utilities.TestSet testSet, int transmissionCount)
+		public virtual void PerformTransmission(TransmissionType type, Utilities.TestSet testSet, int transmissionCount)
 		{
 			TerminalSettingsRoot settingsA;
 			TerminalSettingsRoot settingsB;
-			Utilities.GetStartedTextSettings(tt, out settingsA, out settingsB);
+			Utilities.GetStartedTextSettings(type, out settingsA, out settingsB);
 
 			// Create terminals from settings and check whether B receives from A:
 			using (Terminal terminalA = new Terminal(settingsA))
@@ -454,11 +454,11 @@ namespace YAT.Model.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(TwoWayTransmissionTestData), "TestCases")]
-		public virtual void PerformTransmission(TransmissionType tt, Utilities.TestSet testSet, int transmissionCount)
+		public virtual void PerformTransmission(TransmissionType type, Utilities.TestSet testSet, int transmissionCount)
 		{
 			TerminalSettingsRoot settingsA;
 			TerminalSettingsRoot settingsB;
-			Utilities.GetStartedTextSettings(tt, out settingsA, out settingsB);
+			Utilities.GetStartedTextSettings(type, out settingsA, out settingsB);
 
 			// Create terminals from settings and check whether B receives from A:
 			using (Terminal terminalA = new Terminal(settingsA))
@@ -610,11 +610,11 @@ namespace YAT.Model.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(RepeatingTransmissionTestData), "TestCases")]
-		public virtual void PerformTransmission(TransmissionType tt, int repeatCount, bool doTwoWay, bool executeBreak)
+		public virtual void PerformTransmission(TransmissionType type, int repeatCount, bool doTwoWay, bool executeBreak)
 		{
 			TerminalSettingsRoot settingsA;
 			TerminalSettingsRoot settingsB;
-			Utilities.GetStartedTextSettings(tt, out settingsA, out settingsB);
+			Utilities.GetStartedTextSettings(type, out settingsA, out settingsB);
 
 			// Set both settings to the desired repeat count and create the terminals:
 			settingsA.Send.DefaultLineRepeat = repeatCount;
