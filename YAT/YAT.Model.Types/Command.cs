@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 3 Development Version 1.99.31
+// YAT 2.0 Gamma 1 Version 1.99.32
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -291,7 +291,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		[XmlElement("IsPartialText")]
+		[XmlIgnore]
 		public virtual bool IsPartialText
 		{
 			get
@@ -304,20 +304,20 @@ namespace YAT.Model.Types
 				{
 					this.isPartialText = value;
 				}
-				else if (value) // Ensure that only a set flag defines the
-				{               // command during XML deserialization!
+				else if (value) // Ensure that only a set flag defines the command!
+				{
 					this.isDefined = true;
 					this.isPartialText = value;
 				}
 				else
 				{
-					// Ensure that XML deserialization keeps command undefined in case of cleared flag!
+					// Ensure command stay undefined in case of a cleared flag!
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("IsPartialTextEol")]
+		[XmlIgnore]
 		public virtual bool IsPartialTextEol
 		{
 			get
@@ -330,14 +330,14 @@ namespace YAT.Model.Types
 				{
 					this.isPartialTextEol = value;
 				}
-				else if (value) // Ensure that only a set flag defines the
-				{               // command during XML deserialization!
+				else if (value) // Ensure that only a set flag defines the command!
+				{
 					this.isDefined = true;
 					this.isPartialTextEol = value;
 				}
 				else
 				{
-					// Ensure that XML deserialization keeps command undefined in case of cleared flag!
+					// Ensure command stay undefined in case of a cleared flag!
 				}
 			}
 		}

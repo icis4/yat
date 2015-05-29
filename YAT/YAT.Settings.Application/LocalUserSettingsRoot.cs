@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 3 Development Version 1.99.31
+// YAT 2.0 Gamma 1 Version 1.99.32
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -35,7 +35,7 @@ namespace YAT.Settings.Application
 	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem
 	{
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.3.1";
+		private string settingsVersion = "1.4.0";
 
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
