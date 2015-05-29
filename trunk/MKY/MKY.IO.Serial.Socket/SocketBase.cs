@@ -21,6 +21,8 @@
 //==================================================================================================
 
 using System;
+using System.Threading;
+
 using MKY;
 
 namespace MKY.IO.Serial.Socket
@@ -51,7 +53,7 @@ namespace MKY.IO.Serial.Socket
 		/// </value>
 		public static int NextInstanceId
 		{
-			get { return (staticInstanceCounter++); }
+			get { return (Interlocked.Increment(ref staticInstanceCounter)); }
 		}
 
 		/// <summary>

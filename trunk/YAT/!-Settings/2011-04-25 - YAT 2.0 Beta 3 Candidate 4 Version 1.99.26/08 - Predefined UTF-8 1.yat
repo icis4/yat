@@ -141,6 +141,16 @@
         <PageName>Page 1</PageName>
         <Commands>
           <IsDefined>true</IsDefined>
+          <Description>abc</Description>
+          <CommandLines>abc</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Commands>
+        <Commands>
+          <IsDefined>true</IsDefined>
           <Description>äöü</Description>
           <CommandLines>äöü</CommandLines>
           <DefaultRadix>String</DefaultRadix>
@@ -153,6 +163,26 @@
           <IsDefined>true</IsDefined>
           <Description>ÄÖÜ</Description>
           <CommandLines>ÄÖÜ</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Commands>
+        <Commands>
+          <IsDefined>true</IsDefined>
+          <Description>$£€</Description>
+          <CommandLines>$£€</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsPartialText>false</IsPartialText>
+          <IsPartialEolText>false</IsPartialEolText>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Commands>
+        <Commands>
+          <IsDefined>true</IsDefined>
+          <Description>čěř</Description>
+          <CommandLines>čěř</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsPartialText>false</IsPartialText>
           <IsPartialEolText>false</IsPartialEolText>

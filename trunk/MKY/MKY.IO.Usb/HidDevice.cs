@@ -233,7 +233,7 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
-							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath, false));
+							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 
 							Debug.WriteLine("USB HID device disconnected:");
 							Debug.Indent();

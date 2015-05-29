@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
@@ -214,7 +215,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -658,6 +659,21 @@ namespace MKY.IO.Serial.Socket
 							startIsOngoing = this.server.Start(); // Server will be started asynchronously.
 					}
 				}
+				catch (SocketException)
+				{
+					// A 'SocketException' can occur in the call stack shown below, in case another
+					// AutoSocket or Server tries to bind the given end point at the same time. In
+					// such case, ignore the exception and try again later. This procedure ensures
+					// that multiple AutoSockets eventually get connected to each other.
+					//
+					// Stack trace:
+					//  > MKY.IO.Serial.Socket.TcpServer.Start() <= Called above
+					//  > MKY.IO.Serial.Socket.TcpServer.StartSocketAndThread()
+					//  > ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.Start()
+					//  > ALAZ.SystemEx.NetEx.SocketsEx.SocketListener.Start()
+					//  > System.Net.Sockets.Socket.Bind(EndPoint localEP)
+					//  > System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+				}
 				finally
 				{
 					if (!startIsOngoing)
@@ -1055,7 +1071,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Server:" + this.localPort + " / " + IPHost.Decorate(this.remoteIPAddress) + ":" + this.remotePort);
+			return ("Server:" + this.localPort + " / " + IPHost.ToUrlString(this.remoteIPAddress) + ":" + this.remotePort);
 		}
 
 		#endregion
@@ -1074,7 +1090,7 @@ namespace MKY.IO.Serial.Socket
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

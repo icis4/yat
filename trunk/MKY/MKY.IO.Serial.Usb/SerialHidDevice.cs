@@ -26,8 +26,12 @@
 // Configuration
 //==================================================================================================
 
-// Enable debugging of thread state:
+#if (DEBUG)
+
+	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
+
+#endif // DEBUG
 
 #endregion
 
@@ -183,7 +187,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -877,7 +881,7 @@ namespace MKY.IO.Serial.Usb
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
@@ -889,7 +893,6 @@ namespace MKY.IO.Serial.Usb
 			);
 		}
 
-		[Conditional("DEBUG")]
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void WriteDebugThreadStateMessageLine(string message)
 		{

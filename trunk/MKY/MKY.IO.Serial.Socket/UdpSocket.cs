@@ -25,8 +25,12 @@
 // Configuration
 //==================================================================================================
 
-// Enable debugging of thread state:
-#define DEBUG_THREAD_STATE
+#if (DEBUG)
+
+	// Enable debugging of thread state:
+////#define DEBUG_THREAD_STATE
+
+#endif // DEBUG
 
 #endregion
 
@@ -210,7 +214,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -751,7 +755,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Receive:" + this.localPort + " / " + IPHost.Decorate(this.remoteIPAddress) + ":" + this.remotePort);
+			return ("Receive:" + this.localPort + " / " + IPHost.ToUrlString(this.remoteIPAddress) + ":" + this.remotePort);
 		}
 
 		#endregion
@@ -770,7 +774,7 @@ namespace MKY.IO.Serial.Socket
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
@@ -782,7 +786,6 @@ namespace MKY.IO.Serial.Socket
 			);
 		}
 
-		[Conditional("DEBUG")]
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void WriteDebugThreadStateMessageLine(string message)
 		{

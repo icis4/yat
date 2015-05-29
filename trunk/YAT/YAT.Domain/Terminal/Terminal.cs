@@ -26,8 +26,12 @@
 // Configuration
 //==================================================================================================
 
-// Enable debugging of thread state:
+#if (DEBUG)
+
+	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
+
+#endif // DEBUG
 
 #endregion
 
@@ -286,9 +290,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			this.instanceId = staticInstanceCounter++;
+			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 
-			this.txRepository = new DisplayRepository(settings.Display.TxMaxLineCount);
+			this.txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
 			this.bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
 			this.rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
 
@@ -303,9 +307,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
-			this.instanceId = staticInstanceCounter++;
+			this.instanceId = Interlocked.Increment(ref staticInstanceCounter);
 
-			this.txRepository = new DisplayRepository(terminal.txRepository);
+			this.txRepository    = new DisplayRepository(terminal.txRepository);
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
 			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
 
@@ -361,7 +365,7 @@ namespace YAT.Domain
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -2034,7 +2038,7 @@ namespace YAT.Domain
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
@@ -2046,7 +2050,6 @@ namespace YAT.Domain
 			);
 		}
 
-		[Conditional("DEBUG")]
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void WriteDebugThreadStateMessageLine(string message)
 		{

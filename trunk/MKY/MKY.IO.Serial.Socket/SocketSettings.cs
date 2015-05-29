@@ -587,10 +587,10 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (hostType)
 			{
-				case SocketHostType.TcpClient:     return (                                         IPHost.Decorate(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketHostType.TcpServer:     return ("Server:"  + this.localTcpPort.ToString(CultureInfo.InvariantCulture)                               );
-				case SocketHostType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.Decorate(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketHostType.Udp:           return ("Receive:" + this.localUdpPort + " / " + IPHost.Decorate(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketHostType.TcpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketHostType.TcpServer:     return ("Server:"  + this.localTcpPort.ToString(CultureInfo.InvariantCulture)                                  );
+				case SocketHostType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketHostType.Udp:           return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                           return (Undefined);
 			}

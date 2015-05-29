@@ -37,6 +37,15 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
+#if (DEBUG)
+
+	// Enable debugging of exceptions:
+////#define DEBUG_EXCEPTIONS
+
+#endif
+
+using System.Diagnostics;
+
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -239,7 +248,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
+                    WriteDebugExceptionMessageLine(ex);
                 }
 
                 // ----- \remind  END  -----
@@ -291,6 +300,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #endregion
 
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_EXCEPTIONS")]
+		private void WriteDebugExceptionMessageLine(Exception ex)
+		{
+			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
+		}
+
+		#endregion
     }
 
 }
