@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 3 Development Version 1.99.31
+// YAT 2.0 Gamma 1 Version 1.99.32
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -31,7 +31,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -39,7 +38,6 @@ using System.Xml.Serialization;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
-using MKY.Windows.Forms;
 using MKY.Xml.Schema;
 
 using NUnit.Framework;

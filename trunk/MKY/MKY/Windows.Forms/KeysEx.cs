@@ -3,12 +3,12 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Windows.Forms/LayoutInfo.cs $
-// $Author: maettu_this $
-// $Date: 2013-02-03 20:59:28 +0100 (So, 03 Feb 2013) $
-// $Revision: 628 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.10
+// MKY Version 1.0.11
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -57,5 +57,5 @@ namespace MKY.Windows.Forms
 
 //==================================================================================================
 // End of
-// $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/MKY/MKY/Windows.Forms/LayoutInfo.cs $
+// $URL$
 //==================================================================================================
