@@ -115,26 +115,19 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo()
 		{
+			Initialize("");
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
 		public DeviceInfo(string path)
-			: this(path, true)
 		{
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily", Justification = "The initialization of VID and PID is not unnecesary, it is based on a constant that contains a default value!")]
-		public DeviceInfo(string path, bool getDeviceInfoFromSystem)
-		{
-			if (getDeviceInfoFromSystem)
-			{
-				int vendorId, productId;
-				string manufacturer, product, serial;
-				if (Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
-					Initialize(path, vendorId, productId, manufacturer, product, serial);
-			}
+			int vendorId, productId;
+			string manufacturer, product, serial;
+			if (Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+				Initialize(path, vendorId, productId, manufacturer, product, serial);
+			else
+				Initialize(path); // Initialize this info based on the available information only.
 		}
 
 		/// <summary></summary>
@@ -144,6 +137,8 @@ namespace MKY.IO.Usb
 			string path, manufacturer, product, serial;
 			if (Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serial))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
+			else
+				Initialize(vendorId, productId); // Initialize this info based on the available information only.
 		}
 
 		/// <summary></summary>
@@ -153,6 +148,8 @@ namespace MKY.IO.Usb
 			string path, manufacturer, product;
 			if (Device.GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serial, out path, out manufacturer, out product))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
+			else
+				Initialize(vendorId, productId, serial); // Initialize this info based on the available information only.
 		}
 
 		/// <summary></summary>
@@ -160,6 +157,21 @@ namespace MKY.IO.Usb
 		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			Initialize(path, vendorId, productId, manufacturer, product, serial);
+		}
+
+		private void Initialize(string path)
+		{
+			Initialize(path, DefaultVendorId, DefaultProductId, "", "", "");
+		}
+
+		private void Initialize(int vendorId, int productId)
+		{
+			Initialize(vendorId, productId, "");
+		}
+
+		private void Initialize(int vendorId, int productId, string serial)
+		{
+			Initialize("", vendorId, productId, "", "", serial);
 		}
 
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)

@@ -62,7 +62,6 @@ namespace MKY.Net
 		#region String Definitions
 
 		private const string Localhost_string     = "localhost";
-		private const string Localhost_stringNice = "<Localhost>";
 		private const string IPv4Localhost_string = "IPv4 localhost";
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
@@ -122,7 +121,30 @@ namespace MKY.Net
 				case IPHostType.Localhost:     return (Localhost_string);
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHostType.Other:         return (Decorate(this.otherAddress.ToString()));
+				case IPHostType.Other:         return (this.otherAddress.ToString());
+			}
+			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
+		/// </summary>
+		/// <remarks>
+		/// It is recommended to use this function instead of <see cref="ToString"/> in cases where
+		/// the IPv6 address is immediately followed the port number, separated by a colon.
+		/// Compare readability:
+		/// "1:2:3:4:5:6:7:8:8080"
+		/// "[1:2:3:4:5:6:7:8]:8080"
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
+		public string ToUrlString()
+		{
+			switch ((IPHostType)UnderlyingEnum)
+			{
+				case IPHostType.Localhost:     return (Localhost_string);
+				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
+				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
+				case IPHostType.Other:         return (ToUrlString(this.otherAddress.ToString()));
 			}
 			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
@@ -135,8 +157,15 @@ namespace MKY.Net
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
+		/// <remarks>
+		/// It is recommended to use this function instead of <see cref="ToString"/> in cases where
+		/// the IPv6 address is immediately followed the port number, separated by a colon.
+		/// Compare readability:
+		/// "1:2:3:4:5:6:7:8:8080"
+		/// "[1:2:3:4:5:6:7:8]:8080"
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
-		public static string Decorate(IPAddress a)
+		public static string ToUrlString(IPAddress a)
 		{
 			switch (a.AddressFamily)
 			{
@@ -148,12 +177,19 @@ namespace MKY.Net
 		/// <summary>
 		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
+		/// <remarks>
+		/// It is recommended to use this function instead of <see cref="ToString"/> in cases where
+		/// the IPv6 address is immediately followed the port number, separated by a colon.
+		/// Compare readability:
+		/// "1:2:3:4:5:6:7:8:8080"
+		/// "[1:2:3:4:5:6:7:8]:8080"
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
-		public static string Decorate(string s)
+		public static string ToUrlString(string s)
 		{
 			IPHost host;
 			if (!string.IsNullOrEmpty(s) && IPHost.TryParse(s, out host))
-				return (Decorate(host.IPAddress));
+				return (ToUrlString(host.IPAddress));
 
 			return (s);
 		}
@@ -200,8 +236,7 @@ namespace MKY.Net
 
 			IPAddress address;
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string))
 			{
 				result = new IPHost(IPHostType.Localhost);
 				return (true);

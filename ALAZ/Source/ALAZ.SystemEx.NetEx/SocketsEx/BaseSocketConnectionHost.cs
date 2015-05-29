@@ -37,6 +37,19 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 
+#if (DEBUG)
+
+	// Enable debugging of exceptions:
+////#define DEBUG_EXCEPTIONS
+
+	// Enable debugging of shutdown:
+////#define DEBUG_SHUTDOWN
+
+#endif
+
+using System.Diagnostics;
+using System.Globalization;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -333,7 +346,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         }
                         catch (NullReferenceException ex)
                         {
-                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
+                            WriteDebugExceptionMessageLine(ex);
                         }
 
                         // ----- \remind  END  -----
@@ -359,8 +372,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 if (connections != null)
                 {
 
+                    WriteDebugShutdownMessageLine("Resetting 'FWaitConnectionsDisposing'...");
                     FWaitConnectionsDisposing.Reset();
-                    
+                    WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' reset.");
+
                     int loopSleep = 0;
 
                     foreach (BaseSocketConnection connection in connections)
@@ -371,7 +386,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                     if (connections.Length > 0)
                     {
+                        WriteDebugShutdownMessageLine("Waiting 'FWaitConnectionsDisposing'...");
                         FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
+                        WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' waited.");
                     }
 
                 }
@@ -1782,31 +1799,31 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   }
                   catch (NullReferenceException ex)
                   {
-                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
+                      WriteDebugExceptionMessageLine(ex);
                   }
                   finally
                   {
                       try
                       {
                           if (FSocketConnections.Count <= 0)
+                          {
+                              WriteDebugShutdownMessageLine("Setting 'FWaitConnectionsDisposing'...");
                               FWaitConnectionsDisposing.Set();
-                          else
-                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes.");
+                              WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' set.");
+                          }
                       }
                       catch (NullReferenceException ex)
                       {
-                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
+                          WriteDebugExceptionMessageLine(ex);
                       }
                       catch (ObjectDisposedException ex)
                       {
-                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
+                          WriteDebugExceptionMessageLine(ex);
                       }
                       finally
                       {
                           if (FSocketConnectionsSync != null)
                               FSocketConnectionsSync.ExitWriteLock();
-                          else
-                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes.");
                       }
 
                   }
@@ -1910,7 +1927,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               }
               catch (Exception ex)
               {
-                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes.");
+                  WriteDebugExceptionMessageLine(ex);
               }
 
               // ----- \remind  END  -----
@@ -2729,6 +2746,36 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #endregion
 
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_EXCEPTIONS")]
+		private void WriteDebugExceptionMessageLine(Exception ex)
+		{
+			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
+		}
+
+		[Conditional("DEBUG_SHUTDOWN")]
+		private void WriteDebugShutdownMessageLine(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.InvariantCulture,
+					" @ {0} @ Thread #{1} : {2} {3} : {4}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
+					GetType(),
+					"#" + this.FConnectionId.ToString("D2", CultureInfo.InvariantCulture),
+					message
+				)
+			);
+		}
+
+		#endregion
     }
 
 }

@@ -25,8 +25,12 @@
 // Configuration
 //==================================================================================================
 
-// Enable debugging of thread state:
+#if (DEBUG)
+
+	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
+
+#endif // DEBUG
 
 #endregion
 
@@ -242,7 +246,7 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
-							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath, false));
+							DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 
 							Debug.WriteLine("USB Ser/HID device disconnected:");
 							Debug.Indent();
@@ -1097,7 +1101,7 @@ namespace MKY.IO.Usb
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
@@ -1109,7 +1113,6 @@ namespace MKY.IO.Usb
 			);
 		}
 
-		[Conditional("DEBUG")]
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void WriteDebugThreadStateMessageLine(string message)
 		{

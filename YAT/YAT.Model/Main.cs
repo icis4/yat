@@ -208,7 +208,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -1524,7 +1524,7 @@ namespace YAT.Model
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),

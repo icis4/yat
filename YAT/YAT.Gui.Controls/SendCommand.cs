@@ -26,8 +26,13 @@
 // Configuration
 //==================================================================================================
 
-// Enables debug messages to debug this control (state changes, validation,...):
-// #define DEBUG_COMMAND
+#if (DEBUG)
+
+	// Enable debugging of state changes and validation related to the handled command:
+////#define DEBUG_COMMAND
+
+#endif // DEBUG
+
 #endregion
 
 #region Using

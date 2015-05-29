@@ -25,8 +25,12 @@
 // Configuration
 //==================================================================================================
 
-// Enable debugging of ALAZ socket shutdown:
-#define DEBUG_SOCKET_SHUTDOWN
+#if (DEBUG)
+
+	// Enable debugging of ALAZ socket shutdown:
+////#define DEBUG_SOCKET_SHUTDOWN
+
+#endif // DEBUG
 
 #endregion
 
@@ -134,6 +138,8 @@ namespace MKY.IO.Serial.Socket
 		private ReaderWriterLockSlim isStoppingAndDisposingLock = new ReaderWriterLockSlim();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
+		private object socketSyncObj = new object();
+
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
 		private object socketConnectionSyncObj = new object();
 
@@ -237,7 +243,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. OnDisconnected().
 					StopAndDisposeReconnectTimer();
-					SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread();
+					SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 					// Do not dispose of state and shutdown locks because that will result in null
 					// ref exceptions during closing, due to the fact that ALAZ closes/disconnects
@@ -257,7 +263,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			WriteDebugSocketShutdownMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -410,7 +416,8 @@ namespace MKY.IO.Serial.Socket
 			{
 				AssertNotDisposed();
 
-				return (this.socket);
+				lock (this.socketSyncObj)
+					return (this.socket);
 			}
 		}
 
@@ -429,7 +436,7 @@ namespace MKY.IO.Serial.Socket
 			if (IsStopped)
 			{
 				WriteDebugMessageLine("Starting...");
-				StartSocket();
+				StartSocketAndThread();
 				return (true);
 			}
 			else
@@ -453,7 +460,7 @@ namespace MKY.IO.Serial.Socket
 				StopAndDisposeReconnectTimer();
 
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread();
+				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				SetStateSynchronizedAndNotify(SocketState.Reset);
 			}
@@ -527,10 +534,9 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <remarks>
-		/// Note that starting is done asynchronously, opposed to stopping that is synchronously.
-		/// This difference is due to the issue described in the header of this class.
+		/// Note that ALAZ sockets start asynchronously, same as stopping.
 		/// </remarks>
-		private void StartSocket()
+		private void StartSocketAndThread()
 		{
 			IsStoppingAndDisposingSynchronized = false;
 
@@ -538,31 +544,33 @@ namespace MKY.IO.Serial.Socket
 
 			StartDataSentThread();
 
-			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
-			(
-				ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
-				(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
-				ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
-				null,
-				SocketDefaults.SocketBufferSize,
-				SocketDefaults.MessageBufferSize,
-				Timeout.Infinite,
-				Timeout.Infinite
-			);
+			lock (this.socketSyncObj)
+			{
+				this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
+				(
+					ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
+					(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
+					ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
+					null,
+					SocketDefaults.SocketBufferSize,
+					SocketDefaults.MessageBufferSize,
+					Timeout.Infinite,
+					Timeout.Infinite
+				);
 
-			this.socket.AddConnector("MKY TCP/IP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
-			this.socket.Start(); // The ALAZ socket will be started asynchronously
+				this.socket.AddConnector("MKY TCP/IP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+				this.socket.Start(); // The ALAZ socket will be started asynchronously
+			}
 		}
 
 		/// <remarks>
-		/// Note that starting is done asynchronously, opposed to stopping that is synchronously.
-		/// This difference is due to the issue described in the header of this class.
+		/// Note that ALAZ sockets stop asynchronously, same as starting.
 		/// 
 		/// \attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
 		/// See remarks of the header of this class for details.
 		/// </remarks>
-		private void SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThread()
+		private void SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync()
 		{
 			IsStoppingAndDisposingSynchronized = true;
 
@@ -573,35 +581,36 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void StopAndDisposeSocketAndConnectionsAndThread()
 		{
-			if (this.socket != null)
+			lock (this.socketSyncObj)
 			{
-				try
+				if (this.socket != null)
 				{
-					WriteDebugSocketShutdownMessageLine("Stopping socket...");
-					this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
-					WriteDebugSocketShutdownMessageLine("...successfully stopped.");
-				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(GetType(), ex, "Stopping socket of TCP/IP Client failed!");
+					try
+					{
+						WriteDebugSocketShutdownMessageLine("Stopping socket...");
+						this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
+						WriteDebugSocketShutdownMessageLine("...successfully stopped.");
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex, "Stopping socket of TCP/IP Client failed!");
+					}
+
+					try
+					{
+						WriteDebugSocketShutdownMessageLine("Disposing socket...");
+						this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
+						WriteDebugSocketShutdownMessageLine("...successfully disposed.");
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP Client failed!");
+					}
+
+					this.socket = null;
 				}
 			}
 
-			if (this.socket != null) // Check again as socket could have been disposed in the meantime.
-			{
-				try
-				{
-					WriteDebugSocketShutdownMessageLine("Disposing socket...");
-					this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
-					WriteDebugSocketShutdownMessageLine("...successfully disposed.");
-				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP Client failed!");
-				}
-			}
-
-			this.socket = null;
 
 			lock (this.socketConnectionSyncObj)
 				this.socketConnection = null;
@@ -829,7 +838,8 @@ namespace MKY.IO.Serial.Socket
 			if (!IsStoppingAndDisposingSynchronized)
 			{
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				StopAndDisposeSocketAndConnectionsAndThread();
+				// Must be called asynchronously! Otherwise, a dead-lock will occur in ALAZ.
+				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				// \attention:
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
@@ -878,7 +888,8 @@ namespace MKY.IO.Serial.Socket
 			if (!IsStoppingAndDisposingSynchronized)
 			{
 				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				StopAndDisposeSocketAndConnectionsAndThread();
+				// Must be called asynchronously! Otherwise, a dead-lock will occur in ALAZ.
+				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				// \attention:
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
@@ -961,7 +972,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				try
 				{
-					StartSocket();
+					StartSocketAndThread();
 				}
 				catch
 				{
@@ -1039,7 +1050,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return (IPHost.Decorate(this.remoteIPAddress) + ":" + this.remotePort);
+			return (IPHost.ToUrlString(this.remoteIPAddress) + ":" + this.remotePort);
 		}
 
 		#endregion
@@ -1058,7 +1069,7 @@ namespace MKY.IO.Serial.Socket
 			(
 				string.Format
 				(
-					CultureInfo.CurrentCulture,
+					CultureInfo.InvariantCulture,
 					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
@@ -1070,14 +1081,12 @@ namespace MKY.IO.Serial.Socket
 			);
 		}
 
-		[Conditional("DEBUG")]
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void WriteDebugThreadStateMessageLine(string message)
 		{
 			WriteDebugMessageLine(message);
 		}
 
-		[Conditional("DEBUG")]
 		[Conditional("DEBUG_SOCKET_SHUTDOWN")]
 		private void WriteDebugSocketShutdownMessageLine(string message)
 		{

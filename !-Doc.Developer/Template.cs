@@ -28,12 +28,10 @@
 
 #if (DEBUG)
 
-	// Choose <...>:
-	// - Uncomment to <...>
-	// - Comment out for normal operation
-	//#define DEBUG_<...>
+	// Enable debugging of...:
+////#define DEBUG_<...>
 
-#endif
+#endif // DEBUG
 
 #endregion
 

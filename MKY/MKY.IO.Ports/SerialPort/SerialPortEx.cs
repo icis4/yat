@@ -26,10 +26,12 @@
 // Configuration
 //==================================================================================================
 
-// Choose whether additional debug output should be written on open/close:
-// - Uncomment to debug
-// - Comment out for normal operation
-//#define DEBUG_OPEN_CLOSE
+#if (DEBUG)
+
+	// Enable debugging of open/close state:
+////#define DEBUG_OPEN_CLOSE
+
+#endif // DEBUG
 
 #endregion
 
