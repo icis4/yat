@@ -418,6 +418,12 @@ namespace YAT.Gui.Forms
 			int repeat;
 			if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && (repeat < 0))
 				label_DefaultLineRepeatUnit.Text = "= infinite";
+			else if (repeat == 0)
+				label_DefaultLineRepeatUnit.Text = "= never";
+			else if (repeat == 1)
+				label_DefaultLineRepeatUnit.Text = "= once";
+			else if (repeat == 2)
+				label_DefaultLineRepeatUnit.Text = "= twice";
 			else
 				label_DefaultLineRepeatUnit.Text = "times";
 		}
@@ -430,7 +436,7 @@ namespace YAT.Gui.Forms
 				const int RepeatInfinite = Domain.Settings.SendSettings.LineRepeatInfinite;
 
 				int repeat;
-				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 2) || (repeat == RepeatInfinite)))
+				if (int.TryParse(textBox_DefaultLineRepeat.Text, out repeat) && ((repeat >= 1) || (repeat == RepeatInfinite)))
 				{
 					this.settingsInEdit.Terminal.Send.DefaultLineRepeat = repeat;
 				}
@@ -439,7 +445,7 @@ namespace YAT.Gui.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Repeat must be at least 2 times! Or set to " + RepeatInfinite + " for infinite repeating.",
+						"Repeat must be 1 or more! Or set to " + RepeatInfinite + " for infinite repeating.",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

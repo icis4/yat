@@ -195,7 +195,6 @@ namespace YAT.Model.Test
 		// Test Cases
 		//==========================================================================================
 
-		/// <summary></summary>
 		private static IEnumerable<KeyValuePair<TestCaseData, string[]>> TestCasesWithoutCategory
 		{
 			get
@@ -300,45 +299,16 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(OneWayTransmissionTestData), "TestCases")]
-		public virtual void PerformTransmission(TransmissionType transmissionType, Utilities.TestSet testSet, int transmissionCount)
-		{
-			switch (transmissionType)
-			{
-				case TransmissionType.SerialPort:
-					PerformTransmission(Utilities.GetStartedTextSerialPortASettings(), Utilities.GetStartedTextSerialPortBSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv4Loopback:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(), Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv6Loopback:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(), Utilities.GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnSpecificIPv4Interface:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings(), Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnSpecificIPv6Interface:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings(), Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings(), testSet, transmissionCount);
-					break;
-			}
-		}
-
-		#endregion
-
-		#region Transmission
-		//==========================================================================================
-		// Transmission
-		//==========================================================================================
-
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
-		private static void PerformTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		[Test, TestCaseSource(typeof(OneWayTransmissionTestData), "TestCases")]
+		public virtual void PerformTransmission(TransmissionType tt, Utilities.TestSet testSet, int transmissionCount)
 		{
+			TerminalSettingsRoot settingsA;
+			TerminalSettingsRoot settingsB;
+			Utilities.GetStartedTextSettings(tt, out settingsA, out settingsB);
+
 			// Create terminals from settings and check whether B receives from A:
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
@@ -398,7 +368,6 @@ namespace YAT.Model.Test
 		// Test Cases
 		//==========================================================================================
 
-		/// <summary></summary>
 		private static IEnumerable<KeyValuePair<TestCaseData, string[]>> TestCasesWithoutCategory
 		{
 			get
@@ -481,45 +450,16 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(TwoWayTransmissionTestData), "TestCases")]
-		public virtual void PerformTransmission(TransmissionType transmissionType, Utilities.TestSet testSet, int transmissionCount)
-		{
-			switch (transmissionType)
-			{
-				case TransmissionType.SerialPort:
-					PerformTransmission(Utilities.GetStartedTextSerialPortASettings(), Utilities.GetStartedTextSerialPortBSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv4Loopback:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(), Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv6Loopback:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(), Utilities.GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnSpecificIPv4Interface:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings(), Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings(), testSet, transmissionCount);
-					break;
-
-				case TransmissionType.TcpAutoSocketOnSpecificIPv6Interface:
-					PerformTransmission(Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings(), Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings(), testSet, transmissionCount);
-					break;
-			}
-		}
-
-		#endregion
-
-		#region Transmission
-		//==========================================================================================
-		// Transmission
-		//==========================================================================================
-
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
-		private static void PerformTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		[Test, TestCaseSource(typeof(TwoWayTransmissionTestData), "TestCases")]
+		public virtual void PerformTransmission(TransmissionType tt, Utilities.TestSet testSet, int transmissionCount)
 		{
+			TerminalSettingsRoot settingsA;
+			TerminalSettingsRoot settingsB;
+			Utilities.GetStartedTextSettings(tt, out settingsA, out settingsB);
+
 			// Create terminals from settings and check whether B receives from A:
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
@@ -549,6 +489,187 @@ namespace YAT.Model.Test
 						Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 						                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 						                      testSet, i + 1);
+					}
+				}
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
+	public static class RepeatingTransmissionTestData
+	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary></summary>
+		public const string TestString = "Hello World";
+
+		/// <summary></summary>
+		public const string TestCommand = TestString + @"\!(LineRepeat)\!(LineDelay)";
+
+		#endregion
+
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		private static IEnumerable<KeyValuePair<TestCaseData, string[]>> TestCasesWithoutCategory
+		{
+			get
+			{
+				foreach (KeyValuePair<TransmissionType, string[]> kvp in TransmissionTypes.GetItems)
+				{
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key,  1, false, false).SetName(kvp.Key + "_Repeat01OneWay"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key,  1, true,  false).SetName(kvp.Key + "_Repeat01TwoWay"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key,  2, false, false).SetName(kvp.Key + "_Repeat02OneWay"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key,  2, true,  false).SetName(kvp.Key + "_Repeat02TwoWay"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, 10, false, false).SetName(kvp.Key + "_Repeat10OneWay"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, 10, true,  false).SetName(kvp.Key + "_Repeat10TwoWay"), kvp.Value));
+
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, Domain.Settings.SendSettings.LineRepeatInfinite, false, true ).SetName(kvp.Key + "_RepeatInfiniteOneWayAndBreak"),  kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, Domain.Settings.SendSettings.LineRepeatInfinite, false, false).SetName(kvp.Key + "_RepeatInfiniteOneWayUntilExit"), kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, Domain.Settings.SendSettings.LineRepeatInfinite, true,  true ).SetName(kvp.Key + "_RepeatInfiniteTwoWayAndBreak"),  kvp.Value));
+					yield return (new KeyValuePair<TestCaseData, string[]>(new TestCaseData(kvp.Key, Domain.Settings.SendSettings.LineRepeatInfinite, true,  false).SetName(kvp.Key + "_RepeatInfiniteTwoWayUntilExit"), kvp.Value));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				foreach (KeyValuePair<TestCaseData, string[]> kvp in TestCasesWithoutCategory)
+				{
+					foreach (string cat in kvp.Value)
+						kvp.Key.SetCategory(cat);
+
+					yield return (kvp.Key);
+				}
+			}
+		}
+
+		#endregion
+	}
+
+	/// <remarks>
+	/// It can be argued that this test would be better located in YAT.Domain.Test. It currently is
+	/// located here because line counts and rates are calculated in <see cref="YAT.Model.Terminal"/>
+	/// and required when evaluating the test result.
+	/// </remarks>
+	[TestFixture]
+	public class RepeatingTransmissionTest
+	{
+		#region Set Up Fixture
+		//==========================================================================================
+		// Set Up Fixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
+		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
+			// Prevent auto-save of workspace settings.
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+		}
+
+		#endregion
+
+		#region Tear Down Fixture
+		//==========================================================================================
+		// Tear Down Fixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
+		}
+
+		#endregion
+
+		#region Tests
+		//==========================================================================================
+		// Tests
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
+		[Test, TestCaseSource(typeof(RepeatingTransmissionTestData), "TestCases")]
+		public virtual void PerformTransmission(TransmissionType tt, int repeatCount, bool doTwoWay, bool executeBreak)
+		{
+			TerminalSettingsRoot settingsA;
+			TerminalSettingsRoot settingsB;
+			Utilities.GetStartedTextSettings(tt, out settingsA, out settingsB);
+
+			// Set both settings to the desired repeat count and create the terminals:
+			settingsA.Send.DefaultLineRepeat = repeatCount;
+			settingsB.Send.DefaultLineRepeat = repeatCount;
+			using (Terminal terminalA = new Terminal(settingsA))
+			{
+				using (Terminal terminalB = new Terminal(settingsB))
+				{
+					// Start and open terminals:
+					terminalA.Start();
+					terminalB.Start();
+					Utilities.WaitForConnection(terminalA, terminalB);
+
+					// Trigger repeating command:
+					Types.Command command = new Types.Command(RepeatingTransmissionTestData.TestCommand);
+
+					terminalA.SendText(command);
+					if (doTwoWay)
+						terminalB.SendText(command);
+
+					if (repeatCount >= 0) // Finite count.
+					{
+						Utilities.TestSet testSet = new Utilities.TestSet
+							(
+							command, repeatCount,
+							ArrayEx.CreateAndInitializeInstance<int>(repeatCount, 2), // Data + EOL
+							ArrayEx.CreateAndInitializeInstance<int>(repeatCount, RepeatingTransmissionTestData.TestString.Length),
+							false
+							);
+
+						Utilities.WaitForTransmission(terminalA, terminalB, repeatCount);
+						if (doTwoWay)
+							Utilities.WaitForTransmission(terminalB, terminalA, repeatCount);
+
+						// Verify transmission:
+						Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+						                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+						                      testSet);
+						if (doTwoWay)
+							Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+							                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+							                      testSet);
+					}
+					else // Infinite count.
+					{
+						if (executeBreak)
+						{
+							terminalA.Break();
+							terminalB.Break();
+						}
+						else
+						{
+							terminalA.StopIO();
+							terminalB.StopIO();
+						}
 					}
 				}
 			}
@@ -597,7 +718,6 @@ namespace YAT.Model.Test
 		{
 			get
 			{
-				TransmissionType tt = TransmissionType.SerialPort;
 				string categoryDev = MKY.IO.Ports.Test.SettingsCategoryStrings.MTSicsDeviceAIsConnected;
 				string category01m = new NUnit.MinuteDurationCategoryAttribute( 1).Name;
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
@@ -614,11 +734,11 @@ namespace YAT.Model.Test
 					int loops60m = (int)((     3600.0 * 1000) / c.Value2.TotalMilliseconds);
 					int loops24h = (int)((24 * 3600.0 * 1000) / c.Value2.TotalMilliseconds);
 
-					yield return (new TestCaseData(tt, stimulus, expected,  1).SetCategory(categoryDev).SetName(tt + "_" + stimulus +  "_1"));
-					yield return (new TestCaseData(tt, stimulus, expected, 10).SetCategory(categoryDev).SetName(tt + "_" + stimulus + "_10"));
-					yield return (new TestCaseData(tt, stimulus, expected, loops01m).SetCategory(category01m).SetName(tt + "_" + stimulus + "_" + loops01m));
-					yield return (new TestCaseData(tt, stimulus, expected, loops60m).SetCategory(category60m).SetName(tt + "_" + stimulus + "_" + loops60m));
-					yield return (new TestCaseData(tt, stimulus, expected, loops24h).SetCategory(category24h).SetName(tt + "_" + stimulus + "_" + loops24h));
+					yield return (new TestCaseData(stimulus, expected,        1).SetCategory(categoryDev).SetName(stimulus +  "_1"));
+					yield return (new TestCaseData(stimulus, expected,       10).SetCategory(categoryDev).SetName(stimulus + "_10"));
+					yield return (new TestCaseData(stimulus, expected, loops01m).SetCategory(category01m).SetName(stimulus + "_" + loops01m));
+					yield return (new TestCaseData(stimulus, expected, loops60m).SetCategory(category60m).SetName(stimulus + "_" + loops60m));
+					yield return (new TestCaseData(stimulus, expected, loops24h).SetCategory(category24h).SetName(stimulus + "_" + loops24h));
 				}
 			}
 		}
@@ -676,14 +796,9 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(MTSicsDeviceTransmissionTestData), "TestCases")]
-		public virtual void PerformTransmission(TransmissionType transmissionType, string stimulus, string expected, int transmissionCount)
+		public virtual void PerformTransmission(string stimulus, string expected, int transmissionCount)
 		{
-			switch (transmissionType)
-			{
-				case TransmissionType.SerialPort:
-					PerformTransmission(Utilities.GetStartedTextMTSicsDeviceASettings(), stimulus, expected, transmissionCount);
-					break;
-			}
+			PerformTransmission(Utilities.GetStartedTextMTSicsDeviceASettings(), stimulus, expected, transmissionCount);
 		}
 
 		#endregion

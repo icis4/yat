@@ -222,6 +222,11 @@ namespace YAT.Model.Test
 		// Settings
 		//==========================================================================================
 
+		#region Settings > Dedicated
+		//------------------------------------------------------------------------------------------
+		// Settings > Dedicated
+		//------------------------------------------------------------------------------------------
+
 		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(MKY.IO.Ports.SerialPortId portId)
 		{
 			// Create settings
@@ -380,6 +385,50 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Settings > Combined
+		//------------------------------------------------------------------------------------------
+		// Settings > Combined
+		//------------------------------------------------------------------------------------------
+
+		internal static void GetStartedTextSettings(TransmissionType tt, out TerminalSettingsRoot settingsA, out TerminalSettingsRoot settingsB)
+		{
+			switch (tt)
+			{
+				case TransmissionType.SerialPort:
+					settingsA = GetStartedTextSerialPortASettings();
+					settingsB = GetStartedTextSerialPortBSettings();
+					break;
+
+				case TransmissionType.TcpAutoSocketOnIPv4Loopback:
+					settingsA = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
+					settingsB = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
+					break;
+
+				case TransmissionType.TcpAutoSocketOnIPv6Loopback:
+					settingsA = GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings();
+					settingsB = GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings();
+					break;
+
+				case TransmissionType.TcpAutoSocketOnSpecificIPv4Interface:
+					settingsA = GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings();
+					settingsB = GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings();
+					break;
+
+				case TransmissionType.TcpAutoSocketOnSpecificIPv6Interface:
+					settingsA = GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings();
+					settingsB = GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings();
+					break;
+
+				default:
+					throw (new InvalidOperationException("Program execution should never get here, item " + tt.ToString() + " is unknown!"));
+			}
+
+		}
+
+		#endregion
+
+		#endregion
+
 		#region Wait
 		//==========================================================================================
 		// Wait
@@ -415,6 +464,11 @@ namespace YAT.Model.Test
 
 		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB, TestSet testSet)
 		{
+			WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount);
+		}
+
+		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB, int expectedLineCountB)
+		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
@@ -426,7 +480,7 @@ namespace YAT.Model.Test
 			}
 			while ((terminalB.RxByteCount != terminalA.TxByteCount) &&
 			       (terminalB.RxLineCount != terminalA.TxLineCount) &&
-			       (terminalB.RxLineCount != testSet.ExpectedLineCount));
+				   (terminalB.RxLineCount != expectedLineCountB));
 
 			// Wait to allow Eol to be sent (Eol is sent a bit later than line contents).
 			Thread.Sleep(EolWaitInterval);
@@ -439,20 +493,12 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
-		                                 TestSet testSet)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet)
 		{
 			VerifyLines(linesA, linesB, testSet, 1);
 		}
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB,
-		                                 TestSet testSet, int cycle)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int cycle)
 		{
 			// Compare the expected line count at the receiver side.
 			int  expectedLineCount       = (testSet.ExpectedLineCount * cycle);
