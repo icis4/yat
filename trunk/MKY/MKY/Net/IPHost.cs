@@ -135,7 +135,11 @@ namespace MKY.Net
 		/// Compare readability:
 		/// "1:2:3:4:5:6:7:8:8080"
 		/// "[1:2:3:4:5:6:7:8]:8080"
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
+		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public string ToUrlString()
 		{
@@ -163,8 +167,11 @@ namespace MKY.Net
 		/// Compare readability:
 		/// "1:2:3:4:5:6:7:8:8080"
 		/// "[1:2:3:4:5:6:7:8]:8080"
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
+		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
 		public static string ToUrlString(IPAddress a)
 		{
 			switch (a.AddressFamily)
@@ -183,8 +190,11 @@ namespace MKY.Net
 		/// Compare readability:
 		/// "1:2:3:4:5:6:7:8:8080"
 		/// "[1:2:3:4:5:6:7:8]:8080"
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
+		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
 		public static string ToUrlString(string s)
 		{
 			IPHost host;

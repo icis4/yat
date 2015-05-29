@@ -611,7 +611,6 @@ namespace MKY.IO.Serial.Socket
 				}
 			}
 
-
 			lock (this.socketConnectionSyncObj)
 				this.socketConnection = null;
 

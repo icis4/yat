@@ -247,7 +247,7 @@ namespace YAT.Controller
 		/// <summary>
 		/// This is the main run method for normal operation.
 		/// </summary>
-		public virtual Result RunNormally()
+		public virtual Result Run()
 		{
 			AssertNotDisposed();
 
@@ -330,12 +330,13 @@ namespace YAT.Controller
 		}
 
 		/// <summary>
-		/// This is the main run method that supports all run options. Do not directly call
-		/// this method for normal or console operation. Call <see cref="RunNormally"/> or
-		/// <see cref="RunFromConsole"/> instead. Call this method directly for automated
-		/// testing purposes only.
+		/// This is the main run method that supports all run options.
 		/// </summary>
 		/// <remarks>
+		/// Do not directly call this method for normal or console operation. Call <see cref="Run()"/>
+		/// or <see cref="RunFromConsole"/> instead. Call this method directly for automated testing
+		/// purposes only.
+		/// 
 		/// There are the following use cases to run YAT. This Run() method supports all these
 		/// use cases as also shown below:
 		/// 

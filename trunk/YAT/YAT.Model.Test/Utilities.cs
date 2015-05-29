@@ -390,9 +390,9 @@ namespace YAT.Model.Test
 		// Settings > Combined
 		//------------------------------------------------------------------------------------------
 
-		internal static void GetStartedTextSettings(TransmissionType tt, out TerminalSettingsRoot settingsA, out TerminalSettingsRoot settingsB)
+		internal static void GetStartedTextSettings(TransmissionType type, out TerminalSettingsRoot settingsA, out TerminalSettingsRoot settingsB)
 		{
-			switch (tt)
+			switch (type)
 			{
 				case TransmissionType.SerialPort:
 					settingsA = GetStartedTextSerialPortASettings();
@@ -420,9 +420,8 @@ namespace YAT.Model.Test
 					break;
 
 				default:
-					throw (new InvalidOperationException("Program execution should never get here, item " + tt.ToString() + " is unknown!"));
+					throw (new InvalidOperationException("Program execution should never get here, item " + type.ToString() + " is unknown!"));
 			}
-
 		}
 
 		#endregion

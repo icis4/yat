@@ -57,7 +57,7 @@ Start YAT by selecting "Start > Programs > YAT > YAT".
 2. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 4 Candidate 3 Version 1.99.3x :: 2015-xx-xx
+YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -150,7 +150,8 @@ Limitations and known issues:
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
 - Text terminals: Wait for answer line not yet implemented (feature request #19)
 - Direct mode does not yet support special formats and commands (feature request #10)
-- XML logging not yet implemented, definition of schema pending (bugs #26 and #27)
+- Logging is limited to text, RTF format not yet implemented (feature requests #233)
+- XML logging not yet implemented, definition of schema pending (feature requests #26 and #27)
 
 
 YAT 2.0 Beta 4 Candidate 2 Version 1.99.30 :: 2013-02-02
@@ -877,17 +878,19 @@ XTerm232 1.0.0 :: 2003-10-14
 4. Roadmap
 ====================================================================================================
 
-YAT 2.0 Final :: Expected in 2013/2014
+YAT 2.0 Final :: Expected in 2015/2016
 ----------------------------------------------------------------------------------------------------
-Once all bugs of priority 5 and above as well as all feature requests of priority 7 and above have
-been resolved, YAT 2.0 Final will be released. For details regarding these items, see the YAT bug
-and feature request trackers.
+YAT 2.0 Final will be released once all bugs and feature requests of priority 7 and above have been
+resolved. This state is expected to be reached by the next or next-next version of YAT. For details
+regarding the items, see bugs and feature requests at http://sourceforge.net/projects/y-a-terminal/.
 
 
 YAT 2.1 :: Not planned yet
 ----------------------------------------------------------------------------------------------------
-The most often requested features will be added to future versions of YAT.
-For potential new features see the YAT feature request tracker.
+The next major step for YAT will be the integration of a scripting environment. Scripting will allow
+executing any kind of automatic procedures from within YAT.
+It is also planned to demonstrate how to use YAT from a PowerShell script and along with NUnit. All
+these features aim for providing a versatile automatic testing tool for serial communications.
 
 
 ====================================================================================================

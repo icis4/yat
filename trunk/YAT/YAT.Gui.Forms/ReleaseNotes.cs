@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -30,6 +35,8 @@ using System.Windows.Forms;
 using MKY.IO;
 
 using YAT.Utilities;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -46,7 +53,7 @@ namespace YAT.Gui.Forms
 			".." + Path.DirectorySeparatorChar +
 			".." + Path.DirectorySeparatorChar +
 			".." + Path.DirectorySeparatorChar +
-			"Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
+			"!-Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
 		/// <summary></summary>
 		public ReleaseNotes()

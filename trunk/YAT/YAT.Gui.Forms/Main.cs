@@ -222,8 +222,11 @@ namespace YAT.Gui.Forms
 		{
 			this.isStartingUp = false;
 
-			// Start YAT according to the requested settings.
+			// Start YAT according to the requested settings. Temporarily notify MDI layouting
+			// to prevent that initial layouting overwrites the workspace settings.
+			this.isLayoutingMdi = true;
 			this.result = this.main.Start();
+			this.isLayoutingMdi = false;
 
 			if (this.result != Model.Main.Result.Success)
 			{
@@ -1020,9 +1023,9 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > PerformStartOperation
+		#region Controls Event Handlers > PerformStart/ExitOperation
 		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > PerformStartOperation
+		// Controls Event Handlers > PerformStart/ExitOperation
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -1065,23 +1068,42 @@ namespace YAT.Gui.Forms
 					this.result = Model.Main.Result.ApplicationRunError;
 				}
 
-				if (!this.main.StartArgs.KeepOpen)
+				if ((!this.main.StartArgs.KeepOpen) &&
+					(!(this.main.StartArgs.KeepOpenOnError && (this.result != Model.Main.Result.Success))))
 				{
-					try
-					{
-						SetFixedStatusText("Automatically closing " + ApplicationInfo.ProductName);
-						Close();
-					}
-					catch (Exception ex)
-					{
-						DebugEx.WriteException(GetType(), ex);
-						this.result = Model.Main.Result.ApplicationExitError;
-					}
+					timer_PerformExitOperation.Start();
 				}
+
 			}
 			else
 			{
 				this.result = Model.Main.Result.ApplicationRunError;
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void timer_PerformExitOperation_Tick(object sender, EventArgs e)
+		{
+			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;
+			Model.Terminal terminal = this.workspace.GetTerminalByDynamicIndex(id);
+			if ((terminal != null) && (terminal.IsBusy))
+			{
+				return; // Pend!
+			}
+
+			if ((!this.main.StartArgs.KeepOpen) &&
+				(!(this.main.StartArgs.KeepOpenOnError && (this.result != Model.Main.Result.Success))))
+			{
+				try
+				{
+					SetFixedStatusText("Automatically closing " + ApplicationInfo.ProductName);
+					Close();
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex);
+					this.result = Model.Main.Result.ApplicationExitError;
+				}
 			}
 		}
 
