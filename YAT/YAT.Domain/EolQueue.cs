@@ -213,8 +213,7 @@ namespace YAT.Domain
 			}
 			catch (InvalidOperationException ex)
 			{
-				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
-				System.Diagnostics.Debug.WriteLine("Queue.Count = " + this.queue.Count);
+				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "Queue.Count = " + this.queue.Count);
 			}
 		}
 

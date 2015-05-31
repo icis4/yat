@@ -1629,8 +1629,8 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
 			}
 		}
 
