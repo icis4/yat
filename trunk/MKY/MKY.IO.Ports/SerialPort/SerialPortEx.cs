@@ -1065,10 +1065,12 @@ namespace MKY.IO.Ports
 			if (DebugWrite_portName.Length == 0)
 				DebugWrite_portName = PortName;
 
-			Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount + " " + message);
+			string completeMessage = DebugWrite_portName + " " + Environment.TickCount + " " + message;
 
 			if (writeStack)
-				MKY.Diagnostics.XDebug.WriteStack(this, "");
+				MKY.Diagnostics.DebugEx.WriteStack(this, completeMessage);
+			else
+				MKY.Diagnostics.DebugEx.WriteLine(this, completeMessage);
 		}
 
 #endif // DEBUG && DEBUG_OPEN_CLOSE

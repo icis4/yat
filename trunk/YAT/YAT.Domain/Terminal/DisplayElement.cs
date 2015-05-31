@@ -553,8 +553,7 @@ namespace YAT.Domain
 			}
 			catch (ArgumentException ex)
 			{
-				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
-				System.Diagnostics.Debug.WriteLine(de.ToString());
+				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, de.ToString());
 			}
 		}
 
