@@ -1,4 +1,11 @@
-@@ -9,9 +9,8 @@
+@@ -1,4 +1,5 @@
+-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+@@ -9,49 +10,95 @@
      <AppDesignerFolder>Properties</AppDesignerFolder>
      <RootNamespace>ALAZ.SystemEx.NetEx</RootNamespace>
      <AssemblyName>ALAZ.SystemEx.NetEx</AssemblyName>
@@ -9,9 +16,26 @@
 +    <AssemblyOriginatorKeyFile>Properties\ALAZLibSN.snk</AssemblyOriginatorKeyFile>
      <FileUpgradeFlags>
      </FileUpgradeFlags>
-     <OldToolsVersion>2.0</OldToolsVersion>
-@@ -20,28 +19,65 @@
+-    <OldToolsVersion>2.0</OldToolsVersion>
++    <OldToolsVersion>3.5</OldToolsVersion>
+     <UpgradeBackupLocation>
+     </UpgradeBackupLocation>
      <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
++    <PublishUrl>publish\</PublishUrl>
++    <Install>true</Install>
++    <InstallFrom>Disk</InstallFrom>
++    <UpdateEnabled>false</UpdateEnabled>
++    <UpdateMode>Foreground</UpdateMode>
++    <UpdateInterval>7</UpdateInterval>
++    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
++    <UpdatePeriodically>false</UpdatePeriodically>
++    <UpdateRequired>false</UpdateRequired>
++    <MapFileExtensions>true</MapFileExtensions>
++    <ApplicationRevision>0</ApplicationRevision>
++    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
++    <IsWebBootstrapper>false</IsWebBootstrapper>
++    <UseApplicationTrust>false</UseApplicationTrust>
++    <BootstrapperEnabled>true</BootstrapperEnabled>
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 -    <DebugSymbols>true</DebugSymbols>
@@ -75,18 +99,20 @@
 +  </PropertyGroup>
    <ItemGroup>
      <Reference Include="System" />
-     <Reference Include="System.Core">
-       <RequiredTargetFramework>3.5</RequiredTargetFramework>
-     </Reference>
+-    <Reference Include="System.Core">
+-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+-    </Reference>
 -    <Reference Include="System.Data" />
-     <Reference Include="System.Runtime.Serialization">
-       <RequiredTargetFramework>3.0</RequiredTargetFramework>
-     </Reference>
-@@ -49,9 +85,11 @@
-       <RequiredTargetFramework>3.0</RequiredTargetFramework>
-     </Reference>
+-    <Reference Include="System.Runtime.Serialization">
+-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+-    </Reference>
+-    <Reference Include="System.ServiceModel">
+-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+-    </Reference>
++    <Reference Include="System.Runtime.Serialization" />
++    <Reference Include="System.ServiceModel" />
      <Reference Include="System.Web" />
--    <Reference Include="System.Xml" />
+-    <Reference Include="System.XML" />
    </ItemGroup>
    <ItemGroup>
 +    <Compile Include="..\ALAZ.Version.cs">
@@ -95,13 +121,13 @@
      <Compile Include="Properties\AssemblyInfo.cs" />
      <Compile Include="SocketsEx\AuthenticateCallbackData.cs" />
      <Compile Include="SocketsEx\BaseSocketConnection.cs" />
-@@ -78,11 +116,18 @@
+@@ -78,11 +125,30 @@
      <Compile Include="SocketsEx\SocketsExTypes.cs" />
    </ItemGroup>
    <ItemGroup>
 +    <ProjectReference Include="..\..\..\MKY\MKY\MKY.csproj">
 +      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-+      <Name>MKY %28MKY\MKY%29</Name>
++      <Name>MKY</Name>
 +    </ProjectReference>
      <ProjectReference Include="..\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
        <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
@@ -110,6 +136,18 @@
    </ItemGroup>
 +  <ItemGroup>
 +    <None Include="Properties\ALAZLibSN.snk" />
++  </ItemGroup>
++  <ItemGroup>
++    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
++      <Visible>False</Visible>
++      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
++      <Install>false</Install>
++    </BootstrapperPackage>
++    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
++      <Visible>False</Visible>
++      <ProductName>.NET Framework 3.5 SP1</ProductName>
++      <Install>true</Install>
++    </BootstrapperPackage>
 +  </ItemGroup>
    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

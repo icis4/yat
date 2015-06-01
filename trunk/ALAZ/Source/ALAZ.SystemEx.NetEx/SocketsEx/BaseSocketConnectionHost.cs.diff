@@ -1,4 +1,24 @@
-@@ -194,7 +194,17 @@
+@@ -37,6 +37,19 @@
+  * OF THE POSSIBILITY OF SUCH DAMAGE. 
+  */
+ 
++#if (DEBUG)
++
++	// Enable debugging of exceptions:
++////#define DEBUG_EXCEPTIONS
++
++	// Enable debugging of shutdown:
++////#define DEBUG_SHUTDOWN
++
++#endif
++
++using System.Diagnostics;
++using System.Globalization;
++
+ using System;
+ using System.Collections.Generic;
+ using System.Threading;
+@@ -194,7 +207,17 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                  FBufferManager = null;
              }
  
@@ -16,7 +36,7 @@
              FSocketService = null;
              FDelimiter = null;
              FDelimiterEncrypt = null;
-@@ -306,7 +316,27 @@
+@@ -306,7 +329,27 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
  
                      if (creators.Length > 0)
                      {
@@ -38,14 +58,36 @@
 +                        }
 +                        catch (NullReferenceException ex)
 +                        {
-+                            MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                            WriteDebugExceptionMessageLine(ex);
 +                        }
 +
 +                        // ----- \remind  END  -----
                      }
  
                  }
-@@ -404,7 +434,11 @@
+@@ -329,8 +372,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+                 if (connections != null)
+                 {
+ 
++                    WriteDebugShutdownMessageLine("Resetting 'FWaitConnectionsDisposing'...");
+                     FWaitConnectionsDisposing.Reset();
+-                    
++                    WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' reset.");
++
+                     int loopSleep = 0;
+ 
+                     foreach (BaseSocketConnection connection in connections)
+@@ -341,7 +386,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+ 
+                     if (connections.Length > 0)
+                     {
++                        WriteDebugShutdownMessageLine("Waiting 'FWaitConnectionsDisposing'...");
+                         FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
++                        WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' waited.");
+                     }
+ 
+                 }
+@@ -404,7 +451,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
  
          #region FireOnSent
  
@@ -58,7 +100,7 @@
          {
  
              if (!Disposed)
-@@ -421,7 +455,7 @@
+@@ -421,7 +472,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
  
                              case EventProcessing.epUser:
  
@@ -67,7 +109,7 @@
                                  break;
  
                              case EventProcessing.epEncrypt:
-@@ -448,6 +482,8 @@
+@@ -448,6 +499,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
  
          }
  
@@ -76,7 +118,7 @@
          #endregion
  
          #region FireOnReceived
-@@ -718,9 +754,15 @@
+@@ -718,9 +771,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                          connection.Stream.EndWrite(ar);
                          connection.SetConnectionData(0, connection.WriteOV.Count);
  
@@ -93,7 +135,7 @@
  
                          if (connection.Active)
                          {
-@@ -748,6 +790,8 @@
+@@ -748,6 +807,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
  
                          }
  
@@ -102,7 +144,7 @@
                      }
  
                  }
-@@ -832,12 +876,18 @@
+@@ -832,12 +893,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                              }
                              else
                              {
@@ -122,7 +164,7 @@
                              }
  
                          }
-@@ -1707,34 +1757,66 @@
+@@ -1707,34 +1774,66 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
            if (!Disposed)
            {
  
@@ -155,7 +197,7 @@
                    }
 +                  catch (NullReferenceException ex)
 +                  {
-+                      MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                      WriteDebugExceptionMessageLine(ex);
 +                  }
                    finally
                    {
@@ -165,24 +207,24 @@
                        {
 -                          FWaitConnectionsDisposing.Set();
 +                          if (FSocketConnections.Count <= 0)
++                          {
++                              WriteDebugShutdownMessageLine("Setting 'FWaitConnectionsDisposing'...");
 +                              FWaitConnectionsDisposing.Set();
-+                          else
-+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
++                              WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' set.");
++                          }
                        }
 +                      catch (NullReferenceException ex)
 +                      {
-+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                          WriteDebugExceptionMessageLine(ex);
 +                      }
 +                      catch (ObjectDisposedException ex)
 +                      {
-+                          MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                          WriteDebugExceptionMessageLine(ex);
 +                      }
 +                      finally
 +                      {
 +                          if (FSocketConnectionsSync != null)
 +                              FSocketConnectionsSync.ExitWriteLock();
-+                          else
-+                              MKY.Diagnostics.DebugEx.WriteStack(GetType(), "This stack frame is intentionally output for debugging purposes");
 +                      }
  
 -                      FSocketConnectionsSync.ExitWriteLock();
@@ -199,7 +241,7 @@
          }
  
          #endregion
-@@ -1788,12 +1870,22 @@
+@@ -1788,12 +1887,22 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
              if (!Disposed)
              {
  
@@ -223,7 +265,7 @@
                      if (connection.WriteQueue.Count > 0)
                      {
  
-@@ -1811,7 +1903,18 @@
+@@ -1811,7 +1920,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
  
                      }
  
@@ -234,7 +276,7 @@
 +              }
 +              catch (Exception ex)
 +              {
-+                MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes");
++                  WriteDebugExceptionMessageLine(ex);
 +              }
 +
 +              // ----- \remind  END  -----
@@ -242,7 +284,7 @@
              }
          }
  
-@@ -2197,7 +2300,7 @@
+@@ -2197,7 +2317,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                      }
  
                  }
@@ -251,3 +293,40 @@
                  {
                      FireOnException(connection, ex);
                  }
+@@ -2626,6 +2746,36 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+ 
+         #endregion
+ 
++		#region Debug
++		//==========================================================================================
++		// Debug
++		//==========================================================================================
++
++		[Conditional("DEBUG_EXCEPTIONS")]
++		private void WriteDebugExceptionMessageLine(Exception ex)
++		{
++			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
++		}
++
++		[Conditional("DEBUG_SHUTDOWN")]
++		private void WriteDebugShutdownMessageLine(string message)
++		{
++			Debug.WriteLine
++			(
++				string.Format
++				(
++					CultureInfo.InvariantCulture,
++					" @ {0} @ Thread #{1} : {2} {3} : {4}",
++					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
++					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
++					GetType(),
++					"#" + this.FConnectionId.ToString("D2", CultureInfo.InvariantCulture),
++					message
++				)
++			);
++		}
++
++		#endregion
+     }
+ 
+ }
