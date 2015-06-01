@@ -5,7 +5,7 @@
  using System.Runtime.CompilerServices;
  using System.Runtime.InteropServices;
  
-@@ -22,14 +23,7 @@
+@@ -22,14 +23,7 @@ using System.Runtime.InteropServices;
  // The following GUID is for the ID of the typelib if this project is exposed to COM
  [assembly: Guid("abea02ff-32ca-4cbf-9722-a6baace422d2")]
  

@@ -199,7 +199,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 //
                 // Trying to fix it by uncommenting the seemingly unnecessary SetBuffer():
 
-//              FReadOV.SetBuffer(null, 0, 0);
+            ////FReadOV.SetBuffer(null, 0, 0);
 
                 // ----- \remind  END  -----
 
@@ -216,7 +216,16 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
                 f.SetValue(FWriteOV, null);
 
-                FWriteOV.SetBuffer(null, 0, 0);
+                // ----- \remind BEGIN -----
+                // 2015-06-01 / Matthias Klaey
+                // Handling System.InvalidOperationException on closing/disposing:
+                // "An asynchronous socket operation is already in progress using this SocketAsyncEventArgs instance."
+                // Details see above. Trying to fix it by uncommenting the seemingly unnecessary SetBuffer():
+
+            ////FWriteOV.SetBuffer(null, 0, 0);
+
+                // ----- \remind  END  -----
+
                 FWriteOV.Dispose();
                 FWriteOV = null;
 
