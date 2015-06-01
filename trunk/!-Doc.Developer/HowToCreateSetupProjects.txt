@@ -48,6 +48,7 @@ Setup project configuration
        > Add primary output of "YAT" and "YATConsole"
           > Release x86 => x86
           > Release 'AnyCPU' => x64
+       > Add additional file "YAT Release Notes"
        > Add folders "DejaVu Info" and "Installer"
        > Add Installer banner
        > Add DejaVu info files
