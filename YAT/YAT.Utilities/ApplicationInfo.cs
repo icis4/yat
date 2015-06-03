@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 1 Version 1.99.32
+// YAT 2.0 Gamma 1' Version 1.99.33
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -37,7 +37,7 @@ namespace YAT.Utilities
 		////public const string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-		public const string ProductBuildName = " Gamma 1";
+		public const string ProductBuildName = " Gamma 1'";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
 		////public const string ProductBuildName = " Gamma 2 Development";
@@ -62,7 +62,7 @@ namespace YAT.Utilities
 		public static readonly string[] ProductLogo =
 		{
 			ProductNameLong + ".",
-			"Operate, test and debug serial communications.",
+			"Engineering, testing and debugging of serial communications.",
 			"Supports RS-232/422/423/485...",
 			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
 			"",
