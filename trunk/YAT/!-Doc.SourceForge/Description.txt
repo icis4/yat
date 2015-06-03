@@ -31,12 +31,18 @@ udp/ip
 usb
 
 Features:
-Serial terminal (connection endpoint)
-Sends singleline commands, multiline commands and files
-Unlimited number of predefined commands
-Versatile monitoring of sent and received data
+Serial terminal (connection endpoint) for engineering and testing purposes
+Single-line commands, multi-line commands and files
+Escapes for bin/oct/dec/hex like "\h(4F 4B)"
+Escapes for ASCII controls like "<CR><LF>" as well as C-style "\r\n"
+Special commands such as "\!(Delay)", "\!(LineDelay)" and "\!(LineRepeat)"
+Unlimited number of predefined commands and logging of recent commands
+Versatile monitoring and logging of sent and received data
+Formatting options for excellent readability
 Advanced settings for text and binary sessions
 Workspace supporting multiple terminals
+Powerful keyboard operation incl. shortcuts
+Versatile shell/PowerShell command line
 
 Topics:
 Communications

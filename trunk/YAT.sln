@@ -158,7 +158,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YATConsole", "YAT\YATConsol
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B01A8E-BCFE-4A8F-BA2B-3B15AC1BB2A3}"
 	ProjectSection(SolutionItems) = preProject
-		!-Tools\! Tools and Versions.txt = !-Tools\! Tools and Versions.txt
+		!-Tools\! - Tools and Versions.txt = !-Tools\! - Tools and Versions.txt
 		!-Tools\FxCop-Setup.txt = !-Tools\FxCop-Setup.txt
 		!-Tools\NUnit-Setup.txt = !-Tools\NUnit-Setup.txt
 		!-Tools\StyleCop-Setup.txt = !-Tools\StyleCop-Setup.txt

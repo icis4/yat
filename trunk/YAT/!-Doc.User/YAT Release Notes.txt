@@ -3,7 +3,7 @@
                                          YAT Release Notes.
  --------------------------------------------------------------------------------------------------
                                     YAT - Yet Another Terminal.
-                           Operate, test and debug serial communications.
+                    Engineering, testing and debugging of serial communications.
      Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID.
  --------------------------------------------------------------------------------------------------
                      Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
@@ -56,6 +56,13 @@ Start YAT by selecting "Start > Programs > YAT > YAT".
 ====================================================================================================
 2. History of Changes in YAT
 ====================================================================================================
+
+YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-03
+----------------------------------------------------------------------------------------------------
+
+Fixed bugs:
+
+
 
 YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
 ----------------------------------------------------------------------------------------------------
