@@ -41,10 +41,13 @@ namespace MKY.Net
 	public enum IPHostType
 	{
 		Localhost,
+
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
 		IPv4Localhost,
+		
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Localhost,
+		
 		Other,
 	}
 
@@ -61,7 +64,9 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Localhost_string     = "localhost";
+		private const string Localhost_string     = "localhost";   // Backward compatibility.
+		private const string Localhost_stringNice = "<Localhost>"; // Nicer readable presentation.
+
 		private const string IPv4Localhost_string = "IPv4 localhost";
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
@@ -79,15 +84,19 @@ namespace MKY.Net
 		public IPHost(IPHostType hostType)
 			: base(hostType)
 		{
+			if (hostType == IPHostType.Other)
+				throw (new InvalidOperationException("Program execution should never get here, 'IPHostType.Other' requires an IP address, please report this bug!"));
 		}
 
 		/// <summary></summary>
 		public IPHost(IPAddress address)
 		{
 			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.Localhost);     this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.IPv4Localhost); this.otherAddress = IPAddress.None; }
 			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHostType.IPv6Localhost); this.otherAddress = IPAddress.None; }
 			else                                        { SetUnderlyingEnum(IPHostType.Other);         this.otherAddress = address;        }
+
+			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
+			// Also note that similar but optimized code is found at ParseFromIPAddress() further below.
 		}
 
 		#region Properties
@@ -118,7 +127,7 @@ namespace MKY.Net
 		{
 			switch ((IPHostType)UnderlyingEnum)
 			{
-				case IPHostType.Localhost:     return (Localhost_string);
+				case IPHostType.Localhost:     return (Localhost_stringNice);
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (this.otherAddress.ToString());
@@ -145,7 +154,7 @@ namespace MKY.Net
 		{
 			switch ((IPHostType)UnderlyingEnum)
 			{
-				case IPHostType.Localhost:     return (Localhost_string);
+				case IPHostType.Localhost:     return (Localhost_stringNice);
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (ToUrlString(this.otherAddress.ToString()));
@@ -246,8 +255,9 @@ namespace MKY.Net
 
 			IPAddress address;
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string))
-			{
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
+			        (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice)))
+			{	// Note that similar code is found in IPNetworkInterface.TryParse()!
 				result = new IPHost(IPHostType.Localhost);
 				return (true);
 			}
@@ -276,12 +286,15 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static IPHost ParseFromIPAddress(IPAddress address)
 		{
-			if (address == IPAddress.Loopback)
+			if      (address == IPAddress.Loopback)
 				return (new IPHost(IPHostType.Localhost));
 			else if (address == IPAddress.IPv6Loopback)
 				return (new IPHost(IPHostType.IPv6Localhost));
 			else
 				return (new IPHost(address));
+
+			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
+			// Also note that similar but less optimized code is found at IPHost(IPAddress) further above.
 		}
 
 		#endregion

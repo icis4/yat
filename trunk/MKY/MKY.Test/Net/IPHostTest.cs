@@ -48,7 +48,9 @@ namespace MKY.Test.Net
 		// Constants
 		//==========================================================================================
 
-		private const string LocalhostString = "localhost";
+		private const string LocalhostString     =  "Localhost";
+		private const string LocalhostStringNice = "<Localhost>";
+
 		private const string IPv4LocalhostString = "IPv4 localhost";
 		private const string IPv6LocalhostString = "IPv6 localhost";
 
@@ -70,17 +72,16 @@ namespace MKY.Test.Net
 		{
 			get
 			{
-				yield return (new TestCaseData(new IPHost(IPHostType.Localhost),		IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
+				yield return (new TestCaseData(new IPHost(IPHostType.Localhost),		IPHostType.Localhost,		IPAddress.Loopback,		LocalhostStringNice)	.SetName("Localhost_HostType"));
 				yield return (new TestCaseData(new IPHost(IPHostType.IPv4Localhost),	IPHostType.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
 				yield return (new TestCaseData(new IPHost(IPHostType.IPv6Localhost),	IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
-				yield return (new TestCaseData(new IPHost(SomeIPv4Address),				IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address_HostType"));
-				yield return (new TestCaseData(new IPHost(SomeIPv6Address),				IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address_HostType"));
 
-				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostStringNice)	.SetName("Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.IPv4Localhost,	IPAddress.Loopback,		LocalhostStringNice)	.SetName("IPv4Localhost_HostAddress"));
 				yield return (new TestCaseData(new IPHost(IPAddress.IPv6Loopback),		IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHost(SomeIPv4Address),				IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address_HostAddress"));
-				yield return (new TestCaseData(new IPHost(SomeIPv6Address),				IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address_HostAddress"));
+
+				yield return (new TestCaseData(new IPHost(SomeIPv4Address),				IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
+				yield return (new TestCaseData(new IPHost(SomeIPv6Address),				IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address"));
 			}
 		}
 
@@ -121,6 +122,12 @@ namespace MKY.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostEqualsHostType(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
+			if ((ipHostType == IPHostType.Localhost) && ((IPHostType)ipHost == IPHostType.IPv4Localhost))
+				return; // All fine, 'Localhost' and 'IPv4Localhost' are the same.
+
+			if ((ipHostType == IPHostType.IPv4Localhost) && ((IPHostType)ipHost == IPHostType.Localhost))
+				return; // All fine, 'IPv4Localhost' and 'Localhost' are the same.
+
 			Assert.AreEqual(ipHostType, (IPHostType)ipHost);
 		}
 
@@ -172,6 +179,7 @@ namespace MKY.Test.Net
 			if (ipHostType == IPHostType.Localhost)
 			{
 				// Deserialize from file using different methods and verify the result:
+
 				ipHostDeserialized = (IPHost)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(IPHost));
 				Assert.AreEqual(ipHost, ipHostDeserialized);
 				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);

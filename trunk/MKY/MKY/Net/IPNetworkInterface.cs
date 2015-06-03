@@ -64,8 +64,9 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Any_string          = "any";
-		private const string Any_stringNice      = "<Any>";
+		private const string Any_string          = "any";   // Backward compatibility.
+		private const string Any_stringNice      = "<Any>"; // Nicer readable presentation.
+
 		private const string IPv4Any_string      = "IPv4 any";
 		private const string IPv4Loopback_string = "IPv4 loopback";
 		private const string IPv6Any_string      = "IPv6 any";
@@ -252,7 +253,7 @@ namespace MKY.Net
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringNice))
-			{
+			{	// Note that similar code is found in IPHost.TryParse()!
 				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 				return (true);
 			}
