@@ -117,6 +117,9 @@ namespace YAT.Domain
 		private struct IOChangedEventHelper
 		{
 			/// <summary></summary>
+			public const int ThresholdMs = 400; // 400 Bytes @ 9600 Baud ~= 400 ms
+
+			/// <summary></summary>
 			public bool EventMustBeRaised;
 
 			private DateTime initialTimeStamp;
@@ -129,25 +132,35 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			public bool ChunkSizeIsAboveThreshold(int chunkSize)
+			{
+				return (chunkSize >= ThresholdMs);
+			}
+
+			/// <summary></summary>
 			public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize)
 			{
 				// Only let the event get raised if it has'nt been yet:
-				if (!this.EventMustBeRaised &&
-					(chunkSize >= 400)) // 400 Bytes @ 9600 Baud ~= 400 ms
+				if (!this.EventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize))
 				{
 					this.EventMustBeRaised = true;
 					return (true);
 				}
 
 				return (false);
+			}
+
+			/// <summary></summary>
+			public bool DelayIsAboveThreshold(int delay)
+			{
+				return (delay >= ThresholdMs);
 			}
 
 			/// <summary></summary>
 			public bool RaiseEventIfDelayIsAboveThreshold(int delay)
 			{
 				// Only let the event get raised if it has'nt been yet:
-				if (!this.EventMustBeRaised &&
-					(delay >= 400)) // 400 ms
+				if (!this.EventMustBeRaised && DelayIsAboveThreshold(delay))
 				{
 					this.EventMustBeRaised = true;
 					return (true);
@@ -157,13 +170,18 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			public bool TotalTimeLagIsAboveThreshold()
+			{
+				TimeSpan totalTimeLag = (DateTime.Now - this.initialTimeStamp);
+				return (totalTimeLag.Milliseconds >= ThresholdMs);
+			}
+
+			/// <summary></summary>
 			public bool RaiseEventIfTotalTimeLagIsAboveThreshold()
 			{
-				TimeSpan totalTimeLag = (DateTime.Now - initialTimeStamp);
-
 				// Let the event get raised in any case. This ensures the terminal
 				// state gets properly updated during an ongoing long delay:
-				if (totalTimeLag.Milliseconds >= 400) // 400 ms
+				if (TotalTimeLagIsAboveThreshold())
 				{
 					this.EventMustBeRaised = true;
 					return (true);
@@ -230,8 +248,8 @@ namespace YAT.Domain
 		private bool sendingIsOngoing;
 		private IOChangedEventHelper ioChangedEventHelper;
 
-		private bool breakRequestFlag;
-		private object breakRequestFlagSynObj = new object();
+		private bool breakState;
+		private object breakStateSyncObj = new object();
 
 		private DisplayRepository txRepository;
 		private DisplayRepository bidirRepository;
@@ -732,10 +750,12 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
+			// Each send request shall resume a pending break condition:
+			Resume();
+
+			// Enqueue the items for sending:
 			lock (this.sendQueue)
-			{
 				this.sendQueue.Enqueue(item);
-			}
 
 			// Signal send thread:
 			this.sendThreadEvent.Set();
@@ -799,7 +819,22 @@ namespace YAT.Domain
 						this.sendingIsOngoing = true;
 
 						foreach (SendItem si in pendingItems)
+						{
 							ProcessSendItem(si);
+
+							if (this.ioChangedEventHelper.TotalTimeLagIsAboveThreshold())
+							{
+								// Break if requested or terminal has stopped or closed!
+								lock (this.breakStateSyncObj)
+								{
+									if (this.breakState || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
+									{
+										this.breakState = false;
+										break;
+									}
+								}
+							}
+						}
 
 						this.sendingIsOngoing = false;
 						if (this.ioChangedEventHelper.EventMustBeRaised)
@@ -925,11 +960,11 @@ namespace YAT.Domain
 
 				// Break if requested or terminal has stopped or closed! Note that breaking is
 				// done prior to a potential Sleep() or repeat.
-				lock (this.breakRequestFlagSynObj)
+				lock (this.breakStateSyncObj)
 				{
-					if (this.breakRequestFlag || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
+					if (this.breakState || !(!IsDisposed && this.sendThreadRunFlag && IsTransmissive)) // Check 'IsDisposed' first!
 					{
-						this.breakRequestFlag = false;
+						this.breakState = false;
 						break;
 					}
 				}
@@ -1078,10 +1113,8 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
-		/// </remarks>
-		protected void ForwardDataToRawTerminal(ReadOnlyCollection<byte> data)
+		/// <summary></summary>
+		protected virtual void ForwardDataToRawTerminal(ReadOnlyCollection<byte> data)
 		{
 			// AssertNotDisposed() is called by 'ForwardDataToRawTerminal()' below.
 
@@ -1091,14 +1124,13 @@ namespace YAT.Domain
 			ForwardDataToRawTerminal(a);
 		}
 
+		/// <summary></summary>
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
-		/// 
 		/// \todo
 		/// Use a 'ReadOnlyCollection' instead of a byte array in 'RawTerminal', then remove this method.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		protected void ForwardDataToRawTerminal(byte[] data)
+		protected virtual void ForwardDataToRawTerminal(byte[] data)
 		{
 			AssertNotDisposed();
 
@@ -1130,11 +1162,9 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the private member 'rawTerminal'.
-		/// </remarks>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
+		public virtual void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
 		{
 			AssertNotDisposed();
 
@@ -1168,9 +1198,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Methods > Break
+		#region Methods > Break/Resume
 		//------------------------------------------------------------------------------------------
-		// Methods > Break
+		// Methods > Break/Resume
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1178,9 +1208,28 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Break()
 		{
-			lock (this.breakRequestFlagSynObj)
+			lock (this.breakStateSyncObj)
+				this.breakState = true;
+		}
+
+		/// <summary>
+		/// Resumes all currently ongoing operations in the terminal.
+		/// </summary>
+		public virtual void Resume()
+		{
+			lock (this.breakStateSyncObj)
+				this.breakState = false;
+		}
+
+		/// <summary>
+		/// Resumes all currently ongoing operations in the terminal.
+		/// </summary>
+		public virtual bool BreakState
+		{
+			get
 			{
-				this.breakRequestFlag = true;
+				lock (this.breakStateSyncObj)
+					return (this.breakState);
 			}
 		}
 
