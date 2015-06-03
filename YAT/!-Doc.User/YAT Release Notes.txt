@@ -61,7 +61,8 @@ YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-03
 ----------------------------------------------------------------------------------------------------
 
 Fixed bugs:
-
+- FormatException when opening the terminal settings of a terminal that is based on an existing
+  .yat file fixed, additional test cases added to regression testing (bugs #306 and #307)
 
 
 YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
@@ -127,7 +128,7 @@ Fixed bugs:
 - ThreadException upon copy of exception data to clipboard fixed (bug #245)
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2013 on .NET 3.5 SP1 (req. #229)
+- x64 distributions are 'AnyCPU' builds due to limitations of VS2013 on .NET 3.5 SP1 (feat. #229)
 - General imitations of .NET Windows.Forms
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute

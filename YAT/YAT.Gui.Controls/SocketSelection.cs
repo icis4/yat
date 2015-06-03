@@ -365,11 +365,16 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
+					IPHost ipHost;
 					IPAddress ipAddress;
 					string nameOrAddress;
 					nameOrAddress = comboBox_RemoteHost.Text;
 
-					if (IPAddress.TryParse(nameOrAddress, out ipAddress))
+					if (IPHost.TryParse(nameOrAddress, out ipHost))
+					{
+						RemoteHost = ipHost;
+					}
+					else if (IPAddress.TryParse(nameOrAddress, out ipAddress))
 					{
 						this.resolvedRemoteIPAddress = ipAddress;
 						RemoteHost = new IPHost(this.resolvedRemoteIPAddress);

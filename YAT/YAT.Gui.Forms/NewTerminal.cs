@@ -383,13 +383,25 @@ namespace YAT.Gui.Forms
 			Domain.IOType ioType = this.newTerminalSettingsInEdit.IOType;
 			terminalSelection.IOType = ioType;
 
+			// Set visible/invisible before accessing the other settings, to ensure that the correct
+			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
+
 			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
 			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
 			bool isSocket       = (!isSerialPort && !isUsbSerialHid);
 
+			socketSelection.Visible = isSocket;
+			socketSettings.Visible  = isSocket;
+
+			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
+			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
+
+			serialPortSelection.Visible = isSerialPort;
+			serialPortSettings.Visible  = isSerialPort;
+
 			// Set socket and USB control before serial port control since that might need to refresh
 			// the serial port list first (which takes time, which looks ulgy).
-			socketSelection.Visible        = isSocket;
+
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;
 			socketSelection.RemoteTcpPort  = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
@@ -398,22 +410,17 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
 
-			socketSettings.Visible                  = isSocket;
 			socketSettings.HostType                 = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect   = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
 
-			usbSerialHidDeviceSelection.Visible     = isUsbSerialHid;
 			usbSerialHidDeviceSelection.DeviceInfo  = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
-			usbSerialHidDeviceSettings.Visible      = isUsbSerialHid;
 			usbSerialHidDeviceSettings.ReportFormat = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
 			usbSerialHidDeviceSettings.RxIdUsage    = this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage;
 			usbSerialHidDeviceSettings.AutoOpen     = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
 
-			serialPortSelection.Visible    = isSerialPort;
 			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;
 
-			serialPortSettings.Visible     = isSerialPort;
 			serialPortSettings.BaudRate    = this.newTerminalSettingsInEdit.SerialPortCommunication.BaudRate;
 			serialPortSettings.DataBits    = this.newTerminalSettingsInEdit.SerialPortCommunication.DataBits;
 			serialPortSettings.Parity      = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
