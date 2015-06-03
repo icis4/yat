@@ -41,6 +41,7 @@ using MKY.IO;
 using MKY.Net;
 using MKY.Recent;
 using MKY.Settings;
+using MKY.Text;
 using MKY.Time;
 
 using YAT.Model.Settings;
@@ -2233,9 +2234,9 @@ namespace YAT.Model
 			Send("", true);
 		}
 
-		private void SendLine(string data)
+		private void SendLine(string line)
 		{
-			Send(data, true);
+			Send(line, true);
 		}
 
 		private void Send(string data, bool isLine)
@@ -2337,15 +2338,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
-			Command c = this.settingsRoot.SendCommand.Command;
-			if (c.IsValidText)
-			{
-				SendText(c);
+			DoSendText(this.settingsRoot.SendCommand.Command);
 
-				// Clear command if desired:
-				if (!this.settingsRoot.Send.KeepCommand)
-					this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
-			}
+			// Clear command if desired:
+			if (!this.settingsRoot.Send.KeepCommand)
+				this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
 		}
 
 		/// <summary>
@@ -2353,7 +2350,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendPartialTextEol()
 		{
-			SendText(new Command(true));
+			DoSendText(new Command(true));
 		}
 
 		/// <summary>
@@ -2362,6 +2359,18 @@ namespace YAT.Model
 		/// <param name="c">Text command to be sent.</param>
 		public virtual void SendText(Command c)
 		{
+			DoSendText(c);
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden. All text sending shall be requested using this
+		/// method, to ensure that pending break conditions are resumed.
+		/// </remarks>
+		protected void DoSendText(Command c)
+		{
+			// Each send request shall resume a pending break condition:
+			Resume();
+
 			if (c.IsValidText)
 			{
 				if (c.IsSingleLineText)
@@ -2430,11 +2439,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendFile()
 		{
-			Command c = this.settingsRoot.SendFile.Command;
-			if (c.IsFilePath)
-			{
-				SendFile(c);
-			}
+			SendFile(this.settingsRoot.SendFile.Command);
 		}
 
 		/// <summary>
@@ -2444,6 +2449,15 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void SendFile(Command c)
 		{
+			DoSendFile(c);
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden. All file sending shall be requested using this
+		/// method, to ensure that pending break conditions are resumed.
+		/// </remarks>
+		protected void DoSendFile(Command c)
+		{
 			if (!c.IsValidFilePath)
 				return;
 
@@ -2451,55 +2465,54 @@ namespace YAT.Model
 
 			try
 			{
+				// Each send request shall resume a pending break condition:
+				Resume();
+
 				if (this.terminal is Domain.TextTerminal)
 				{
-					string[] lines;
 					if (ExtensionSettings.IsXmlFile(filePath))
 					{
-						// XML.
-						lines = XmlReader.LinesFromXmlFile(filePath);
+						// XML => Read all at once for simplicity:
+						string[] lines = XmlReader.LinesFromXmlFile(filePath);
+						foreach (string line in lines)
+							SendLine(line);
 					}
 					else if (ExtensionSettings.IsRtfFile(filePath))
 					{
-						// RTF.
-						lines = RtfReader.LinesFromRtfFile(filePath);
+						// RTF => Read all at once for simplicity:
+						string[] lines = RtfReader.LinesFromRtfFile(filePath);
+						foreach (string line in lines)
+							SendLine(line);
 					}
 					else
 					{
-						// Text.
-						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
-						{
-							string s;
-							List<string> l = new List<string>();
-							while ((s = sr.ReadLine()) != null)
+						// Text => Send in lines to enable breaking:
+						using (StreamReader sr = new StreamReader(filePath, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, true))
+						{										// Automatically detect encoding from BOM, otherwise use given setting.
+							string line;
+							while (((line = sr.ReadLine()) != null) && (!this.terminal.BreakState))
 							{
-								l.Add(s);
+								SendLine(line);
 							}
-							sr.Close(); // Close file before sending.
-							lines = l.ToArray();
 						}
-					}
-
-					foreach (string line in lines)
-					{
-						SendLine(line);
 					}
 				}
 				else
 				{
+					// Binary => Send in chunks to enable breaking:
 					using (FileStream fs = File.OpenRead(filePath))
 					{
-						byte[] a = new byte[(int)fs.Length];
-						fs.Read(a, 0, (int)fs.Length);
-						fs.Close(); // Close file before sending.
-						Send(a);
+						long remaining = fs.Length;
+						while ((remaining > 0) && (!this.terminal.BreakState))
+						{
+							byte[] a = new byte[1024]; // 1 KB chunks.
+							int n = fs.Read(a, 0, a.Length);
+							Array.Resize<byte>(ref a, n);
+							Send(a);
+							remaining -= n;
+						}
 					}
 				}
-
-				// Put file into history.
-				Command clone = new Command(c);
-				this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
-				this.settingsRoot.SendFile.SetChanged(); // Manual change required because underlying collection is modified.
 			}
 			catch (Exception ex)
 			{
@@ -2512,6 +2525,13 @@ namespace YAT.Model
 					MessageBoxIcon.Error
 				);
 			}
+
+			// Clone the command for the recents collection:
+			Command clone = new Command(c);
+
+			// Put clone into recent history:
+			this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
+			this.settingsRoot.SendFile.SetChanged(); // Manual change required because underlying collection is modified.
 		}
 
 		#endregion
@@ -2619,9 +2639,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Break
+		#region Terminal > Break/Resume
 		//------------------------------------------------------------------------------------------
-		// Terminal > Break
+		// Terminal > Break/Resume
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -2629,8 +2649,17 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void Break()
 		{
-			OnFixedStatusTextRequest("Breaking operation...");
+			OnTimedStatusTextRequest("Breaking operation...");
 			this.terminal.Break();
+		}
+
+		/// <summary>
+		/// Resumes all currently ongoing operations in the terminal.
+		/// </summary>
+		public virtual void Resume()
+		{
+			OnTimedStatusTextRequest("Resuming operation...");
+			this.terminal.Resume();
 		}
 
 		#endregion
