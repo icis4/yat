@@ -328,7 +328,7 @@ namespace YAT.Gui.Forms
 					}
 					catch (ArgumentException)
 					{
-						DialogResult result = MessageBoxEx.Show
+						DialogResult dr = MessageBoxEx.Show
 						(
 							this,
 							"Font '" + fd.Font.Name + "' does not support regular style. Choose a different font.",
@@ -337,7 +337,7 @@ namespace YAT.Gui.Forms
 							MessageBoxIcon.Exclamation
 						);
 
-						cancel = (result != DialogResult.OK);
+						cancel = (dr != DialogResult.OK);
 					}
 				}
 			}

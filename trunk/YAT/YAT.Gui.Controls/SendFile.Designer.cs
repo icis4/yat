@@ -30,38 +30,52 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.button_SetFile = new System.Windows.Forms.Button();
-			this.button_SendFile = new System.Windows.Forms.Button();
-			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.button_OpenFile = new System.Windows.Forms.Button();
+			this.button_Send = new System.Windows.Forms.Button();
 			this.pathComboBox_FilePath = new MKY.Windows.Forms.PathComboBox();
+			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// button_SetFile
+			// button_OpenFile
 			// 
-			this.button_SetFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SetFile.Location = new System.Drawing.Point(328, 3);
-			this.button_SetFile.Name = "button_SetFile";
-			this.button_SetFile.Size = new System.Drawing.Size(25, 21);
-			this.button_SetFile.TabIndex = 3;
-			this.button_SetFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_SetFile, "Choose File");
-			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
+			this.button_OpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_OpenFile.Location = new System.Drawing.Point(328, 3);
+			this.button_OpenFile.Name = "button_OpenFile";
+			this.button_OpenFile.Size = new System.Drawing.Size(25, 21);
+			this.button_OpenFile.TabIndex = 3;
+			this.button_OpenFile.Text = "...";
+			this.toolTip.SetToolTip(this.button_OpenFile, "Choose File");
+			this.button_OpenFile.Click += new System.EventHandler(this.button_OpenFile_Click);
 			// 
-			// button_SendFile
+			// button_Send
 			// 
-			this.button_SendFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SendFile.Enabled = false;
-			this.button_SendFile.Location = new System.Drawing.Point(3, 3);
-			this.button_SendFile.Name = "button_SendFile";
-			this.button_SendFile.Size = new System.Drawing.Size(176, 21);
-			this.button_SendFile.TabIndex = 4;
-			this.button_SendFile.Text = "Send File (F4)";
-			this.toolTip.SetToolTip(this.button_SendFile, "Send File");
-			this.button_SendFile.Click += new System.EventHandler(this.button_SendFile_Click);
+			this.button_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Send.Enabled = false;
+			this.button_Send.Location = new System.Drawing.Point(3, 3);
+			this.button_Send.Name = "button_Send";
+			this.button_Send.Size = new System.Drawing.Size(176, 21);
+			this.button_Send.TabIndex = 4;
+			this.button_Send.Text = "Send File (F4)";
+			this.toolTip.SetToolTip(this.button_Send, "Send File");
+			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
+			// 
+			// pathComboBox_FilePath
+			// 
+			this.pathComboBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.pathComboBox_FilePath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pathComboBox_FilePath.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.pathComboBox_FilePath.FormattingEnabled = true;
+			this.pathComboBox_FilePath.Location = new System.Drawing.Point(3, 3);
+			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
+			this.pathComboBox_FilePath.Size = new System.Drawing.Size(319, 21);
+			this.pathComboBox_FilePath.TabIndex = 1;
+			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "<Enter> to send file, drop down\r\nfor recent files, <...> to choose file");
+			this.pathComboBox_FilePath.SelectedIndexChanged += new System.EventHandler(this.pathComboBox_FilePath_SelectedIndexChanged);
 			// 
 			// splitContainer
 			// 
@@ -73,28 +87,15 @@
 			// splitContainer.Panel1
 			// 
 			this.splitContainer.Panel1.Controls.Add(this.pathComboBox_FilePath);
-			this.splitContainer.Panel1.Controls.Add(this.button_SetFile);
+			this.splitContainer.Panel1.Controls.Add(this.button_OpenFile);
 			// 
 			// splitContainer.Panel2
 			// 
-			this.splitContainer.Panel2.Controls.Add(this.button_SendFile);
+			this.splitContainer.Panel2.Controls.Add(this.button_Send);
 			this.splitContainer.Size = new System.Drawing.Size(540, 27);
 			this.splitContainer.SplitterDistance = 356;
 			this.splitContainer.SplitterWidth = 1;
 			this.splitContainer.TabIndex = 3;
-			// 
-			// pathComboBox_FilePath
-			// 
-			this.pathComboBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.pathComboBox_FilePath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.pathComboBox_FilePath.FormattingEnabled = true;
-			this.pathComboBox_FilePath.Location = new System.Drawing.Point(3, 3);
-			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
-			this.pathComboBox_FilePath.Size = new System.Drawing.Size(319, 21);
-			this.pathComboBox_FilePath.TabIndex = 1;
-			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "File path, click arrow for recent files, click or press <...> to choose file");
-			this.pathComboBox_FilePath.SelectedIndexChanged += new System.EventHandler(this.pathComboBox_FilePath_SelectedIndexChanged);
 			// 
 			// SendFile
 			// 
@@ -103,6 +104,7 @@
 			this.Controls.Add(this.splitContainer);
 			this.Name = "SendFile";
 			this.Size = new System.Drawing.Size(540, 27);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SendFile_Paint);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			this.splitContainer.ResumeLayout(false);
@@ -114,8 +116,8 @@
 
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.SplitContainer splitContainer;
-		private System.Windows.Forms.Button button_SetFile;
-		private System.Windows.Forms.Button button_SendFile;
+		private System.Windows.Forms.Button button_OpenFile;
+		private System.Windows.Forms.Button button_Send;
 		private MKY.Windows.Forms.PathComboBox pathComboBox_FilePath;
 	}
 }

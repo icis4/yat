@@ -288,7 +288,7 @@ namespace YAT.Gui.Forms
 				{
 					e.Cancel = (!this.terminal.Close());
 
-					// Revert closing state in case of cancel.
+					// Revert closing state in case of cancel:
 					if (e.Cancel)
 						this.closingState = ClosingState.None;
 				}
@@ -377,15 +377,14 @@ namespace YAT.Gui.Forms
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
 				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  this.terminal.IsStarted;
+				toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsBusy;
 			}
 			else
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = false;
 				toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  = false;
+				toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 			}
-
-			// Start/stop
-			toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = this.terminal.IsBusy;
 
 			// Edit
 			bool monitorIsDefined = (this.lastMonitorSelection != Domain.RepositoryType.None);
@@ -487,7 +486,9 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			bool sendFileEnabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
+			bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
+
+			// Set the menu item properties:
 
 			toolStripMenuItem_TerminalMenu_Send_Command.Text    = sendCommandText;
 			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = sendCommandEnabled && this.terminal.IsReadyToSend;
@@ -1459,7 +1460,9 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			bool sendFileEnabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
+			bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath;
+
+			// Set the menu item properties:
 
 			toolStripMenuItem_SendContextMenu_SendCommand.Text    = sendCommandText;
 			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = sendCommandEnabled && this.terminal.IsReadyToSend;
@@ -1846,6 +1849,12 @@ namespace YAT.Gui.Forms
 		private bool IsClosing
 		{
 			get { return (this.closingState != ClosingState.None); }
+		}
+
+		/// <summary></summary>
+		public virtual void RevertClosingState()
+		{
+			this.closingState = ClosingState.None;
 		}
 
 		/// <summary></summary>

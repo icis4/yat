@@ -242,7 +242,7 @@ namespace YAT.Gui.Controls
 				if (this.parseMode != value)
 				{
 					this.parseMode = value;
-					SetControlsExceptCommandAndRecents();
+					SetSendControls();
 				}
 			}
 		}
@@ -259,7 +259,7 @@ namespace YAT.Gui.Controls
 				if (this.sendImmediately != value)
 				{
 					this.sendImmediately = value;
-					SetControlsExceptCommandAndRecents();
+					SetSendControls();
 				}
 			}
 		}
@@ -274,7 +274,7 @@ namespace YAT.Gui.Controls
 				if (this.terminalType != value)
 				{
 					this.terminalType = value;
-					SetControlsExceptCommandAndRecents();
+					SetSendControls();
 				}
 			}
 		}
@@ -289,7 +289,7 @@ namespace YAT.Gui.Controls
 				if (this.terminalIsReadyToSend != value)
 				{
 					this.terminalIsReadyToSend = value;
-					SetControlsExceptCommandAndRecents();
+					SetSendControls();
 				}
 			}
 		}
@@ -358,7 +358,7 @@ namespace YAT.Gui.Controls
 			{
 				if (keyData == Keys.Enter)
 				{
-					if (button_SendCommand.Enabled)
+					if (button_Send.Enabled)
 					{
 						RequestSendCommand();
 						SetCursorToEnd();
@@ -394,9 +394,8 @@ namespace YAT.Gui.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetControlsExceptCommandAndRecents();
-				SetCommandControls();
 				SetRecentsControls();
+				SetCommandControls();
 				SetCursorToEnd();
 			}
 		}
@@ -484,7 +483,7 @@ namespace YAT.Gui.Controls
 			if (this.sendImmediately)
 			{
 				this.isValidated = true;
-				CreatePartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for keys!
+				CreateAndConfirmPartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for keys!
 				InvokeSendCommandRequest();
 			}
 
@@ -502,7 +501,7 @@ namespace YAT.Gui.Controls
 				else
 					this.isValidated = false; // Reset the validation flag.
 
-				SetButtonToolTip();
+				SetSendControls();
 			}
 
 			CommandDebugMessageLeave();
@@ -540,7 +539,7 @@ namespace YAT.Gui.Controls
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
-							CreateSingleLineCommand(comboBox_Command.Text);
+							CreateAndConfirmSingleLineCommand(comboBox_Command.Text);
 
 							CommandDebugMessageLeave();
 							return;
@@ -556,7 +555,7 @@ namespace YAT.Gui.Controls
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
-							CreateSingleLineCommand(comboBox_Command.Text);
+							CreateAndConfirmSingleLineCommand(comboBox_Command.Text);
 
 							CommandDebugMessageLeave();
 							return;
@@ -605,7 +604,7 @@ namespace YAT.Gui.Controls
 			ShowMultiLineCommandBox(button_MultiLineCommand);
 		}
 
-		private void button_SendCommand_Click(object sender, EventArgs e)
+		private void button_Send_Click(object sender, EventArgs e)
 		{
 			RequestSendCommand();
 			SetCursorToEnd();
@@ -623,38 +622,30 @@ namespace YAT.Gui.Controls
 		// Private Methods > Set Controls
 		//------------------------------------------------------------------------------------------
 
-		/// <remarks>
-		/// This function sets all controls except command/recents which are specially treated.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'recents'?")]
-		private void SetControlsExceptCommandAndRecents()
+		private void SetRecentsControls()
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
-			// Prepare the button properties based on state and settings.
-			//
-			// Attention: Similar code exists in the following locations:
-			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
-			// Changes here may have to be applied there.
+			// Keep text field because Items.Clear() will reset this:
+			string text         = comboBox_Command.Text;
+			int selectionStart  = comboBox_Command.SelectionStart;
+			int selectionLength = comboBox_Command.SelectionLength;
 
-			string text = "Send Command (F3)";
-			bool enabled = this.terminalIsReadyToSend;
-			if (this.sendImmediately)
-			{
-				switch (this.terminalType)
-				{
-					case Domain.TerminalType.Text: text = "Send EOL (F3)"; break;
-					default: /* Binary or <New> */ enabled = false;        break;
-				}
-			}
+			comboBox_Command.Items.Clear();
+			if ((this.recents != null) && (this.recents.Count > 0))
+				comboBox_Command.Items.AddRange(this.recents.ToArray());
 
-			button_SendCommand.Text = text;
-			button_SendCommand.Enabled = enabled;
+			// Immediately update the updated item list:
+			comboBox_Command.Refresh();
 
-			SetButtonToolTip();
+			// Restore text field:
+			comboBox_Command.Text            = text;
+			comboBox_Command.SelectionStart  = selectionStart;
+			comboBox_Command.SelectionLength = selectionLength;
 
 			this.isSettingControls.Leave();
+			CommandDebugMessageLeave();
 		}
 
 		/// <remarks>
@@ -692,56 +683,7 @@ namespace YAT.Gui.Controls
 			}
 
 			SetCursorToEnd();
-			SetButtonToolTip();
-
-			this.isSettingControls.Leave();
-			CommandDebugMessageLeave();
-		}
-
-		private void SetButtonToolTip()
-		{
-			this.isSettingControls.Enter();
-
-			string commandText = "";
-			if (!string.IsNullOrEmpty(comboBox_Command.Text))
-				commandText = comboBox_Command.Text;
-
-			string caption = @"Send """ + commandText + @"""";
-			if (this.sendImmediately)
-			{
-				switch (this.terminalType)
-				{
-					case Domain.TerminalType.Text: caption = "Send EOL"; break;
-					default: /* Binary or <New> */ caption = "";         break;
-				}
-			}
-
-			toolTip.SetToolTip(button_SendCommand, caption);
-
-			this.isSettingControls.Leave();
-		}
-
-		private void SetRecentsControls()
-		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
-			this.isSettingControls.Enter();
-
-			// Keep text field because Items.Clear() will reset this:
-			string text         = comboBox_Command.Text;
-			int selectionStart  = comboBox_Command.SelectionStart;
-			int selectionLength = comboBox_Command.SelectionLength;
-
-			comboBox_Command.Items.Clear();
-			if (this.recents != null)
-				comboBox_Command.Items.AddRange(this.recents.ToArray());
-
-			// Immediately update the updated item list:
-			comboBox_Command.Refresh();
-
-			// Restore text field:
-			comboBox_Command.Text            = text;
-			comboBox_Command.SelectionStart  = selectionStart;
-			comboBox_Command.SelectionLength = selectionLength;
+			SetSendControls();
 
 			this.isSettingControls.Leave();
 			CommandDebugMessageLeave();
@@ -756,6 +698,50 @@ namespace YAT.Gui.Controls
 
 			this.isSettingControls.Leave();
 			CommandDebugMessageLeave();
+		}
+
+		private void SetSendControls()
+		{
+			this.isSettingControls.Enter();
+
+			// Prepare the button properties based on state and settings.
+			//
+			// Attention: Similar code exists in the following locations:
+			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+			// Changes here may have to be applied there.
+
+			string text = "Send Command (F3)";
+			bool enabled = this.terminalIsReadyToSend;
+			if (this.sendImmediately)
+			{
+				switch (this.terminalType)
+				{
+					case Domain.TerminalType.Text: text = "Send EOL (F3)"; break;
+					default: /* Binary or <New> */ enabled = false;        break;
+				}
+			}
+
+			string commandText = "";
+			if (!string.IsNullOrEmpty(comboBox_Command.Text))
+				commandText = comboBox_Command.Text;
+
+			string toolTipText = @"Send """ + commandText + @"""";
+			if (this.sendImmediately)
+			{
+				switch (this.terminalType)
+				{
+					case Domain.TerminalType.Text: toolTipText = "Send EOL"; break;
+					default: /* Binary or <New> */ toolTipText = "";         break;
+				}
+			}
+
+			// Set the button properties:
+			button_Send.Text = text;
+			button_Send.Enabled = enabled;
+			toolTip.SetToolTip(button_Send, toolTipText);
+
+			this.isSettingControls.Leave();
 		}
 
 		#endregion
@@ -802,7 +788,7 @@ namespace YAT.Gui.Controls
 				//// Do not call OnCommandChanged(), nothing has changed.
 			}
 
-			button_SendCommand.Select();
+			button_Send.Select();
 		}
 
 		#endregion
@@ -821,7 +807,7 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Always create new command to ensure that not only command but also description is updated.
 		/// </remarks>
-		private void CreateSingleLineCommand(string singleLineCommand)
+		private void CreateAndConfirmSingleLineCommand(string singleLineCommand)
 		{
 			this.command = new Command(singleLineCommand);
 
@@ -832,7 +818,7 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Always create new command to ensure that not only command but also description is updated.
 		/// </remarks>
-		private void CreatePartialCommand(string partialCommand)
+		private void CreateAndConfirmPartialCommand(string partialCommand)
 		{
 			this.command = new Command(partialCommand, true);
 
@@ -843,7 +829,7 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Always create new command to ensure that not only command but also description is updated.
 		/// </remarks>
-		private void CreatePartialEolCommand()
+		private void CreateAndConfirmPartialEolCommand()
 		{
 			this.command = new Command(true);
 
@@ -862,7 +848,7 @@ namespace YAT.Gui.Controls
 		{
 			if (this.sendImmediately)
 			{
-				CreatePartialEolCommand();
+				CreateAndConfirmPartialEolCommand();
 				InvokeSendCommandRequest();
 			}
 			else
@@ -874,7 +860,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					if (ValidateChildren()) // CreateSingleLineCommand() gets called here.
+					if (ValidateChildren()) // CreateAndConfirmSingleLineCommand() gets called here.
 						InvokeSendCommandRequest();
 				}
 			}
