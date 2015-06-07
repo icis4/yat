@@ -395,7 +395,7 @@ namespace YAT.Gui.Controls
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetSerialPortList()
 		{
-			// Only scan for ports if control is enabled. This saves some time.
+			// Only scan for ports if control is enabled. This saves some time and prevents issues.
 			if (Enabled && !DesignMode)
 			{
 				this.portListIsInitialized = true; // Purpose see remarks above.
@@ -475,7 +475,7 @@ namespace YAT.Gui.Controls
 							if (!string.IsNullOrEmpty(portIdNoLongerAvailable))
 							{
 								string message =
-									"The given serial port " + portIdNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+									"The serial port " + portIdNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
 									"The setting has been defaulted to the first available port.";
 
 								MessageBoxEx.Show

@@ -235,7 +235,7 @@ namespace YAT.Gui.Controls
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetDeviceList()
 		{
-			// Only scan for ports if control is enabled. This saves some time.
+			// Only scan for devices if control is enabled. This saves some time and prevents issues.
 			if (Enabled && !DesignMode)
 			{
 				this.deviceListIsInitialized = true; // Purpose see remarks above.
@@ -260,7 +260,7 @@ namespace YAT.Gui.Controls
 						string message;
 						if (this.deviceInfo != null)
 							message =
-								"The given USB device " + this.deviceInfo + " is currently not available." + Environment.NewLine + Environment.NewLine +
+								"The USB device " + this.deviceInfo + " is currently not available." + Environment.NewLine + Environment.NewLine +
 								"The setting has been defaulted to the first available device.";
 						else
 							message =

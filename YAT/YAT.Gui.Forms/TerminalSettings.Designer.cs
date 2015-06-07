@@ -223,7 +223,7 @@ namespace YAT.Gui.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.serialPortSelection.Location = new System.Drawing.Point(6, 19);
 			this.serialPortSelection.Name = "serialPortSelection";
-			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(3);
+			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
 			this.serialPortSelection.Size = new System.Drawing.Size(285, 46);
 			this.serialPortSelection.TabIndex = 0;
 			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
