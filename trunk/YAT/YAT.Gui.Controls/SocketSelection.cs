@@ -593,7 +593,7 @@ namespace YAT.Gui.Controls
 						if (!string.IsNullOrEmpty(localInterfaceNoLongerAvailable))
 						{
 							string message =
-								"The given local network interface " + localInterfaceNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+								"The local network interface " + localInterfaceNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
 								"The setting has been defaulted to the first available interface.";
 
 							MessageBoxEx.Show
