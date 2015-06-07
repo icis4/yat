@@ -63,6 +63,7 @@ YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-03
 Fixed bugs:
 - FormatException when opening the terminal settings of a terminal that is based on an existing
   .yat file fixed, additional test cases added to regression testing (bugs #306 and #307)
+- Issues with 'Send File' fixed, handling of recents and shortcuts improved (bug #304)
 
 
 YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
@@ -157,6 +158,7 @@ Limitations and known issues:
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
 - Text terminals: Wait for answer line not yet implemented (feature request #19)
+- Sending files cannot be breaked yet (bug #305)
 - Direct mode does not yet support special formats and commands (feature request #10)
 - Logging is limited to text, RTF format not yet implemented (feature requests #233)
 - XML logging not yet implemented, definition of schema pending (feature requests #26 and #27)

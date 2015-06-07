@@ -21,6 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of state changes and validation related to the handled command:
+////#define DEBUG_COMMAND
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -28,9 +42,11 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
@@ -103,7 +119,8 @@ namespace YAT.Gui.Controls
 		public SendFile()
 		{
 			InitializeComponent();
-			SetControls();
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -125,13 +142,17 @@ namespace YAT.Gui.Controls
 			{
 				if (this.command != value)
 				{
+					CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 					if (value != null)
 						this.command = value;
 					else
 						this.command = new Command();
 
-					SetControls();
+					SetCommandAndRecentsControls();
 					OnCommandChanged(EventArgs.Empty);
+
+					CommandDebugMessageLeave();
 				}
 			}
 		}
@@ -145,10 +166,14 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
+				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 				// Do not check if (this.recents != value) because the collection will always be the same!
 
 				this.recents = value;
-				SetControls();
+				SetCommandAndRecentsControls(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
+
+				CommandDebugMessageLeave();
 			}
 		}
 
@@ -162,7 +187,7 @@ namespace YAT.Gui.Controls
 				if (this.terminalType != value)
 				{
 					this.terminalType = value;
-					SetControls();
+					SetSendControls();
 				}
 			}
 		}
@@ -177,7 +202,7 @@ namespace YAT.Gui.Controls
 				if (this.terminalIsReadyToSend != value)
 				{
 					this.terminalIsReadyToSend = value;
-					SetControls();
+					SetSendControls();
 				}
 			}
 		}
@@ -194,7 +219,62 @@ namespace YAT.Gui.Controls
 				// has been set.
 
 				this.splitterDistance = value;
-				SetSplitter();
+
+				// No need to call SetControls(); as only the splitter will be moved, and that will
+				// not be accessed anywhere else.
+
+				splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
+			}
+		}
+
+		#endregion
+
+		#region Control Special Keys
+		//==========================================================================================
+		// Control Special Keys
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (keyData == Keys.Enter)
+			{
+				if (button_Send.Enabled)
+				{
+					RequestSendCommand();
+					return (true);
+				}
+			}
+
+			return (base.ProcessCmdKey(ref msg, keyData));
+		}
+
+		#endregion
+
+		#region Control Event Handlers
+		//==========================================================================================
+		// Control Event Handlers
+		//==========================================================================================
+
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
+		private void SendFile_Paint(object sender, PaintEventArgs e)
+		{
+			if (this.isStartingUp)
+			{
+				this.isStartingUp = false;
+				SetCommandAndRecentsControls();
 			}
 		}
 
@@ -209,21 +289,25 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
+				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 				if (pathComboBox_FilePath.SelectedItem != null)
 				{
 					RecentItem<Command> ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
 					if (ri != null)
-						SetCommand(ri.Item);
+						CreateAndConfirmCommand(ri.Item.FilePath);
 				}
+
+				CommandDebugMessageLeave();
 			}
 		}
 
-		private void button_SetFile_Click(object sender, EventArgs e)
+		private void button_OpenFile_Click(object sender, EventArgs e)
 		{
 			ShowOpenFileDialog();
 		}
 
-		private void button_SendFile_Click(object sender, EventArgs e)
+		private void button_Send_Click(object sender, EventArgs e)
 		{
 			RequestSendCommand();
 		}
@@ -235,41 +319,72 @@ namespace YAT.Gui.Controls
 		// Private Methods
 		//==========================================================================================
 
-		private void SetSplitter()
-		{
-			this.isSettingControls.Enter();
-			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
-			this.isSettingControls.Leave();
-		}
+		#region Private Methods > Set Controls
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Set Controls
+		//------------------------------------------------------------------------------------------
 
-		private void SetControls()
+		private void SetCommandAndRecentsControls()
 		{
+			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
-
-			SetSplitter();
 
 			pathComboBox_FilePath.Items.Clear();
+
+			// Fill the drop down list, depending on the amount of recents:
 			if ((this.recents != null) && (this.recents.Count > 0))
+			{
+				// Add the current command, or "<Set a file...>", to the top of the list:
+				if (this.command.IsFilePath)
+				{
+					// Add the current command only if not already contained in recents:
+					if (!this.recents.Contains(this.command))
+						pathComboBox_FilePath.Items.Add(this.command);
+				}
+				else
+				{
+					pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
+				}
+
+				// Add the recents:
 				pathComboBox_FilePath.Items.AddRange(this.recents.ToArray());
+			}
 			else
-				pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
+			{
+				if (this.command.IsFilePath)
+					pathComboBox_FilePath.Items.Add(this.command);
+				else
+					pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
+			}
+
+			// Restore the current command and set the combo box' properties:
+			int selectedIndex = ControlEx.InvalidIndex;
 
 			if (this.command.IsFilePath)
 			{
-				pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
-				pathComboBox_FilePath.Font      = SystemFonts.DefaultFont;
-
-				int index = 0;
 				for (int i = 0; i < pathComboBox_FilePath.Items.Count; i++)
 				{
+					Command c = pathComboBox_FilePath.Items[i] as Command;
+					if ((c != null) && (c == this.command))
+					{
+						selectedIndex = i;
+						break;
+					}
+
 					RecentItem<Command> r = pathComboBox_FilePath.Items[i] as RecentItem<Command>;
 					if ((r != null) && (r.Item == this.command))
 					{
-						index = i;
+						selectedIndex = i;
 						break;
 					}
 				}
-				pathComboBox_FilePath.SelectedIndex = index;
+			}
+
+			if (selectedIndex != ControlEx.InvalidIndex)
+			{
+				pathComboBox_FilePath.ForeColor     = SystemColors.ControlText;
+				pathComboBox_FilePath.Font          = SystemFonts.DefaultFont;
+				pathComboBox_FilePath.SelectedIndex = selectedIndex;
 			}
 			else
 			{
@@ -278,24 +393,30 @@ namespace YAT.Gui.Controls
 				pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
 			}
 
+			SetSendControls();
+
+			this.isSettingControls.Leave();
+			CommandDebugMessageLeave();
+		}
+
+		private void SetSendControls()
+		{
+			this.isSettingControls.Enter();
+
 			if (this.command.IsValidFilePath)
-				button_SendFile.Enabled = this.terminalIsReadyToSend;
+				button_Send.Enabled = this.terminalIsReadyToSend;
 			else
-				button_SendFile.Enabled = false;
+				button_Send.Enabled = false;
 
 			this.isSettingControls.Leave();
 		}
 
-		private void SetCommand(Command command)
-		{
-			this.command = command;
+		#endregion
 
-			if (!this.recents.Contains(command))
-				this.recents.Add(command);
-
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
-		}
+		#region Private Methods > Open File
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Open File
+		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private bool ShowOpenFileDialog()
@@ -328,58 +449,83 @@ namespace YAT.Gui.Controls
 				ApplicationSettings.LocalUserSettings.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				SetCommand(new Command(ofd.FileName, true, ofd.FileName));
+				CreateAndConfirmCommand(ofd.FileName);
 			}
 			else
 			{
-				SetControls();
+				SetCommandAndRecentsControls();
+				//// Do not call OnCommandChanged(), nothing has changed.
 			}
 
-			button_SendFile.Select();
+			button_Send.Select();
 			return (success);
 		}
+
+		#endregion
+
+		#region Private Methods > Handle Command
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Handle Command
+		//------------------------------------------------------------------------------------------
+
+		private void ConfirmCommand()
+		{
+			SetCommandAndRecentsControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		/// <remarks>
+		/// Always create new command to ensure that not only command but also description is updated.
+		/// </remarks>
+		private void CreateAndConfirmCommand(string filePath)
+		{
+			this.command = new Command(filePath, true, filePath);
+
+			SetCommandAndRecentsControls();
+			OnCommandChanged(EventArgs.Empty);
+		}
+
+		#endregion
+
+		#region Private Methods > Request Send
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Request Send
+		//------------------------------------------------------------------------------------------
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void RequestSendCommand()
 		{
-			if (!this.command.IsValidFilePath)
+			if (this.command.IsValidFilePath)
 			{
-				if (MessageBoxEx.Show
-					(
+				ConfirmCommand(); // Required to invoke OnCommandChanged().
+				InvokeSendCommandRequest();
+			}
+			else
+			{
+				DialogResult dr = MessageBoxEx.Show
+				(
 					this,
 					"File does not exist, set file?",
 					"No File",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question,
 					MessageBoxDefaultButton.Button1
-					)
-					== DialogResult.Yes)
-				{
-					if (!ShowOpenFileDialog())
-						return;
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			if (this.command.IsValidFilePath)
-			{
-				OnSendCommandRequest(EventArgs.Empty);
-			}
-			else
-			{
-				MessageBoxEx.Show
-				(
-					this,
-					"File does not exist, no data has been sent!",
-					"No File",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
 				);
+
+				if (dr == DialogResult.Yes)
+				{
+					if (ShowOpenFileDialog()) // CreateAndConfirmCommand() gets called here.
+						InvokeSendCommandRequest();
+				}
 			}
 		}
+
+		private void InvokeSendCommandRequest()
+		{
+			OnSendCommandRequest(EventArgs.Empty);
+		}
+
+		#endregion
 
 		#endregion
 
@@ -398,6 +544,42 @@ namespace YAT.Gui.Controls
 		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
 			EventHelper.FireSync(SendCommandRequest, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COMMAND")]
+		protected virtual void CommandDebugMessageEnter(string methodName)
+		{
+			Debug.WriteLine(methodName);
+			Debug.Indent();
+
+			CommandDebugMessage();
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COMMAND")]
+		protected virtual void CommandDebugMessageLeave()
+		{
+			CommandDebugMessage();
+
+			Debug.Unindent();
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG_COMMAND")]
+		protected virtual void CommandDebugMessage()
+		{
+			Debug.WriteLine("Text    = " + pathComboBox_FilePath.Text);
+
+			if (this.recents != null)
+				Debug.WriteLine("Recents = " + ArrayEx.ElementsToString(this.recents.ToArray()));
 		}
 
 		#endregion

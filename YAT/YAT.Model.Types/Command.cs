@@ -222,7 +222,7 @@ namespace YAT.Model.Types
 					else if (IsText)
 						return (SingleLineText);
 					else if (IsFilePath)
-						return (Path.GetFileNameWithoutExtension(FilePath));
+						return (Path.GetFileName(FilePath)); // Only use file name for better readability!
 					else
 						return ("");
 				}
@@ -403,6 +403,31 @@ namespace YAT.Model.Types
 		//==========================================================================================
 		// Convenience Properties
 		//==========================================================================================
+
+		/// <remarks>
+		/// Similar to <see cref="Description"/>, but not taking the user defined description string
+		/// into account.
+		/// </remarks>
+		[XmlIgnore]
+		public virtual string Caption
+		{
+			get
+			{
+				if (IsDefined)
+				{
+					if (IsText)
+						return (SingleLineText);
+					else if (IsFilePath)
+						return (Path.GetFileName(FilePath)); // Only use file name for better readability!
+					else
+						return (DefineCommandText);
+				}
+				else
+				{
+					return (DefineCommandText);
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlIgnore]
@@ -603,10 +628,14 @@ namespace YAT.Model.Types
 		// Object Members
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Do not redirect to <see cref="Description"/> in order to ensure that user defined
+		/// description string is not shown in a combo box or similar. Instead, use the dedicated
+		/// <see cref="Caption"/> property.
+		/// </remarks>
 		public override string ToString()
 		{
-			return (SingleLineText);
+			return (Caption);
 		}
 
 		/// <summary>
@@ -623,6 +652,9 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
+		/// 
+		/// Do not consider <see cref="Description"/> nor <see cref="Caption"/> as they do not define
+		/// the command.
 		/// </remarks>
 		public bool Equals(Command other)
 		{
@@ -635,7 +667,6 @@ namespace YAT.Model.Types
 			return
 			(
 				(IsDefined                     == other.IsDefined) &&
-				(Description                   == other.Description) &&
 				ArrayEx.ValuesEqual(CommandLines, other.CommandLines) &&
 				(DefaultRadix                  == other.DefaultRadix) &&
 				(IsFilePath                    == other.IsFilePath) &&
@@ -649,13 +680,15 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
+		/// 
+		/// Do not consider <see cref="Description"/> nor <see cref="Caption"/> as they do not define
+		/// the command.
 		/// </remarks>
 		public override int GetHashCode()
 		{
 			return
 			(
 				IsDefined   .GetHashCode() ^
-				Description .GetHashCode() ^
 				CommandLines.GetHashCode() ^
 				DefaultRadix.GetHashCode() ^
 				IsFilePath  .GetHashCode() ^

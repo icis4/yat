@@ -387,8 +387,16 @@ namespace YAT.Gui.Forms
 				{
 					e.Cancel = true;
 
-					// Revert closing state.
+					// Revert closing state in case of cancel:
 					this.closingState = ClosingState.None;
+					
+					// Also revert closing state for MDI children:
+					foreach (Form f in this.MdiChildren)
+					{
+						Terminal t = f as Terminal;
+						if (t != null)
+							t.RevertClosingState();
+					}
 				}
 				else
 				{

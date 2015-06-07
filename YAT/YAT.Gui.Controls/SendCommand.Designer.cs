@@ -31,7 +31,7 @@
 			this.components = new System.ComponentModel.Container();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_MultiLineCommand = new System.Windows.Forms.Button();
-			this.button_SendCommand = new System.Windows.Forms.Button();
+			this.button_Send = new System.Windows.Forms.Button();
 			this.comboBox_Command = new System.Windows.Forms.ComboBox();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -51,18 +51,18 @@
 			this.button_MultiLineCommand.UseVisualStyleBackColor = true;
 			this.button_MultiLineCommand.Click += new System.EventHandler(this.button_MultiLineCommand_Click);
 			// 
-			// button_SendCommand
+			// button_Send
 			// 
-			this.button_SendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.button_Send.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SendCommand.Enabled = false;
-			this.button_SendCommand.Location = new System.Drawing.Point(3, 3);
-			this.button_SendCommand.Name = "button_SendCommand";
-			this.button_SendCommand.Size = new System.Drawing.Size(177, 21);
-			this.button_SendCommand.TabIndex = 4;
-			this.button_SendCommand.Text = "Send Command (F3)";
-			this.toolTip.SetToolTip(this.button_SendCommand, "Send Command");
-			this.button_SendCommand.Click += new System.EventHandler(this.button_SendCommand_Click);
+			this.button_Send.Enabled = false;
+			this.button_Send.Location = new System.Drawing.Point(3, 3);
+			this.button_Send.Name = "button_Send";
+			this.button_Send.Size = new System.Drawing.Size(177, 21);
+			this.button_Send.TabIndex = 4;
+			this.button_Send.Text = "Send Command (F3)";
+			this.toolTip.SetToolTip(this.button_Send, "Send Command");
+			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
 			// comboBox_Command
 			// 
@@ -72,8 +72,8 @@
 			this.comboBox_Command.Name = "comboBox_Command";
 			this.comboBox_Command.Size = new System.Drawing.Size(319, 21);
 			this.comboBox_Command.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_Command, "Fill-in desired command, <Enter> to send,\r\n<Arrow Up/Down> or small triangle for " +
-        "recent\r\ncommands, <...> to enter multi line command");
+			this.toolTip.SetToolTip(this.comboBox_Command, "Fill-in command, <Enter> to send,\r\ndrop down for recent commands,\r\n<...> to enter" +
+        " multi line command");
 			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
 			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
 			this.comboBox_Command.Enter += new System.EventHandler(this.comboBox_Command_Enter);
@@ -95,7 +95,7 @@
 			// 
 			// splitContainer.Panel2
 			// 
-			this.splitContainer.Panel2.Controls.Add(this.button_SendCommand);
+			this.splitContainer.Panel2.Controls.Add(this.button_Send);
 			this.splitContainer.Size = new System.Drawing.Size(540, 27);
 			this.splitContainer.SplitterDistance = 356;
 			this.splitContainer.SplitterWidth = 1;
@@ -123,7 +123,7 @@
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.SplitContainer splitContainer;
 		private System.Windows.Forms.Button button_MultiLineCommand;
-		private System.Windows.Forms.Button button_SendCommand;
+		private System.Windows.Forms.Button button_Send;
 		private System.Windows.Forms.ComboBox comboBox_Command;
 	}
 }
