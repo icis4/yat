@@ -41,7 +41,6 @@
   <Target Name="$(ProjectDir)/MKY.Test/bin/Debug/MKY.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32.Test/bin/Debug/MKY.Win32.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32/bin/Debug/MKY.Win32.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Windows.Forms.Test/bin/Debug/MKY.Windows.Forms.Test.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Windows.Forms/bin/Debug/MKY.Windows.Forms.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY/bin/Debug/MKY.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>

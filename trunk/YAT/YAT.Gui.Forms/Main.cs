@@ -1081,7 +1081,6 @@ namespace YAT.Gui.Forms
 				{
 					timer_PerformExitOperation.Start();
 				}
-
 			}
 			else
 			{

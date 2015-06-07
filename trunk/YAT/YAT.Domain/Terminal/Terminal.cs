@@ -132,7 +132,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public bool ChunkSizeIsAboveThreshold(int chunkSize)
+			public static bool ChunkSizeIsAboveThreshold(int chunkSize)
 			{
 				return (chunkSize >= ThresholdMs);
 			}
@@ -151,7 +151,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public bool DelayIsAboveThreshold(int delay)
+			public static bool DelayIsAboveThreshold(int delay)
 			{
 				return (delay >= ThresholdMs);
 			}
@@ -751,7 +751,7 @@ namespace YAT.Domain
 			AssertNotDisposed();
 
 			// Each send request shall resume a pending break condition:
-			Resume();
+			ResumeBreak();
 
 			// Enqueue the items for sending:
 			lock (this.sendQueue)
@@ -1213,9 +1213,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Resumes all currently ongoing operations in the terminal.
+		/// Resumes all currently breaked operations in the terminal.
 		/// </summary>
-		public virtual void Resume()
+		public virtual void ResumeBreak()
 		{
 			lock (this.breakStateSyncObj)
 				this.breakState = false;
