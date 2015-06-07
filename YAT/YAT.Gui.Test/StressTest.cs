@@ -39,8 +39,8 @@ using NUnit.Framework;
 
 using YAT.Controller;
 using YAT.Domain;
-using YAT.Model.Types;
 using YAT.Model.Settings;
+using YAT.Model.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;

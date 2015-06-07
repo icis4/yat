@@ -2369,7 +2369,7 @@ namespace YAT.Model
 		protected void DoSendText(Command c)
 		{
 			// Each send request shall resume a pending break condition:
-			Resume();
+			ResumeBreak();
 
 			if (c.IsValidText)
 			{
@@ -2446,7 +2446,6 @@ namespace YAT.Model
 		/// Sends given file.
 		/// </summary>
 		/// <param name="c">File to be sent.</param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual void SendFile(Command c)
 		{
 			DoSendFile(c);
@@ -2456,6 +2455,7 @@ namespace YAT.Model
 		/// This method shall not be overridden. All file sending shall be requested using this
 		/// method, to ensure that pending break conditions are resumed.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected void DoSendFile(Command c)
 		{
 			if (!c.IsValidFilePath)
@@ -2466,7 +2466,7 @@ namespace YAT.Model
 			try
 			{
 				// Each send request shall resume a pending break condition:
-				Resume();
+				ResumeBreak();
 
 				if (this.terminal is Domain.TextTerminal)
 				{
@@ -2654,12 +2654,12 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Resumes all currently ongoing operations in the terminal.
+		/// Resumes all currently breaked operations in the terminal.
 		/// </summary>
-		public virtual void Resume()
+		public virtual void ResumeBreak()
 		{
 			OnTimedStatusTextRequest("Resuming operation...");
-			this.terminal.Resume();
+			this.terminal.ResumeBreak();
 		}
 
 		#endregion
