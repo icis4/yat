@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="YAT.Domain.Settings.TerminalSettings">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAAgEkAAaAAAgEgAQQACMAEAAIAAAABAAAAAQAA=</HashCode>
+      <FileName>Settings\TerminalSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.IOSettings">
+    <Position X="2.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAZAAEEAAAAAAIAAggAACAACoAAAAYAAAwEAACACAAA=</HashCode>
+      <FileName>Settings\IOSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.BufferSettings">
+    <Position X="4.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAABAgAAAAIACAACAAIAAACAAAAAgAAA=</HashCode>
+      <FileName>Settings\BufferSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.DisplaySettings">
+    <Position X="6.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAwoSAAAIEgAAAAAgQAgAAAGABAGEIQQhABACIAMGAg=</HashCode>
+      <FileName>Settings\DisplaySettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.SendSettings">
+    <Position X="8.5" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAgAAAAAgAAgAAAAEACAAAAAIABAIAAAQCAAAE=</HashCode>
+      <FileName>Settings\SendSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.BinaryTerminalSettings">
+    <Position X="12.75" Y="4" Width="2" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAoAAAQAAAAAAAgAAAAAACIAAAAIAAAABAAAAAAKA=</HashCode>
+      <FileName>BinaryTerminal\Settings\BinaryTerminalSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.TextTerminalSettings">
+    <Position X="10.5" Y="4" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAIAAAACEAgIAoAQCCiAEAKIABACAAAAAAAQA=</HashCode>
+      <FileName>TextTerminal\Settings\TextTerminalSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YAT.Domain.Settings.BinaryDisplaySettings">
+    <Position X="12.75" Y="6.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAgAAAIAACACEAAIAAAAAAAAAAAAM=</HashCode>
+      <FileName>BinaryTerminal\Settings\BinaryDisplaySettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

@@ -1,0 +1,62 @@
+﻿
+Edition
+-------
+
+Community Edition (2013):
+"An unlimited number of users within an organization can use Visual Studio Community for the following scenarios:
+  > in a classroom learning environment,
+  > for academic research,
+  > or for contributing to open source projects."
+
+
+Visual Studio
+-------------
+
+Help > Set Preference > Help Viewer
+  > Add content to local documentation
+    > VisualStudio Fundamentals
+    > VisualStudio VB and C#
+    > .NET 3.5
+    > .NET 4.0
+    > .NET 4.5
+
+Tools > Options...
+  > Environment > General
+    > Theme = Blue
+    > Turn off upper case in the menu bar
+  > Text Editor
+    > All Languages > General > Diplay > Line numers = true
+    > C# > Tabs > Keep tabs
+  > Debugging
+    > General > Step over properties and operators = false
+
+Edit > Advanced
+  > View White Space = true
+
+
+StyleCop
+--------
+
+Place StyleCop settings into solution folder and inherit settings in each project whenever applicable.
+
+
+NUnit as external tool
+----------------------
+
+Tools > External Tools
+ > Add
+    > Title       = "NUnit"
+    > Command     = "<NUnitInstallPath>\bin\nunit.exe"
+    > Arguments   = "YAT.nunit"
+    > Initial Dir = "$(SolutionDir)"
+    > "OK"
+
+
+Shortcuts
+---------
+
+Tools > Options
+ > Environment > Keyboard
+    > Show "Tools.External"
+       > Command4 (NUnit)
+          > Alt+N (Global)
