@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// NUnit Version 1.0.9
+// NUnit Development Version 1.0.10
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -33,9 +33,9 @@ using System.Reflection;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.9.*")]
-[assembly: AssemblyFileVersion("1.0.9.0")]
-[assembly: AssemblyInformationalVersion("1.0.9")]
+[assembly: AssemblyVersion("1.0.10.*")]
+[assembly: AssemblyFileVersion("1.0.10.0")]
+[assembly: AssemblyInformationalVersion("1.0.10")]
 
 //==================================================================================================
 // End of

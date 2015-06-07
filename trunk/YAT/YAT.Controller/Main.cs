@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 1' Version 1.99.33
+// YAT 2.0 Gamma 2 Development Version 1.99.34
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -862,6 +862,12 @@ namespace YAT.Controller
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 			Console.Out.WriteLine();
 
+			Console.Out.WriteLine(ApplicationInfo.ProductNameAndBuildNameAndVersion);
+
+			Console.Out.WriteLine();
+			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
+			Console.Out.WriteLine();
+
 			foreach (string line in ApplicationInfo.ProductLogo)
 				Console.Out.WriteLine(line);
 
@@ -888,6 +894,7 @@ namespace YAT.Controller
 		private static void WriteReturnToConsole()
 		{
 			Console.Out.WriteLine();
+
 			foreach (string line in ResultText)
 				Console.Out.WriteLine(line);
 
