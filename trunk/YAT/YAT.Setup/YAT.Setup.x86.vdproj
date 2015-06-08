@@ -1502,7 +1502,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ALAZ.SystemEx, Version=3.5.9.37130, Culture=neutral, PublicKeyToken=ada2b06348b160e4, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ALAZ.SystemEx, Version=3.5.11.35597, Culture=neutral, PublicKeyToken=ada2b06348b160e4, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_0ED7EE8479B4C2D2EA04D7BCFB3FBFB2"
@@ -1593,7 +1593,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial, Version=1.0.11.37131, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial, Version=1.0.13.35598, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_184D24823B11A358DDF515CEF5170C90"
@@ -1644,7 +1644,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings.Terminal, Version=1.99.32.37134, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings.Terminal, Version=1.99.34.35602, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2BB9E660B9F7447C7DEE8DD030C695CF"
@@ -1855,7 +1855,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.Windows.Forms, Version=1.0.11.37132, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.Windows.Forms, Version=1.0.13.35599, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_584B3246DB2B72879E026588DF71D8D6"
@@ -1886,7 +1886,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings, Version=1.99.32.37131, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings, Version=1.99.34.35598, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_59F3967D78E20A6B6E0973E9775AD60F"
@@ -1917,7 +1917,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Gui.Forms, Version=1.99.32.37136, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Gui.Forms, Version=1.99.34.35604, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_5BE0A0011AFB25F3DDE61A34B557039F"
@@ -1968,7 +1968,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Gui.Utilities, Version=1.99.32.37133, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Gui.Utilities, Version=1.99.34.35601, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_60F8CD92456B4509B1240C10ECDA7534"
@@ -1999,7 +1999,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Types, Version=1.99.32.37132, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model.Types, Version=1.99.34.35600, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_6530590AFE5AC1ABD6B6BD9B1BAB31AD"
@@ -2030,7 +2030,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model, Version=1.99.32.37134, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model, Version=1.99.34.35602, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_65856066D09FFF4FAE6C1414458BAB45"
@@ -2061,7 +2061,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY, Version=1.0.11.37130, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY, Version=1.0.13.35597, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_681CE4D2CE435B4813484B87E6C4E340"
@@ -2092,7 +2092,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Utilities, Version=1.99.32.37133, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model.Utilities, Version=1.99.34.35601, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_6D56C090B293F716D98925B72D7597E3"
@@ -2123,7 +2123,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Log, Version=1.99.32.37133, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Log, Version=1.99.34.35601, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_7029657FAF06A6FFF4C93B708C3F0794"
@@ -2154,7 +2154,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Gui.Controls, Version=1.99.32.37134, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Gui.Controls, Version=1.99.34.35603, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_74D5B246C9242A644C9F6BDF82F4C32A"
@@ -2205,7 +2205,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.Win32, Version=1.0.11.37131, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.Win32, Version=1.0.13.35598, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_829D8A80BD3B843731B1C5FFFE97D7EA"
@@ -2256,7 +2256,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial.Usb, Version=1.0.11.37131, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial.Usb, Version=1.0.13.35599, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_8EC05EA3FAA1CBA3D5D6A45EBA476DFB"
@@ -2287,7 +2287,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial.SerialPort, Version=1.0.11.37132, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial.SerialPort, Version=1.0.13.35598, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_90B52C0327912542DCF9FB770F1EC1E7"
@@ -2358,7 +2358,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.IO.Ports, Version=1.0.11.37131, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.IO.Ports, Version=1.0.13.35598, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_97FF97EE0D247BFC82B0BC360F74FA6D"
@@ -2409,7 +2409,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.IO.Usb, Version=1.0.11.37131, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.IO.Usb, Version=1.0.13.35599, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_9D2EB56275A073DC0967F05379F78D1A"
@@ -2440,7 +2440,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial.Socket, Version=1.0.11.37132, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MKY.IO.Serial.Socket, Version=1.0.13.35599, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_9E7BEBC328E413B56ACF09F67838F1FD"
@@ -2491,7 +2491,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Utilities, Version=1.99.32.37130, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Utilities, Version=1.99.34.35597, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B29C09705B2CA7A06AA3B23F29B57657"
@@ -2522,7 +2522,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ALAZ.SystemEx.NetEx, Version=3.5.9.37131, Culture=neutral, PublicKeyToken=ada2b06348b160e4, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:ALAZ.SystemEx.NetEx, Version=3.5.11.35598, Culture=neutral, PublicKeyToken=ada2b06348b160e4, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B98FF9B2D93166507BF3C313BA69F00C"
@@ -2573,7 +2573,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings.Application, Version=1.99.32.37133, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings.Application, Version=1.99.34.35601, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_C7FD5F9FBF8AEA87AB459F846B9E3EA9"
@@ -2684,7 +2684,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Domain, Version=1.99.32.37132, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Domain, Version=1.99.34.35600, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_DF323A8D17667D858AAFBB6EE0948060"
@@ -2775,7 +2775,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Controller, Version=1.99.32.37136, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Controller, Version=1.99.34.35752, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E8DD563A6465C07E8879F623DCB8E26F"
@@ -2846,7 +2846,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings.Workspace, Version=1.99.32.37133, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings.Workspace, Version=1.99.34.35601, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_EC65A31E2CAB536686B156BF3882D320"
@@ -2877,7 +2877,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Settings, Version=1.99.32.37133, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model.Settings, Version=1.99.34.35600, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_EFE3309A7CF9E5410060A3FC1D673501"
@@ -3071,19 +3071,19 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:YAT"
-        "ProductCode" = "8:{DE34F61F-CCE7-401A-B370-9DB405D0482B}"
-        "PackageCode" = "8:{9751A03E-E219-422B-B787-11D17537514A}"
+        "ProductCode" = "8:{6A5DCB78-6EC8-49C2-A3B4-4BD6B07D45CF}"
+        "PackageCode" = "8:{62C8238A-484C-41CA-884F-C19D4775678C}"
         "UpgradeCode" = "8:{6013B81A-B607-4E05-AFE6-E920B31F4CBC}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.99.33"
+        "ProductVersion" = "8:1.99.34"
         "Manufacturer" = "8:YAT"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://sourceforge.net/projects/y-a-terminal/"
-        "Title" = "8:YAT 2.0 Gamma 1'"
+        "Title" = "8:YAT 2.0 Gamma 1''"
         "Subject" = "8:YAT - Yet Another Terminal"
         "ARPCONTACT" = "8:Matthias Kläy"
         "Keywords" = "8:Terminal; RS-232; RS-422; RS-423; RS-485; TCP/IP; UDP/IP; USB Ser/HID; Matthias Kläy; HSR; Mettler-Toledo; SourceForge"
