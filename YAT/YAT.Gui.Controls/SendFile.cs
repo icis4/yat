@@ -85,7 +85,7 @@ namespace YAT.Gui.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private Command command = new Command();
-		private RecentItemCollection<Command> recents;
+		private RecentItemCollection<Command> recent;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private int splitterDistance = SplitterDistanceDefault;
@@ -149,7 +149,7 @@ namespace YAT.Gui.Controls
 					else
 						this.command = new Command();
 
-					SetCommandAndRecentsControls();
+					SetCommandAndRecentControls();
 					OnCommandChanged(EventArgs.Empty);
 
 					CommandDebugMessageLeave();
@@ -162,16 +162,16 @@ namespace YAT.Gui.Controls
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual RecentItemCollection<Command> Recents
+		public virtual RecentItemCollection<Command> Recent
 		{
 			set
 			{
 				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-				// Do not check if (this.recents != value) because the collection will always be the same!
+				// Do not check if (this.recent != value) because the collection will always be the same!
 
-				this.recents = value;
-				SetCommandAndRecentsControls(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
+				this.recent = value;
+				SetCommandAndRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
 				CommandDebugMessageLeave();
 			}
@@ -274,7 +274,7 @@ namespace YAT.Gui.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetCommandAndRecentsControls();
+				SetCommandAndRecentControls();
 			}
 		}
 
@@ -324,21 +324,21 @@ namespace YAT.Gui.Controls
 		// Private Methods > Set Controls
 		//------------------------------------------------------------------------------------------
 
-		private void SetCommandAndRecentsControls()
+		private void SetCommandAndRecentControls()
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			pathComboBox_FilePath.Items.Clear();
 
-			// Fill the drop down list, depending on the amount of recents:
-			if ((this.recents != null) && (this.recents.Count > 0))
+			// Fill the drop down list, depending on the amount of recent files:
+			if ((this.recent != null) && (this.recent.Count > 0))
 			{
 				// Add the current command, or "<Set a file...>", to the top of the list:
 				if (this.command.IsFilePath)
 				{
-					// Add the current command only if not already contained in recents:
-					if (!this.recents.Contains(this.command))
+					// Add the current command only if not already contained in recent files:
+					if (!this.recent.Contains(this.command))
 						pathComboBox_FilePath.Items.Add(this.command);
 				}
 				else
@@ -346,8 +346,8 @@ namespace YAT.Gui.Controls
 					pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
 				}
 
-				// Add the recents:
-				pathComboBox_FilePath.Items.AddRange(this.recents.ToArray());
+				// Add the recent files:
+				pathComboBox_FilePath.Items.AddRange(this.recent.ToArray());
 			}
 			else
 			{
@@ -453,7 +453,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				SetCommandAndRecentsControls();
+				SetCommandAndRecentControls();
 				//// Do not call OnCommandChanged(), nothing has changed.
 			}
 
@@ -470,7 +470,7 @@ namespace YAT.Gui.Controls
 
 		private void ConfirmCommand()
 		{
-			SetCommandAndRecentsControls();
+			SetCommandAndRecentControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
@@ -481,7 +481,7 @@ namespace YAT.Gui.Controls
 		{
 			this.command = new Command(filePath, true, filePath);
 
-			SetCommandAndRecentsControls();
+			SetCommandAndRecentControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
 
@@ -578,8 +578,8 @@ namespace YAT.Gui.Controls
 		{
 			Debug.WriteLine("Text    = " + pathComboBox_FilePath.Text);
 
-			if (this.recents != null)
-				Debug.WriteLine("Recents = " + ArrayEx.ElementsToString(this.recents.ToArray()));
+			if (this.recent != null)
+				Debug.WriteLine("Recent = " + ArrayEx.ElementsToString(this.recent.ToArray()));
 		}
 
 		#endregion
