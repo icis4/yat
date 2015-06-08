@@ -57,52 +57,12 @@ Start YAT by selecting "Start > Programs > YAT > YAT".
 2. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.0 Gamma 2 Version 1.99.?? :: 201?-??-??
+YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-??
 ----------------------------------------------------------------------------------------------------
-
-New:
-
-
-Important changes:
-
 
 Fixed bugs:
 
-
-Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2013 on .NET 3.5 SP1 (feat. #229)
-- General imitations of .NET Windows.Forms
-   > If YAT is not the active application, two clicks are required to execute an action. Reason:
-     In .NET Windows.Forms the first click only activates the application but doesn't execute
-     anything (bug #210)
-   > Horizontal auto scroll is not feasible to implement (feature request #163)
-   > System errors are output in local language, even though YAT is all-English (bug #66)
-- MDI limitations of .NET Windows.Forms
-   > Issues with frame (bugs #29 and #30)
-   > Issues with window list (bugs #31, #119, #180 and #213)
-- Long monitor contents are not displayed properly when horizontally scrolling using the scroll bar
-  (bug #125)
-- Serial COM port limitations of .NET
-   > Support for ports named other than "COM..." isn't supported by .NET (feature request #101)
-- Serial COM port limitations of certain hardware, e.g. certain USB/RS-232 converters
-   > RFR/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported (bug #203)
-   > Manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may not be
-     supported on Win7/64 (bug #254)
-   > Handling of serial COM port break states may not be supported (feature request #109)
-- Use of internal serial COM port may lead to slowdown of the application on certain computers; due
-  to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown
-- USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they
-  have different serial numbers, however, it is not yet possible to properly communicate with them
-  simultaneously, this could be a bug or a limitation of the Win32 HID.dll (bug #169)
-- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet', significant work and the availability of
-  a test environment would be needed to run USB Ser/HID on unixoids (feature request #119)
-- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
-- Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
-- Text terminals: Wait for answer line not yet implemented (feature request #19)
-- Sending files cannot be breaked yet (bug #305)
-- Direct mode does not yet support special formats and commands (feature request #10)
-- Logging is limited to text, RTF format not yet implemented (feature requests #233)
-- XML logging not yet implemented, definition of schema pending (feature requests #26 and #27)
+- User settings are again upgraded from the latest previous version (bug #311)
 
 
 YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-07
@@ -111,7 +71,7 @@ YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-07
 Fixed bugs:
 - FormatException when opening the terminal settings of a terminal that is based on an existing
   .yat file fixed, additional test cases added to regression testing (bugs #306 and #307)
-- Issues with 'Send File' fixed, handling of recents and shortcuts improved (bug #304)
+- Issues with 'Send File' fixed, handling of recent commands and shortcuts improved (bug #304)
 
 
 YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
@@ -662,7 +622,7 @@ Fixed bugs:
 - Shortcuts are immediately active, no need to first open menu anymore (bug #1944023)
 - Menu > Send > File now gets properly enabled (bug #1995796)
 - Directly opened terminals don't automatically get saved anymore (bug #2821291)
-- Relative paths are no more added to recents
+- Relative paths are no more added to recent files
 - Log now logs EOL according to settings (bug #1995797)
 - Help, release notes and tracker instructions forms are shown at center of parent (bug #1938031)
 
