@@ -72,6 +72,62 @@ namespace MKY.IO
 		}
 
 		/// <summary>
+		/// Checks whether the given file is readable.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>
+		/// Returns <c>true</c> if file is readable.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
+		public static bool IsReadable(string filePath)
+		{
+			try
+			{
+				// Force exception if file is not accessible:
+				FileInfo fi = new FileInfo(filePath);
+				return (true);
+			}
+			catch
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Checks whether the given file is read-only.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>
+		/// Returns <c>true</c> if file is read-only.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static bool IsReadOnly(string filePath)
+		{
+			try
+			{
+				FileInfo fi = new FileInfo(filePath);
+				return (fi.IsReadOnly);
+			}
+			catch
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Checks whether the given file is writeable.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>
+		/// Returns <c>true</c> if file is writeable.
+		/// </returns>
+		public static bool IsWritable(string filePath)
+		{
+			return (!IsReadOnly(filePath));
+		}
+
+		/// <summary>
 		/// Tries to delete file <paramref name="filePath"/>.
 		/// </summary>
 		/// <returns>

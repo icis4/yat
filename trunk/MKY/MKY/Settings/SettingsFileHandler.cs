@@ -179,23 +179,13 @@ namespace MKY.Settings
 				if (!FileExists)
 					return (false);
 
-				try
-				{
-					// Force exception if file is not accessible:
-					FileInfo fi = new FileInfo(this.filePath);
-					return (true);
-				}
-				catch
-				{
-					return (false);
-				}
+				return (FileEx.IsReadable(this.filePath));
 			}
 		}
 
 		/// <summary>
 		/// Returns whether setting file is read-only.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual bool FileIsReadOnly
 		{
 			get
@@ -204,15 +194,7 @@ namespace MKY.Settings
 				if (!FileExists)
 					return (false);
 
-				try
-				{
-					FileInfo fi = new FileInfo(this.filePath);
-					return (fi.IsReadOnly);
-				}
-				catch
-				{
-					return (false);
-				}
+				return (FileEx.IsReadOnly(this.filePath));
 			}
 		}
 
@@ -290,7 +272,7 @@ namespace MKY.Settings
 			object result = null; // If not successful, return <c>null</c>.
 
 			// First check for file to minimize exceptions thrown.
-			if (FileExists && FileIsReadable)
+			if (File.Exists(filePath) && FileEx.IsReadable(filePath))
 			{
 				// First, always try standard deserialization:
 				//  > This is the fastest way of deserialization
@@ -367,7 +349,7 @@ namespace MKY.Settings
 		{
 			bool success = false;
 
-			if (FilePathIsValid && FileIsWritable)
+			if (PathEx.IsValid(filePath) && FileEx.IsWritable(filePath))
 			{
 				string backup = filePath + IO.FileEx.BackupFileExtension;
 
