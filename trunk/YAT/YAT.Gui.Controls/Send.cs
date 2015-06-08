@@ -152,7 +152,7 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands
 		{
-			set { sendCommand.Recents = value; }
+			set { sendCommand.Recent = value; }
 		}
 
 		/// <summary>
@@ -173,7 +173,7 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentFileCommands
 		{
-			set { sendFile.Recents = value; }
+			set { sendFile.Recent = value; }
 		}
 
 		/// <summary></summary>

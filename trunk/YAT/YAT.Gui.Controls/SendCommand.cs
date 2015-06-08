@@ -121,7 +121,7 @@ namespace YAT.Gui.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private Command command = new Command();
-		private RecentItemCollection<Command> recents;
+		private RecentItemCollection<Command> recent;
 		private Domain.Parser.Modes parseMode = ParseModeDefault;
 		private bool sendImmediately = SendImmediatelyDefault;
 
@@ -215,16 +215,16 @@ namespace YAT.Gui.Controls
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is intended.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual RecentItemCollection<Command> Recents
+		public virtual RecentItemCollection<Command> Recent
 		{
 			set
 			{
 				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-				// Do not check if (this.recents != value) because the collection will always be the same!
+				// Do not check if (this.recent != value) because the collection will always be the same!
 
-				this.recents = value;
-				SetRecentsControls(); // Recents must immediately be updated, otherwise order will be wrong on arrow-up/down.
+				this.recent = value;
+				SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
 				CommandDebugMessageLeave();
 			}
@@ -394,7 +394,7 @@ namespace YAT.Gui.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetRecentsControls();
+				SetRecentControls();
 				SetCommandControls();
 				SetCursorToEnd();
 			}
@@ -622,7 +622,7 @@ namespace YAT.Gui.Controls
 		// Private Methods > Set Controls
 		//------------------------------------------------------------------------------------------
 
-		private void SetRecentsControls()
+		private void SetRecentControls()
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
@@ -633,8 +633,8 @@ namespace YAT.Gui.Controls
 			int selectionLength = comboBox_Command.SelectionLength;
 
 			comboBox_Command.Items.Clear();
-			if ((this.recents != null) && (this.recents.Count > 0))
-				comboBox_Command.Items.AddRange(this.recents.ToArray());
+			if ((this.recent != null) && (this.recent.Count > 0))
+				comboBox_Command.Items.AddRange(this.recent.ToArray());
 
 			// Immediately update the updated item list:
 			comboBox_Command.Refresh();
@@ -932,8 +932,8 @@ namespace YAT.Gui.Controls
 			Debug.Write    (" with cursor @ " + comboBox_Command.SelectionStart);
 			Debug.WriteLine(" and sel.idx @ " + comboBox_Command.SelectedIndex);
 
-			if (this.recents != null)
-				Debug.WriteLine("Recents = " + ArrayEx.ElementsToString(this.recents.ToArray()));
+			if (this.recent != null)
+				Debug.WriteLine("Recent = " + ArrayEx.ElementsToString(this.recent.ToArray()));
 		}
 
 		#endregion

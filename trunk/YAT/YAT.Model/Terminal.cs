@@ -1729,9 +1729,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Recents
+		#region Recent Files
 		//==========================================================================================
-		// Recents
+		// Recent Files
 		//==========================================================================================
 
 		/// <summary>
@@ -2407,10 +2407,10 @@ namespace YAT.Model
 					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type!"));
 				}
 
-				// Copy line commands into recents, include compiled partial commands:
+				// Copy line commands into recent commands, include compiled partial commands:
 				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialTextEol)
 				{
-					// Clone the command for the recents collection:
+					// Clone the command for the recent commands collection:
 					Command clone;
 					if (!c.IsPartialTextEol)
 						clone = new Command(c); // 'Normal' case, simply clone the command.
@@ -2526,7 +2526,7 @@ namespace YAT.Model
 				);
 			}
 
-			// Clone the command for the recents collection:
+			// Clone the command for the recent commands collection:
 			Command clone = new Command(c);
 
 			// Put clone into recent history:

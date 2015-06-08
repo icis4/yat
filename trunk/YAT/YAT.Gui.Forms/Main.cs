@@ -459,8 +459,7 @@ namespace YAT.Gui.Forms
 
 			this.isSettingControls.Enter();
 
-			bool recentsAreReady = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
-			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
+			toolStripMenuItem_MainMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
 
 			this.isSettingControls.Leave();
 		}
@@ -827,8 +826,7 @@ namespace YAT.Gui.Forms
 
 			this.isSettingControls.Enter();
 
-			bool recentsAreReady = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
-			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = recentsAreReady;
+			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
 
 			this.isSettingControls.Leave();
 		}
@@ -873,19 +871,19 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private List<ToolStripMenuItem> menuItems_recents;
+		private List<ToolStripMenuItem> menuItems_recent;
 
 		private void contextMenuStrip_FileRecent_InitializeControls()
 		{
-			this.menuItems_recents = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_1);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_2);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_3);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_4);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_5);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_6);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_7);
-			this.menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_8);
+			this.menuItems_recent = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_1);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_2);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_3);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_4);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_5);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_6);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_7);
+			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_8);
 		}
 
 		/// <remarks>
@@ -900,8 +898,8 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 			{
 				string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1);
-				this.menuItems_recents[i].Text = "&" + prefix;
-				this.menuItems_recents[i].Visible = false;
+				this.menuItems_recent[i].Text = "&" + prefix;
+				this.menuItems_recent[i].Visible = false;
 			}
 
 			// Show valid.
@@ -911,15 +909,15 @@ namespace YAT.Gui.Forms
 				string file = PathEx.LimitPath(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
 				if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 				{
-					this.menuItems_recents[i].Text = "&" + prefix + file;
-					this.menuItems_recents[i].Enabled = true;
+					this.menuItems_recent[i].Text = "&" + prefix + file;
+					this.menuItems_recent[i].Enabled = true;
 				}
 				else
 				{
-					this.menuItems_recents[i].Text = "&" + prefix;
-					this.menuItems_recents[i].Enabled = false;
+					this.menuItems_recent[i].Text = "&" + prefix;
+					this.menuItems_recent[i].Enabled = false;
 				}
-				this.menuItems_recents[i].Visible = true;
+				this.menuItems_recent[i].Visible = true;
 			}
 
 			this.isSettingControls.Leave();

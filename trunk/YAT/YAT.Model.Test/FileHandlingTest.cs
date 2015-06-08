@@ -1860,16 +1860,16 @@ namespace YAT.Model.Test
 
 			// Verify recent settings.
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
-				Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path doesn't exist in recents!");
+				Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path doesn't exist in recent files!");
 			else
-				Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path must not be in recents!");
+				Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), prefix + "Workspace file path must not be in recent files!");
 
 			for (int i = 0; i < terminal.Length; i++)
 			{
 				if (terminalFileExpected[i] && (!terminalFileAutoExpected[i]))
-					Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path doesn't exist in recents!");
+					Assert.IsTrue(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path doesn't exist in recent files!");
 				else
-					Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path must not be in recents!");
+					Assert.IsFalse(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Contains(terminal[i].SettingsFilePath), prefix + "Terminal file path must not be in recent files!");
 			}
 		}
 
