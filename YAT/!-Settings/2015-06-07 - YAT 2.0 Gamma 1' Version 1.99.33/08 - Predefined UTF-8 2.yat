@@ -2,7 +2,7 @@
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
   <SettingsVersion>1.4.0</SettingsVersion>
-  <ProductVersion>1.99.32</ProductVersion>
+  <ProductVersion>1.99.33</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
     <TimeStamp>2015-05-29T15:36:02.5975871+02:00</TimeStamp>
@@ -36,7 +36,7 @@
         </SerialPort>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
-          <RemoteHost>localhost</RemoteHost>
+          <RemoteHost>&lt;localhost&gt;</RemoteHost>
           <RemoteTcpPort>10000</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
