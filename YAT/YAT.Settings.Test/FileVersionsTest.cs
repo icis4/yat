@@ -748,6 +748,148 @@ namespace YAT.Settings.Test
 
 		#endregion
 
+		#region Tests > YAT 2.0 Gamma 1' Version 1.99.33
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Gamma 1' Version 1.99.33
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		public virtual void Test_V1_99_33_TerminalSettingsCase01()
+		{
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		public virtual void Test_V1_99_33_TerminalSettingsCase02()
+		{
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_33_TerminalSettingsCase03()
+		{
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_33_WorkspaceSettingsCase04()
+		{
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_33.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_33_TerminalSettingsCase05()
+		{
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_33_WorkspaceSettingsCase06()
+		{
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_33.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_33_TerminalSettingsCase07()
+		{
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_33_WorkspaceSettingsCase08()
+		{
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_33.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
+		}
+
+		#endregion
+
+		#region Tests > YAT 2.0 Gamma 1'' Version 1.99.34
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Gamma 1'' Version 1.99.34
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		public virtual void Test_V1_99_34_TerminalSettingsCase01()
+		{
+			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		public virtual void Test_V1_99_34_TerminalSettingsCase02()
+		{
+			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_34_TerminalSettingsCase03()
+		{
+			ExecuteSettingsCase03(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_03_COM1_Closed_Predefined]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_34_WorkspaceSettingsCase04()
+		{
+			ExecuteSettingsCase04(SettingsFilesProvider.FilePaths_V1_99_34.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_04_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_34_TerminalSettingsCase05()
+		{
+			ExecuteSettingsCase05(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_05_COM1_Open_Recent]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_34_WorkspaceSettingsCase06()
+		{
+			ExecuteSettingsCase06(SettingsFilesProvider.FilePaths_V1_99_34.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_06_Matthias]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_34_TerminalSettingsCase07()
+		{
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[Test]
+		public virtual void Test_V1_99_34_WorkspaceSettingsCase08()
+		{
+			ExecuteSettingsCase08(SettingsFilesProvider.FilePaths_V1_99_34.WorkspaceFilePaths[WorkspaceSettingsTestCase.W_08_Matthias]);
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Set Up Settings
