@@ -96,10 +96,10 @@
           <xs:element minOccurs="0" maxOccurs="1" name="SerialPortId" type="SerialPortId" />
           <xs:element minOccurs="0" maxOccurs="1" name="SerialPortCommunication" type="SerialCommunicationSettings" />
           <xs:element minOccurs="1" maxOccurs="1" name="SerialPortAutoReopen" type="AutoRetry" />
-          <xs:element minOccurs="0" maxOccurs="1" name="SocketRemoteHost" type="IPHost" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SocketRemoteHost" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="SocketRemoteTcpPort" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="SocketRemoteUdpPort" type="xs:int" />
-          <xs:element minOccurs="0" maxOccurs="1" name="SocketLocalInterface" type="IPNetworkInterface" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SocketLocalInterface" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="SocketLocalTcpPort" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="SocketLocalUdpPort" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="TcpClientAutoReconnect" type="AutoRetry" />
@@ -139,17 +139,6 @@
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="Interval" type="xs:int" />
     </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="IPHost">
-    <xs:complexContent mixed="false">
-      <xs:extension base="EnumEx" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="EnumEx" abstract="true" />
-  <xs:complexType name="IPNetworkInterface">
-    <xs:complexContent mixed="false">
-      <xs:extension base="EnumEx" />
-    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="DeviceInfo">
     <xs:sequence>

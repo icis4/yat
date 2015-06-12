@@ -164,7 +164,7 @@
           <xs:element minOccurs="1" maxOccurs="1" name="NameChannel" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="NameDate" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="NameTime" type="xs:boolean" />
-          <xs:element minOccurs="0" maxOccurs="1" name="NameSeparator" type="FileNameSeparator" />
+          <xs:element minOccurs="0" maxOccurs="1" name="NameSeparator" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -175,7 +175,6 @@
       <xs:enumeration value="Append" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="FileNameSeparator" />
   <xs:complexType name="FormatSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
