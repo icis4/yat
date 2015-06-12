@@ -2654,7 +2654,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Resumes all currently breaked operations in the terminal.
+		/// Resumes all currently suspended operations in the terminal.
 		/// </summary>
 		public virtual void ResumeBreak()
 		{

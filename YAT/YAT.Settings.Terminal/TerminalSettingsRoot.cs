@@ -35,7 +35,7 @@ namespace YAT.Settings.Terminal
 	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.4.0";
+		private string settingsVersion = "1.4.1";
 
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string productVersion = Utilities.ApplicationInfo.ProductVersion;

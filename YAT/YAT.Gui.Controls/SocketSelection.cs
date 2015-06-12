@@ -53,17 +53,15 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType DefaultHostType                      = SocketHostType.TcpAutoSocket;
+		private const SocketHostType DefaultHostType                     = SocketHostType.TcpAutoSocket;
 
-		private static readonly IPHost DefaultRemoteHost                  = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
-		private static readonly IPAddress DefaultResolvedRemoteIPAddress  = MKY.IO.Serial.Socket.SocketSettings.DefaultResolvedRemoteIPAddress;
-		private const int DefaultRemoteTcpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
-		private const int DefaultRemoteUdpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
+		private static readonly IPHost DefaultRemoteHost                 = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
+		private const int DefaultRemoteTcpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
+		private const int DefaultRemoteUdpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
 
-		private static readonly IPNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
-		private static readonly IPAddress DefaultResolvedLocalIPAddress   = MKY.IO.Serial.Socket.SocketSettings.DefaultResolvedLocalIPAddress;
-		private const int DefaultLocalTcpPort                             = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
-		private const int DefaultLocalUdpPort                             = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
+		private static readonly IPNetworkInterface DefaultLocalInterface = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
+		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
 
 		#endregion
 
@@ -83,12 +81,10 @@ namespace YAT.Gui.Controls
 		private SocketHostType hostType = DefaultHostType;
 
 		private IPHost remoteHost                 = DefaultRemoteHost;
-		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 		private int remoteTcpPort                 = DefaultRemoteTcpPort;
 		private int remoteUdpPort                 = DefaultRemoteUdpPort;
 
 		private IPNetworkInterface localInterface = DefaultLocalInterface;
-		private IPAddress resolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
 		private int localTcpPort                  = DefaultLocalTcpPort;
 		private int localUdpPort                  = DefaultLocalUdpPort;
 
@@ -184,14 +180,6 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual IPAddress ResolvedRemoteIPAddress
-		{
-			get { return (this.resolvedRemoteIPAddress); }
-		}
-
-		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The remote TCP port.")]
 		[DefaultValue(DefaultRemoteTcpPort)]
@@ -238,24 +226,10 @@ namespace YAT.Gui.Controls
 				if (this.localInterface != value)
 				{
 					this.localInterface = value;
-
-					if (value != null) // In case there is no interface at all (e.g. offline laptop).
-						this.resolvedLocalIPAddress = value.IPAddress;
-					else
-						this.resolvedLocalIPAddress = IPAddress.None;
-
 					SetControls();
 					OnLocalInterfaceChanged(EventArgs.Empty);
 				}
 			}
-		}
-
-		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual IPAddress ResolvedLocalIPAddress
-		{
-			get { return (this.resolvedLocalIPAddress); }
 		}
 
 		/// <summary></summary>
@@ -348,6 +322,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
@@ -361,50 +336,26 @@ namespace YAT.Gui.Controls
 				if ((host != null) && (host.IPAddress != IPAddress.None) && StringEx.EqualsOrdinalIgnoreCase(host.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = host;
-					this.resolvedRemoteIPAddress = RemoteHost.IPAddress;
 				}
 				else
 				{
-					IPHost ipHost;
 					IPAddress ipAddress;
-					string nameOrAddress;
-					nameOrAddress = comboBox_RemoteHost.Text;
-
-					if (IPHost.TryParse(nameOrAddress, out ipHost))
+					if (IPResolver.TryResolveRemoteHost(comboBox_RemoteHost.Text, out ipAddress))
 					{
-						RemoteHost = ipHost;
-					}
-					else if (IPAddress.TryParse(nameOrAddress, out ipAddress))
-					{
-						this.resolvedRemoteIPAddress = ipAddress;
-						RemoteHost = new IPHost(this.resolvedRemoteIPAddress);
+						RemoteHost = new IPHost(ipAddress);
 					}
 					else
 					{
-						try
-						{
-							IPAddress[] ipAddresses;
-							ipAddresses = Dns.GetHostAddresses(nameOrAddress);
-							this.resolvedRemoteIPAddress = ipAddresses[0];
-							RemoteHost = new IPHost(this.resolvedRemoteIPAddress);
-						}
-						catch (ArgumentException ex)
-						{
-							string message =
-								"Remote host name or address is invalid!" + Environment.NewLine + Environment.NewLine +
-								"System error message:" + Environment.NewLine + ex.Message;
+						MessageBoxEx.Show
+						(
+							this,
+							"Remote host name or address is invalid!",
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+						);
 
-							MessageBoxEx.Show
-							(
-								this,
-								message,
-								"Invalid Input",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Error
-							);
-
-							e.Cancel = true;
-						}
+						e.Cancel = true;
 					}
 				}
 			}

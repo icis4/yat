@@ -28,11 +28,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
+using System.Xml.Serialization;
 
 using MKY.Collections;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Recent;
+using MKY.Text;
+using MKY.Windows.Forms;
 using MKY.Xml.Serialization;
 
 using NUnit.Framework;
@@ -98,6 +102,125 @@ namespace MKY.Test.Xml.Serialization
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanTrue", FileExtension);
 			b = true;
 			TestSerializationChain(filePath, typeof(bool), b);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > SimpleEnum
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > SimpleEnum
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// A simple enum 0, 1, 2,... can easy be serialized. However, serialization results in an
+		/// XML elemnt that contains the enum's string, e.g. "Horizontal". This may be intentional,
+		/// but can also be difficult to understand.
+		/// </summary>
+		[Test]
+		public virtual void TestSimpleEnumSerialization()
+		{
+			string filePath = "";
+			Orientation e;
+
+			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnum_0_Horizontal", FileExtension);
+			e = Orientation.Horizontal;
+			TestSerializationChain(filePath, typeof(Orientation), e);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnum_1_Vertical", FileExtension);
+			e = Orientation.Vertical;
+			TestSerializationChain(filePath, typeof(Orientation), e);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > SimpleEnumEx
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > SimpleEnumEx
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// <see cref="EnumEx"/> based types are not serializable because <see cref="Enum"/> isn't.
+		/// </summary>
+		[Test]
+		public virtual void TestSimpleEnumExSerialization()
+		{
+#if (FALSE) // See 'summary' above.
+			string filePath = "";
+			OrientationEx x;
+
+			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnumEx_0_Horizontal", FileExtension);
+			x = (OrientationEx)Orientation.Horizontal;
+			TestSerializationChain(filePath, typeof(OrientationEx), x);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnumEx_1_Vertical", FileExtension);
+			x = (OrientationEx)Orientation.Vertical;
+			TestSerializationChain(filePath, typeof(OrientationEx), x);
+#endif
+		}
+
+		#endregion
+
+		#region Tests > Serialization > ComplexEnum
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > ComplexEnum
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Default serialization also works for a complex enum as shown below. However, the
+		/// <see cref="TolerantXmlSerializer"/> is not able to deserialize such enum, because it
+		/// does not provide an element 0. This issue has been remarked at bug #232 "Issues with
+		/// TolerantXmlSerializer".
+		/// </summary>
+		[Test]
+		public virtual void TestComplexEnumSerialization()
+		{
+#if (FALSE) // See 'summary' above.
+			string filePath = "";
+			SupportedEncoding e;
+
+			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_ASCII_20127", FileExtension);
+			e = SupportedEncoding.ASCII;
+			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_Windows1252", FileExtension);
+			e = SupportedEncoding.Windows1252;
+			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_UTF8_65001", FileExtension);
+			e = SupportedEncoding.UTF8;
+			TestSerializationChain(filePath, typeof(SupportedEncoding), e);
+#endif
+		}
+
+		#endregion
+
+		#region Tests > Serialization > ComplexEnumEx
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > ComplexEnumEx
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// <see cref="EnumEx"/> based types are not serializable because <see cref="Enum"/> isn't.
+		/// </summary>
+		[Test]
+		public virtual void TestComplexEnumExSerialization()
+		{
+#if (FALSE) // See 'summary' above.
+			string filePath = "";
+			EncodingEx x;
+
+			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_ASCII_20127", FileExtension);
+			x = (EncodingEx)SupportedEncoding.ASCII;
+			TestSerializationChain(filePath, typeof(EncodingEx), x);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_Windows1252", FileExtension);
+			x = (EncodingEx)SupportedEncoding.Windows1252;
+			TestSerializationChain(filePath, typeof(EncodingEx), x);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_UTF8_65001", FileExtension);
+			x = (EncodingEx)SupportedEncoding.UTF8;
+			TestSerializationChain(filePath, typeof(EncodingEx), x);
+#endif
 		}
 
 		#endregion

@@ -329,7 +329,7 @@ namespace YAT.Gui.Forms
 		private void comboBox_Options_NameSeparator_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.NameSeparator = (Log.FileNameSeparator)(string)comboBox_Options_NameSeparator.Text;
+				this.settingsInEdit.NameSeparator = (Log.FileNameSeparator)(comboBox_Options_NameSeparator.Text);
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)

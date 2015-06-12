@@ -192,7 +192,6 @@ namespace YAT.Gui.Forms
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
 			this.settingsInEdit.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
-			this.settingsInEdit.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
 		}
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
@@ -208,7 +207,6 @@ namespace YAT.Gui.Forms
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
 			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
-			this.settingsInEdit.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)

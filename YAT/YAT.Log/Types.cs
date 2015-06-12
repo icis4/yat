@@ -87,7 +87,6 @@ namespace YAT.Log
 
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-	[Serializable]
 	public class FileNameSeparator : IEquatable<FileNameSeparator>
 	{
 		#region String Definitions
@@ -321,7 +320,8 @@ namespace YAT.Log
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_description))
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_description) ||
+			         string.IsNullOrEmpty(s)) // Default!
 			{
 				result = None;
 				return (true);

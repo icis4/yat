@@ -86,7 +86,7 @@ namespace MKY.IO
 			{
 				// Force exception if file is not accessible:
 				FileInfo fi = new FileInfo(filePath);
-				return (true);
+				return (fi.Exists);
 			}
 			catch
 			{
@@ -107,7 +107,7 @@ namespace MKY.IO
 			try
 			{
 				FileInfo fi = new FileInfo(filePath);
-				return (fi.IsReadOnly);
+				return (fi.Exists && fi.IsReadOnly);
 			}
 			catch
 			{

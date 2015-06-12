@@ -86,8 +86,14 @@ namespace YAT.Log
 
 			/// <summary></summary>
 			protected Log(bool enabled, string file, LogFileWriteMode writeMode)
+				: this(enabled, file, writeMode, "")
 			{
-				Initialize(enabled, file, writeMode, new FileNameSeparator(""));
+			}
+
+			/// <summary></summary>
+			protected Log(bool enabled, string file, LogFileWriteMode writeMode, string separator)
+				: this(enabled, file, writeMode, (FileNameSeparator)separator)
+			{
 			}
 
 			/// <summary></summary>
@@ -99,7 +105,7 @@ namespace YAT.Log
 			private void Initialize(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
 				this.isEnabled = enabled;
-				this.file = file;
+				this.file      = file;
 				this.writeMode = writeMode;
 				this.separator = separator;
 			}
@@ -187,7 +193,13 @@ namespace YAT.Log
 			/// <summary></summary>
 			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode)
 			{
-				SetSettings(enabled, file, writeMode, new FileNameSeparator(""));
+				SetSettings(enabled, file, writeMode, "");
+			}
+
+			/// <summary></summary>
+			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, string separator)
+			{
+				SetSettings(enabled, file, writeMode, (FileNameSeparator)separator);
 			}
 
 			/// <summary></summary>
@@ -344,6 +356,12 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
+			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode, string separator)
+				: base(enabled, file, writeMode, (FileNameSeparator)separator)
+			{
+			}
+
+			/// <summary></summary>
 			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 				: base(enabled, file, writeMode, separator)
 			{
@@ -405,6 +423,12 @@ namespace YAT.Log
 			/// <summary></summary>
 			public TextLog(bool enabled, string file, LogFileWriteMode writeMode)
 				: base(enabled, file, writeMode)
+			{
+			}
+
+			/// <summary></summary>
+			public TextLog(bool enabled, string file, LogFileWriteMode writeMode, string separator)
+				: base(enabled, file, writeMode, (FileNameSeparator)separator)
 			{
 			}
 
@@ -494,13 +518,13 @@ namespace YAT.Log
 			this.rawLogs = new List<Log>();
 			this.neatLogs = new List<Log>();
 
-			this.rawLogs.Add(this.rawTxLog = new BinaryLog(this.settings.RawLogTx, this.settings.RawTxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.rawLogs.Add(this.rawTxLog    = new BinaryLog(this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
 			this.rawLogs.Add(this.rawBidirLog = new BinaryLog(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
-			this.rawLogs.Add(this.rawRxLog = new BinaryLog(this.settings.RawLogRx, this.settings.RawRxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.rawLogs.Add(this.rawRxLog    = new BinaryLog(this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
 
-			this.neatLogs.Add(this.neatTxLog = new TextLog(this.settings.NeatLogTx, this.settings.NeatTxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.neatLogs.Add(this.neatTxLog    = new TextLog(this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
 			this.neatLogs.Add(this.neatBidirLog = new TextLog(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
-			this.neatLogs.Add(this.neatRxLog = new TextLog(this.settings.NeatLogRx, this.settings.NeatRxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.neatLogs.Add(this.neatRxLog    = new TextLog(this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
 
 			this.logs.AddRange(this.rawLogs);
 			this.logs.AddRange(this.neatLogs);
@@ -573,13 +597,13 @@ namespace YAT.Log
 			{
 				this.settings = value;
 
-				this.rawTxLog.SetSettings(this.settings.RawLogTx, this.settings.RawTxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.rawTxLog.SetSettings   (this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
 				this.rawBidirLog.SetSettings(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
-				this.rawRxLog.SetSettings(this.settings.RawLogRx, this.settings.RawRxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.rawRxLog.SetSettings   (this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
 
-				this.neatTxLog.SetSettings(this.settings.NeatLogTx, this.settings.NeatTxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
 				this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
-				this.neatRxLog.SetSettings(this.settings.NeatLogRx, this.settings.NeatRxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
 			}
 		}
 

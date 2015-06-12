@@ -683,8 +683,11 @@ namespace MKY.Text
 	/// <summary>
 	/// Extended enum XEncoding.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	[Serializable]
 	public class EncodingEx : EnumEx
 	{
 		private struct EncodingInfoEx
