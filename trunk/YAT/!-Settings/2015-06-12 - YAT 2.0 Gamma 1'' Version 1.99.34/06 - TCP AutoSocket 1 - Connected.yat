@@ -36,7 +36,7 @@
         </SerialPort>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
-          <RemoteHost>&lt;localhost&gt;</RemoteHost>
+          <RemoteHost>&lt;Localhost&gt;</RemoteHost>
           <RemoteTcpPort>10000</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
