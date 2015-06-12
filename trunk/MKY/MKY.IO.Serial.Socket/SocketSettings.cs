@@ -224,7 +224,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("RemoteHost")]
@@ -323,7 +323,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("LocalInterface")]
@@ -343,7 +343,6 @@ namespace MKY.IO.Serial.Socket
 						this.resolvedLocalIPAddress = ipAddress;
 					else
 						this.resolvedLocalIPAddress = DefaultResolvedLocalIPAddress;
-
 				}
 			}
 		}

@@ -116,6 +116,7 @@ namespace MKY.Test.Xml.Serialization
 		/// XML elemnt that contains the enum's string, e.g. "Horizontal". This may be intentional,
 		/// but can also be difficult to understand.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'enum's'?")]
 		[Test]
 		public virtual void TestSimpleEnumSerialization()
 		{

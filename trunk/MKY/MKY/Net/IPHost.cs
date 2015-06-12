@@ -60,7 +60,7 @@ namespace MKY.Net
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
-	/// Make sure to use the underlying enum for serialization!
+	/// Make sure to use the underlying enum for serialization.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	public class IPHost : EnumEx
@@ -122,7 +122,52 @@ namespace MKY.Net
 
 		#endregion
 
-		#region ToString
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			IPHost other = (IPHost)obj;
+			if ((IPHostType)UnderlyingEnum == IPHostType.Other)
+			{
+				return
+				(
+					base.Equals(other) &&
+					(this.otherAddress == other.otherAddress)
+				);
+			}
+			else
+			{
+				return (base.Equals(other));
+			}
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		public override int GetHashCode()
+		{
+			if ((IPHostType)UnderlyingEnum == IPHostType.Other)
+			{
+				return
+				(
+					base.GetHashCode() ^
+					this.otherAddress.GetHashCode()
+				);
+			}
+			else
+			{
+				return (base.GetHashCode());
+			}
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
