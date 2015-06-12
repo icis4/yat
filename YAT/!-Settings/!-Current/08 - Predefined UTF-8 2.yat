@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
-  <SettingsVersion>1.4.0</SettingsVersion>
-  <ProductVersion>1.99.33</ProductVersion>
+  <SettingsVersion>1.4.1</SettingsVersion>
+  <ProductVersion>1.99.34</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2015-05-29T15:36:02.5975871+02:00</TimeStamp>
+    <TimeStamp>2015-06-12T10:44:22.9161656+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -254,12 +254,12 @@
     <Window>
       <State>Normal</State>
       <Location>
-        <X>394</X>
+        <X>390</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>394</Width>
-        <Height>496</Height>
+        <Width>390</Width>
+        <Height>485</Height>
       </Size>
     </Window>
     <Layout>
@@ -270,7 +270,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.6296296</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.6042781</PredefinedSplitterRatio>
       <SendCommandPanelIsVisible>true</SendCommandPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
