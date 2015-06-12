@@ -2,7 +2,7 @@
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
   <SettingsVersion>1.4.0</SettingsVersion>
-  <ProductVersion>1.99.32</ProductVersion>
+  <ProductVersion>1.99.33</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
     <TimeStamp>2015-05-29T15:34:07.0673007+02:00</TimeStamp>
