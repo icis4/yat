@@ -53,9 +53,12 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum CharSubstitutionEx.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	[Serializable]
 	public class CharSubstitutionEx : EnumEx
 	{
 		#region String Definitions
@@ -130,12 +133,7 @@ namespace YAT.Domain
 		{
 			s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
-			{
-				result = new CharSubstitutionEx(CharSubstitution.None);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.ToUpper);
 				return (true);
@@ -143,6 +141,12 @@ namespace YAT.Domain
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToLower_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.ToLower);
+				return (true);
+			}
+			else if ((StringEx.EqualsOrdinalIgnoreCase(s, None_string)) ||
+			         (string.IsNullOrEmpty(s))) // Default!
+			{
+				result = new CharSubstitutionEx(CharSubstitution.None);
 				return (true);
 			}
 			else

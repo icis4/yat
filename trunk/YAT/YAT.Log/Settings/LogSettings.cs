@@ -713,8 +713,23 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("NameSeparator")]
+		/// <remarks>
+		/// \fixme MKY 2015-06-12 (focus on releasing 1.99.34, real fix must be postponed)
+		/// <see cref="FileNameSeparator"/> does a string to EnumEx to string conversion.
+		/// This leads to a severe issue:
+		///  - Serialization must be done with reduced string (e.g. "_").
+		///  - But ToString() must return the user friendly string!
+		/// 
+		/// Work-around:
+		///  - This property is used for all operations.
+		///  - The property below is used for serialization.
+		/// 
+		/// Potential solutions:
+		///  - Upgrade <see cref="FileNameSeparator"/> to EnumEx? E.g. like 'MKY.Net.IPHost'.
+		///  - <see cref="Log"/> and <see cref="LogSettings"/> string only,
+		///    <see cref="FileNameSeparator"/> only used for GUI?
+		/// </remarks>
+		[XmlIgnore]
 		public virtual FileNameSeparator NameSeparator
 		{
 			get { return (this.nameSeparator); }
@@ -723,6 +738,21 @@ namespace YAT.Log.Settings
 				if (this.nameSeparator != value)
 				{
 					this.nameSeparator = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("NameSeparator")]
+		public virtual string NameSeparator_
+		{
+			get { return (this.nameSeparator.Separator); }
+			set
+			{
+				if (this.nameSeparator.Separator != value)
+				{
+					this.nameSeparator = new FileNameSeparator(value);
 					SetChanged();
 				}
 			}

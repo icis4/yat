@@ -166,19 +166,17 @@ namespace MKY.IO.Serial.Socket
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			HostType                = rhs.HostType;
+			HostType               = rhs.HostType;
 
-			RemoteHost              = rhs.RemoteHost;
-			ResolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
-			RemoteTcpPort           = rhs.RemoteTcpPort;
-			RemoteUdpPort           = rhs.RemoteUdpPort;
+			RemoteHost             = rhs.RemoteHost;
+			RemoteTcpPort          = rhs.RemoteTcpPort;
+			RemoteUdpPort          = rhs.RemoteUdpPort;
 
-			LocalInterface          = rhs.LocalInterface;
-			ResolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
-			LocalTcpPort            = rhs.LocalTcpPort;
-			LocalUdpPort            = rhs.LocalUdpPort;
+			LocalInterface         = rhs.LocalInterface;
+			LocalTcpPort           = rhs.LocalTcpPort;
+			LocalUdpPort           = rhs.LocalUdpPort;
 
-			TcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
+			TcpClientAutoReconnect = rhs.TcpClientAutoReconnect;
 
 			ClearChanged();
 		}
@@ -190,19 +188,17 @@ namespace MKY.IO.Serial.Socket
 		{
 			base.SetMyDefaults();
 
-			HostType                = SocketHostType.TcpAutoSocket;
+			HostType               = SocketHostType.TcpAutoSocket;
 
-			RemoteHost              = DefaultRemoteHost;
-			ResolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
-			RemoteTcpPort           = DefaultRemoteTcpPort;
-			RemoteUdpPort           = DefaultRemoteUdpPort;
+			RemoteHost             = DefaultRemoteHost;
+			RemoteTcpPort          = DefaultRemoteTcpPort;
+			RemoteUdpPort          = DefaultRemoteUdpPort;
 
-			LocalInterface          = DefaultLocalInterface;
-			ResolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
-			LocalTcpPort            = DefaultLocalTcpPort;
-			LocalUdpPort            = DefaultLocalUdpPort;
+			LocalInterface         = DefaultLocalInterface;
+			LocalTcpPort           = DefaultLocalTcpPort;
+			LocalUdpPort           = DefaultLocalUdpPort;
 
-			TcpClientAutoReconnect  = new AutoRetry(false, 500);
+			TcpClientAutoReconnect = new AutoRetry(false, 500);
 		}
 
 		#endregion
@@ -227,7 +223,9 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("RemoteHost")]
 		public virtual string RemoteHost
@@ -241,7 +239,11 @@ namespace MKY.IO.Serial.Socket
 					SetChanged();
 
 					// Immediately try to resolve the corresponding remote IP address.
-					this.resolvedRemoteIPAddress = IPResolver.ResolveRemoteHost(this.remoteHost);
+					IPAddress ipAddress;
+					if (IPResolver.TryResolveRemoteHost(this.remoteHost, out ipAddress))
+						this.resolvedRemoteIPAddress = ipAddress;
+					else
+						this.resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 				}
 			}
 		}
@@ -251,7 +253,6 @@ namespace MKY.IO.Serial.Socket
 		public virtual IPAddress ResolvedRemoteIPAddress
 		{
 			get { return (this.resolvedRemoteIPAddress); }
-			set { this.resolvedRemoteIPAddress = value;  }
 		}
 
 		/// <summary></summary>
@@ -321,7 +322,9 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[XmlElement("LocalInterface")]
 		public virtual string LocalInterface
@@ -335,7 +338,12 @@ namespace MKY.IO.Serial.Socket
 					SetChanged();
 
 					// Immediately try to resolve the corresponding local IP address.
-					this.resolvedLocalIPAddress = IPResolver.ResolveLocalInterface(this.localInterface);
+					IPAddress ipAddress;
+					if (IPResolver.TryResolveRemoteHost(this.localInterface, out ipAddress))
+						this.resolvedLocalIPAddress = ipAddress;
+					else
+						this.resolvedLocalIPAddress = DefaultResolvedLocalIPAddress;
+
 				}
 			}
 		}
@@ -345,7 +353,6 @@ namespace MKY.IO.Serial.Socket
 		public virtual IPAddress ResolvedLocalIPAddress
 		{
 			get { return (this.resolvedLocalIPAddress); }
-			set { this.resolvedLocalIPAddress = value; }
 		}
 
 		/// <summary></summary>

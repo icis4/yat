@@ -41,7 +41,7 @@ namespace MKY.Net
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static IPAddress ResolveRemoteHost(string remoteHost)
+		public static bool TryResolveRemoteHost(string remoteHost, out IPAddress ipAddress)
 		{
 			IPHost ipHost;
 			if (IPHost.TryParse(remoteHost, out ipHost))
@@ -52,20 +52,23 @@ namespace MKY.Net
 					case IPHostType.IPv4Localhost:
 					case IPHostType.IPv6Localhost:
 					{
-						return (ipHost.IPAddress);
+						ipAddress = ipHost.IPAddress;
+						return (true);
 					}
 
 					case IPHostType.Other:
 					{
 						try
 						{
-							IPAddress[] ipAddresses = System.Net.Dns.GetHostAddresses(remoteHost);
-							return (ipAddresses[0]);
+							IPAddress[] ipAddresses = Dns.GetHostAddresses(remoteHost);
+							ipAddress = ipAddresses[0];
+							return (true);
 						}
 						catch (Exception ex)
 						{
 							DebugEx.WriteException(typeof(IPResolver), ex);
-							return (IPAddress.None);
+							ipAddress = IPAddress.None;
+							return (false);
 						}
 					}
 
@@ -77,13 +80,14 @@ namespace MKY.Net
 			}
 			else
 			{
-				return (IPAddress.None);
+				ipAddress = IPAddress.None;
+				return (false);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static IPAddress ResolveLocalInterface(string localInterface)
+		public static bool TryResolveLocalInterface(string localInterface, out IPAddress ipAddress)
 		{
 			IPNetworkInterface networkInterface;
 			if (IPNetworkInterface.TryParse(localInterface, out networkInterface))
@@ -96,7 +100,8 @@ namespace MKY.Net
 					case IPNetworkInterfaceType.IPv6Any:
 					case IPNetworkInterfaceType.IPv6Loopback:
 					{
-						return (networkInterface.IPAddress);
+						ipAddress = networkInterface.IPAddress;
+						return (true);
 					}
 
 					case IPNetworkInterfaceType.Other:
@@ -104,12 +109,14 @@ namespace MKY.Net
 						try
 						{
 							IPAddress[] ipAddresses = Dns.GetHostAddresses(localInterface);
-							return (ipAddresses[0]);
+							ipAddress = ipAddresses[0];
+							return (true);
 						}
 						catch (Exception ex)
 						{
 							DebugEx.WriteException(typeof(IPResolver), ex);
-							return (IPAddress.None);
+							ipAddress = IPAddress.None;
+							return (false);
 						}
 					}
 
@@ -121,7 +128,8 @@ namespace MKY.Net
 			}
 			else
 			{
-				return (IPAddress.None);
+				ipAddress = IPAddress.None;
+				return (false);
 			}
 		}
 	}

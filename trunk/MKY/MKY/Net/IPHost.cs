@@ -58,8 +58,11 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum IPHost.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-	[Serializable]
 	public class IPHost : EnumEx
 	{
 		#region String Definitions
@@ -253,8 +256,6 @@ namespace MKY.Net
 		{
 			s = s.Trim();
 
-			IPAddress address;
-
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
 			        (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice)))
 			{	// Note that similar code is found in IPNetworkInterface.TryParse()!
@@ -271,15 +272,24 @@ namespace MKY.Net
 				result = new IPHost(IPHostType.IPv6Localhost);
 				return (true);
 			}
-			else if (IPAddress.TryParse(s, out address))
-			{
-				result = new IPHost(address);
-				return (true);
-			}
 			else
 			{
-				result = null;
-				return (false);
+				IPAddress address;
+				if (IPAddress.TryParse(s, out address)) // IP address!
+				{
+					result = new IPHost(address);
+					return (true);
+				}
+				else if (string.IsNullOrEmpty(s)) // Default!
+				{
+					result = new IPHost();
+					return (true);
+				}
+				else
+				{
+					result = null;
+					return (false);
+				}
 			}
 		}
 

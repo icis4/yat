@@ -275,8 +275,11 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extended enum HidUsagePageEx.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	[Serializable]
 	public class HidUsagePageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Undefined"/>.</summary>
@@ -399,8 +402,11 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extended enum HidUsageEx.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	[Serializable]
 	public class HidUsageIdEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsageId.Undefined"/>.</summary>

@@ -49,18 +49,23 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum TerminalTypeEx.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	[Serializable]
 	public class TerminalTypeEx : EnumEx
 	{
 		#region String Definitions
 
 		private const string Text_string      = "Text";
 		private const string Text_stringShort = "T";
+		private const string Text_stringStart = "Tex";
 
 		private const string Binary_string      = "Binary";
 		private const string Binary_stringShort = "B";
+		private const string Binary_stringStart = "Bin";
 
 		#endregion
 
@@ -127,13 +132,15 @@ namespace YAT.Domain
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Text_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Text_stringShort))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Text_stringShort) ||
+			         s.StartsWith(Text_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new TerminalTypeEx(TerminalType.Text);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Binary_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Binary_stringShort))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Binary_stringShort) ||
+			         s.StartsWith(Binary_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
 				result = new TerminalTypeEx(TerminalType.Binary);
 				return (true);

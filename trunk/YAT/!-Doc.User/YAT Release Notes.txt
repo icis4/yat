@@ -61,8 +61,10 @@ YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-??
 ----------------------------------------------------------------------------------------------------
 
 Fixed bugs:
-
-- User settings are again upgraded from the latest previous version (bug #311)
+- SocketException when resolving URL of a not yet available remote host fixed (bug #312)
+- Invalid handling of remote host IP address fixed (bugs #313, #314 and #315)
+- Local user settings (previous workspace/terminals, recent files, window location, preferences) are
+  again loaded from the latest previous version (bug #311)
 
 
 YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-07
@@ -151,11 +153,13 @@ Limitations and known issues:
   (bug #125)
 - Serial COM port limitations of .NET
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101)
-- Serial COM port limitations of certain hardware, e.g. certain USB/RS-232 converters
+- Serial COM port limitations of certain hardware, e.g. certain USB/RS-232 converters (USB CDC)
    > RFR/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported (bug #203)
    > Manual RFR/CTS flow control 'Manual Hardware' and 'Manual Hardware Combined' may not be
      supported on Win7/64 (bug #254)
    > Handling of serial COM port break states may not be supported (feature request #109)
+- Use of USB/RS-232 converters (USB CDC) while sleep or undock without closing the serial COM port
+  leads to an ObjectDisposedException in the system internal infrastructure (bugs #293 and #316)
 - Use of internal serial COM port may lead to slowdown of the application on certain computers; due
   to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown
 - USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they
@@ -166,7 +170,7 @@ Limitations and known issues:
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #139)
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13)
 - Text terminals: Wait for answer line not yet implemented (feature request #19)
-- Sending files cannot be breaked yet (bug #305)
+- Breaking while sending files not possible yet (bug #305)
 - Direct mode does not yet support special formats and commands (feature request #10)
 - Logging is limited to text, RTF format not yet implemented (feature requests #233)
 - XML logging not yet implemented, definition of schema pending (feature requests #26 and #27)

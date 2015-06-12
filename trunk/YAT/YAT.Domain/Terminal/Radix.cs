@@ -62,10 +62,12 @@ namespace YAT.Domain
 
 	#endregion
 
-	/// <summary></summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	[Serializable]
 	public class RadixEx : EnumEx
 	{
 		#region String Definitions
@@ -196,42 +198,43 @@ namespace YAT.Domain
 			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_string))
 			{
 				result = new RadixEx(Radix.Bin);
-				return (false);
+				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_string))
 			{
 				result = new RadixEx(Radix.Oct);
-				return (false);
+				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_string))
 			{
 				result = new RadixEx(Radix.Dec);
-				return (false);
+				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_string))
 			{
 				result = new RadixEx(Radix.Hex);
-				return (false);
+				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Char_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Char_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Char_string))
 			{
 				result = new RadixEx(Radix.Char);
-				return (false);
+				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringMiddle) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, String_string))
+			         StringEx.EqualsOrdinalIgnoreCase(s, String_string) ||
+			         string.IsNullOrEmpty(s)) // Default!
 			{
 				result = new RadixEx(Radix.String);
-				return (false);
+				return (true);
 			}
 			else
 			{

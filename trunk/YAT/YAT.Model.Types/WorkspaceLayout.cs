@@ -74,9 +74,12 @@ namespace YAT.Model.Types
 	/// <summary>
 	/// Extended enum WorkspaceLayoutEx.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	[Serializable]
 	public class WorkspaceLayoutEx : EnumEx
 	{
 		#region String Definitions
@@ -154,12 +157,7 @@ namespace YAT.Model.Types
 		{
 			s = s.Trim();
 
-			if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string))
-			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.Manual);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
 			{
 				result = new WorkspaceLayoutEx(WorkspaceLayout.Cascade);
 				return (true);
@@ -172,6 +170,12 @@ namespace YAT.Model.Types
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileVertical_string))
 			{
 				result = new WorkspaceLayoutEx(WorkspaceLayout.TileVertical);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string) ||
+			         string.IsNullOrEmpty(s)) // Default!
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.Manual);
 				return (true);
 			}
 			else

@@ -301,20 +301,18 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.SerialPort.Communication.FlowControl = this.newTerminalSettings.SerialPortCommunication.FlowControl;
 			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen                = this.newTerminalSettings.SerialPortAutoReopen;
 
-			this.terminalSettings.Terminal.IO.Socket.RemoteHost              = this.newTerminalSettings.SocketRemoteHost;
-			this.terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
-			this.terminalSettings.Terminal.IO.Socket.RemoteTcpPort           = this.newTerminalSettings.SocketRemoteTcpPort;
-			this.terminalSettings.Terminal.IO.Socket.RemoteUdpPort           = this.newTerminalSettings.SocketRemoteUdpPort;
-			this.terminalSettings.Terminal.IO.Socket.LocalInterface          = this.newTerminalSettings.SocketLocalInterface;
-			this.terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
-			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort            = this.newTerminalSettings.SocketLocalTcpPort;
-			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort            = this.newTerminalSettings.SocketLocalUdpPort;
-			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect  = this.newTerminalSettings.TcpClientAutoReconnect;
+			this.terminalSettings.Terminal.IO.Socket.RemoteHost                    = this.newTerminalSettings.SocketRemoteHost;
+			this.terminalSettings.Terminal.IO.Socket.RemoteTcpPort                 = this.newTerminalSettings.SocketRemoteTcpPort;
+			this.terminalSettings.Terminal.IO.Socket.RemoteUdpPort                 = this.newTerminalSettings.SocketRemoteUdpPort;
+			this.terminalSettings.Terminal.IO.Socket.LocalInterface                = this.newTerminalSettings.SocketLocalInterface;
+			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort                  = this.newTerminalSettings.SocketLocalTcpPort;
+			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort                  = this.newTerminalSettings.SocketLocalUdpPort;
+			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect        = this.newTerminalSettings.TcpClientAutoReconnect;
 
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo   = this.newTerminalSettings.UsbSerialHidDeviceInfo;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat = this.newTerminalSettings.UsbSerialHidReportFormat;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxIdUsage    = this.newTerminalSettings.UsbSerialHidRxIdUsage;
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen     = this.newTerminalSettings.UsbSerialHidAutoOpen;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxIdUsage         = this.newTerminalSettings.UsbSerialHidRxIdUsage;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
 
 			this.terminalSettings.TerminalIsStarted = this.newTerminalSettings.StartTerminal;
 		}

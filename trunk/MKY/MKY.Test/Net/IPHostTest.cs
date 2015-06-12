@@ -92,21 +92,6 @@ namespace MKY.Test.Net
 	[TestFixture]
 	public class IPHostTest
 	{
-		#region Tear Down Fixture
-		//==========================================================================================
-		// Tear Down Fixture
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TestFixtureTearDown]
-		public virtual void TestFixtureTearDown()
-		{
-			Temp.CleanTempPath(GetType());
-		}
-
-		#endregion
-
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -153,54 +138,6 @@ namespace MKY.Test.Net
 		public virtual void TestHostEqualsHostString(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(hostString, (string)ipHost);
-		}
-
-		#endregion
-
-		#region Tests > Serialization
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
-		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestSerialization(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
-		{
-			string filePath = Temp.MakeTempFilePath(GetType(), ".xml");
-			IPHost ipHostDeserialized = null;
-
-			// Serialize to file:
-			XmlSerializerTest.TestSerializeToFile(filePath, typeof(IPHost), ipHost);
-
-			// Serialization for this EnumEx cannot work. Therefore, only default case results in success.
-			// Anyway, tests are done to ensure that serialization doesn't throw exceptions.
-			if (ipHostType == IPHostType.Localhost)
-			{
-				// Deserialize from file using different methods and verify the result:
-
-				ipHostDeserialized = (IPHost)XmlSerializerTest.TestDeserializeFromFile(filePath, typeof(IPHost));
-				Assert.AreEqual(ipHost, ipHostDeserialized);
-				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);
-				Assert.AreEqual(ipAddress, (IPAddress)ipHostDeserialized);
-				Assert.AreEqual(ipAddress, ipHostDeserialized.IPAddress);
-				Assert.AreEqual(hostString, (string)ipHostDeserialized);
-
-				ipHostDeserialized = (IPHost)XmlSerializerTest.TestTolerantDeserializeFromFile(filePath, typeof(IPHost));
-				Assert.AreEqual(ipHost, ipHostDeserialized);
-				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);
-				Assert.AreEqual(ipAddress, (IPAddress)ipHostDeserialized);
-				Assert.AreEqual(ipAddress, ipHostDeserialized.IPAddress);
-				Assert.AreEqual(hostString, (string)ipHostDeserialized);
-
-				ipHostDeserialized = (IPHost)XmlSerializerTest.TestAlternateTolerantDeserializeFromFile(filePath, typeof(IPHost));
-				Assert.AreEqual(ipHost, ipHostDeserialized);
-				Assert.AreEqual(ipHostType, (IPHostType)ipHostDeserialized);
-				Assert.AreEqual(ipAddress, (IPAddress)ipHostDeserialized);
-				Assert.AreEqual(ipAddress, ipHostDeserialized.IPAddress);
-				Assert.AreEqual(hostString, (string)ipHostDeserialized);
-			}
 		}
 
 		#endregion

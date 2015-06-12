@@ -39,8 +39,8 @@ namespace MKY
 	/// <remarks>
 	/// Using a normal enum in a client class has the big advantage that code designers and
 	/// features like IntelliSense can use their built-in enum support.
-	/// <see cref="EnumEx"/> based types are not serializable due to the fact that
-	/// <see cref="Enum"/> isn't serializable.
+	/// As a draw-back, <see cref="EnumEx"/> based types are not serializable because it's abstract
+	/// underlying type <see cref="Enum"/> isn't.
 	/// </remarks>
 	/// <example>
 	/// 
@@ -155,7 +155,6 @@ namespace MKY
 	/// </example>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "IntelliSense just contains 'Intelli'...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	[Serializable]
 	public abstract class EnumEx : IEquatable<EnumEx>, IComparable, ICloneable
 	{
 		/// <summary>

@@ -58,8 +58,11 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum IPNetworkInterface.
 	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization!
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-	[Serializable]
 	public class IPNetworkInterface : EnumEx
 	{
 		#region String Definitions
@@ -280,12 +283,21 @@ namespace MKY.Net
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(s, out address))
+				if (IPAddress.TryParse(s, out address)) // IP address!
+				{
 					result = new IPNetworkInterface(address, "");
+					return (true);
+				}
+				else if (string.IsNullOrEmpty(s)) // Default!
+				{
+					result = new IPNetworkInterface();
+					return (true);
+				}
 				else
-					result = new IPNetworkInterface(IPAddress.None, s);
-
-				return (true);
+				{
+					result = null;
+					return (false);
+				}
 			}
 		}
 

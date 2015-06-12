@@ -39,10 +39,10 @@ namespace YAT.Model.Settings
 		private MKY.IO.Serial.SerialPort.SerialCommunicationSettings serialPortCommunication;
 		private MKY.IO.Serial.AutoRetry serialPortAutoReopen;
 
-		private IPHost socketRemoteHost;
+		private string socketRemoteHost;
 		private int socketRemoteTcpPort;
 		private int socketRemoteUdpPort;
-		private IPNetworkInterface socketLocalInterface;
+		private string socketLocalInterface;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
@@ -233,9 +233,11 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// </remarks>
 		[XmlElement("SocketRemoteHost")]
-		public virtual IPHost SocketRemoteHost
+		public virtual string SocketRemoteHost
 		{
 			get { return (this.socketRemoteHost); }
 			set
@@ -278,9 +280,11 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// </remarks>
 		[XmlElement("SocketLocalInterface")]
-		public virtual IPNetworkInterface SocketLocalInterface
+		public virtual string SocketLocalInterface
 		{
 			get { return (this.socketLocalInterface); }
 			set
