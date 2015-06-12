@@ -234,7 +234,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("SocketRemoteHost")]
 		public virtual string SocketRemoteHost
@@ -281,7 +281,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Must be string because an 'EnumEx' cannot be serialized!
+		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
 		[XmlElement("SocketLocalInterface")]
 		public virtual string SocketLocalInterface

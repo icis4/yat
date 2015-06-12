@@ -170,9 +170,10 @@ namespace YAT.Gui.Controls
 			get { return (this.remoteHost); }
 			set
 			{
-				if (this.remoteHost != value)
-				{
-					this.remoteHost = value;
+				if ((this.remoteHost != value) ||
+					(value.IPAddress == IPAddress.Loopback)) // Always SetControls() to be able to
+				{	                                         //   deal with the different types of
+					this.remoteHost = value;                 //   localhost/loopback.
 					SetControls();
 					OnRemoteHostChanged(EventArgs.Empty);
 				}
@@ -223,9 +224,10 @@ namespace YAT.Gui.Controls
 			get { return (this.localInterface); }
 			set
 			{
-				if (this.localInterface != value)
-				{
-					this.localInterface = value;
+				if ((this.localInterface != value) ||
+					(value.IPAddress == IPAddress.Loopback)) // Always SetControls() to be able to
+				{	                                         //   deal with the different types of
+					this.localInterface = value;             //   localhost/loopback.
 					SetControls();
 					OnLocalInterfaceChanged(EventArgs.Empty);
 				}
@@ -332,10 +334,10 @@ namespace YAT.Gui.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				IPHost host = comboBox_RemoteHost.SelectedItem as IPHost;
-				if ((host != null) && (host.IPAddress != IPAddress.None) && StringEx.EqualsOrdinalIgnoreCase(host.ToString(), comboBox_RemoteHost.Text))
+				IPHost remoteHost = comboBox_RemoteHost.SelectedItem as IPHost;
+				if ((remoteHost != null) && (remoteHost.IPAddress != IPAddress.None) && StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
-					RemoteHost = host;
+					RemoteHost = remoteHost;
 				}
 				else
 				{

@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -79,6 +80,8 @@ namespace YAT.Log.Settings
 		private bool nameChannel;
 		private bool nameDate;
 		private bool nameTime;
+
+		[NonSerialized] // See remarks at property 'NameSeparator'.
 		private FileNameSeparator nameSeparator;
 
 		#endregion
@@ -728,6 +731,8 @@ namespace YAT.Log.Settings
 		///  - Upgrade <see cref="FileNameSeparator"/> to EnumEx? E.g. like 'MKY.Net.IPHost'.
 		///  - <see cref="Log"/> and <see cref="LogSettings"/> string only,
 		///    <see cref="FileNameSeparator"/> only used for GUI?
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[XmlIgnore]
 		public virtual FileNameSeparator NameSeparator
@@ -744,6 +749,7 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "See remarks at property 'NameSeparator' above.")]
 		[XmlElement("NameSeparator")]
 		public virtual string NameSeparator_
 		{

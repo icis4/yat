@@ -63,7 +63,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		public const int MaxSendChunkSizeDefault = 50;
-		
+
 		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
 
