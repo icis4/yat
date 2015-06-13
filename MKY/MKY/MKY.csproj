@@ -116,6 +116,7 @@
     <Compile Include="Text\Ascii.cs" />
     <Compile Include="Text\Escape.cs" />
     <Compile Include="Time\DateTimeEx.cs" />
+    <Compile Include="Time\RateHelper.cs" />
     <Compile Include="Time\TimeStampItem.cs" />
     <Compile Include="Time\Rate.cs" />
     <Compile Include="Types\BooleanEx.cs" />

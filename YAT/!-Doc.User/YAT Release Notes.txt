@@ -60,6 +60,14 @@ Start YAT by selecting "Start > Programs > YAT > YAT".
 YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13
 ----------------------------------------------------------------------------------------------------
 
+New:
+- Serial COM ports can better be configured in terms of sending (feature request #235)
+   > Output buffer size can be limited, useful when using hardware and/or software flow control
+   > Send rate can be limited, useful if a device cannot process more than a certain amount of data
+
+Important changes:
+- Serial COM port send chunk size can no longer be configured (related to feature request #235)
+
 Fixed bugs:
 - SocketException when resolving URL of a not yet available remote host fixed (bug #312)
 - Invalid handling of remote host IP address fixed (bugs #313, #314 and #315)

@@ -41,7 +41,7 @@ namespace MKY
 	public static class Int32Ex
 	{
 		/// <summary>
-		/// Limits "value" to the boundaries specified.
+		/// Limits <paramref name="value"/> to the boundaries specified.
 		/// </summary>
 		public static int LimitToBounds(int value, int lower, int upper)
 		{
@@ -55,11 +55,27 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Returns whether "value" is within the boundaries specified.
+		/// Returns whether <paramref name="value"/> is within the boundaries specified.
 		/// </summary>
 		public static bool IsWithin(int value, int lower, int upper)
 		{
 			return ((value >= lower) && (value <= upper));
+		}
+
+		/// <summary>
+		/// Returns whether <paramref name="value"/> is even.
+		/// </summary>
+		public static bool IsEven(int value)
+		{
+			return ((value % 2) == 0);
+		}
+
+		/// <summary>
+		/// Returns whether <paramref name="value"/> is odd.
+		/// </summary>
+		public static bool IsOdd(int value)
+		{
+			return ((value % 2) != 0);
 		}
 	}
 }

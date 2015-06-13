@@ -38,8 +38,8 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <remarks>
-		/// Must be implemented as property that creates a new id object on each call to ensure that
-		/// there aren't multiple clients referencing (and modifying) the same id object.
+		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static AutoRetry AutoReopenDefault
 		{
@@ -61,8 +61,26 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public const string XOffDescription = MKY.IO.Ports.SerialPortSettings.XOffDescription;
 
+		/// <remarks>
+		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
+		/// </remarks>
+		public static LimitOutputBuffer LimitOutputBufferDefault
+		{
+			get { return (new LimitOutputBuffer(false, 2048)); } // 2048 is default of 'SerialPort'.
+		}
+
+		/// <remarks>
+		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
+		/// </remarks>
+		public static SendRate MaxSendRateDefault
+		{
+			get { return (new SendRate(false, 50, 50)); } // 50 bytes per 50 ms.
+		}
+
 		/// <summary></summary>
-		public const int MaxSendChunkSizeDefault = 50;
+		public const int MaxSendRateMaxInterval = 1000; // 1 second.
 
 		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
@@ -82,7 +100,8 @@ namespace MKY.IO.Serial.SerialPort
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
-		private int maxSendChunkSize;
+		private LimitOutputBuffer limitOutputBuffer;
+		private SendRate maxSendRate;
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
 
@@ -154,7 +173,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			Communication       = new SerialCommunicationSettings(rhs.Communication);
 			AutoReopen          = rhs.autoReopen;
-			MaxSendChunkSize    = rhs.MaxSendChunkSize;
+			LimitOutputBuffer   = rhs.LimitOutputBuffer;
+			MaxSendRate         = rhs.MaxSendRate;
 			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
 			NoSendOnInputBreak  = rhs.NoSendOnInputBreak;
 
@@ -176,7 +196,8 @@ namespace MKY.IO.Serial.SerialPort
 			PortId              = SerialPortId.FirstStandardPort;
 
 			AutoReopen          = AutoReopenDefault;
-			MaxSendChunkSize    = MaxSendChunkSizeDefault;
+			LimitOutputBuffer   = LimitOutputBufferDefault;
+			MaxSendRate         = MaxSendRateDefault;
 			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
 			NoSendOnInputBreak  = NoSendOnInputBreakDefault;
 		}
@@ -244,16 +265,34 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("MaxSendChunkSize")]
-		public virtual int MaxSendChunkSize
+		/// <summary>
+		/// The serial ports 'WriteBufferSize' typically is 2048. However, devices may
+		/// not be able to deal with that much data.
+		/// </summary>
+		[XmlElement("LimitOutputBuffer")]
+		public virtual LimitOutputBuffer LimitOutputBuffer
 		{
-			get { return (this.maxSendChunkSize); }
+			get { return (this.limitOutputBuffer); }
 			set
 			{
-				if (this.maxSendChunkSize != value)
+				if (this.limitOutputBuffer != value)
 				{
-					this.maxSendChunkSize = value;
+					this.limitOutputBuffer = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("MaxSendRate")]
+		public virtual SendRate MaxSendRate
+		{
+			get { return (this.maxSendRate); }
+			set
+			{
+				if (this.maxSendRate != value)
+				{
+					this.maxSendRate = value;
 					SetChanged();
 				}
 			}
@@ -316,7 +355,8 @@ namespace MKY.IO.Serial.SerialPort
 				(PortId              == other.PortId) &&
 				(Communication       == other.Communication) &&
 				(AutoReopen          == other.AutoReopen) &&
-				(MaxSendChunkSize    == other.MaxSendChunkSize) &&
+				(LimitOutputBuffer   == other.LimitOutputBuffer) &&
+				(MaxSendRate         == other.MaxSendRate) &&
 				(NoSendOnOutputBreak == other.NoSendOnOutputBreak) &&
 				(NoSendOnInputBreak  == other.NoSendOnInputBreak)
 			);
@@ -342,7 +382,8 @@ namespace MKY.IO.Serial.SerialPort
 				portIdHashCode     .GetHashCode() ^
 				Communication      .GetHashCode() ^
 				AutoReopen         .GetHashCode() ^
-				MaxSendChunkSize   .GetHashCode() ^
+				LimitOutputBuffer  .GetHashCode() ^
+				MaxSendRate        .GetHashCode() ^
 				NoSendOnOutputBreak.GetHashCode() ^
 				NoSendOnInputBreak .GetHashCode()
 			);

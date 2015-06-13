@@ -130,9 +130,8 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static SerialPortId FirstStandardPort
 		{
-			// Must be implemented as property that creates a new id object on each call to
-			// ensure that there aren't multiple clients referencing (and modifying) the same
-			// id object.
+			// Must be implemented as property that creates a new object on each call to ensure that
+			// there aren't multiple clients referencing (and modifying) the same object.
 			get { return (new SerialPortId(FirstStandardPortNumber)); }
 		}
 

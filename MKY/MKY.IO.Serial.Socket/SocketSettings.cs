@@ -78,8 +78,8 @@ namespace MKY.IO.Serial.Socket
 		public const int DefaultLocalUdpPort = DefaultPort + 1;
 
 		/// <remarks>
-		/// Must be implemented as property that creates a new id object on each call to ensure that
-		/// there aren't multiple clients referencing (and modifying) the same id object.
+		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static AutoRetry TcpClientAutoReconnectDefault
 		{

@@ -102,6 +102,7 @@
     <Compile Include="SerialFlowControl.cs" />
     <Compile Include="SerialPort.cs" />
     <Compile Include="SerialPortSettings.cs" />
+    <Compile Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
