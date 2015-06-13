@@ -5,7 +5,7 @@
   <ProductVersion>1.99.34</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2015-06-12T10:08:49.2684341+02:00</TimeStamp>
+    <TimeStamp>2015-06-13T10:55:13.3148811+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -30,7 +30,15 @@
             <Enabled>true</Enabled>
             <Interval>2000</Interval>
           </AutoReopen>
-          <MaxSendChunkSize>50</MaxSendChunkSize>
+          <LimitOutputBuffer>
+            <Enabled>false</Enabled>
+            <Size>2048</Size>
+          </LimitOutputBuffer>
+          <MaxSendRate>
+            <Enabled>false</Enabled>
+            <Size>50</Size>
+            <Interval>50</Interval>
+          </MaxSendRate>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
