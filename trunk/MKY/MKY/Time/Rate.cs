@@ -63,7 +63,7 @@ namespace MKY.Time
 
 	/// <remarks>
 	/// There's an almost equal implementation in <see cref="RateHelper"/>. An object of that
-	/// implementation should be used in this class, in order to reduce maintainance efforts.
+	/// implementation should be used in this class, in order to reduce maintenance efforts.
 	/// </remarks>
 	public class Rate : IDisposable
 	{
