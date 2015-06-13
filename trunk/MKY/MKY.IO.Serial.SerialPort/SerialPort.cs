@@ -49,6 +49,7 @@ using System.Threading;
 
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Time;
 
 #endregion
 
@@ -814,6 +815,8 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
+			RateHelper sendRate = new RateHelper(this.settings.MaxSendRate.Interval);
+
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
 
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
@@ -888,22 +891,17 @@ namespace MKY.IO.Serial.SerialPort
 								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 									this.port.RfrEnable = true;
 
-								// 'WriteBufferSize' typically is 2048. However, devices on the other side may
-								// not be able to deal with that much data if flow control is active.
-								int chunkSize;
-								int availableSpace = (this.port.WriteBufferSize - this.port.BytesToWrite);
-							////if (this.settings.Communication.FlowControlIsInactive)
-							////{
-							////	// Easy case, just stuff as much data as possible into output buffer:
-							////	chunkSize = availableSpace;
-							////}
-							////else
-							////{
-									// Harder case, limit the chunk size to the maximum chunk size setting:
-									chunkSize = Int32Ex.LimitToBounds(availableSpace, 0, this.settings.MaxSendChunkSize);
-							////}
-							//// Always use max chunk size, otherwise the DataSent event is very erratic.
+								// By default, stuff as much data as possible into output buffer:
+								int chunkSize = (this.port.WriteBufferSize - this.port.BytesToWrite);
 
+								// Reduce the chunk size if maximum send rate is specified:
+								if (this.settings.MaxSendRate.Enabled)
+								{
+									int remainingSizeInInterval = (this.settings.MaxSendRate.Size - sendRate.Value);
+									chunkSize = Int32Ex.LimitToBounds(chunkSize, 0, remainingSizeInInterval);
+								}
+
+								// Retrieve the chunk from the send queue:
 								List<byte> chunkList = new List<byte>(chunkSize);
 								lock (this.sendQueue)
 								{
@@ -911,6 +909,10 @@ namespace MKY.IO.Serial.SerialPort
 										chunkList.Add(this.sendQueue.Dequeue());
 								}
 								chunkData = chunkList.ToArray();
+
+								// Update the send rate with the effective chunk size:
+								if (this.settings.MaxSendRate.Enabled)
+									sendRate.Update(chunkData.Length);
 
 								try
 								{
@@ -1063,6 +1065,9 @@ namespace MKY.IO.Serial.SerialPort
 			lock (this.port)
 			{
 				this.port.PortId = this.settings.PortId;
+
+				if (this.settings.LimitOutputBuffer.Enabled)
+					this.port.WriteBufferSize = this.settings.LimitOutputBuffer.Size;
 
 				SerialCommunicationSettings s = this.settings.Communication;
 				this.port.BaudRate  = (MKY.IO.Ports.BaudRateEx)s.BaudRate;

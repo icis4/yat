@@ -36,47 +36,14 @@ using System.Threading;
 
 namespace MKY.Time
 {
-	#region RateEventArgs
-	//==================================================================================================
-	// RateEventArgs
-	//==================================================================================================
-
 	/// <summary></summary>
-	public class RateEventArgs : EventArgs
-	{
-		private int rate;
-
-		/// <summary></summary>
-		public RateEventArgs(int rate)
-		{
-			this.rate = rate;
-		}
-
-		/// <summary></summary>
-		public int Rate
-		{
-			get { return (this.rate); }
-		}
-	}
-
-	#endregion
-
-	/// <remarks>
-	/// There's an almost equal implementation in <see cref="RateHelper"/>. An object of that
-	/// implementation should be used in this class, in order to reduce maintainance efforts.
-	/// </remarks>
-	public class Rate : IDisposable
+	public class RateHelper
 	{
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private bool isDisposed;
-
-		private System.Timers.Timer timer;
-
-		private int tick;
 		private int interval;
 		private int window;
 
@@ -86,103 +53,29 @@ namespace MKY.Time
 
 		#endregion
 
-		#region Events
-		//==========================================================================================
-		// Events
-		//==========================================================================================
-
-		/// <summary></summary>
-		[Category("Action")]
-		[Description("Event raised when the tick interval elapsed or the time span was reset.")]
-		public event EventHandler<RateEventArgs> Changed;
-
-		#endregion
-
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Rate()
-			: this(100, 1000, 5000)
+		public RateHelper()
+			: this(1000, 5000)
 		{
 		}
 
 		/// <summary></summary>
-		public Rate(int tick, int interval)
-			: this(tick, interval, interval)
+		public RateHelper(int interval)
+			: this(interval, interval)
 		{
 		}
 
 		/// <summary></summary>
-		public Rate(int tick, int interval, int window)
+		public RateHelper(int interval, int window)
 		{
-			this.tick = tick;
 			this.interval = interval;
 			this.window = window;
-
-			this.timer = new System.Timers.Timer();
-			this.timer.AutoReset = true;
-			this.timer.Interval = this.tick;
-			this.timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
-			this.timer.Start();
 		}
-
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!this.isDisposed)
-			{
-				// In any case, dispose of the timer as it was created in the constructor:
-				if (this.timer != null)
-					this.timer.Dispose();
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-
-				// Set state to disposed:
-				this.timer = null;
-				this.isDisposed = true;
-			}
-		}
-
-		/// <summary></summary>
-		~Rate()
-		{
-			Dispose(false);
-
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
-		}
-
-		/// <summary></summary>
-		public bool IsDisposed
-		{
-			get { return (this.isDisposed); }
-		}
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (this.isDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-		}
-
-		#endregion
 
 		#endregion
 
@@ -192,31 +85,24 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public int Tick
-		{
-			get { AssertNotDisposed(); return (this.tick); }
-			set { AssertNotDisposed(); this.tick = value;  }
-		}
-
-		/// <summary></summary>
 		public int Interval
 		{
-			get { AssertNotDisposed(); return (this.interval); }
-			set { AssertNotDisposed(); this.interval = value;  }
+			get { return (this.interval); }
+			set { this.interval = value;  }
 		}
 
 		/// <summary></summary>
 		public int Window
 		{
-			get { AssertNotDisposed(); return (this.window); }
-			set { AssertNotDisposed(); this.window = value;  }
+			get { return (this.window); }
+			set { this.window = value;  }
 		}
 
 		/// <summary></summary>
 		public int Value
 		{
-			get { AssertNotDisposed(); return (this.value); }
-			set { AssertNotDisposed(); this.value = value;  }
+			get { return (this.value); }
+			set { this.value = value;  }
 		}
 
 		#endregion
@@ -229,20 +115,16 @@ namespace MKY.Time
 		/// <summary></summary>
 		public virtual bool Update(int value)
 		{
-			AssertNotDisposed();
-
 			AddValueToQueue(value);
 			RemoveObsoleteFromQueue();
-			return (CalculateValueFromQueueAndSignalIfChanged(value));
+			return (CalculateValueFromQueue(value));
 		}
 
 		/// <summary></summary>
 		public virtual void Reset()
 		{
-			AssertNotDisposed();
-
 			ClearQueue();
-			CalculateValueFromQueueAndSignalIfChanged();
+			CalculateValueFromQueue();
 		}
 
 		#region Methods > Private
@@ -285,12 +167,12 @@ namespace MKY.Time
 			}
 		}
 
-		private bool CalculateValueFromQueueAndSignalIfChanged()
+		private bool CalculateValueFromQueue()
 		{
-			return (CalculateValueFromQueueAndSignalIfChanged(0));
+			return (CalculateValueFromQueue(0));
 		}
 
-		private bool CalculateValueFromQueueAndSignalIfChanged(int value)
+		private bool CalculateValueFromQueue(int value)
 		{
 			int oldValue = this.value;
 			int newValue = 0;
@@ -336,7 +218,6 @@ namespace MKY.Time
 			if (newValue != oldValue)
 			{
 				this.value = newValue;
-				OnRateChanged(new RateEventArgs(this.value));
 				return (true);
 			}
 			else
@@ -346,51 +227,6 @@ namespace MKY.Time
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Timer Event Handlers
-		//==========================================================================================
-		// Timer Event Handlers
-		//==========================================================================================
-
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object timer_Elapsed_SyncObj = new object();
-
-		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-		{
-			// Ensure that only one timer elapsed event thread is active at a time.
-			// Without this exclusivity, two timer threads could create a race condition.
-			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
-			{
-				try
-				{
-					// Ensure not to forward events during closing anymore.
-					if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
-					{
-						RemoveObsoleteFromQueue(e.SignalTime);
-						CalculateValueFromQueueAndSignalIfChanged();
-					}
-				}
-				finally
-				{
-					Monitor.Exit(timer_Elapsed_SyncObj);
-				}
-			}
-		}
-
-		#endregion
-
-		#region Event Invoking
-		//==========================================================================================
-		// Event Invoking
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected virtual void OnRateChanged(RateEventArgs e)
-		{
-			EventHelper.FireSync<RateEventArgs>(Changed, this, e);
-		}
 
 		#endregion
 	}

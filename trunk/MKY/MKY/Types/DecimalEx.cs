@@ -34,7 +34,7 @@ namespace MKY
 	public static class DecimalEx
 	{
 		/// <summary>
-		/// Limits "value" to the boundaries specified.
+		/// Limits <paramref name="value"/> to the boundaries specified.
 		/// </summary>
 		public static decimal LimitToBounds(decimal value, decimal lower, decimal upper)
 		{
