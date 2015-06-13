@@ -524,7 +524,8 @@
           <xs:element minOccurs="0" maxOccurs="1" name="PortId" type="SerialPortId" />
           <xs:element minOccurs="0" maxOccurs="1" name="Communication" type="SerialCommunicationSettings" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoReopen" type="AutoRetry" />
-          <xs:element minOccurs="1" maxOccurs="1" name="MaxSendChunkSize" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LimitOutputBuffer" type="LimitOutputBuffer" />
+          <xs:element minOccurs="1" maxOccurs="1" name="MaxSendRate" type="SendRate" />
           <xs:element minOccurs="1" maxOccurs="1" name="NoSendOnOutputBreak" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="NoSendOnInputBreak" type="xs:boolean" />
         </xs:sequence>
@@ -534,6 +535,19 @@
   <xs:complexType name="SerialPortId">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LimitOutputBuffer">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Size" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SendRate">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Size" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Interval" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="IOSettings">
