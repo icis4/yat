@@ -30,7 +30,15 @@
             <Enabled>true</Enabled>
             <Interval>2000</Interval>
           </AutoReopen>
-          <MaxSendChunkSize>50</MaxSendChunkSize>
+          <LimitOutputBuffer>
+            <Enabled>false</Enabled>
+            <Size>2048</Size>
+          </LimitOutputBuffer>
+          <MaxSendRate>
+            <Enabled>false</Enabled>
+            <Size>50</Size>
+            <Interval>50</Interval>
+          </MaxSendRate>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
