@@ -410,11 +410,11 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				const int maxInterval = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateMaxInterval;
+				const int MaxInterval = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateMaxInterval;
 
 				int interval;
 				if (int.TryParse(textBox_MaxSendRateInterval.Text, out interval) &&
-					(interval >= 1) && (interval <= maxInterval))
+					(interval >= 1) && (interval <= MaxInterval))
 				{
 					MKY.IO.Serial.SerialPort.SendRate sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate;
 					sr.Interval = interval;
@@ -425,7 +425,7 @@ namespace YAT.Gui.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						"Interval must be from 1 to " + maxInterval.ToString(CultureInfo.CurrentCulture) + " ms!",
+						"Interval must be from 1 to " + MaxInterval.ToString(CultureInfo.CurrentCulture) + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
