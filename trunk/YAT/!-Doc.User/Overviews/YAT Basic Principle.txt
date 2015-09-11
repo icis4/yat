@@ -1,0 +1,18 @@
+
+1. Demonstrate internet service communication
+    > Browser
+    > Interpreted HTML
+    > Show HTML data
+
+2. Demonstrate internet device communication
+    > Browser
+    > Interpreted HTML
+    > Show HTML data
+
+3. Demonstrate internet device communication with YAT
+    > YAT
+    > Plain HTML
+
+4. Demonstrate embedded device communication with YAT
+    > Embedded Artists EduBoard
+    > MFU MC2 exercise 15 (RGB-LED over UART)
