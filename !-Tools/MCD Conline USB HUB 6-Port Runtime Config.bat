@@ -1,4 +1,4 @@
-ï»¿@ECHO OFF
+@ECHO OFF
 
 :: =================================================================================================
 ::  YAT - Yet Another Terminal.
@@ -15,22 +15,37 @@
 ::  See SVN change log for revision details.
 ::  See release notes for product version details.
 ::  -----------------------------------------------------------------------------------------------
-::  Copyright Â© 2003-2015 Matthias KlÃ¤y.
+::  Copyright © 2003-2015 Matthias Kläy.
 ::  All rights reserved.
 ::  -----------------------------------------------------------------------------------------------
 ::  This source code is licensed under the GNU LGPL.
 ::  See http:REMwww.gnu.org/licenses/lgpl.html for license details.
 :: =================================================================================================
 
-PUSHD ..
+SET USB_HUB_CTRL_EXE=USBHubControl.exe
 
-ECHO Cleaning temporary setup directories...
-RMDIR /S /Q "YAT.Setup\Debug"
-RMDIR /S /Q "YAT.Setup\Release"
-RMDIR /S /Q "YAT.Setup\Release with Redistributable"
-ECHO ...successfully cleaned
+:: Verify the hub control is available
+WHERE %USB_HUB_CTRL_EXE% >NUL 2>&1
+IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
 
-POPD
+:: Hub 1 'USB'
+%USB_HUB_CTRL_EXE% A6YJ5BDF 110111
+
+:: Hub 2 'RS-232'
+%USB_HUB_CTRL_EXE% A6YJ5A78 001111
+
+GOTO END
+
+:ERROR_EXE
+ECHO.
+ECHO The required %USB_HUB_CTRL_EXE% is not available!
+ECHO Make sure that the "MCD Conline USB HUB" drivers are installed, and...
+ECHO ..."\Tools\CommandLine\USBHubControl.exe" has been added to the system's PATH!
+ECHO.
+PAUSE
+GOTO END
+
+:END
 
 :: =================================================================================================
 ::  End of
