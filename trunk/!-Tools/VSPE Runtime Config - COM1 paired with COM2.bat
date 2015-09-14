@@ -1,4 +1,4 @@
-ï»¿@ECHO OFF
+@ECHO OFF
 
 :: =================================================================================================
 ::  YAT - Yet Another Terminal.
@@ -15,22 +15,18 @@
 ::  See SVN change log for revision details.
 ::  See release notes for product version details.
 ::  -----------------------------------------------------------------------------------------------
-::  Copyright Â© 2003-2015 Matthias KlÃ¤y.
+::  Copyright © 2003-2015 Matthias Kläy.
 ::  All rights reserved.
 ::  -----------------------------------------------------------------------------------------------
 ::  This source code is licensed under the GNU LGPL.
 ::  See http:REMwww.gnu.org/licenses/lgpl.html for license details.
 :: =================================================================================================
 
-PUSHD ..
+%MY_NAME% WITHOUT .bat
 
-ECHO Cleaning temporary setup directories...
-RMDIR /S /Q "YAT.Setup\Debug"
-RMDIR /S /Q "YAT.Setup\Release"
-RMDIR /S /Q "YAT.Setup\Release with Redistributable"
-ECHO ...successfully cleaned
+RUN AS ADMIN
 
-POPD
+MINIMIZE
 
 :: =================================================================================================
 ::  End of
