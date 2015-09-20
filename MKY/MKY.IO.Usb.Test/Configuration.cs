@@ -181,7 +181,28 @@ namespace MKY.IO.Usb.Test
 		{
 			ConfigurationSection configuration;
 			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			{
+				// Ensure that the configured physical ports are currently indeed available:
+
+				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
+				devices.FillWithAvailableDevices();
+
+				DeviceInfo di;
+				if (DeviceInfo.TryParse(configuration.SerialHidDeviceA, out di))
+				{
+					if (!devices.Contains(di))
+						configuration.SerialHidDeviceAIsAvailable = false;
+				}
+
+				if (DeviceInfo.TryParse(configuration.SerialHidDeviceB, out di))
+				{
+					if (!devices.Contains(di))
+						configuration.SerialHidDeviceBIsAvailable = false;
+				}
+
+				// Activate the effective configuration:
 				StaticConfiguration = configuration;
+			}
 		}
 
 		/// <summary></summary>

@@ -185,7 +185,28 @@ namespace MKY.Net.Test
 		{
 			ConfigurationSection configuration;
 			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			{
+				// Ensure that the configured physical ports are currently indeed available:
+
+				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
+				inferfaces.FillWithAvailableInterfaces();
+
+				IPNetworkInterface ni;
+				if (IPNetworkInterface.TryParse(configuration.SpecificIPv4Interface, out ni))
+				{
+					if (!inferfaces.Contains(ni))
+						configuration.SpecificIPv4InterfaceIsAvailable = false;
+				}
+
+				if (IPNetworkInterface.TryParse(configuration.SpecificIPv6Interface, out ni))
+				{
+					if (!inferfaces.Contains(ni))
+						configuration.SpecificIPv6InterfaceIsAvailable = false;
+				}
+
+				// Activate the effective configuration:
 				StaticConfiguration = configuration;
+			}
 		}
 
 		/// <summary></summary>
