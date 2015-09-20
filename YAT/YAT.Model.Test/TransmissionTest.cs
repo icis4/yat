@@ -86,9 +86,9 @@ namespace YAT.Model.Test
 
 		private static readonly string[] SerialPortsAreInterconnectedAB = new string[]
 		{
-			MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortAIsAvailable,
-			MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortBIsAvailable,
-			MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortsAreInterconnected
+			MKY.IO.Ports.Test.ConfigurationCategoryStrings.SerialPortAIsAvailable,
+			MKY.IO.Ports.Test.ConfigurationCategoryStrings.SerialPortBIsAvailable,
+			MKY.IO.Ports.Test.ConfigurationCategoryStrings.SerialPortsAreInterconnected
 		};
 
 		/// <summary></summary>
@@ -98,10 +98,10 @@ namespace YAT.Model.Test
 			get
 			{
 				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.SerialPort, SerialPortsAreInterconnectedAB));
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          new string[] { MKY.Net.Test.SettingsCategoryStrings.IPv4LoopbackIsAvailable }));
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          new string[] { MKY.Net.Test.SettingsCategoryStrings.IPv6LoopbackIsAvailable }));
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, new string[] { MKY.Net.Test.SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable }));
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, new string[] { MKY.Net.Test.SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, new string[] { MKY.Net.Test.ConfigurationCategoryStrings.SpecificIPv4InterfaceIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, new string[] { MKY.Net.Test.ConfigurationCategoryStrings.SpecificIPv6InterfaceIsAvailable }));
 			}
 		}
 
@@ -718,7 +718,7 @@ namespace YAT.Model.Test
 		{
 			get
 			{
-				string categoryDev = MKY.IO.Ports.Test.SettingsCategoryStrings.MTSicsDeviceAIsConnected;
+				string categoryDev = MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected;
 				string category01m = new NUnit.MinuteDurationCategoryAttribute( 1).Name;
 				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
 				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;

@@ -22,11 +22,26 @@
 ::  See http:REMwww.gnu.org/licenses/lgpl.html for license details.
 :: =================================================================================================
 
-%MY_NAME% WITHOUT .bat
+:: ------------------------------------------------------------------------------------------------
+:: This batch is a work-around to start .vspe settings 'As Admin'. Setup and procedure:
+:: 1) A shortcut with 'As Admin' enabled refers to this batch
+:: 2) This batch is started via that shortcut with 'As Admin' enabled
+:: 3) This batch starts the according .vspe settings
+::
+:: This work-around is necessary because Windows doesn't allow to enable 'As Admin' on a shortcut
+:: pointing to a .exe/.com/.bin/.bat file.
+:: ------------------------------------------------------------------------------------------------
 
-RUN AS ADMIN
+:: 0) Change into the directory where the batch is located
+::    Note that the executing directory of the batch is %SystemRoot%\System32 when called as admin
+cd /D %~dp0
 
-MINIMIZE
+:: 1) Retrieve the name of this batch (without extension)
+SET name=%~n0
+
+:: 2) Invoke the according VSPE settings
+::    Unfortunately, VSPE doesn't properly start minimized with the /MIN option
+START "VSPE" /B "%name%.vspe"
 
 :: =================================================================================================
 ::  End of

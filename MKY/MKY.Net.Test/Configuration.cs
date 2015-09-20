@@ -28,15 +28,15 @@ using MKY.Configuration;
 
 namespace MKY.Net.Test
 {
-	#region Settings
+	#region Section
 	//==========================================================================================
-	// Settings
+	// Section
 	//==========================================================================================
 
 	/// <summary>
-	/// Type representing the configuration settings section.
+	/// Type representing the configuration section.
 	/// </summary>
-	public class SettingsSection : MergeableSettingsSection
+	public class ConfigurationSection : MergeableConfigurationSection
 	{
 		#region Fields
 		//==========================================================================================
@@ -59,9 +59,9 @@ namespace MKY.Net.Test
 		//==========================================================================================
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SettingsSection"/> class.
+		/// Initializes a new instance of the <see cref="ConfigurationSection"/> class.
 		/// </summary>
-		public SettingsSection()
+		public ConfigurationSection()
 		{
 			this.properties = new ConfigurationPropertyCollection();
 
@@ -156,40 +156,42 @@ namespace MKY.Net.Test
 	// Provider
 	//==========================================================================================
 
-	/// <summary></summary>
 	/// <remarks>
-	/// Separate class needed to create default settings. To create the defaults, these constants
-	/// are needed but the provider below must not be initialized.
+	/// Separate class needed to create the default configuration. To create the defaults, these
+	/// constants are needed but the provider below must not be initialized.
 	/// </remarks>
-	public static class SettingsConstants
+	public static class ConfigurationConstants
 	{
 		/// <summary></summary>
-		public static readonly string ConfigurationGroupName = typeof(SettingsConstants).Namespace + ".Settings";
+		public static readonly string ConfigurationGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration";
 
 		/// <summary></summary>
-		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
+		public static readonly string ConfigurationSectionsGroupName = ConfigurationGroupName + ".Sections";
 
 		/// <summary></summary>
-		public static readonly string UserSettingsEnvironmentVariableName = "MKY_NET_TEST_SETTINGS_FILE";
+		public static readonly string SolutionConfigurationFileNameSuffix = ".Test";
+
+		/// <summary></summary>
+		public static readonly string UserConfigurationEnvironmentVariableName = "MKY_NET_TEST_CONFIG_FILE";
 	}
 
 	/// <summary></summary>
-	public static class SettingsProvider
+	public static class ConfigurationProvider
 	{
-		private static readonly SettingsSection StaticSettings = new SettingsSection();
+		private static readonly ConfigurationSection StaticConfiguration = new ConfigurationSection();
 
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Settings need to be read during creation.")]
-		static SettingsProvider()
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Configuration needs to be read during creation.")]
+		static ConfigurationProvider()
 		{
-			SettingsSection settings;
-			if (Provider.TryOpenAndMergeConfigurations<SettingsSection>(SettingsConstants.ConfigurationGroupName, SettingsConstants.ConfigurationsGroupName, SettingsConstants.UserSettingsEnvironmentVariableName, out settings))
-				StaticSettings = settings;
+			ConfigurationSection configuration;
+			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+				StaticConfiguration = configuration;
 		}
 
 		/// <summary></summary>
-		public static SettingsSection Settings
+		public static ConfigurationSection Configuration
 		{
-			get { return (StaticSettings); }
+			get { return (StaticConfiguration); }
 		}
 	}
 
@@ -201,7 +203,7 @@ namespace MKY.Net.Test
 	//==========================================================================================
 
 	/// <summary></summary>
-	public static class SettingsCategoryStrings
+	public static class ConfigurationCategoryStrings
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
@@ -213,11 +215,11 @@ namespace MKY.Net.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string SpecificIPv4InterfaceIsAvailable = "Specific IPv4 interface '" + SettingsProvider.Settings.SpecificIPv4Interface + "' is available";
+		public static readonly string SpecificIPv4InterfaceIsAvailable = "Specific IPv4 interface '" + ConfigurationProvider.Configuration.SpecificIPv4Interface + "' is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string SpecificIPv6InterfaceIsAvailable = "Specific IPv6 interface '" + SettingsProvider.Settings.SpecificIPv6Interface + "' is available";
+		public static readonly string SpecificIPv6InterfaceIsAvailable = "Specific IPv6 interface '" + ConfigurationProvider.Configuration.SpecificIPv6Interface + "' is available";
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
@@ -227,7 +229,7 @@ namespace MKY.Net.Test
 	{
 		/// <summary></summary>
 		public IPv4LoopbackIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.IPv4LoopbackIsAvailable)
+			: base(ConfigurationCategoryStrings.IPv4LoopbackIsAvailable)
 		{
 		}
 	}
@@ -239,7 +241,7 @@ namespace MKY.Net.Test
 	{
 		/// <summary></summary>
 		public IPv6LoopbackIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.IPv6LoopbackIsAvailable)
+			: base(ConfigurationCategoryStrings.IPv6LoopbackIsAvailable)
 		{
 		}
 	}
@@ -251,7 +253,7 @@ namespace MKY.Net.Test
 	{
 		/// <summary></summary>
 		public SpecificIPv4InterfaceIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable)
+			: base(ConfigurationCategoryStrings.SpecificIPv4InterfaceIsAvailable)
 		{
 		}
 	}
@@ -263,7 +265,7 @@ namespace MKY.Net.Test
 	{
 		/// <summary></summary>
 		public SpecificIPv6InterfaceIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable)
+			: base(ConfigurationCategoryStrings.SpecificIPv6InterfaceIsAvailable)
 		{
 		}
 	}

@@ -27,21 +27,21 @@ using System.IO;
 namespace MKY.Configuration
 {
 	/// <summary></summary>
-	public class MergeableSettingsSection : ConfigurationSection
+	public class MergeableConfigurationSection : ConfigurationSection
 	{
 		/// <summary>
-		/// Merges the settings with alternative settings.
+		/// Merges the configuration with alternative configurations.
 		/// </summary>
-		/// <param name="settingsToBeMergedWith">The settings to be merged with.</param>
-		public virtual void MergeWith(MergeableSettingsSection settingsToBeMergedWith)
+		/// <param name="configurationsToBeMergedWith">The configurations to be merged with.</param>
+		public virtual void MergeWith(MergeableConfigurationSection configurationsToBeMergedWith)
 		{
 			foreach (ConfigurationProperty cpA in this.Properties)
 			{
-				foreach (ConfigurationProperty cpB in settingsToBeMergedWith.Properties)
+				foreach (ConfigurationProperty cpB in configurationsToBeMergedWith.Properties)
 				{
 					if (StringEx.EqualsOrdinalIgnoreCase(cpA.Name, cpB.Name))
 					{
-						object value = settingsToBeMergedWith[cpB];
+						object value = configurationsToBeMergedWith[cpB];
 						SetPropertyValue(cpA, value, true);
 						break;
 					}
