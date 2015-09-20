@@ -246,8 +246,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings()
 		{
-			if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortAIsAvailable)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA));
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortAIsAvailable)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortA));
 
 			Assert.Ignore("'SerialPortA' is not available, therefore this test is ignored. Ensure that 'SerialPortA' is properly configured and available if passing this test is required.");
 			return (null);
@@ -261,8 +261,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings()
 		{
-			if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortBIsAvailable)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB));
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortBIsAvailable)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortB));
 
 			Assert.Ignore("'SerialPortB' is not available, therefore this test is ignored. Ensure that 'SerialPortB' is properly configured and available if passing this test is required.");
 			return (null);
@@ -276,8 +276,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings()
 		{
-			if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceAIsConnected)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceA));
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
 			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			return (null);
@@ -342,7 +342,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4Interface));
+			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv4Interface));
 
 			/* \todo (MKY 2012-12-28):
 			   #145 "AutoExclude/Ignore tests where infrastructure is not avail." is to be finalized for IPv4 and 
@@ -364,7 +364,7 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6Interface));
+			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv6Interface));
 
 			/* \todo (MKY 2012-12-28):
 			   #145 "AutoExclude/Ignore tests where infrastructure is not avail." is to be finalized for IPv6 and 

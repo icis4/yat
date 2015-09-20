@@ -28,15 +28,15 @@ using MKY.Configuration;
 
 namespace MKY.IO.Ports.Test
 {
-	#region Settings
+	#region Section
 	//==========================================================================================
-	// Settings
+	// Section
 	//==========================================================================================
 
 	/// <summary>
-	/// Type representing the configuration settings section.
+	/// Type representing the configuration section.
 	/// </summary>
-	public class SettingsSection : MergeableSettingsSection
+	public class ConfigurationSection : MergeableConfigurationSection
 	{
 		#region Fields
 		//==========================================================================================
@@ -75,9 +75,9 @@ namespace MKY.IO.Ports.Test
 		//==========================================================================================
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SettingsSection"/> class.
+		/// Initializes a new instance of the <see cref="ConfigurationSection"/> class.
 		/// </summary>
-		public SettingsSection()
+		public ConfigurationSection()
 		{
 			this.properties.Add(this.serialPortAIsAvailable);
 			this.properties.Add(this.serialPortBIsAvailable);
@@ -339,72 +339,74 @@ namespace MKY.IO.Ports.Test
 	// Provider
 	//==========================================================================================
 
-	/// <summary></summary>
 	/// <remarks>
-	/// Separate class needed to create default settings. To create the defaults, these constants
-	/// are needed but the provider below must not be initialized.
+	/// Separate class needed to create the default configuration. To create the defaults, these
+	/// constants are needed but the provider below must not be initialized.
 	/// </remarks>
-	public static class SettingsConstants
+	public static class ConfigurationConstants
 	{
 		/// <summary></summary>
-		public static readonly string ConfigurationGroupName = typeof(SettingsConstants).Namespace + ".Settings";
+		public static readonly string ConfigurationGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration";
 
 		/// <summary></summary>
-		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
+		public static readonly string ConfigurationSectionsGroupName = ConfigurationGroupName + ".Sections";
 
 		/// <summary></summary>
-		public static readonly string UserSettingsEnvironmentVariableName = "MKY_IO_PORTS_TEST_SETTINGS_FILE";
+		public static readonly string SolutionConfigurationFileNameSuffix = ".Test";
+
+		/// <summary></summary>
+		public static readonly string UserConfigurationEnvironmentVariableName = "MKY_IO_PORTS_TEST_CONFIG_FILE";
 	}
 
 	/// <summary></summary>
-	public static class SettingsProvider
+	public static class ConfigurationProvider
 	{
-		private static readonly SettingsSection StaticSettings = new SettingsSection();
+		private static readonly ConfigurationSection StaticConfiguration = new ConfigurationSection();
 
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Settings need to be read during creation.")]
-		static SettingsProvider()
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Configuration needs to be read during creation.")]
+		static ConfigurationProvider()
 		{
-			SettingsSection settings;
-			if (Provider.TryOpenAndMergeConfigurations<SettingsSection>(SettingsConstants.ConfigurationGroupName, SettingsConstants.ConfigurationsGroupName, SettingsConstants.UserSettingsEnvironmentVariableName, out settings))
+			ConfigurationSection configuration;
+			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
-				// Ensure that physical ports are not only configured in the settings configuration
-				// file but indeed available on the current machine:
+				// Ensure that the configured physical ports are currently indeed available:
+
 				MKY.IO.Ports.SerialPortCollection serialPorts = new MKY.IO.Ports.SerialPortCollection();
 				serialPorts.FillWithAvailablePorts(false);
 
-				if (!serialPorts.Contains(settings.SerialPortA))
-					settings.SerialPortAIsAvailable = false;
+				if (!serialPorts.Contains(configuration.SerialPortA))
+					configuration.SerialPortAIsAvailable = false;
 
-				if (!serialPorts.Contains(settings.SerialPortB))
-					settings.SerialPortBIsAvailable = false;
+				if (!serialPorts.Contains(configuration.SerialPortB))
+					configuration.SerialPortBIsAvailable = false;
 
-				if (!serialPorts.Contains(settings.SerialPortC))
-					settings.SerialPortCIsAvailable = false;
+				if (!serialPorts.Contains(configuration.SerialPortC))
+					configuration.SerialPortCIsAvailable = false;
 
-				if (!serialPorts.Contains(settings.SerialPortD))
-					settings.SerialPortDIsAvailable = false;
+				if (!serialPorts.Contains(configuration.SerialPortD))
+					configuration.SerialPortDIsAvailable = false;
 
-				if (!serialPorts.Contains(settings.SerialPortE))
-					settings.SerialPortEIsAvailable = false;
+				if (!serialPorts.Contains(configuration.SerialPortE))
+					configuration.SerialPortEIsAvailable = false;
 
-				if (!serialPorts.Contains(settings.SerialPortF))
-					settings.SerialPortFIsAvailable = false;
+				if (!serialPorts.Contains(configuration.SerialPortF))
+					configuration.SerialPortFIsAvailable = false;
 
-				if (!serialPorts.Contains(settings.MTSicsDeviceA))
-					settings.MTSicsDeviceAIsConnected = false;
+				if (!serialPorts.Contains(configuration.MTSicsDeviceA))
+					configuration.MTSicsDeviceAIsConnected = false;
 
-				if (!serialPorts.Contains(settings.MTSicsDeviceB))
-					settings.MTSicsDeviceBIsConnected = false;
+				if (!serialPorts.Contains(configuration.MTSicsDeviceB))
+					configuration.MTSicsDeviceBIsConnected = false;
 
-				// Activate the effective settings:
-				StaticSettings = settings;
+				// Activate the effective configuration:
+				StaticConfiguration = configuration;
 			}
 		}
 
 		/// <summary></summary>
-		public static SettingsSection Settings
+		public static ConfigurationSection Configuration
 		{
-			get { return (StaticSettings); }
+			get { return (StaticConfiguration); }
 		}
 	}
 
@@ -416,42 +418,42 @@ namespace MKY.IO.Ports.Test
 	//==========================================================================================
 
 	/// <summary></summary>
-	public static class SettingsCategoryStrings
+	public static class ConfigurationCategoryStrings
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string SerialPortAIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortA + " is available";
+		public static readonly string SerialPortAIsAvailable = "Serial port " + ConfigurationProvider.Configuration.SerialPortA + " is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string SerialPortBIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortB + " is available";
+		public static readonly string SerialPortBIsAvailable = "Serial port " + ConfigurationProvider.Configuration.SerialPortB + " is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "CIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string SerialPortCIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortC + " is available";
+		public static readonly string SerialPortCIsAvailable = "Serial port " + ConfigurationProvider.Configuration.SerialPortC + " is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "DIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string SerialPortDIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortD + " is available";
+		public static readonly string SerialPortDIsAvailable = "Serial port " + ConfigurationProvider.Configuration.SerialPortD + " is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "EIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string SerialPortEIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortE + " is available";
+		public static readonly string SerialPortEIsAvailable = "Serial port " + ConfigurationProvider.Configuration.SerialPortE + " is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "FIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string SerialPortFIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortF + " is available";
+		public static readonly string SerialPortFIsAvailable = "Serial port " + ConfigurationProvider.Configuration.SerialPortF + " is available";
 
 		/// <summary></summary>
 		public static readonly string SerialPortsAreInterconnected = "Serial ports are interconnected";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string MTSicsDeviceAIsConnected = "MT-SICS device is connected to " + SettingsProvider.Settings.MTSicsDeviceA;
+		public static readonly string MTSicsDeviceAIsConnected = "MT-SICS device is connected to " + ConfigurationProvider.Configuration.MTSicsDeviceA;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Ports and devices are named with a single letter")]
-		public static readonly string MTSicsDeviceBIsConnected = "MT-SICS device is connected to " + SettingsProvider.Settings.MTSicsDeviceA;
+		public static readonly string MTSicsDeviceBIsConnected = "MT-SICS device is connected to " + ConfigurationProvider.Configuration.MTSicsDeviceA;
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
@@ -461,7 +463,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortAIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortAIsAvailable)
+			: base(ConfigurationCategoryStrings.SerialPortAIsAvailable)
 		{
 		}
 	}
@@ -473,7 +475,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortBIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortBIsAvailable)
+			: base(ConfigurationCategoryStrings.SerialPortBIsAvailable)
 		{
 		}
 	}
@@ -485,7 +487,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortCIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortCIsAvailable)
+			: base(ConfigurationCategoryStrings.SerialPortCIsAvailable)
 		{
 		}
 	}
@@ -497,7 +499,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortDIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortDIsAvailable)
+			: base(ConfigurationCategoryStrings.SerialPortDIsAvailable)
 		{
 		}
 	}
@@ -509,7 +511,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortEIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortEIsAvailable)
+			: base(ConfigurationCategoryStrings.SerialPortEIsAvailable)
 		{
 		}
 	}
@@ -521,7 +523,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortFIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortFIsAvailable)
+			: base(ConfigurationCategoryStrings.SerialPortFIsAvailable)
 		{
 		}
 	}
@@ -532,7 +534,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public SerialPortsAreInterconnectedCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortsAreInterconnected)
+			: base(ConfigurationCategoryStrings.SerialPortsAreInterconnected)
 		{
 		}
 	}
@@ -544,7 +546,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public MTSicsDeviceAIsConnectedCategoryAttribute()
-			: base(SettingsCategoryStrings.MTSicsDeviceAIsConnected)
+			: base(ConfigurationCategoryStrings.MTSicsDeviceAIsConnected)
 		{
 		}
 	}
@@ -556,7 +558,7 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public MTSicsDeviceBIsConnectedCategoryAttribute()
-			: base(SettingsCategoryStrings.MTSicsDeviceBIsConnected)
+			: base(ConfigurationCategoryStrings.MTSicsDeviceBIsConnected)
 		{
 		}
 	}

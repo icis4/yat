@@ -28,7 +28,7 @@ using MKY.Configuration;
 namespace YAT.Test
 {
 	/// <summary>
-	/// Creates the defaults of the test settings in the solution directory.
+	/// Creates the defaults of the overall test configuration file.
 	/// </summary>
 	public static class TestSettingsDefaults
 	{
@@ -36,62 +36,113 @@ namespace YAT.Test
 		[STAThread]
 		public static void Main()
 		{
-			// Open and reset current configuration.
-			Configuration c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-			c.Sections.Clear();
-			c.SectionGroups.Clear();
-			c.AppSettings.Settings.Clear();
-			c.ConnectionStrings.ConnectionStrings.Clear();
+			// Create the overall configuration object:
 
-			// Add default sections for each test assembly.
+			ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
+			ecfm.ExeConfigFilename = "YAT.Test";
+			Configuration overall = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
+			overall.Sections.Clear();
+			overall.SectionGroups.Clear();
 
-			// MKY.IO.Ports.Test
-			CreateAssemblySections
+			// Add default sections for each test assembly to the overall configuration,
+			// and at the same time create dedicated files for each test assembly too:
+
+			CreateDedicatedFilesAndAddAssemblySections // MKY.IO.Ports.Test
 			(
-				c,
-				MKY.IO.Ports.Test.SettingsConstants.ConfigurationGroupName,
-				MKY.IO.Ports.Test.SettingsConstants.ConfigurationsGroupName,
-				new MKY.IO.Ports.Test.SettingsSection()
+				"MKY.IO.Ports.Test",
+				MKY.IO.Ports.Test.ConfigurationConstants.ConfigurationGroupName,
+				MKY.IO.Ports.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
+				new MKY.IO.Ports.Test.ConfigurationSection(), // Dedicated
+				new MKY.IO.Ports.Test.ConfigurationSection(), // Overall
+				overall
 			);
 
-			// MKY.IO.Serial.Test
+			// MKY.IO.Serial.SerialPort.Test
+			// MKY.IO.Serial.Socket.Test
+			// MKY.IO.Serial.Usb.Test
+			// Don't provide configuration (yet).
 
-			// MKY.IO.Usb.Test
-			CreateAssemblySections
+			CreateDedicatedFilesAndAddAssemblySections // MKY.IO.Usb.Test
 			(
-				c,
-				MKY.IO.Usb.Test.SettingsConstants.ConfigurationGroupName,
-				MKY.IO.Usb.Test.SettingsConstants.ConfigurationsGroupName,
-				new MKY.IO.Usb.Test.SettingsSection()
+				"MKY.IO.Usb.Test",
+				MKY.IO.Usb.Test.ConfigurationConstants.ConfigurationGroupName,
+				MKY.IO.Usb.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
+				new MKY.IO.Usb.Test.ConfigurationSection(), // Dedicated
+				new MKY.IO.Usb.Test.ConfigurationSection(), // Overall
+				overall
 			);
 
-			// MKY.Net.Test
-			CreateAssemblySections
+			CreateDedicatedFilesAndAddAssemblySections // MKY.Net.Test
 			(
-				c,
-				MKY.Net.Test.SettingsConstants.ConfigurationGroupName,
-				MKY.Net.Test.SettingsConstants.ConfigurationsGroupName,
-				new MKY.Net.Test.SettingsSection()
+				"MKY.Net.Test",
+				MKY.Net.Test.ConfigurationConstants.ConfigurationGroupName,
+				MKY.Net.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
+				new MKY.Net.Test.ConfigurationSection(), // Dedicated
+				new MKY.Net.Test.ConfigurationSection(), // Overall
+				overall
 			);
 
 			// MKY.Test
-			// Do not include MKY.Windows.Forms.Test as it is a separate .exe project.
+			// MKY.Win32.Test
+			// Doesn't provide configuration (yet).
+
+			// MKY.Windows.Forms.Test
+			// Do not include as it is a separate .exe project.
 
 			// YAT.Controller.Test
 			// YAT.Domain.Test
+			// YAT.Gui.Test
 			// YAT.Model.Test
 			// YAT.Settings.Test
+			// Don't provide configuration (yet).
 
-			c.Save(ConfigurationSaveMode.Full, true);
+			// YAT.Test
+			// Is this .exe project to generate the defaults of the overall test configuration file.
+
+			// Generate the overall configuration file:
+			overall.Save(ConfigurationSaveMode.Full, true);
+
+			// Proceed as follows to generate the configuration files:
+			//  1. Build and run this project => The files get created.
+			//  2. Go to "\YAT\YAT.Test\bin\Debug" and filter for "*.config".
+			//  3. Clean the files from unnecessary information:
+			//      a) Remove the version information:
+			//          > Groups ", Version=..." >> "" >"
+			//          > Sections ", Version=..." >> "" />"
+			//      b) Remove the following sections:
+			//          > "appSettings"
+			//          > "configProtectedData"
+			//          > "connectionStrings"
+			//          > "system.diagnostics"
+			//          > "system.windows.forms"
+			//  4. Copy the files to the respective "\ConfigurationTemplate" folder.
+			//  5. Compare the new file against the former file.
+			//  6. Update the effective solution file ".\YAT.Test.config" as required.
+			//  7. Update the effective assembly files in e.g. "..\!-TestConfig" as required.
 		}
 
-		private static void CreateAssemblySections(Configuration c, string configurationGroupName, string configurationsGroupName, ConfigurationSection settingsSection)
+		private static void CreateDedicatedFilesAndAddAssemblySections(string dedicatedFileName, string groupName, string sectionsGroupName, ConfigurationSection dedicatedSection, ConfigurationSection overallSection, Configuration overallConfiguration)
 		{
-			c.SectionGroups.Add(configurationGroupName, new ConfigurationSectionGroup());
-			c.SectionGroups[configurationGroupName].Sections.Add(SelectionSection.SelectionSectionName, new SelectionSection());
+			// Add default sections for the assembly to the dedicated configuration:
+			ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
+			ecfm.ExeConfigFilename = dedicatedFileName;
+			Configuration dedicatedConfiguration = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
+			dedicatedConfiguration.Sections.Clear();
+			dedicatedConfiguration.SectionGroups.Clear();
+			AddAssemblySections(groupName, sectionsGroupName, dedicatedSection, dedicatedConfiguration);
+			dedicatedConfiguration.Save(ConfigurationSaveMode.Full, true);
 
-			c.SectionGroups.Add(configurationsGroupName, new ConfigurationSectionGroup());
-			c.SectionGroups[configurationsGroupName].Sections.Add("Default", settingsSection);
+			// Add default sections for the assembly to the overall configuration:
+			AddAssemblySections(groupName, sectionsGroupName, overallSection, overallConfiguration);
+		}
+
+		private static void AddAssemblySections(string groupName, string sectionsGroupName, ConfigurationSection section, Configuration configuration)
+		{
+			configuration.SectionGroups.Add(groupName, new ConfigurationSectionGroup());
+			configuration.SectionGroups[groupName].Sections.Add(SelectionSection.SelectionSectionName, new SelectionSection());
+
+			configuration.SectionGroups.Add(sectionsGroupName, new ConfigurationSectionGroup());
+			configuration.SectionGroups[sectionsGroupName].Sections.Add("NoDevices", section);
 		}
 	}
 }

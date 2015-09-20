@@ -1120,9 +1120,9 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA == "COM1")
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortA == "COM1")
 			{
-				if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortAIsAvailable)
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortAIsAvailable)
 					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
 				else
 					Assert.Ignore("'SerialPortA' is configured to 'COM1' but isn't available on this machine.");
@@ -1148,9 +1148,9 @@ namespace YAT.Settings.Test
 			if (!ignoreBaudRate) // Optionally ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
 				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB == "COM2")
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortB == "COM2")
 			{
-				if (MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortBIsAvailable)
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortBIsAvailable)
 					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");
 				else
 					Assert.Ignore("'SerialPortB' is configured to 'COM2' but isn't available on this machine.");
