@@ -342,17 +342,11 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv4Interface));
-
-			/* \todo (MKY 2012-12-28):
-			   #145 "AutoExclude/Ignore tests where infrastructure is not avail." is to be finalized for IPv4 and 
-			   #149 "Merge partly configs with existing configs" is required before the IPv4 test settings can be properly used.
-			if (MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4InterfaceIsAvailable)
-				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4Interface));
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv4InterfaceIsAvailable)
+				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv4Interface));
 
 			Assert.Ignore("'SpecificIPv4Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv4Interface' is properly configured and available if passing this test is required.");
 			return (null);
-			*/
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
@@ -364,17 +358,11 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv6Interface));
-
-			/* \todo (MKY 2012-12-28):
-			   #145 "AutoExclude/Ignore tests where infrastructure is not avail." is to be finalized for IPv6 and 
-			   #149 "Merge partly configs with existing configs" is required before the IPv6 test settings can be properly used.
-			if (MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6InterfaceIsAvailable)
-				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6Interface));
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv6InterfaceIsAvailable)
+				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv6Interface));
 
 			Assert.Ignore("'SpecificIPv6Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv6Interface' is properly configured and available if passing this test is required.");
 			return (null);
-			*/
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]

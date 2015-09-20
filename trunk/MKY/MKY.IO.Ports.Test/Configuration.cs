@@ -371,7 +371,7 @@ namespace MKY.IO.Ports.Test
 			{
 				// Ensure that the configured physical ports are currently indeed available:
 
-				MKY.IO.Ports.SerialPortCollection serialPorts = new MKY.IO.Ports.SerialPortCollection();
+				SerialPortCollection serialPorts = new SerialPortCollection();
 				serialPorts.FillWithAvailablePorts(false);
 
 				if (!serialPorts.Contains(configuration.SerialPortA))
