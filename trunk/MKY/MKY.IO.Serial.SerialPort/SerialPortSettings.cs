@@ -130,7 +130,7 @@ namespace MKY.IO.Serial.SerialPort
 			SetMyDefaults();
 			InitializeNodes();
 
-			// Attention: Port ID can be null (if no COM ports are available on system).
+			// Attention: Port ID can be null (if no serial COM ports are available on system).
 			if (portId != null)
 				PortId = new SerialPortId(portId);
 			else
@@ -165,7 +165,7 @@ namespace MKY.IO.Serial.SerialPort
 		public SerialPortSettings(SerialPortSettings rhs)
 			: base(rhs)
 		{
-			// Attention: Port ID can be null (if no COM ports are available on system).
+			// Attention: Port ID can be null (if no serial COM ports are available on system).
 			if (rhs.PortId != null)
 				PortId = new SerialPortId(rhs.PortId);
 			else

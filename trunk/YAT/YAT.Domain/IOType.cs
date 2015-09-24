@@ -71,7 +71,7 @@ namespace YAT.Domain
 
 		private const string Unknown_string            = "Unknown";
 
-		private const string SerialPort_string         = "Serial Port (COM)";
+		private const string SerialPort_string         = "Serial COM Port";
 		private const string SerialPort_stringShort    = "COM";
 
 		private const string TcpClient_string          = "TCP/IP Client";

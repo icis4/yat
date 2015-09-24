@@ -23,7 +23,7 @@ References
 
 Pros and Cons of the Ser/HID Device profile
 -------------------------------------------
-+ Can replace COM ports
++ Can replace serial COM ports
 + Does not require any driver installation
 + Is very versatile and extendable
 - Needs a Ser/HID capable middleware on the PC (e.g. MKY.IO.Usb)
