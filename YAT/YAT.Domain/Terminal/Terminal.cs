@@ -78,7 +78,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public static readonly string SerialPortHelp =
-			@"For serial ports (COM), if one of the following error conditions occurs, the according error indication will be shown in the terminal window:" + Environment.NewLine +
+			@"For serial COM ports, if one of the following error conditions occurs, the according error indication will be shown in the terminal window:" + Environment.NewLine +
 			Environment.NewLine +
 			@"<" + RxFramingErrorString + ">" + Environment.NewLine +
 			@"An input framing error occurs when the last bit received is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when the speed at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
