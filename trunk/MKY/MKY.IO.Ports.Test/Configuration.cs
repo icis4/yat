@@ -161,15 +161,15 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		public virtual string TILauchPadDeviceA
+		public virtual string TILaunchPadDeviceA
 		{
-			get { return ((string)this["TILauchPadDeviceA"]); }
+			get { return ((string)this["TILaunchPadDeviceA"]); }
 		}
 
 		/// <summary></summary>
-		public virtual string TILauchPadDeviceB
+		public virtual string TILaunchPadDeviceB
 		{
-			get { return ((string)this["TILauchPadDeviceB"]); }
+			get { return ((string)this["TILaunchPadDeviceB"]); }
 		}
 
 		/// <summary></summary>
@@ -231,7 +231,7 @@ namespace MKY.IO.Ports.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public virtual bool TILauchPadDeviceAIsConnected
+		public virtual bool TILaunchPadDeviceAIsConnected
 		{
 			get { return (this.tiLaunchPadDeviceAIsConnected); }
 			set { this.tiLaunchPadDeviceAIsConnected = value;  }
@@ -239,7 +239,7 @@ namespace MKY.IO.Ports.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public virtual bool TILauchPadDeviceBIsConnected
+		public virtual bool TILaunchPadDeviceBIsConnected
 		{
 			get { return (this.tiLaunchPadDeviceBIsConnected); }
 			set { this.tiLaunchPadDeviceBIsConnected = value;  }
@@ -291,10 +291,10 @@ namespace MKY.IO.Ports.Test
 	public static class ConfigurationConstants
 	{
 		/// <summary></summary>
-		public static readonly string ConfigurationGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration";
+		public static readonly string SelectionGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration"; // Simply use the generic <Namespace>.Configuration identifier.
 
 		/// <summary></summary>
-		public static readonly string ConfigurationSectionsGroupName = ConfigurationGroupName + ".Sections";
+		public static readonly string SectionsGroupName = SelectionGroupName + ".Sections"; // Just add to the generic identifier from above.
 
 		/// <summary></summary>
 		public static readonly string SolutionConfigurationFileNameSuffix = ".Test";
@@ -312,7 +312,7 @@ namespace MKY.IO.Ports.Test
 		static ConfigurationProvider()
 		{
 			ConfigurationSection configuration;
-			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
 				// Set which physical items are available on the current machine:
 				SerialPortCollection availablePorts = new SerialPortCollection();
@@ -324,8 +324,8 @@ namespace MKY.IO.Ports.Test
 				configuration.MTSicsDeviceAIsConnected = availablePorts.Contains(configuration.MTSicsDeviceA);
 				configuration.MTSicsDeviceBIsConnected = availablePorts.Contains(configuration.MTSicsDeviceB);
 
-				configuration.TILauchPadDeviceAIsConnected = availablePorts.Contains(configuration.TILauchPadDeviceA);
-				configuration.TILauchPadDeviceBIsConnected = availablePorts.Contains(configuration.TILauchPadDeviceB);
+				configuration.TILaunchPadDeviceAIsConnected = availablePorts.Contains(configuration.TILaunchPadDeviceA);
+				configuration.TILaunchPadDeviceBIsConnected = availablePorts.Contains(configuration.TILaunchPadDeviceB);
 
 				List<bool> l = new List<bool>();
 				l.Clear(); // LoopbackPairs
@@ -366,45 +366,36 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public static readonly string PortAIsAvailable = "Serial port A";
-		//public static readonly string PortAIsAvailable = "Serial port A " + (ConfigurationProvider.Configuration.PortAIsAvailable ? ("'" + ConfigurationProvider.Configuration.PortA + "' is") : "is not") + " available";
+		public static readonly string PortAIsAvailable = "Serial port A '" + ConfigurationProvider.Configuration.PortA + "' is " + (ConfigurationProvider.Configuration.PortAIsAvailable ? "" : "not ") + "available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public static readonly string PortBIsAvailable = "Serial port B";
-		//public static readonly string PortBIsAvailable = "Serial port B " + (ConfigurationProvider.Configuration.PortBIsAvailable ? ("'" + ConfigurationProvider.Configuration.PortB + "' is") : "is not") + " available";
+		public static readonly string PortBIsAvailable = "Serial port B '" + ConfigurationProvider.Configuration.PortB + "' is " + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : "not ") + "available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public static readonly string MTSicsDeviceAIsConnected = "Serial port MT-SICS device A";
-		//public static readonly string MTSicsDeviceAIsConnected = "Serial port MT-SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? ("connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'") : "not connected");
+		public static readonly string MTSicsDeviceAIsConnected = "Serial port MT-SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public static readonly string MTSicsDeviceBIsConnected = "Serial port MT-SICS device B";
-		//public static readonly string MTSicsDeviceBIsConnected = "Serial port MT-SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? ("connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'") : "not connected");
+		public static readonly string MTSicsDeviceBIsConnected = "Serial port MT-SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public static readonly string TILauchPadDeviceAIsConnected = "Serial port TI LaunchPad device A";
-		//public static readonly string TILauchPadDeviceAIsConnected = "Serial port TI LaunchPad device A is " + (ConfigurationProvider.Configuration.TILauchPadDeviceAIsConnected ? ("connected to '" + ConfigurationProvider.Configuration.TILauchPadDeviceA + "'") : "not connected");
+		public static readonly string TILaunchPadDeviceAIsConnected = "Serial port TI LaunchPad device A is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "'";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public static readonly string TILauchPadDeviceBIsConnected = "Serial port TI LaunchPad device B";
-		//public static readonly string TILauchPadDeviceBIsConnected = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILauchPadDeviceBIsConnected ? ("connected to '" + ConfigurationProvider.Configuration.TILauchPadDeviceB + "'") : "not connected");
+		public static readonly string TILaunchPadDeviceBIsConnected = "Serial port TI LaunchPad device B is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "not ") + "connected to '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "'";
 
 		/// <summary></summary>
-		public static readonly string LoopbackPairsAreAvailable = "Serial port loopback pair";
-		//public static readonly string LoopbackPairsAreAvailable = "Serial port loopback pair" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 1) ? "s are " : " is ") : " is not") + " available";
+		public static readonly string LoopbackPairsAreAvailable = "Serial port loopback pair" + ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackPairs.Count > 1) ? "s are " : " is ") : " is not ") + "available";
 
 		/// <summary></summary>
-		public static readonly string LoopbackSelfsAreAvailable = "Serial port loopback self";
-		//public static readonly string LoopbackSelfsAreAvailable = "Serial port loopback self" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 1) ? "s are " : " is ") : " is not") + " available";
+		public static readonly string LoopbackSelfsAreAvailable = "Serial port loopback self" + ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 0) ? ((ConfigurationProvider.Configuration.LoopbackSelfs.Count > 1) ? "s are " : " is ") : " is not ") + "available";
 
 		/// <summary></summary>
-		public static readonly string LoopbacksAreAvailable = "Serial port loopback";
-		//public static readonly string LoopbacksAreAvailable = "Serial port loopback" + ((ConfigurationProvider.Configuration.LoopbackCount > 0) ? ((ConfigurationProvider.Configuration.LoopbackCount > 1) ? "s are " : " is ") : " is not") + " available";
+		public static readonly string LoopbacksAreAvailable = "Serial port loopback" + ((ConfigurationProvider.Configuration.LoopbackCount > 0) ? ((ConfigurationProvider.Configuration.LoopbackCount > 1) ? "s are " : " is ") : " is not ") + "available";
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
@@ -432,7 +423,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -444,7 +435,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -456,25 +447,25 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class TILauchPadDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class TILaunchPadDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public TILauchPadDeviceAIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.TILauchPadDeviceAIsConnected)
+		public TILaunchPadDeviceAIsConnectedCategoryAttribute()
+			: base(ConfigurationCategoryStrings.TILaunchPadDeviceAIsConnected)
 		{
 		}
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class TILauchPadDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class TILaunchPadDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public TILauchPadDeviceBIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.TILauchPadDeviceBIsConnected)
+		public TILaunchPadDeviceBIsConnectedCategoryAttribute()
+			: base(ConfigurationCategoryStrings.TILaunchPadDeviceBIsConnected)
 		{
 		}
 	}
