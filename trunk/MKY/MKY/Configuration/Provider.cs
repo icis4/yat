@@ -77,10 +77,10 @@ namespace MKY.Configuration
 	/// Finally, the values for each section:
 	///     MKY.IO.Ports.Test.Configuration
 	///         Selection SelectedConfigurationName="NoDevices"
-	///     MKY.IO.Ports.Test.Configuration.Configurations
-	///         NoDevices SerialPortAIsAvailable="false" SerialPortBIsAvailable="false" SerialPortA="COM1" SerialPortB="COM2" SerialPortsAreInterconnected="false"
-	///         UsingPhysicalDevices SerialPortAIsAvailable="true" SerialPortBIsAvailable="true" SerialPortA="COM1" SerialPortB="COM2" SerialPortsAreInterconnected="true"
-	///         UsingVSPE SerialPortAIsAvailable="true" SerialPortBIsAvailable="true" SerialPortA="COM1" SerialPortB="COM2" SerialPortsAreInterconnected="true"
+	///     MKY.IO.Ports.Test.Configuration.Sections
+	///         NoDevices PortA="COM1" PortB="COM2"
+	///         UsingPhysicalDevices PortA="COM1" PortB="COM2"
+	///         UsingVSPE PortA="COM1" PortB="COM2"
 	/// These solution defaults may then be partly or completely overridden by the machine specific
 	/// configuration file 'MKY.IO.Ports.Test.config':
 	///     MKY.IO.Ports.Test.Configuration
@@ -101,6 +101,20 @@ namespace MKY.Configuration
 	/// </remarks>
 	public static class Provider
 	{
+		/// <summary>
+		/// Tries the open and merge configurations.
+		/// </summary>
+		/// <typeparam name="T">The type of the section to retrieve.</typeparam>
+		/// <param name="configurationGroupName">Name of the configuration group.</param>
+		/// <param name="configurationSectionsGroupName">Name of the configuration sections group.</param>
+		/// <param name="userConfigurationEnvironmentVariableName">Name of the user configuration environment variable.</param>
+		/// <param name="mergedConfiguration">The merged configuration.</param>
+		public static bool TryOpenAndMergeConfigurations<T>(string configurationGroupName, string configurationSectionsGroupName, string userConfigurationEnvironmentVariableName, out T mergedConfiguration)
+			where T : MergeableConfigurationSection
+		{
+			return (TryOpenAndMergeConfigurations(configurationGroupName, configurationSectionsGroupName, null, userConfigurationEnvironmentVariableName, out mergedConfiguration));
+		}
+
 		/// <summary>
 		/// Tries the open and merge configurations.
 		/// </summary>

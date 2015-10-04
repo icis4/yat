@@ -39,7 +39,7 @@ namespace YAT.Test
 			// Create the overall configuration object:
 
 			ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
-			ecfm.ExeConfigFilename = "YAT.Test";
+			ecfm.ExeConfigFilename = "YAT.Test.config";
 			Configuration overall = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
 			overall.Sections.Clear();
 			overall.SectionGroups.Clear();
@@ -49,7 +49,7 @@ namespace YAT.Test
 
 			CreateDedicatedFilesAndAddAssemblySections // MKY.IO.Ports.Test
 			(
-				"MKY.IO.Ports.Test",
+				"MKY.IO.Ports.Test.config",
 				MKY.IO.Ports.Test.ConfigurationConstants.ConfigurationGroupName,
 				MKY.IO.Ports.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
 				new MKY.IO.Ports.Test.ConfigurationSection(), // Dedicated
@@ -64,7 +64,7 @@ namespace YAT.Test
 
 			CreateDedicatedFilesAndAddAssemblySections // MKY.IO.Usb.Test
 			(
-				"MKY.IO.Usb.Test",
+				"MKY.IO.Usb.Test.config",
 				MKY.IO.Usb.Test.ConfigurationConstants.ConfigurationGroupName,
 				MKY.IO.Usb.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
 				new MKY.IO.Usb.Test.ConfigurationSection(), // Dedicated
@@ -74,7 +74,7 @@ namespace YAT.Test
 
 			CreateDedicatedFilesAndAddAssemblySections // MKY.Net.Test
 			(
-				"MKY.Net.Test",
+				"MKY.Net.Test.config",
 				MKY.Net.Test.ConfigurationConstants.ConfigurationGroupName,
 				MKY.Net.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
 				new MKY.Net.Test.ConfigurationSection(), // Dedicated
@@ -103,9 +103,9 @@ namespace YAT.Test
 			overall.Save(ConfigurationSaveMode.Full, true);
 
 			// Proceed as follows to generate the configuration files:
-			//  1. Build and run this project => The files get created.
+			//  1. Build and run this project => Template files get created.
 			//  2. Go to "\YAT\YAT.Test\bin\Debug" and filter for "*.config".
-			//  3. Clean the files from unnecessary information:
+			//  3. Clean template files from unnecessary information:
 			//      a) Remove the version information:
 			//          > Groups ", Version=..." >> "" >"
 			//          > Sections ", Version=..." >> "" />"
@@ -115,10 +115,10 @@ namespace YAT.Test
 			//          > "connectionStrings"
 			//          > "system.diagnostics"
 			//          > "system.windows.forms"
-			//  4. Copy the files to the respective "\ConfigurationTemplate" folder.
-			//  5. Compare the new file against the former file.
-			//  6. Update the effective solution file ".\YAT.Test.config" as required.
-			//  7. Update the effective assembly files in e.g. "..\!-TestConfig" as required.
+			//  4. Move template files to the respective "\ConfigurationTemplate" folder.
+			//  5. Compare the new template file against the former template file.
+			//  6. Update the effective solution file ".\YAT.Test.config" as required. (This is the generic base configuration.)
+			//  7. Update the effective assembly files in e.g. "..\!-TestConfig" as required. (This is the user/machine dependent configuration to be merged with.)
 		}
 
 		private static void CreateDedicatedFilesAndAddAssemblySections(string dedicatedFileName, string groupName, string sectionsGroupName, ConfigurationSection dedicatedSection, ConfigurationSection overallSection, Configuration overallConfiguration)
@@ -142,7 +142,7 @@ namespace YAT.Test
 			configuration.SectionGroups[groupName].Sections.Add(SelectionSection.SelectionSectionName, new SelectionSection());
 
 			configuration.SectionGroups.Add(sectionsGroupName, new ConfigurationSectionGroup());
-			configuration.SectionGroups[sectionsGroupName].Sections.Add("NoDevices", section);
+			configuration.SectionGroups[sectionsGroupName].Sections.Add("Template", section);
 		}
 	}
 }

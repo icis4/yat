@@ -107,6 +107,7 @@
     <Compile Include="SerialPort\SerialPortIdTest.cs" />
     <Compile Include="SerialPort\SerialPortSettingsTest.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationElements.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">

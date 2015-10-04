@@ -43,13 +43,27 @@ namespace MKY.Net.Test
 		// Fields
 		//==========================================================================================
 
+		#region Fields > Configuration
+		//------------------------------------------------------------------------------------------
+		// Fields > Configuration
+		//------------------------------------------------------------------------------------------
+
 		private ConfigurationPropertyCollection properties;
 
-		private ConfigurationProperty specificIPv4InterfaceIsAvailable = new ConfigurationProperty("SpecificIPv4InterfaceIsAvailable", typeof(bool), false);
-		private ConfigurationProperty specificIPv6InterfaceIsAvailable = new ConfigurationProperty("SpecificIPv6InterfaceIsAvailable", typeof(bool), false);
+		private ConfigurationProperty ipv4SpecificInterface = new ConfigurationProperty("IPv4SpecificInterface", typeof(string), "TAP-Win32 Adapter");
+		private ConfigurationProperty ipv6SpecificInterface = new ConfigurationProperty("IPv6SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 
-		private ConfigurationProperty specificIPv4Interface = new ConfigurationProperty("SpecificIPv4Interface", typeof(string), "TAP-Win32 Adapter");
-		private ConfigurationProperty specificIPv6Interface = new ConfigurationProperty("SpecificIPv6Interface", typeof(string), "TAP-Win32 Adapter");
+		#endregion
+
+		#region Fields > Auxiliary
+		//------------------------------------------------------------------------------------------
+		// Fields > Auxiliary
+		//------------------------------------------------------------------------------------------
+
+		private bool ipv4SpecificInterfaceIsAvailable;
+		private bool ipv6SpecificInterfaceIsAvailable;
+
+		#endregion
 
 		#endregion
 
@@ -65,11 +79,8 @@ namespace MKY.Net.Test
 		{
 			this.properties = new ConfigurationPropertyCollection();
 
-			this.properties.Add(this.specificIPv4InterfaceIsAvailable);
-			this.properties.Add(this.specificIPv6InterfaceIsAvailable);
-
-			this.properties.Add(this.specificIPv4Interface);
-			this.properties.Add(this.specificIPv6Interface);
+			this.properties.Add(this.ipv4SpecificInterface);
+			this.properties.Add(this.ipv6SpecificInterface);
 		}
 
 		#endregion
@@ -79,6 +90,11 @@ namespace MKY.Net.Test
 		// Properties
 		//==========================================================================================
 
+		#region Properties > Configuration
+		//------------------------------------------------------------------------------------------
+		// Properties > Configuration
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		protected override ConfigurationPropertyCollection Properties
 		{
@@ -87,51 +103,42 @@ namespace MKY.Net.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public virtual bool SpecificIPv4InterfaceIsAvailable
+		public virtual string IPv4SpecificInterface
 		{
-			get { return ((bool)this["SpecificIPv4InterfaceIsAvailable"]); }
-			set
-			{
-				AssertNotReadOnly("SpecificIPv4InterfaceIsAvailable");
-				this["SpecificIPv4InterfaceIsAvailable"] = value;
-			}
+			get { return ((string)this["IPv4SpecificInterface"]); }
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public virtual bool SpecificIPv6InterfaceIsAvailable
+		public virtual string IPv6SpecificInterface
 		{
-			get { return ((bool)this["SpecificIPv6InterfaceIsAvailable"]); }
-			set
-			{
-				AssertNotReadOnly("SpecificIPv6InterfaceIsAvailable");
-				this["SpecificIPv6InterfaceIsAvailable"] = value;
-			}
+			get { return ((string)this["IPv6SpecificInterface"]); }
+		}
+
+		#endregion
+
+		#region Properties > Auxiliary
+		//------------------------------------------------------------------------------------------
+		// Properties > Auxiliary
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
+		public virtual bool IPv4SpecificInterfaceIsAvailable
+		{
+			get { return (this.ipv4SpecificInterfaceIsAvailable); }
+			set { this.ipv4SpecificInterfaceIsAvailable = value;  }
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public virtual string SpecificIPv4Interface
+		public virtual bool IPv6SpecificInterfaceIsAvailable
 		{
-			get { return ((string)this["SpecificIPv4Interface"]); }
-			set
-			{
-				AssertNotReadOnly("SpecificIPv4Interface");
-				this["SpecificIPv4Interface"] = value;
-			}
+			get { return (this.ipv6SpecificInterfaceIsAvailable); }
+			set { this.ipv6SpecificInterfaceIsAvailable = value;  }
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public virtual string SpecificIPv6Interface
-		{
-			get { return ((string)this["SpecificIPv6Interface"]); }
-			set
-			{
-				AssertNotReadOnly("SpecificIPv6Interface");
-				this["SpecificIPv6Interface"] = value;
-			}
-		}
+		#endregion
 
 		#endregion
 
@@ -186,23 +193,16 @@ namespace MKY.Net.Test
 			ConfigurationSection configuration;
 			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
-				// Ensure that the configured physical ports are currently indeed available:
-
+				// Set which physical items are available on the current machine:
 				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
 				inferfaces.FillWithAvailableInterfaces();
 
 				IPNetworkInterface ni;
-				if (IPNetworkInterface.TryParse(configuration.SpecificIPv4Interface, out ni))
-				{
-					if (!inferfaces.Contains(ni))
-						configuration.SpecificIPv4InterfaceIsAvailable = false;
-				}
+				if (IPNetworkInterface.TryParse(configuration.IPv4SpecificInterface, out ni))
+					configuration.IPv4SpecificInterfaceIsAvailable = inferfaces.Contains(ni);
 
-				if (IPNetworkInterface.TryParse(configuration.SpecificIPv6Interface, out ni))
-				{
-					if (!inferfaces.Contains(ni))
-						configuration.SpecificIPv6InterfaceIsAvailable = false;
-				}
+				if (IPNetworkInterface.TryParse(configuration.IPv6SpecificInterface, out ni))
+					configuration.IPv6SpecificInterfaceIsAvailable = inferfaces.Contains(ni);
 
 				// Activate the effective configuration:
 				StaticConfiguration = configuration;
@@ -236,11 +236,13 @@ namespace MKY.Net.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string SpecificIPv4InterfaceIsAvailable = "Specific IPv4 interface '" + ConfigurationProvider.Configuration.SpecificIPv4Interface + "' is available";
+		public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface";
+		//public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface '" + ConfigurationProvider.Configuration.IPv4SpecificInterface + "' is available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string SpecificIPv6InterfaceIsAvailable = "Specific IPv6 interface '" + ConfigurationProvider.Configuration.SpecificIPv6Interface + "' is available";
+		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface";
+		//public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is available";
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
@@ -270,11 +272,11 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class SpecificIPv4InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class IPv4SpecificInterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public SpecificIPv4InterfaceIsAvailableCategoryAttribute()
-			: base(ConfigurationCategoryStrings.SpecificIPv4InterfaceIsAvailable)
+		public IPv4SpecificInterfaceIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable)
 		{
 		}
 	}
@@ -282,11 +284,11 @@ namespace MKY.Net.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class SpecificIPv6InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class IPv6SpecificInterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public SpecificIPv6InterfaceIsAvailableCategoryAttribute()
-			: base(ConfigurationCategoryStrings.SpecificIPv6InterfaceIsAvailable)
+		public IPv6SpecificInterfaceIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable)
 		{
 		}
 	}

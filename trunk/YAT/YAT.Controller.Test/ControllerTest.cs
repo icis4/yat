@@ -28,7 +28,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-using MKY.IO.Ports.Test;
 using MKY.Settings;
 
 using NUnit;
@@ -205,7 +204,7 @@ namespace YAT.Controller.Test
 		/// <summary></summary>
 		/// <remarks> COM A and COM B will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).</remarks>
-		[Test, SerialPortAIsAvailableCategory, SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void TestWorkspaceCommandLineArgRun()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
@@ -275,7 +274,7 @@ namespace YAT.Controller.Test
 		/// <summary></summary>
 		/// <remarks> COM A and COM B will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).</remarks>
-		[Test, SerialPortAIsAvailableCategory, SerialPortBIsAvailableCategory, InteractiveCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory, InteractiveCategory]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))

@@ -65,9 +65,9 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		TcpAutoSocketOnIPv6Loopback,
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
-		TcpAutoSocketOnSpecificIPv4Interface,
+		TcpAutoSocketOnIPv4SpecificInterface,
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
-		TcpAutoSocketOnSpecificIPv6Interface,
+		TcpAutoSocketOnIPv6SpecificInterface,
 
 		// USB Ser/HID not possible since YAT only implements the host side.
 	}
@@ -84,24 +84,17 @@ namespace YAT.Model.Test
 		// TransmissionTypes
 		//==========================================================================================
 
-		private static readonly string[] SerialPortsAreInterconnectedAB = new string[]
-		{
-			MKY.IO.Ports.Test.ConfigurationCategoryStrings.SerialPortAIsAvailable,
-			MKY.IO.Ports.Test.ConfigurationCategoryStrings.SerialPortBIsAvailable,
-			MKY.IO.Ports.Test.ConfigurationCategoryStrings.SerialPortsAreInterconnected
-		};
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		public static IEnumerable<KeyValuePair<TransmissionType, string[]>> GetItems
 		{
 			get
 			{
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.SerialPort, SerialPortsAreInterconnectedAB));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.SerialPort, new string[] { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbacksAreAvailable }));
 				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
 				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, new string[] { MKY.Net.Test.ConfigurationCategoryStrings.SpecificIPv4InterfaceIsAvailable }));
-				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, new string[] { MKY.Net.Test.ConfigurationCategoryStrings.SpecificIPv6InterfaceIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv4SpecificInterface, new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
+				yield return (new KeyValuePair<TransmissionType, string[]>(TransmissionType.TcpAutoSocketOnIPv6SpecificInterface, new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
 			}
 		}
 
