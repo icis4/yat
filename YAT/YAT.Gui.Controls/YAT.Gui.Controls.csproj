@@ -105,37 +105,37 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="BinaryDisplaySettingsSet.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="BinaryDisplaySettingsSet.Designer.cs">
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
     </Compile>
     <Compile Include="UsbSerialHidDeviceSettings.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="UsbSerialHidDeviceSettings.Designer.cs">
       <DependentUpon>UsbSerialHidDeviceSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="UsbSerialHidDeviceSelection.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="UsbSerialHidDeviceSelection.Designer.cs">
       <DependentUpon>UsbSerialHidDeviceSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="Send.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="Send.Designer.cs">
       <DependentUpon>Send.cs</DependentUpon>
     </Compile>
     <Compile Include="SocketSettings.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="SocketSettings.Designer.cs">
       <DependentUpon>SocketSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Monitor.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="Monitor.Designer.cs">
       <DependentUpon>Monitor.cs</DependentUpon>
@@ -147,61 +147,61 @@
       <DependentUpon>MultiLineBox.cs</DependentUpon>
     </Compile>
     <Compile Include="PredefinedCommandSettingsSet.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="PredefinedCommandSettingsSet.Designer.cs">
       <DependentUpon>PredefinedCommandSettingsSet.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialPortSelection.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="SerialPortSelection.Designer.cs">
       <DependentUpon>SerialPortSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialPortSettings.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="SerialPortSettings.Designer.cs">
       <DependentUpon>SerialPortSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="PredefinedCommands.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="PredefinedCommands.Designer.cs">
       <DependentUpon>PredefinedCommands.cs</DependentUpon>
     </Compile>
     <Compile Include="PredefinedCommandPageButtons.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="PredefinedCommandPageButtons.Designer.cs">
       <DependentUpon>PredefinedCommandPageButtons.cs</DependentUpon>
     </Compile>
     <Compile Include="SendCommand.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="SendCommand.Designer.cs">
       <DependentUpon>SendCommand.cs</DependentUpon>
     </Compile>
     <Compile Include="SendFile.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="SendFile.Designer.cs">
       <DependentUpon>SendFile.cs</DependentUpon>
     </Compile>
     <Compile Include="SocketSelection.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="SocketSelection.Designer.cs">
       <DependentUpon>SocketSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="TerminalSelection.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="TerminalSelection.Designer.cs">
       <DependentUpon>TerminalSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="TextFormat.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="TextFormat.Designer.cs">
       <DependentUpon>TextFormat.cs</DependentUpon>
@@ -213,7 +213,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="UsbSerialHidReportFormatPreview.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Windows Forms</SubType>
     </Compile>
     <Compile Include="UsbSerialHidReportFormatPreview.Designer.cs">
       <DependentUpon>UsbSerialHidReportFormatPreview.cs</DependentUpon>
