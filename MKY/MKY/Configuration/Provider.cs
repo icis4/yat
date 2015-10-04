@@ -78,9 +78,9 @@ namespace MKY.Configuration
 	///     MKY.IO.Ports.Test.Configuration
 	///         Selection SelectedConfigurationName="NoDevices"
 	///     MKY.IO.Ports.Test.Configuration.Sections
-	///         NoDevices PortA="COM1" PortB="COM2"
-	///         UsingPhysicalDevices PortA="COM1" PortB="COM2"
+	///         NoDevices PortA="" PortB=""
 	///         UsingVSPE PortA="COM1" PortB="COM2"
+	///         UsingPhysicalDevices PortA="COM11" PortB="COM12"
 	/// These solution defaults may then be partly or completely overridden by the machine specific
 	/// configuration file 'MKY.IO.Ports.Test.config':
 	///     MKY.IO.Ports.Test.Configuration
@@ -105,33 +105,33 @@ namespace MKY.Configuration
 		/// Tries the open and merge configurations.
 		/// </summary>
 		/// <typeparam name="T">The type of the section to retrieve.</typeparam>
-		/// <param name="configurationGroupName">Name of the configuration group.</param>
-		/// <param name="configurationSectionsGroupName">Name of the configuration sections group.</param>
+		/// <param name="selectionGroupName">Name of the selection configuration group.</param>
+		/// <param name="sectionsGroupName">Name of the configuration sections group.</param>
 		/// <param name="userConfigurationEnvironmentVariableName">Name of the user configuration environment variable.</param>
-		/// <param name="mergedConfiguration">The merged configuration.</param>
-		public static bool TryOpenAndMergeConfigurations<T>(string configurationGroupName, string configurationSectionsGroupName, string userConfigurationEnvironmentVariableName, out T mergedConfiguration)
+		/// <param name="resultingConfiguration">The resulting configuration (default, solution, user or merged).</param>
+		public static bool TryOpenAndMergeConfigurations<T>(string selectionGroupName, string sectionsGroupName, string userConfigurationEnvironmentVariableName, out T resultingConfiguration)
 			where T : MergeableConfigurationSection
 		{
-			return (TryOpenAndMergeConfigurations(configurationGroupName, configurationSectionsGroupName, null, userConfigurationEnvironmentVariableName, out mergedConfiguration));
+			return (TryOpenAndMergeConfigurations(selectionGroupName, sectionsGroupName, null, userConfigurationEnvironmentVariableName, out resultingConfiguration));
 		}
 
 		/// <summary>
 		/// Tries the open and merge configurations.
 		/// </summary>
 		/// <typeparam name="T">The type of the section to retrieve.</typeparam>
-		/// <param name="configurationGroupName">Name of the configuration group.</param>
-		/// <param name="configurationSectionsGroupName">Name of the configuration sections group.</param>
+		/// <param name="selectionGroupName">Name of the selection configuration group.</param>
+		/// <param name="sectionsGroupName">Name of the configuration sections group.</param>
 		/// <param name="solutionConfigurationFileNameSuffix">An optional suffix to choose a dedicated file (e.g. ".Test" for a test configuration file).</param>
 		/// <param name="userConfigurationEnvironmentVariableName">Name of the user configuration environment variable.</param>
-		/// <param name="mergedConfiguration">The merged configuration.</param>
-		public static bool TryOpenAndMergeConfigurations<T>(string configurationGroupName, string configurationSectionsGroupName, string solutionConfigurationFileNameSuffix, string userConfigurationEnvironmentVariableName, out T mergedConfiguration)
+		/// <param name="resultingConfiguration">The resulting configuration (default, solution, user or merged).</param>
+		public static bool TryOpenAndMergeConfigurations<T>(string selectionGroupName, string sectionsGroupName, string solutionConfigurationFileNameSuffix, string userConfigurationEnvironmentVariableName, out T resultingConfiguration)
 			where T : MergeableConfigurationSection
 		{
 			string solutionFilePath = System.AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 #if (DEBUG)
 			StringBuilder sb;
 #endif
-			// The configuration section of the selected configuration of the solution test configuration file:
+			// The configuration section of the selected configuration of the solution configuration file:
 			System.Configuration.Configuration solutionConfiguration;
 			if (string.IsNullOrEmpty(solutionConfigurationFileNameSuffix))
 			{
@@ -140,7 +140,7 @@ namespace MKY.Configuration
 			}
 			else
 			{
-				// Use of a separate file (e.g. dedicated for test configuration):
+				// Use of a dedicated file (e.g. dedicated for test configuration):
 				string extension = Path.GetExtension(solutionFilePath);
 				int indexBeforeExtension = solutionFilePath.Length - extension.Length;
 				solutionFilePath = solutionFilePath.Insert(indexBeforeExtension, solutionConfigurationFileNameSuffix);
@@ -152,12 +152,12 @@ namespace MKY.Configuration
 			if (solutionConfiguration != null)
 			{
 				T selectedSolutionConfiguration;
-				if (Selector.TryGetSelectedConfiguration<T>(solutionConfiguration, configurationGroupName, configurationSectionsGroupName, out selectedSolutionConfiguration))
+				if (Selector.TryGetSelectedConfiguration<T>(solutionConfiguration, selectionGroupName, sectionsGroupName, out selectedSolutionConfiguration))
 				{
 #if (DEBUG)
 					sb = new StringBuilder();
 					sb.Append("Solution test configuration of ");
-					sb.Append(configurationGroupName);
+					sb.Append(selectionGroupName);
 					sb.Append(" successfully loaded from ");
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
@@ -167,20 +167,19 @@ namespace MKY.Configuration
 					string userFilePath;
 					if (EnvironmentEx.TryGetFilePathFromEnvironmentVariableAndVerify(userConfigurationEnvironmentVariableName, out userFilePath))
 					{
-						System.Configuration.Configuration userConfiguration;
 						ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
 						ecfm.ExeConfigFilename = userFilePath;
-						userConfiguration = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
+						System.Configuration.Configuration userConfiguration = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
 						if (userConfiguration != null)
 						{
 							T selectedUserConfiguration;
-							if (Selector.TryGetSelectedConfiguration<T>(userConfiguration, configurationGroupName, configurationSectionsGroupName, out selectedUserConfiguration))
+							if (Selector.TryGetSelectedConfiguration<T>(userConfiguration, selectionGroupName, sectionsGroupName, out selectedUserConfiguration))
 							{
 								selectedSolutionConfiguration.MergeWith(selectedUserConfiguration);
 #if (DEBUG)
 								sb = new StringBuilder();
 								sb.Append("Configuration of ");
-								sb.Append(configurationGroupName);
+								sb.Append(selectionGroupName);
 								sb.Append(" successfully merged with user configuration from ");
 								sb.AppendLine();
 								sb.AppendLine(userConfiguration.FilePath);
@@ -199,7 +198,7 @@ namespace MKY.Configuration
 						}
 #endif
 					}
-					mergedConfiguration = selectedSolutionConfiguration;
+					resultingConfiguration = selectedSolutionConfiguration;
 					return (true);
 				}
 #if (DEBUG)
@@ -207,7 +206,7 @@ namespace MKY.Configuration
 				{
 					sb = new StringBuilder();
 					sb.Append("Failed to load solution configuration of ");
-					sb.Append(configurationGroupName);
+					sb.Append(selectionGroupName);
 					sb.Append(" from ");
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
@@ -225,7 +224,7 @@ namespace MKY.Configuration
 				Debug.Write(sb.ToString());
 			}
 #endif
-			mergedConfiguration = null;
+			resultingConfiguration = null;
 			return (false);
 		}
 	}

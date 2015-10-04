@@ -50,8 +50,8 @@ namespace YAT.Test
 			CreateDedicatedFilesAndAddAssemblySections // MKY.IO.Ports.Test
 			(
 				"MKY.IO.Ports.Test.config",
-				MKY.IO.Ports.Test.ConfigurationConstants.ConfigurationGroupName,
-				MKY.IO.Ports.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
+				MKY.IO.Ports.Test.ConfigurationConstants.SelectionGroupName,
+				MKY.IO.Ports.Test.ConfigurationConstants.SectionsGroupName,
 				new MKY.IO.Ports.Test.ConfigurationSection(), // Dedicated
 				new MKY.IO.Ports.Test.ConfigurationSection(), // Overall
 				overall
@@ -65,8 +65,8 @@ namespace YAT.Test
 			CreateDedicatedFilesAndAddAssemblySections // MKY.IO.Usb.Test
 			(
 				"MKY.IO.Usb.Test.config",
-				MKY.IO.Usb.Test.ConfigurationConstants.ConfigurationGroupName,
-				MKY.IO.Usb.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
+				MKY.IO.Usb.Test.ConfigurationConstants.SelectionGroupName,
+				MKY.IO.Usb.Test.ConfigurationConstants.SectionsGroupName,
 				new MKY.IO.Usb.Test.ConfigurationSection(), // Dedicated
 				new MKY.IO.Usb.Test.ConfigurationSection(), // Overall
 				overall
@@ -75,8 +75,8 @@ namespace YAT.Test
 			CreateDedicatedFilesAndAddAssemblySections // MKY.Net.Test
 			(
 				"MKY.Net.Test.config",
-				MKY.Net.Test.ConfigurationConstants.ConfigurationGroupName,
-				MKY.Net.Test.ConfigurationConstants.ConfigurationSectionsGroupName,
+				MKY.Net.Test.ConfigurationConstants.SelectionGroupName,
+				MKY.Net.Test.ConfigurationConstants.SectionsGroupName,
 				new MKY.Net.Test.ConfigurationSection(), // Dedicated
 				new MKY.Net.Test.ConfigurationSection(), // Overall
 				overall
@@ -106,22 +106,23 @@ namespace YAT.Test
 			//  1. Build and run this project => Template files get created.
 			//  2. Go to "\YAT\YAT.Test\bin\Debug" and filter for "*.config".
 			//  3. Clean template files from unnecessary information:
-			//      a) Remove the version information:
-			//          > Groups ", Version=..." >> "" >"
-			//          > Sections ", Version=..." >> "" />"
-			//      b) Remove the following sections:
+			//      a) Remove the following sections:
 			//          > "appSettings"
 			//          > "configProtectedData"
 			//          > "connectionStrings"
 			//          > "system.diagnostics"
 			//          > "system.windows.forms"
+			//      b) Remove the version information:
+			//          > In all "<sectionGroup..." remove all content from ", System.Configuration, Version=..." up to the closing quote.
+			//            Attention: Files including the assembly information "System.Configuration" result in TypeLoadException's! Why? No clue...
+			//          > In all "<section..." remove all content from ", Version=..." up to the very last closing quote.
 			//  4. Move template files to the respective "\ConfigurationTemplate" folder.
 			//  5. Compare the new template file against the former template file.
 			//  6. Update the effective solution file ".\YAT.Test.config" as required. (This is the generic base configuration.)
 			//  7. Update the effective assembly files in e.g. "..\!-TestConfig" as required. (This is the user/machine dependent configuration to be merged with.)
 		}
 
-		private static void CreateDedicatedFilesAndAddAssemblySections(string dedicatedFileName, string groupName, string sectionsGroupName, ConfigurationSection dedicatedSection, ConfigurationSection overallSection, Configuration overallConfiguration)
+		private static void CreateDedicatedFilesAndAddAssemblySections(string dedicatedFileName, string selectionGroupName, string sectionsGroupName, ConfigurationSection dedicatedSection, ConfigurationSection overallSection, Configuration overallConfiguration)
 		{
 			// Add default sections for the assembly to the dedicated configuration:
 			ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
@@ -129,17 +130,17 @@ namespace YAT.Test
 			Configuration dedicatedConfiguration = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
 			dedicatedConfiguration.Sections.Clear();
 			dedicatedConfiguration.SectionGroups.Clear();
-			AddAssemblySections(groupName, sectionsGroupName, dedicatedSection, dedicatedConfiguration);
+			AddAssemblySections(selectionGroupName, sectionsGroupName, dedicatedSection, dedicatedConfiguration);
 			dedicatedConfiguration.Save(ConfigurationSaveMode.Full, true);
 
 			// Add default sections for the assembly to the overall configuration:
-			AddAssemblySections(groupName, sectionsGroupName, overallSection, overallConfiguration);
+			AddAssemblySections(selectionGroupName, sectionsGroupName, overallSection, overallConfiguration);
 		}
 
-		private static void AddAssemblySections(string groupName, string sectionsGroupName, ConfigurationSection section, Configuration configuration)
+		private static void AddAssemblySections(string selectionGroupName, string sectionsGroupName, ConfigurationSection section, Configuration configuration)
 		{
-			configuration.SectionGroups.Add(groupName, new ConfigurationSectionGroup());
-			configuration.SectionGroups[groupName].Sections.Add(SelectionSection.SelectionSectionName, new SelectionSection());
+			configuration.SectionGroups.Add(selectionGroupName, new ConfigurationSectionGroup());
+			configuration.SectionGroups[selectionGroupName].Sections.Add(SelectionSection.SelectionSectionName, new SelectionSection());
 
 			configuration.SectionGroups.Add(sectionsGroupName, new ConfigurationSectionGroup());
 			configuration.SectionGroups[sectionsGroupName].Sections.Add("Template", section);

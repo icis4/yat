@@ -170,10 +170,10 @@ namespace MKY.Net.Test
 	public static class ConfigurationConstants
 	{
 		/// <summary></summary>
-		public static readonly string ConfigurationGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration";
+		public static readonly string SelectionGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration"; // Simply use the generic <Namespace>.Configuration identifier.
 
 		/// <summary></summary>
-		public static readonly string ConfigurationSectionsGroupName = ConfigurationGroupName + ".Sections";
+		public static readonly string SectionsGroupName = SelectionGroupName + ".Sections"; // Just add to the generic identifier from above.
 
 		/// <summary></summary>
 		public static readonly string SolutionConfigurationFileNameSuffix = ".Test";
@@ -191,7 +191,7 @@ namespace MKY.Net.Test
 		static ConfigurationProvider()
 		{
 			ConfigurationSection configuration;
-			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
 				// Set which physical items are available on the current machine:
 				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
@@ -236,13 +236,11 @@ namespace MKY.Net.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface";
-		//public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface '" + ConfigurationProvider.Configuration.IPv4SpecificInterface + "' is available";
+		public static readonly string IPv4SpecificInterfaceIsAvailable = "IPv4 specific interface '" + ConfigurationProvider.Configuration.IPv4SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable ? "" : "not ") + "available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface";
-		//public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is available";
+		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : "not ") + "available";
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>

@@ -120,13 +120,7 @@ namespace MKY.IO.Usb.Test
 		/// <summary></summary>
 		public virtual string DeviceA
 		{
-			get
-			{
-				if (this.properties.Contains("DeviceA"))
-					return ((string)this["DeviceA"]);
-				else
-					return ("<N/A>");
-			}
+			get { return ((string)this["DeviceA"]); }
 		}
 
 		/// <summary></summary>
@@ -148,15 +142,15 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
-		public virtual string TILauchPadDeviceA
+		public virtual string TILaunchPadDeviceA
 		{
-			get { return ((string)this["TILauchPadDeviceA"]); }
+			get { return ((string)this["TILaunchPadDeviceA"]); }
 		}
 
 		/// <summary></summary>
-		public virtual string TILauchPadDeviceB
+		public virtual string TILaunchPadDeviceB
 		{
-			get { return ((string)this["TILauchPadDeviceB"]); }
+			get { return ((string)this["TILaunchPadDeviceB"]); }
 		}
 
 		#endregion
@@ -200,7 +194,7 @@ namespace MKY.IO.Usb.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public virtual bool TILauchPadDeviceAIsConnected
+		public virtual bool TILaunchPadDeviceAIsConnected
 		{
 			get { return (this.tiLaunchPadDeviceAIsConnected); }
 			set { this.tiLaunchPadDeviceAIsConnected = value; }
@@ -208,7 +202,7 @@ namespace MKY.IO.Usb.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public virtual bool TILauchPadDeviceBIsConnected
+		public virtual bool TILaunchPadDeviceBIsConnected
 		{
 			get { return (this.tiLaunchPadDeviceBIsConnected); }
 			set { this.tiLaunchPadDeviceBIsConnected = value; }
@@ -246,10 +240,10 @@ namespace MKY.IO.Usb.Test
 	public static class ConfigurationConstants
 	{
 		/// <summary></summary>
-		public static readonly string ConfigurationGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration";
+		public static readonly string SelectionGroupName = typeof(ConfigurationConstants).Namespace + ".Configuration"; // Simply use the generic <Namespace>.Configuration identifier.
 
 		/// <summary></summary>
-		public static readonly string ConfigurationSectionsGroupName = ConfigurationGroupName + ".Sections";
+		public static readonly string SectionsGroupName = SelectionGroupName + ".Sections"; // Just add to the generic identifier from above.
 
 		/// <summary></summary>
 		public static readonly string SolutionConfigurationFileNameSuffix = ".Test";
@@ -267,7 +261,7 @@ namespace MKY.IO.Usb.Test
 		static ConfigurationProvider()
 		{
 			ConfigurationSection configuration;
-			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.ConfigurationGroupName, ConfigurationConstants.ConfigurationSectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
+			if (Provider.TryOpenAndMergeConfigurations<ConfigurationSection>(ConfigurationConstants.SelectionGroupName, ConfigurationConstants.SectionsGroupName, ConfigurationConstants.SolutionConfigurationFileNameSuffix, ConfigurationConstants.UserConfigurationEnvironmentVariableName, out configuration))
 			{
 				// Set which physical items are available on the current machine:
 				SerialHidDeviceCollection availableDevices = new SerialHidDeviceCollection();
@@ -286,11 +280,11 @@ namespace MKY.IO.Usb.Test
 				if (DeviceInfo.TryParse(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceBIsConnected = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.TILauchPadDeviceA, out di))
-					configuration.TILauchPadDeviceAIsConnected = availableDevices.Contains(di);
+				if (DeviceInfo.TryParse(configuration.TILaunchPadDeviceA, out di))
+					configuration.TILaunchPadDeviceAIsConnected = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.TILauchPadDeviceB, out di))
-					configuration.TILauchPadDeviceBIsConnected = availableDevices.Contains(di);
+				if (DeviceInfo.TryParse(configuration.TILaunchPadDeviceB, out di))
+					configuration.TILaunchPadDeviceBIsConnected = availableDevices.Contains(di);
 
 				// Activate the effective configuration:
 				StaticConfiguration = configuration;
@@ -316,33 +310,27 @@ namespace MKY.IO.Usb.Test
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter")]
-		public static readonly string DeviceAIsAvailable = "USB Ser/HID device A";
-		//public static readonly string DeviceAIsAvailable = "USB Ser/HID device A " + (ConfigurationProvider.Configuration.DeviceAIsAvailable ? ("'" + ConfigurationProvider.Configuration.DeviceA + "' is ") : "is not") + " available";
+		public static readonly string DeviceAIsAvailable = "USB Ser/HID device A '" + ConfigurationProvider.Configuration.DeviceA + "' is " + (ConfigurationProvider.Configuration.DeviceAIsAvailable ? "" : "not ") + "available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter")]
-		public static readonly string DeviceBIsAvailable = "USB Ser/HID device B";
-		//public static readonly string DeviceBIsAvailable = "USB Ser/HID device B " + (ConfigurationProvider.Configuration.DeviceBIsAvailable ? ("'" + ConfigurationProvider.Configuration.DeviceB + "' is ") : "is not") + " available";
+		public static readonly string DeviceBIsAvailable = "USB Ser/HID device B '" + ConfigurationProvider.Configuration.DeviceB + "' is " + (ConfigurationProvider.Configuration.DeviceBIsAvailable ? "" : "not ") + "available";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT-SICS device A";
-		//public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT-SICS device A " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? ("'" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is") : "is not") + "connected";
+		public static readonly string MTSicsDeviceAIsConnected = "USB Ser/HID MT-SICS device A '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? "" : "not ") + "connected";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT-SICS device B";
-		//public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT-SICS device B " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ? ("'" + ConfigurationProvider.Configuration.MTSicsDeviceA + "' is") : "is not") + "connected";
+		public static readonly string MTSicsDeviceBIsConnected = "USB Ser/HID MT-SICS device B '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "' is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected ? "" : "not ") + "connected";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
-		public static readonly string TILauchPadDeviceAIsConnected = "USB Ser/HID TI LaunchPad device A";
-		//public static readonly string TILauchPadDeviceAIsConnected = "USB Ser/HID TI LaunchPad device A " + (ConfigurationProvider.Configuration.TILauchPadDeviceAIsConnected ? ("'" + ConfigurationProvider.Configuration.TILauchPadDeviceA + "' is") : "is not") + "connected";
+		public static readonly string TILaunchPadDeviceAIsConnected = "USB Ser/HID TI LaunchPad device A '" + ConfigurationProvider.Configuration.TILaunchPadDeviceA + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceAIsConnected ? "" : "not ") + "connected";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
-		public static readonly string TILauchPadDeviceBIsConnected = "USB Ser/HID TI LaunchPad device B";
-		//public static readonly string TILauchPadDeviceBIsConnected = "USB Ser/HID TI LaunchPad device B " + (ConfigurationProvider.Configuration.TILauchPadDeviceBIsConnected ? ("'" + ConfigurationProvider.Configuration.TILauchPadDeviceB + "' is") : "is not") + "connected";
+		public static readonly string TILaunchPadDeviceBIsConnected = "USB Ser/HID TI LaunchPad device B '" + ConfigurationProvider.Configuration.TILaunchPadDeviceB + "' is " + (ConfigurationProvider.Configuration.TILaunchPadDeviceBIsConnected ? "" : "not ") + "connected";
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
@@ -396,11 +384,11 @@ namespace MKY.IO.Usb.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class TILauchPadDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class TILaunchPadDeviceAIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public TILauchPadDeviceAIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.TILauchPadDeviceAIsConnected)
+		public TILaunchPadDeviceAIsConnectedCategoryAttribute()
+			: base(ConfigurationCategoryStrings.TILaunchPadDeviceAIsConnected)
 		{
 		}
 	}
@@ -408,11 +396,11 @@ namespace MKY.IO.Usb.Test
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class TILauchPadDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public sealed class TILaunchPadDeviceBIsConnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public TILauchPadDeviceBIsConnectedCategoryAttribute()
-			: base(ConfigurationCategoryStrings.TILauchPadDeviceBIsConnected)
+		public TILaunchPadDeviceBIsConnectedCategoryAttribute()
+			: base(ConfigurationCategoryStrings.TILaunchPadDeviceBIsConnected)
 		{
 		}
 	}
