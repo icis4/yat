@@ -39,20 +39,20 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, SerialHidDeviceAIsAvailableCategory]
+		[Test, DeviceAIsAvailableCategory]
 		public virtual void TestConnectDisconnectA()
 		{
-			if (!ConfigurationProvider.Configuration.SerialHidDeviceAIsAvailable)
+			if (!ConfigurationProvider.Configuration.DeviceAIsAvailable)
 				Assert.Ignore("'USB Ser/HID Device A' is not available, therefore this test is ignored. Ensure that 'USB Ser/HID Device A' is properly configured and available if passing this test is required.");
 
 			Assert.Ignore("The USB Ser/HID connect/disconnect test is not yet implemented.");
 		}
 
 		/// <summary></summary>
-		[Test, SerialHidDeviceBIsAvailableCategory]
+		[Test, DeviceBIsAvailableCategory]
 		public virtual void TestConnectDisconnectB()
 		{
-			if (!ConfigurationProvider.Configuration.SerialHidDeviceBIsAvailable)
+			if (!ConfigurationProvider.Configuration.DeviceBIsAvailable)
 				Assert.Ignore("'USB Ser/HID Device B' is not available, therefore this test is ignored. Ensure that 'USB Ser/HID Device B' is properly configured and available if passing this test is required.");
 
 			Assert.Ignore("The USB Ser/HID connect/disconnect test is not yet implemented.");

@@ -244,34 +244,34 @@ namespace YAT.Model.Test
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortSettings(portId)));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings()
+		internal static TerminalSettingsRoot GetStartedTextPortASettings()
 		{
-			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortAIsAvailable)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortA));
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
 
-			Assert.Ignore("'SerialPortA' is not available, therefore this test is ignored. Ensure that 'SerialPortA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'PortA' is not available, therefore this test is ignored. Ensure that 'PortA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortASettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextPortASettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortASettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextPortASettings()));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings()
+		internal static TerminalSettingsRoot GetStartedTextPortBSettings()
 		{
-			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortBIsAvailable)
-				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortB));
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
 
-			Assert.Ignore("'SerialPortB' is not available, therefore this test is ignored. Ensure that 'SerialPortB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'PortB' is not available, therefore this test is ignored. Ensure that 'PortB' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortBSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextPortBSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortBSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextPortBSettings()));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings()
@@ -340,35 +340,35 @@ namespace YAT.Model.Test
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings()
 		{
-			if (MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv4InterfaceIsAvailable)
-				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv4Interface));
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
+				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
-			Assert.Ignore("'SpecificIPv4Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv4Interface' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is ignored. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings()));
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings()
 		{
-			if (MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv6InterfaceIsAvailable)
-				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.SpecificIPv6Interface));
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
+				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
-			Assert.Ignore("'SpecificIPv6Interface' is not available, therefore this test is ignored. Ensure that 'SpecificIPv6Interface' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is ignored. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings()));
 		}
 
 		#endregion
@@ -383,8 +383,8 @@ namespace YAT.Model.Test
 			switch (type)
 			{
 				case TransmissionType.SerialPort:
-					settingsA = GetStartedTextSerialPortASettings();
-					settingsB = GetStartedTextSerialPortBSettings();
+					settingsA = GetStartedTextPortASettings();
+					settingsB = GetStartedTextPortBSettings();
 					break;
 
 				case TransmissionType.TcpAutoSocketOnIPv4Loopback:
@@ -397,14 +397,14 @@ namespace YAT.Model.Test
 					settingsB = GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings();
 					break;
 
-				case TransmissionType.TcpAutoSocketOnSpecificIPv4Interface:
-					settingsA = GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings();
-					settingsB = GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings();
+				case TransmissionType.TcpAutoSocketOnIPv4SpecificInterface:
+					settingsA = GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings();
+					settingsB = GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings();
 					break;
 
-				case TransmissionType.TcpAutoSocketOnSpecificIPv6Interface:
-					settingsA = GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings();
-					settingsB = GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings();
+				case TransmissionType.TcpAutoSocketOnIPv6SpecificInterface:
+					settingsA = GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings();
+					settingsB = GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings();
 					break;
 
 				default:

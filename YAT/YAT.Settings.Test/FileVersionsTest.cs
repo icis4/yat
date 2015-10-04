@@ -95,7 +95,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -103,7 +103,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
 		{
 			// Ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
@@ -127,7 +127,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -135,7 +135,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -166,7 +166,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -174,7 +174,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -205,7 +205,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -213,7 +213,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -244,7 +244,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -252,7 +252,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -283,7 +283,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -291,7 +291,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -322,7 +322,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -330,7 +330,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -361,7 +361,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_24_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -369,7 +369,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_24_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -408,7 +408,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_25_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -416,7 +416,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_25_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -471,7 +471,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_26_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -479,7 +479,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_26_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -542,7 +542,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_28_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -550,7 +550,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_28_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -613,7 +613,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_30_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -621,7 +621,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_30_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -684,7 +684,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_32_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -692,7 +692,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_32_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -755,7 +755,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_33_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -763,7 +763,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_33_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -826,7 +826,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory]
 		public virtual void Test_V1_99_34_TerminalSettingsCase01()
 		{
 			ExecuteSettingsCase01(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_01_COM1_Open_Default]);
@@ -834,7 +834,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
-		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		[Test, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void Test_V1_99_34_TerminalSettingsCase02()
 		{
 			ExecuteSettingsCase02(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_02_COM2_Open_Binary_115200]);
@@ -1120,16 +1120,16 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortA == "COM1")
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA == "COM1")
 			{
-				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortAIsAvailable)
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
 					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
 				else
-					Assert.Ignore("'SerialPortA' is configured to 'COM1' but isn't available on this machine.");
+					Assert.Ignore("'PortA' is configured to 'COM1' but isn't available on this machine.");
 			}
 			else
 			{
-				Assert.Fail("This test case requires that 'SerialPortA' is configured to 'COM1'!");
+				Assert.Fail("This test case requires that 'PortA' is configured to 'COM1'!");
 			}
 		}
 
@@ -1148,16 +1148,16 @@ namespace YAT.Settings.Test
 			if (!ignoreBaudRate) // Optionally ignore baud rate because it changed from enum to int from 1.99.12 to 1.99.13.
 				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
-			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortB == "COM2")
+			if ((MKY.IO.Ports.SerialPortId)MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB == "COM2")
 			{
-				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.SerialPortBIsAvailable)
+				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
 					Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");
 				else
-					Assert.Ignore("'SerialPortB' is configured to 'COM2' but isn't available on this machine.");
+					Assert.Ignore("'PortB' is configured to 'COM2' but isn't available on this machine.");
 			}
 			else
 			{
-				Assert.Fail("This test case requires that 'SerialPortB' is configured to 'COM2'!");
+				Assert.Fail("This test case requires that 'PortB' is configured to 'COM2'!");
 			}
 		}
 
