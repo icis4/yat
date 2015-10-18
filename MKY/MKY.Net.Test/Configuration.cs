@@ -101,14 +101,14 @@ namespace MKY.Net.Test
 			get { return (this.properties); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>Currently limited to a single specific interface.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string IPv4SpecificInterface
 		{
 			get { return ((string)this["IPv4SpecificInterface"]); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>Currently limited to a single specific interface.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string IPv6SpecificInterface
 		{
@@ -223,7 +223,12 @@ namespace MKY.Net.Test
 	// Categories
 	//==========================================================================================
 
-	/// <summary></summary>
+	/// <remarks>
+	/// Note that NUnit category strings may not contain the following characters as specified
+	/// by <see cref="NUnit.Framework.CategoryAttribute"/>: ',' '+' '-' and '!'
+	/// 
+	/// Saying hello to StyleCop ;-.
+	/// </remarks>
 	public static class ConfigurationCategoryStrings
 	{
 		/// <summary></summary>
@@ -267,6 +272,7 @@ namespace MKY.Net.Test
 		}
 	}
 
+	/// <remarks>Currently limited to a single specific interface.</remarks>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
@@ -279,6 +285,7 @@ namespace MKY.Net.Test
 		}
 	}
 
+	/// <remarks>Currently limited to a single specific interface.</remarks>
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]

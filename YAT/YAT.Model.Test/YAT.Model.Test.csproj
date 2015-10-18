@@ -107,7 +107,10 @@
     <Compile Include="StartTest.cs" />
     <Compile Include="FileHandlingTest.cs" />
     <Compile Include="StressTest.cs" />
-    <Compile Include="TransmissionTest.cs" />
+    <Compile Include="Transmission\MTSicsDeviceTest.cs" />
+    <Compile Include="Transmission\RepeatingTest.cs" />
+    <Compile Include="Transmission\TwoWayTest.cs" />
+    <Compile Include="Transmission\OneWayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClearTest.cs" />
     <Compile Include="Utilities.cs" />

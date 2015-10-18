@@ -27,14 +27,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Collections.Generic;
 using MKY.Net;
-using MKY.Settings;
 
 using NUnit.Framework;
 
@@ -54,9 +53,80 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		public delegate TerminalSettingsRoot TerminalSettingsDelegate<T>(T arg);
+
+		/// <summary></summary>
+		public static class TransmissionSettings
+		{
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackPairs
+			{
+				get
+				{
+					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
+					{
+						TerminalSettingsDelegate<string> tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
+						Pair<TerminalSettingsDelegate<string>, string> pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
+						Pair<TerminalSettingsDelegate<string>, string> pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
+						string name = "SerialPortLoopbackPairs_" + ce.PortA + "_" + ce.PortB;
+						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
+						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
+					}
+				}
+			}
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackSelfs
+			{
+				get
+				{
+					foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
+					{
+						TerminalSettingsDelegate<string> tsm = new TerminalSettingsDelegate<string>(GetStartedTextSerialPortSettings);
+						Pair<TerminalSettingsDelegate<string>, string> pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
+						Pair<TerminalSettingsDelegate<string>, string> pB = new Pair<TerminalSettingsDelegate<string>, string>(null, null);
+						string name = "SerialPortLoopbackSelf_" + ce.Port;
+						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackSelfsAreAvailable };
+						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
+					}
+				}
+			}
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> IPLoopbacks
+			{
+				get
+				{
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "IPv4Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "IPv6Loopback", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "IPv4SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable }));
+
+					yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>
+					             (new Pair<TerminalSettingsDelegate<string>, string>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings, null),
+					              new Pair<TerminalSettingsDelegate<string>, string>(null, null),
+					              "IPv6SpecificInterface", new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable }));
+				}
+			}
+		}
+
+		/// <summary></summary>
 		/// <remarks>
 		/// \todo:
-		/// This test set class should be improved such that it can also handle expectations on the
+		/// This test set struct should be improved such that it can also handle expectations on the
 		/// sender side (i.e. terminal A). Rationale: Testing of \!(Clear) behavior.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This struct really belongs to these test utilities only.")]
@@ -227,21 +297,20 @@ namespace YAT.Model.Test
 		// Settings > Dedicated
 		//------------------------------------------------------------------------------------------
 
+		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(string portId)
+		{
+			return (GetStartedTextSerialPortSettings((MKY.IO.Ports.SerialPortId)portId));
+		}
+
 		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(MKY.IO.Ports.SerialPortId portId)
 		{
-			// Create settings
+			// Create settings:
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
 			settings.Terminal.IO.SerialPort.PortId = portId;
 			settings.TerminalIsStarted = true;
 			return (settings);
-		}
-
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortSettingsHandler(MKY.IO.Ports.SerialPortId portId)
-		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortSettings(portId)));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextPortASettings()
@@ -253,10 +322,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextPortASettingsHandler()
+		internal static TerminalSettingsRoot GetStartedTextPortASettings(string dummy)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextPortASettings()));
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextPortASettings());
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextPortBSettings()
@@ -268,10 +337,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextPortBSettingsHandler()
+		internal static TerminalSettingsRoot GetStartedTextPortBSettings(string dummy)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextPortBSettings()));
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextPortBSettings());
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings()
@@ -283,28 +352,35 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-	////internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceASettingsHandler()
-	////{
-	////	return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceASettings()));
-	////}
+		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextMTSicsDeviceASettings());
+		}
 
-	////internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings()
-	////{
-	////	if (MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceBIsConnected)
-	////		return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.MTSicsDeviceB));
-	////
-	////	Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
-	////	return (null);
-	////}
+		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings()
+		{
+			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
+		
+			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			return (null);
+		}
 
-	////internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextMTSicsDeviceBSettingsHandler()
-	////{
-	////	return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextMTSicsDeviceBSettings()));
-	////}
+		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextMTSicsDeviceBSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(string networkInterface)
+		{
+			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)networkInterface));
+		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)
 		{
-			// Create settings
+			// Create settings:
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
@@ -313,20 +389,15 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketSettingsHandler(IPNetworkInterface networkInterface)
-		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketSettings(networkInterface)));
-		}
-
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()
 		{
 			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)IPNetworkInterfaceType.IPv4Loopback));
 		}
 
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(string dummy)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()));
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings());
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()
@@ -334,10 +405,10 @@ namespace YAT.Model.Test
 			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)IPNetworkInterfaceType.IPv6Loopback));
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv6LoopbackSettingsHandler()
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(string dummy)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()));
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings());
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings()
@@ -349,13 +420,12 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettingsHandler()
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings(string dummy)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings()));
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings());
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
@@ -365,51 +435,10 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettingsHandler()
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings(string dummy)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings()));
-		}
-
-		#endregion
-
-		#region Settings > Combined
-		//------------------------------------------------------------------------------------------
-		// Settings > Combined
-		//------------------------------------------------------------------------------------------
-
-		internal static void GetStartedTextSettings(TransmissionType type, out TerminalSettingsRoot settingsA, out TerminalSettingsRoot settingsB)
-		{
-			switch (type)
-			{
-				case TransmissionType.SerialPort:
-					settingsA = GetStartedTextPortASettings();
-					settingsB = GetStartedTextPortBSettings();
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv4Loopback:
-					settingsA = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
-					settingsB = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv6Loopback:
-					settingsA = GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings();
-					settingsB = GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings();
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv4SpecificInterface:
-					settingsA = GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings();
-					settingsB = GetStartedTextTcpAutoSocketOnIPv4SpecificInterfaceSettings();
-					break;
-
-				case TransmissionType.TcpAutoSocketOnIPv6SpecificInterface:
-					settingsA = GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings();
-					settingsB = GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings();
-					break;
-
-				default:
-					throw (new InvalidOperationException("Program execution should never get here, item " + type.ToString() + " is unknown!"));
-			}
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings());
 		}
 
 		#endregion

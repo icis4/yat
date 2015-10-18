@@ -32,14 +32,12 @@ namespace YAT
 	/// <remarks>
 	/// This class is separated into its own .exe project for those who want to use YAT components
 	/// within their own application context.
-	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealed".
 	/// </remarks>
+	/// <remarks>Sealed according to FxCop "CA1052:StaticHolderTypesShouldBeSealed".</remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public sealed class YAT
 	{
-		/// <remarks>
-		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".
-		/// </remarks>
+		/// <remarks>Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".</remarks>
 		private YAT()
 		{
 		}

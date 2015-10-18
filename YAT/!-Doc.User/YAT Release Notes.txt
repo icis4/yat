@@ -64,13 +64,14 @@ New:
 -
 
 Important changes:
--
+- Test board (serial COM ports, USB devices,...) created and test cases adapted accordingly
+- Visual Studio upgraded to 2015 Community Edition, incl. installer (VSI)
 
 Fixed bugs:
 -
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2013 on .NET 3.5 SP1 (feat. #229)
+- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229)
 - General imitations of .NET Windows.Forms
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute

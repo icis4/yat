@@ -89,6 +89,8 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="Collections\Generic\Quadruple.cs" />
+    <Compile Include="Collections\Generic\Triple.cs" />
     <Compile Include="Collections\Generic\Pair.cs" />
     <Compile Include="Collections\NamedStringDictionary.cs" />
     <Compile Include="Collections\CollectionsEx.cs" />
