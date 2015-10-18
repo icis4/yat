@@ -28,27 +28,37 @@ using System.Xml.Serialization;
 namespace MKY.Collections.Generic
 {
 	/// <summary>
-	/// Value pair.
+	/// Value quadruple.
 	/// </summary>
-	/// <typeparam name="T1">The first type of the pair.</typeparam>
-	/// <typeparam name="T2">The second type of the pair.</typeparam>
+	/// <typeparam name="T1">The first type of the quadruple.</typeparam>
+	/// <typeparam name="T2">The second type of the quadruple.</typeparam>
+	/// <typeparam name="T3">The third type of the quadruple.</typeparam>
+	/// <typeparam name="T4">The forth type of the quadruple.</typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1", Justification = "T1 relates to Value1.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "3", Justification = "T3 relates to Value3.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "4", Justification = "T4 relates to Value4.")]
 	[Serializable]
-	public struct Pair<T1, T2>
+	public struct Quadruple<T1, T2, T3, T4>
 	{
 		private T1 value1;
 		private T2 value2;
+		private T3 value3;
+		private T4 value4;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:ValuePair`1"/> struct.
+		/// Initializes a new instance of the <see cref="T:ValueQuadruple`1"/> struct.
 		/// </summary>
 		/// <param name="value1">The first value.</param>
 		/// <param name="value2">The second value.</param>
-		public Pair(T1 value1, T2 value2)
+		/// <param name="value3">The third value.</param>
+		/// <param name="value4">The forth value.</param>
+		public Quadruple(T1 value1, T2 value2, T3 value3, T4 value4)
 		{
 			this.value1 = value1;
 			this.value2 = value2;
+			this.value3 = value3;
+			this.value4 = value4;
 		}
 
 		/// <summary>
@@ -73,6 +83,28 @@ namespace MKY.Collections.Generic
 			set { this.value2 = value;  }
 		}
 
+		/// <summary>
+		/// Gets or sets the third value.
+		/// </summary>
+		/// <value>The third value.</value>
+		[XmlElement("Value3")]
+		public T3 Value3
+		{
+			get { return (this.value3); }
+			set { this.value3 = value;  }
+		}
+
+		/// <summary>
+		/// Gets or sets the forth value.
+		/// </summary>
+		/// <value>The forth value.</value>
+		[XmlElement("Value4")]
+		public T4 Value4
+		{
+			get { return (this.value4); }
+			set { this.value4 = value;  }
+		}
+
 		#region Object Members
 
 		/// <summary>
@@ -90,11 +122,13 @@ namespace MKY.Collections.Generic
 			if (GetType() != obj.GetType())
 				return (false);
 
-			Pair<T1, T2> other = (Pair<T1, T2>)obj;
+			Quadruple<T1, T2, T3, T4> other = (Quadruple<T1, T2, T3, T4>)obj;
 			return
 			(
 				(Value1.Equals(other.Value1)) &&
-				(Value2.Equals(other.Value2))
+				(Value2.Equals(other.Value2)) &&
+				(Value3.Equals(other.Value3)) &&
+				(Value4.Equals(other.Value4))
 			);
 		}
 
@@ -110,7 +144,9 @@ namespace MKY.Collections.Generic
 			return
 			(
 				Value1.GetHashCode() ^
-				Value2.GetHashCode()
+				Value2.GetHashCode() ^
+				Value3.GetHashCode() ^
+				Value4.GetHashCode()
 			);
 		}
 
@@ -128,6 +164,10 @@ namespace MKY.Collections.Generic
 			sb.Append(Value1);
 			sb.Append(" / ");
 			sb.Append(Value2);
+			sb.Append(" / ");
+			sb.Append(Value3);
+			sb.Append(" / ");
+			sb.Append(Value4);
 
 			return (sb.ToString());
 		}
@@ -139,7 +179,7 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
+		public static bool operator ==(Quadruple<T1, T2, T3, T4> lhs, Quadruple<T1, T2, T3, T4> rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -154,7 +194,7 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
+		public static bool operator !=(Quadruple<T1, T2, T3, T4> lhs, Quadruple<T1, T2, T3, T4> rhs)
 		{
 			return (!(lhs == rhs));
 		}

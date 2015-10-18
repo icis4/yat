@@ -28,27 +28,32 @@ using System.Xml.Serialization;
 namespace MKY.Collections.Generic
 {
 	/// <summary>
-	/// Value pair.
+	/// Value triple.
 	/// </summary>
-	/// <typeparam name="T1">The first type of the pair.</typeparam>
-	/// <typeparam name="T2">The second type of the pair.</typeparam>
+	/// <typeparam name="T1">The first type of the triple.</typeparam>
+	/// <typeparam name="T2">The second type of the triple.</typeparam>
+	/// <typeparam name="T3">The third type of the triple.</typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1", Justification = "T1 relates to Value1.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2", Justification = "T2 relates to Value2.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "3", Justification = "T3 relates to Value3.")]
 	[Serializable]
-	public struct Pair<T1, T2>
+	public struct Triple<T1, T2, T3>
 	{
 		private T1 value1;
 		private T2 value2;
+		private T3 value3;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:ValuePair`1"/> struct.
+		/// Initializes a new instance of the <see cref="T:ValueTriple`1"/> struct.
 		/// </summary>
 		/// <param name="value1">The first value.</param>
 		/// <param name="value2">The second value.</param>
-		public Pair(T1 value1, T2 value2)
+		/// <param name="value3">The third value.</param>
+		public Triple(T1 value1, T2 value2, T3 value3)
 		{
 			this.value1 = value1;
 			this.value2 = value2;
+			this.value3 = value3;
 		}
 
 		/// <summary>
@@ -73,6 +78,17 @@ namespace MKY.Collections.Generic
 			set { this.value2 = value;  }
 		}
 
+		/// <summary>
+		/// Gets or sets the third value.
+		/// </summary>
+		/// <value>The third value.</value>
+		[XmlElement("Value3")]
+		public T3 Value3
+		{
+			get { return (this.value3); }
+			set { this.value3 = value;  }
+		}
+
 		#region Object Members
 
 		/// <summary>
@@ -90,11 +106,12 @@ namespace MKY.Collections.Generic
 			if (GetType() != obj.GetType())
 				return (false);
 
-			Pair<T1, T2> other = (Pair<T1, T2>)obj;
+			Triple<T1, T2, T3> other = (Triple<T1, T2, T3>)obj;
 			return
 			(
 				(Value1.Equals(other.Value1)) &&
-				(Value2.Equals(other.Value2))
+				(Value2.Equals(other.Value2)) &&
+				(Value3.Equals(other.Value3))
 			);
 		}
 
@@ -110,7 +127,8 @@ namespace MKY.Collections.Generic
 			return
 			(
 				Value1.GetHashCode() ^
-				Value2.GetHashCode()
+				Value2.GetHashCode() ^
+				Value3.GetHashCode()
 			);
 		}
 
@@ -128,6 +146,8 @@ namespace MKY.Collections.Generic
 			sb.Append(Value1);
 			sb.Append(" / ");
 			sb.Append(Value2);
+			sb.Append(" / ");
+			sb.Append(Value3);
 
 			return (sb.ToString());
 		}
@@ -139,7 +159,7 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
+		public static bool operator ==(Triple<T1, T2, T3> lhs, Triple<T1, T2, T3> rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -154,7 +174,7 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
+		public static bool operator !=(Triple<T1, T2, T3> lhs, Triple<T1, T2, T3> rhs)
 		{
 			return (!(lhs == rhs));
 		}

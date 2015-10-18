@@ -368,7 +368,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, uc + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal could not be created!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
@@ -464,14 +464,14 @@ namespace YAT.Model.Test
 				VerifyFiles(uc, workspace, true, terminal1, true, false);
 				StringAssert.AreEqualIgnoringCase(this.normalTerminal1FilePath, terminal1.SettingsFilePath, uc + "Terminal 1 is not stored at user terminal 1 location!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal 2 could not be created!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
 
-				Assert.IsTrue(workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()), "Terminal 3 could not be created!");
+				Assert.IsTrue(workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()), "Terminal 3 could not be created!");
 				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
 
 				Terminal terminal3 = workspace.ActiveTerminal;
@@ -690,7 +690,7 @@ namespace YAT.Model.Test
 					new bool[]     { false,     false     }  // Auto.
 				);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal 3 could not be created!");
 				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
 
@@ -803,14 +803,14 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, uc + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal 1 could not be created!");
 				Terminal terminal1 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal1, uc + "Terminal 1 could not be created!");
 				success = terminal1.SaveAs(this.normalTerminal1FilePath);
 				Assert.IsTrue(success, uc + "Terminal 1 could not be saved as!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
@@ -882,7 +882,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(uc, workspace, false, terminal1, true, false);
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, uc + "Terminal 2 could not be created!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
@@ -1041,7 +1041,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal could not be created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
@@ -1094,7 +1094,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 1 could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal 1 could not be created!");
@@ -1173,7 +1173,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
@@ -1249,7 +1249,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
@@ -1325,7 +1325,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
@@ -1416,7 +1416,7 @@ namespace YAT.Model.Test
 
 				Assert.IsTrue(terminal1.IsStarted, step + "Terminal is no longer started!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
@@ -1510,7 +1510,7 @@ namespace YAT.Model.Test
 
 				Assert.IsFalse(terminal1.IsStarted, step + "Terminal is started but should be stopped!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
@@ -1591,7 +1591,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 1 could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal 1 could not be created!");
@@ -1629,14 +1629,14 @@ namespace YAT.Model.Test
 				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
 				Assert.AreEqual(1,                         workspace.ActiveTerminalSequentialIndex, step + "Sequential index of terminal 1 isn't 1!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.IsTrue(success, step + "Terminal 2 could not be saved as!");
 
-				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				success = workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, step + "Terminal 3 could not be created!");
 				Terminal terminal3 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal3, step + "Terminal 3 could not be created!");
@@ -1728,17 +1728,22 @@ namespace YAT.Model.Test
 		// Private Methods
 		//==========================================================================================
 
-		#region Private Methods > Start
+		#region Private Methods > Settings, Start
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Start
+		// Private Methods > Settings, Start
 		//------------------------------------------------------------------------------------------
+
+		private static DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()));
+		}
 
 		private static void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			main = new Main();
 			main.Start();              // Creates empty workspace
 			workspace = main.Workspace;
-			workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+			workspace.CreateNewTerminal(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 			terminal = workspace.ActiveTerminal;
 		}
 
