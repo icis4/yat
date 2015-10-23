@@ -292,9 +292,9 @@ namespace YAT.Model.Test
 		// Settings
 		//==========================================================================================
 
-		#region Settings > Dedicated
+		#region Settings > SerialPort
 		//------------------------------------------------------------------------------------------
-		// Settings > Dedicated
+		// Settings > SerialPort
 		//------------------------------------------------------------------------------------------
 
 		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(string portId)
@@ -313,7 +313,7 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextPortASettings()
+		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
@@ -322,13 +322,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextPortASettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextPortASettings());
+			return (GetStartedTextSerialPortASettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextPortBSettings()
+		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
@@ -337,13 +337,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextPortBSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextPortBSettings());
+			return (GetStartedTextSerialPortBSettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings()
+		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
@@ -352,13 +352,13 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceASettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceASettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextMTSicsDeviceASettings());
+			return (GetStartedTextSerialPortMTSicsDeviceASettings());
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings()
+		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
@@ -367,11 +367,18 @@ namespace YAT.Model.Test
 			return (null);
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextMTSicsDeviceBSettings(string dummy)
+		internal static TerminalSettingsRoot GetStartedTextSerialPortMTSicsDeviceBSettings(string dummy)
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
-			return (GetStartedTextMTSicsDeviceBSettings());
+			return (GetStartedTextSerialPortMTSicsDeviceBSettings());
 		}
+
+		#endregion
+
+		#region Settings > Socket
+		//------------------------------------------------------------------------------------------
+		// Settings > Socket
+		//------------------------------------------------------------------------------------------
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(string networkInterface)
 		{
@@ -439,6 +446,89 @@ namespace YAT.Model.Test
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
 			return (GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings());
+		}
+
+		#endregion
+
+		#region Settings > USB Ser/HID
+		//------------------------------------------------------------------------------------------
+		// Settings > USB Ser/HID
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidSettings(string deviceInfo)
+		{
+			return (GetStartedTextUsbSerialHidSettings((MKY.IO.Usb.DeviceInfo)deviceInfo));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.DeviceInfo deviceInfo)
+		{
+			// Create settings:
+			TerminalSettingsRoot settings = new TerminalSettingsRoot();
+			settings.TerminalType = Domain.TerminalType.Text;
+			settings.Terminal.IO.IOType = Domain.IOType.UsbSerialHid;
+			settings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
+			settings.TerminalIsStarted = true;
+			return (settings);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings()
+		{
+			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceAIsAvailable)
+				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
+
+			Assert.Ignore("'DeviceA' is not available, therefore this test is ignored. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceASettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUsbSerialHidDeviceASettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceBSettings()
+		{
+			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceBIsAvailable)
+				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
+
+			Assert.Ignore("'DeviceB' is not available, therefore this test is ignored. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidDeviceBSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUsbSerialHidDeviceBSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceASettings()
+		{
+			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
+				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
+
+			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceASettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUsbSerialHidMTSicsDeviceASettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceBSettings()
+		{
+			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
+
+			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextUsbSerialHidMTSicsDeviceBSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextUsbSerialHidMTSicsDeviceBSettings());
 		}
 
 		#endregion

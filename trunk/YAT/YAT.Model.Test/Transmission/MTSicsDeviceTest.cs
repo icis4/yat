@@ -116,16 +116,29 @@ namespace YAT.Model.Test.Transmission
 				List<Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>> devs = new List<Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>>();
 
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
-				   !MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add at least 'A' even if no device is available => 'Ignore' is issued in that case.
+					!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextMTSicsDeviceASettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "DeviceA_"));
+					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceASettings, null);
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "SerialPort_DeviceA_"));
 				}
 
 				if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				{
-					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextMTSicsDeviceBSettings, null);
-					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "DeviceB_"));
+					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceBSettings, null);
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_DeviceB_"));
+				}
+
+				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
+					!MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected) // Add 'A' if neither device is available => 'Ignore' is issued in that case.
+				{
+					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceASettings, null);
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceAIsConnected, "UsbSerialHid_DeviceA_"));
+				}
+
+				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
+				{
+					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextUsbSerialHidMTSicsDeviceBSettings, null);
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Usb.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "UsbSerialHid_DeviceB_"));
 				}
 
 				foreach (Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string> dev in devs)
@@ -137,7 +150,7 @@ namespace YAT.Model.Test.Transmission
 						args.Insert(0, dev.Value1); // Insert the settings delegate at the beginning.
 						TestCaseData tcd = new TestCaseData(args.ToArray());
 
-						// Category(ies):
+						// Category:
 						tcd.SetCategory(dev.Value2); // Set device category.
 
 						if (!string.IsNullOrEmpty(kvp.Value))
