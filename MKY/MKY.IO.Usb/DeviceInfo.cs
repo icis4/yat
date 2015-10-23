@@ -76,11 +76,28 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public const int DefaultProductId = FirstProductId;
 
-		/// <remarks><![CDATA["VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"]]></remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234"]]></remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234)"]]></remarks>
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
 		public static readonly Regex VendorIdRegex = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-		/// <remarks><![CDATA["VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"]]></remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234"]]></remarks>
+		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234)"]]></remarks>
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
 		public static readonly Regex ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+		/// <remarks><![CDATA["VID:0ABC / PID:1234 / SNR:XYZ"]]></remarks>
+		/// <remarks><![CDATA["vid_0ABC & pid_1234 & snr_xyz"]]></remarks>
+		public static readonly Regex SerialRegexTag = new Regex(@"SNR[^0-9a-fA-F](?<serial>.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled); // SNR may be any character.
+
+		/// <remarks><![CDATA["Company (VID:0ABC) Product (PID:1234) XYZ"]]></remarks>
+		public static readonly Regex SerialRegexRemainder = new Regex(@"PID[^0-9a-fA-F][0-9a-fA-F]+.\s?(?<serial>.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled); // Everything following the PID pattern.
 
 		/// <summary></summary>
 		public const string DefaultSerial = "";
@@ -261,9 +278,23 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
+		/// The USB standard does not seem to specify any restriction on the serial number string.
+		/// Thus, it may be any UTF-16 encoded string.
+		/// </remarks>
+		/// <remarks>
+		/// Microsoft further restricts the serial string as documented in <see cref="https://msdn.microsoft.com/en-us/library/windows/hardware/dn423379%28v=vs.85%29.aspx#usbsn"/>:
+		/// "Plug and Play requires that every byte in a USB serial number be valid. If a single
+		///  byte is invalid, Windows discards the serial number and treats the device as if it
+		///  had no serial number. The following byte values are not valid for USB serial numbers:
+		///  - Values less than 0x20.
+		///  - Values greater than 0x7F.
+		///  - 0x2C (comma)."
+		/// Note that 0x7F (delete) doesn't make much sense either...
+		/// </remarks>
+		/// <remarks>
 		/// Keeping "SerialNumber" for the XML element for backward-compatibility to older versions.
 		/// Note that the USB standard also uses the term "SerialNumber" which not really makes
-		/// sense as the value can be any unicode (UTF-8 ??) encoded string.
+		/// sense as the value can contain characters as well.
 		/// </remarks>
 		[XmlElement("SerialNumber")]
 		public virtual string Serial
@@ -338,9 +369,9 @@ namespace MKY.IO.Usb
 
 			return
 			(
-				(VendorId     == other.VendorId) &&
-				(ProductId    == other.ProductId) &&
-				(Serial == other.Serial)
+				(VendorId  == other.VendorId) &&
+				(ProductId == other.ProductId) &&
+				(Serial    == other.Serial)
 			);
 		}
 
@@ -486,10 +517,25 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static DeviceInfo Parse(string s)
+		public static DeviceInfo ParseFromVidAndPid(string s)
 		{
 			DeviceInfo result;
-			if (TryParse(s, out result))
+			if (TryParseFromVidAndPid(s, out result))
+				return (result);
+			else
+				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
+		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for VID / PID / SNR and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static DeviceInfo ParseFromVidAndPidAndSerial(string s)
+		{
+			DeviceInfo result;
+			if (TryParseFromVidAndPidAndSerial(s, out result))
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" does not specify a valid USB device ID."));
@@ -501,11 +547,27 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out DeviceInfo result)
+		public static bool TryParseFromVidAndPid(string s, out DeviceInfo result)
+		{
+			return (TryParse(s, false, out result));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/> for VID / PID / SNR and returns a corresponding device ID object.
+		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParseFromVidAndPidAndSerial(string s, out DeviceInfo result)
+		{
+			return (TryParse(s, true, out result));
+		}
+
+		private static bool TryParse(string s, bool expectSerial, out DeviceInfo result)
 		{
 			s = s.Trim();
 
-			// e.g. "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
+			// e.g. "VID:0ABC / PID:1234 / SNR:XYZ" or "vid_0ABC & pid_1234 & snr_xyz"
 			Match m = VendorIdRegex.Match(s);
 			if (m.Success)
 			{
@@ -518,8 +580,28 @@ namespace MKY.IO.Usb
 						int productId;
 						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out productId))
 						{
-							result = new DeviceInfo(vendorId, productId);
-							return (true);
+							if (expectSerial)
+							{
+								m = SerialRegexTag.Match(s); // Try to match against "SNR" tag.
+								if (m.Success)
+								{
+									string serial = m.Groups[1].Value;
+									result = new DeviceInfo(vendorId, productId, serial);
+									return (true);
+								}
+								m = SerialRegexRemainder.Match(s); // Try to match against remainder string.
+								if (m.Success)
+								{
+									string serial = m.Groups[1].Value;
+									result = new DeviceInfo(vendorId, productId, serial);
+									return (true);
+								}
+							}
+							else
+							{
+								result = new DeviceInfo(vendorId, productId);
+								return (true);
+							}
 						}
 					}
 				}
@@ -639,9 +721,19 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator string(DeviceInfo id)
+		public static implicit operator string(DeviceInfo deviceInfo)
 		{
-			return (id.ToString());
+			return (deviceInfo.ToString());
+		}
+
+		/// <summary></summary>
+		public static implicit operator DeviceInfo(string s)
+		{
+			DeviceInfo result;
+			if (TryParseFromVidAndPidAndSerial(s, out result))
+				return (result);
+			else
+				return (ParseFromVidAndPid(s));
 		}
 
 		#endregion

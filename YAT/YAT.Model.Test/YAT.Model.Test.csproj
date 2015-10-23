@@ -144,6 +144,10 @@
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
+      <Project>{e909b6f9-f856-4ed5-8d8f-6e77bc02c24c}</Project>
+      <Name>MKY.IO.Usb.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.IO.Usb\MKY.IO.Usb.csproj">
       <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
       <Name>MKY.IO.Usb</Name>

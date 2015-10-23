@@ -268,22 +268,22 @@ namespace MKY.IO.Usb.Test
 				availableDevices.FillWithAvailableDevices();
 
 				DeviceInfo di;
-				if (DeviceInfo.TryParse(configuration.DeviceA, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.DeviceA, out di))
 					configuration.DeviceAIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.DeviceB, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.DeviceB, out di))
 					configuration.DeviceBIsAvailable = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.MTSicsDeviceA, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceAIsConnected = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.MTSicsDeviceA, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceBIsConnected = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.TILaunchPadDeviceA, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceA, out di))
 					configuration.TILaunchPadDeviceAIsConnected = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParse(configuration.TILaunchPadDeviceB, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceB, out di))
 					configuration.TILaunchPadDeviceBIsConnected = availableDevices.Contains(di);
 
 				// Activate the effective configuration:
