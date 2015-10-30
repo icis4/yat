@@ -154,8 +154,10 @@ namespace MKY.IO.Usb
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
-		public static void RegisterStaticDeviceNotificationHandler()
+		public static bool RegisterStaticDeviceNotificationHandler()
 		{
+			bool result = false;
+
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// The first call to this method registers the notification.
@@ -164,14 +166,20 @@ namespace MKY.IO.Usb
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB HID Device object, please report this bug!"));
 
-					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
-					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidGuid, out staticDeviceNotificationHandle);
+					if (NativeMessageHandler.MessageSourceIsRegistered)
+					{
+						staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
+						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidGuid, out staticDeviceNotificationHandle);
+						result = true;
+					}
 				}
 
 				// Keep track of the register/unregister requests.
 				if (staticDeviceNotificationCounter < int.MaxValue)
 					staticDeviceNotificationCounter++;
 			}
+
+			return (result);
 		}
 
 		/// <remarks>
@@ -183,7 +191,8 @@ namespace MKY.IO.Usb
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// Keep track of the register/unregister requests.
-				staticDeviceNotificationCounter--;
+				if (staticDeviceNotificationCounter > int.MinValue)
+					staticDeviceNotificationCounter--;
 
 				// The last call to this method unregisters the notification.
 				if (staticDeviceNotificationCounter == 0)
@@ -191,13 +200,12 @@ namespace MKY.IO.Usb
 					if (staticDeviceNotificationHandle == IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB HID Device object, please report this bug!"));
 
-					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
-					staticDeviceNotificationHandle = IntPtr.Zero;
+					if (staticDeviceNotificationHandle != null)
+					{
+						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+						staticDeviceNotificationHandle = IntPtr.Zero;
+					}
 				}
-
-				// Ensure that decrement never results in negative values.
-				if (staticDeviceNotificationCounter < 0)
-					staticDeviceNotificationCounter = 0;
 			}
 		}
 
@@ -403,16 +411,18 @@ namespace MKY.IO.Usb
 
 		private void RegisterAndAttachStaticDeviceEventHandlers()
 		{
-			RegisterStaticDeviceNotificationHandler();
 			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+
+			RegisterStaticDeviceNotificationHandler();
 		}
 
 		private void DetachAndUnregisterStaticDeviceEventHandlers()
 		{
+			UnregisterStaticDeviceNotificationHandler();
+
 			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
-			UnregisterStaticDeviceNotificationHandler();
 		}
 
 		#region Disposal

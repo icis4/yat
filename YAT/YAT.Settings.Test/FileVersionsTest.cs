@@ -941,7 +941,8 @@ namespace YAT.Settings.Test
 				// Required if COM1 is not available.
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
-				terminal.Start();
+				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+
 				VerifySettingsCase01(terminal);
 			}
 		}
@@ -968,7 +969,8 @@ namespace YAT.Settings.Test
 				// Required if COM2 is not available.
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
-				terminal.Start();
+				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+
 				VerifySettingsCase02(terminal, ignoreBaudRate);
 			}
 		}
@@ -987,7 +989,8 @@ namespace YAT.Settings.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
-				terminal.Start();
+				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+
 				VerifySettingsCase03(terminal);
 			}
 		}
@@ -1028,7 +1031,8 @@ namespace YAT.Settings.Test
 				// Required if COM1 is not available.
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
-				terminal.Start();
+				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+
 				VerifySettingsCase05(terminal);
 			}
 		}
@@ -1066,7 +1070,8 @@ namespace YAT.Settings.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
-				terminal.Start();
+				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+
 				VerifySettingsCase07(terminal);
 			}
 		}

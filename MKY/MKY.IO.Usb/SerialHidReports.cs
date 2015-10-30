@@ -105,7 +105,7 @@ namespace MKY.IO.Usb
 					data.Add(report[i]);
 				}
 			}
-			else if (format.AppendTerminatingZero)
+			else if (format.AppendTerminatingZero || format.FillLastReport)
 			{
 				// Simply read until the terminating zero or the end of the report:
 				for (int i = format.HeaderByteLength; i < report.Length; i++)
@@ -177,15 +177,15 @@ namespace MKY.IO.Usb
 				if (format.AppendTerminatingZero)
 					effectiveLength += 1;
 
-				// If requested, create a full report, many systems don't work otherwise:
-				byte[] report;
-			////if (format.FillLastReport)
-			////	report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
-			////else
-			////	report = new byte[effectiveLength]; // C# value-type arrays are initialized to 0.
+				////byte[] report;
+				////// If requested, create a full report, many systems don't work otherwise:
+				////if (format.FillLastReport)
+				////	report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
+				////else
+				////	report = new byte[effectiveLength]; // C# value-type arrays are initialized to 0.
 
 				// Windows HID.dll requires that outgoing reports are always filled!
-				report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
+				byte[] report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
 
 				// If requested, copy the ID into the first byte of the report:
 				if (format.UseId)

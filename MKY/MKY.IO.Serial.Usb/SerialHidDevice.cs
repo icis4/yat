@@ -432,6 +432,12 @@ namespace MKY.IO.Serial.Usb
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
 
+		/// <summary></summary>
+		public int CalculateTotalReportByteLength(byte[] payload)
+		{
+			return (this.device.CalculateTotalReportByteLength(payload));
+		}
+
 		#endregion
 
 		#region Device Methods

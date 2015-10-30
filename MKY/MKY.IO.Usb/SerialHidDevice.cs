@@ -167,8 +167,10 @@ namespace MKY.IO.Usb
 		/// \attention:
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
-		public static new void RegisterStaticDeviceNotificationHandler()
+		public static new bool RegisterStaticDeviceNotificationHandler()
 		{
+			bool result = false;
+
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// The first call to this method registers the notification.
@@ -177,14 +179,20 @@ namespace MKY.IO.Usb
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object, please report this bug!"));
 
-					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
-					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
+					if (NativeMessageHandler.MessageSourceIsRegistered)
+					{
+						staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
+						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
+						result = true;
+					}
 				}
 
 				// Keep track of the register/unregister requests.
 				if (staticDeviceNotificationCounter < int.MaxValue)
 					staticDeviceNotificationCounter++;
 			}
+
+			return (result);
 		}
 
 		/// <remarks>
@@ -196,7 +204,8 @@ namespace MKY.IO.Usb
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// Keep track of the register/unregister requests.
-				staticDeviceNotificationCounter--;
+				if (staticDeviceNotificationCounter > int.MinValue)
+					staticDeviceNotificationCounter--;
 
 				// The last call to this method unregisters the notification.
 				if (staticDeviceNotificationCounter == 0)
@@ -204,13 +213,12 @@ namespace MKY.IO.Usb
 					if (staticDeviceNotificationHandle == IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object, please report this bug!"));
 
-					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
-					staticDeviceNotificationHandle = IntPtr.Zero;
+					if (staticDeviceNotificationHandle != null)
+					{
+						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+						staticDeviceNotificationHandle = IntPtr.Zero;
+					}
 				}
-
-				// Ensure that decrement never results in negative values.
-				if (staticDeviceNotificationCounter < 0)
-					staticDeviceNotificationCounter = 0;
 			}
 		}
 
@@ -370,16 +378,18 @@ namespace MKY.IO.Usb
 
 		private void RegisterAndAttachStaticDeviceEventHandlers()
 		{
-			RegisterStaticDeviceNotificationHandler();
 			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+
+			RegisterStaticDeviceNotificationHandler();
 		}
 
 		private void DetachAndUnregisterStaticDeviceEventHandlers()
 		{
+			UnregisterStaticDeviceNotificationHandler();
+
 			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
-			UnregisterStaticDeviceNotificationHandler();
 		}
 
 		#region Disposal
@@ -967,9 +977,9 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Methods > State Methods
+		#region Methods > State
 		//------------------------------------------------------------------------------------------
-		// Methods > State Methods
+		// Methods > State
 		//------------------------------------------------------------------------------------------
 
 		private State GetStateSynchronized()
@@ -1001,6 +1011,26 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Methods > Reports
+		//------------------------------------------------------------------------------------------
+		// Methods > Reports
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public int CalculateTotalReportByteLength(byte[] payload)
+		{
+			SerialHidOutputReportContainer dummy = new SerialHidOutputReportContainer(this);
+			dummy.CreateReports(this.reportFormat, payload);
+
+			int byteLength = 0;
+			foreach (byte[] report in dummy.Reports)
+				byteLength += report.Length;
+
+			return (byteLength);
+		}
+
+		#endregion
+		
 		#endregion
 
 		#region Event Handling

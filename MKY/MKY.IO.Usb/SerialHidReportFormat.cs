@@ -182,6 +182,28 @@ namespace MKY.IO.Usb
 			set { this.fillLastReport = value;  }
 		}
 
+		/// <summary>
+		/// Returns the byte length of the report header, depending on the given settings.
+		/// </summary>
+		/// <remarks>
+		/// The length also indicates the location of the first payload byte.
+		/// </remarks>
+		public int HeaderByteLength
+		{
+			get
+			{
+				int length = 0;
+
+				if (UseId)
+					length++;
+
+				if (PrependPayloadByteLength)
+					length++;
+
+				return (length);
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -239,28 +261,6 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Returns the byte length of the report header, depending on the given settings.
-		/// </summary>
-		/// <remarks>
-		/// The length also indicates the location of the first payload byte.
-		/// </remarks>
-		public int HeaderByteLength
-		{
-			get
-			{
-				int length = 0;
-
-				if (UseId)
-					length++;
-
-				if (PrependPayloadByteLength)
-					length++;
-
-				return (length);
-			}
-		}
 
 		#region Comparison Operators
 

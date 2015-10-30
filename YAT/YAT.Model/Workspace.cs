@@ -1244,10 +1244,16 @@ namespace YAT.Model
 			AddToWorkspace(terminal);
 
 			// Start terminal:
-			terminal.Start();
-
-			OnTimedStatusTextRequest("New terminal created.");
-			return (true);
+			if (terminal.Start())
+			{
+				OnTimedStatusTextRequest("New terminal created.");
+				return (true);
+			}
+			else
+			{
+				OnFixedStatusTextRequest("Failed to create new terminal!");
+				return (true);
+			}
 		}
 
 		/// <summary>

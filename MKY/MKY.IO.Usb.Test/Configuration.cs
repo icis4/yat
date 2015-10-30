@@ -277,7 +277,7 @@ namespace MKY.IO.Usb.Test
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceA, out di))
 					configuration.MTSicsDeviceAIsConnected = availableDevices.Contains(di);
 
-				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceA, out di))
+				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.MTSicsDeviceB, out di))
 					configuration.MTSicsDeviceBIsConnected = availableDevices.Contains(di);
 
 				if (DeviceInfo.TryParseFromVidAndPidAndSerial(configuration.TILaunchPadDeviceA, out di))

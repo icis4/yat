@@ -3396,6 +3396,21 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			AssertNotDisposed();
+
+			return (Caption);
+		}
+
+		#endregion
+
 		#region Debug
 		//==========================================================================================
 		// Debug

@@ -68,6 +68,22 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Returns whether a message source has previously been registered and this class is ready
+		/// to create handlers.
+		/// </summary>
+		public static bool MessageSourceIsRegistered
+		{
+			get { return (staticMainForm != null); }
+		}
+
+		#endregion
+
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
@@ -114,11 +130,24 @@ namespace MKY.Windows.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Ensure <see cref="MessageSourceIsRegistered"/> returns <c>true</c> before calling this
+		/// constructor; <c>InvalidOperationException</c> will be thrown otherwise.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// Thrown if no message source has previously been registered.
+		/// </exception>
 		public NativeMessageHandler(NativeMessageCallback callback)
 		{
-			this.messageCallback = callback;
-			Register(staticMainForm);
+			if (staticMainForm != null)
+			{
+				this.messageCallback = callback;
+				Register(staticMainForm);
+			}
+			else
+			{
+				throw (new InvalidOperationException("No message source to register at!"));
+			}
 		}
 
 		#endregion
