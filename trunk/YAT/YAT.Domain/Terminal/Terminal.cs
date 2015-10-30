@@ -665,9 +665,7 @@ namespace YAT.Domain
 				// Do not clear the send queue, it already got cleared when stopping. This setup
 				// potentially allows to call Send() and buffer data before starting the terminal.
 
-				bool startResult = this.rawTerminal.Start();
-
-				return (startResult);
+				return (this.rawTerminal.Start());
 			}
 			else
 			{

@@ -100,8 +100,8 @@ namespace YAT.Model.Test
 					Utilities.TestSet testSet;
 
 					// Start and open terminals
-					terminalA.Start();
-					terminalB.Start();
+					Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
+					Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission
@@ -151,8 +151,8 @@ namespace YAT.Model.Test
 					Utilities.TestSet testSet;
 
 					// Start and open terminals
-					terminalA.Start();
-					terminalB.Start();
+					Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
+					Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission

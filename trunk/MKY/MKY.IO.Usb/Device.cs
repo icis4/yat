@@ -408,8 +408,10 @@ namespace MKY.IO.Usb
 		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
-		public static void RegisterStaticDeviceNotificationHandler(Guid classGuid)
+		public static bool RegisterStaticDeviceNotificationHandler(Guid classGuid)
 		{
+			bool result = false;
+
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// The first call to this method registers the notification.
@@ -418,14 +420,20 @@ namespace MKY.IO.Usb
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB Device object, please report this bug!"));
 
-					staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
-					Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, classGuid, out staticDeviceNotificationHandle);
+					if (NativeMessageHandler.MessageSourceIsRegistered)
+					{
+						staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
+						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, classGuid, out staticDeviceNotificationHandle);
+						result = true;
+					}
 				}
 
 				// Keep track of the register/unregister requests.
 				if (staticDeviceNotificationCounter < int.MaxValue)
 					staticDeviceNotificationCounter++;
 			}
+
+			return (result);
 		}
 
 		/// <remarks>
@@ -437,7 +445,8 @@ namespace MKY.IO.Usb
 			lock (staticDeviceNotificationSyncObj)
 			{
 				// Keep track of the register/unregister requests.
-				staticDeviceNotificationCounter--;
+				if (staticDeviceNotificationCounter > int.MinValue)
+					staticDeviceNotificationCounter--;
 
 				// The last call to this method unregisters the notification.
 				if (staticDeviceNotificationCounter == 0)
@@ -445,13 +454,12 @@ namespace MKY.IO.Usb
 					if (staticDeviceNotificationHandle == IntPtr.Zero)
 						throw (new InvalidOperationException("Invalid state within USB Device object, please report this bug!"));
 
-					Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
-					staticDeviceNotificationHandle = IntPtr.Zero;
+					if (staticDeviceNotificationHandle != null)
+					{
+						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+						staticDeviceNotificationHandle = IntPtr.Zero;
+					}
 				}
-
-				// Ensure that decrement never results in negative values.
-				if (staticDeviceNotificationCounter < 0)
-					staticDeviceNotificationCounter = 0;
 			}
 		}
 
@@ -651,16 +659,18 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		private void RegisterAndAttachStaticDeviceEventHandlers(Guid classGuid)
 		{
-			RegisterStaticDeviceNotificationHandler(classGuid);
 			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+
+			RegisterStaticDeviceNotificationHandler(classGuid);
 		}
 
 		private void DetachAndUnregisterStaticDeviceEventHandlers()
 		{
+			UnregisterStaticDeviceNotificationHandler();
+
 			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
 			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
-			UnregisterStaticDeviceNotificationHandler();
 		}
 
 		#region Disposal

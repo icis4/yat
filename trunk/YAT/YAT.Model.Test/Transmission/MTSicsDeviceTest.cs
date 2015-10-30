@@ -232,6 +232,8 @@ namespace YAT.Model.Test.Transmission
 			using (Terminal terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				Utilities.WaitForConnection(terminal);
 
 				// Prepare stimulus and expected:
 				Types.Command stimulusCommand = new Types.Command(stimulus);
@@ -244,37 +246,19 @@ namespace YAT.Model.Test.Transmission
 				l.Add(0x0A); // <LF>
 
 				byte[] expectedBytes = l.ToArray();
-
-				// Required if COM1 is not available.
-				terminal.Start();
-				Utilities.WaitForConnection(terminal);
+				int expectedTotalByteCount = 0;
 
 				for (int i = 0; i < transmissionCount; i++)
 				{
 					// Send stimulus to device:
 					Trace.WriteLine(@">> """ + stimulus + @""" (" + i + ")");
 					terminal.SendText(stimulusCommand);
-
-					// Wait for response from device:
-					Domain.DisplayLine lastLine;
-					byte[] actualBytes;
-					const int WaitInterval = 5;
-					const int WaitTimeout = 3000;
-					int timeout = 0;
-					do                         // Initially wait to allow async send,
-					{                          //   therefore, use do-while.
-						Thread.Sleep(WaitInterval);
-						timeout += WaitInterval;
-
-						if (timeout >= WaitTimeout)
-							Assert.Fail("Transmission timeout! Try to re-run test case.");
-
-						lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
-						actualBytes = lastLine.ElementsToOrigin();
-					}
-					while (actualBytes.Length < expectedBytes.Length);
+					expectedTotalByteCount += expectedBytes.Length;
+					Utilities.WaitForTransmission(terminal, i + 1, expectedTotalByteCount); // i = transmission count equals line count.
 
 					// Verify response:
+					Domain.DisplayLine lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
+					byte[] actualBytes = lastLine.ElementsToOrigin();
 					Assert.True(ArrayEx.ValuesEqual(expectedBytes, actualBytes), "Unexpected respose from device! Should be " + ArrayEx.ElementsToString(expectedBytes) + " but is " + ArrayEx.ElementsToString(actualBytes));
 					Trace.WriteLine(@"<< """ + expected + @"""");
 					terminal.ClearLastDisplayLineAuxiliary(Domain.RepositoryType.Rx);

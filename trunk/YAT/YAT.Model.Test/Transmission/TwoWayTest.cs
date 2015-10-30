@@ -25,6 +25,7 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -84,22 +85,29 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
+		/// <param name="loopbackSettings">
+		/// Quadruple of...
+		/// ...Pair(terminalSettingsDelegateA, terminalSettingsArgumentA)...
+		/// ...Pair(terminalSettingsDelegateB, terminalSettingsArgumentB)...
+		/// ...string testCaseName...
+		/// ...string[] testCaseCategories.
+		/// </param>
 		private static IEnumerable<TestCaseData> TestCases(Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings)
 		{
-			foreach (TestCaseData commandData in TestCasesCommandData)
+			foreach (TestCaseData commandData in TestCasesCommandData) // TestCaseData(Utilities.TestSet command, int transmissionCount).
 			{
 				// Arguments:
 				List<object> args = new List<object>(commandData.Arguments);
-				args.Insert(0, loopbackSettings.Value1); // Insert the settings delegate at the beginning.
-				args.Insert(1, loopbackSettings.Value2); // Insert the settings delegate at the beginning.
-				TestCaseData tcd = new TestCaseData(args.ToArray());
+				args.Insert(0, loopbackSettings.Value1); // Insert the settings descriptor A at the beginning.
+				args.Insert(1, loopbackSettings.Value2); // Insert the settings descriptor B at second.
+				TestCaseData tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
+
+				// Name:
+				tcd.SetName(loopbackSettings.Value3 + commandData.TestName);
 
 				// Category(ies):
 				foreach (string cat in loopbackSettings.Value4)
 					tcd.SetCategory(cat);
-
-				// Name:
-				tcd.SetName(loopbackSettings.Value3 + commandData.TestName);
 
 				yield return (tcd);
 			}
@@ -111,7 +119,10 @@ namespace YAT.Model.Test.Transmission
 			get
 			{
 				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
-					yield return (TestCases(loopbackSettings));
+				{
+					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+						yield return (testCase);
+				}
 			}
 		}
 
@@ -121,7 +132,10 @@ namespace YAT.Model.Test.Transmission
 			get
 			{
 				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
-					yield return (TestCases(loopbackSettings));
+				{
+					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+						yield return (testCase);
+				}
 			}
 		}
 
@@ -131,7 +145,10 @@ namespace YAT.Model.Test.Transmission
 			get
 			{
 				foreach (Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings in Utilities.TransmissionSettings.IPLoopbacks)
-					yield return (TestCases(loopbackSettings));
+				{
+					foreach (TestCaseData testCase in TestCases(loopbackSettings))
+						yield return (testCase);
+				}
 			}
 		}
 
@@ -220,7 +237,8 @@ namespace YAT.Model.Test.Transmission
 			TerminalSettingsRoot settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
-				terminalA.Start();
+				terminalA.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+				Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
 				Utilities.WaitForConnection(terminalA);
 
 				if (settingsDescriptorB.Value1 != null) // Loopback pair.
@@ -228,7 +246,8 @@ namespace YAT.Model.Test.Transmission
 					TerminalSettingsRoot settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					using (Terminal terminalB = new Terminal(settingsB))
 					{
-						terminalB.Start();
+						terminalB.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+						Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						PerformTransmission(terminalA, terminalB, testSet, transmissionCount);
@@ -246,26 +265,36 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		private void PerformTransmission(Terminal terminalA, Terminal terminalB, Utilities.TestSet testSet, int transmissionCount)
 		{
-			for (int i = 0; i < transmissionCount; i++)
+			for (int cycle = 1; cycle <= transmissionCount; cycle++)
 			{
 				// Send 'Ping' test command A > B :
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalA, terminalB, testSet);
+				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount * cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, i + 1);
+				                      testSet, testSet.ExpectedLineCount * cycle);
 
 				// Send 'Pong' test command B > A :
 				terminalB.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalB, terminalA, testSet);
+				Utilities.WaitForTransmission(terminalB, terminalA, testSet.ExpectedLineCount * cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, i + 1);
+				                      testSet, testSet.ExpectedLineCount * cycle);
 			}
+		}
+
+		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
+		{
+			Assert.Fail
+			(
+				"Unexpected message input request:" + Environment.NewLine + Environment.NewLine +
+				e.Caption + Environment.NewLine + Environment.NewLine +
+				e.Text
+			);
 		}
 
 		#endregion

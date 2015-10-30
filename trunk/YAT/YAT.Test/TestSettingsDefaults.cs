@@ -36,6 +36,12 @@ namespace YAT.Test
 		[STAThread]
 		public static void Main()
 		{
+			foreach (System.Collections.IEnumerable bla in YAT.Model.Test.Transmission.OneWayTestData.TestCasesIPLoopbacks)
+			{
+				var commandData = (NUnit.Framework.TestCaseData)bla;
+				System.Console.WriteLine(bla);
+			}
+
 			// Create the overall configuration object:
 
 			ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();

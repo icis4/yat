@@ -27,6 +27,7 @@ Tools > Options...
   > Text Editor
     > All Languages > General > Diplay > Line numers = true
     > C# > Tabs > Keep tabs
+    > C# > Code Style > Qualify member access with 'this'
   > Debugging
     > General > Step over properties and operators = false
 

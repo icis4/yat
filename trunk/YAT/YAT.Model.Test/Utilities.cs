@@ -132,14 +132,14 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This struct really belongs to these test utilities only.")]
 		public struct TestSet
 		{
-			private Model.Types.Command command;
+			private Types.Command command;
 			private int   expectedLineCount;
 			private int[] expectedElementCounts;
 			private int[] expectedDataCounts;
 			private bool  expectedAlsoApplyToA;
 
 			/// <summary></summary>
-			public TestSet(Model.Types.Command command)
+			public TestSet(Types.Command command)
 			{
 				this.command = command;
 				this.expectedLineCount = command.CommandLines.Length;
@@ -156,7 +156,7 @@ namespace YAT.Model.Test
 			}
 
 			/// <summary></summary>
-			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
+			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
 			{
 				this.command = command;
 				this.expectedLineCount     = expectedLineCount;
@@ -166,7 +166,7 @@ namespace YAT.Model.Test
 			}
 
 			/// <summary></summary>
-			public Model.Types.Command Command
+			public Types.Command Command
 			{
 				get { return (this.command); }
 			}
@@ -283,7 +283,6 @@ namespace YAT.Model.Test
 
 		private const int WaitInterval = 100;
 		private const int WaitTimeout = 10000;
-		private const int EolWaitInterval = 1000;
 
 		#endregion
 
@@ -540,7 +539,7 @@ namespace YAT.Model.Test
 		// Wait
 		//==========================================================================================
 
-		internal static void WaitForConnection(Model.Terminal terminalA)
+		internal static void WaitForConnection(Terminal terminalA)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -554,7 +553,7 @@ namespace YAT.Model.Test
 			while (!terminalA.IsConnected);
 		}
 
-		internal static void WaitForConnection(Model.Terminal terminalA, Model.Terminal terminalB)
+		internal static void WaitForConnection(Terminal terminalA, Terminal terminalB)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -568,12 +567,12 @@ namespace YAT.Model.Test
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 		}
 
-		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB, TestSet testSet)
+		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, TestSet testSet)
 		{
 			WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount);
 		}
 
-		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB, int expectedLineCountB)
+		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedLineCountB)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -583,13 +582,32 @@ namespace YAT.Model.Test
 
 				if (timeout >= WaitTimeout)
 					Assert.Fail("Transmission timeout! Try to re-run test case.");
-			}
-			while ((terminalB.RxByteCount != terminalA.TxByteCount) &&
-			       (terminalB.RxLineCount != terminalA.TxLineCount) &&
-				   (terminalB.RxLineCount != expectedLineCountB));
 
-			// Wait to allow Eol to be sent (Eol is sent a bit later than line contents).
-			Thread.Sleep(EolWaitInterval);
+				if (terminalB.RxLineCount > expectedLineCountB) // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error! Number of received lines/bytes mismatches expected.");
+			}
+			while ((terminalB.RxLineCount != expectedLineCountB) &&
+			       (terminalB.RxLineCount != terminalA.TxLineCount) &&
+			       (terminalB.RxByteCount != terminalA.TxByteCount));
+		}
+
+		internal static void WaitForTransmission(Terminal terminal, int expectedLineCount, int expectedByteCount)
+		{
+			int timeout = 0;
+			do                         // Initially wait to allow async send,
+			{                          //   therefore, use do-while.
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeout)
+					Assert.Fail("Transmission timeout! Try to re-run test case.");
+
+				if ((terminal.RxLineCount > expectedLineCount) ||
+					(terminal.RxByteCount > expectedByteCount)) // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error! Number of received lines/bytes mismatches expected.");
+			}
+			while ((terminal.RxLineCount != expectedLineCount) &&
+			       (terminal.RxByteCount != expectedByteCount));
 		}
 
 		#endregion
@@ -601,14 +619,13 @@ namespace YAT.Model.Test
 
 		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet)
 		{
-			VerifyLines(linesA, linesB, testSet, 1);
+			VerifyLines(linesA, linesB, testSet, testSet.ExpectedLineCount);
 		}
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int cycle)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int expectedLineCountB)
 		{
 			// Compare the expected line count at the receiver side.
-			int  expectedLineCount       = (testSet.ExpectedLineCount * cycle);
-			bool expectedLineCountMatchB = (linesB.Count == expectedLineCount);
+			bool expectedLineCountMatchB = (linesB.Count == expectedLineCountB);
 
 			// If both sides are expected to show the same line count, compare the counts.
 			// Otherwise, ignore the comparision.
@@ -651,9 +668,9 @@ namespace YAT.Model.Test
 						Assert.Fail
 						(
 							"Length of line " + i + " mismatches:" + Environment.NewLine +
-							"Expected = " + expectedElementCount + " elements, " +
-							"A = " + lineA.Count + " elements, " +
-							"B = " + lineB.Count + " elements," + Environment.NewLine +
+							"Expected = " + expectedElementCount + " element(s), " +
+							"A = " + lineA.Count + " element(s), " +
+							"B = " + lineB.Count + " element(s)," + Environment.NewLine +
 							"Expected = " + expectedDataCount + " data, " +
 							"A = " + lineA.DataCount + " data, " +
 							"B = " + lineB.DataCount + " data." + Environment.NewLine +
@@ -681,9 +698,9 @@ namespace YAT.Model.Test
 				Assert.Fail
 				(
 					"Line count mismatches: " + Environment.NewLine +
-					"Expected = " + expectedLineCount + " lines, " +
-					"A = " + linesA.Count + " lines, " +
-					"B = " + linesB.Count + " lines." + Environment.NewLine +
+					"Expected = " + expectedLineCountB + " line(s), " +
+					"A = " + linesA.Count + " line(s), " +
+					"B = " + linesB.Count + " line(s)." + Environment.NewLine +
 					@"See ""Output"" for details."
 				);
 			}
