@@ -85,7 +85,8 @@ namespace YAT.Model.Test.Transmission
 		private static readonly Utilities.TestSet ControlCharCommand2;
 		private static readonly Utilities.TestSet ControlCharCommand3;
 
-		private static readonly Utilities.TestSet ClearCommand;
+		private static readonly Utilities.TestSet ClearCommand1;
+		private static readonly Utilities.TestSet ClearCommand2;
 
 		#endregion
 
@@ -109,17 +110,18 @@ namespace YAT.Model.Test.Transmission
 			EolPartsCommand     = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 }, new int[] { 2, 1, 2, 5 }, true);
 			EolOnlyCommand      = new Utilities.TestSet(new Types.Command(new string[] { "A", "B", "", "C" }),                4, new int[] { 2, 2, 1, 2 }, new int[] { 1, 1, 0, 1 }, true);
 
-			SingleNoEolCommand  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"),                                 1, new int[] { 1 },    new int[] { 1 },    true); // There is always 1 line.
-			DoubleNoEolCommand  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 1 },    new int[] { 2 },    true); // There is always 1 line.
+			SingleNoEolCommand  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"),                                 0, new int[] { 1 },    new int[] { 1 },    true); // 1st line will not get completed.
+			DoubleNoEolCommand  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 1 },    new int[] { 2 },    true); // 1st line will not get completed.
 			StillEolCommand1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"),                          1, new int[] { 1 },    new int[] { 0 },    true);
 			StillEolCommand2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"),                         1, new int[] { 2 },    new int[] { 1 },    true);
-			StillEolCommand3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        2, new int[] { 2, 1 }, new int[] { 1, 1 }, true);
+			StillEolCommand3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        1, new int[] { 2, 1 }, new int[] { 1, 1 }, true); // 2nd line will not get completed.
 
 			ControlCharCommand1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
 			ControlCharCommand2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
 			ControlCharCommand3 = new Utilities.TestSet(new Types.Command(@"\h(FF)<CR><LF>\h(FF)A<CR><LF>A\h(FF)<CR><LF>A\h(FF)A"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 2, 2, 3 }, true); // A non-breaking space isn't a control character.
 
-			ClearCommand        = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 3, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
+			ClearCommand1       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)"),          3, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
+			ClearCommand2       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 2, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
 		}
 
 		#endregion
@@ -159,7 +161,8 @@ namespace YAT.Model.Test.Transmission
 				yield return (new TestCaseData(ControlCharCommand2, 1).SetName("_ControlCharCommand2"));
 				yield return (new TestCaseData(ControlCharCommand3, 1).SetName("_ControlCharCommand3"));
 
-				yield return (new TestCaseData(ClearCommand,        1).SetName("_ClearCommand"));
+				yield return (new TestCaseData(ClearCommand1,       1).SetName("_ClearCommand1"));
+				yield return (new TestCaseData(ClearCommand2,       1).SetName("_ClearCommand2"));
 			}
 		}
 
@@ -347,12 +350,12 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send test command:
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount * cycle);
+				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, testSet.ExpectedLineCount * cycle);
+				                      testSet, cycle);
 			}
 		}
 
