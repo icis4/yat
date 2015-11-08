@@ -10,8 +10,6 @@
 ::  $Date$
 ::  $Revision$
 ::  -----------------------------------------------------------------------------------------------
-::  MKY Development Version 1.0.10
-::  -----------------------------------------------------------------------------------------------
 ::  See SVN change log for revision details.
 ::  See release notes for product version details.
 ::  -----------------------------------------------------------------------------------------------
@@ -29,35 +27,9 @@ WHERE %USB_HUB_CTRL_EXE% >NUL 2>&1
 IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
 
 :: Hub 1 'USB'
-:: Ensure to only activate one device per driver (work-around to limitations of certain drivers)
-ECHO.
-ECHO Enabling 1st set of USB devices...
-%USB_HUB_CTRL_EXE% A6YJ5BDF 010001
-TIMEOUT 5
-ECHO.
-ECHO Enabling 2nd set of USB devices...
-%USB_HUB_CTRL_EXE% A6YJ5BDF 110011
-TIMEOUT 5
-ECHO.
-ECHO Enabling 3rd set of USB devices...
 %USB_HUB_CTRL_EXE% A6YJ5BDF 110111
 
 :: Hub 2 'RS-232'
-:: Ensure to only activate one device per driver (work-around to limitations of certain drivers)
-ECHO.
-ECHO Enabling 1st RS-232 device...
-%USB_HUB_CTRL_EXE% A6YJ5A78 000001
-TIMEOUT 5
-ECHO.
-ECHO Enabling 2nd RS-232 device...
-%USB_HUB_CTRL_EXE% A6YJ5A78 000011
-TIMEOUT 5
-ECHO.
-ECHO Enabling 3rd RS-232 device...
-%USB_HUB_CTRL_EXE% A6YJ5A78 000111
-TIMEOUT 5
-ECHO.
-ECHO Enabling 4th RS-232 device...
 %USB_HUB_CTRL_EXE% A6YJ5A78 001111
 
 GOTO END
