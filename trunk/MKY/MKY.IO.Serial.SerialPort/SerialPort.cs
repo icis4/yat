@@ -1108,7 +1108,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (this.state != oldState)
 				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ".");
 			else
-				WriteDebugMessageLine("State is still " + oldState + ".");
+				WriteDebugMessageLine("State is already " + oldState + ".");
 #endif
 			OnIOChanged(EventArgs.Empty);
 			OnIOControlChanged(EventArgs.Empty);

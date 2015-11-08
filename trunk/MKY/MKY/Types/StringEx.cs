@@ -151,7 +151,6 @@ namespace MKY
 		/// <summary>
 		/// Returns whether <paramref name="str"/> contains any of the <paramref name="anyOf"/>.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Chars", Justification = "Parameter naming as similar string methods.")]
 		public static bool ContainsAny(string str, char[] anyOf)
 		{
 			return (str.IndexOfAny(anyOf) >= 0);
@@ -467,7 +466,6 @@ namespace MKY
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
 		public static bool StartsWithAny(string str, string[] values)
 		{
 			return (StartsWithAny(str, values, false, null));
@@ -483,7 +481,6 @@ namespace MKY
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
 		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
 		public static bool StartsWithAny(string str, string[] values, StringComparison comparisonType)
 		{
 			foreach (string value in values)
@@ -504,7 +501,6 @@ namespace MKY
 		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException">value is null.</exception>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "Strings", Justification = "Parameter naming as similar string methods.")]
 		public static bool StartsWithAny(string str, string[] values, bool ignoreCase, CultureInfo culture)
 		{
 			foreach (string value in values)

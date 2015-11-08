@@ -1840,15 +1840,15 @@ namespace YAT.Model
 		{
 			OnTimedStatusTextRequest("Sending...");
 
-			// Count.
+			// Count:
 			this.txByteCount += e.Element.Data.Count;
 			OnIOCountChanged(EventArgs.Empty);
 
-			// Rate.
+			// Rate:
 			if (this.txByteRate.Update(e.Element.Data.Count))
 				OnIORateChanged(EventArgs.Empty);
 
-			// Log.
+			// Log:
 			if (this.log.IsStarted)
 			{
 				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawTx);
@@ -1860,15 +1860,15 @@ namespace YAT.Model
 		{
 			OnTimedStatusTextRequest("Receiving...");
 
-			// Count.
+			// Count:
 			this.rxByteCount += e.Element.Data.Count;
 			OnIOCountChanged(EventArgs.Empty);
 
-			// Rate.
+			// Rate:
 			if (this.rxByteRate.Update(e.Element.Data.Count))
 				OnIORateChanged(EventArgs.Empty);
 
-			// Log.
+			// Log:
 			if (this.log.IsStarted)
 			{
 				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
@@ -1878,10 +1878,10 @@ namespace YAT.Model
 
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display.
+			// Display:
 			OnDisplayElementsSent(e);
 
-			// Log.
+			// Log:
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
 				if (this.log.IsStarted)
@@ -1902,10 +1902,10 @@ namespace YAT.Model
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display.
+			// Display:
 			OnDisplayElementsReceived(e);
 
-			// Log.
+			// Log:
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
 				if (this.log.IsStarted)
@@ -1926,29 +1926,29 @@ namespace YAT.Model
 
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// Count.
+			// Count:
 			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged(EventArgs.Empty);
 
-			// Rate.
+			// Rate:
 			if (this.txLineRate.Update(e.Lines.Count))
 				OnIORateChanged(EventArgs.Empty);
 
-			// Display.
+			// Display:
 			OnDisplayLinesSent(e);
 		}
 
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// Count.
+			// Count:
 			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged(EventArgs.Empty);
 
-			// Rate.
+			// Rate:
 			if (this.rxLineRate.Update(e.Lines.Count))
 				OnIORateChanged(EventArgs.Empty);
 
-			// Display.
+			// Display:
 			OnDisplayLinesReceived(e);
 		}
 
