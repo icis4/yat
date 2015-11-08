@@ -1005,7 +1005,7 @@ namespace MKY.IO.Usb
 			if (this.state != oldState)
 				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
 			else
-				WriteDebugMessageLine("State is still " + oldState + ".");
+				WriteDebugMessageLine("State is already " + oldState + ".");
 #endif
 		}
 
