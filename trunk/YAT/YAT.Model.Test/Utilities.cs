@@ -123,7 +123,6 @@ namespace YAT.Model.Test
 			}
 		}
 
-		/// <summary></summary>
 		/// <remarks>
 		/// \todo:
 		/// This test set struct should be improved such that it can also handle expectations on the
@@ -136,9 +135,12 @@ namespace YAT.Model.Test
 			private int   expectedLineCount;
 			private int[] expectedElementCounts;
 			private int[] expectedDataCounts;
+
+			/// <remarks>Using 'A' instead of 'Tx' as some tests perform two-way-transmission.</remarks>
 			private bool  expectedAlsoApplyToA;
 
 			/// <summary></summary>
+			/// <param name="command">The test command.</param>
 			public TestSet(Types.Command command)
 			{
 				this.command = command;
@@ -148,14 +150,19 @@ namespace YAT.Model.Test
 				this.expectedDataCounts    = new int[this.expectedLineCount];
 				for (int i = 0; i < this.expectedLineCount; i++)
 				{
-					this.expectedElementCounts[i] = 2; // 1 data element + 1 Eol element.
+					this.expectedElementCounts[i] = 2; // 1 data element + 1 EOL element.
 					this.expectedDataCounts[i]    = command.CommandLines[i].Length;
 				}
 
-				this.expectedAlsoApplyToA = false;
+				this.expectedAlsoApplyToA = true;
 			}
 
 			/// <summary></summary>
+			/// <param name="command">The test command.</param>
+			/// <param name="expectedLineCount">The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</param>
+			/// <param name="expectedElementCounts">The expected number of display elements per display line.</param>
+			/// <param name="expectedDataCounts">The expected number of raw data bytes per display line.</param>
+			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
 			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
 			{
 				this.command = command;
@@ -165,33 +172,34 @@ namespace YAT.Model.Test
 				this.expectedAlsoApplyToA  = expectedAlsoApplyToA;
 			}
 
-			/// <summary></summary>
+			/// <summary>The test command.</summary>
 			public Types.Command Command
 			{
 				get { return (this.command); }
 			}
 
-			/// <summary></summary>
+			/// <summary>The expected number of lines as returned by <see cref="Terminal.RxLineCount"/> and <see cref="Terminal.TxLineCount"/>.</summary>
 			public int ExpectedLineCount
 			{
 				get { return (this.expectedLineCount); }
 			}
 
-			/// <summary></summary>
+			/// <summary>The expected number of display elements per display line.</summary>
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedElementCounts
 			{
 				get { return (this.expectedElementCounts); }
 			}
 
-			/// <summary></summary>
+			/// <summary>The expected number of raw data bytes per display line.</summary>
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedDataCounts
 			{
 				get { return (this.expectedDataCounts); }
 			}
 
-			/// <summary></summary>
+			/// <summary>Flag indicating that expected values not only apply to B but also A.</summary>
+			/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
 			public bool ExpectedAlsoApplyToA
 			{
 				get { return (this.expectedAlsoApplyToA); }
@@ -281,8 +289,9 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
+		private const int WaitTimeoutForConnection = 5000;
+		private const int WaitTimeoutForLineTransmission = 1000;
 		private const int WaitInterval = 100;
-		private const int WaitTimeout = 10000;
 
 		#endregion
 
@@ -539,7 +548,7 @@ namespace YAT.Model.Test
 		// Wait
 		//==========================================================================================
 
-		internal static void WaitForConnection(Terminal terminalA)
+		internal static void WaitForConnection(Terminal terminal)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -547,10 +556,10 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForConnection)
 					Assert.Fail("Connect timeout!");
 			}
-			while (!terminalA.IsConnected);
+			while (!terminal.IsConnected);
 		}
 
 		internal static void WaitForConnection(Terminal terminalA, Terminal terminalB)
@@ -561,37 +570,59 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForConnection)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 		}
 
+		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
 		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, TestSet testSet)
 		{
-			WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount);
+			WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount, 1); // Single cycle.
 		}
 
-		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedLineCountB)
+		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
+		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedPerCycleLineCountRx)
 		{
+			WaitForTransmission(terminalA, terminalB, expectedPerCycleLineCountRx, 1); // Single cycle.
+		}
+
+		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
+		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedPerCycleLineCountRx, int cycle)
+		{
+			// Calculate total expected line count at the receiver side:
+			int expectedTotalLineCount = (expectedPerCycleLineCountRx * cycle);
+
+			// Calculate timeout factor per line, taking cases with 0 lines into account:
+			int timeoutFactorPerLine = ((expectedPerCycleLineCountRx > 0) ? expectedPerCycleLineCountRx : 1);
+
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= (WaitTimeoutForLineTransmission * timeoutFactorPerLine))
 					Assert.Fail("Transmission timeout! Try to re-run test case.");
 
-				if (terminalB.RxLineCount > expectedLineCountB) // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error! Number of received lines/bytes mismatches expected.");
+				if (terminalB.RxLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+						" Number of received lines = " + terminalB.RxLineCount +
+						" mismatches expected = " + expectedTotalLineCount + ".");
 			}
-			while ((terminalB.RxLineCount != expectedLineCountB) &&
-			       (terminalB.RxLineCount != terminalA.TxLineCount) &&
+			while ((terminalB.RxLineCount != expectedTotalLineCount) ||
+			       (terminalB.RxLineCount != terminalA.TxLineCount) ||
 			       (terminalB.RxByteCount != terminalA.TxByteCount));
+
+			// Attention: Terminal line count is not always equal to display line count!
+			//  > Terminal line count = number of *completed* lines in terminal
+			//  > Display line count = number of lines in view
+			// This function uses terminal line count for verification!
 		}
 
-		internal static void WaitForTransmission(Terminal terminal, int expectedLineCount, int expectedByteCount)
+		/// <remarks>Using 'B' instead of 'Rx' as some tests perform two-way-transmission.</remarks>
+		internal static void WaitForTransmission(Terminal terminalB, int expectedTotalLineCount, int expectedTotalByteCount)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -599,15 +630,22 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= (WaitTimeoutForLineTransmission * expectedTotalLineCount))
 					Assert.Fail("Transmission timeout! Try to re-run test case.");
 
-				if ((terminal.RxLineCount > expectedLineCount) ||
-					(terminal.RxByteCount > expectedByteCount)) // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error! Number of received lines/bytes mismatches expected.");
+				if ((terminalB.RxLineCount > expectedTotalLineCount) ||
+					(terminalB.RxByteCount > expectedTotalByteCount)) // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+						" Number of received lines = " + terminalB.RxLineCount + " / bytes = " + terminalB.RxByteCount +
+						" mismatches expected = " + expectedTotalLineCount + " / " + expectedTotalByteCount + ".");
 			}
-			while ((terminal.RxLineCount != expectedLineCount) &&
-			       (terminal.RxByteCount != expectedByteCount));
+			while ((terminalB.RxLineCount != expectedTotalLineCount) ||
+			       (terminalB.RxByteCount != expectedTotalByteCount));
+
+			// Attention: Terminal line count is not always equal to display line count!
+			//  > Terminal line count = number of *completed* lines in terminal
+			//  > Display line count = number of lines in view
+			// This function uses terminal line count for verification!
 		}
 
 		#endregion
@@ -617,92 +655,117 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet)
+		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
+		internal static void VerifyLines(List<Domain.DisplayLine> displayLinesA, List<Domain.DisplayLine> displayLinesB, TestSet testSet)
 		{
-			VerifyLines(linesA, linesB, testSet, testSet.ExpectedLineCount);
+			VerifyLines(displayLinesA, displayLinesB, testSet, 1); // Single cycle.
 		}
 
-		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int expectedLineCountB)
+		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
+		internal static void VerifyLines(List<Domain.DisplayLine> displayLinesA, List<Domain.DisplayLine> displayLinesB, TestSet testSet, int cycle)
 		{
-			// Compare the expected line count at the receiver side.
-			bool expectedLineCountMatchB = (linesB.Count == expectedLineCountB);
+			// Attention: Display line count is not always equal to terminal line count!
+			//  > Display line count = number of lines in view
+			//  > Terminal line count = number of *completed* lines in terminal
+			// This function uses display line count for verification!
 
-			// If both sides are expected to show the same line count, compare the counts.
-			// Otherwise, ignore the comparision.
-			bool expectedLineCountMatchAB;
-			if (testSet.ExpectedAlsoApplyToA)
-				expectedLineCountMatchAB = (linesB.Count == linesA.Count);
-			else
-				expectedLineCountMatchAB = true;
+			// Calculate total expected dispaly line count at the receiver side:
+			int expectedTotalDisplayLineCountB = (testSet.ExpectedElementCounts.Length * cycle);
 
-			if (expectedLineCountMatchAB && expectedLineCountMatchB)
+			// Compare the expected line count at the receiver side:
+			if (displayLinesB.Count != expectedTotalDisplayLineCountB)
 			{
-				for (int i = 0; i < linesA.Count; i++)
-				{
-					int commandIndex         = i % testSet.ExpectedLineCount;
-					int expectedElementCount =     testSet.ExpectedElementCounts[commandIndex];
-					int expectedDataCount    =     testSet.ExpectedDataCounts[commandIndex];
-
-					Domain.DisplayLine lineA = linesA[i];
-					Domain.DisplayLine lineB = linesB[i];
-
-					if ((lineB.Count     == lineA.Count) &&
-						(lineB.Count     == expectedElementCount) &&
-						(lineB.DataCount == lineA.DataCount) &&
-						(lineB.DataCount == expectedDataCount))
-					{
-						for (int j = 0; j < lineA.Count; j++)
-							Assert.AreEqual(lineA[j].Text, lineB[j].Text);
-					}
-					else
-					{
-						string strA = ArrayEx.ElementsToString(lineA.ToArray());
-						string strB = ArrayEx.ElementsToString(lineB.ToArray());
-
-						Console.Error.Write
-						(
-							"A:" + Environment.NewLine + strA + Environment.NewLine +
-							"B:" + Environment.NewLine + strB + Environment.NewLine
-						);
-
-						Assert.Fail
-						(
-							"Length of line " + i + " mismatches:" + Environment.NewLine +
-							"Expected = " + expectedElementCount + " element(s), " +
-							"A = " + lineA.Count + " element(s), " +
-							"B = " + lineB.Count + " element(s)," + Environment.NewLine +
-							"Expected = " + expectedDataCount + " data, " +
-							"A = " + lineA.DataCount + " data, " +
-							"B = " + lineB.DataCount + " data." + Environment.NewLine +
-							@"See ""Output"" for details."
-						);
-					}
-				}
-			}
-			else
-			{
-				StringBuilder sbA = new StringBuilder();
 				StringBuilder sbB = new StringBuilder();
-
-				foreach (Domain.DisplayLine lineA in linesA)
-					sbA.Append(ArrayEx.ElementsToString(lineA.ToArray()));
-				foreach (Domain.DisplayLine lineB in linesB)
-					sbB.Append(ArrayEx.ElementsToString(lineB.ToArray()));
+				foreach (Domain.DisplayLine displayLineB in displayLinesB)
+					sbB.Append(ArrayEx.ElementsToString(displayLineB.ToArray()));
 
 				Console.Error.Write
 				(
-					"A:" + Environment.NewLine + sbA + Environment.NewLine +
 					"B:" + Environment.NewLine + sbB + Environment.NewLine
 				);
 
 				Assert.Fail
 				(
 					"Line count mismatches: " + Environment.NewLine +
-					"Expected = " + expectedLineCountB + " line(s), " +
-					"A = " + linesA.Count + " line(s), " +
-					"B = " + linesB.Count + " line(s)." + Environment.NewLine +
+					"Expected = " + expectedTotalDisplayLineCountB + " line(s), " +
+					"B = " + displayLinesB.Count + " line(s)." + Environment.NewLine +
 					@"See ""Output"" for details."
 				);
+			}
+
+			// If both sides are expected to show the same line count, compare the counts,
+			// otherwise, ignore the comparision:
+			if (testSet.ExpectedAlsoApplyToA)
+			{
+				if (displayLinesB.Count == displayLinesA.Count)
+				{
+					for (int i = 0; i < displayLinesA.Count; i++)
+					{
+						int index                = i % testSet.ExpectedElementCounts.Length;
+						int expectedElementCount =     testSet.ExpectedElementCounts[index];
+						int expectedDataCount    =     testSet.ExpectedDataCounts[index];
+
+						Domain.DisplayLine displayLineA = displayLinesA[i];
+						Domain.DisplayLine displayLineB = displayLinesB[i];
+
+						if ((displayLineB.Count     == displayLineA.Count) &&
+							(displayLineB.Count     == expectedElementCount) &&
+							(displayLineB.DataCount == displayLineA.DataCount) &&
+							(displayLineB.DataCount == expectedDataCount))
+						{
+							for (int j = 0; j < displayLineA.Count; j++)
+								Assert.AreEqual(displayLineA[j].Text, displayLineB[j].Text);
+						}
+						else
+						{
+							string strA = ArrayEx.ElementsToString(displayLineA.ToArray());
+							string strB = ArrayEx.ElementsToString(displayLineB.ToArray());
+
+							Console.Error.Write
+							(
+								"A:" + Environment.NewLine + strA + Environment.NewLine +
+								"B:" + Environment.NewLine + strB + Environment.NewLine
+							);
+
+							Assert.Fail
+							(
+								"Length of line " + i + " mismatches:" + Environment.NewLine +
+								"Expected = " + expectedElementCount + " element(s), " +
+								"A = " + displayLineA.Count + " element(s), " +
+								"B = " + displayLineB.Count + " element(s)," + Environment.NewLine +
+								"Expected = " + expectedDataCount + " data, " +
+								"A = " + displayLineA.DataCount + " data, " +
+								"B = " + displayLineB.DataCount + " data." + Environment.NewLine +
+								@"See ""Output"" for details."
+							);
+						}
+					}
+				}
+				else
+				{
+					StringBuilder sbA = new StringBuilder();
+					foreach (Domain.DisplayLine displayLineA in displayLinesA)
+						sbA.Append(ArrayEx.ElementsToString(displayLineA.ToArray()));
+
+					StringBuilder sbB = new StringBuilder();
+					foreach (Domain.DisplayLine displayLineB in displayLinesB)
+						sbB.Append(ArrayEx.ElementsToString(displayLineB.ToArray()));
+
+					Console.Error.Write
+					(
+						"A:" + Environment.NewLine + sbA + Environment.NewLine +
+						"B:" + Environment.NewLine + sbB + Environment.NewLine
+					);
+
+					Assert.Fail
+					(
+						"Line count mismatches: " + Environment.NewLine +
+						"Expected = " + expectedTotalDisplayLineCountB + " line(s), " +
+						"A = " + displayLinesA.Count + " line(s), " +
+						"B = " + displayLinesB.Count + " line(s)." + Environment.NewLine +
+						@"See ""Output"" for details."
+					);
+				}
 			}
 		}
 

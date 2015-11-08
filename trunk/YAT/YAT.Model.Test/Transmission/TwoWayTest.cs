@@ -269,21 +269,21 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send 'Ping' test command A > B :
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount * cycle);
+				Utilities.WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, testSet.ExpectedLineCount * cycle);
+				                      testSet, cycle);
 
 				// Send 'Pong' test command B > A :
 				terminalB.SendText(testSet.Command);
-				Utilities.WaitForTransmission(terminalB, terminalA, testSet.ExpectedLineCount * cycle);
+				Utilities.WaitForTransmission(terminalB, terminalA, testSet.ExpectedLineCount, cycle);
 
 				// Verify transmission:
 				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, testSet.ExpectedLineCount * cycle);
+				                      testSet, cycle);
 			}
 		}
 
