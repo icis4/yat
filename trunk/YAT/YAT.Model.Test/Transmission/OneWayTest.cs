@@ -29,6 +29,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 using MKY.Collections.Generic;
 using MKY.Settings;
@@ -319,7 +320,13 @@ namespace YAT.Model.Test.Transmission
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
 				terminalA.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
-				Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
+				if (!terminalA.Start())
+				{
+					if (PerformTransmission_terminal_MessageInputRequest_Exclude)
+						Assert.Inconclusive(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+					else
+						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
+				}
 				Utilities.WaitForConnection(terminalA);
 
 				if (settingsDescriptorB.Value1 != null) // Loopback pair.
@@ -328,7 +335,13 @@ namespace YAT.Model.Test.Transmission
 					using (Terminal terminalB = new Terminal(settingsB))
 					{
 						terminalB.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
-						Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
+						if (!terminalB.Start())
+						{
+							if (PerformTransmission_terminal_MessageInputRequest_Exclude)
+								Assert.Inconclusive(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+							else
+								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
+						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						PerformTransmission(terminalA, terminalB, testSet, transmissionCount);
@@ -359,14 +372,21 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
+		private static bool PerformTransmission_terminal_MessageInputRequest_Exclude = false;
+		private static string PerformTransmission_terminal_MessageInputRequest_ExcludeText = "";
+
 		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
 		{
-			Assert.Fail
-			(
-				"Unexpected message input request:" + Environment.NewLine + Environment.NewLine +
-				e.Caption + Environment.NewLine + Environment.NewLine +
-				e.Text
-			);
+			// No assertion = exception can be invoked here as it might be handled by the calling event handler.
+			// Therefore, simply confirm...
+			e.Result = DialogResult.OK;
+
+			// ...and signal exclusion via a flag:
+			if (e.Text.StartsWith("Unable to start terminal!"))
+			{
+				PerformTransmission_terminal_MessageInputRequest_Exclude = true;
+				PerformTransmission_terminal_MessageInputRequest_ExcludeText = e.Text;
+			}
 		}
 
 		#endregion

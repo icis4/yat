@@ -30,6 +30,7 @@ Tools > Options...
     > C# > Code Style > Qualify member access with 'this'
   > Debugging
     > General > Step over properties and operators = false
+    > General > Require source files to excatly match the original version = false
 
 Edit > Advanced
   > View White Space = true

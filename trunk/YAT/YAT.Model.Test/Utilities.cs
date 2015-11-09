@@ -326,7 +326,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
 
-			Assert.Inconclusive("'PortA' is not available, therefore this test is ignored. Ensure that 'PortA' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -341,7 +341,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
 
-			Assert.Inconclusive("'PortB' is not available, therefore this test is ignored. Ensure that 'PortB' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'PortB' is not available, therefore this test is excluded. Ensure that 'PortB' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -356,7 +356,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
-			Assert.Inconclusive("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -371,7 +371,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
 		
-			Assert.Inconclusive("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -431,7 +431,7 @@ namespace YAT.Model.Test
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
-			Assert.Inconclusive("'IPv4SpecificInterface' is not available, therefore this test is ignored. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -446,7 +446,7 @@ namespace YAT.Model.Test
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
-			Assert.Inconclusive("'IPv6SpecificInterface' is not available, therefore this test is ignored. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -484,7 +484,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceAIsAvailable)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
 
-			Assert.Inconclusive("'DeviceA' is not available, therefore this test is ignored. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -499,7 +499,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceBIsAvailable)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
 
-			Assert.Inconclusive("'DeviceB' is not available, therefore this test is ignored. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -514,7 +514,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
-			Assert.Inconclusive("'MTSicsDeviceA' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 
@@ -529,7 +529,7 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
 
-			Assert.Inconclusive("'MTSicsDeviceB' is not connected, therefore this test is ignored. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			Assert.Inconclusive("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 			return (null);
 		}
 

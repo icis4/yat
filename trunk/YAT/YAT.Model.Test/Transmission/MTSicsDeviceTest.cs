@@ -30,7 +30,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
+using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
@@ -232,7 +232,13 @@ namespace YAT.Model.Test.Transmission
 			using (Terminal terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
-				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
+				if (!terminal.Start())
+				{
+					if (PerformTransmission_terminal_MessageInputRequest_Exclude)
+						Assert.Inconclusive(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+					else
+						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
+				}
 				Utilities.WaitForConnection(terminal);
 
 				// Prepare stimulus and expected:
@@ -266,14 +272,21 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
+		private static bool PerformTransmission_terminal_MessageInputRequest_Exclude = false;
+		private static string PerformTransmission_terminal_MessageInputRequest_ExcludeText = "";
+
 		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
 		{
-			Assert.Fail
-			(
-				"Unexpected message input request:" + Environment.NewLine + Environment.NewLine +
-				e.Caption + Environment.NewLine + Environment.NewLine +
-				e.Text
-			);
+			// No assertion = exception can be invoked here as it might be handled by the calling event handler.
+			// Therefore, simply confirm...
+			e.Result = DialogResult.OK;
+
+			// ...and signal exclusion via a flag:
+			if (e.Text.StartsWith("Unable to start terminal!"))
+			{
+				PerformTransmission_terminal_MessageInputRequest_Exclude = true;
+				PerformTransmission_terminal_MessageInputRequest_ExcludeText = e.Text;
+			}
 		}
 
 		#endregion
