@@ -29,6 +29,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -76,10 +77,10 @@ namespace YAT.Model.Test.Transmission
 				yield return (new TestCaseData(10, false, false).SetName("_Repeat10OneWay"));
 				yield return (new TestCaseData(10, true,  false).SetName("_Repeat10TwoWay"));
 
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, false, true ).SetName("_RepeatInfiniteOneWayAndBreak"));
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, false, false).SetName("_RepeatInfiniteOneWayUntilExit"));
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, true,  true ).SetName("_RepeatInfiniteTwoWayAndBreak"));
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, true,  false).SetName("_RepeatInfiniteTwoWayUntilExit"));
+				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, false, true ).SetName("_RepeatRandomOneWayAndBreak"));
+				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, false, false).SetName("_RepeatRandomOneWayUntilExit"));
+				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, true,  true ).SetName("_RepeatRandomTwoWayAndBreak"));
+				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, true,  false).SetName("_RepeatRandomTwoWayUntilExit"));
 			}
 		}
 
@@ -306,8 +307,12 @@ namespace YAT.Model.Test.Transmission
 					                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 					                      testSet);
 			}
-			else // Infinite count.
+			else // Random count.
 			{
+				Random r = new Random(RandomEx.NextPseudoRandomSeed());
+				Thread.Sleep(r.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
+
+				// Break or stop:
 				if (executeBreak)
 				{
 					terminalA.Break();
