@@ -5,10 +5,10 @@
 ::  Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
 ::  Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 ::  -----------------------------------------------------------------------------------------------
-::  $URL$
-::  $Author$
-::  $Date$
-::  $Revision$
+::  $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/VSPE%20Runtime%20Config%20-%20COM1%20paired%20with%20COM2.bat $
+::  $Author: maettu_this $
+::  $Date: 2015-11-08 21:40:09 +0100 (So, 08 Nov 2015) $
+::  $Revision: 819 $
 ::  -----------------------------------------------------------------------------------------------
 ::  See SVN change log for revision details.
 ::  See release notes for product version details.
@@ -20,25 +20,25 @@
 ::  See http://www.gnu.org/licenses/lgpl.html for license details.
 :: =================================================================================================
 
-SET USB_HUB_CTRL_EXE=USBHubControl.exe
+SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_B_LPC1769_B.exe
+SET MT_SICS_EXE_PATH="D:\MKY\Projekte\Software\YAT\Test Environment\MT RB ExampleBalance"
 
 :: Verify that executable is available
-WHERE %USB_HUB_CTRL_EXE% >NUL 2>&1
+WHERE %MT_SICS_EXE% >NUL 2>&1
 IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
 
-:: Start Hub 1 'USB'
-%USB_HUB_CTRL_EXE% A6YJ5BDF 110111
+:: Change to executable directory (limitation of executable)
+CD /D %MT_SICS_EXE_PATH%
 
-:: Start Hub 2 'RS-232'
-%USB_HUB_CTRL_EXE% A6YJ5A78 001111
+:: Start executable
+%MT_SICS_EXE%
 
 GOTO END
 
 :ERROR_EXE
 ECHO.
-ECHO The required %USB_HUB_CTRL_EXE% is not available!
-ECHO Make sure that the "MCD Conline USB HUB" drivers are installed, and...
-ECHO ..."\Tools\CommandLine\USBHubControl.exe" has been added to the system's PATH!
+ECHO The required %MT_SICS_EXE% is not available!
+ECHO Make sure that it has been added to the system's PATH!
 ECHO.
 PAUSE
 GOTO END
@@ -47,5 +47,5 @@ GOTO END
 
 :: =================================================================================================
 ::  End of
-::  $URL$
+::  $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/VSPE%20Runtime%20Config%20-%20COM1%20paired%20with%20COM2.bat $
 :: =================================================================================================
