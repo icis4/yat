@@ -262,7 +262,25 @@ namespace YAT.Gui.Forms
 		{
 			string link = e.Link.LinkData as string;
 			if (link != null)
-				MKY.Net.Browser.BrowseUri(link);
+			{
+				Exception ex;
+				if (!MKY.Net.Browser.BrowseUri(link, out ex))
+				{
+					MessageBox.Show
+					(
+						this.Parent,
+						"Unable to open link." + Environment.NewLine + Environment.NewLine +
+						"System message:" + Environment.NewLine + ex.Message,
+						"System Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+				}
+			}
+			else
+			{
+				throw (new InvalidOperationException("Invalid link, program execution should never get here, please report this bug!"));
+			}
 		}
 
 		#endregion

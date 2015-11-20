@@ -109,35 +109,35 @@
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
     <Compile Include="ListBoxEx.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PathComboBox.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="FastListBox.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PathLabel.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PictureBoxEx.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusBox.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="StatusBox.Designer.cs">
       <DependentUpon>StatusBox.cs</DependentUpon>
     </Compile>
     <Compile Include="StringListEdit.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="StringListEdit.Designer.cs">
       <DependentUpon>StringListEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="TextInputBox.cs">
-      <SubType>Windows Forms</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="TextInputBox.Designer.cs">
       <DependentUpon>TextInputBox.cs</DependentUpon>

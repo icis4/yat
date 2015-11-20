@@ -76,7 +76,6 @@ namespace YAT.Gui.Controls
 	/// <summary>
 	/// This monitor implements a list box based terminal monitor in a speed optimized way.
 	/// </summary>
-	[DesignerCategory("Windows Forms")]
 	public partial class Monitor : UserControl
 	{
 		#region Types

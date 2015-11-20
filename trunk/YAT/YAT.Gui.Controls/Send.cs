@@ -41,7 +41,6 @@ using YAT.Model.Types;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
 	public partial class Send : UserControl
 	{

@@ -31,7 +31,6 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a simple text input box similar to <see cref="MessageBox"/>.
 	/// </summary>
-	[DesignerCategory("Windows Forms")]
 	public partial class TextInputBox : Form
 	{
 		#region Fields

@@ -304,10 +304,14 @@
 			// 
 			this.reportFormatPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.reportFormatPreview.AppendTerminatingZero = false;
+			this.reportFormatPreview.FillLastReport = false;
 			this.reportFormatPreview.Location = new System.Drawing.Point(3, 77);
 			this.reportFormatPreview.Name = "reportFormatPreview";
+			this.reportFormatPreview.PrependPayloadByteLength = false;
 			this.reportFormatPreview.Size = new System.Drawing.Size(254, 88);
 			this.reportFormatPreview.TabIndex = 8;
+			this.reportFormatPreview.UseId = false;
 			// 
 			// UsbSerialHidDeviceSettings
 			// 
@@ -367,6 +371,5 @@
 		private System.Windows.Forms.Label label_Preview_5;
 		private System.Windows.Forms.Label label_Preview_6;
 		private System.Windows.Forms.Label label_Preview_7;
-
 	}
 }

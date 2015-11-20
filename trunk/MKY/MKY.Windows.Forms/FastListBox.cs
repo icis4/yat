@@ -40,7 +40,6 @@ namespace MKY.Windows.Forms
 	/// Fast implementation of a list box. The original <see cref="ListBox"/> is rather slow if
 	/// there are many consecutive updates/adds.
 	/// </summary>
-	[DesignerCategory("Windows Forms")]
 	public class FastListBox : ListBoxEx
 	{
 		#region Fields

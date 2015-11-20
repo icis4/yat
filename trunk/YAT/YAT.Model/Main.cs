@@ -948,7 +948,7 @@ namespace YAT.Model
 		/// Opens the workspace or terminal file given.
 		/// </summary>
 		/// <param name="filePath">Workspace or terminal file.</param>
-		/// <returns><c>true</c> if successfully opened the workspace or terminal.</returns>
+		/// <returns><c>true</c> if successfully opened the workspace or terminal, <c>false</c> otherwise.</returns>
 		public virtual bool OpenFromFile(string filePath)
 		{
 			AssertNotDisposed();

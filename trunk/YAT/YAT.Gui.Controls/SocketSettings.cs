@@ -39,7 +39,6 @@ using MKY.Windows.Forms;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("TcpClientAutoReconnectChanged")]
 	public partial class SocketSettings : UserControl
 	{

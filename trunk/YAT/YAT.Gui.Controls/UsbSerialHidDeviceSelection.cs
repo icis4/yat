@@ -39,7 +39,6 @@ using MKY.Windows.Forms;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("DeviceInfoChanged")]
 	public partial class UsbSerialHidDeviceSelection : UserControl
 	{
