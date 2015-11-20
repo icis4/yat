@@ -15,14 +15,12 @@
     <assembly path="MKY\MKY.IO.Serial.Usb\bin\Debug\MKY.IO.Serial.Usb.dll" />
     <assembly path="MKY\MKY.IO.Serial.Usb.Test\bin\Debug\MKY.IO.Serial.Usb.Test.dll" />
     <assembly path="MKY\MKY.IO.Usb\bin\Debug\MKY.IO.Usb.dll" />
-    <assembly path="MKY\MKY.IO.Usb.Demo\bin\Debug\MKY.IO.Usb.Demo.exe" />
     <assembly path="MKY\MKY.IO.Usb.Test\bin\Debug\MKY.IO.Usb.Test.dll" />
     <assembly path="MKY\MKY.Net.Test\bin\Debug\MKY.Net.Test.dll" />
     <assembly path="MKY\MKY.Win32\bin\Debug\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\Debug\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\Debug\MKY.Windows.Forms.dll" />
     <assembly path="NUnit\NUnit\bin\Debug\NUnit.dll" />
-    <assembly path="YAT\YAT\bin\Debug\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\Debug\YAT.Controller.dll" />
     <assembly path="YAT\YAT.Controller.Test\bin\Debug\YAT.Controller.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Debug\YAT.Domain.dll" />
@@ -42,9 +40,7 @@
     <assembly path="YAT\YAT.Settings.Terminal\bin\Debug\YAT.Settings.Terminal.dll" />
     <assembly path="YAT\YAT.Settings.Test\bin\Debug\YAT.Settings.Test.dll" />
     <assembly path="YAT\YAT.Settings.Workspace\bin\Debug\YAT.Settings.Workspace.dll" />
-    <assembly path="YAT\YAT.Test\bin\Debug\YAT.Test.exe" />
     <assembly path="YAT\YAT.Utilities\bin\Debug\YAT.Utilities.dll" />
-    <assembly path="YAT\YATConsole\bin\Debug\YATConsole.exe" />
   </Config>
   <Config name="Release" binpathtype="Auto">
     <assembly path="ALAZ\Source\ALAZ.SystemEx\bin\Release\ALAZ.SystemEx.dll" />
@@ -61,14 +57,12 @@
     <assembly path="MKY\MKY.IO.Serial.Usb\bin\Release\MKY.IO.Serial.Usb.dll" />
     <assembly path="MKY\MKY.IO.Serial.Usb.Test\bin\Release\MKY.IO.Serial.Usb.Test.dll" />
     <assembly path="MKY\MKY.IO.Usb\bin\Release\MKY.IO.Usb.dll" />
-    <assembly path="MKY\MKY.IO.Usb.Demo\bin\Release\MKY.IO.Usb.Demo.exe" />
     <assembly path="MKY\MKY.IO.Usb.Test\bin\Release\MKY.IO.Usb.Test.dll" />
     <assembly path="MKY\MKY.Net.Test\bin\Release\MKY.Net.Test.dll" />
     <assembly path="MKY\MKY.Win32\bin\Release\MKY.Win32.dll" />
     <assembly path="MKY\MKY.Win32.Test\bin\Release\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\Release\MKY.Windows.Forms.dll" />
     <assembly path="NUnit\NUnit\bin\Release\NUnit.dll" />
-    <assembly path="YAT\YAT\bin\Release\YAT.exe" />
     <assembly path="YAT\YAT.Controller\bin\Release\YAT.Controller.dll" />
     <assembly path="YAT\YAT.Controller.Test\bin\Release\YAT.Controller.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Release\YAT.Domain.dll" />
@@ -88,8 +82,6 @@
     <assembly path="YAT\YAT.Settings.Terminal\bin\Release\YAT.Settings.Terminal.dll" />
     <assembly path="YAT\YAT.Settings.Test\bin\Release\YAT.Settings.Test.dll" />
     <assembly path="YAT\YAT.Settings.Workspace\bin\Release\YAT.Settings.Workspace.dll" />
-    <assembly path="YAT\YAT.Test\bin\Release\YAT.Test.exe" />
     <assembly path="YAT\YAT.Utilities\bin\Release\YAT.Utilities.dll" />
-    <assembly path="YAT\YATConsole\bin\Release\YATConsole.exe" />
   </Config>
 </NUnitProject>

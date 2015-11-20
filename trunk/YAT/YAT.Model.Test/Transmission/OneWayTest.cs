@@ -315,10 +315,13 @@ namespace YAT.Model.Test.Transmission
 				terminalA.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
 				if (!terminalA.Start())
 				{
-					if (PerformTransmission_terminal_MessageInputRequest_Exclude)
-						Assert.Inconclusive(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
-					else
+					if (PerformTransmission_terminal_MessageInputRequest_Exclude) {
+						Assert.Ignore(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					}
+					else {
 						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
+					}
 				}
 				Utilities.WaitForConnection(terminalA);
 
@@ -330,10 +333,13 @@ namespace YAT.Model.Test.Transmission
 						terminalB.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
 						if (!terminalB.Start())
 						{
-							if (PerformTransmission_terminal_MessageInputRequest_Exclude)
-								Assert.Inconclusive(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
-							else
+							if (PerformTransmission_terminal_MessageInputRequest_Exclude) {
+								Assert.Ignore(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+								// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+							}
+							else {
 								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
+							}
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 

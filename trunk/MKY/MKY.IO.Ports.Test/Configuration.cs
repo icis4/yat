@@ -54,8 +54,8 @@ namespace MKY.IO.Ports.Test
 		private ConfigurationProperty portA = new ConfigurationProperty("PortA", typeof(string), "COM1");
 		private ConfigurationProperty portB = new ConfigurationProperty("PortB", typeof(string), "COM2");
 
-		private ConfigurationProperty mtSicsDeviceA = new ConfigurationProperty("MTSicsDeviceA", typeof(string), "COM41");
-		private ConfigurationProperty mtSicsDeviceB = new ConfigurationProperty("MTSicsDeviceB", typeof(string), "COM42");
+		private ConfigurationProperty mtSicsDeviceA = new ConfigurationProperty("MTSicsDeviceA", typeof(string), "COM14"); // MCT
+		private ConfigurationProperty mtSicsDeviceB = new ConfigurationProperty("MTSicsDeviceB", typeof(string), "COM43"); // MT
 
 		private ConfigurationProperty tiLaunchPadDeviceA = new ConfigurationProperty("TILaunchPadDeviceA", typeof(string), "COM51");
 		private ConfigurationProperty tiLaunchPadDeviceB = new ConfigurationProperty("TILaunchPadDeviceB", typeof(string), "COM52");

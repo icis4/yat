@@ -431,7 +431,7 @@ namespace YAT.Gui.Controls
 			{
 				int port;
 				if (int.TryParse(textBox_LocalPort.Text, out port) &&
-					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
+					(port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
 				{
 					if ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket))
 					{
@@ -451,8 +451,8 @@ namespace YAT.Gui.Controls
 				{
 					string message =
 						"Local port is invalid, valid values are numbers from " +
-						System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
+						IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+						IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
 
 					MessageBoxEx.Show
 					(

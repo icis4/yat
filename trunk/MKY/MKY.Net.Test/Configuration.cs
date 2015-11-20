@@ -23,6 +23,8 @@
 using System;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Net.NetworkInformation;
 
 using MKY.Configuration;
 
@@ -53,6 +55,8 @@ namespace MKY.Net.Test
 		private ConfigurationProperty ipv4SpecificInterface = new ConfigurationProperty("IPv4SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 		private ConfigurationProperty ipv6SpecificInterface = new ConfigurationProperty("IPv6SpecificInterface", typeof(string), "TAP-Win32 Adapter");
 
+		private ConfigurationProperty mtSicsDeviceTcpPort = new ConfigurationProperty("MTSicsDeviceTcpPort", typeof(string), "55600"); // ExBal
+
 		#endregion
 
 		#region Fields > Auxiliary
@@ -62,6 +66,9 @@ namespace MKY.Net.Test
 
 		private bool ipv4SpecificInterfaceIsAvailable;
 		private bool ipv6SpecificInterfaceIsAvailable;
+
+		private bool mtSicsDeviceIsAvailable;
+		private int mtSicsDeviceTcpPortAsInt;
 
 		#endregion
 
@@ -81,6 +88,8 @@ namespace MKY.Net.Test
 
 			this.properties.Add(this.ipv4SpecificInterface);
 			this.properties.Add(this.ipv6SpecificInterface);
+
+			this.properties.Add(this.mtSicsDeviceTcpPort);
 		}
 
 		#endregion
@@ -115,6 +124,12 @@ namespace MKY.Net.Test
 			get { return ((string)this["IPv6SpecificInterface"]); }
 		}
 
+		/// <summary></summary>
+		public virtual string MTSicsDeviceTcpPort
+		{
+			get { return ((string)this["MTSicsDeviceTcpPort"]); }
+		}
+
 		#endregion
 
 		#region Properties > Auxiliary
@@ -136,6 +151,20 @@ namespace MKY.Net.Test
 		{
 			get { return (this.ipv6SpecificInterfaceIsAvailable); }
 			set { this.ipv6SpecificInterfaceIsAvailable = value;  }
+		}
+
+		/// <summary></summary>
+		public virtual bool MTSicsDeviceIsAvailable
+		{
+			get { return (this.mtSicsDeviceIsAvailable); }
+			set { this.mtSicsDeviceIsAvailable = value;  }
+		}
+
+		/// <summary></summary>
+		public virtual int MTSicsDeviceTcpPortAsInt
+		{
+			get { return (this.mtSicsDeviceTcpPortAsInt); }
+			set { this.mtSicsDeviceTcpPortAsInt = value;  }
 		}
 
 		#endregion
@@ -204,6 +233,24 @@ namespace MKY.Net.Test
 				if (IPNetworkInterface.TryParse(configuration.IPv6SpecificInterface, out ni))
 					configuration.IPv6SpecificInterfaceIsAvailable = inferfaces.Contains(ni);
 
+				// Check whether a port is available at the specified MT-SICS device port:
+				int port;
+				if (int.TryParse(configuration.MTSicsDeviceTcpPort, out port))
+				{
+					if ((port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
+					{
+						foreach (IPEndPoint tcpListener in IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners())
+						{
+							if (tcpListener.Port == port)
+							{
+								configuration.MTSicsDeviceIsAvailable = true;
+								configuration.MTSicsDeviceTcpPortAsInt = port;
+								break;
+							}
+						}
+					}
+				}
+		
 				// Activate the effective configuration:
 				StaticConfiguration = configuration;
 			}
@@ -246,6 +293,10 @@ namespace MKY.Net.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : "not ") + "available";
+
+		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter")]
+		public static readonly string MTSicsDeviceIsAvailable = "MT SICS device is " + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : "not ") + "available on TCP port " + ConfigurationProvider.Configuration.MTSicsDeviceTcpPort;
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
@@ -294,6 +345,17 @@ namespace MKY.Net.Test
 		/// <summary></summary>
 		public IPv6SpecificInterfaceIsAvailableCategoryAttribute()
 			: base(ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable)
+		{
+		}
+	}
+
+	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	public sealed class MTSicsDeviceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	{
+		/// <summary></summary>
+		public MTSicsDeviceIsAvailableCategoryAttribute()
+			: base(ConfigurationCategoryStrings.MTSicsDeviceIsAvailable)
 		{
 		}
 	}

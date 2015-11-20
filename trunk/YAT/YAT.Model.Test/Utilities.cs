@@ -326,7 +326,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortAIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortA));
 
-			Assert.Inconclusive("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -341,7 +343,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortBIsAvailable)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.PortB));
 
-			Assert.Inconclusive("'PortB' is not available, therefore this test is excluded. Ensure that 'PortB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'PortB' is not available, therefore this test is excluded. Ensure that 'PortB' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -356,7 +360,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
-			Assert.Inconclusive("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -371,7 +377,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
 		
-			Assert.Inconclusive("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -431,7 +439,9 @@ namespace YAT.Model.Test
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
 				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
-			Assert.Inconclusive("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -446,7 +456,9 @@ namespace YAT.Model.Test
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
 				return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
-			Assert.Inconclusive("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -454,6 +466,30 @@ namespace YAT.Model.Test
 		{
 			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
 			return (GetStartedTextTcpAutoSocketOnIPv6SpecificInterfaceSettings());
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketMTSicsDeviceSettings()
+		{
+			if (MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable)
+			{
+				int port = MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceTcpPortAsInt;
+
+				TerminalSettingsRoot settings = GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings();
+				settings.IO.Socket.LocalTcpPort = port;
+				settings.IO.Socket.RemoteTcpPort = port;
+				return (settings);
+			}
+
+			Assert.Ignore("'MTSicsDevice' is not available, therefore this test is excluded. Ensure that 'MTSicsDevice' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			return (null);
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketMTSicsDeviceSettings(string dummy)
+		{
+			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			return (GetStartedTextTcpAutoSocketMTSicsDeviceSettings());
 		}
 
 		#endregion
@@ -484,7 +520,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceAIsAvailable)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
 
-			Assert.Inconclusive("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'DeviceA' is not available, therefore this test is excluded. Ensure that 'DeviceA' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -499,7 +537,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceBIsAvailable)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.DeviceB));
 
-			Assert.Inconclusive("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'DeviceB' is not available, therefore this test is excluded. Ensure that 'DeviceB' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -514,7 +554,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
-			Assert.Inconclusive("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 
@@ -529,7 +571,9 @@ namespace YAT.Model.Test
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsConnected)
 				return (GetStartedTextUsbSerialHidSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
 
-			Assert.Inconclusive("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			Assert.Ignore("'MTSicsDeviceB' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
+			// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			return (null);
 		}
 

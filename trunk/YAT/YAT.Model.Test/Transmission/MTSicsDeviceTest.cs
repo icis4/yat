@@ -67,8 +67,8 @@ namespace YAT.Model.Test.Transmission
 		static MTSicsDeviceTestData()
 		{
 			Commands = new List<Pair<Pair<string, string>, TimeSpan>>();
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S +"), TimeSpan.FromSeconds(90.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S +"), TimeSpan.FromSeconds(15.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S S       0.00 g"), TimeSpan.FromSeconds(90.0 / 1000)));
+			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S S       0.00 g"), TimeSpan.FromSeconds(15.0 / 1000)));
 			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(50.0 / 1000)));
 			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I6", @"ES"),  TimeSpan.FromSeconds(15.0 / 1000)));
 		}
@@ -126,6 +126,12 @@ namespace YAT.Model.Test.Transmission
 				{
 					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextSerialPortMTSicsDeviceBSettings, null);
 					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.IO.Ports.Test.ConfigurationCategoryStrings.MTSicsDeviceBIsConnected, "SerialPort_DeviceB_"));
+				}
+
+				// Add device in any case => 'Ignore' is issued if device is not available.
+				{
+					Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDelegate = new Pair<Utilities.TerminalSettingsDelegate<string>, string>(Utilities.GetStartedTextTcpAutoSocketMTSicsDeviceSettings, null);
+					devs.Add(new Triple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string>(settingsDelegate, MKY.Net.Test.ConfigurationCategoryStrings.MTSicsDeviceIsAvailable, "TcpAutoSocket_Device_"));
 				}
 
 				if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected ||
@@ -227,10 +233,13 @@ namespace YAT.Model.Test.Transmission
 				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
 				if (!terminal.Start())
 				{
-					if (PerformTransmission_terminal_MessageInputRequest_Exclude)
-						Assert.Inconclusive(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
-					else
+					if (PerformTransmission_terminal_MessageInputRequest_Exclude) {
+						Assert.Ignore(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					}
+					else {
 						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
+					}
 				}
 				Utilities.WaitForConnection(terminal);
 
