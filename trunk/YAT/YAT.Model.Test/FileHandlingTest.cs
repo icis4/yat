@@ -62,9 +62,9 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Set Up Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Set Up Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -85,13 +85,6 @@ namespace YAT.Model.Test
 			ApplicationSettings.Save();
 		}
 
-		#endregion
-
-		#region Tear Down Fixture
-		//==========================================================================================
-		// Tear Down Fixture
-		//==========================================================================================
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TestFixtureTearDown]
@@ -111,9 +104,9 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Set Up
+		#region TestInstance
 		//==========================================================================================
-		// Set Up
+		// TestInstance
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -130,13 +123,6 @@ namespace YAT.Model.Test
 
 			Temp.MakeTempPath(GetType());
 		}
-
-		#endregion
-
-		#region Tear Down
-		//==========================================================================================
-		// Tear Down
-		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]

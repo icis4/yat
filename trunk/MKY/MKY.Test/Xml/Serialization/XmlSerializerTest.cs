@@ -58,9 +58,9 @@ namespace MKY.Test.Xml.Serialization
 
 		#endregion
 
-		#region Tear Down Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Tear Down Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>

@@ -54,9 +54,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tear Down Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Tear Down Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>

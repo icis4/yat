@@ -584,9 +584,9 @@ namespace MKY.Test.Settings
 	[TestFixture]
 	public class SettingsTest
 	{
-		#region Tear Down Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Tear Down Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>

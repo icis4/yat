@@ -102,9 +102,9 @@ namespace MKY.IO.Usb.Test
 	[TestFixture]
 	public class DeviceInfoTest
 	{
-		#region Tear Down Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Tear Down Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>
