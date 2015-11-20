@@ -42,9 +42,9 @@ namespace MKY.IO.Serial.Usb.Test
 	[TestFixture]
 	public class SerialHidPortSettingsTest
 	{
-		#region Tear Down Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Tear Down Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>

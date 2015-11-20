@@ -54,9 +54,9 @@ namespace YAT.Gui.Test
 	[TestFixture]
 	public class StressTest
 	{
-		#region Set Up Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Set Up Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -70,13 +70,6 @@ namespace YAT.Gui.Test
 			// Prevent auto-save of workspace settings.
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
 		}
-
-		#endregion
-
-		#region Tear Down Fixture
-		//==========================================================================================
-		// Tear Down Fixture
-		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]

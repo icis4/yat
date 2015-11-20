@@ -73,9 +73,9 @@ namespace MKY.IO.Ports.Test.SerialPort
 	[TestFixture]
 	public class SerialPortIdTest
 	{
-		#region Tear Down Fixture
+		#region TestFixture
 		//==========================================================================================
-		// Tear Down Fixture
+		// TestFixture
 		//==========================================================================================
 
 		/// <summary></summary>
