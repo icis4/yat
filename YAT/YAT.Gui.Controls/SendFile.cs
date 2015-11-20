@@ -62,7 +62,6 @@ using YAT.Settings.Application;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
 	public partial class SendFile : UserControl
 	{

@@ -33,7 +33,6 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a status box similar to <see cref="MessageBox"/>.
 	/// </summary>
-	[DesignerCategory("Windows Forms")]
 	public partial class StatusBox : Form
 	{
 		#region Delegates

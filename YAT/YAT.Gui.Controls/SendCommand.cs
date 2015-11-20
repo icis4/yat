@@ -69,7 +69,6 @@ namespace YAT.Gui.Controls
 	/// On focus enter, edit state is always reset.
 	/// On focus leave, edit state is kept depending on how focus is leaving.
 	/// </remarks>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
 	public partial class SendCommand : UserControl
 	{

@@ -39,7 +39,6 @@ using MKY.Windows.Forms;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("ReportFormatChanged")]
 	public partial class UsbSerialHidDeviceSettings : UserControl
 	{
@@ -366,9 +365,19 @@ namespace YAT.Gui.Controls
 
 		private void linkLabel_Info_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			string link = e.Link.LinkData as string;
-			if (link != null)
-				MKY.Net.Browser.BrowseUri(link);
+			Exception ex;
+			if (!MKY.Net.Browser.BrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
+			{
+				MessageBox.Show
+				(
+					this.Parent,
+					"Unable to open link." + Environment.NewLine + Environment.NewLine +
+					"System message:" + Environment.NewLine + ex.Message,
+					"System Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+				);
+			}
 		}
 
 		private void checkBox_AutoOpen_CheckedChanged(object sender, EventArgs e)

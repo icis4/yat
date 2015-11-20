@@ -35,7 +35,6 @@ using YAT.Gui.Utilities;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	public partial class BinaryDisplaySettingsSet : UserControl
 	{
 		#region Fields

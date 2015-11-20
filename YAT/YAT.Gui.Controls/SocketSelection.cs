@@ -44,7 +44,6 @@ namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("HostNameOrAddressChanged")]
 	public partial class SocketSelection : UserControl
 	{

@@ -38,7 +38,6 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a list box including edit buttons to edit a list of strings.
 	/// </summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("StringListChanged")]
 	public partial class StringListEdit : UserControl
 	{

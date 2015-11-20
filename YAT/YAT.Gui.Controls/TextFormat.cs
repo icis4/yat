@@ -32,7 +32,6 @@ using MKY.Windows.Forms;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("FormatChanged")]
 	public partial class TextFormat : System.Windows.Forms.UserControl
 	{

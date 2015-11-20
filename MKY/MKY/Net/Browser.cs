@@ -23,7 +23,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Net
 {
@@ -36,20 +35,32 @@ namespace MKY.Net
 		/// Opens the system default browser and browses uri.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
-		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Quite funny suggestion by FxCop...")]
-		public static void BrowseUri(string uri)
+		/// <param name="exception">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public static bool BrowseUri(string uri, out Exception exception)
 		{
-			Process.Start(uri);
+			try
+			{
+				Process.Start(uri);
+				exception = null;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				exception = ex;
+				return (false);
+			}
 		}
 
 		/// <summary>
 		/// Opens the system default browser and browses uri.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
-		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Quite funny suggestion by FxCop...")]
-		public static void BrowseUri(Uri uri)
+		/// <param name="exception">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public static bool BrowseUri(Uri uri, out Exception exception)
 		{
-			BrowseUri(uri.AbsoluteUri);
+			return (BrowseUri(uri.AbsoluteUri, out exception));
 		}
 	}
 }

@@ -40,7 +40,6 @@ using MKY.Windows.Forms;
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
-	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("UseIdChanged")]
 	public partial class UsbSerialHidReportFormatPreview : UserControl
 	{

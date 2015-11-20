@@ -110,6 +110,12 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ID", Justification = "Underscore for improved readability.")]
 		public const byte TI_ID = 0x3F;
 
+		/// <summary>
+		/// The location of the TI HID API specification.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
+		public const string TI_Link = "http://www.ti.com/lit/an/slaa453/slaa453.pdf";
+
 		#endregion
 
 		/// <summary>Default is <see cref="SerialHidReportFormatPreset.YAT"/>.</summary>
