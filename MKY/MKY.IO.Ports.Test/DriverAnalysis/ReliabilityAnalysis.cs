@@ -28,6 +28,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -237,7 +238,10 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			// Perform ECHO:
 			string command = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwyxyz0123456789";
 			for (int i = 0; i < linesToTransmit; i++)
+			{
+				Trace.WriteLine(">> line #" + i);
 				this.port.WriteLine(command);
+			}
 
 			Thread.Sleep(BusyWaitForOperation);
 
@@ -323,6 +327,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 
 			// Perform transmission:
+			Trace.WriteLine(">> SIR");
 			this.port.WriteLine("SIR"); // Request continuous values.
 
 			int receivedLines = 0;
@@ -409,8 +414,10 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				if (b == 0x0A) // <LF>
 				{
 					this.receivedDataLock.AcquireWriterLock(Timeout.Infinite);
-					this.receivedLines++;
+					int receivedLines = this.receivedLines++;
 					this.receivedDataLock.ReleaseWriterLock();
+
+					Trace.WriteLine("<< line #" + receivedLines);
 				}
 			}
 		}

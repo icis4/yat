@@ -36,12 +36,6 @@ namespace YAT.Test
 		[STAThread]
 		public static void Main()
 		{
-			foreach (System.Collections.IEnumerable bla in YAT.Model.Test.Transmission.OneWayTestData.TestCasesIPLoopbacks)
-			{
-				var commandData = (NUnit.Framework.TestCaseData)bla;
-				System.Console.WriteLine(bla);
-			}
-
 			// Create the overall configuration object:
 
 			ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
@@ -109,9 +103,10 @@ namespace YAT.Test
 			overall.Save(ConfigurationSaveMode.Full, true);
 
 			// Proceed as follows to generate the configuration files:
-			//  1. Build and run this project => Template files get created.
-			//  2. Go to "\YAT\YAT.Test\bin\Debug" and filter for "*.config".
-			//  3. Clean template files from unnecessary information:
+			//  1. Active the "Debug Test" configuration.
+			//  2. Build and run this project => Template files get created.
+			//  3. Go to "\YAT\YAT.Test\bin\Debug" and filter for "*.config".
+			//  4. Clean template files from unnecessary information:
 			//      a) Remove the following sections:
 			//          > "appSettings"
 			//          > "configProtectedData"
@@ -122,10 +117,10 @@ namespace YAT.Test
 			//          > In all "<sectionGroup..." remove all content from ", System.Configuration, Version=..." up to the closing quote.
 			//            Attention: Files including the assembly information "System.Configuration" result in TypeLoadException's! Why? No clue...
 			//          > In all "<section..." remove all content from ", Version=..." up to the very last closing quote.
-			//  4. Move template files to the respective "\ConfigurationTemplate" folder.
-			//  5. Compare the new template file against the former template file.
-			//  6. Update the effective solution file ".\YAT.Test.config" as required. (This is the generic base configuration.)
-			//  7. Update the effective assembly files in e.g. "..\!-TestConfig" as required. (This is the user/machine dependent configuration to be merged with.)
+			//  5. Move template files to the respective "\ConfigurationTemplate" folder.
+			//  6. Compare the new template file against the former template file.
+			//  7. Update the effective solution file ".\YAT.Test.config" as required. (This is the generic base configuration.)
+			//  8. Update the effective assembly files in e.g. "..\!-TestConfig" as required. (This is the user/machine dependent configuration to be merged with.)
 		}
 
 		private static void CreateDedicatedFilesAndAddAssemblySections(string dedicatedFileName, string selectionGroupName, string sectionsGroupName, ConfigurationSection dedicatedSection, ConfigurationSection overallSection, Configuration overallConfiguration)

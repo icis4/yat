@@ -114,6 +114,18 @@
       <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
       <Name>MKY.IO.Ports.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.SerialPort.Test\MKY.IO.Serial.SerialPort.Test.csproj">
+      <Project>{48429c05-4bc7-431f-ae89-9f667640798b}</Project>
+      <Name>MKY.IO.Serial.SerialPort.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Socket.Test\MKY.IO.Serial.Socket.Test.csproj">
+      <Project>{d1f642b8-b8a2-44e5-8cdd-3c70f7eaed88}</Project>
+      <Name>MKY.IO.Serial.Socket.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Usb.Test\MKY.IO.Serial.Usb.Test.csproj">
+      <Project>{840930e0-828a-484c-8600-760ab8ac6f33}</Project>
+      <Name>MKY.IO.Serial.Usb.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
       <Project>{E909B6F9-F856-4ED5-8D8F-6E77BC02C24C}</Project>
       <Name>MKY.IO.Usb.Test</Name>
@@ -126,9 +138,17 @@
       <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
       <Name>MKY.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Win32.Test\MKY.Win32.Test.csproj">
+      <Project>{b5f4667b-5154-45c0-a0de-411bbc292049}</Project>
+      <Name>MKY.Win32.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
-      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Project>{f489b948-95cf-49fe-b9aa-a51654f5688b}</Project>
       <Name>MKY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
+      <Name>NUnit</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Controller.Test\YAT.Controller.Test.csproj">
       <Project>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</Project>
@@ -137,6 +157,10 @@
     <ProjectReference Include="..\YAT.Domain.Test\YAT.Domain.Test.csproj">
       <Project>{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}</Project>
       <Name>YAT.Domain.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Gui.Test\YAT.Gui.Test.csproj">
+      <Project>{b1fa3c03-5924-47ff-90ad-d5d38027df0c}</Project>
+      <Name>YAT.Gui.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Model.Test\YAT.Model.Test.csproj">
       <Project>{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}</Project>
