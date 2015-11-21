@@ -22,39 +22,69 @@ Contents
 ========
 
 1. Installation
-2. History of changes in YAT
-3. History of changes in XTerm232
-4. Roadmap
-5. Legal
+2. Execution
+3. History of changes in YAT
+4. History of changes in XTerm232
+5. Roadmap
+6. Legal
 
 
 ====================================================================================================
 1. Installation
 ====================================================================================================
 
-YAT uses the .NET Framework 3.5 SP1. Setup checks whether the .NET 3.5 SP1 runtime is installed on
-the computer and automatically downloads and installs it if not installed yet.
+Compact (.msi) -vs- with .NET runtime (.zip) package
+----------------------------------------------------------------------------------------------------
 
-You can also download .NET from <http://www.microsoft.com/net/downloads>. Go to "Earlier Versions"
-and browse for ".NET Framework 3.5 SP1", download and install it manually.
+YAT uses the .NET Framework 3.5 SP1. The installer verifies .NET is installed on the computer.
+
+A) If .NET is already installed, run "YAT-...(32-bit).msi" or "YAT-...(64-bit).msi":
+    > Installer verifies .NET is installed.
+    > Installer installs YAT, older versions of YAT are automatically replaced.
+
+B) If .NET is not yet installed and the computer is online, run "YAT-...(32-bit).msi"
+   or "YAT-...(64-bit).msi" to download and install .NET from Microsoft's online servers:
+    > Installer downloads and installs .NET.
+    > Installer installs YAT, older versions of YAT are automatically replaced.
+
+C) If .NET and/or Windows Installer is not yet installed, download one of the .zip packages and
+   install the required components from offline resources contained in the .zip package:
+    1. Unzip the package to a temporary location.
+    2. Run .msi if Windows Installer is installed on the computer, otherwise "setup.exe".
+        > Installer checks whether .NET is installed and installs if necessary.
+        > Installer installs YAT, older versions of YAT are automatically replaced.
+
+You can also download .NET from Microsoft at <https://www.microsoft.com/en-us/download> or by
+googling for "Microsoft Download .Net Framework 3.5 SP1 Full".
 
 Installing .NET requires administrator permissions.
 
-A) If Windows Installer is already installed, run "YAT-x86_(32-bit).msi" or "YAT-x64_(64-bit).msi":
-    1. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary.
-    2. Setup installs YAT, older versions of YAT are automatically replaced.
 
-B) If Windows Installer is not installed on the computer, run "setup.exe":
-    1. Setup checks whether Windows Installer 4.5 is installed and downloads and installs it if
-       necessary.
-    2. Setup checks whether .NET 3.5 SP1 is installed and downloads and installs it if necessary.
-    3. Setup installs YAT, older versions of YAT are automatically replaced.
+x86 (32-bit) -vs- x64 (64-bit)
+----------------------------------------------------------------------------------------------------
 
-Start YAT by selecting "Start > Programs > YAT > YAT".
+YAT can be installed as x86 or x64 application. x86 works on either 32-bit or 64-bit systems whereas
+x64 can only be installed on 64-bit systems. By default, x86 is installed to "\Program Files (x86)"
+whereas x64 is installed to "\Program Files".
+
+It is not possible to install both distributions for the same user. When changing from x86 to x64 of
+the same version of YAT, or vice versa, the installed distribution must first be uninstalled before
+the other distribution can be installed. If this limitation is not acceptable for somebody, create a
+new feature request ticket and describe the impacts/rationale/use case as detailed as possible.
 
 
 ====================================================================================================
-2. History of Changes in YAT
+2. Execution
+====================================================================================================
+
+Run YAT by selecting "Start > Programs > YAT > YAT".
+
+Use "C:\<Program Files>\YAT\YAT.exe" to run YAT normally.
+Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
+
+
+====================================================================================================
+3. History of Changes in YAT
 ====================================================================================================
 
 YAT 2.0 Gamma 2 Version 1.99.36 :: 2015-??-??
@@ -918,7 +948,7 @@ Limitations and known issues:
 
 
 ====================================================================================================
-3. History of Changes in XTerm232
+4. History of Changes in XTerm232
 ====================================================================================================
 
 XTerm232 1.0.2 :: 2003-10-31
@@ -956,7 +986,7 @@ XTerm232 1.0.0 :: 2003-10-14
 
 
 ====================================================================================================
-4. Roadmap
+5. Roadmap
 ====================================================================================================
 
 YAT 2.0 Final :: Expected in 2015/2016
@@ -975,7 +1005,7 @@ these features aim for providing a versatile automatic testing tool for serial c
 
 
 ====================================================================================================
-5. Legal
+6. Legal
 ====================================================================================================
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
