@@ -1,6 +1,28 @@
 
-Evaluation 2015-03..04
-----------------------
+Update of evaluation related to bugs #318 and #323 (2015-11-21)
+---------------------------------------------------------------
+
+Issues (bugs #318 and #323)
+ - Some users have difficulties installing directly from within 7-Zip or similar
+    (unknown whether they started setup.exe or the .msi)
+
+Therefore searching for alternatives to the current VSI + ZIP based distribution:
+
+Microsoft ClickOnce <https://msdn.microsoft.com/en-us/library/142dbbz4%28v=vs.90%29.aspx>
+ + Easy, simple
+ + Support for automatic update
+ - Not supporting fonts and other shared resources => KILLER
+ - Not supporting installation for multiple users => KILLER
+
+Keep as-is but a little bit better (suggestion (BSc))
+ > Distribute compact package directly as .msi (instead of .zip)
+ > Distribute full package still as .zip, but add additional notes (!-UnzipBeforeInstalling-And-ReadMe.txt)
+
+
+
+
+Evaluation MK.II (2015-03..04)
+------------------------------
 
 YAT initially used the VS2003..2008 integrated installer functionality (VSI). But VS2013 no longer contained this. Therefore, alternatives were evaluated to pre-releasing YAT 1.99.31 for Raffi Zingg.
 
@@ -44,3 +66,10 @@ Then, browsing the web once more (to complain at Microsoft regarding the limitat
  => https://visualstudiogallery.msdn.microsoft.com/9abe329c-9bba-44a1-be59-0fbf6151054d
 
  :-))
+
+
+
+Initial (2003..15)
+------------------
+
+Use of VS2003..2008 integrated installer functionality (VSI).
