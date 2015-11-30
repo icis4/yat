@@ -56,94 +56,6 @@ using MKY.Time;
 namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
-	/// <remarks>
-	/// There is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
-	/// Google for [UnauthorizedAccessException "Access to the port"] for more information and
-	/// workarounds suggestions.
-	/// 
-	/// ============================================================================================
-	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
-	/// Author: Dan Randolph
-	/// 
-	/// There is a deadlock problem with the internal close operation of
-	/// <see cref="System.IO.Ports.SerialPort"/>. Use BeginInvoke instead of Invoke from the
-	/// serialPort_DataReceived event handler to start the method that reads from the
-	/// SerialPort buffer and it will solve the problem. I finally tracked down the problem
-	/// to the Close method by putting a start/stop button on the form. Then I was able to
-	/// lock up the application and found that Close was the culpret. I'm pretty sure that
-	/// components.Dispose() will end up calling the SerialPort Close method if it is open.
-	/// 
-	/// In my application, the user can change the baud rate and the port. In order to do
-	/// this, the SerialPort must be closed fist and this caused a random deadlock in my
-	/// application. Microsoft should document this better!
-	/// ============================================================================================
-	/// 
-	/// Use case 1: Open/close a single time from GUI
-	/// ---------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Close port
-	/// 4. Exit YAT
-	/// 
-	/// Use case 2: Close/open multiple times from GUI
-	/// ----------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Close port
-	/// 4. Open port
-	/// 5. Repeat close/open multiple times
-	/// 6. Exit YAT
-	/// 
-	/// Use case 3: Close/disconnect/reconnect/open multiple times
-	/// ----------------------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Close port
-	/// 4. Disconnect USB-to-serial adapter
-	/// 5. Reconnect USB-to-serial adapter
-	/// 6. Open port
-	/// 7. Repeat close/disconnect/reconnect/open multiple times
-	/// 8. Exit YAT
-	/// 
-	/// Use case 4: Disconnect/reconnect multiple times
-	/// -----------------------------------------------
-	/// 1. Start YAT
-	/// 2. Open port
-	/// 3. Disconnect USB-to-serial adapter
-	/// 4. Reconnect USB-to-serial adapter
-	///    => System.UnauthorizedAccssException("Access is denied.")
-	///       @ System.IO.Ports.InternalResources.WinIOError(int errorCode, string str)
-	///       @ System.IO.Ports.SerialStream.Dispose(bool disposing)
-	///       @ System.IO.Ports.SerialStream.Finalize()
-	/// 5. Repeat disconnect/reconnect multiple times
-	/// 6. Exit YAT
-	/// 
-	/// ============================================================================================
-	/// (from above)
-	/// 
-	/// Use cases 1 through 3 work fine. But use case 4 results in an exception. Workarounds tried
-	/// in May 2008:
-	/// - Async close
-	/// - Async DataReceived event
-	/// - Immediate async read
-	/// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
-	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
-	/// 
-	/// --------------------------------------------------------------------------------------------
-	/// 
-	/// October 2011:
-	/// Issue fixed by adding the DisposeBaseStream_SerialPortBugFix() to MKY.IO.Ports.SerialPortEx()
-	/// 
-	/// (see below)
-	/// ============================================================================================
-	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
-	/// Author: jmatos1
-	/// 
-	/// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
-	/// ============================================================================================
-	/// 
-	/// Saying hello to StyleCop ;-.
-	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
 	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable
@@ -201,6 +113,7 @@ namespace MKY.IO.Serial.SerialPort
 		private SerialPortSettings settings;
 
 		private Ports.ISerialPort port;
+		private object portSyncObj = new object(); // Required as port will be disposed on recreated on open/close.
 
 		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
@@ -328,7 +241,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					ResetPortAndThreads();
+					ResetPortAndThreadsAndNotify(false); // Suppress notifications during disposal.
 
 					this.stateLock.Dispose();
 				}
@@ -439,10 +352,13 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				if (this.port != null)
-					return (this.port.IsOpen);
-				else
-					return (false);
+				lock (this.portSyncObj)
+				{
+					if (this.port != null)
+						return (this.port.IsOpen);
+					else
+						return (false);
+				}
 			}
 		}
 
@@ -453,10 +369,13 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				if (IsOpen)
-					return (!this.port.OutputBreak && !this.port.InputBreak);
-				else
-					return (false);
+				lock (this.portSyncObj)
+				{
+					if (IsOpen)
+						return (!this.port.OutputBreak && !this.port.InputBreak);
+					else
+						return (false);
+				}
 			}
 		}
 
@@ -467,15 +386,18 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				if (IsOpen)
+				lock (this.portSyncObj)
 				{
-					bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
-					bool inputBreak  = (this.settings.NoSendOnInputBreak  && this.port.InputBreak);
-					return (!outputBreak && !inputBreak);
-				}
-				else
-				{
-					return (false);
+					if (IsOpen)
+					{
+						bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
+						bool inputBreak  = (this.settings.NoSendOnInputBreak  && this.port.InputBreak);
+						return (!outputBreak && !inputBreak);
+					}
+					else
+					{
+						return (false);
+					}
 				}
 			}
 		}
@@ -489,10 +411,13 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.port != null)
-					return (this.port.ControlPins);
-				else
-					return (new Ports.SerialPortControlPins());
+				lock (this.portSyncObj)
+				{
+					if (this.port != null)
+						return (this.port.ControlPins);
+					else
+						return (new Ports.SerialPortControlPins());
+				}
 			}
 		}
 
@@ -505,10 +430,13 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.port != null)
-					return (this.port.ControlPinCount);
-				else
-					return (new Ports.SerialPortControlPinCount());
+				lock (this.portSyncObj)
+				{
+					if (this.port != null)
+						return (this.port.ControlPinCount);
+					else
+						return (new Ports.SerialPortControlPinCount());
+				}
 			}
 		}
 
@@ -639,10 +567,13 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.port != null)
-					return (this.port.OutputBreakCount);
-				else
-					return (0);
+				lock (this.portSyncObj)
+				{
+					if (this.port != null)
+						return (this.port.OutputBreakCount);
+					else
+						return (0);
+				}
 			}
 		}
 
@@ -653,10 +584,13 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.port != null)
-					return (this.port.InputBreakCount);
-				else
-					return (0);
+				lock (this.portSyncObj)
+				{
+					if (this.port != null)
+						return (this.port.InputBreakCount);
+					else
+						return (0);
+				}
 			}
 		}
 
@@ -688,11 +622,11 @@ namespace MKY.IO.Serial.SerialPort
 				WriteDebugMessageLine("Starting...");
 				try
 				{
-					CreateAndOpenPortAndThreads();
+					CreateAndOpenPortAndThreadsAndNotify();
 				}
 				catch
 				{
-					ResetPortAndThreads();
+					ResetPortAndThreadsAndNotify();
 					throw; // Re-throw!
 				}
 			}
@@ -712,7 +646,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (IsStarted)
 			{
 				WriteDebugMessageLine("Stopping...");
-				ResetPortAndThreads();
+				ResetPortAndThreadsAndNotify();
 			}
 			else
 			{
@@ -783,7 +717,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (signalXOnXOff)
 					this.receiveThreadEvent.Set();
 
-				// Immediately invoke the event, invoke it normally = synchronously:
+				// Immediately invoke the event:
 				if (signalXOnXOff || signalXOnXOffCount)
 					OnIOControlChanged(EventArgs.Empty);
 
@@ -852,7 +786,7 @@ namespace MKY.IO.Serial.SerialPort
 						// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
 						// an exception when trying to write while in output break!
 						bool isOutputBreak;
-						lock (this.port)
+						lock (this.portSyncObj)
 							isOutputBreak = this.port.OutputBreak;
 
 						if (!isOutputBreak)
@@ -868,7 +802,7 @@ namespace MKY.IO.Serial.SerialPort
 							if (this.settings.Communication.FlowControlUsesRfrCts)
 							{
 								bool isClearToSend;
-								lock (this.port)
+								lock (this.portSyncObj)
 									isClearToSend = this.port.CtsHolding;
 
 								if (!isClearToSend)
@@ -886,7 +820,7 @@ namespace MKY.IO.Serial.SerialPort
 
 							// Send it!
 							byte[] chunkData;
-							lock (this.port)
+							lock (this.portSyncObj)
 							{
 								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 									this.port.RfrEnable = true;
@@ -962,7 +896,7 @@ namespace MKY.IO.Serial.SerialPort
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "SendThread() has detected shutdown of port.");
-				RestartOrResetPortAndThreads();
+				RestartOrResetPortAndThreadsAndNotify();
 			}
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
@@ -1033,10 +967,13 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// AssertNotDisposed() is called by 'ResetXOnXOffCount()' below.
 
-			ResetXOnXOffCount();
+			lock (this.portSyncObj)
+			{
+				ResetXOnXOffCount();
 
-			if (this.port != null)
-				this.port.ResetControlPinCount();
+				if (this.port != null)
+					this.port.ResetControlPinCount();
+			}
 		}
 
 		/// <summary>
@@ -1046,8 +983,11 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			AssertNotDisposed();
 
-			if (this.port != null)
-				this.port.ResetBreakCount();
+			lock (this.portSyncObj)
+			{
+				if (this.port != null)
+					this.port.ResetBreakCount();
+			}
 		}
 
 		#endregion
@@ -1059,11 +999,11 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void ApplySettings()
 		{
-			if (this.port == null)
-				return;
-
-			lock (this.port)
+			lock (this.portSyncObj)
 			{
+				if (this.port == null)
+					return;
+
 				this.port.PortId = this.settings.PortId;
 
 				if (this.settings.LimitOutputBuffer.Enabled)
@@ -1098,6 +1038,11 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void SetStateSynchronizedAndNotify(State state)
 		{
+			SetStateSynchronizedAndNotify(state, true);
+		}
+
+		private void SetStateSynchronizedAndNotify(State state, bool withNotify)
+		{
 #if (DEBUG)
 			State oldState = GetStateSynchronized();
 #endif
@@ -1110,8 +1055,17 @@ namespace MKY.IO.Serial.SerialPort
 			else
 				WriteDebugMessageLine("State is already " + oldState + ".");
 #endif
-			OnIOChanged(EventArgs.Empty);
-			OnIOControlChanged(EventArgs.Empty);
+			if (withNotify)
+			{
+				// Notify asynchronously because the state will get changed from asynchronous items
+				// such as the reopen timer. In case of that timer, the port needs to be locked to
+				// ensure proper operation. In such case, a synchronous notification callback would
+				// likely result in a deadlock, in case the callback sink would call any method or
+				// property that also locks the port!
+
+				OnIOChangedAsync(EventArgs.Empty);
+				OnIOControlChangedAsync(EventArgs.Empty);
+			}
 		}
 
 		#endregion
@@ -1123,20 +1077,23 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void CreatePort()
 		{
-			if (this.port != null)
-				CloseAndDisposePort();
+			lock (this.portSyncObj)
+			{
+				if (this.port != null)
+					CloseAndDisposePort();
 
-			this.port = new Ports.SerialPortEx();
-			this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
-			this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
-			this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
+				this.port = new Ports.SerialPortEx();
+				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
+				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
+				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
+			}
 		}
 
 		private void OpenPort()
 		{
-			if (this.port != null)
+			lock (this.portSyncObj)
 			{
-				lock (this.port)
+				if (this.port != null)
 				{
 					if (!this.port.IsOpen)
 						this.port.Open();
@@ -1147,17 +1104,20 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void CloseAndDisposePort()
 		{
-			if (this.port != null)
+			lock (this.portSyncObj)
 			{
-				try
+				if (this.port != null)
 				{
-					if (this.port.IsOpen)
-						this.port.Close();
-				}
-				finally
-				{
-					this.port.Dispose();
-					this.port = null;
+					try
+					{
+						if (this.port.IsOpen)
+							this.port.Close();
+					}
+					finally
+					{
+						this.port.Dispose();
+						this.port = null;
+					}
 				}
 			}
 		}
@@ -1170,13 +1130,13 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
-		private void CreateAndOpenPortAndThreads()
+		private void CreateAndOpenPortAndThreadsAndNotify()
 		{
-			CreatePort();          // Port must be created each time because this.port.Close()
-			ApplySettings();       //   disposes the underlying IO instance
-
-			lock (this.port)
+			lock (this.portSyncObj) // Ensure that whole operation is performed at once!
 			{
+				CreatePort();       // Port must be created each time because this.port.Close()
+				ApplySettings();    //   disposes the underlying IO instance
+
 				// RFR (formerly RTS)
 				switch (this.settings.Communication.FlowControl)
 				{
@@ -1211,12 +1171,12 @@ namespace MKY.IO.Serial.SerialPort
 						this.port.DtrEnable = false;
 						break;
 				}
-			} // lock (this.portSyncObj)
 
-			StartThreads();
-			StartAliveTimer();
-			OpenPort();
-			SetStateSynchronizedAndNotify(State.Opened);
+				StartThreads();
+				StartAliveTimer();
+				OpenPort();
+				SetStateSynchronizedAndNotify(State.Opened);
+			} // lock (this.portSyncObj)
 
 			// Handle XOn/XOff
 			if (XOnXOffIsInUse)
@@ -1230,48 +1190,66 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					case SerialFlowControl.ManualSoftware:
 					case SerialFlowControl.ManualCombined:
+					{
 						bool wasXOn = false;
 						lock (this.manualInputWasXOnSyncObj)
-						{
 							wasXOn = this.manualInputWasXOn;
-						}
+
 						if (wasXOn)
 							SetInputXOn();
+
 						break;
+					}
 
 					default:
+					{
 						SetInputXOn();
 						break;
+					}
 				}
 			}
 		}
 
 		/// <summary></summary>
-		private void RestartOrResetPortAndThreads()
+		private void RestartOrResetPortAndThreadsAndNotify()
+		{
+			RestartOrResetPortAndThreadsAndNotify(true);
+		}
+
+		/// <summary></summary>
+		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify)
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
 				StopThreads();
 				StopAndDisposeAliveTimer();
 				CloseAndDisposePort();
-				SetStateSynchronizedAndNotify(State.Closed);
+
+				SetStateSynchronizedAndNotify(State.Closed, withNotify);
 
 				StartReopenTimer();
-				SetStateSynchronizedAndNotify(State.WaitingForReopen);
+
+				SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify);
 			}
 			else
 			{
-				ResetPortAndThreads();
+				ResetPortAndThreadsAndNotify();
 			}
 		}
 
-		private void ResetPortAndThreads()
+		private void ResetPortAndThreadsAndNotify()
+		{
+			ResetPortAndThreadsAndNotify(true);
+		}
+
+		private void ResetPortAndThreadsAndNotify(bool withNotify)
 		{
 			StopThreads();
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-			SetStateSynchronizedAndNotify(State.Reset);
+
+			SetStateSynchronizedAndNotify(State.Reset, withNotify);
 		}
 
 		#endregion
@@ -1423,7 +1401,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Immediately read data on this thread.
 					int bytesToRead;
 					byte[] data;
-					lock (this.port)
+					lock (this.portSyncObj)
 					{
 						bytesToRead = this.port.BytesToRead;
 						data = new byte[bytesToRead];
@@ -1483,7 +1461,7 @@ namespace MKY.IO.Serial.SerialPort
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port.");
-				RestartOrResetPortAndThreads();
+				RestartOrResetPortAndThreadsAndNotify();
 			}
 		}
 
@@ -1637,7 +1615,7 @@ namespace MKY.IO.Serial.SerialPort
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "PinChangedAsync() has detected shutdown of port.");
-				RestartOrResetPortAndThreads();
+				RestartOrResetPortAndThreadsAndNotify();
 			}
 		}
 
@@ -1705,27 +1683,30 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
+			lock (this.portSyncObj) // Ensure that whole operation is performed at once!
 			{
-				try
+				if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
 				{
-					// If port isn't open anymore, or access to port throws exception,
-					//   port has been shut down, e.g. USB to serial converter disconnected.
-					if (!this.port.IsOpen)
+					try
+					{
+						// If port isn't open anymore, or access to port throws exception,
+						//   port has been shut down, e.g. USB to serial converter disconnected.
+						if (!this.port.IsOpen)
+						{
+							WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port.");
+							RestartOrResetPortAndThreadsAndNotify();
+						}
+					}
+					catch
 					{
 						WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port.");
-						RestartOrResetPortAndThreads();
+						RestartOrResetPortAndThreadsAndNotify();
 					}
 				}
-				catch
+				else
 				{
-					WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port.");
-					RestartOrResetPortAndThreads();
+					StopAndDisposeAliveTimer();
 				}
-			}
-			else
-			{
-				StopAndDisposeAliveTimer();
 			}
 		}
 
@@ -1760,23 +1741,25 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (AutoReopenEnabledAndAllowed)
+			lock (this.portSyncObj) // Ensure that whole operation is performed at once!
 			{
-				try
+				if (AutoReopenEnabledAndAllowed)
 				{
-					// Try to re-open port.
-					CreateAndOpenPortAndThreads();
-					WriteDebugMessageLine("ReopenTimerElapsed() successfully reopend the port.");
+					try
+					{
+						CreateAndOpenPortAndThreadsAndNotify(); // Try to reopen port.
+						WriteDebugMessageLine("ReopenTimerElapsed() successfully reopened the port.");
+					}
+					catch
+					{
+						WriteDebugMessageLine("ReopenTimerElapsed() has failed to reopen the port.");
+						RestartOrResetPortAndThreadsAndNotify(false); // Cleanup and restart. Suppress notifications.
+					}
 				}
-				catch
+				else
 				{
-					// Re-open failed, cleanup and restart.
-					RestartOrResetPortAndThreads();
+					StopAndDisposeReopenTimer();
 				}
-			}
-			else
-			{
-				StopAndDisposeReopenTimer();
 			}
 		}
 
@@ -1794,6 +1777,12 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
+		protected virtual void OnIOChangedAsync(EventArgs e)
+		{
+			EventHelper.FireAsync(IOChanged, this, e);
+		}
+
+		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
@@ -1802,10 +1791,11 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
-			EventHelper.FireSync(IOControlChanged, this, e);
+			EventHelper.FireAsync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
@@ -1846,12 +1836,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
-			if      (this.port != null)
-				return (this.port.PortId);
-			else if (this.settings != null)
-				return (this.settings.PortId);
-			else
-				return (Undefined);
+			lock (this.portSyncObj)
+			{
+				if      (this.port != null)
+					return (this.port.PortId);
+				else if (this.settings != null)
+					return (this.settings.PortId);
+				else
+					return (Undefined);
+			}
 		}
 
 		#endregion

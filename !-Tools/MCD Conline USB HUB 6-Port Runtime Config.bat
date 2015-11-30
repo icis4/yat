@@ -30,7 +30,20 @@ IF NOT %ERRORLEVEL% == 0 GOTO ERROR_EXE
 %USB_HUB_CTRL_EXE% A6YJ5BDF 110111
 
 :: Start Hub 2 'RS-232'
+:: Ensure to activate devices subsequently (work-around to limitation of MCT or windows driver ??)
+:: Must be done in reversed order, enumeration/configuration of higher devices otherwise may fail ??
+ECHO.
+ECHO Enabling higher pair of devices...
+%USB_HUB_CTRL_EXE% A6YJ5A78 001100
+:: Time required for execution is approx 3 seconds
+TIMEOUT 10
+:: Time required to load the drivers is approx 6 seconds => 10 seconds timeout
+ECHO.
+ECHO Additionally enabling lower pair of devices...
 %USB_HUB_CTRL_EXE% A6YJ5A78 001111
+:: Time required for execution is approx 3 seconds
+TIMEOUT 10
+:: Time required to load the drivers is approx 6 seconds => 10 seconds timeout
 
 GOTO END
 

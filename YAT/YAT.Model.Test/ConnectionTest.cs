@@ -1,0 +1,418 @@
+﻿//==================================================================================================
+// YAT - Yet Another Terminal.
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+// ------------------------------------------------------------------------------------------------
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
+// ------------------------------------------------------------------------------------------------
+// MKY Development Version 1.0.14
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// See release notes for product version details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2010-2015 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO.Ports;
+using System.Threading;
+using System.Reflection;
+
+using MKY.IO.Ports;
+using MKY.IO.Ports.Test;
+using MKY.Settings;
+
+using NUnit;
+using NUnit.Framework;
+
+using YAT.Settings.Application;
+using YAT.Settings.Terminal;
+
+#endregion
+
+namespace YAT.Model.Test
+{
+	/// <summary></summary>
+	[TestFixture]
+	public class ConnectionTest
+	{
+		#region TestFixture
+		//==========================================================================================
+		// TestFixture
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
+		{
+			// Create temporary in-memory application settings for this test run.
+			ApplicationSettings.Create(ApplicationSettingsFileAccess.None);
+
+			// Prevent auto-save of workspace settings.
+			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = false;
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			// Close temporary in-memory application settings.
+			ApplicationSettings.Close();
+		}
+
+		#endregion
+
+		#region Tests
+		//==========================================================================================
+		// Tests
+		//==========================================================================================
+
+		#region Tests > Close/Reopen
+		//------------------------------------------------------------------------------------------
+		// Tests > Close/Reopen
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, MTSicsDeviceAIsConnectedCategory]
+		public virtual void TestCloseReopenSerialPort()
+		{
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
+				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			TerminalSettingsRoot settings = Utilities.GetStartedTextSerialPortMTSicsDeviceASettings();
+
+			// Create terminals from settings:
+			using (Terminal terminal = new Terminal(settings))
+			{
+				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+				if (!terminal.StartIO())
+				{
+					if (Utilities.TerminalMessageInputRequestResultsInExclude)
+					{
+						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					}
+					else
+					{
+						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
+					}
+				}
+				Utilities.WaitForConnection(terminal);
+
+				const int WaitForOperation = 100;
+
+				// --- Test: Close/Reopen without sending. -----------------------------------------
+
+				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+				Thread.Sleep(WaitForOperation);
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// --- Test: Close/Reopen with previous and subsequent sending. --------------------
+
+				// Prepare stimulus and expected:
+				Types.Command emptyCommand = new Types.Command("");
+				List<byte> l = new List<byte>();
+				l.Add(0x45); // 'E'
+				l.Add(0x53); // 'S'
+				l.Add(0x0D); // <CR>
+				l.Add(0x0A); // <LF>
+				byte[] emptyCommandExpected = l.ToArray();
+				int expectedTotalLineCount = 0;
+				int expectedTotalByteCount = 0;
+
+				// Send something and verify response:
+				terminal.SendText(emptyCommand);
+				expectedTotalLineCount++;
+				expectedTotalByteCount += emptyCommandExpected.Length;
+				Utilities.WaitForTransmission(terminal, expectedTotalLineCount, expectedTotalByteCount);
+
+				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+				Thread.Sleep(WaitForOperation);
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// Send something and verify response:
+				terminal.SendText(emptyCommand);
+				expectedTotalLineCount++;
+				expectedTotalByteCount += emptyCommandExpected.Length;
+				Utilities.WaitForTransmission(terminal, expectedTotalLineCount, expectedTotalByteCount);
+
+				// --- Test: Close/Reopen while continuous receiving. ----------------------------------
+
+				// Request continuous data:
+				terminal.SendText(new Types.Command("SIR")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+				Thread.Sleep(WaitForOperation);
+
+				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+				Thread.Sleep(WaitForOperation);
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// Stop continuous data:
+				terminal.SendText(new Types.Command("SI")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+				Thread.Sleep(WaitForOperation);
+
+				// Close terminal. Expected: No exceptions, terminal can be closed.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+			} // Expected: No exceptions, terminal can be disposed.
+		}
+
+		#endregion
+
+		#region Tests > Disconnect/Reconnect
+		//------------------------------------------------------------------------------------------
+		// Tests > Disconnect/Reconnect
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1)]
+		public virtual void TestDisconnectReconnectSerialPort()
+		{
+			TestDisconnectReconnect(false); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
+		}
+
+		/// <summary></summary>
+		[Test, MTSicsDeviceAIsConnectedCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
+		public virtual void TestDisconnectReconnectSerialPortWithContinuousReceiving()
+		{
+			TestDisconnectReconnect(true); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
+		}
+
+		private void TestDisconnectReconnect(bool testWithContinuousReceiving)
+		{
+			if (!ConfigurationProvider.Configuration.MTSicsDeviceAIsConnected)
+				Assert.Ignore("'MTSicsDeviceA' is not connected, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
+				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			if (!UsbHubControl.Probe())
+				Assert.Ignore(UsbHubControl.ErrorMessage);
+				// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			string portName = ConfigurationProvider.Configuration.MTSicsDeviceA;
+			UsbHubSetting portOut = UsbHubSetting.Out4;
+
+			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
+
+			TerminalSettingsRoot settings = Utilities.GetStartedTextSerialPortMTSicsDeviceASettings();
+
+			// Create terminals from settings:
+			using (Terminal terminal = new Terminal(settings))
+			{
+				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
+				if (!terminal.StartIO())
+				{
+					if (Utilities.TerminalMessageInputRequestResultsInExclude)
+					{
+						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+					}
+					else
+					{
+						Assert.Fail(@"Failed to start """ + terminal.Caption + @"""");
+					}
+				}
+				Utilities.WaitForConnection(terminal);
+
+				const int WaitForOperation = 100;
+
+				// --- Test: Disconnect/Reconnect without sending. ---------------------------------
+
+				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
+				Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.None), "Failed to modify USB hub!");
+				// Disabling all outputs is used to improve speed when enabling single outputs below.
+				// See comments in implementation of 'UsbHubControl' for explanation.
+				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
+				Utilities.WaitForDisconnection(terminal);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
+				Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
+				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically reopen!
+				Utilities.WaitForConnection(terminal);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// Verify that subsequently calling StartIO() also works:
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
+				Thread.Sleep(WaitForOperation);
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+				Thread.Sleep(WaitForOperation);
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// --- Test: Disconnect/Reconnect with previous and subsequent sending. ------------
+
+				// Prepare stimulus and expected:
+				Types.Command emptyCommand = new Types.Command("");
+				List<byte> l = new List<byte>();
+				l.Add(0x45); // 'E'
+				l.Add(0x53); // 'S'
+				l.Add(0x0D); // <CR>
+				l.Add(0x0A); // <LF>
+				byte[] emptyCommandExpected = l.ToArray();
+				int expectedTotalLineCount = 0;
+				int expectedTotalByteCount = 0;
+
+				// Send something and verify response:
+				terminal.SendText(emptyCommand);
+				expectedTotalLineCount++;
+				expectedTotalByteCount += emptyCommandExpected.Length;
+				Utilities.WaitForTransmission(terminal, expectedTotalLineCount, expectedTotalByteCount);
+
+				// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
+				Assert.IsTrue(UsbHubControl.Disable(portOut), "Failed to modify USB hub!");
+				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
+				Utilities.WaitForDisconnection(terminal);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
+				Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
+				Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically reopen!
+				Utilities.WaitForConnection(terminal);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// Send something and verify response:
+				terminal.SendText(emptyCommand);
+				expectedTotalLineCount++;
+				expectedTotalByteCount += emptyCommandExpected.Length;
+				Utilities.WaitForTransmission(terminal, expectedTotalLineCount, expectedTotalByteCount);
+
+				// Verify that subsequently calling StartIO() also works:
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+
+				// Send something and verify response:
+				terminal.SendText(emptyCommand);
+				expectedTotalLineCount++;
+				expectedTotalByteCount += emptyCommandExpected.Length;
+				Utilities.WaitForTransmission(terminal, expectedTotalLineCount, expectedTotalByteCount);
+
+				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+				Thread.Sleep(WaitForOperation);
+
+				Assert.IsTrue(terminal.StartIO());
+				Assert.IsTrue(terminal.IsStarted);
+				Assert.IsTrue(terminal.IsOpen);
+				Assert.IsTrue(terminal.IsReadyToSend);
+				Thread.Sleep(WaitForOperation);
+
+				// Send something and verify response:
+				terminal.SendText(emptyCommand);
+				expectedTotalLineCount++;
+				expectedTotalByteCount += emptyCommandExpected.Length;
+				Utilities.WaitForTransmission(terminal, expectedTotalLineCount, expectedTotalByteCount);
+
+				// --- Test: Disconnect/Reconnect while continuous receiving. ----------------------
+
+				if (testWithContinuousReceiving) // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
+				{
+					// Request continuous data:
+					terminal.SendText(new Types.Command("SIR")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+					Thread.Sleep(WaitForOperation);
+
+					// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
+					Assert.IsTrue(UsbHubControl.Disable(portOut), "Failed to modify USB hub!");
+					Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically close!
+					Utilities.WaitForDisconnection(terminal);
+					Assert.IsFalse(terminal.IsOpen);
+					Assert.IsFalse(terminal.IsReadyToSend);
+
+					// \Remind: The underlying port should be closed here. However, this doesn't
+					// work due to the issue documented in the header of 'SerialPortEx'. Still, a
+					// YAT terminal shall handle this situation without any exceptions!
+
+					// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
+					Assert.IsTrue(UsbHubControl.Enable(portOut), "Failed to modify USB hub!");
+					Assert.IsTrue(terminal.IsStarted); // Terminal still started, and must automatically reopen!
+					Utilities.WaitForConnection(terminal);
+					Assert.IsTrue(terminal.IsOpen);
+					Assert.IsTrue(terminal.IsReadyToSend);
+
+					// Stop continuous data:
+					terminal.SendText(new Types.Command("SI")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+					Thread.Sleep(WaitForOperation);
+				}
+
+				// Close terminal. Expected: No exceptions, terminal can be closed.
+				Assert.IsTrue(terminal.StopIO());
+				Assert.IsFalse(terminal.IsStarted);
+				Assert.IsFalse(terminal.IsOpen);
+				Assert.IsFalse(terminal.IsReadyToSend);
+
+			} // Expected: No exceptions, terminal can be disposed.
+
+			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
+			Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.All), "Failed to set USB hub!");
+		}
+
+		#endregion
+
+		#endregion
+	}
+}
+
+//==================================================================================================
+// End of
+// $URL$
+//==================================================================================================

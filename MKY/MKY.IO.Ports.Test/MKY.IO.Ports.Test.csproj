@@ -103,14 +103,20 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="UsbHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DriverAnalysis\ReliabilityAnalysis.cs" />
+    <Compile Include="SerialPort\ConnectionTest.cs" />
     <Compile Include="SerialPort\SerialPortIdTest.cs" />
     <Compile Include="SerialPort\SerialPortSettingsTest.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationElements.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
+      <Name>NUnit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>

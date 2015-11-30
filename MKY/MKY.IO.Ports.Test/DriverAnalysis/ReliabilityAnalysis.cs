@@ -124,7 +124,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		// Constants
 		//==========================================================================================
 
-		private const int BusyWaitForOperation = 200;
+		private const int WaitForOperation = 200;
 		private const int AdditionalThreads = 10;
 
 		#endregion
@@ -222,14 +222,15 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.port.NewLine = "\r\n"; // <CR><LF>
 			this.port.PortName = portName;
 			this.port.Open();
+			Assert.IsTrue(port.IsOpen);
 
 			// Prepare transmission:
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 			this.port.WriteLine(""); // Sync before requesting ECHO.
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 			this.port.ReadExisting(); // Clear sync data.
 			this.port.WriteLine("ECHO 1");
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 			Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 1!");
 
 			this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
@@ -243,7 +244,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.port.WriteLine(command);
 			}
 
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 
 			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
 			int receivedBytes = this.receivedBytes;
@@ -259,7 +260,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.port.ErrorReceived -= new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 
 			this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 			Assert.AreEqual("",       this.port.ReadLine(), "Failed to quit ECHO mode!");
 			Assert.AreEqual("ECHO A", this.port.ReadLine(), "Failed to quit ECHO mode!");
 
@@ -317,11 +318,12 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.port.NewLine = "\r\n"; // <CR><LF>
 			this.port.PortName = portName;
 			this.port.Open();
+			Assert.IsTrue(port.IsOpen);
 
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 			this.port.WriteLine(""); // Sync before requesting continuous values.
 
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 			this.port.ReadExisting(); // Clear preparation data.
 			this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
 			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
@@ -342,7 +344,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			while (receivedLines < linesToReceive);
 
 			this.port.WriteLine("SI"); // Stop continuous values.
-			Thread.Sleep(BusyWaitForOperation);
+			Thread.Sleep(WaitForOperation);
 
 			this.isOngoing = false;
 

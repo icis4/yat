@@ -2696,7 +2696,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the last display line of desired repository for auxiliary purposes.
+		/// Returns the last display line of desired repository for auxiliary purposes (e.g. automated testing).
 		/// </summary>
 		public virtual Domain.DisplayLine LastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
 		{
@@ -2705,7 +2705,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Clears the last display line of desired repository for auxiliary purposes.
+		/// Clears the last display line of desired repository for auxiliary purposes (e.g. automated testing).
 		/// </summary>
 		public virtual void ClearLastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
 		{

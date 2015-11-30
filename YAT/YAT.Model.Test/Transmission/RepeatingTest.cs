@@ -230,11 +230,11 @@ namespace YAT.Model.Test.Transmission
 			settingsA.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
-				terminalA.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+				terminalA.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
 				if (!terminalA.Start())
 				{
-					if (PerformTransmission_terminal_MessageInputRequest_Exclude) {
-						Assert.Ignore(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
 						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else {
@@ -249,11 +249,11 @@ namespace YAT.Model.Test.Transmission
 					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
 					using (Terminal terminalB = new Terminal(settingsB))
 					{
-						terminalB.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+						terminalB.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
 						if (!terminalB.Start())
 						{
-							if (PerformTransmission_terminal_MessageInputRequest_Exclude) {
-								Assert.Ignore(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
 								// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 							}
 							else {
@@ -322,23 +322,6 @@ namespace YAT.Model.Test.Transmission
 					terminalA.StopIO();
 					terminalB.StopIO();
 				}
-			}
-		}
-
-		private static bool PerformTransmission_terminal_MessageInputRequest_Exclude = false;
-		private static string PerformTransmission_terminal_MessageInputRequest_ExcludeText = "";
-
-		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
-		{
-			// No assertion = exception can be invoked here as it might be handled by the calling event handler.
-			// Therefore, simply confirm...
-			e.Result = DialogResult.OK;
-
-			// ...and signal exclusion via a flag:
-			if (e.Text.StartsWith("Unable to start terminal!"))
-			{
-				PerformTransmission_terminal_MessageInputRequest_Exclude = true;
-				PerformTransmission_terminal_MessageInputRequest_ExcludeText = e.Text;
 			}
 		}
 

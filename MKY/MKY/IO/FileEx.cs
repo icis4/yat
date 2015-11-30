@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -125,6 +127,65 @@ namespace MKY.IO
 		public static bool IsWritable(string filePath)
 		{
 			return (!IsReadOnly(filePath));
+		}
+
+		/// <summary>
+		/// Checks whether the given file is findable, e.g. via the system's PATH variable.
+		/// </summary>
+		/// <param name="fileName">The file name, typically an executable.</param>
+		/// <returns>
+		/// Returns <c>true</c> if file is findable.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static bool IsFindable(string fileName)
+		{
+			string filePath;
+			bool result = IsFindable(fileName, out filePath);
+			UnusedLocal.PreventAnalysisWarning(filePath);
+			return (result);
+		}
+
+		/// <summary>
+		/// Checks whether the given file is findable, e.g. via the system's PATH variable.
+		/// </summary>
+		/// <param name="fileName">The file name, typically an executable.</param>
+		/// <param name="filePath">The path to the file.</param>
+		/// <returns>
+		/// Returns <c>true</c> if file is findable.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static bool IsFindable(string fileName, out string filePath)
+		{
+			try
+			{
+				Process p = new Process();
+				p.StartInfo.UseShellExecute = false;
+				p.StartInfo.FileName = "WHERE";
+				p.StartInfo.Arguments = fileName;
+				p.StartInfo.RedirectStandardOutput = true;
+				p.StartInfo.CreateNoWindow = true;
+				p.Start();
+
+				string whereResult = p.StandardOutput.ReadToEnd();
+
+				p.WaitForExit();
+
+				if (p.ExitCode == 0)
+				{
+					filePath = whereResult.Substring(0, whereResult.IndexOf(Environment.NewLine));
+					return (true);
+				}
+				else
+				{
+					filePath = null;
+					return (false);
+				}
+			}
+			catch
+			{
+				filePath = null;
+				return (false);
+			}
 		}
 
 		/// <summary>
