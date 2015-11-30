@@ -216,9 +216,6 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to verify.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
 		public virtual void PerformTransmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
 		{
@@ -227,14 +224,14 @@ namespace YAT.Model.Test.Transmission
 			// Ensure that EOL is displayed, otherwise the EOL bytes are not available for verification.
 			settings.TextTerminal.ShowEol = true;
 
-			// Create terminals from settings and check whether B receives from A:
+			// Create terminals from settings:
 			using (Terminal terminal = new Terminal(settings))
 			{
-				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(PerformTransmission_terminal_MessageInputRequest);
+				terminal.MessageInputRequest += new EventHandler<MessageInputEventArgs>(Utilities.TerminalMessageInputRequest);
 				if (!terminal.Start())
 				{
-					if (PerformTransmission_terminal_MessageInputRequest_Exclude) {
-						Assert.Ignore(PerformTransmission_terminal_MessageInputRequest_ExcludeText);
+					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
 						// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else {
@@ -271,23 +268,6 @@ namespace YAT.Model.Test.Transmission
 					Trace.WriteLine(@"<< """ + expected + @"""");
 					terminal.ClearLastDisplayLineAuxiliary(Domain.RepositoryType.Rx);
 				}
-			}
-		}
-
-		private static bool PerformTransmission_terminal_MessageInputRequest_Exclude = false;
-		private static string PerformTransmission_terminal_MessageInputRequest_ExcludeText = "";
-
-		private static void PerformTransmission_terminal_MessageInputRequest(object sender, MessageInputEventArgs e)
-		{
-			// No assertion = exception can be invoked here as it might be handled by the calling event handler.
-			// Therefore, simply confirm...
-			e.Result = DialogResult.OK;
-
-			// ...and signal exclusion via a flag:
-			if (e.Text.StartsWith("Unable to start terminal!"))
-			{
-				PerformTransmission_terminal_MessageInputRequest_Exclude = true;
-				PerformTransmission_terminal_MessageInputRequest_ExcludeText = e.Text;
 			}
 		}
 

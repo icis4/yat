@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
@@ -289,7 +290,7 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
-		private const int WaitTimeoutForConnection = 5000;
+		private const int WaitTimeoutForConnectionChange = 5000;
 		private const int WaitTimeoutForLineTransmission = 1000;
 		private const int WaitInterval = 100;
 
@@ -592,6 +593,19 @@ namespace YAT.Model.Test
 		// Wait
 		//==========================================================================================
 
+		internal static void WaitForDisconnection(Terminal terminal)
+		{
+			int timeout = 0;
+			while (terminal.IsConnected)
+			{
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeoutForConnectionChange)
+					Assert.Fail("Disconnect timeout!");
+			}
+		}
+
 		internal static void WaitForConnection(Terminal terminal)
 		{
 			int timeout = 0;
@@ -600,7 +614,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnection)
+				if (timeout >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminal.IsConnected);
@@ -614,7 +628,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeoutForConnection)
+				if (timeout >= WaitTimeoutForConnectionChange)
 					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
@@ -636,7 +650,7 @@ namespace YAT.Model.Test
 		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedPerCycleLineCountRx, int cycle)
 		{
 			// Calculate total expected line count at the receiver side:
-			int expectedTotalLineCount = (expectedPerCycleLineCountRx * cycle);
+			int expectedTotalLineCountRx = (expectedPerCycleLineCountRx * cycle);
 
 			// Calculate timeout factor per line, taking cases with 0 lines into account:
 			int timeoutFactorPerLine = ((expectedPerCycleLineCountRx > 0) ? expectedPerCycleLineCountRx : 1);
@@ -650,12 +664,12 @@ namespace YAT.Model.Test
 				if (timeout >= (WaitTimeoutForLineTransmission * timeoutFactorPerLine))
 					Assert.Fail("Transmission timeout! Try to re-run test case.");
 
-				if (terminalB.RxLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
+				if (terminalB.RxLineCount > expectedTotalLineCountRx) // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
 						" Number of received lines = " + terminalB.RxLineCount +
-						" mismatches expected = " + expectedTotalLineCount + ".");
+						" mismatches expected = " + expectedTotalLineCountRx + ".");
 			}
-			while ((terminalB.RxLineCount != expectedTotalLineCount) ||
+			while ((terminalB.RxLineCount != expectedTotalLineCountRx) ||
 			       (terminalB.RxLineCount != terminalA.TxLineCount) ||
 			       (terminalB.RxByteCount != terminalA.TxByteCount));
 
@@ -665,8 +679,7 @@ namespace YAT.Model.Test
 			// This function uses terminal line count for verification!
 		}
 
-		/// <remarks>Using 'B' instead of 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void WaitForTransmission(Terminal terminalB, int expectedTotalLineCount, int expectedTotalByteCount)
+		internal static void WaitForTransmission(Terminal terminal, int expectedTotalLineCountRx, int expectedTotalByteCountRx)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -674,17 +687,17 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= (WaitTimeoutForLineTransmission * expectedTotalLineCount))
+				if (timeout >= (WaitTimeoutForLineTransmission * expectedTotalLineCountRx))
 					Assert.Fail("Transmission timeout! Try to re-run test case.");
 
-				if ((terminalB.RxLineCount > expectedTotalLineCount) ||
-					(terminalB.RxByteCount > expectedTotalByteCount)) // Break in case of too much data to improve speed of test.
+				if ((terminal.RxLineCount > expectedTotalLineCountRx) ||
+					(terminal.RxByteCount > expectedTotalByteCountRx)) // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + terminalB.RxLineCount + " / bytes = " + terminalB.RxByteCount +
-						" mismatches expected = " + expectedTotalLineCount + " / " + expectedTotalByteCount + ".");
+						" Number of received lines = " + terminal.RxLineCount + " / bytes = " + terminal.RxByteCount +
+						" mismatches expected = " + expectedTotalLineCountRx + " / " + expectedTotalByteCountRx + ".");
 			}
-			while ((terminalB.RxLineCount != expectedTotalLineCount) ||
-			       (terminalB.RxByteCount != expectedTotalByteCount));
+			while ((terminal.RxLineCount != expectedTotalLineCountRx) ||
+			       (terminal.RxByteCount != expectedTotalByteCountRx));
 
 			// Attention: Terminal line count is not always equal to display line count!
 			//  > Terminal line count = number of *completed* lines in terminal
@@ -810,6 +823,43 @@ namespace YAT.Model.Test
 						@"See ""Output"" for details."
 					);
 				}
+			}
+		}
+
+		#endregion
+
+		#region Helpers
+		//==========================================================================================
+		// Helpers
+		//==========================================================================================
+
+		private static bool staticTerminalMessageInputRequestResultsInExclude = false;
+		private static string staticTerminalMessageInputRequestResultsInExcludeText = "";
+
+		/// <summary></summary>
+		public static bool TerminalMessageInputRequestResultsInExclude
+		{
+			get { return (staticTerminalMessageInputRequestResultsInExclude); }
+		}
+
+		/// <summary></summary>
+		public static string TerminalMessageInputRequestResultsInExcludeText
+		{
+			get { return (staticTerminalMessageInputRequestResultsInExcludeText); }
+		}
+
+		/// <summary></summary>
+		public static void TerminalMessageInputRequest(object sender, MessageInputEventArgs e)
+		{
+			// No assertion = exception can be invoked here as it might be handled by the calling event handler.
+			// Therefore, simply confirm...
+			e.Result = DialogResult.OK;
+
+			// ...and signal exclusion via a flag:
+			if (e.Text.StartsWith("Unable to start terminal!"))
+			{
+				staticTerminalMessageInputRequestResultsInExclude = true;
+				staticTerminalMessageInputRequestResultsInExcludeText = e.Text;
 			}
 		}
 

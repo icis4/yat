@@ -55,6 +55,102 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Serial port component based on <see cref="System.IO.Ports.SerialPort"/>.
 	/// </summary>
+	/// <remarks>
+	/// There is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
+	/// 
+	/// Google for...
+	///  > [UnauthorizedAccessException "access to the port"]
+	///  > [ObjectDisposedException "safe handle has been closed"]
+	/// ...for additional information and suggested workarounds.
+	/// 
+	/// This issue can be reproduced by 'TestDisconnectReconnectSerialPortExWithContinuousSending'
+	/// implemented in 'MKY.IO.Ports.Test.SerialPort.ConnectionTest'. Note this is an 'Explicit'
+	/// test as it requires to manually reset the sending device beause it will remain in continuous
+	/// mode as well as the port device because it cannot be opened until disconnected/reconnected!
+	/// 
+	/// ============================================================================================
+	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
+	/// Author: Dan Randolph
+	/// 
+	/// There is a deadlock problem with the internal close operation of
+	/// <see cref="System.IO.Ports.SerialPort"/>. Use BeginInvoke instead of Invoke from the
+	/// serialPort_DataReceived event handler to start the method that reads from the
+	/// SerialPort buffer and it will solve the problem. I finally tracked down the problem
+	/// to the Close method by putting a start/stop button on the form. Then I was able to
+	/// lock up the application and found that Close was the culpret. I'm pretty sure that
+	/// components.Dispose() will end up calling the SerialPort Close method if it is open.
+	/// 
+	/// In my application, the user can change the baud rate and the port. In order to do
+	/// this, the SerialPort must be closed fist and this caused a random deadlock in my
+	/// application. Microsoft should document this better!
+	/// ============================================================================================
+	/// 
+	/// Use case 1: Open/close a single time from GUI
+	/// ---------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Close port
+	/// 4. Exit YAT
+	/// 
+	/// Use case 2: Close/open multiple times from GUI
+	/// ----------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Close port
+	/// 4. Open port
+	/// 5. Repeat close/open multiple times
+	/// 6. Exit YAT
+	/// 
+	/// Use case 3: Close/disconnect/reconnect/open multiple times
+	/// ----------------------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Close port
+	/// 4. Disconnect USB-to-serial adapter
+	/// 5. Reconnect USB-to-serial adapter
+	/// 6. Open port
+	/// 7. Repeat close/disconnect/reconnect/open multiple times
+	/// 8. Exit YAT
+	/// 
+	/// Use case 4: Disconnect/reconnect multiple times
+	/// -----------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Disconnect USB-to-serial adapter
+	/// 4. Reconnect USB-to-serial adapter
+	///    => System.UnauthorizedAccssException("Access is denied.")
+	///       @ System.IO.Ports.InternalResources.WinIOError(int errorCode, string str)
+	///       @ System.IO.Ports.SerialStream.Dispose(bool disposing)
+	///       @ System.IO.Ports.SerialStream.Finalize()
+	/// 5. Repeat disconnect/reconnect multiple times
+	/// 6. Exit YAT
+	/// 
+	/// ============================================================================================
+	/// (from above)
+	/// 
+	/// Use cases 1 through 3 work fine. But use case 4 results in an exception. Workarounds tried
+	/// in May 2008:
+	/// - Async close
+	/// - Async DataReceived event
+	/// - Immediate async read
+	/// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
+	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
+	/// 
+	/// --------------------------------------------------------------------------------------------
+	/// 
+	/// October 2011:
+	/// Issue fixed by adding the DisposeBaseStream_SerialPortBugFix() to MKY.IO.Ports.SerialPortEx()
+	/// 
+	/// (see below)
+	/// ============================================================================================
+	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
+	/// Author: jmatos1
+	/// 
+	/// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
+	/// ============================================================================================
+	/// 
+	/// Saying hello to StyleCop ;-.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
@@ -181,26 +277,6 @@ namespace MKY.IO.Ports
 			base.DataReceived  += new System.IO.Ports.SerialDataReceivedEventHandler (base_DataReceived);
 			base.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(base_ErrorReceived);
 			base.PinChanged    += new System.IO.Ports.SerialPinChangedEventHandler   (base_PinChanged);
-		}
-
-		/// <remarks>
-		/// This dispose method fixes the deadlock issue described in MKY.IO.Serial.SerialPort.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void DisposeBaseStream_SerialPortBugFix()
-		{
-			try
-			{
-				// Attention, the base stream is only available if the port is open!
-				if ((this.IsOpen) && (this.BaseStream != null))
-				{
-					this.BaseStream.Flush();
-					this.BaseStream.Close();
-					
-					// Attention, do not call Dispose() as it can throw after a call to Close().
-				}
-			}
-			catch { }
 		}
 
 		#endregion
@@ -749,6 +825,7 @@ namespace MKY.IO.Ports
 			if (!IsOpen)
 			{
 				OnOpening(EventArgs.Empty);
+
 #if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
@@ -765,12 +842,32 @@ namespace MKY.IO.Ports
 #else
 				base.Open();
 #endif
+				// This is a fix to the 'ObjectDisposedException' issue described in several locations:
+				// http://stackoverflow.com/questions/3808885/net-4-serial-port-objectdisposedexception-on-windows-7-only
+				// http://stackoverflow.com/questions/3230311/problem-with-serialport
+				//
+				// Details on this exception:
+				// Type: System.ObjectDisposedException
+				// Message: Safe handle has been closed
+				// Source: mscorlib
+				// Stack:
+				//    at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+				//    at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped * lpOverlapped, Int32 & lpNumberOfBytesTransferred, Boolean bWait)
+				//    at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+				//    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+				//    at System.Threading.ThreadHelper.ThreadStart()
+				//
+				// It suppresses finalization of the underlying base stream while the port is open.
+				// It will later safely be re-registered by Close().
+				GC.SuppressFinalize(this.BaseStream);
+
+				// Invoke the additional events implemented by this class:
 				OnOpened(EventArgs.Empty);
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 
-				// Immediately check whether there is already data pending
+				// Immediately check whether there is already data pending:
 				if (BytesToRead > 0)
 					OnDataReceived(new SerialDataReceivedEventArgs(System.IO.Ports.SerialData.Chars));
 			}
@@ -787,11 +884,10 @@ namespace MKY.IO.Ports
 			{
 				try
 				{
-					// Flush() can throw System.Exception.
+					// Flush() can throw System.Exception! Work-around by simply waiting!
+
 					while (BytesToWrite > 0)
-					{
 						Thread.Sleep(TimeSpan.Zero);
-					}
 				}
 				catch (Exception ex)
 				{
@@ -819,6 +915,33 @@ namespace MKY.IO.Ports
 			if (IsOpen)
 			{
 				OnClosing(EventArgs.Empty);
+
+				// This is a fix to the 'ObjectDisposedException' issue described in several locations:
+				// http://stackoverflow.com/questions/3808885/net-4-serial-port-objectdisposedexception-on-windows-7-only
+				// http://stackoverflow.com/questions/3230311/problem-with-serialport
+				//
+				// Details on this exception:
+				// Type: System.ObjectDisposedException
+				// Message: Safe handle has been closed
+				// Source: mscorlib
+				// Stack:
+				//    at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+				//    at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped * lpOverlapped, Int32 & lpNumberOfBytesTransferred, Boolean bWait)
+				//    at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+				//    at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+				//    at System.Threading.ThreadHelper.ThreadStart()
+				//
+				// It suppresses finalization of the underlying base stream while the port is open.
+				// It is here safely re-registered.
+				try
+				{
+					GC.ReRegisterForFinalize(this.BaseStream);
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex);
+				}
+
 #if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
@@ -835,6 +958,7 @@ namespace MKY.IO.Ports
 #else
 				base.Close();
 #endif
+				// Invoke the additional events implemented by this class:
 				OnClosed(EventArgs.Empty);
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rfr));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
@@ -1068,9 +1192,9 @@ namespace MKY.IO.Ports
 			string completeMessage = DebugWrite_portName + " " + Environment.TickCount + " " + message;
 
 			if (writeStack)
-				MKY.Diagnostics.DebugEx.WriteStack(this, completeMessage);
+				DebugEx.WriteStack(this, completeMessage);
 			else
-				MKY.Diagnostics.DebugEx.WriteLine(this, completeMessage);
+				DebugEx.WriteLine(this, completeMessage);
 		}
 
 #endif // DEBUG && DEBUG_OPEN_CLOSE

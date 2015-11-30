@@ -161,6 +161,10 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Gets the underlying I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// \ToDo: Add two methods to lock/unlock the I/O instance because the underlying logic
+		/// could change or even dispose of the instance while accessing it.
+		/// </remarks>
 		/// <returns>
 		/// The I/O instance.
 		/// </returns>

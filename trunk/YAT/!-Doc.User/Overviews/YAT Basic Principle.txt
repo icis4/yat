@@ -1,23 +1,27 @@
 
-1. Demonstrate internet service communication
+1. Start with human communication
+    > Talking
+    > Writing
+
+2. Demonstrate internet service communication
     > Browser                  @ Firefox > http://www.srf.ch > something
     > Interpreted HTML         @ Firefox
     > Show HTML data           @ Firefox > Extras > Web Designer > Source Code (Ctrl+U)
 
-2. Demonstrate internet device communication
+3. Demonstrate internet device communication
     > Browser                  @ Firefox > http://fritz.box/
     > Interpreted HTML         @ Firefox
     > Show HTML data           @ Firefox > Extras > Web Designer > Source Code (Ctrl+U)
-  ( > Show messages            @ Message Anaylzer > Loppback & Unencrypted > *Address == 192.168.178.1 )
+  ( > Show messages            @ Message Analyzer > Loopback & Unencrypted > *Address == 192.168.178.1 )
   ( > Browser                  @ Firefox > http://fritz.box/ > Reload )
 
-3. Demonstrate internet device communication with YAT
+4. Demonstrate internet device communication with YAT
     > YAT                      @ YAT > TCP Client > 192.168.178.1:80 > Text Settings <LF> / UTF-8
     > Plain HTML               @ YAT >> "GET / HTTP/1.0" + ""
                                @ YAT << "HTTP/1.0 200 OK"...
                                  => YAT Basic Principle_Terminal 1_Internet Device.yat
 
-4. Demonstrate embedded device communication with YAT
+5. Demonstrate embedded device communication with YAT
     > Embedded Artists EduBoard
     > MFU MC2 exercise 15 (RGB-LED over UART)
                                @ YAT > Serial Port > COM4
