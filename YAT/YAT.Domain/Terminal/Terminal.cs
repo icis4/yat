@@ -446,6 +446,8 @@ namespace YAT.Domain
 					// Ensure that send thread has stopped after the stop request:
 					try
 					{
+						Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))

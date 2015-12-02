@@ -191,9 +191,10 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		public virtual void TearDown()
 		{
 			// Join the additional threads:
-			for (int i = 0; i < this.threads.Length; i++)
+			foreach (Thread t in this.threads)
 			{
-				this.threads[i].Join();
+				Debug.Assert(t.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+				t.Join();
 			}
 		}
 
