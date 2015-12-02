@@ -632,6 +632,8 @@ namespace MKY.IO.Serial.Socket
 					// Ensure that thread has stopped after the stop request:
 					try
 					{
+						Debug.Assert(this.dataSentThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
 						int accumulatedTimeout = 0;
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.dataSentThread.Join(interval = SocketBase.Random.Next(5, 20)))

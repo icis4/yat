@@ -415,7 +415,7 @@ namespace YAT.Gui.Controls
 						// 150 ms because that's the standard time until a human notices a delay.
 						timer_ShowRetrieveDialog.Start();
 
-						// Start retrieving on different thread.
+						// Start retrieving on different thread:
 						this.retrieveDescriptionsThread = new RetrievePortCaptionsThread(ports);
 						Thread t = new Thread(new ThreadStart(this.retrieveDescriptionsThread.GetPortCaptionsFromSystem));
 						t.Name = "Get Serial Port Captions From System";
@@ -424,9 +424,9 @@ namespace YAT.Gui.Controls
 						while (this.retrieveDescriptionsThread.IsRetrieving)
 							Application.DoEvents();
 
-						t.Join();
+						t.Join(); // Debug.Assert(t.ManagedThreadId != ...) makes no sense here, just created the thread above.
 
-						// Cleanup.
+						// Cleanup:
 						timer_ShowRetrieveDialog.Stop();
 					}
 
@@ -436,7 +436,7 @@ namespace YAT.Gui.Controls
 						// 150 ms because that's the standard time until a human notices a delay.
 						timer_ShowScanDialog.Start();
 
-						// Start scanning on different thread.
+						// Start scanning on different thread:
 						this.markPortsInUseThread = new MarkPortsInUseThread(ports);
 						Thread t = new Thread(new ThreadStart(this.markPortsInUseThread.MarkPortsInUse));
 						t.Name = "Mark Serial Ports In Use";
@@ -445,9 +445,9 @@ namespace YAT.Gui.Controls
 						while (this.markPortsInUseThread.IsScanning)
 							Application.DoEvents();
 
-						t.Join();
+						t.Join(); // Debug.Assert(t.ManagedThreadId != ...) makes no sense here, just created the thread above.
 
-						// Cleanup.
+						// Cleanup:
 						timer_ShowScanDialog.Stop();
 					}
 
