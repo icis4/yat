@@ -1021,7 +1021,7 @@ namespace MKY.Settings
 
 			// Throw exception if either operation failed.
 			if (result != null)
-				throw (result);
+				throw (result); // Pure re-throw not possible here.
 		}
 
 		/// <summary>
