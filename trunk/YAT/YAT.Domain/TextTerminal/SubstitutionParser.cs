@@ -102,7 +102,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected SubstitutionParser(ParserState parserState, Parser parent)
+		internal SubstitutionParser(ParserState parserState, Parser parent)
 			: base(parserState, parent)
 		{
 			this.substitution = ((SubstitutionParser)parent).substitution;
@@ -137,7 +137,7 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected override Parser GetParser(ParserState parserState, Parser parent)
+		internal override Parser GetParser(ParserState parserState, Parser parent)
 		{
 			AssertNotDisposed();
 
@@ -243,20 +243,20 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected override bool TryParseContiguousRadixToken(string token, Radix radix, out byte[] result, ref FormatException formatException)
+		internal override bool TryParseRadixItem(string item, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixToken()' below.
+			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixItem()' below.
 
-			return (base.TryParseContiguousRadixToken(Substitute(token), radix, out result, ref formatException));
+			return (base.TryParseRadixItem(Substitute(item), radix, out result, ref formatException));
 		}
 
-		private string Substitute(string token)
+		private string Substitute(string item)
 		{
 			switch (this.substitution)
 			{
-				case CharSubstitution.ToUpper: return (token.ToUpper(CultureInfo.CurrentCulture));
-				case CharSubstitution.ToLower: return (token.ToLower(CultureInfo.CurrentCulture));
-				default: return (token);
+				case CharSubstitution.ToUpper: return (item.ToUpper(CultureInfo.CurrentCulture));
+				case CharSubstitution.ToLower: return (item.ToLower(CultureInfo.CurrentCulture));
+				default:                       return (item);
 			}
 		}
 
