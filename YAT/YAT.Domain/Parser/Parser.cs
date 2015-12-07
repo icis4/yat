@@ -35,14 +35,25 @@ using System.Text;
 
 using MKY;
 using MKY.Diagnostics;
-using MKY.IO;
-using MKY.Text;
 
 #endregion
 
 namespace YAT.Domain.Parser
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// This parser provides all functionality to parse any parsable text to send (commands, files).
+	/// The parser is implemented using the state pattern. The states are implemented in a separate
+	/// file 'States.cs'.
+	/// 
+	/// The abstract base class <see cref="ParserState"/> defines the state's interface and provides
+	/// some common methods. The concrete state classes implement the required states:
+	///  - <see cref="DefaultState"/>       : Default parser, handles contiguous sequences.
+	///  - <see cref="NestedState"/>        : Handles a nested context.
+	///  - <see cref="EscapeState"/>        : Handles an escaping '\'.
+	///  - <see cref="OpeningState"/>       : Handles an opening '('.
+	///  - <see cref="AsciiMnemonicState"/> : Sequence of ASCII mnemonics.
+	///  - <see cref="NumericValueState"/>  : Sequence of numeric values.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Parser : IDisposable
 	{
@@ -62,12 +73,13 @@ namespace YAT.Domain.Parser
 			@"Hexadecimal ""\h(4F 4B)""" + Environment.NewLine +
 			@"Character ""\c(O K)""" + Environment.NewLine +
 			@"String ""\s(OK)""" + Environment.NewLine +
-			@"ASCII controls (0x00 to 0x1F) ""<CR><LF>""" + Environment.NewLine +
+			@"ASCII controls (0x00..0x1F and 0x7F) ""<CR><LF>""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Format specifiers are case insensitive, e.g. ""\H"" = ""\h"", ""4f"" = ""4F"", ""<lf>"" = ""<LF>""" + Environment.NewLine +
 			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
 			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" alternative to ""\h""" + Environment.NewLine +
+			@"+/- signs are not allowed, neither are decimal points nor separators such as the apostroph" + Environment.NewLine +
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
 			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +
@@ -97,849 +109,6 @@ namespace YAT.Domain.Parser
 
 		#endregion
 
-		#region States
-		//==========================================================================================
-		// States
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected abstract class ParserState : IDisposable
-		{
-			private bool isDisposed;
-
-			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
-			public abstract bool TryParse(Parser parser, int parseChar, ref FormatException formatException);
-
-			/// <summary></summary>
-			protected static void ChangeState(Parser parser, ParserState state)
-			{
-				parser.State = state;
-			}
-
-			#region Disposal
-			//--------------------------------------------------------------------------------------
-			// Disposal
-			//--------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			/// <summary></summary>
-			protected virtual void Dispose(bool disposing)
-			{
-				if (!this.isDisposed)
-				{
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-					}
-
-					// Set state to disposed:
-					this.isDisposed = true;
-				}
-			}
-
-			/// <summary></summary>
-			~ParserState()
-			{
-				Dispose(false);
-
-				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
-			}
-
-			/// <summary></summary>
-			public bool IsDisposed
-			{
-				get { return (this.isDisposed); }
-			}
-
-			/// <summary></summary>
-			protected void AssertNotDisposed()
-			{
-				if (this.isDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-			}
-
-			#endregion
-		}
-
-		/// <summary>
-		/// Parses default.
-		/// </summary>
-		protected class DefaultState : ParserState
-		{
-			private StringWriter contiguousWriter;
-
-			/// <summary></summary>
-			public DefaultState()
-			{
-				this.contiguousWriter = new StringWriter(CultureInfo.InvariantCulture);
-			}
-
-			#region Disposal
-			//--------------------------------------------------------------------------------------
-			// Disposal
-			//--------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			protected override void Dispose(bool disposing)
-			{
-				if (!IsDisposed)
-				{
-					// In any case, dispose of the writer as it was created in the constructor:
-					if (this.contiguousWriter != null)
-						this.contiguousWriter.Dispose();
-
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-					}
-
-					// Set state to disposed:
-					this.contiguousWriter = null;
-				}
-
-				base.Dispose(disposing);
-			}
-
-			#endregion
-
-			/// <summary></summary>
-			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
-			{
-				AssertNotDisposed();
-
-				if ((parseChar < 0) ||                   // End of parse string.
-					(parseChar == ')' && !parser.IsTopLevel))
-				{
-					if (!TryWriteContiguous(parser, ref formatException))
-						return (false);
-
-					parser.HasFinished = true;
-					ChangeState(parser, null);
-				}
-				else if (parseChar == '\\')              // Escape sequence.
-				{
-					if (!TryWriteContiguous(parser, ref formatException))
-						return (false);
-
-					parser.EndByteArray();
-					parser.NestedParser = parser.GetParser(new EscapeState(), parser);
-					ChangeState(parser, new NestedState());
-				}
-				else if (parseChar == '<')               // ASCII mnemonic sequence.
-				{
-					if (!TryWriteContiguous(parser, ref formatException))
-						return (false);
-
-					parser.EndByteArray();
-					parser.NestedParser = parser.GetParser(new AsciiMnemonicState(), parser);
-					ChangeState(parser, new NestedState());
-				}
-				else                                     // Compose contiguous string.
-				{
-					this.contiguousWriter.Write((char)parseChar);
-				}
-				return (true);
-			}
-
-			private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
-			{
-				string contiguousString = this.contiguousWriter.ToString();
-				if (contiguousString.Length > 0)
-				{
-					if (!parser.IsKeywordParser)
-					{
-						byte[] a;
-
-						if (!parser.TryParseContiguousRadix(contiguousString, parser.Radix, out a, ref formatException))
-							return (false);
-
-						foreach (byte b in a)
-							parser.ByteArrayWriter.WriteByte(b);
-
-						parser.EndByteArray();
-					}
-					else
-					{
-						Result[] a;
-
-						if (!parser.TryParseContiguousKeywords(contiguousString, out a, ref formatException))
-							return (false);
-
-						parser.ResultList.AddRange(a);
-					}
-				}
-				return (true);
-			}
-		}
-
-		/// <summary>
-		/// Parses escape control.
-		/// </summary>
-		protected class EscapeState : ParserState
-		{
-			/// <summary></summary>
-			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
-			{
-				switch (parseChar)
-				{
-					case 'b':
-					case 'B':
-					{
-						int nextChar = CharEx.InvalidChar;
-						try
-						{
-							nextChar = parser.Reader.Peek();
-						}
-						catch (ObjectDisposedException ex)
-						{
-							DebugEx.WriteException(GetType(), ex); // Debug use only.
-						}
-
-						switch (nextChar)
-						{
-							case '(': // "\b(...)" is used for binary values, e.g. "\b(010110001)".
-							{
-								parser.SetDefaultRadix(Radix.Bin);
-								ChangeState(parser, new OpeningState());
-								return (true);
-							}
-
-							case StreamEx.EndOfStream: // Just "\b" is used for c-style backspace.
-							default:
-							{
-								parser.ByteArrayWriter.WriteByte((byte)'\b');
-								parser.EndByteArray();
-								parser.HasFinished = true;
-								ChangeState(parser, null);
-								return (true);
-							}
-						}
-					}
-
-					case 'o':
-					case 'O':
-					{
-						parser.SetDefaultRadix(Radix.Oct);
-						ChangeState(parser, new OpeningState());
-						return (true);
-					}
-
-					case 'd':
-					case 'D':
-					{
-						parser.SetDefaultRadix(Radix.Dec);
-						ChangeState(parser, new OpeningState());
-						return (true);
-					}
-
-					case 'h':
-					case 'H':
-					{
-						parser.SetDefaultRadix(Radix.Hex);
-						ChangeState(parser, new OpeningState());
-						return (true);
-					}
-
-					case 'c':
-					case 'C':
-					{
-						parser.SetDefaultRadix(Radix.Char);
-						ChangeState(parser, new OpeningState());
-						return (true);
-					}
-
-					case 's':
-					case 'S':
-					{
-						parser.SetDefaultRadix(Radix.String);
-						ChangeState(parser, new OpeningState());
-						return (true);
-					}
-
-					case '!':
-					{
-						if ((parser.modes & Modes.Keywords) == Modes.Keywords)
-						{
-							parser.IsKeywordParser = true;
-							ChangeState(parser, new OpeningState());
-							return (true);
-						}
-						else
-						{
-							// Keywords are disabled, therefore return the escape sequence.
-							byte[] b = parser.Encoding.GetBytes(new char[] { '\\', '!' });
-							parser.ByteArrayWriter.Write(b, 0, b.Length);
-							parser.EndByteArray();
-							parser.HasFinished = true;
-							ChangeState(parser, null);
-							return (true);
-						}
-					}
-
-					case '0':
-					{
-						int nextChar = CharEx.InvalidChar;
-						try
-						{
-							nextChar = parser.Reader.Peek();
-						}
-						catch (ObjectDisposedException ex)
-						{
-							DebugEx.WriteException(GetType(), ex); // Debug use only.
-						}
-
-						switch (nextChar)
-						{
-							case '0': // "\0<value>" is used for c-style octal notation.
-							case '1':
-							case '2':
-							case '3':
-							case '4':
-							case '5':
-							case '6':
-							case '7':
-							{
-								parser.SetDefaultRadix(Radix.Oct);
-								ChangeState(parser, new NumericState());
-								return (true);
-							}
-
-							case 'x': // "\0x.." is used for c-style hexadecimal notation.
-							case 'X':
-							{
-								int thisChar = CharEx.InvalidChar;
-								try
-								{
-									thisChar = parser.Reader.Read(); // Consume 'x' or 'X'.
-								}
-								catch (ObjectDisposedException ex)
-								{
-									DebugEx.WriteException(GetType(), ex); // Debug use only.
-								}
-
-								if (thisChar != CharEx.InvalidChar)
-								{
-									parser.SetDefaultRadix(Radix.Hex);
-									ChangeState(parser, new NumericState());
-									return (true);
-								}
-								else // Consider it successful if there is just "\0x" without any numeric value.
-								{
-									parser.EndByteArray();
-									parser.HasFinished = true;
-									ChangeState(parser, null);
-									return (true);
-								}
-							}
-
-							case StreamEx.EndOfStream: // Just "\0" is used for c-style <NUL>.
-							default:
-							{
-								parser.ByteArrayWriter.WriteByte((byte)'\0');
-								parser.EndByteArray();
-								parser.HasFinished = true;
-								ChangeState(parser, null);
-								return (true);
-							}
-						}
-					}
-
-					case 'a': // C-style bell.
-					case 'A':
-					{
-						parser.ByteArrayWriter.WriteByte((byte)'\a');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					// For case 'b' or 'B' (C-style backspace) see top of this switch-case.
-
-					case 't': // C-style tab.
-					case 'T':
-					{
-						parser.ByteArrayWriter.WriteByte((byte)'\t');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case 'v': // C-style vertical tab.
-					case 'V':
-					{
-						parser.ByteArrayWriter.WriteByte((byte)'\v');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case 'n': // C-style <LF>.
-					case 'N':
-					{
-						parser.ByteArrayWriter.WriteByte((byte)'\n');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case 'r': // C-style <CR>.
-					case 'R':
-					{
-						parser.ByteArrayWriter.WriteByte((byte)'\r');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case 'f': // C-style <FF>.
-					case 'F':
-					{
-						parser.ByteArrayWriter.WriteByte((byte)'\f');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case 'x': // C-style hexadecimal value, e.g. "\x1A".
-					case 'X':
-					{
-						parser.SetDefaultRadix(Radix.Hex);
-						ChangeState(parser, new NumericState());
-						return (true);
-					}
-
-					case '1': // C-style decimal value, e.g. "\12".
-					case '2':
-					case '3':
-					case '4':
-					case '5':
-					case '6':
-					case '7':
-					case '8':
-					case '9':
-					{
-						parser.SetDefaultRadix(Radix.Dec);
-						ChangeState(parser, new NumericState(parseChar));
-						return (true);
-					}
-
-					case '\\':                              // "\\" results in "\".
-					{
-						byte[] b = parser.Encoding.GetBytes(new char[] { '\\' });
-						parser.ByteArrayWriter.Write(b, 0, b.Length);
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case '<':                              // "\<" results in "<".
-					{
-						byte[] b = parser.Encoding.GetBytes(new char[] { '<' });
-						parser.ByteArrayWriter.Write(b, 0, b.Length);
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case '>':                              // "\>" results in ">".
-					{
-						byte[] b = parser.Encoding.GetBytes(new char[] { '>' });
-						parser.ByteArrayWriter.Write(b, 0, b.Length);
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case '(':                              // "\(" results in "(".
-					{
-						byte[] b = parser.Encoding.GetBytes(new char[] { '(' });
-						parser.ByteArrayWriter.Write(b, 0, b.Length);
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case ')':                              // "\)" results in ")".
-					{
-						byte[] b = parser.Encoding.GetBytes(new char[] { ')' });
-						parser.ByteArrayWriter.Write(b, 0, b.Length);
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					case StreamEx.EndOfStream:
-					{
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
-					}
-
-					default:
-					{
-						formatException = new FormatException
-						(
-							@"Character '" + (char)parseChar + "'" +
-							@"[\d(" + parseChar + ")] is " +
-							@"not a valid character"
-						);
-						return (false);
-					}
-				}
-			}
-		}
-
-		/// <summary></summary>
-		protected class OpeningState : ParserState
-		{
-			/// <summary></summary>
-			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
-			{
-				if (parseChar == '(')
-				{
-					ChangeState(parser, new DefaultState());
-					return (true);
-				}
-				else
-				{
-					formatException = new FormatException(@"Missing opening parenthesis ""(""!");
-					return (false);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		protected class AsciiMnemonicState : ParserState
-		{
-			private StringWriter mnemonicWriter;
-
-			/// <summary></summary>
-			public AsciiMnemonicState()
-			{
-				this.mnemonicWriter = new StringWriter(CultureInfo.InvariantCulture);
-			}
-
-			#region Disposal
-			//--------------------------------------------------------------------------------------
-			// Disposal
-			//--------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			protected override void Dispose(bool disposing)
-			{
-				if (!IsDisposed)
-				{
-					// In any case, dispose of the writer as it was created in the constructor:
-					if (this.mnemonicWriter != null)
-						this.mnemonicWriter.Dispose();
-
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-					}
-
-					// Set state to disposed:
-					this.mnemonicWriter = null;
-				}
-
-				base.Dispose(disposing);
-			}
-
-			#endregion
-
-			/// <summary></summary>
-			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
-			{
-				AssertNotDisposed();
-
-				if ((parseChar < 0) || (parseChar == '>')) // Process finished mnemonic string.
-				{
-					byte[] a;
-
-					if (!TryParseAsciiMnemonic(parser, this.mnemonicWriter.ToString(), out a, ref formatException))
-						return (false);
-
-					foreach (byte b in a)
-						parser.ByteArrayWriter.WriteByte(b);
-
-					parser.EndByteArray();
-
-					parser.HasFinished = true;
-					ChangeState(parser, null);
-				}
-				else                                       // Compose contiguous string.
-				{
-					this.mnemonicWriter.Write((char)parseChar);
-				}
-				return (true);
-			}
-
-			/// <summary>
-			/// Parses <paramref name="value"/> for ASCII mnemonics.
-			/// </summary>
-			/// <param name="parser">Parser to retrieve settings.</param>
-			/// <param name="value">String to be parsed.</param>
-			/// <param name="result">Array containing the resulting bytes.</param>
-			/// <param name="formatException">Returned if invalid string format.</param>
-			/// <returns>Byte array containing the values encoded in Encoding.Default.</returns>
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-			public static bool TryParseAsciiMnemonic(Parser parser, string value, out byte[] result, ref FormatException formatException)
-			{
-				MemoryStream bytes = new MemoryStream();
-				string[] tokens = value.Split(' ');
-				foreach (string t in tokens)
-				{
-					if (t.Length == 0)
-						continue;
-
-					byte code;
-					if (Ascii.TryParse(t, out code))
-					{
-						char c = Convert.ToChar(code);
-						byte[] b = parser.Encoding.GetBytes(new char[] { c });
-						bytes.Write(b, 0, b.Length);
-					}
-					else
-					{
-						result = new byte[] { };
-						formatException = new FormatException(@"""" + t + @""" is no ASCII mnemonic!");
-						return (false);
-					}
-				}
-				result = bytes.ToArray();
-				return (true);
-			}
-		}
-
-		/// <summary></summary>
-		protected class NumericState : ParserState
-		{
-			private StringWriter numericWriter;
-
-			/// <summary></summary>
-			public NumericState()
-			{
-				this.numericWriter = new StringWriter(CultureInfo.InvariantCulture);
-			}
-
-			/// <summary></summary>
-			public NumericState(int parseChar)
-				: this()
-			{
-				this.numericWriter.Write((char)parseChar);
-			}
-
-			#region Disposal
-			//--------------------------------------------------------------------------------------
-			// Disposal
-			//--------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			protected override void Dispose(bool disposing)
-			{
-				if (!IsDisposed)
-				{
-					// In any case, dispose of the writer as it was created in the constructor:
-					if (this.numericWriter != null)
-						this.numericWriter.Dispose();
-
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-					}
-
-					// Set state to disposed:
-					this.numericWriter = null;
-				}
-
-				base.Dispose(disposing);
-			}
-
-			#endregion
-
-			/// <summary></summary>
-			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
-			{
-				AssertNotDisposed();
-
-				switch (parser.Radix)
-				{
-					case Radix.Oct:
-					{
-						if ((parseChar >= '0') && (parseChar <= '7'))
-						{
-							this.numericWriter.Write((char)parseChar);
-							return (true);
-						}
-						break;
-					}
-
-					case Radix.Dec:
-					{
-						if ((parseChar >= '0') && (parseChar <= '9'))
-						{
-							this.numericWriter.Write((char)parseChar);
-							return (true);
-						}
-						break;
-					}
-
-					case Radix.Hex:
-					{
-						if (((parseChar >= '0') && (parseChar <= '9')) ||
-							((parseChar >= 'A') && (parseChar <= 'F')) ||
-							((parseChar >= 'a') && (parseChar <= 'f')))
-						{
-							this.numericWriter.Write((char)parseChar);
-							return (true);
-						}
-						break;
-					}
-
-					// No other numeric formats are handled by this parser so far.
-					// Only C-style \0<oct>, \<dec>, \0x<hex> and \x<hex>.
-					default:
-					{
-						// Also handled below.
-						break;
-					}
-				}
-
-				// No more valid character found, try to process numeric value.
-				byte[] a;
-
-				if (!TryParseNumericValue(parser, this.numericWriter.ToString(), out a, ref formatException))
-					return (false);
-
-				foreach (byte b in a)
-					parser.ByteArrayWriter.WriteByte(b);
-
-				parser.EndByteArray();
-
-				parser.HasFinished = true;
-				ChangeState(parser, null);
-				return (false); // Return 'false' to indicate that the current 'parseChar' has not been processed yet!
-			}
-
-			/// <summary>
-			/// Parses <paramref name="value"/> for ASCII mnemonics.
-			/// </summary>
-			/// <param name="parser">Parser to retrieve settings.</param>
-			/// <param name="value">String to be parsed.</param>
-			/// <param name="result">Array containing the resulting bytes.</param>
-			/// <param name="formatException">Returned if invalid string format.</param>
-			/// <returns>Byte array containing the values encoded in Encoding.Default.</returns>
-			[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using UInt64 for orthogonality with UInt64Ex.")]
-			[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-			[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-			public static bool TryParseNumericValue(Parser parser, string value, out byte[] result, ref FormatException formatException)
-			{
-				switch (parser.Radix)
-				{
-					case Radix.Oct:
-					{
-						UInt64 tempResult;
-						if (UInt64Ex.TryParseOctal(value, out tempResult))
-						{
-							result = UInt64Ex.ConvertToByteArray(tempResult);
-							return (true);
-						}
-						else
-						{
-							formatException = new FormatException(@"""" + value + @""" is no valid octal value!");
-						}
-						break;
-					}
-
-					case Radix.Dec:
-					{
-						UInt64 tempResult;
-						if (UInt64.TryParse(value, out tempResult))
-						{
-							result = UInt64Ex.ConvertToByteArray(tempResult);
-							return (true);
-						}
-						else
-						{
-							formatException = new FormatException(@"""" + value + @""" is no valid decimal value!");
-						}
-						break;
-					}
-
-					case Radix.Hex:
-					{
-						MemoryStream bytes = new MemoryStream();
-						string errorString = null;
-						foreach (string s in StringEx.SplitFixedLength(value, 2))
-						{
-							byte b;
-							if (byte.TryParse(s, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out b))
-								bytes.WriteByte(b);
-							else
-								errorString = s;
-						}
-
-						if (string.IsNullOrEmpty(errorString))
-						{
-							result = bytes.ToArray();
-							return (true);
-						}
-						else
-						{
-							formatException = new FormatException(@"Substring """ + errorString + @""" of """ + value + @""" is no valid hexadecimal value!");
-						}
-
-						break;
-					}
-				}
-
-				result = new byte[] { };
-				return (false);
-			}
-		}
-
-		/// <summary></summary>
-		protected class NestedState : ParserState
-		{
-			/// <summary></summary>
-			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
-			{
-				bool parseCharHasBeenParsed = parser.NestedParser.State.TryParse(parser.NestedParser, parseChar, ref formatException);
-
-				if (parser.NestedParser.HasFinished) // Regain parser "focus".
-				{
-					ChangeState(parser, new DefaultState());
-
-					if (!parseCharHasBeenParsed) // Again try to parse the character with the 'new' parser:
-						parseCharHasBeenParsed = parser.State.TryParse(parser, parseChar, ref formatException);
-				}
-
-				return (parseCharHasBeenParsed);
-			}
-		}
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -952,13 +121,13 @@ namespace YAT.Domain.Parser
 		private Radix defaultRadix = Radix.String;
 		private Modes modes = Modes.All;
 
-		private StringReader reader;
-		private MemoryStream byteArrayWriter;
-		private List<Result> resultList;
+		private StringReader charReader;
+		private MemoryStream bytesWriter;
+		private List<Result> result;
 		private ParserState state;
 
 		private Parser parentParser;
-		private Parser nestedChildParser;
+		private Parser nestedParser;
 		private bool isKeywordParser;
 
 		private bool hasFinished;
@@ -1019,7 +188,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected Parser(ParserState parserState, Parser parent)
+		internal Parser(ParserState parserState, Parser parent)
 		{
 			InitializeNestedParse(parserState, parent);
 		}
@@ -1086,7 +255,7 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual Parser GetParser(ParserState parserState, Parser parent)
+		internal virtual Parser GetParser(ParserState parserState, Parser parent)
 		{
 			AssertNotDisposed();
 
@@ -1100,22 +269,17 @@ namespace YAT.Domain.Parser
 		// Properties
 		//==========================================================================================
 
-		private StringReader Reader
+		internal virtual StringReader CharReader
 		{
-			get { return (this.reader); }
+			get { return (this.charReader); }
 		}
 
-		private MemoryStream ByteArrayWriter
+		internal virtual MemoryStream BytesWriter
 		{
-			get { return (this.byteArrayWriter); }
+			get { return (this.bytesWriter); }
 		}
 
-		private List<Result> ResultList
-		{
-			get { return (this.resultList); }
-		}
-
-		private ParserState State
+		internal virtual ParserState State
 		{
 			get { return (this.state); }
 			set
@@ -1147,9 +311,14 @@ namespace YAT.Domain.Parser
 			get { return (this.defaultRadix); }
 		}
 
-		private void SetDefaultRadix(Radix defaultRadix)
+		internal virtual void SetDefaultRadix(Radix defaultRadix)
 		{
 			this.defaultRadix = defaultRadix;
+		}
+
+		internal virtual Modes Modes
+		{
+			get { return (this.modes); }
 		}
 
 		/// <summary></summary>
@@ -1159,24 +328,24 @@ namespace YAT.Domain.Parser
 		}
 
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		private Parser Parent
+		internal virtual Parser Parent
 		{
 			get { return (this.parentParser); }
 		}
 
-		private Parser NestedParser
+		internal virtual Parser NestedParser
 		{
-			get { return (this.nestedChildParser); }
-			set { this.nestedChildParser = value; }
+			get { return (this.nestedParser); }
+			set { this.nestedParser = value; }
 		}
 
-		private bool IsKeywordParser
+		internal virtual bool IsKeywordParser
 		{
 			get { return (this.isKeywordParser); }
 			set { this.isKeywordParser = value; }
 		}
 
-		private bool HasFinished
+		internal virtual bool HasFinished
 		{
 			get { return (this.hasFinished); }
 			set { this.hasFinished = value; }
@@ -1204,9 +373,9 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called by 'Parse()' below.
 
-			Result[] resultResult = Parse(s, Modes.AllByteArrayResults, out parsed);
+			Result[] typedResult = Parse(s, Modes.AllByteArrayResults, out parsed);
 			MemoryStream byteResult = new MemoryStream();
-			foreach (Result r in resultResult)
+			foreach (Result r in typedResult)
 			{
 				ByteArrayResult bar = r as ByteArrayResult;
 				if (bar != null)
@@ -1237,6 +406,7 @@ namespace YAT.Domain.Parser
 			FormatException formatException = new FormatException("");
 			if (!TryParse(s, modes, out result, out parsed, ref formatException))
 				throw (formatException);
+
 			return (result);
 		}
 
@@ -1265,22 +435,28 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			Result[] resultResult;
-			bool tryResult = TryParse(s, modes, out resultResult, out parsed);
-
-			MemoryStream byteResult = new MemoryStream();
-			foreach (Result r in resultResult)
+			Result[] typedResult;
+			if (TryParse(s, modes, out typedResult, out parsed))
 			{
-				ByteArrayResult bar = r as ByteArrayResult;
-				if (bar != null)
-				{
-					byte[] a = bar.ByteArray;
-					byteResult.Write(a, 0, a.Length);
-				}
-			}
-			result = byteResult.ToArray();
 
-			return (tryResult);
+				MemoryStream bytes = new MemoryStream();
+				foreach (Result r in typedResult)
+				{
+					ByteArrayResult bar = r as ByteArrayResult;
+					if (bar != null)
+					{
+						byte[] a = bar.ByteArray;
+						bytes.Write(a, 0, a.Length);
+					}
+				}
+				result = bytes.ToArray();
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
@@ -1322,7 +498,7 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, Modes modes, out string parsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
@@ -1345,19 +521,19 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed, ref FormatException formatException)
 		{
 			AssertNotDisposed();
 
-			InitializeTopLevelParse(s, modes);
+			InitializeTopLevel(s, modes);
 
 			while (!HasFinished)
 			{
-				int c = CharEx.InvalidChar;
+				int c = CharEx.InvalidChar; // 'int' is given by Read() below.
 				try
 				{
-					c = this.Reader.Read();
+					c = this.CharReader.Read();
 				}
 				catch (ObjectDisposedException ex)
 				{
@@ -1366,12 +542,12 @@ namespace YAT.Domain.Parser
 
 				if (!this.state.TryParse(this, c, ref formatException))
 				{
-					EndByteArray();
+					CommitPendingBytes();
 
 					string remaining = null;
 					try
 					{
-						remaining = this.Reader.ReadToEnd();
+						remaining = this.CharReader.ReadToEnd();
 					}
 					catch (ObjectDisposedException ex)
 					{
@@ -1390,16 +566,16 @@ namespace YAT.Domain.Parser
 						// Signal that parsing resulted in a parse error and
 						//   return the part of the string that could be parsed:
 						parsed = StringEx.Left(s, s.Length - remaining.Length - 1);
-						result = this.resultList.ToArray();
+						result = this.result.ToArray();
 						return (false);
 					}
 				}
 			}
 
-			EndByteArray();
+			CommitPendingBytes();
 
 			parsed = s;
-			result = this.resultList.ToArray();
+			result = this.result.ToArray();
 			return (true);
 		}
 
@@ -1411,168 +587,41 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void EndByteArray()
+		internal virtual void CommitPendingBytes()
 		{
 			AssertNotDisposed();
 
-			if (this.byteArrayWriter.Length > 0)
+			if (this.bytesWriter.Length > 0)
 			{
-				this.resultList.Add(new ByteArrayResult(this.byteArrayWriter.ToArray()));
-				this.byteArrayWriter = new MemoryStream();
+				this.result.Add(new ByteArrayResult(this.bytesWriter.ToArray()));
+				this.bytesWriter = new MemoryStream();
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		protected virtual bool TryParseContiguousRadixToken(string token, Radix radix, out byte[] result, ref FormatException formatException)
+		internal virtual void CommitResult(IEnumerable<Result> result)
 		{
 			AssertNotDisposed();
 
-			// String.
-			if (radix == Radix.String)
-			{
-				result = this.encoding.GetBytes(token);
-				return (true);
-			}
-
-			// Char.
-			if (radix == Radix.Char)
-			{
-				char c;
-				if (char.TryParse(token, out c))
-				{
-					result = this.encoding.GetBytes(new char[] { c });
-					return (true);
-				}
-				else
-				{
-					formatException = new FormatException(@"Substring """ + token + @""" does not contain a valid single character!");
-					result = new byte[] { };
-					return (false);
-				}
-			}
-
-			// Bin/Oct/Dec/Hex.
-			bool negative = false;
-			string tokenValue = token;
-			if (StringEx.EqualsOrdinalIgnoreCase(token.Substring(0, 1), "-"))
-			{
-				negative = true;
-				tokenValue = token.Substring(1);
-			}
-
-			ulong value;
-			bool success;
-			switch (radix)
-			{
-				case Radix.Bin: success = UInt64Ex.TryParseBinary(tokenValue, out value); break;
-				case Radix.Oct: success = UInt64Ex.TryParseOctal (tokenValue, out value); break;
-				case Radix.Dec: success = ulong.TryParse         (tokenValue, out value); break;
-				case Radix.Hex: success = ulong.TryParse         (tokenValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value); break;
-				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
-			}
-			if (success)
-			{
-				bool useBigEndian = (this.endianness == Endianness.BigEndian);
-				result = UInt64Ex.ConvertToByteArray(value, negative, useBigEndian);
-				return (true);
-			}
-
-			// FormatException.
-			string readable = "";
-			switch (radix)
-			{
-				case Radix.Bin: readable = "binary value";      break;
-				case Radix.Oct: readable = "octal value";       break;
-				case Radix.Dec: readable = "decimal value";     break;
-				case Radix.Hex: readable = "hexadecimal value"; break;
-				default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
-			}
-			formatException = new FormatException(@"Substring """ + token + @""" contains no valid " + readable + ".");
-			result = new byte[] { };
-			return (false);
-		}
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private void InitializeTopLevelParse(string value, Modes modes)
-		{
-			DisposeAndReset();
-
-			this.modes           = modes;
-
-			this.reader          = new StringReader(value);
-			this.byteArrayWriter = new MemoryStream();
-			this.resultList      = new List<Result>();
-			this.state           = new DefaultState();
-
-			this.isKeywordParser = false;
-
-			this.hasFinished     = false;
-		}
-
-		private void InitializeNestedParse(ParserState parserState, Parser parent)
-		{
-			DisposeAndReset();
-
-			this.encoding        = parent.encoding;
-			this.defaultRadix    = parent.defaultRadix;
-			this.modes           = parent.modes;
-
-			this.reader          = parent.reader;
-			this.byteArrayWriter = new MemoryStream();
-			this.resultList      = parent.resultList;
-			this.state           = parserState;
-
-			this.parentParser    = parent;
-			this.isKeywordParser = false;
-
-			this.hasFinished     = false;
-		}
-
-		private void DisposeAndReset()
-		{
-			if (this.reader != null)
-				this.reader.Dispose();
-
-			if (this.byteArrayWriter != null)
-				this.byteArrayWriter.Dispose();
-
-			if (this.state != null)
-				this.state.Dispose();
-
-			if (this.nestedChildParser != null)
-				this.nestedChildParser.Dispose();
-
-			this.reader = null;
-			this.byteArrayWriter = null;
-			this.state = null;
-			this.nestedChildParser = null;
+			this.result.AddRange(result);
 		}
 
 		/// <summary>
-		/// Parses <paramref name="value"/> for one or more values in the specified base
-		/// <paramref name="radix"/>, separated with spaces.
+		/// Parses <paramref name="s"/> for one or more items in the specified base <paramref name="radix"/>, separated with spaces.
 		/// </summary>
-		/// <param name="value">String to be parsed.</param>
+		/// <param name="s">String to be parsed.</param>
 		/// <param name="radix">Numeric radix.</param>
 		/// <param name="result">Array containing the resulting bytes.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
-		private bool TryParseContiguousRadix(string value, Radix radix, out byte[] result, ref FormatException formatException)
+		internal virtual bool TryParseContiguousRadix(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			MemoryStream bytes = new MemoryStream();
 			if (radix == Radix.String)
 			{
 				byte[] b;
-				if (TryParseContiguousRadixToken(value, Radix.String, out b, ref formatException))
+				if (TryParseRadixItem(s, Radix.String, out b, ref formatException))
 				{
 					bytes.Write(b, 0, b.Length);
 				}
@@ -1584,13 +633,13 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				string[] tokens = value.Split(' ');
-				foreach (string token in tokens)
+				string[] items = s.Split(' ');
+				foreach (string item in items)
 				{
-					if (token.Length > 0)
+					if (item.Length > 0)
 					{
 						byte[] b;
-						if (TryParseContiguousRadixToken(token, radix, out b, ref formatException))
+						if (TryParseRadixItem(item, radix, out b, ref formatException))
 						{
 							bytes.Write(b, 0, b.Length);
 						}
@@ -1607,6 +656,253 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
+		/// Parses <paramref name="s"/> for a single item in the specified base <paramref name="radix"/>.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		internal virtual bool TryParseRadixItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
+		{
+			AssertNotDisposed();
+
+			switch (radix)
+			{
+				case Radix.String:
+					return (TryEncodeStringItem(s, out result, ref formatException));
+
+				case Radix.Char:
+					return (TryEncodeCharItem(s, out result, ref formatException));
+
+				case Radix.Bin:
+				case Radix.Oct:
+				case Radix.Dec:
+				case Radix.Hex:
+					return (TryParseAndConvertNumericItem(s, radix, out result, ref formatException));
+
+				default:
+					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
+			}
+		}
+
+		/// <summary>
+		/// Encodes <paramref name="s"/> containing a plain string into bytes.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		internal virtual bool TryEncodeStringItem(string s, out byte[] result, ref FormatException formatException)
+		{
+			result = this.encoding.GetBytes(s);
+			return (true);
+		}
+
+		/// <summary>
+		/// Encodes <paramref name="s"/> containing a single char item into bytes.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		internal virtual bool TryEncodeCharItem(string s, out byte[] result, ref FormatException formatException)
+		{
+			char c;
+			if (char.TryParse(s, out c))
+			{
+				result = this.encoding.GetBytes(new char[] { c });
+				return (true);
+			}
+			else
+			{
+				formatException = new FormatException(@"Substring """ + s + @""" does not contain a valid single character!");
+				result = new byte[] { };
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for a single single numeric item and converts it into bytes.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		internal virtual bool TryParseAndConvertNumericItem(string s, out byte[] result, ref FormatException formatException)
+		{
+			return (TryParseAndConvertNumericItem(s, this.Radix, out result, ref formatException));
+		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for a single single numeric item and converts it into bytes.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		internal virtual bool TryParseAndConvertNumericItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
+		{
+			string remaining = s;
+			MemoryStream bytes = new MemoryStream();
+			bool success = false;
+
+			switch (radix)
+			{
+				case Radix.Bin:
+				{
+					while (remaining.Length > 0)
+					{
+						bool found = false;
+
+						for (int i = 8; i > 0; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
+						{
+							if (remaining.Length >= i)
+							{
+								UInt64 tempResult;
+								if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
+									{
+										bytes.WriteByte((byte)tempResult);
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop.
+									}
+								}
+							}
+						}
+
+						if (!found)
+						{
+							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid binary value!");
+							break; // Quit while-loop.
+						}
+					}
+					success = true;
+					break; // Break switch-case.
+				}
+
+				case Radix.Oct:
+				{
+					while (remaining.Length > 0)
+					{
+						bool found = false;
+
+						for (int i = 3; i > 0; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
+						{
+							if (remaining.Length >= i)
+							{
+								UInt64 tempResult;
+								if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
+									{
+										bytes.WriteByte((byte)tempResult);
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop.
+									}
+								}
+							}
+						}
+
+						if (!found)
+						{
+							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid octal value!");
+							break; // Quit while-loop.
+						}
+					}
+					success = true;
+					break; // Break switch-case.
+				}
+
+				case Radix.Dec:
+				{
+					while (remaining.Length > 0)
+					{
+						bool found = false;
+
+						for (int i = 3; i > 0; i--) // Probe the 3-2-1 left-most characters for a valid decimal byte.
+						{
+							if (remaining.Length >= i)
+							{
+								byte tempResult;
+								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid decimal byte!
+									{
+										bytes.WriteByte(tempResult);
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop.
+									}
+								}
+							}
+						}
+
+						if (!found)
+						{
+							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid decimal value!");
+							break; // Quit while-loop.
+						}
+					}
+					success = true;
+					break; // Break switch-case.
+				}
+
+				case Radix.Hex:
+				{
+					while (remaining.Length > 0)
+					{
+						bool found = false;
+
+						for (int i = 2; i > 0; i--) // Probe the 2-1 left-most characters for a valid hexadecimal byte.
+						{
+							if (remaining.Length >= i)
+							{
+								byte tempResult;
+								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
+								{
+									if (tempResult <= 0xFF) // i left-most characters are a valid hexadecimal byte!
+									{
+										bytes.WriteByte(tempResult);
+										remaining = remaining.Remove(0, i);
+										found = true;
+										break; // Quit for-loop.
+									}
+								}
+							}
+						}
+
+						if (!found)
+						{
+							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid hexadecimal value!");
+							break; // Quit while-loop.
+						}
+					}
+					success = true;
+					break; // Break switch-case.
+				}
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
+				}
+			}
+
+			if (success)
+			{
+				result = bytes.ToArray();
+				return (true);
+			}
+			else
+			{
+				string radixReadable = "";
+				switch (radix)
+				{
+					case Radix.Bin: radixReadable = "binary";      break;
+					case Radix.Oct: radixReadable = "octal";       break;
+					case Radix.Dec: radixReadable = "decimal";     break;
+					case Radix.Hex: radixReadable = "hexadecimal"; break;
+					default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
+				}
+				formatException = new FormatException(@"Substring """ + remaining + @""" contains no valid " + radixReadable + ".");
+				result = new byte[] { };
+				return (false);
+			}
+		}
+
+		/// <summary>
 		/// Parses <paramref name="value"/> for keywords.
 		/// </summary>
 		/// <param name="value">String to be parsed.</param>
@@ -1614,18 +910,18 @@ namespace YAT.Domain.Parser
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Non-static for orthogonality with other TryParse() methods.")]
-		private bool TryParseContiguousKeywords(string value, out Result[] result, ref FormatException formatException)
+		internal virtual bool TryParseContiguousKeywords(string value, out Result[] result, ref FormatException formatException)
 		{
-			List<Result> resultList = new List<Result>();
-			string[] tokens = value.Split(' ');
-			foreach (string t in tokens)
+			List<Result> l = new List<Result>();
+			string[] items = value.Split(' ');
+			foreach (string t in items)
 			{
 				if (t.Length == 0)
 					continue;
 
 				try
 				{
-					resultList.Add(new KeywordResult((KeywordEx)t));
+					l.Add(new KeywordResult((KeywordEx)t));
 				}
 				catch (ArgumentException)
 				{
@@ -1634,8 +930,79 @@ namespace YAT.Domain.Parser
 					return (false);
 				}
 			}
-			result = resultList.ToArray();
+			result = l.ToArray();
 			return (true);
+		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Initialize or re-initialize the top-level of the parser.
+		/// </summary>
+		/// <remarks>
+		/// Required to allow multiple use of parser.
+		/// </remarks>
+		private void InitializeTopLevel(string value, Modes modes)
+		{
+			DisposeAndReset();
+
+			this.modes           = modes;
+
+			this.charReader      = new StringReader(value);
+			this.bytesWriter     = new MemoryStream();
+			this.result          = new List<Result>();
+			this.state           = new DefaultState();
+
+			this.isKeywordParser = false;
+
+			this.hasFinished     = false;
+		}
+
+		/// <summary>
+		/// Initialize a nested parse-level.
+		/// </summary>
+		private void InitializeNestedParse(ParserState parserState, Parser parent)
+		{
+			DisposeAndReset();
+
+			this.encoding        = parent.encoding;
+			this.defaultRadix    = parent.defaultRadix;
+			this.modes           = parent.modes;
+
+			this.charReader      = parent.charReader;
+			this.bytesWriter     = new MemoryStream();
+			this.result          = parent.result;
+			this.state           = parserState;
+
+			this.parentParser    = parent;
+			this.isKeywordParser = false;
+
+			this.hasFinished     = false;
+		}
+
+		private void DisposeAndReset()
+		{
+			if (this.charReader != null)
+				this.charReader.Dispose();
+
+			if (this.bytesWriter != null)
+				this.bytesWriter.Dispose();
+
+			if (this.state != null)
+				this.state.Dispose();
+
+			if (this.nestedParser != null)
+				this.nestedParser.Dispose();
+
+			this.charReader   = null;
+			this.bytesWriter  = null;
+			this.state        = null;
+			this.nestedParser = null;
 		}
 
 		#endregion
