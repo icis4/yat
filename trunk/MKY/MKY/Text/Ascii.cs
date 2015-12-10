@@ -33,9 +33,15 @@ namespace MKY.Text
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop doesn't seem to be able to skip URLs...")]
 	public static class Ascii
 	{
-		//------------------------------------------------------------------------------------------
-		// Static Methods
-		//------------------------------------------------------------------------------------------
+		/// <summary>
+		/// The length of the shortest mnemonic is 2, e.g. "BS".
+		/// </summary>
+		public const int MnemonicMinLength = 2;
+
+		/// <summary>
+		/// The length of the longest mnemonic is 4, i.e. "XOFF".
+		/// </summary>
+		public const int MnemonicMaxLength = 4;
 
 		/// <summary>
 		/// Converts an ASCII code into according mnemonic.
@@ -153,20 +159,20 @@ namespace MKY.Text
 		{
 			switch (mnemonic.Trim().ToUpper(CultureInfo.InvariantCulture))
 			{
-				case "NUL": result = 0x00; return (true);
+				case "NUL": result = 0x00; return (true); // \0
 				case "SOH": result = 0x01; return (true);
 				case "STX": result = 0x02; return (true);
 				case "ETX": result = 0x03; return (true);
 				case "EOT": result = 0x04; return (true);
 				case "ENQ": result = 0x05; return (true);
 				case "ACK": result = 0x06; return (true);
-				case "BEL": result = 0x07; return (true);
-				case "BS":  result = 0x08; return (true);
-				case "TAB": result = 0x09; return (true);
-				case "LF":  result = 0x0A; return (true);
-				case "VT":  result = 0x0B; return (true);
-				case "FF":  result = 0x0C; return (true);
-				case "CR":  result = 0x0D; return (true);
+				case "BEL": result = 0x07; return (true); // \a
+				case "BS":  result = 0x08; return (true); // \b
+				case "TAB": result = 0x09; return (true); // \t
+				case "LF":  result = 0x0A; return (true); // \n
+				case "VT":  result = 0x0B; return (true); // \v
+				case "FF":  result = 0x0C; return (true); // \f
+				case "CR":  result = 0x0D; return (true); // \r
 				case "SO":  result = 0x0E; return (true);
 				case "SI":  result = 0x0F; return (true);
 				case "DLE": result = 0x10; return (true);

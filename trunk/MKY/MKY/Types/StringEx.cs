@@ -315,6 +315,8 @@ namespace MKY
 		{
 			if (length >= str.Length)
 				return (str);
+			else if (length <= 0)
+				return ("");
 			else
 				return (str.Substring(0, length));
 		}
@@ -326,6 +328,10 @@ namespace MKY
 		{
 			if (begin >= end)
 				return ("");
+			else if ((begin < 0) || (begin >= str.Length) || (end < 0))
+				return ("");
+			else if (end >= str.Length)
+				return (str.Substring(begin));
 			else
 				return (str.Substring(begin, end - begin + 1));
 		}
@@ -337,6 +343,8 @@ namespace MKY
 		{
 			if (length >= str.Length)
 				return (str);
+			else if (length <= 0)
+				return ("");
 			else
 				return (str.Substring(str.Length - length, length));
 		}
