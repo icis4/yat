@@ -1214,7 +1214,7 @@ namespace YAT.Gui.Controls
 
 		private static long TimeoutToTicks(int timeout)
 		{
-			return ((long)timeout * TimeSpan.TicksPerMillisecond);
+			return (timeout * TimeSpan.TicksPerMillisecond);
 		}
 
 		/// <summary>
@@ -1222,41 +1222,43 @@ namespace YAT.Gui.Controls
 		/// of Rx/Tx data and the human eye. The function is defined as follows:
 		/// 
 		///    update interval in milliseconds
-		///                 ^
-		/// max = 1000      | ------------ x
-		///                 |              |
-		///                 |              |
-		///                 |              |
-		/// min = immediate | - x          |
+		///                 ^                 
+		/// max = 500       | ------------ xxx
+		///                 |            x |  
+		///                 |         x    |  
+		///                 |      x       |  
+		/// min = immediate | - x          |  
 		///       (means 0) o-----------------> data rate in bytes per second
 		///                    100       1000
 		/// 
-		/// Thus, up to 100 bytes per second the update is done immediately.
-		/// At 1000 bytes per second or more, the update is done once a second.
-		/// Linear inbetween, for ease of implementation the 1:1 value is used.
+		/// Thus, up to 100 bytes per second the update is done immediately. At 1000 bytes per second or
+		/// more, the update is done twice a second. Linear inbetween.
 		/// 
-		/// An alternative solution would be to measure the effective duration of
-		/// an update and then adjust the rate on the duration.Could be tried if
-		/// the calculation applied now doesn't work well.
+		/// An alternative solution would be to measure the effective duration of an update and then
+		/// adjust the rate on the duration. Could be tried if the calculation applied now doesn't work
+		/// well enough. Consider to take the number of active monitors (all monitors of all terminals)
+		/// into account.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'inbetween'?")]
 		private void CalculateUpdateRate()
 		{
-			int maxRate = Math.Max(this.txByteRateStatus, this.rxByteRateStatus);
+			int lowerLimit =  100; // bytes per second
+			int upperLimit = 1000; // bytes per second
+			int currentRate = Math.Max(this.txByteRateStatus, this.rxByteRateStatus);
 
-			if (maxRate <= 100)
+			if (currentRate <= lowerLimit)
 			{
 				this.updateTickInterval = 0;
 				this.performImmediateUpdate = true;
 			}
-			else if (maxRate >= 1000)
+			else if (currentRate >= upperLimit)
 			{
-				this.updateTickInterval = TimeoutToTicks(1000);
+				this.updateTickInterval = TimeoutToTicks(upperLimit / 2);
 				this.performImmediateUpdate = false;
 			}
 			else
 			{
-				this.updateTickInterval = TimeoutToTicks(maxRate);
+				this.updateTickInterval = TimeoutToTicks(currentRate / 2);
 				this.performImmediateUpdate = false;
 			}
 		}
