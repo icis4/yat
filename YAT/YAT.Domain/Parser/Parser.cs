@@ -426,7 +426,18 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			return (TryParse(s, Modes.AllByteArrayResults, out result, out parsed));
+			FormatException formatException = new FormatException("");
+			return (TryParse(s, out result, out parsed, ref formatException));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, out byte[] result, out string parsed, ref FormatException formatException)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			return (TryParse(s, Modes.AllByteArrayResults, out result, out parsed, ref formatException));
 		}
 
 		/// <summary></summary>
@@ -435,8 +446,19 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
+			FormatException formatException = new FormatException("");
+			return (TryParse(s, modes, out result, out parsed, ref formatException));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string parsed, ref FormatException formatException)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
 			Result[] typedResult;
-			if (TryParse(s, modes, out typedResult, out parsed))
+			if (TryParse(s, modes, out typedResult, out parsed, ref formatException))
 			{
 
 				MemoryStream bytes = new MemoryStream();
@@ -498,7 +520,7 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, Modes modes, out string parsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
@@ -519,9 +541,20 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, out Result[] result, out string parsed, ref FormatException formatException)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			return (TryParse(s, Modes.All, out result, out parsed, ref formatException));
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed, ref FormatException formatException)
 		{
 			AssertNotDisposed();
@@ -621,7 +654,7 @@ namespace YAT.Domain.Parser
 			if (radix == Radix.String)
 			{
 				byte[] b;
-				if (TryParseRadixItem(s, Radix.String, out b, ref formatException))
+				if (TryParseContiguousRadixItem(s, Radix.String, out b, ref formatException))
 				{
 					bytes.Write(b, 0, b.Length);
 				}
@@ -639,7 +672,7 @@ namespace YAT.Domain.Parser
 					if (item.Length > 0)
 					{
 						byte[] b;
-						if (TryParseRadixItem(item, radix, out b, ref formatException))
+						if (TryParseContiguousRadixItem(item, radix, out b, ref formatException))
 						{
 							bytes.Write(b, 0, b.Length);
 						}
@@ -656,11 +689,11 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for a single item in the specified base <paramref name="radix"/>.
+		/// Parses <paramref name="s"/> for a single item in the specified <paramref name="radix"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "4#", Justification = "Required for recursion.")]
-		internal virtual bool TryParseRadixItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		internal virtual bool TryParseContiguousRadixItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			AssertNotDisposed();
 
@@ -676,10 +709,10 @@ namespace YAT.Domain.Parser
 				case Radix.Oct:
 				case Radix.Dec:
 				case Radix.Hex:
-					return (TryParseAndConvertNumericItem(s, radix, out result, ref formatException));
+					return (TryParseAndConvertContiguousNumericItem(s, radix, out result, ref formatException));
 
 				default:
-					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
+					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
 			}
 		}
 
@@ -687,7 +720,7 @@ namespace YAT.Domain.Parser
 		/// Encodes <paramref name="s"/> containing a plain string into bytes.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		internal virtual bool TryEncodeStringItem(string s, out byte[] result, ref FormatException formatException)
 		{
 			result = this.encoding.GetBytes(s);
@@ -698,7 +731,7 @@ namespace YAT.Domain.Parser
 		/// Encodes <paramref name="s"/> containing a single char item into bytes.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		internal virtual bool TryEncodeCharItem(string s, out byte[] result, ref FormatException formatException)
 		{
 			char c;
@@ -709,32 +742,37 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				formatException = new FormatException(@"Substring """ + s + @""" does not contain a valid single character!");
+				formatException = new FormatException(@"""" + s + @""" does not contain a valid single character.");
 				result = new byte[] { };
 				return (false);
 			}
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for a single single numeric item and converts it into bytes.
+		/// Parses <paramref name="s"/> for a sequence of contiguous numeric digits in the current
+		/// radix and converts them into bytes. The digits will sequentially be parsed and converted
+		/// byte-by-byte.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		internal virtual bool TryParseAndConvertNumericItem(string s, out byte[] result, ref FormatException formatException)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		internal virtual bool TryParseAndConvertContiguousNumericItem(string s, out byte[] result, ref FormatException formatException)
 		{
-			return (TryParseAndConvertNumericItem(s, this.Radix, out result, ref formatException));
+			return (TryParseAndConvertContiguousNumericItem(s, this.Radix, out result, ref formatException));
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for a single single numeric item and converts it into bytes.
+		/// Parses <paramref name="s"/> for a sequence of contiguous numeric digits in the specified
+		/// <paramref name="radix"/> and converts them into bytes. The digits will sequentially be
+		/// parsed and converted byte-by-byte.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "4#", Justification = "Required for recursion.")]
-		internal virtual bool TryParseAndConvertNumericItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		internal virtual bool TryParseAndConvertContiguousNumericItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			string remaining = s;
+
 			MemoryStream bytes = new MemoryStream();
-			bool success = false;
+			bool success = true;
 
 			switch (radix)
 			{
@@ -744,31 +782,30 @@ namespace YAT.Domain.Parser
 					{
 						bool found = false;
 
-						for (int i = 8; i > 0; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
+						int from = Math.Min(8, remaining.Length);
+						for (int i = from; i >= 1; i--) // Probe the 8-7-...-2-1 left-most characters for a valid binary byte.
 						{
-							if (remaining.Length >= i)
+							UInt64 tempResult;
+							if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
 							{
-								UInt64 tempResult;
-								if (UInt64Ex.TryParseBinary(StringEx.Left(remaining, i), out tempResult))
+								if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid binary byte!
-									{
-										bytes.WriteByte((byte)tempResult);
-										remaining = remaining.Remove(0, i);
-										found = true;
-										break; // Quit for-loop.
-									}
+									bytes.WriteByte((byte)tempResult);
+
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
 								}
 							}
 						}
 
 						if (!found)
 						{
-							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid binary value!");
+							success = false;
 							break; // Quit while-loop.
 						}
 					}
-					success = true;
+
 					break; // Break switch-case.
 				}
 
@@ -778,31 +815,30 @@ namespace YAT.Domain.Parser
 					{
 						bool found = false;
 
-						for (int i = 3; i > 0; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
+						int from = Math.Min(3, remaining.Length);
+						for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid octal byte.
 						{
-							if (remaining.Length >= i)
+							UInt64 tempResult;
+							if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
 							{
-								UInt64 tempResult;
-								if (UInt64Ex.TryParseOctal(StringEx.Left(remaining, i), out tempResult))
+								if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid octal byte!
-									{
-										bytes.WriteByte((byte)tempResult);
-										remaining = remaining.Remove(0, i);
-										found = true;
-										break; // Quit for-loop.
-									}
+									bytes.WriteByte((byte)tempResult);
+
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
 								}
 							}
 						}
 
 						if (!found)
 						{
-							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid octal value!");
+							success = false;
 							break; // Quit while-loop.
 						}
 					}
-					success = true;
+
 					break; // Break switch-case.
 				}
 
@@ -812,31 +848,30 @@ namespace YAT.Domain.Parser
 					{
 						bool found = false;
 
-						for (int i = 3; i > 0; i--) // Probe the 3-2-1 left-most characters for a valid decimal byte.
+						int from = Math.Min(3, remaining.Length);
+						for (int i = from; i >= 1; i--) // Probe the 3-2-1 left-most characters for a valid decimal byte.
 						{
-							if (remaining.Length >= i)
+							byte tempResult;
+							if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
 							{
-								byte tempResult;
-								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.Integer, CultureInfo.InvariantCulture, out tempResult))
+								if (tempResult <= 0xFF) // i left-most characters are a valid decimal byte!
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid decimal byte!
-									{
-										bytes.WriteByte(tempResult);
-										remaining = remaining.Remove(0, i);
-										found = true;
-										break; // Quit for-loop.
-									}
+									bytes.WriteByte(tempResult);
+
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
 								}
 							}
 						}
 
 						if (!found)
 						{
-							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid decimal value!");
+							success = false;
 							break; // Quit while-loop.
 						}
 					}
-					success = true;
+
 					break; // Break switch-case.
 				}
 
@@ -846,37 +881,36 @@ namespace YAT.Domain.Parser
 					{
 						bool found = false;
 
-						for (int i = 2; i > 0; i--) // Probe the 2-1 left-most characters for a valid hexadecimal byte.
+						int from = Math.Min(2, remaining.Length);
+						for (int i = from; i >= 1; i--) // Probe the 2-1 left-most characters for a valid hexadecimal byte.
 						{
-							if (remaining.Length >= i)
+							byte tempResult;
+							if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
 							{
-								byte tempResult;
-								if (byte.TryParse(StringEx.Left(remaining, i), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out tempResult))
+								if (tempResult <= 0xFF) // i left-most characters are a valid hexadecimal byte!
 								{
-									if (tempResult <= 0xFF) // i left-most characters are a valid hexadecimal byte!
-									{
-										bytes.WriteByte(tempResult);
-										remaining = remaining.Remove(0, i);
-										found = true;
-										break; // Quit for-loop.
-									}
+									bytes.WriteByte(tempResult);
+
+									remaining = remaining.Remove(0, i);
+									found = true;
+									break; // Quit for-loop and continue within remaining string.
 								}
 							}
 						}
 
 						if (!found)
 						{
-							formatException = new FormatException(@"Substring """ + remaining + @""" of """ + s + @""" is no valid hexadecimal value!");
+							success = false;
 							break; // Quit while-loop.
 						}
 					}
-					success = true;
+
 					break; // Break switch-case.
 				}
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
+					throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
 				}
 			}
 
@@ -887,16 +921,31 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				string radixReadable = "";
+				StringBuilder sb = new StringBuilder();
+
+				if (remaining.Length != s.Length)
+				{
+					sb.Append(@"""");
+					sb.Append(remaining);
+					sb.Append(@""" of ");
+				}
+
+				sb.Append(@"""");
+				sb.Append(s);
+				sb.Append(@""" is no valid ");
+
 				switch (radix)
 				{
-					case Radix.Bin: radixReadable = "binary";      break;
-					case Radix.Oct: radixReadable = "octal";       break;
-					case Radix.Dec: radixReadable = "decimal";     break;
-					case Radix.Hex: radixReadable = "hexadecimal"; break;
-					default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""."));
+					case Radix.Bin: sb.Append("binary");      break;
+					case Radix.Oct: sb.Append("octal");       break;
+					case Radix.Dec: sb.Append("decimal");     break;
+					case Radix.Hex: sb.Append("hexadecimal"); break;
+					default: throw (new ArgumentOutOfRangeException("radix", radix, @"Unknown radix """ + radix + @"""!"));
 				}
-				formatException = new FormatException(@"Substring """ + remaining + @""" contains no valid " + radixReadable + ".");
+
+				sb.Append(" value.");
+
+				formatException = new FormatException(sb.ToString());
 				result = new byte[] { };
 				return (false);
 			}
@@ -914,19 +963,19 @@ namespace YAT.Domain.Parser
 		{
 			List<Result> l = new List<Result>();
 			string[] items = value.Split(' ');
-			foreach (string t in items)
+			foreach (string item in items)
 			{
-				if (t.Length == 0)
+				if (item.Length == 0)
 					continue;
 
 				try
 				{
-					l.Add(new KeywordResult((KeywordEx)t));
+					l.Add(new KeywordResult((KeywordEx)item));
 				}
 				catch (ArgumentException)
 				{
 					result = new Result[] { };
-					formatException = new FormatException(@"""" + t + @""" is no keyword!");
+					formatException = new FormatException(@"""" + item + @""" is no valid keyword.");
 					return (false);
 				}
 			}

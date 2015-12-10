@@ -36,6 +36,11 @@ namespace MKY
 		/// <summary>
 		/// An invalid char is represented by -1.
 		/// </summary>
+		/// <remarks>
+		/// Value corresponds to the value returned by <see cref="System.IO.StringReader.Read()"/>
+		/// and the other read functions if no more characters can be read from the stream.
+		/// Value also corresponds to <see cref="IO.StreamEx.EndOfStream"/>.
+		/// </remarks>
 		public const int InvalidChar = -1;
 	}
 }

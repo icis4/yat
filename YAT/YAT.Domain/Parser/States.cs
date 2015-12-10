@@ -30,6 +30,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 using MKY;
 using MKY.Diagnostics;
@@ -46,7 +47,7 @@ namespace YAT.Domain.Parser
 		private bool isDisposed;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "2#", Justification = "Required for recursion.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
 		public abstract bool TryParse(Parser parser, int parseChar, ref FormatException formatException);
 
 		/// <summary></summary>
@@ -185,11 +186,24 @@ namespace YAT.Domain.Parser
 			else                                     // Compose contiguous string.
 			{
 				this.contiguousWriter.Write((char)parseChar);
+
+				if (!ProbeContiguous(parser, ref formatException))
+					return (false);
 			}
 			return (true);
 		}
 
 		private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
+		{
+			return (HandleContiguous(parser, ref formatException, true));
+		}
+
+		private bool ProbeContiguous(Parser parser, ref FormatException formatException)
+		{
+			return (HandleContiguous(parser, ref formatException, false));
+		}
+
+		private bool HandleContiguous(Parser parser, ref FormatException formatException, bool writeOnSuccess)
 		{
 			string contiguousString = this.contiguousWriter.ToString();
 			if (contiguousString.Length > 0)
@@ -201,10 +215,13 @@ namespace YAT.Domain.Parser
 					if (!parser.TryParseContiguousRadix(contiguousString, parser.Radix, out result, ref formatException))
 						return (false);
 
-					foreach (byte b in result)
-						parser.BytesWriter.WriteByte(b);
+					if (writeOnSuccess)
+					{
+						foreach (byte b in result)
+							parser.BytesWriter.WriteByte(b);
 
-					parser.CommitPendingBytes();
+						parser.CommitPendingBytes();
+					}
 				}
 				else
 				{
@@ -213,9 +230,11 @@ namespace YAT.Domain.Parser
 					if (!parser.TryParseContiguousKeywords(contiguousString, out result, ref formatException))
 						return (false);
 
-					parser.CommitResult(result);
+					if (writeOnSuccess)
+						parser.CommitResult(result);
 				}
 			}
+
 			return (true);
 		}
 	}
@@ -550,21 +569,22 @@ namespace YAT.Domain.Parser
 					return (true);
 				}
 
-				case StreamEx.EndOfStream:
+				case CharEx.InvalidChar:
 				{
-					parser.CommitPendingBytes();
-					parser.HasFinished = true;
-					ChangeState(parser, null);
-					return (true);
+					formatException = new FormatException
+					(
+						"Incomplete escape sequence."
+					);
+					return (false);
 				}
 
 				default:
 				{
 					formatException = new FormatException
 					(
-						@"Character '" + (char)parseChar + "'" +
-						@"[\d(" + parseChar + ")] is " +
-						@"not a valid character"
+						@"Character '" + (char)parseChar + "' " +
+						@"(0x" + parseChar.ToString("X", CultureInfo.InvariantCulture) + ") " +
+						@"is no valid escape character."
 					);
 					return (false);
 				}
@@ -587,7 +607,7 @@ namespace YAT.Domain.Parser
 			}
 			else
 			{
-				formatException = new FormatException(@"Missing opening parenthesis ""(""!");
+				formatException = new FormatException(@"Missing opening parenthesis ""("".");
 				return (false);
 			}
 		}
@@ -645,7 +665,7 @@ namespace YAT.Domain.Parser
 			{
 				byte[] a;
 
-				if (!TryParseAsciiMnemonic(parser, this.mnemonicWriter.ToString(), out a, ref formatException))
+				if (!TryParseContiguousAsciiMnemonic(parser, this.mnemonicWriter.ToString(), out a, ref formatException))
 					return (false);
 
 				foreach (byte b in a)
@@ -664,40 +684,104 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses <paramref name="value"/> for ASCII mnemonics.
+		/// Parses <paramref name="s"/> for ASCII mnemonics. <paramref name="s"/> will
+		/// sequentially be parsed and converted mnemonics-by-mnemonics.
 		/// </summary>
-		/// <param name="parser">Parser to retrieve settings.</param>
-		/// <param name="value">String to be parsed.</param>
+		/// <param name="parser">The parser to be used.</param>
+		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">Array containing the resulting bytes.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Byte array containing the values encoded in Encoding.Default.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPasstylesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public bool TryParseAsciiMnemonic(Parser parser, string value, out byte[] result, ref FormatException formatException)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
+		private static bool TryParseContiguousAsciiMnemonic(Parser parser, string s, out byte[] result, ref FormatException formatException)
 		{
 			MemoryStream bytes = new MemoryStream();
-			string[] items = value.Split(' ');
-			foreach (string t in items)
+			string[] items = s.Split(' ');
+			foreach (string item in items)
 			{
-				if (t.Length == 0)
-					continue;
-
-				byte code;
-				if (Ascii.TryParse(t, out code)) // \ToDo: Also allow contiguous notation such as <CRLF>.
+				if (item.Length > 0)
 				{
-					char c = Convert.ToChar(code);
-					byte[] b = parser.Encoding.GetBytes(new char[] { c });
-					bytes.Write(b, 0, b.Length);
-				}
-				else
-				{
-					result = new byte[] { };
-					formatException = new FormatException(@"""" + t + @""" is no ASCII mnemonic!");
-					return (false);
+					byte[] b;
+					if (TryParseContiguousAsciiMnemonicItem(parser, item, out b, ref formatException))
+					{
+						bytes.Write(b, 0, b.Length);
+					}
+					else
+					{
+						result = new byte[] { };
+						return (false);
+					}
 				}
 			}
 			result = bytes.ToArray();
 			return (true);
+		}
+
+		/// <summary>
+		/// Parses <paramref name="s"/> for ASCII mnemonics. <paramref name="s"/> will
+		/// sequentially be parsed and converted mnemonics-by-mnemonics.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
+		private static bool TryParseContiguousAsciiMnemonicItem(Parser parser, string s, out byte[] result, ref FormatException formatException)
+		{
+			string remaining = s;
+
+			MemoryStream bytes = new MemoryStream();
+			bool success = true;
+
+			while (remaining.Length > 0)
+			{
+				bool found = false;
+
+				int from = Math.Min(Ascii.MnemonicMaxLength, remaining.Length);
+				for (int i = from; i >= Ascii.MnemonicMinLength; i--) // Probe the max..min left-most characters for a valid ASCII mnemonic.
+				{
+					byte code;
+					if (Ascii.TryParse(StringEx.Left(remaining, i), out code))
+					{
+						char c = Convert.ToChar(code);
+						byte[] b = parser.Encoding.GetBytes(new char[] { c });
+						bytes.Write(b, 0, b.Length);
+
+						remaining = remaining.Remove(0, i);
+						found = true;
+						break; // Quit for-loop and continue within remaining string.
+					}
+				}
+
+				if (!found)
+				{
+					success = false;
+					break; // Quit while-loop.
+				}
+			}
+
+			if (success)
+			{
+				result = bytes.ToArray();
+				return (true);
+			}
+			else
+			{
+				StringBuilder sb = new StringBuilder();
+
+				if (remaining.Length != s.Length)
+				{
+					sb.Append(@"""");
+					sb.Append(remaining);
+					sb.Append(@""" of ");
+				}
+
+				sb.Append(@"""");
+				sb.Append(s);
+				sb.Append(@""" is no valid ASCII mnemonic.");
+
+				formatException = new FormatException(sb.ToString());
+				result = new byte[] { };
+				return (false);
+			}
 		}
 	}
 
@@ -811,7 +895,7 @@ namespace YAT.Domain.Parser
 
 			// No more valid character found, try to process numeric value.
 			byte[] result;
-			if (parser.TryParseAndConvertNumericItem(this.valueWriter.ToString(), out result, ref formatException))
+			if (parser.TryParseAndConvertContiguousNumericItem(this.valueWriter.ToString(), out result, ref formatException))
 			{
 				foreach (byte b in result)
 					parser.BytesWriter.WriteByte(b);

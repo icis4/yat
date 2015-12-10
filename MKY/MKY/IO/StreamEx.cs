@@ -21,14 +21,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace MKY.IO
 {
 	/// <summary>
-	/// Utility methods for <see cref="System.IO.Stream"/>.
+	/// Utility methods for <see cref="Stream"/>.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class StreamEx
@@ -36,10 +35,16 @@ namespace MKY.IO
 		/// <summary>
 		/// Result when reading the stream's end.
 		/// </summary>
+		/// <remarks>
+		/// Value corresponds to the value returned by <see cref="Stream.ReadByte()"/>
+		/// and the other read functions if no more characters can be read from the stream.
+		/// Value also corresponds to <see cref="CharEx.InvalidChar"/>.
+		/// </remarks>
 		public const int EndOfStream = -1;
 
 		/// <summary>
-		/// Result when stream length cannot be retrieved from a stream, e.g. if the stream is not seekable.
+		/// Result when stream length cannot be retrieved from a stream,
+		/// e.g. if the stream is not seekable.
 		/// </summary>
 		public const long UnknownLength = -1;
 

@@ -20,7 +20,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -127,11 +129,13 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\s(\< angle \>)",			new byte[] { 0x3C, 0x20, 0x61, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x3E } ).SetName("Angle brackets in string short 3"));
 
 				// Backslashes:
+				yield return (new TestCaseData(@"\\",										new byte[] { 0x5C } ).SetName("Backslash"));
+				yield return (new TestCaseData(@"\\\\",										new byte[] { 0x5C, 0x5C } ).SetName("Backslash double"));
 				yield return (new TestCaseData(@"Hello \\back\\ slashes",					new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes"));
 				yield return (new TestCaseData(@"Hello \92back\92 slashes",					new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes C-style"));
-				yield return (new TestCaseData(@"Hello \\\\double back\\\\ slashes",		new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes double"));
- 				yield return (new TestCaseData(@"Hello \92\92double back\92\92 slashes",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes double C-style"));
-				yield return (new TestCaseData(@"Hello \\\92double back\92\\ slashes",		new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes double combined"));
+				yield return (new TestCaseData(@"Hello \\\\double back\\\\ slashes",		new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x5C, 0x64, 0x6F, 0x75, 0x62, 0x6C, 0x65, 0x20, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes double"));
+ 				yield return (new TestCaseData(@"Hello \92\92double back\92\92 slashes",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x5C, 0x64, 0x6F, 0x75, 0x62, 0x6C, 0x65, 0x20, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes double C-style"));
+				yield return (new TestCaseData(@"Hello \\\92double back\92\\ slashes",		new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x5C, 0x64, 0x6F, 0x75, 0x62, 0x6C, 0x65, 0x20, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes double combined"));
 
 				// Char:
 				yield return (new TestCaseData(@"Single char \c(9)",				new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x39 } ).SetName("Char single '9'"));
@@ -268,6 +272,32 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		#endregion
+
+		#region Test Cases Error
+		//==========================================================================================
+		// Test Cases Error
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesError
+		{
+			get					// Erroneous input		Expected substring		Expected message
+			{
+				yield return (new TestCaseData(@"A<AAA",		@"A<AA",		@"""AAA"" is no valid ASCII mnemonic.").SetName("Invalid ASCII"));
+
+				yield return (new TestCaseData(@"A\d(A7)",		@"A\d(",		@"""A"" is no valid decimal value.").SetName("Invalid decimal value 1"));
+				yield return (new TestCaseData(@"A\d(A77)",		@"A\d(",		@"""A"" is no valid decimal value.").SetName("Invalid decimal value 2"));
+				yield return (new TestCaseData(@"A\d(7A)",		@"A\d(7",		@"""A"" of ""7A"" is no valid decimal value.").SetName("Invalid decimal digit 1"));
+				yield return (new TestCaseData(@"A\d(7AA)",		@"A\d(7",		@"""A"" of ""7A"" is no valid decimal value.").SetName("Invalid decimal digit 2"));
+
+				yield return (new TestCaseData(@"A\e(AA)",		@"A\",			@"Character 'e' (0x65) is no valid escape character.").SetName("Invalid escape character"));
+
+				yield return (new TestCaseData(@"A\",			@"A",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 1"));
+				yield return (new TestCaseData(@"A\\\",			@"A\\",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 2"));
+			}
+		}
+
+		#endregion
 	}
 
 	/// <summary></summary>
@@ -291,17 +321,11 @@ namespace YAT.Domain.Test.Parser
 		{
 			using (Domain.Parser.Parser parser = new Domain.Parser.Parser())
 			{
-				byte[] actualBytes = parser.Parse(s);
+				byte[] actualBytes;
+				Assert.IsTrue(parser.TryParse(s, out actualBytes));
 				Assert.AreEqual(expectedBytes, actualBytes);
 			}
 		}
-
-		#endregion
-
-		#region Tests > Encoding
-		//------------------------------------------------------------------------------------------
-		// Tests > Encoding
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
@@ -310,8 +334,50 @@ namespace YAT.Domain.Test.Parser
 		{
 			using (Domain.Parser.Parser parser = new Domain.Parser.Parser(encoding))
 			{
-				byte[] actualBytes = parser.Parse(s);
+				byte[] actualBytes;
+				Assert.IsTrue(parser.TryParse(s, out actualBytes));
 				Assert.AreEqual(expectedBytes, actualBytes);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
+		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesError")]
+		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
+		{
+			using (Domain.Parser.Parser parser = new Domain.Parser.Parser())
+			{
+				byte[] actualBytes;
+				string actualParsed;
+
+				Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
+				Assert.IsFalse(parser.TryParse(s, out actualBytes, out actualParsed, ref formatException));
+
+				string actualMessage;
+				if (formatException.Message.Contains(Environment.NewLine))
+					actualMessage = formatException.Message.Substring(0, formatException.Message.IndexOf(Environment.NewLine));
+				else
+					actualMessage = formatException.Message;
+
+				if (!expectedParsed.Equals(actualParsed))
+				{
+					Trace.WriteLine("Input    " + s);
+					Trace.WriteLine("Expected " + expectedParsed);
+					Trace.WriteLine("Actual   " + actualParsed);
+					Trace.WriteLine("Message  " + actualMessage);
+
+					Assert.AreEqual(expectedParsed, actualParsed);
+				}
+
+				if (!expectedMessage.Equals(actualMessage))
+				{
+					Trace.WriteLine("Input    " + s);
+					Trace.WriteLine("Expected " + expectedParsed);
+					Trace.WriteLine("Actual   " + actualParsed);
+					Trace.WriteLine("Message  " + actualMessage);
+
+					Assert.AreEqual(expectedMessage, actualMessage);
+				}
 			}
 		}
 

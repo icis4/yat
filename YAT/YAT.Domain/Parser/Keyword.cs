@@ -149,7 +149,7 @@ namespace YAT.Domain.Parser
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid keyword string."));
+				throw (new FormatException(@"""" + s + @""" is no valid keyword."));
 		}
 
 		/// <remarks>

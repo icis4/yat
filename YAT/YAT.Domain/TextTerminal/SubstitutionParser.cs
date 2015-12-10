@@ -243,11 +243,11 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		internal override bool TryParseRadixItem(string item, Radix radix, out byte[] result, ref FormatException formatException)
+		internal override bool TryParseContiguousRadixItem(string item, Radix radix, out byte[] result, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixItem()' below.
 
-			return (base.TryParseRadixItem(Substitute(item), radix, out result, ref formatException));
+			return (base.TryParseContiguousRadixItem(Substitute(item), radix, out result, ref formatException));
 		}
 
 		private string Substitute(string item)
