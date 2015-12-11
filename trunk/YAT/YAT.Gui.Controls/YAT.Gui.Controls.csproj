@@ -364,18 +364,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Edit\Image_Delete_16x16.png" />
-    <Content Include="Resources\Edit\Image_Delete_16x16_Disabled.png" />
-    <Content Include="Resources\Edit\Image_Delete_16x16_Hot.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Bidir_28x28_Grey.png" />
-    <None Include="Resources\Monitor\Image_Monitor_Bidir_28x28_Green.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Rx_28x28_Grey.png" />
-    <None Include="Resources\Monitor\Image_Monitor_Rx_28x28_Green.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Tx_28x28_Grey.png" />
-    <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16.png" />
-    <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16_Disabled.png" />
-    <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16_Hot.png" />
-    <None Include="Resources\Monitor\Image_Monitor_Tx_28x28_Green.png" />
+    <None Include="Resources\Tool\Image_Tool_arrow_refresh_small_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_broom_16x16.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -388,6 +378,24 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_left_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_left_grey_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_refresh_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_refresh_grey_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_right_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_right_grey_32x32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

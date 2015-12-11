@@ -123,7 +123,7 @@
 			// button_Delete
 			// 
 			this.button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Delete.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Delete_16x16;
+			this.button_Delete.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Tool_broom_16x16;
 			this.button_Delete.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_Delete.Location = new System.Drawing.Point(557, 0);
 			this.button_Delete.Name = "button_Delete";

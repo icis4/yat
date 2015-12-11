@@ -235,7 +235,7 @@
 			this.contextMenuStrip_Status_BreakCount_ShowCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Status_BreakCount_ResetCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripStatusLabel_TerminalStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_TerminalStatus_IOStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_Separator1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_RFR = new System.Windows.Forms.ToolStripStatusLabel();
@@ -269,6 +269,7 @@
 			this.timer_RfrLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -706,7 +707,7 @@
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Clear
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_Clear.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem_MonitorContextMenu_Clear.Image")));
+			this.toolStripMenuItem_MonitorContextMenu_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Name = "toolStripMenuItem_MonitorContextMenu_Clear";
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Size = new System.Drawing.Size(241, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Text = "Clear";
@@ -738,7 +739,7 @@
 			// 
 			// toolStripMenuItem_MonitorContextMenu_SaveToFile
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_16x16;
+			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_save_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Name = "toolStripMenuItem_MonitorContextMenu_SaveToFile";
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Size = new System.Drawing.Size(241, 22);
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Text = "Save to File...";
@@ -746,7 +747,7 @@
 			// 
 			// toolStripMenuItem_MonitorContextMenu_CopyToClipboard
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
+			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Name = "toolStripMenuItem_MonitorContextMenu_CopyToClipboard";
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Size = new System.Drawing.Size(241, 22);
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Text = "Copy to Clipboard";
@@ -754,7 +755,7 @@
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Print
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_16x16;
+			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_printer_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Print.Name = "toolStripMenuItem_MonitorContextMenu_Print";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(241, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
@@ -1281,6 +1282,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_File_Close
 			// 
+			this.toolStripMenuItem_TerminalMenu_File_Close.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_application_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_File_Close.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_Close.MergeIndex = 3;
 			this.toolStripMenuItem_TerminalMenu_File_Close.Name = "toolStripMenuItem_TerminalMenu_File_Close";
@@ -1290,7 +1292,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_File_Save
 			// 
-			this.toolStripMenuItem_TerminalMenu_File_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_16x16;
+			this.toolStripMenuItem_TerminalMenu_File_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_save_16x16;
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_File_Save.Name = "toolStripMenuItem_TerminalMenu_File_Save";
@@ -1301,6 +1303,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_File_SaveAs
 			// 
+			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_save_as_16x16;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.MergeIndex = 7;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Name = "toolStripMenuItem_TerminalMenu_File_SaveAs";
@@ -1317,6 +1320,7 @@
             this.toolStripMenuItem_TerminalMenu_Terminal_Break,
             this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2,
             this.toolStripMenuItem_TerminalMenu_Terminal_Clear,
+            this.toolStripMenuItem_TerminalMenu_Terminal_Refresh,
             this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3,
             this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll,
             this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone,
@@ -1336,7 +1340,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Start
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Image = global::YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_accept_button_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Name = "toolStripMenuItem_TerminalMenu_Terminal_Start";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
@@ -1346,7 +1350,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Stop
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.C)));
@@ -1374,7 +1378,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Clear
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem_TerminalMenu_Terminal_Clear.Image")));
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Delete)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(213, 22);
@@ -1410,7 +1414,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Name = "toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard";
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Size = new System.Drawing.Size(213, 22);
@@ -1419,7 +1423,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_SaveToFile
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_save_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Name = "toolStripMenuItem_TerminalMenu_Terminal_SaveToFile";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Size = new System.Drawing.Size(213, 22);
@@ -1428,7 +1432,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Print
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_printer_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Name = "toolStripMenuItem_TerminalMenu_Terminal_Print";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Size = new System.Drawing.Size(213, 22);
@@ -1442,7 +1446,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Settings
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Properties_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_interface_preferences_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Name = "toolStripMenuItem_TerminalMenu_Terminal_Settings";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
@@ -1608,45 +1612,50 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Begin
 			// 
+			this.toolStripMenuItem_TerminalMenu_Log_Begin.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Name = "toolStripMenuItem_TerminalMenu_Log_Begin";
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.B)));
-			this.toolStripMenuItem_TerminalMenu_Log_Begin.Size = new System.Drawing.Size(177, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Begin.Size = new System.Drawing.Size(197, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Text = "&Begin";
 			this.toolStripMenuItem_TerminalMenu_Log_Begin.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Begin_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_End
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_End.Enabled = false;
+			this.toolStripMenuItem_TerminalMenu_Log_End.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_End.Name = "toolStripMenuItem_TerminalMenu_Log_End";
 			this.toolStripMenuItem_TerminalMenu_Log_End.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.E)));
-			this.toolStripMenuItem_TerminalMenu_Log_End.Size = new System.Drawing.Size(177, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_End.Size = new System.Drawing.Size(197, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_End.Text = "&End";
 			this.toolStripMenuItem_TerminalMenu_Log_End.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_End_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Separator_1
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Size = new System.Drawing.Size(174, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Size = new System.Drawing.Size(194, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = false;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Name = "toolStripMenuItem_TerminalMenu_Log_Clear";
-			this.toolStripMenuItem_TerminalMenu_Log_Clear.Size = new System.Drawing.Size(177, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.Size = new System.Drawing.Size(197, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Text = "&Clear";
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Clear_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Separator_2
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(174, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(194, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Settings
 			// 
+			this.toolStripMenuItem_TerminalMenu_Log_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_gear_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.Name = "toolStripMenuItem_TerminalMenu_Log_Settings";
-			this.toolStripMenuItem_TerminalMenu_Log_Settings.Size = new System.Drawing.Size(177, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.L)));
+			this.toolStripMenuItem_TerminalMenu_Log_Settings.Size = new System.Drawing.Size(197, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.Text = "&Settings...";
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Settings_Click);
 			// 
@@ -1934,6 +1943,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Format
 			// 
+			this.toolStripMenuItem_TerminalMenu_View_Format.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_font_16x16;
 			this.toolStripMenuItem_TerminalMenu_View_Format.Name = "toolStripMenuItem_TerminalMenu_View_Format";
 			this.toolStripMenuItem_TerminalMenu_View_Format.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Format.Text = "&Format...";
@@ -1944,7 +1954,7 @@
 			this.statusStrip_Terminal.ContextMenuStrip = this.contextMenuStrip_Status;
 			this.statusStrip_Terminal.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel_TerminalStatus_Status,
-            this.toolStripStatusLabel_TerminalStatus_IOStatusText,
+            this.toolStripStatusLabel_TerminalStatus_IOStatus,
             this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator,
             this.toolStripStatusLabel_TerminalStatus_Separator1,
             this.toolStripStatusLabel_TerminalStatus_RFR,
@@ -2029,15 +2039,15 @@
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_Status.ToolTipText = "Terminal Status";
 			// 
-			// toolStripStatusLabel_TerminalStatus_IOStatusText
+			// toolStripStatusLabel_TerminalStatus_IOStatus
 			// 
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.Name = "toolStripStatusLabel_TerminalStatus_IOStatusText";
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.Size = new System.Drawing.Size(75, 20);
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.Text = "<I/O Status>";
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.ToolTipText = "Port Status and Settings";
-			this.toolStripStatusLabel_TerminalStatus_IOStatusText.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_IOStatus_Click);
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.Name = "toolStripStatusLabel_TerminalStatus_IOStatus";
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.Size = new System.Drawing.Size(75, 20);
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.Text = "<I/O Status>";
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.ToolTipText = "Port Status and Settings";
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_IOStatus_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_IOStatusIndicator
 			// 
@@ -2045,7 +2055,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Name = "toolStripStatusLabel_TerminalStatus_IOStatusIndicator";
 			this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Size = new System.Drawing.Size(16, 20);
@@ -2068,7 +2078,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_RFR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_RFR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_RFR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_RFR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RFR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_RFR.Name = "toolStripStatusLabel_TerminalStatus_RFR";
@@ -2087,7 +2097,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_CTS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_CTS.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.toolStripStatusLabel_TerminalStatus_CTS.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_CTS.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_CTS.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_CTS.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_CTS.Name = "toolStripStatusLabel_TerminalStatus_CTS";
@@ -2103,7 +2113,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DTR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_DTR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Red_12x12;
+			this.toolStripStatusLabel_TerminalStatus_DTR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Red_12x12;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DTR.Name = "toolStripStatusLabel_TerminalStatus_DTR";
@@ -2121,7 +2131,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DSR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_DSR.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.toolStripStatusLabel_TerminalStatus_DSR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Red_12x12;
+			this.toolStripStatusLabel_TerminalStatus_DSR.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Red_12x12;
 			this.toolStripStatusLabel_TerminalStatus_DSR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DSR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DSR.Name = "toolStripStatusLabel_TerminalStatus_DSR";
@@ -2138,7 +2148,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DCD.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_DCD.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.toolStripStatusLabel_TerminalStatus_DCD.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Red_12x12;
+			this.toolStripStatusLabel_TerminalStatus_DCD.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Red_12x12;
 			this.toolStripStatusLabel_TerminalStatus_DCD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DCD.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DCD.Name = "toolStripStatusLabel_TerminalStatus_DCD";
@@ -2164,7 +2174,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Name = "toolStripStatusLabel_TerminalStatus_InputXOnXOff";
@@ -2182,7 +2192,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Name = "toolStripStatusLabel_TerminalStatus_OutputXOnXOff";
@@ -2209,7 +2219,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.toolStripStatusLabel_TerminalStatus_InputBreak.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_InputBreak.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.Name = "toolStripStatusLabel_TerminalStatus_InputBreak";
@@ -2225,7 +2235,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Green_12x12;
+			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Status_Green_12x12;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Name = "toolStripStatusLabel_TerminalStatus_OutputBreak";
@@ -2241,7 +2251,7 @@
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -2253,8 +2263,8 @@
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Terminal.Panel2MinSize = 97;
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 488);
-			this.splitContainer_Terminal.SplitterDistance = 390;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 464);
+			this.splitContainer_Terminal.SplitterDistance = 366;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2274,7 +2284,7 @@
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 144;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 390);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 366);
 			this.splitContainer_Predefined.SplitterDistance = 525;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2287,7 +2297,7 @@
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(525, 390);
+			this.panel_Monitor.Size = new System.Drawing.Size(525, 366);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2298,7 +2308,7 @@
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 387);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 363);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2318,7 +2328,7 @@
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 371);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 347);
 			this.splitContainer_TxMonitor.SplitterDistance = 168;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2331,7 +2341,7 @@
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 371);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 347);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2342,7 +2352,7 @@
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(162, 368);
+			this.monitor_Tx.Size = new System.Drawing.Size(162, 344);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
@@ -2362,7 +2372,7 @@
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 371);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 347);
 			this.splitContainer_RxMonitor.SplitterDistance = 171;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2375,7 +2385,7 @@
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 371);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 347);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2386,7 +2396,7 @@
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(165, 368);
+			this.monitor_Bidir.Size = new System.Drawing.Size(165, 344);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
@@ -2398,7 +2408,7 @@
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 371);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 347);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2409,7 +2419,7 @@
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(162, 368);
+			this.monitor_Rx.Size = new System.Drawing.Size(162, 344);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
@@ -2421,7 +2431,7 @@
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(183, 390);
+			this.panel_Predefined.Size = new System.Drawing.Size(183, 366);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2431,7 +2441,7 @@
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 387);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 363);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2441,7 +2451,7 @@
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(173, 368);
+			this.predefined.Size = new System.Drawing.Size(173, 344);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -2479,6 +2489,14 @@
 			// timer_IOStatusIndicator
 			// 
 			this.timer_IOStatusIndicator.Tick += new System.EventHandler(this.timer_IOStatusIndicator_Tick);
+			// 
+			// toolStripMenuItem_TerminalMenu_Terminal_Refresh
+			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Name = "toolStripMenuItem_TerminalMenu_Terminal_Refresh";
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(213, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "Refresh";
 			// 
 			// Terminal
 			// 
@@ -2578,7 +2596,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View;
 		private System.Windows.Forms.StatusStrip statusStrip_Terminal;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Status;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_IOStatusText;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_IOStatus;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_RFR;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_CTS;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_DTR;
@@ -2769,6 +2787,7 @@
 		private System.Windows.Forms.Timer timer_IOStatusIndicator;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Break;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Refresh;
 	}
 
 	#region Copied Designer Code For Backup

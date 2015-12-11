@@ -123,7 +123,7 @@
 			// button_RefreshLocalInterfaces
 			// 
 			this.button_RefreshLocalInterfaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_RefreshLocalInterfaces.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Refresh_16x16;
+			this.button_RefreshLocalInterfaces.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Tool_arrow_refresh_small_16x16;
 			this.button_RefreshLocalInterfaces.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_RefreshLocalInterfaces.Location = new System.Drawing.Point(258, 75);
 			this.button_RefreshLocalInterfaces.Name = "button_RefreshLocalInterfaces";
