@@ -32,12 +32,11 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TerminalSettings));
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-			this.label_AdvancedSettings = new System.Windows.Forms.Label();
-			this.label_TextOrBinarySettings = new System.Windows.Forms.Label();
 			this.button_AdvancedSettings = new System.Windows.Forms.Button();
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
 			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
@@ -48,10 +47,9 @@ namespace YAT.Gui.Forms
 			this.socketSettings = new YAT.Gui.Controls.SocketSettings();
 			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
 			this.serialPortSettings = new YAT.Gui.Controls.SerialPortSettings();
-			this.menuItem_Port = new System.Windows.Forms.ContextMenu();
-			this.menuItem_Port_Search = new System.Windows.Forms.MenuItem();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.button_Help = new System.Windows.Forms.Button();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_PortSettings.SuspendLayout();
 			this.SuspendLayout();
@@ -83,8 +81,6 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Settings.Controls.Add(this.label_AdvancedSettings);
-			this.groupBox_Settings.Controls.Add(this.label_TextOrBinarySettings);
 			this.groupBox_Settings.Controls.Add(this.button_AdvancedSettings);
 			this.groupBox_Settings.Controls.Add(this.button_TextOrBinarySettings);
 			this.groupBox_Settings.Controls.Add(this.terminalSelection);
@@ -95,30 +91,6 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
-			// label_AdvancedSettings
-			// 
-			this.label_AdvancedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_AdvancedSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_AdvancedSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_AdvancedSettings.Location = new System.Drawing.Point(312, 296);
-			this.label_AdvancedSettings.Name = "label_AdvancedSettings";
-			this.label_AdvancedSettings.Size = new System.Drawing.Size(135, 52);
-			this.label_AdvancedSettings.TabIndex = 4;
-			this.label_AdvancedSettings.Text = "Advanced display, radix,\r\ncommunication, send,\r\nreceive and user settings.";
-			this.label_AdvancedSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			// 
-			// label_TextOrBinarySettings
-			// 
-			this.label_TextOrBinarySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_TextOrBinarySettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_TextOrBinarySettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_TextOrBinarySettings.Location = new System.Drawing.Point(312, 47);
-			this.label_TextOrBinarySettings.Name = "label_TextOrBinarySettings";
-			this.label_TextOrBinarySettings.Size = new System.Drawing.Size(135, 52);
-			this.label_TextOrBinarySettings.TabIndex = 3;
-			this.label_TextOrBinarySettings.Text = "Text terminal dependent\r\nsettings such as encoding,\r\nend-of-line and comments.";
-			this.label_TextOrBinarySettings.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
 			// button_AdvancedSettings
 			// 
 			this.button_AdvancedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -127,6 +99,7 @@ namespace YAT.Gui.Forms
 			this.button_AdvancedSettings.Size = new System.Drawing.Size(114, 23);
 			this.button_AdvancedSettings.TabIndex = 5;
 			this.button_AdvancedSettings.Text = "&Advanced Settings...";
+			this.toolTip.SetToolTip(this.button_AdvancedSettings, "Advanced display, radix, communication, send, receive and user settings.");
 			this.button_AdvancedSettings.Click += new System.EventHandler(this.button_AdvancedSettings_Click);
 			// 
 			// button_TextOrBinarySettings
@@ -137,6 +110,7 @@ namespace YAT.Gui.Forms
 			this.button_TextOrBinarySettings.Size = new System.Drawing.Size(114, 23);
 			this.button_TextOrBinarySettings.TabIndex = 2;
 			this.button_TextOrBinarySettings.Text = "Te&xt Settings...";
+			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, end-of-line and comments.");
 			this.button_TextOrBinarySettings.Click += new System.EventHandler(this.button_TextOrBinarySettings_Click);
 			// 
 			// terminalSelection
@@ -174,8 +148,6 @@ namespace YAT.Gui.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(9, 70);
 			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
-			this.usbSerialHidDeviceSettings.ReportFormat = ((MKY.IO.Usb.SerialHidReportFormat)(resources.GetObject("usbSerialHidDeviceSettings.ReportFormat")));
-			this.usbSerialHidDeviceSettings.RxIdUsage = ((MKY.IO.Usb.SerialHidRxIdUsage)(resources.GetObject("usbSerialHidDeviceSettings.RxIdUsage")));
 			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 227);
 			this.usbSerialHidDeviceSettings.TabIndex = 3;
 			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
@@ -244,16 +216,6 @@ namespace YAT.Gui.Forms
 			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
 			this.serialPortSettings.AutoReopenChanged += new System.EventHandler(this.serialPortSettings_AutoReopenChanged);
 			// 
-			// menuItem_Port
-			// 
-			this.menuItem_Port.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem_Port_Search});
-			// 
-			// menuItem_Port_Search
-			// 
-			this.menuItem_Port_Search.Index = 0;
-			this.menuItem_Port_Search.Text = "Search For Ports...";
-			// 
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -310,8 +272,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Defaults;
 		private System.Windows.Forms.GroupBox groupBox_PortSettings;
 		private System.Windows.Forms.GroupBox groupBox_Settings;
-		private System.Windows.Forms.ContextMenu menuItem_Port;
-		private System.Windows.Forms.MenuItem menuItem_Port_Search;
 		private YAT.Gui.Controls.TerminalSelection terminalSelection;
 		private YAT.Gui.Controls.SerialPortSettings serialPortSettings;
 		private System.Windows.Forms.Button button_AdvancedSettings;
@@ -322,7 +282,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Help;
 		private YAT.Gui.Controls.UsbSerialHidDeviceSelection usbSerialHidDeviceSelection;
 		private YAT.Gui.Controls.UsbSerialHidDeviceSettings usbSerialHidDeviceSettings;
-		private System.Windows.Forms.Label label_TextOrBinarySettings;
-		private System.Windows.Forms.Label label_AdvancedSettings;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }

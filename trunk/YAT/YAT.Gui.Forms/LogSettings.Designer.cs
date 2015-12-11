@@ -32,6 +32,7 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogSettings));
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
@@ -72,6 +73,7 @@ namespace YAT.Gui.Forms
 			this.checkBox_Neat_Bidir = new System.Windows.Forms.CheckBox();
 			this.checkBox_Neat_Tx = new System.Windows.Forms.CheckBox();
 			this.button_Defaults = new System.Windows.Forms.Button();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_Options_Subdirectories.SuspendLayout();
 			this.groupBox_Options_Name.SuspendLayout();
@@ -104,8 +106,8 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Settings
 			// 
-			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Settings.Controls.Add(this.pathLabel_Root);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Subdirectories);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Name);
@@ -164,8 +166,8 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Options_Name
 			// 
-			this.groupBox_Options_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Options_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameFormat);
 			this.groupBox_Options_Name.Controls.Add(this.comboBox_Options_NameSeparator);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameChannel);
@@ -195,6 +197,7 @@ namespace YAT.Gui.Forms
 			this.comboBox_Options_NameSeparator.Name = "comboBox_Options_NameSeparator";
 			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(120, 21);
 			this.comboBox_Options_NameSeparator.TabIndex = 5;
+			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, resources.GetString("comboBox_Options_NameSeparator.ToolTip"));
 			this.comboBox_Options_NameSeparator.TextChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_TextChanged);
 			// 
 			// checkBox_Options_NameChannel
@@ -298,8 +301,8 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Raw
 			// 
-			this.groupBox_Raw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Raw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Raw.Controls.Add(this.pathLabel_Raw_Rx);
 			this.groupBox_Raw.Controls.Add(this.pathLabel_Raw_Bidir);
 			this.groupBox_Raw.Controls.Add(this.pathLabel_Raw_Tx);
@@ -370,8 +373,11 @@ namespace YAT.Gui.Forms
 			this.comboBox_Raw_Extension.Name = "comboBox_Raw_Extension";
 			this.comboBox_Raw_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Raw_Extension.TabIndex = 7;
-			this.comboBox_Raw_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Raw_Extension_Validating);
+			this.toolTip.SetToolTip(this.comboBox_Raw_Extension, "Either select a preset from the list, or fill in any valid extension.\r\n\\ / : * ? " +
+        "\" < > | are not valid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to" +
+        " request additional presets.");
 			this.comboBox_Raw_Extension.TextChanged += new System.EventHandler(this.comboBox_Raw_Extension_TextChanged);
+			this.comboBox_Raw_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Raw_Extension_Validating);
 			// 
 			// checkBox_Raw_Rx
 			// 
@@ -395,8 +401,8 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Neat
 			// 
-			this.groupBox_Neat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Neat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Neat.Controls.Add(this.pathLabel_Neat_Rx);
 			this.groupBox_Neat.Controls.Add(this.pathLabel_Neat_Bidir);
 			this.groupBox_Neat.Controls.Add(this.pathLabel_Neat_Tx);
@@ -457,8 +463,11 @@ namespace YAT.Gui.Forms
 			this.comboBox_Neat_Extension.Name = "comboBox_Neat_Extension";
 			this.comboBox_Neat_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Neat_Extension.TabIndex = 7;
-			this.comboBox_Neat_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Neat_Extension_Validating);
+			this.toolTip.SetToolTip(this.comboBox_Neat_Extension, "Either select a preset from the list, or fill in any valid extension.\r\n\\ / : * ? " +
+        "\" < > | are not valid characters.\r\n\r\nContact YAT via \"Help > Request Feature\" to" +
+        " request additional presets.");
 			this.comboBox_Neat_Extension.TextChanged += new System.EventHandler(this.comboBox_Neat_Extension_TextChanged);
+			this.comboBox_Neat_Extension.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Neat_Extension_Validating);
 			// 
 			// checkBox_Neat_Rx
 			// 
@@ -577,5 +586,6 @@ namespace YAT.Gui.Forms
 		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Bidir;
 		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Tx;
 		private System.Windows.Forms.Button button_Defaults;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }

@@ -49,8 +49,8 @@
 			// 
 			// comboBox_StopBits
 			// 
-			this.comboBox_StopBits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_StopBits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_StopBits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_StopBits.Location = new System.Drawing.Point(101, 84);
 			this.comboBox_StopBits.Name = "comboBox_StopBits";
@@ -60,21 +60,21 @@
 			// 
 			// comboBox_FlowControl
 			// 
-			this.comboBox_FlowControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_FlowControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_FlowControl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_FlowControl.Location = new System.Drawing.Point(3, 130);
 			this.comboBox_FlowControl.Name = "comboBox_FlowControl";
 			this.comboBox_FlowControl.Size = new System.Drawing.Size(254, 21);
 			this.comboBox_FlowControl.TabIndex = 9;
 			this.toolTip.SetToolTip(this.comboBox_FlowControl, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
-					"t To Send) control line");
+        "t To Send) control line");
 			this.comboBox_FlowControl.SelectedIndexChanged += new System.EventHandler(this.comboBox_FlowControl_SelectedIndexChanged);
 			// 
 			// comboBox_Parity
 			// 
-			this.comboBox_Parity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Parity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Parity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Parity.Location = new System.Drawing.Point(101, 57);
 			this.comboBox_Parity.Name = "comboBox_Parity";
@@ -84,8 +84,8 @@
 			// 
 			// comboBox_DataBits
 			// 
-			this.comboBox_DataBits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_DataBits.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_DataBits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_DataBits.Location = new System.Drawing.Point(101, 30);
 			this.comboBox_DataBits.Name = "comboBox_DataBits";
@@ -95,14 +95,16 @@
 			// 
 			// comboBox_BaudRate
 			// 
-			this.comboBox_BaudRate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_BaudRate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_BaudRate.Location = new System.Drawing.Point(101, 3);
 			this.comboBox_BaudRate.Name = "comboBox_BaudRate";
 			this.comboBox_BaudRate.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_BaudRate.TabIndex = 1;
-			this.comboBox_BaudRate.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_BaudRate_Validating);
+			this.toolTip.SetToolTip(this.comboBox_BaudRate, "Either select a standard rate from the list, or enter a non-standard rate.\r\n\r\nNon" +
+        "-standard rates are not be supported by all serial port devices.");
 			this.comboBox_BaudRate.SelectedIndexChanged += new System.EventHandler(this.comboBox_BaudRate_SelectedIndexChanged);
+			this.comboBox_BaudRate.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_BaudRate_Validating);
 			// 
 			// label_FlowControl
 			// 
@@ -167,7 +169,7 @@
 			this.label_FlowControlRemarks_2.TabIndex = 11;
 			this.label_FlowControlRemarks_2.Text = "RFR/DTR and/or XOn/XOff set manually\r\nRFR is set high while sending\r\n";
 			this.toolTip.SetToolTip(this.label_FlowControlRemarks_2, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
-					"t To Send) control line");
+        "t To Send) control line");
 			// 
 			// label_AutoReopenIntervalUnit
 			// 
@@ -221,8 +223,8 @@
 			this.Controls.Add(this.label_BaudRate);
 			this.Name = "SerialPortSettings";
 			this.Size = new System.Drawing.Size(260, 232);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SerialPortSettings_Paint);
 			this.EnabledChanged += new System.EventHandler(this.SerialPortSettings_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SerialPortSettings_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

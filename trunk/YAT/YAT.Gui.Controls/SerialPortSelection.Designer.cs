@@ -46,7 +46,7 @@
 			this.button_RefreshPorts.Name = "button_RefreshPorts";
 			this.button_RefreshPorts.Size = new System.Drawing.Size(24, 21);
 			this.button_RefreshPorts.TabIndex = 2;
-			this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh serial port list");
+			this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh the list with the serial ports available on the system");
 			this.button_RefreshPorts.Click += new System.EventHandler(this.button_RefreshPorts_Click);
 			// 
 			// comboBox_Port
@@ -58,6 +58,7 @@
 			this.comboBox_Port.Name = "comboBox_Port";
 			this.comboBox_Port.Size = new System.Drawing.Size(251, 21);
 			this.comboBox_Port.TabIndex = 1;
+			this.toolTip.SetToolTip(this.comboBox_Port, "Either select a port from the list, or fill in \"COM..\" (COM1..COM65535).");
 			this.comboBox_Port.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Port_Validating);
 			// 
 			// label_Port

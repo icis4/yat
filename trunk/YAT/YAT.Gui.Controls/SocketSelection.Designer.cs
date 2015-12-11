@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.label_RemoteHost = new System.Windows.Forms.Label();
 			this.label_RemotePort = new System.Windows.Forms.Label();
 			this.textBox_RemotePort = new System.Windows.Forms.TextBox();
@@ -37,6 +38,7 @@
 			this.label_LocalInterface = new System.Windows.Forms.Label();
 			this.comboBox_LocalInterface = new System.Windows.Forms.ComboBox();
 			this.button_RefreshLocalInterfaces = new System.Windows.Forms.Button();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
 			// label_RemoteHost
@@ -75,6 +77,8 @@
 			this.comboBox_RemoteHost.Name = "comboBox_RemoteHost";
 			this.comboBox_RemoteHost.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_RemoteHost.TabIndex = 1;
+			this.toolTip.SetToolTip(this.comboBox_RemoteHost, "Either select a preset from the list, or fill in any IPv4 or IPv6 address.\r\n\r\nCon" +
+        "tact YAT via \"Help > Request Feature\" to request additional presets.");
 			this.comboBox_RemoteHost.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RemoteHost_Validating);
 			// 
 			// textBox_LocalPort
@@ -160,5 +164,6 @@
 		private System.Windows.Forms.Label label_LocalInterface;
 		private System.Windows.Forms.ComboBox comboBox_LocalInterface;
 		private System.Windows.Forms.Button button_RefreshLocalInterfaces;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }
