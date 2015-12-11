@@ -97,6 +97,7 @@ Important changes:
 - Test board (serial COM ports, USB devices,...) created and test cases adapted accordingly.
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326)
 - Parser error message improved in terms of accuracy of the error location (bug #268)
+- Additional hints (tool tips) added to the settings dialogs (feature request #189)
 - Help window is now sizeable to display more/all content (feature request #237)
 - Visual Studio upgraded to 2015 Community Edition, incl. installer (VSI).
 

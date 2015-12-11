@@ -360,21 +360,17 @@ namespace YAT.Gui.Forms
 			terminalSelection.TerminalType = tt;
 
 			string button = "&";
-			string label = "";
+			string toolTipCaption = "";
 			switch (tt)
 			{
 				case Domain.TerminalType.Text:
 					button += "Text";
-					label = "Text terminal dependent" + Environment.NewLine +
-							"settings such as encoding," + Environment.NewLine +
-							"end-of-line and comments.";
+					toolTipCaption = "Text terminal dependent settings such as encoding, end-of-line and comments.";
 					break;
 
 				case Domain.TerminalType.Binary:
 					button += "Binary";
-					label = "Binary terminal dependent" + Environment.NewLine +
-							"settings such as sequence" + Environment.NewLine +
-							"and timeout line breaks.";
+					toolTipCaption = "Binary terminal dependent settings such as sequence and timeout line breaks.";
 					break;
 
 				default:
@@ -382,7 +378,7 @@ namespace YAT.Gui.Forms
 			}
 			button += " Settings...";
 			button_TextOrBinarySettings.Text = button;
-			label_TextOrBinarySettings.Text = label;
+			toolTip.SetToolTip(button_TextOrBinarySettings, toolTipCaption);
 
 			Domain.IOType ioType = this.settingsInEdit.Terminal.IO.IOType;
 			terminalSelection.IOType = ioType;

@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.label_LengthLineBreakUnit = new System.Windows.Forms.Label();
 			this.textBox_SequenceLineBreakSequence = new System.Windows.Forms.TextBox();
 			this.textBox_LengthLineBreak = new System.Windows.Forms.TextBox();
@@ -36,6 +37,7 @@
 			this.label_TimedLineBreakUnit = new System.Windows.Forms.Label();
 			this.textBox_TimedLineBreakTimeout = new System.Windows.Forms.TextBox();
 			this.checkBox_TimedLineBreak = new System.Windows.Forms.CheckBox();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
 			// label_LengthLineBreakUnit
@@ -56,6 +58,7 @@
 			this.textBox_SequenceLineBreakSequence.Size = new System.Drawing.Size(106, 20);
 			this.textBox_SequenceLineBreakSequence.TabIndex = 4;
 			this.textBox_SequenceLineBreakSequence.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_SequenceLineBreakSequence, "Can be any sequence of bytes, e.g. \\h(17 00) or <ETB><NUL>");
 			this.textBox_SequenceLineBreakSequence.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SequenceLineBreakSequence_Validating);
 			// 
 			// textBox_LengthLineBreak
@@ -148,5 +151,6 @@
 		private System.Windows.Forms.Label label_TimedLineBreakUnit;
 		private System.Windows.Forms.TextBox textBox_TimedLineBreakTimeout;
 		private System.Windows.Forms.CheckBox checkBox_TimedLineBreak;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }
