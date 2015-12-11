@@ -3233,8 +3233,8 @@ namespace YAT.Gui.Forms
 
 		private void SetIOStatus()
 		{
-			Image on  = Properties.Resources.Image_Green_12x12;
-			Image off = Properties.Resources.Image_Red_12x12;
+			Image on  = Properties.Resources.Image_Status_Green_12x12;
+			Image off = Properties.Resources.Image_Status_Red_12x12;
 
 			if (TerminalIsAvailable)
 			{
@@ -3263,7 +3263,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
 				}
 
-				toolStripStatusLabel_TerminalStatus_IOStatusText.Text = this.terminal.IOStatusText;
+				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
 			}
 			else
 			{
@@ -3272,7 +3272,7 @@ namespace YAT.Gui.Forms
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag     = IOStatusIndicatorControl.Steady;
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image   = off;
 
-				toolStripStatusLabel_TerminalStatus_IOStatusText.Text = "";
+				toolStripStatusLabel_TerminalStatus_IOStatus.Text = "";
 			}
 		}
 
@@ -3291,8 +3291,8 @@ namespace YAT.Gui.Forms
 				{
 					ioStatusIndicatorFlashingIsOn = !ioStatusIndicatorFlashingIsOn; // Toggle flashing phase (initially 'false').
 
-					Image onPhase  = Properties.Resources.Image_Green_12x12;
-					Image offPhase = Properties.Resources.Image_Grey_12x12;
+					Image onPhase  = Properties.Resources.Image_Status_Green_12x12;
+					Image offPhase = Properties.Resources.Image_Status_Grey_12x12;
 
 					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = (ioStatusIndicatorFlashingIsOn ? onPhase : offPhase);
 				}
@@ -3357,8 +3357,8 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
 				}
 
-				Image on  = Properties.Resources.Image_Green_12x12;
-				Image off = Properties.Resources.Image_Red_12x12;
+				Image on  = Properties.Resources.Image_Status_Green_12x12;
+				Image off = Properties.Resources.Image_Status_Red_12x12;
 
 				if (isOpen)
 				{
@@ -3457,7 +3457,7 @@ namespace YAT.Gui.Forms
 		private void TriggerRfrLuminescence()
 		{
 			timer_RfrLuminescence.Enabled = false;
-			toolStripStatusLabel_TerminalStatus_RFR.Image = Properties.Resources.Image_Green_12x12;
+			toolStripStatusLabel_TerminalStatus_RFR.Image = Properties.Resources.Image_Status_Green_12x12;
 			timer_RfrLuminescence.Interval = RfrLuminescenceInterval;
 			timer_RfrLuminescence.Enabled = true;
 		}
@@ -3472,8 +3472,8 @@ namespace YAT.Gui.Forms
 		{
 			bool isOpen = this.terminal.IsOpen;
 
-			Image on  = Properties.Resources.Image_Green_12x12;
-			Image off = Properties.Resources.Image_Red_12x12;
+			Image on  = Properties.Resources.Image_Status_Green_12x12;
+			Image off = Properties.Resources.Image_Status_Red_12x12;
 
 			if (isOpen)
 			{

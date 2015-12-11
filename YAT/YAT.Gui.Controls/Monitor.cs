@@ -690,7 +690,7 @@ namespace YAT.Gui.Controls
 
 		private void Monitor_Resize(object sender, EventArgs e)
 		{
-			const int IconDistance = 14; // 14 relates to half the size of the direction icon.
+			const int IconDistance = 16; // 16 relates to half the size of the direction icon.
 			int middle = (Width / 2);
 
 			label_TimeStatus.Width  = middle - IconDistance;
@@ -899,9 +899,9 @@ namespace YAT.Gui.Controls
 			{
 				switch (this.repositoryType)
 				{
-					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_Tx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Green;    break;
-					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28_Grey; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_Green; break;
-					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_Rx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Green;    break;
+					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_arrow_right_grey_32x32;   this.imageActive = Properties.Resources.Image_Monitor_arrow_right_32x32;   break;
+					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_arrow_refresh_grey_32x32; this.imageActive = Properties.Resources.Image_Monitor_arrow_refresh_32x32; break;
+					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_arrow_left_grey_32x32;    this.imageActive = Properties.Resources.Image_Monitor_arrow_left_32x32;    break;
 				}
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
 

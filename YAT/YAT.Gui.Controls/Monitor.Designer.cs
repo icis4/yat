@@ -90,7 +90,7 @@
 			this.label_TimeStatus.AutoEllipsis = true;
 			this.label_TimeStatus.Location = new System.Drawing.Point(0, 0);
 			this.label_TimeStatus.Name = "label_TimeStatus";
-			this.label_TimeStatus.Size = new System.Drawing.Size(136, 30);
+			this.label_TimeStatus.Size = new System.Drawing.Size(132, 30);
 			this.label_TimeStatus.TabIndex = 0;
 			this.label_TimeStatus.Text = "m:ss\r\nm:ss";
 			this.label_TimeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -100,9 +100,9 @@
 			// 
 			this.label_CountStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_CountStatus.AutoEllipsis = true;
-			this.label_CountStatus.Location = new System.Drawing.Point(164, 0);
+			this.label_CountStatus.Location = new System.Drawing.Point(168, 0);
 			this.label_CountStatus.Name = "label_CountStatus";
-			this.label_CountStatus.Size = new System.Drawing.Size(136, 30);
+			this.label_CountStatus.Size = new System.Drawing.Size(132, 30);
 			this.label_CountStatus.TabIndex = 1;
 			this.label_CountStatus.Text = "888 | 888 @ 8/s | 8/s\r\n888 | 888 @ 8/s | 8/s";
 			this.label_CountStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -110,10 +110,10 @@
 			// 
 			// pictureBox_Monitor
 			// 
-			this.pictureBox_Monitor.BackgroundImage = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_Bidir_28x28_Grey;
+			this.pictureBox_Monitor.BackgroundImage = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_arrow_refresh_grey_32x32;
 			this.pictureBox_Monitor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.pictureBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pictureBox_Monitor.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_Bidir_28x28_Green;
+			this.pictureBox_Monitor.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_arrow_refresh_32x32;
 			this.pictureBox_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox_Monitor.Name = "pictureBox_Monitor";
 			this.pictureBox_Monitor.Size = new System.Drawing.Size(300, 31);

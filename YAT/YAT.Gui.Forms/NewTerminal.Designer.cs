@@ -111,8 +111,6 @@ namespace YAT.Gui.Forms
 			// 
 			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(9, 65);
 			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
-			this.usbSerialHidDeviceSettings.ReportFormat = ((MKY.IO.Usb.SerialHidReportFormat)(resources.GetObject("usbSerialHidDeviceSettings.ReportFormat")));
-			this.usbSerialHidDeviceSettings.RxIdUsage = ((MKY.IO.Usb.SerialHidRxIdUsage)(resources.GetObject("usbSerialHidDeviceSettings.RxIdUsage")));
 			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 232);
 			this.usbSerialHidDeviceSettings.TabIndex = 4;
 			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
@@ -205,7 +203,7 @@ namespace YAT.Gui.Forms
 			// 
 			// pictureBox_New
 			// 
-			this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_16x16;
+			this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_application_add_32x32;
 			this.pictureBox_New.Location = new System.Drawing.Point(12, 18);
 			this.pictureBox_New.Name = "pictureBox_New";
 			this.pictureBox_New.Size = new System.Drawing.Size(48, 48);

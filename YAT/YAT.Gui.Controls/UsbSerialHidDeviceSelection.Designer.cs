@@ -38,7 +38,7 @@
 			// button_RefreshPorts
 			// 
 			this.button_RefreshPorts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_RefreshPorts.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Refresh_16x16;
+			this.button_RefreshPorts.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Tool_arrow_refresh_small_16x16;
 			this.button_RefreshPorts.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_RefreshPorts.Location = new System.Drawing.Point(258, 22);
 			this.button_RefreshPorts.Name = "button_RefreshPorts";
