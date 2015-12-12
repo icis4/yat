@@ -1780,6 +1780,7 @@ namespace YAT.Model
 				if (t.SettingsRoot.UserName == userName)
 					return (t);
 			}
+
 			foreach (Terminal t in this.terminals)
 			{
 				if (StringEx.EqualsOrdinalIgnoreCase(t.SettingsRoot.UserName, userName))
@@ -1928,6 +1929,54 @@ namespace YAT.Model
 				return (false);
 
 			return (autoSaveIsAllowed);
+		}
+
+		/// <summary></summary>
+		public virtual bool AllLogOn()
+		{
+			AssertNotDisposed();
+
+			bool success = true;
+
+			foreach (Terminal t in this.terminals)
+			{
+				if (!t.LogOn())
+					success = false;
+			}
+
+			return (success);
+		}
+
+		/// <summary></summary>
+		public virtual bool AllLogOff()
+		{
+			AssertNotDisposed();
+
+			bool success = true;
+
+			foreach (Terminal t in this.terminals)
+			{
+				if (!t.LogOff())
+					success = false;
+			}
+
+			return (success);
+		}
+
+		/// <summary></summary>
+		public virtual bool AllLogClear()
+		{
+			AssertNotDisposed();
+
+			bool success = true;
+
+			foreach (Terminal t in this.terminals)
+			{
+				if (!t.LogClear())
+					success = false;
+			}
+
+			return (success);
 		}
 
 		#endregion

@@ -35,11 +35,11 @@
 cd /D %~dp0
 
 :: 1) Retrieve the name of this batch (without extension)
-SET name=%~n0
+SET NAME=%~n0
 
 :: 2) Invoke the according VSPE settings
 ::    Unfortunately, VSPE doesn't properly start minimized with the /MIN option
-START "VSPE" /B "%name%.vspe"
+START "VSPE" /B "%NAME%.vspe"
 
 :: =================================================================================================
 ::  End of

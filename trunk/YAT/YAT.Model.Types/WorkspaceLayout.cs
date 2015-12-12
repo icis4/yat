@@ -64,9 +64,22 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// All child windows are tiled vertically within the client region of the MDI parent form.
 		/// </summary>
-		TileVertical = MdiLayout.TileVertical // = 2
+		TileVertical = MdiLayout.TileVertical, // = 2
 
-		// System.Windows.Forms.MdiLayout.ArrangeIcons is not supported by YAT.
+	/////// <summary>
+	/////// All MDI child icons are arranged within the client region of the MDI parent form.
+	/////// </summary>
+	////ArrangeIcons = MdiLayout.ArrangeIcons, // = 3 is not supported by YAT.
+
+		/// <summary>
+		/// All child windows are maximized within the client region of the MDI parent form.
+		/// </summary>
+		Maximize = 4,
+
+		/// <summary>
+		/// All child windows are minimized within the client region of the MDI parent form.
+		/// </summary>
+		Minimize = 5
 	}
 
 	#endregion
@@ -84,16 +97,18 @@ namespace YAT.Model.Types
 	{
 		#region String Definitions
 
-		private const string Manual_string = "Manual";
-		private const string Cascade_string = "Cascade";
+		private const string Manual_string         = "Manual";
+		private const string Cascade_string        = "Cascade";
 		private const string TileHorizontal_string = "TileHorizontal";
-		private const string TileVertical_string = "TileVertical";
+		private const string TileVertical_string   = "TileVertical";
+		private const string Maximize_string       = "Maximize";
+		private const string Minimize_string       = "Minimize";
 
 		#endregion
 
-		/// <summary>Default is <see cref="WorkspaceLayout.Manual"/>.</summary>
+		/// <summary>Default is <see cref="WorkspaceLayout.Maximize"/>.</summary>
 		public WorkspaceLayoutEx()
-			: base(WorkspaceLayout.Manual)
+			: base(WorkspaceLayout.Maximize)
 		{
 		}
 
@@ -115,6 +130,8 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Cascade:        return (Cascade_string);
 				case WorkspaceLayout.TileHorizontal: return (TileHorizontal_string);
 				case WorkspaceLayout.TileVertical:   return (TileVertical_string);
+				case WorkspaceLayout.Maximize:       return (Maximize_string);
+				case WorkspaceLayout.Minimize:       return (Minimize_string);
 			}
 			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
 		}
@@ -131,6 +148,8 @@ namespace YAT.Model.Types
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
+			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Maximize));
+			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Minimize));
 			return (a.ToArray());
 		}
 
@@ -157,7 +176,12 @@ namespace YAT.Model.Types
 		{
 			s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
+			if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string))
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.Manual);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
 			{
 				result = new WorkspaceLayoutEx(WorkspaceLayout.Cascade);
 				return (true);
@@ -172,10 +196,15 @@ namespace YAT.Model.Types
 				result = new WorkspaceLayoutEx(WorkspaceLayout.TileVertical);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Maximize_string) ||
 			         string.IsNullOrEmpty(s)) // Default!
 			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.Manual);
+				result = new WorkspaceLayoutEx(WorkspaceLayout.Maximize);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Minimize_string))
+			{
+				result = new WorkspaceLayoutEx(WorkspaceLayout.Minimize);
 				return (true);
 			}
 			else
@@ -223,6 +252,8 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
+				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout'!"));
+				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout'!"));
 				default:                             throw (new InvalidOperationException("Invalid workspace layout!"));
 			}
 		}

@@ -108,7 +108,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestEmptyPrepare()
 		{
-			using (Model.Main main = new Main())
+			using (Main main = new Main())
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -138,7 +138,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTerminalFilePathPrepare()
 		{
-			using (Model.Main main = new Main(TerminalFilePath))
+			using (Main main = new Main(TerminalFilePath))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -148,7 +148,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -170,7 +170,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestWorkspaceFilePathPrepare()
 		{
-			using (Model.Main main = new Main(WorkspaceFilePath))
+			using (Main main = new Main(WorkspaceFilePath))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -180,7 +180,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -203,7 +203,7 @@ namespace YAT.Model.Test
 		public virtual void TestOpenOptionPrepare()
 		{
 			// Workspace only.
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + WorkspaceFilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + WorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -214,7 +214,7 @@ namespace YAT.Model.Test
 			}
 
 			// Terminal only.
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -225,7 +225,7 @@ namespace YAT.Model.Test
 			}
 
 			// Workspace + Terminal = Terminal. (The last argument is used.)
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + WorkspaceFilePath, "--Open=" + Terminal1FilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + WorkspaceFilePath, "--Open=" + Terminal1FilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -236,7 +236,7 @@ namespace YAT.Model.Test
 			}
 
 			// Terminal + Workspace = Workspace. (The last argument is used.)
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath, "--Open=" + WorkspaceFilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath, "--Open=" + WorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -247,7 +247,7 @@ namespace YAT.Model.Test
 			}
 
 			// Terminal1 + Terminal2 = Terminal2. (The last argument is used.)
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath, "--Open=" + Terminal2FilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath, "--Open=" + Terminal2FilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -259,7 +259,7 @@ namespace YAT.Model.Test
 
 			// Invalid file.
 			string invalidFilePath = "MyFile.txt";
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + invalidFilePath })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + invalidFilePath })))
 			{
 				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 
@@ -279,7 +279,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestRecentOptionPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Recent" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Recent" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -300,7 +300,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewOptionPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -319,7 +319,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewSerialPortOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New", "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -340,7 +340,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Interval, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Interval);
 
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
-				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsStarted);
+				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsOn);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
@@ -366,7 +366,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewTcpAutoSocketOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=TCPAutoSocket", "--RemotePort=12345", "--LocalPort=56789", "--OpenTerminal", "--BeginLog" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=TCPAutoSocket", "--RemotePort=12345", "--LocalPort=56789", "--OpenTerminal", "--LogOn" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -382,7 +382,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(56789, main.StartArgs.TerminalSettings.Settings.IO.Socket.LocalPort);
 
 				Assert.IsTrue(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
-				Assert.IsTrue(main.StartArgs.TerminalSettings.Settings.LogIsStarted);
+				Assert.IsTrue(main.StartArgs.TerminalSettings.Settings.LogIsOn);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
@@ -408,7 +408,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestNewUsbSerialHidOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=USBSerHID", "--VendorID=1234", "--ProductID=ABCD", "--NoUsbAutoOpen" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--New", "--IOType=USBSerHID", "--VendorID=1234", "--ProductID=ABCD", "--NoUsbAutoOpen" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -422,7 +422,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.AutoOpen);
 
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);
-				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsStarted);
+				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsOn);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
 				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
@@ -448,7 +448,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestReplaceTerminalSettingsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--BaudRate=19200" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--BaudRate=19200" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -479,7 +479,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestReplaceTerminalSettingsInWorkspacePrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--Terminal=2", "--DataBits=7" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--Terminal=2", "--DataBits=7" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -510,7 +510,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTransmitFilePathOptionPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + TerminalFilePath, "--KeepOpenOnError"})))
+			using (Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + TerminalFilePath, "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -540,7 +540,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTransmitFilePathOptionInWorkspacePrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + TerminalFilePath, "--Terminal=2", "--KeepOpenOnError"})))
+			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + TerminalFilePath, "--Terminal=2", "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -571,7 +571,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestEmptyOptionPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Empty" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Empty" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -598,7 +598,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTileOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -606,7 +606,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(main.StartArgs.TileVertical);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileVertical" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--TileVertical" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -614,7 +614,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue (main.StartArgs.TileVertical);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
 			{
 				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 
@@ -634,22 +634,22 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestInvalidPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--Blablabla" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "--Blablabla" })))
 			{
 				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "+r" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "+r" })))
 			{
 				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "-+Recent" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "-+Recent" })))
 			{
 				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
 
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "+-Recent" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { "+-Recent" })))
 			{
 				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
 			}
@@ -664,12 +664,12 @@ namespace YAT.Model.Test
 		// Private Methods
 		//==========================================================================================
 
-		private static void PrepareMainAndVerifyResult(Model.Main main)
+		private static void PrepareMainAndVerifyResult(Main main)
 		{
 			PrepareMainAndVerifyResult(main, Main.Result.Success);
 		}
 
-		private static void PrepareMainAndVerifyResult(Model.Main main, Model.Main.Result expectedMainResult)
+		private static void PrepareMainAndVerifyResult(Main main, Model.Main.Result expectedMainResult)
 		{
 			Model.Main.Result mainResult = main.PrepareStart();
 			Assert.AreEqual(expectedMainResult, mainResult);

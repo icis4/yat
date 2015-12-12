@@ -608,7 +608,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual bool IsStarted
+		public virtual bool IsOn
 		{
 			get
 			{

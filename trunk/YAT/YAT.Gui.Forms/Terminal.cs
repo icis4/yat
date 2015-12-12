@@ -420,7 +420,12 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Clear_Click(object sender, EventArgs e)
 		{
-			ClearAllMonitors();
+			ClearMonitors();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_Refresh_Click(object sender, EventArgs e)
+		{
+			RefreshMonitors();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SelectAll_Click(object sender, EventArgs e)
@@ -550,11 +555,11 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			bool logIsSelected = this.settingsRoot.Log.AnyRawOrNeat;
-			bool logIsStarted  = this.settingsRoot.LogIsStarted;
+			bool logIsOn       = this.settingsRoot.LogIsOn;
 
-			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logIsSelected && !logIsStarted;
-			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsSelected && logIsStarted;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected && logIsStarted;
+			toolStripMenuItem_TerminalMenu_Log_On.Enabled    = logIsSelected && !logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Off.Enabled   = logIsSelected &&  logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected &&  logIsOn;
 
 			this.isSettingControls.Leave();
 		}
@@ -564,19 +569,19 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Log_Begin_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Log_On_Click(object sender, EventArgs e)
 		{
-			this.terminal.BeginLog();
+			this.terminal.LogOn();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Log_End_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Log_Off_Click(object sender, EventArgs e)
 		{
-			this.terminal.EndLog();
+			this.terminal.LogOff();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Clear_Click(object sender, EventArgs e)
 		{
-			this.terminal.ClearLog();
+			this.terminal.LogClear();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Settings_Click(object sender, EventArgs e)
@@ -1841,6 +1846,18 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool LogIsOn
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.LogIsOn);
+				else
+					return (false);
+			}
+		}
+
 		private bool IsStartingUp
 		{
 			get { return (this.isStartingUp); }
@@ -1895,6 +1912,12 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestEditTerminalSettings()
+		{
+			ShowTerminalSettings();
+		}
+
+		/// <summary></summary>
 		public virtual void RequestRadix(Domain.Radix radix)
 		{
 			this.settingsRoot.Display.TxRadix = radix;
@@ -1907,9 +1930,9 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestSaveToFile()
+		public virtual void RequestRefresh()
 		{
-			ShowSaveMonitorDialog(GetMonitor(this.lastMonitorSelection));
+			this.terminal.ReloadRepositories();
 		}
 
 		/// <summary></summary>
@@ -1919,15 +1942,39 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestSaveToFile()
+		{
+			ShowSaveMonitorDialog(GetMonitor(this.lastMonitorSelection));
+		}
+
+		/// <summary></summary>
 		public virtual void RequestPrint()
 		{
 			ShowPrintMonitorDialog(GetMonitor(this.lastMonitorSelection));
 		}
 
 		/// <summary></summary>
-		public virtual void RequestEditTerminalSettings()
+		public virtual void RequestEditLogSettings()
 		{
-			ShowTerminalSettings();
+			ShowLogSettings();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestLogOn()
+		{
+			this.terminal.LogOn();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestLogOff()
+		{
+			this.terminal.LogOff();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestEditFormatSettings()
+		{
+			ShowFormatSettings();
 		}
 
 		#endregion
@@ -2406,9 +2453,14 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void ClearAllMonitors()
+		private void ClearMonitors()
 		{
 			this.terminal.ClearRepositories();
+		}
+
+		private void RefreshMonitors()
+		{
+			this.terminal.ReloadRepositories();
 		}
 
 		#endregion

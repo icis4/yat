@@ -444,7 +444,7 @@ namespace YAT.Gui.Forms
 
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
-			toolStripMenuItem_MainMenu_File_SaveAll.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_File_SaveAll.Enabled  = childIsReady;
 
 			this.isSettingControls.Leave();
 		}
@@ -561,6 +561,49 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#region Controls Event Handlers > Main Menu > Log
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Main Menu > Log
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Must be called each time MDI child status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_MainMenu_Log_SetMenuItems()
+		{
+			this.isSettingControls.Enter();
+
+			bool childIsReady = (ActiveMdiChild != null);
+			toolStripMenuItem_MainMenu_Log_AllOn.Enabled    = childIsReady;
+			toolStripMenuItem_MainMenu_Log_AllOff.Enabled   = childIsReady;
+			toolStripMenuItem_MainMenu_Log_AllClear.Enabled = childIsReady;
+
+			this.isSettingControls.Leave();
+		}
+
+		private void toolStripMenuItem_MainMenu_Log_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_MainMenu_Log_SetMenuItems();
+		}
+
+		private void toolStripMenuItem_MainMenu_Log_AllOn_Click(object sender, EventArgs e)
+		{
+			this.workspace.AllLogOn();
+		}
+
+		private void toolStripMenuItem_MainMenu_Log_AllOff_Click(object sender, EventArgs e)
+		{
+			this.workspace.AllLogOff();
+		}
+
+		private void toolStripMenuItem_MainMenu_Log_AllClear_Click(object sender, EventArgs e)
+		{
+			this.workspace.AllLogClear();
+		}
+
+		#endregion
+
 		#region Controls Event Handlers > Main Menu > Window
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Main Menu > Window
@@ -578,6 +621,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled   = childIsReady;
+			toolStripMenuItem_MainMenu_Window_Maximize.Enabled       = childIsReady;
+			toolStripMenuItem_MainMenu_Window_Minimize.Enabled       = childIsReady;
 
 			this.isSettingControls.Leave();
 
@@ -611,7 +656,17 @@ namespace YAT.Gui.Forms
 		{
 			SetTerminalLayout(WorkspaceLayout.TileVertical);
 		}
-		
+
+		private void toolStripMenuItem_MainMenu_Window_Maximize_Click(object sender, EventArgs e)
+		{
+			SetTerminalLayout(WorkspaceLayout.Maximize);
+		}
+
+		private void toolStripMenuItem_MainMenu_Window_Minimize_Click(object sender, EventArgs e)
+		{
+			SetTerminalLayout(WorkspaceLayout.Minimize);
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > Main Menu > Help
@@ -679,21 +734,25 @@ namespace YAT.Gui.Forms
 
 			bool terminalFileIsWritable = false;
 			if (childIsReady)
-				terminalFileIsWritable = ((Gui.Forms.Terminal)ActiveMdiChild).SettingsFileIsWritable;
+				terminalFileIsWritable = ((Terminal)ActiveMdiChild).SettingsFileIsWritable;
 
 			bool terminalIsStopped = false;
 			if (childIsReady)
-				terminalIsStopped = ((Gui.Forms.Terminal)ActiveMdiChild).IsStopped;
+				terminalIsStopped = ((Terminal)ActiveMdiChild).IsStopped;
 
 			bool terminalIsStarted = false;
 			if (childIsReady)
-				terminalIsStarted = ((Gui.Forms.Terminal)ActiveMdiChild).IsStarted;
+				terminalIsStarted = ((Terminal)ActiveMdiChild).IsStarted;
+
+			bool logIsOn = false;
+			if (childIsReady)
+				logIsOn = ((Terminal)ActiveMdiChild).LogIsOn;
 
 			bool radixIsReady = false;
 			Domain.Radix radix = Domain.Radix.None;
 			if (childIsReady)
 			{
-				Model.Terminal terminal = ((Gui.Forms.Terminal)ActiveMdiChild).UnderlyingTerminal;
+				Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
 				if ((terminal != null) && (!terminal.IsDisposed))
 				{
 					radixIsReady = !(terminal.SettingsRoot.Display.SeparateTxRxRadix);
@@ -702,9 +761,10 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			toolStripButton_MainTool_File_Save.Enabled      = childIsReady && terminalFileIsWritable;
-			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && terminalIsStopped;
-			toolStripButton_MainTool_Terminal_Stop.Enabled  = childIsReady && terminalIsStarted;
+			toolStripButton_MainTool_File_Save.Enabled         = childIsReady && terminalFileIsWritable;
+			toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
+			toolStripButton_MainTool_Terminal_Stop.Enabled     = childIsReady && terminalIsStarted;
+			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
 
 			toolStripButton_MainTool_Terminal_Radix_String.Enabled = childIsReady && radixIsReady;
 			toolStripButton_MainTool_Terminal_Radix_Char.Enabled   = childIsReady && radixIsReady;
@@ -721,10 +781,14 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_Terminal_Radix_Hex.Checked    = (radix == Domain.Radix.Hex);
 
 			toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
-			toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
+			toolStripButton_MainTool_Terminal_Refresh.Enabled         = childIsReady;
 			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
+			toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
 			toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
-			toolStripButton_MainTool_Terminal_Settings.Enabled        = childIsReady;
+
+			toolStripButton_MainTool_Terminal_Log_Settings.Enabled = childIsReady;
+			toolStripButton_MainTool_Terminal_Log_On.Enabled       = childIsReady && !logIsOn;
+			toolStripButton_MainTool_Terminal_Log_Off.Enabled      = childIsReady &&  logIsOn;
 
 			this.isSettingControls.Leave();
 		}
@@ -752,6 +816,11 @@ namespace YAT.Gui.Forms
 		private void toolStripButton_MainTool_Terminal_Stop_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestStopTerminal();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestEditTerminalSettings();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Radix_String_Click(object sender, EventArgs e)
@@ -789,9 +858,9 @@ namespace YAT.Gui.Forms
 			((Terminal)ActiveMdiChild).RequestClear();
 		}
 
-		private void toolStripButton_MainTool_Terminal_SaveToFile_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_Refresh_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestSaveToFile();
+			((Terminal)ActiveMdiChild).RequestRefresh();
 		}
 
 		private void toolStripButton_MainTool_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
@@ -799,14 +868,34 @@ namespace YAT.Gui.Forms
 			((Terminal)ActiveMdiChild).RequestCopyToClipboard();
 		}
 
+		private void toolStripButton_MainTool_Terminal_SaveToFile_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestSaveToFile();
+		}
+
 		private void toolStripButton_MainTool_Terminal_Print_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestPrint();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_Log_Settings_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestEditTerminalSettings();
+			((Terminal)ActiveMdiChild).RequestEditLogSettings();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Log_On_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestLogOn();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Log_Off_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestLogOff();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestEditFormatSettings();
 		}
 
 		#endregion
@@ -1402,6 +1491,7 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_SetControls();
 
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
+			toolStripMenuItem_MainMenu_Log_SetMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 		}
 
@@ -1623,6 +1713,14 @@ namespace YAT.Gui.Forms
 					LayoutMdi((WorkspaceLayoutEx)layout);
 					break;
 
+				case WorkspaceLayout.Maximize:
+					MaximizeMdi();
+					break;
+
+				case WorkspaceLayout.Minimize:
+					MinimizeMdi();
+					break;
+
 				default:
 					throw (new InvalidOperationException("Program execution should never get here, " + layout + " is an invalid workspace layout!"));
 			}
@@ -1643,6 +1741,26 @@ namespace YAT.Gui.Forms
 			this.isLayoutingMdi = true;
 			base.LayoutMdi(value);
 			this.isLayoutingMdi = false;
+		}
+
+		private void MaximizeMdi()
+		{
+			if (ActiveMdiChild != null)
+			{
+				this.isLayoutingMdi = true;
+				ActiveMdiChild.WindowState = FormWindowState.Maximized;
+				this.isLayoutingMdi = false;
+			}
+		}
+
+		private void MinimizeMdi()
+		{
+			if (ActiveMdiChild != null)
+			{
+				this.isLayoutingMdi = true;
+				ActiveMdiChild.WindowState = FormWindowState.Minimized;
+				this.isLayoutingMdi = false;
+			}
 		}
 
 		#endregion
@@ -1802,7 +1920,27 @@ namespace YAT.Gui.Forms
 		private void terminalMdiChild_Resize(object sender, EventArgs e)
 		{
 			if (!isLayoutingMdi)
-				SetTerminalLayout(WorkspaceLayout.Manual);
+			{
+				Terminal t = (sender as Terminal);
+				if (t != null)
+				{
+					switch (t.WindowState)
+					{
+						case FormWindowState.Normal:
+							SetTerminalLayout(WorkspaceLayout.Manual);
+							break;
+
+						case FormWindowState.Minimized:
+							SetTerminalLayout(WorkspaceLayout.Minimize);
+							break;
+
+						case FormWindowState.Maximized:
+						default:
+							SetTerminalLayout(WorkspaceLayout.Maximize);
+							break;
+					}
+				}
+			}
 		}
 
 		private void terminalMdiChild_FormClosed(object sender, FormClosedEventArgs e)
@@ -1837,7 +1975,7 @@ namespace YAT.Gui.Forms
 		{
 			if (ActiveMdiChild != null)
 			{
-				string childText = "[" + ((Gui.Forms.Terminal)ActiveMdiChild).Text + "]";
+				string childText = "[" + ((Terminal)ActiveMdiChild).Text + "]";
 				switch (status)
 				{
 					case Status.ChildActivated: return (childText + " activated");

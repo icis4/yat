@@ -209,6 +209,7 @@ namespace YAT.Settings.Terminal
 			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                           }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
 				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
+				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                   new string[] { "LogIsStarted" } ),
 			};
 
 		/// <summary></summary>
@@ -243,10 +244,10 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual bool LogIsStarted
+		public virtual bool LogIsOn
 		{
-			get { return (this.implicit_.LogIsStarted); }
-			set { this.implicit_.LogIsStarted = value;  }
+			get { return (this.implicit_.LogIsOn); }
+			set { this.implicit_.LogIsOn = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>

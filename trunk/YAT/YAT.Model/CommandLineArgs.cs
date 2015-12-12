@@ -253,8 +253,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]
-		[OptionArg(Names = new string[] { "Log", "BeginLog" }, ShortName = "bl", Description = "Begin logging.")]
-		public bool BeginLog;
+		[OptionArg(Names = new string[] { "Log", "LogOn" }, ShortName = "lo", Description = "Switch logging on.")]
+		public bool LogOn;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
