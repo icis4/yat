@@ -526,14 +526,14 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool LogIsStarted
+		public virtual bool LogIsOn
 		{
 			get
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				if (this.terminal != null)
-					return (this.log.IsStarted);
+					return (this.log.IsOn);
 				else
 					return (false);
 			}
@@ -979,9 +979,9 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// Begin logging (in case opening of terminal needs to be logged).
-			if (this.settingsRoot.LogIsStarted)
+			if (this.settingsRoot.LogIsOn)
 			{
-				if (!BeginLog())
+				if (!LogOn())
 					return (false);
 			}
 
@@ -1702,8 +1702,8 @@ namespace YAT.Model
 				this.terminal.Close();
 
 				// Then, close log:
-				if (this.log.IsStarted)
-					EndLog();
+				if (this.log.IsOn)
+					LogOff();
 
 				// Finally, ensure that chronos are stopped and do not fire events anymore:
 				StopChronos();
@@ -1849,7 +1849,7 @@ namespace YAT.Model
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
-			if (this.log.IsStarted)
+			if (this.log.IsOn)
 			{
 				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawTx);
 				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
@@ -1869,7 +1869,7 @@ namespace YAT.Model
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
-			if (this.log.IsStarted)
+			if (this.log.IsOn)
 			{
 				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
 				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawRx);
@@ -1884,7 +1884,7 @@ namespace YAT.Model
 			// Log:
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
-				if (this.log.IsStarted)
+				if (this.log.IsOn)
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
@@ -1908,7 +1908,7 @@ namespace YAT.Model
 			// Log:
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
-				if (this.log.IsStarted)
+				if (this.log.IsOn)
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
@@ -3172,22 +3172,22 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool BeginLog()
+		public virtual bool LogOn()
 		{
 			try
 			{
-				// reapply settings NOW, makes sure date/time in filenames is refreshed
+				// Re-apply settings immediately, makes sure date/time in filenames is refreshed:
 				this.log.Settings = this.settingsRoot.Log;
 				this.log.Begin();
-				this.settingsRoot.LogIsStarted = true;
+				this.settingsRoot.LogIsOn = true;
 
 				return (true);
 			}
-			catch (System.IO.IOException ex)
+			catch (IOException ex)
 			{
 				OnMessageInputRequest
 				(
-					"Unable to begin log."                               + Environment.NewLine + Environment.NewLine +
+					"Unable to switch log on."                           + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
 					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
 					"Log file could already be in use.",
@@ -3201,11 +3201,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void ClearLog()
+		public virtual bool LogClear()
 		{
 			try
 			{
 				this.log.Clear();
+
+				return (true);
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -3219,35 +3221,41 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
+
+				return (false);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void EndLog()
+		public virtual bool LogOff()
 		{
-			EndLog(true);
+			return LogOff(true);
 		}
 
 		/// <summary></summary>
-		public virtual void EndLog(bool saveStatus)
+		public virtual bool LogOff(bool saveStatus)
 		{
 			try
 			{
 				this.log.End();
 
 				if (saveStatus)
-					this.settingsRoot.LogIsStarted = false;
+					this.settingsRoot.LogIsOn = false;
+
+				return (true);
 			}
-			catch (System.IO.IOException ex)
+			catch (IOException ex)
 			{
 				OnMessageInputRequest
 				(
-					"Unable to end log." + Environment.NewLine + Environment.NewLine +
+					"Unable to switch log off." + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message,
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 				);
+
+				return (false);
 			}
 		}
 

@@ -587,12 +587,12 @@ namespace YAT.Model
 			if (this.startArgs.TerminalSettings != null)
 			{
 				bool terminalIsStarted = this.startArgs.TerminalSettings.Settings.TerminalIsStarted;
-				bool logIsStarted      = this.startArgs.TerminalSettings.Settings.LogIsStarted;
+				bool logIsOn           = this.startArgs.TerminalSettings.Settings.LogIsOn;
 
-				if (ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettings.Settings.Terminal, ref terminalIsStarted, ref logIsStarted))
+				if (ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettings.Settings.Terminal, ref terminalIsStarted, ref logIsOn))
 				{
 					this.startArgs.TerminalSettings.Settings.TerminalIsStarted = terminalIsStarted;
-					this.startArgs.TerminalSettings.Settings.LogIsStarted      = logIsStarted;
+					this.startArgs.TerminalSettings.Settings.LogIsOn           = logIsOn;
 				}
 				else
 				{
@@ -634,7 +634,7 @@ namespace YAT.Model
 		/// Unfortunately, 'normal' terminal settings and new terminal settings are defined rather
 		/// differently. Therefore, this implementation looks a bit weird.
 		/// </remarks>
-		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings, ref bool terminalIsStarted, ref bool logIsStarted)
+		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings, ref bool terminalIsStarted, ref bool logIsOn)
 		{
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
 			{
@@ -819,8 +819,8 @@ namespace YAT.Model
 			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
 				terminalIsStarted = this.commandLineArgs.OpenTerminal;
 
-			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
-				logIsStarted = this.commandLineArgs.BeginLog;
+			if (this.commandLineArgs.OptionIsGiven("LogOn"))
+				logIsOn = this.commandLineArgs.LogOn;
 
 			return (true);
 		}
@@ -860,9 +860,9 @@ namespace YAT.Model
 			terminalSettings.IO.UsbSerialHidDevice.AutoOpen     = newTerminalSettings.UsbSerialHidAutoOpen;
 
 			bool terminalIsStarted = newTerminalSettings.StartTerminal;
-			bool logIsStarted      = false; // Doesn't matter, new terminal settings do not have this option.
+			bool logIsOn           = false; // Doesn't matter, new terminal settings do not have this option.
 
-			if (ProcessCommandLineArgsIntoExistingTerminalSettings(terminalSettings, ref terminalIsStarted, ref logIsStarted))
+			if (ProcessCommandLineArgsIntoExistingTerminalSettings(terminalSettings, ref terminalIsStarted, ref logIsOn))
 			{
 				newTerminalSettings.TerminalType             = terminalSettings.TerminalType;
 				newTerminalSettings.IOType                   = terminalSettings.IO.IOType;

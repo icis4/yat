@@ -34,10 +34,10 @@ namespace YAT.Settings.Terminal
 		public const bool TerminalIsStartedDefault = false;
 
 		/// <summary></summary>
-		public const bool LogIsStartedDefault = false;
+		public const bool LogIsOnDefault = false;
 
 		private bool terminalIsStarted;
-		private bool logIsStarted;
+		private bool logIsOn;
 
 		private Model.Settings.SendCommandSettings sendCommand;
 		private Model.Settings.SendFileSettings sendFile;
@@ -68,7 +68,7 @@ namespace YAT.Settings.Terminal
 			: base(rhs)
 		{
 			TerminalIsStarted = rhs.TerminalIsStarted;
-			LogIsStarted      = rhs.LogIsStarted;
+			LogIsOn      = rhs.LogIsOn;
 
 			SendCommand = new Model.Settings.SendCommandSettings(rhs.SendCommand);
 			SendFile    = new Model.Settings.SendFileSettings(rhs.SendFile);
@@ -87,7 +87,7 @@ namespace YAT.Settings.Terminal
 			base.SetMyDefaults();
 
 			TerminalIsStarted = TerminalIsStartedDefault;
-			LogIsStarted      = LogIsStartedDefault;
+			LogIsOn           = LogIsOnDefault;
 		}
 
 		#region Properties
@@ -111,15 +111,15 @@ namespace YAT.Settings.Terminal
 		}
 
 		/// <summary></summary>
-		[XmlElement("LogIsStarted")]
-		public virtual bool LogIsStarted
+		[XmlElement("LogIsOn")]
+		public virtual bool LogIsOn
 		{
-			get { return (this.logIsStarted); }
+			get { return (this.logIsOn); }
 			set
 			{
-				if (this.logIsStarted != value)
+				if (this.logIsOn != value)
 				{
-					this.logIsStarted = value;
+					this.logIsOn = value;
 					SetChanged();
 				}
 			}
@@ -280,7 +280,7 @@ namespace YAT.Settings.Terminal
 				base.Equals(other) && // Compare all settings nodes.
 
 				(TerminalIsStarted == other.TerminalIsStarted) &&
-				(LogIsStarted      == other.LogIsStarted)
+				(LogIsOn           == other.LogIsOn)
 			);
 		}
 
@@ -298,7 +298,7 @@ namespace YAT.Settings.Terminal
 				base.GetHashCode() ^
 
 				TerminalIsStarted.GetHashCode() ^
-				LogIsStarted     .GetHashCode()
+				LogIsOn          .GetHashCode()
 			);
 		}
 
