@@ -548,16 +548,25 @@ namespace YAT.Log.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool MultipleRaw
+		public virtual int RawCount
 		{
 			get
 			{
 				int count = 0;
-				if (RawLogTx) count++;
+
+				if (RawLogTx)    count++;
 				if (RawLogBidir) count++;
-				if (RawLogRx) count++;
-				return (count >= 2);
+				if (RawLogRx)    count++;
+
+				return (count);
 			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool MultipleRaw
+		{
+			get { return (RawCount >= 2); }
 		}
 
 		/// <summary></summary>
@@ -569,16 +578,25 @@ namespace YAT.Log.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool MultipleNeat
+		public virtual int NeatCount
 		{
 			get
 			{
 				int count = 0;
-				if (NeatLogTx) count++;
+
+				if (NeatLogTx)    count++;
 				if (NeatLogBidir) count++;
-				if (NeatLogRx) count++;
-				return (count >= 2);
+				if (NeatLogRx)    count++;
+
+				return (count);
 			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool MultipleNeat
+		{
+			get { return (NeatCount >= 2); }
 		}
 
 		/// <summary></summary>
@@ -592,10 +610,7 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual bool BothRawAndNeat
 		{
-			get
-			{
-				return (AnyRaw && AnyNeat);
-			}
+			get { return (AnyRaw && AnyNeat); }
 		}
 
 		/// <summary></summary>
@@ -603,6 +618,13 @@ namespace YAT.Log.Settings
 		public virtual bool SameRawAndNeat
 		{
 			get { return ((RawLogTx && NeatLogTx) || (RawLogBidir && NeatLogBidir) || (RawLogRx && NeatLogRx)); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual int Count
+		{
+			get { return (RawCount + NeatCount); }
 		}
 
 		//- WriteMode -------------------------------------------------------------
@@ -729,7 +751,7 @@ namespace YAT.Log.Settings
 		/// 
 		/// Potential solutions:
 		///  - Upgrade <see cref="FileNameSeparator"/> to EnumEx? E.g. like 'MKY.Net.IPHost'.
-		///  - <see cref="Log"/> and <see cref="LogSettings"/> string only,
+		///  - <see cref="YAT.Log"/> and <see cref="LogSettings"/> string only,
 		///    <see cref="FileNameSeparator"/> only used for GUI?
 		/// 
 		/// Saying hello to StyleCop ;-.

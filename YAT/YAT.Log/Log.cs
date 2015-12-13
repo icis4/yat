@@ -22,11 +22,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Threading;
 
 using MKY.IO;
@@ -34,450 +31,15 @@ using MKY.IO;
 namespace YAT.Log
 {
 	/// <summary></summary>
-	public class Logs : IDisposable
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
+	internal abstract class Log : IDisposable
 	{
-		#region Types
+		#region Constants
 		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		#region Types > Log Base
-		//==========================================================================================
-		// Types > Log Base
+		// Constants
 		//==========================================================================================
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-		protected abstract class Log : IDisposable
-		{
-			#region Constants
-			//==========================================================================================
-			// Constants
-			//==========================================================================================
-
-			private const int FlushTimeout = 250;
-
-			#endregion
-
-			#region Fields
-			//==========================================================================================
-			// Fields
-			//==========================================================================================
-
-			private bool isDisposed;
-
-			private bool isEnabled;
-			private string file;
-			private LogFileWriteMode writeMode;
-			private FileNameSeparator separator;
-
-			private FileStream fileStream;
-			private bool isStarted;
-
-			private Timer flushTimer;
-			private object flushTimerSyncObj = new object();
-
-			#endregion
-
-			#region Object Lifetime
-			//==========================================================================================
-			// Object Lifetime
-			//==========================================================================================
-
-			/// <summary></summary>
-			protected Log(bool enabled, string file, LogFileWriteMode writeMode)
-				: this(enabled, file, writeMode, "")
-			{
-			}
-
-			/// <summary></summary>
-			protected Log(bool enabled, string file, LogFileWriteMode writeMode, string separator)
-				: this(enabled, file, writeMode, (FileNameSeparator)separator)
-			{
-			}
-
-			/// <summary></summary>
-			protected Log(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
-			{
-				Initialize(enabled, file, writeMode, separator);
-			}
-
-			private void Initialize(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
-			{
-				this.isEnabled = enabled;
-				this.file      = file;
-				this.writeMode = writeMode;
-				this.separator = separator;
-			}
-
-			#region Disposal
-			//------------------------------------------------------------------------------------------
-			// Disposal
-			//------------------------------------------------------------------------------------------
-
-			/// <summary></summary>
-			public void Dispose()
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-
-			/// <summary></summary>
-			protected virtual void Dispose(bool disposing)
-			{
-				if (!this.isDisposed)
-				{
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-						StopFlushTimer();
-
-						// In the 'normal' case, Close() has already been called.
-						Close();
-					}
-
-					// Set state to disposed:
-					this.isDisposed = true;
-				}
-			}
-
-			/// <summary></summary>
-			~Log()
-			{
-				Dispose(false);
-
-				System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
-			}
-
-			/// <summary></summary>
-			public bool IsDisposed
-			{
-				get { return (this.isDisposed); }
-			}
-
-			/// <summary></summary>
-			protected void AssertNotDisposed()
-			{
-				if (this.isDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-			}
-
-			#endregion
-
-			#endregion
-
-			#region Properties
-			//==========================================================================================
-			// Properties
-			//==========================================================================================
-
-			/// <summary></summary>
-			protected virtual bool IsEnabled
-			{
-				get { return (this.isEnabled); }
-			}
-
-			/// <summary></summary>
-			public virtual bool IsStarted
-			{
-				get { return (this.isStarted); }
-			}
-
-			#endregion
-
-			#region Methods
-			//==========================================================================================
-			// Methods
-			//==========================================================================================
-
-			/// <summary></summary>
-			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode)
-			{
-				SetSettings(enabled, file, writeMode, "");
-			}
-
-			/// <summary></summary>
-			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, string separator)
-			{
-				SetSettings(enabled, file, writeMode, (FileNameSeparator)separator);
-			}
-
-			/// <summary></summary>
-			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
-			{
-				if (this.isStarted && (enabled != this.isEnabled))
-				{
-					if (enabled)
-					{
-						Initialize(enabled, file, writeMode, separator);
-						Open();
-					}
-					else if (!enabled)
-					{
-						Close();
-						Initialize(enabled, file, writeMode, separator);
-					}
-				}
-				else if (this.isStarted && (file != this.file))
-				{
-					Close();
-					Initialize(enabled, file, writeMode, separator);
-					Open();
-				}
-				else
-					Initialize(enabled, file, writeMode, separator);
-			}
-
-			/// <summary></summary>
-			public virtual void Open()
-			{
-				if (!this.isEnabled)
-					return;
-
-				if (!Directory.Exists(Path.GetDirectoryName(this.file)))
-					Directory.CreateDirectory(Path.GetDirectoryName(this.file));
-
-				if (this.writeMode == LogFileWriteMode.Create)
-				{
-					this.file = FileEx.MakeUniqueFileName(this.file, this.separator.Separator);
-					this.fileStream = File.Open(this.file, FileMode.Create, FileAccess.Write, FileShare.Read);
-				}
-				else if (this.writeMode == LogFileWriteMode.Append)
-				{
-					if (File.Exists(this.file))
-						this.fileStream = File.Open(this.file, FileMode.Append, FileAccess.Write, FileShare.Read);
-					else
-						this.fileStream = File.Open(this.file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-				}
-				else
-					throw (new ArgumentException("Write mode not supported!"));
-
-				OpenWriter(this.fileStream);
-				this.isStarted = true;
-			}
-
-			/// <summary></summary>
-			public virtual void Flush()
-			{
-				if (this.isEnabled && this.isStarted)
-				{
-					FlushWriter();
-				}
-			}
-
-			/// <summary></summary>
-			public virtual void Truncate()
-			{
-				if (this.isEnabled && this.isStarted)
-				{
-					CloseWriter();
-					this.fileStream.Close();
-					this.fileStream = File.Open(this.file, FileMode.Truncate, FileAccess.Write, FileShare.Read);
-					OpenWriter(this.fileStream);
-				}
-			}
-
-			/// <summary></summary>
-			public virtual void Close()
-			{
-				if (this.isEnabled && this.isStarted)
-				{
-					CloseWriter();
-					this.fileStream.Close();
-				}
-
-				this.isStarted = false;
-			}
-
-			/// <summary></summary>
-			protected abstract void OpenWriter(FileStream stream);
-
-			/// <summary></summary>
-			protected abstract void FlushWriter();
-
-			/// <summary></summary>
-			protected abstract void CloseWriter();
-
-			/// <summary></summary>
-			protected virtual void StartFlushTimer()
-			{
-				lock (flushTimerSyncObj)
-				{
-					this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, FlushTimeout, Timeout.Infinite);
-				}
-			}
-
-			/// <summary></summary>
-			protected virtual void RestartFlushTimer()
-			{
-				StopFlushTimer();
-				StartFlushTimer();
-			}
-
-			/// <summary></summary>
-			protected virtual void StopFlushTimer()
-			{
-				lock (flushTimerSyncObj)
-				{
-					if (this.flushTimer != null)
-					{
-						this.flushTimer.Dispose();
-						this.flushTimer = null;
-					}
-				}
-			}
-
-			/// <summary></summary>
-			private void flushTimer_Timeout(object obj)
-			{
-				StopFlushTimer();
-				Flush();
-			}
-
-			#endregion
-		}
-
-		#endregion
-
-		#region Types > Binary Log
-		//==========================================================================================
-		// Types > Binary Log
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected class BinaryLog : Log
-		{
-			private BinaryWriter writer;
-
-			/// <summary></summary>
-			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode)
-				: base(enabled, file, writeMode)
-			{
-			}
-
-			/// <summary></summary>
-			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode, string separator)
-				: base(enabled, file, writeMode, (FileNameSeparator)separator)
-			{
-			}
-
-			/// <summary></summary>
-			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
-				: base(enabled, file, writeMode, separator)
-			{
-			}
-
-			/// <summary></summary>
-			protected override void OpenWriter(FileStream stream)
-			{
-				this.writer = new BinaryWriter(stream);
-			}
-
-			/// <summary></summary>
-			protected override void FlushWriter()
-			{
-				this.writer.Flush();
-			}
-
-			/// <summary></summary>
-			protected override void CloseWriter()
-			{
-				this.writer.Close();
-			}
-
-			/// <summary></summary>
-			public virtual void WriteByte(byte value)
-			{
-				if (IsEnabled && IsStarted)
-				{
-					this.writer.Write(value);
-					RestartFlushTimer();
-				}
-			}
-
-			/// <summary></summary>
-			public virtual void WriteBytes(ReadOnlyCollection<byte> values)
-			{
-				if (IsEnabled && IsStarted)
-				{
-					byte[] array = new byte[values.Count];
-					values.CopyTo(array, 0);
-					this.writer.Write(array);
-					RestartFlushTimer();
-				}
-			}
-		}
-
-		#endregion
-
-		#region Types > Text Log
-		//==========================================================================================
-		// Types > Text Log
-		//==========================================================================================
-
-		/// <summary></summary>
-		protected class TextLog : Log
-		{
-			private StreamWriter writer;
-
-			/// <summary></summary>
-			public TextLog(bool enabled, string file, LogFileWriteMode writeMode)
-				: base(enabled, file, writeMode)
-			{
-			}
-
-			/// <summary></summary>
-			public TextLog(bool enabled, string file, LogFileWriteMode writeMode, string separator)
-				: base(enabled, file, writeMode, (FileNameSeparator)separator)
-			{
-			}
-
-			/// <summary></summary>
-			public TextLog(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
-				: base(enabled, file, writeMode, separator)
-			{
-			}
-
-			/// <summary></summary>
-			protected override void OpenWriter(FileStream stream)
-			{
-				this.writer = new StreamWriter(stream, Encoding.UTF8);
-			}
-
-			/// <summary></summary>
-			protected override void FlushWriter()
-			{
-				this.writer.Flush();
-			}
-
-			/// <summary></summary>
-			protected override void CloseWriter()
-			{
-				this.writer.Close();
-			}
-
-			/// <summary></summary>
-			public virtual void WriteString(string value)
-			{
-				if (IsEnabled && IsStarted)
-				{
-					this.writer.Write(value);
-					RestartFlushTimer();
-				}
-			}
-
-			/// <summary></summary>
-			public virtual void WriteEol()
-			{
-				if (IsEnabled && IsStarted)
-				{
-					this.writer.WriteLine();
-					RestartFlushTimer();
-				}
-			}
-		}
-
-		#endregion
+		private const int FlushTimeout = 250;
 
 		#endregion
 
@@ -488,19 +50,16 @@ namespace YAT.Log
 
 		private bool isDisposed;
 
-		private Settings.LogSettings settings;
+		private bool isEnabled;
+		private string filePath;
+		private LogFileWriteMode writeMode;
+		private FileNameSeparator separator;
 
-		private List<Log> logs;
-		private List<Log> rawLogs;
-		private List<Log> neatLogs;
+		private FileStream fileStream;
+		private bool isOn;
 
-		private BinaryLog rawTxLog;
-		private BinaryLog rawBidirLog;
-		private BinaryLog rawRxLog;
-
-		private TextLog neatTxLog;
-		private TextLog neatBidirLog;
-		private TextLog neatRxLog;
+		private Timer flushTimer;
+		private object flushTimerSyncObj = new object();
 
 		#endregion
 
@@ -510,24 +69,29 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Logs(Settings.LogSettings settings)
+		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode)
+			: this(enabled, filePath, writeMode, "")
 		{
-			this.settings = settings;
+		}
 
-			this.logs = new List<Log>();
-			this.rawLogs = new List<Log>();
-			this.neatLogs = new List<Log>();
+		/// <summary></summary>
+		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
+			: this(enabled, filePath, writeMode, (FileNameSeparator)separator)
+		{
+		}
 
-			this.rawLogs.Add(this.rawTxLog    = new BinaryLog(this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
-			this.rawLogs.Add(this.rawBidirLog = new BinaryLog(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
-			this.rawLogs.Add(this.rawRxLog    = new BinaryLog(this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
+		/// <summary></summary>
+		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+		{
+			Initialize(enabled, filePath, writeMode, separator);
+		}
 
-			this.neatLogs.Add(this.neatTxLog    = new TextLog(this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
-			this.neatLogs.Add(this.neatBidirLog = new TextLog(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
-			this.neatLogs.Add(this.neatRxLog    = new TextLog(this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
-
-			this.logs.AddRange(this.rawLogs);
-			this.logs.AddRange(this.neatLogs);
+		private void Initialize(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+		{
+			this.isEnabled = enabled;
+			this.filePath  = filePath;
+			this.writeMode = writeMode;
+			this.separator = separator;
 		}
 
 		#region Disposal
@@ -550,8 +114,10 @@ namespace YAT.Log
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, End() has already been called.
-					End();
+					StopFlushTimer();
+
+					// In the 'normal' case, Close() has already been called.
+					Close();
 				}
 
 				// Set state to disposed:
@@ -560,7 +126,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		~Logs()
+		~Log()
 		{
 			Dispose(false);
 
@@ -590,33 +156,27 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual Settings.LogSettings Settings
+		public virtual bool IsEnabled
 		{
-			get { return (this.settings); }
-			set
-			{
-				this.settings = value;
-
-				this.rawTxLog.SetSettings   (this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
-				this.rawBidirLog.SetSettings(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
-				this.rawRxLog.SetSettings   (this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
-
-				this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
-				this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
-				this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
-			}
+			get { return (this.isEnabled); }
 		}
 
 		/// <summary></summary>
 		public virtual bool IsOn
 		{
-			get
-			{
-				bool isStarted = false;
-				foreach (Log l in this.logs)
-					isStarted = isStarted || l.IsStarted;
-				return (isStarted);
-			}
+			get { return (this.isOn); }
+		}
+
+		/// <summary></summary>
+		public virtual bool FileExists
+		{
+			get { return (File.Exists(this.filePath)); }
+		}
+
+		/// <summary></summary>
+		public virtual string FilePath
+		{
+			get { return (this.filePath); }
 		}
 
 		#endregion
@@ -627,62 +187,149 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void Begin()
+		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode)
 		{
-			foreach (Log l in this.logs)
-				l.Open();
+			SetSettings(enabled, filePath, writeMode, "");
 		}
 
 		/// <summary></summary>
-		public virtual void Clear()
+		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
 		{
-			foreach (Log l in this.logs)
-				l.Truncate();
+			SetSettings(enabled, filePath, writeMode, (FileNameSeparator)separator);
+		}
+
+		/// <summary></summary>
+		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+		{
+			if (this.isOn && (enabled != this.isEnabled))
+			{
+				if (enabled)
+				{
+					Initialize(enabled, filePath, writeMode, separator);
+					Open();
+				}
+				else if (!enabled)
+				{
+					Close();
+					Initialize(enabled, filePath, writeMode, separator);
+				}
+			}
+			else if (this.isOn && (filePath != this.filePath))
+			{
+				Close();
+				Initialize(enabled, filePath, writeMode, separator);
+				Open();
+			}
+			else
+			{
+				Initialize(enabled, filePath, writeMode, separator);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void Open()
+		{
+			if (!this.isEnabled)
+				return;
+
+			if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
+				Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
+
+			if (this.writeMode == LogFileWriteMode.Create)
+			{
+				this.filePath = FileEx.MakeUniqueFileName(this.filePath, this.separator.Separator);
+				this.fileStream = File.Open(this.filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+			}
+			else if (this.writeMode == LogFileWriteMode.Append)
+			{
+				if (File.Exists(this.filePath))
+					this.fileStream = File.Open(this.filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
+				else
+					this.fileStream = File.Open(this.filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+			}
+			else
+			{
+				throw (new ArgumentException("Write mode not supported!"));
+			}
+
+			OpenWriter(this.fileStream);
+			this.isOn = true;
 		}
 
 		/// <summary></summary>
 		public virtual void Flush()
 		{
-			foreach (Log l in this.logs)
-				l.Flush();
+			if (this.isEnabled && this.isOn)
+				FlushWriter();
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "End", Justification = "End() as method name is the obvious pair against Begin() and should be OK for other languages, .NET itself uses it in ArgIterator.End().")]
-		public virtual void End()
+		public virtual void Truncate()
 		{
-			foreach (Log l in this.logs)
-				l.Close();
+			if (this.isEnabled && this.isOn)
+			{
+				CloseWriter();
+				this.fileStream.Close();
+				this.fileStream = File.Open(this.filePath, FileMode.Truncate, FileAccess.Write, FileShare.Read);
+				OpenWriter(this.fileStream);
+			}
 		}
 
 		/// <summary></summary>
-		public virtual void WriteByte(byte value, LogChannel writeChannel)
+		public virtual void Close()
 		{
-			((BinaryLog)GetLog(writeChannel)).WriteByte(value);
+			if (this.isEnabled && this.isOn)
+			{
+				CloseWriter();
+				this.fileStream.Close();
+			}
+
+			this.isOn = false;
 		}
 
 		/// <summary></summary>
-		public virtual void WriteBytes(ReadOnlyCollection<byte> values, LogChannel writeChannel)
+		protected abstract void OpenWriter(FileStream stream);
+
+		/// <summary></summary>
+		protected abstract void FlushWriter();
+
+		/// <summary></summary>
+		protected abstract void CloseWriter();
+
+		/// <summary></summary>
+		protected virtual void StartFlushTimer()
 		{
-			((BinaryLog)GetLog(writeChannel)).WriteBytes(values);
+			lock (flushTimerSyncObj)
+			{
+				this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, FlushTimeout, Timeout.Infinite);
+			}
 		}
 
 		/// <summary></summary>
-		public virtual void WriteString(string value, LogChannel writeChannel)
+		protected virtual void RestartFlushTimer()
 		{
-			((TextLog)GetLog(writeChannel)).WriteString(value);
+			StopFlushTimer();
+			StartFlushTimer();
 		}
 
 		/// <summary></summary>
-		public virtual void WriteEol(LogChannel writeChannel)
+		protected virtual void StopFlushTimer()
 		{
-			((TextLog)GetLog(writeChannel)).WriteEol();
+			lock (flushTimerSyncObj)
+			{
+				if (this.flushTimer != null)
+				{
+					this.flushTimer.Dispose();
+					this.flushTimer = null;
+				}
+			}
 		}
 
 		/// <summary></summary>
-		private Log GetLog(LogChannel channel)
+		private void flushTimer_Timeout(object obj)
 		{
-			return (this.logs[channel.GetHashCode()]);
+			StopFlushTimer();
+			Flush();
 		}
 
 		#endregion

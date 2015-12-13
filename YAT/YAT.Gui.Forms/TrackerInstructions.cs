@@ -147,7 +147,7 @@ namespace YAT.Gui.Forms
 			if (link != null)
 			{
 				Exception ex;
-				if (!MKY.Net.Browser.BrowseUri(link, out ex))
+				if (!MKY.Net.Browser.TryBrowseUri(link, out ex))
 				{
 					MessageBox.Show
 					(

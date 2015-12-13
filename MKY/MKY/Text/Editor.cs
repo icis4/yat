@@ -24,24 +24,24 @@
 using System;
 using System.Diagnostics;
 
-namespace MKY.Net
+namespace MKY.Text
 {
 	/// <summary>
-	/// Browser utility methods.
+	/// Editor utility methods.
 	/// </summary>
-	public static class Browser
+	public static class Editor
 	{
 		/// <summary>
-		/// Tries to open the system default browser and browse the given URI.
+		/// Tries to open the system default editor and open the given file.
 		/// </summary>
-		/// <param name="uri">URI to browse.</param>
+		/// <param name="filePath">File to open.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		public static bool TryBrowseUri(string uri, out Exception exception)
+		public static bool TryOpenFile(string filePath, out Exception exception)
 		{
 			try
 			{
-				Process.Start(uri);
+				Process.Start(filePath);
 				exception = null;
 				return (true);
 			}
@@ -50,17 +50,6 @@ namespace MKY.Net
 				exception = ex;
 				return (false);
 			}
-		}
-
-		/// <summary>
-		/// Tries to open the system default browser and browse the given URI.
-		/// </summary>
-		/// <param name="uri">URI to browse.</param>
-		/// <param name="exception">Exception object, in case of failure.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		public static bool TryBrowseUri(Uri uri, out Exception exception)
-		{
-			return (TryBrowseUri(uri.AbsoluteUri, out exception));
 		}
 	}
 }

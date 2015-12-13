@@ -436,6 +436,9 @@
     <None Include="Resources\Tool\Image_Tool_application_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_application_get_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_application_put_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_save_all_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_layer_save_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_page_white_magnify_16x16.png" />
     <Content Include="Resources\YAT\Icon_YAT.ico" />
     <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />

@@ -116,6 +116,7 @@
     <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
     <Compile Include="Text\Ascii.cs" />
+    <Compile Include="Text\Editor.cs" />
     <Compile Include="Text\Escape.cs" />
     <Compile Include="Time\DateTimeEx.cs" />
     <Compile Include="Time\RateHelper.cs" />

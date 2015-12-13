@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.14
+// YAT 2.0 Gamma 2 Development Version 1.99.35
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -17,50 +17,74 @@
 // Copyright © 2003-2015 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// This source code is licensed under the GNU LGPL.
+// YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Diagnostics;
+using System.IO;
+using System.Text;
 
-namespace MKY.Net
+namespace YAT.Log
 {
-	/// <summary>
-	/// Browser utility methods.
-	/// </summary>
-	public static class Browser
+	/// <summary></summary>
+	internal class TextLog : Log
 	{
-		/// <summary>
-		/// Tries to open the system default browser and browse the given URI.
-		/// </summary>
-		/// <param name="uri">URI to browse.</param>
-		/// <param name="exception">Exception object, in case of failure.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		public static bool TryBrowseUri(string uri, out Exception exception)
+		private StreamWriter writer;
+
+		/// <summary></summary>
+		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode)
+			: base(enabled, filePath, writeMode)
 		{
-			try
+		}
+
+		/// <summary></summary>
+		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
+			: base(enabled, filePath, writeMode, (FileNameSeparator)separator)
+		{
+		}
+
+		/// <summary></summary>
+		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+			: base(enabled, filePath, writeMode, separator)
+		{
+		}
+
+		/// <summary></summary>
+		protected override void OpenWriter(FileStream stream)
+		{
+			this.writer = new StreamWriter(stream, Encoding.UTF8);
+		}
+
+		/// <summary></summary>
+		protected override void FlushWriter()
+		{
+			this.writer.Flush();
+		}
+
+		/// <summary></summary>
+		protected override void CloseWriter()
+		{
+			this.writer.Close();
+		}
+
+		/// <summary></summary>
+		public virtual void WriteString(string value)
+		{
+			if (IsEnabled && IsOn)
 			{
-				Process.Start(uri);
-				exception = null;
-				return (true);
-			}
-			catch (Exception ex)
-			{
-				exception = ex;
-				return (false);
+				this.writer.Write(value);
+				RestartFlushTimer();
 			}
 		}
 
-		/// <summary>
-		/// Tries to open the system default browser and browse the given URI.
-		/// </summary>
-		/// <param name="uri">URI to browse.</param>
-		/// <param name="exception">Exception object, in case of failure.</param>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		public static bool TryBrowseUri(Uri uri, out Exception exception)
+		/// <summary></summary>
+		public virtual void WriteEol()
 		{
-			return (TryBrowseUri(uri.AbsoluteUri, out exception));
+			if (IsEnabled && IsOn)
+			{
+				this.writer.WriteLine();
+				RestartFlushTimer();
+			}
 		}
 	}
 }

@@ -744,10 +744,6 @@ namespace YAT.Gui.Forms
 			if (childIsReady)
 				terminalIsStarted = ((Terminal)ActiveMdiChild).IsStarted;
 
-			bool logIsOn = false;
-			if (childIsReady)
-				logIsOn = ((Terminal)ActiveMdiChild).LogIsOn;
-
 			bool radixIsReady = false;
 			Domain.Radix radix = Domain.Radix.None;
 			if (childIsReady)
@@ -760,6 +756,14 @@ namespace YAT.Gui.Forms
 						radix = terminal.SettingsRoot.Display.TxRadix;
 				}
 			}
+
+			bool logIsOn = false;
+			if (childIsReady)
+				logIsOn = ((Terminal)ActiveMdiChild).LogIsOn;
+
+			bool logFileExists = false;
+			if (childIsReady)
+				logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
 
 			toolStripButton_MainTool_File_Save.Enabled         = childIsReady && terminalFileIsWritable;
 			toolStripButton_MainTool_Terminal_Start.Enabled    = childIsReady && terminalIsStopped;
@@ -789,6 +793,7 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_Terminal_Log_Settings.Enabled = childIsReady;
 			toolStripButton_MainTool_Terminal_Log_On.Enabled       = childIsReady && !logIsOn;
 			toolStripButton_MainTool_Terminal_Log_Off.Enabled      = childIsReady &&  logIsOn;
+			toolStripButton_MainTool_Terminal_Log_Open.Enabled     = childIsReady &&  logFileExists;
 
 			this.isSettingControls.Leave();
 		}
@@ -806,6 +811,11 @@ namespace YAT.Gui.Forms
 		private void toolStripButton_MainTool_File_Save_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestSaveFile();
+		}
+
+		private void toolStripButton_MainTool_File_SaveWorkspace_Click(object sender, EventArgs e)
+		{
+			this.workspace.Save();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Start_Click(object sender, EventArgs e)
@@ -885,12 +895,17 @@ namespace YAT.Gui.Forms
 
 		private void toolStripButton_MainTool_Terminal_Log_On_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestLogOn();
+			((Terminal)ActiveMdiChild).RequestSwitchLogOn();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Log_Off_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestLogOff();
+			((Terminal)ActiveMdiChild).RequestSwitchLogOff();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Log_Open_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestOpenLogFile();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
@@ -1568,14 +1583,14 @@ namespace YAT.Gui.Forms
 				// has been implemented, the following if-elif-else can be merged back as well.
 				if (ExtensionSettings.IsTerminalFile(ofd.FileName))
 				{
-					ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+					ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath = Path.GetDirectoryName(ofd.FileName);
 					ApplicationSettings.Save();
 
 					this.main.OpenFromFile(ofd.FileName);
 				}
 				else if (ExtensionSettings.IsWorkspaceFile(ofd.FileName))
 				{
-					ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+					ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = Path.GetDirectoryName(ofd.FileName);
 					ApplicationSettings.Save();
 
 					this.main.OpenFromFile(ofd.FileName);
@@ -1628,7 +1643,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.main.OpenFromFile(ofd.FileName);
@@ -1659,7 +1674,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.workspace.SaveAs(sfd.FileName);

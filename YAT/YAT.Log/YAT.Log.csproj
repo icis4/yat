@@ -102,6 +102,9 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Log.cs" />
+    <Compile Include="TextLog.cs" />
+    <Compile Include="BinaryLog.cs" />
+    <Compile Include="Provider.cs" />
     <Compile Include="Settings\LogSettings.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -554,12 +554,18 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool logIsSelected = this.settingsRoot.Log.AnyRawOrNeat;
-			bool logIsOn       = this.settingsRoot.LogIsOn;
+			bool logIsEnabled = (this.settingsRoot.Log.Count > 0);
+			bool logIsOn      = this.settingsRoot.LogIsOn;
 
-			toolStripMenuItem_TerminalMenu_Log_On.Enabled    = logIsSelected && !logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Off.Enabled   = logIsSelected &&  logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected &&  logIsOn;
+			bool logFileExists = false;
+			if (this.terminal != null)
+				logFileExists = this.terminal.LogFileExists;
+
+
+			toolStripMenuItem_TerminalMenu_Log_On.Enabled    = logIsEnabled && !logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Off.Enabled   = logIsEnabled &&  logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Open.Enabled  = logIsEnabled &&  logFileExists;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsEnabled &&  logIsOn;
 
 			this.isSettingControls.Leave();
 		}
@@ -571,17 +577,22 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Log_On_Click(object sender, EventArgs e)
 		{
-			this.terminal.LogOn();
+			this.terminal.SwitchLogOn();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Off_Click(object sender, EventArgs e)
 		{
-			this.terminal.LogOff();
+			this.terminal.SwitchLogOff();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Log_Open_Click(object sender, EventArgs e)
+		{
+
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Clear_Click(object sender, EventArgs e)
 		{
-			this.terminal.LogClear();
+			this.terminal.ClearLog();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Settings_Click(object sender, EventArgs e)
@@ -1858,6 +1869,18 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool LogFileExists
+		{
+			get
+			{
+				if (TerminalIsAvailable)
+					return (this.terminal.LogFileExists);
+				else
+					return (false);
+			}
+		}
+
 		private bool IsStartingUp
 		{
 			get { return (this.isStartingUp); }
@@ -1960,15 +1983,21 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestLogOn()
+		public virtual void RequestSwitchLogOn()
 		{
-			this.terminal.LogOn();
+			this.terminal.SwitchLogOn();
 		}
 
 		/// <summary></summary>
-		public virtual void RequestLogOff()
+		public virtual void RequestSwitchLogOff()
 		{
-			this.terminal.LogOff();
+			this.terminal.SwitchLogOff();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestOpenLogFile()
+		{
+			this.terminal.OpenLogFile();
 		}
 
 		/// <summary></summary>
