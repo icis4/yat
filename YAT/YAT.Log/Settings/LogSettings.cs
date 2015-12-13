@@ -71,9 +71,9 @@ namespace YAT.Log.Settings
 		// write mode
 		private LogFileWriteMode writeMode;
 
-		// subdirectories
-		private bool subdirectoriesFormat;
-		private bool subdirectoriesChannel;
+		// folders
+		private bool folderFormat;
+		private bool folderChannel;
 
 		// naming
 		private bool nameFormat;
@@ -128,8 +128,8 @@ namespace YAT.Log.Settings
 
 			WriteMode = rhs.WriteMode;
 
-			SubdirectoriesFormat  = rhs.SubdirectoriesFormat;
-			SubdirectoriesChannel = rhs.SubdirectoriesChannel;
+			FolderFormat  = rhs.FolderFormat;
+			FolderChannel = rhs.FolderChannel;
 
 			NameFormat    = rhs.NameFormat;
 			NameChannel   = rhs.NameChannel;
@@ -169,8 +169,8 @@ namespace YAT.Log.Settings
 
 			WriteMode = LogFileWriteMode.Create;
 
-			SubdirectoriesFormat  = false;
-			SubdirectoriesChannel = false;
+			FolderFormat  = false;
+			FolderChannel = false;
 
 			NameFormat    = false;
 			NameChannel   = false;
@@ -204,12 +204,12 @@ namespace YAT.Log.Settings
 		{
 			StringBuilder subdirectories = new StringBuilder();
 
-			if (this.subdirectoriesFormat)
+			if (this.folderFormat)
 			{
 				subdirectories.Append(MakeFormat(format));
 				subdirectories.Append(Path.DirectorySeparatorChar);
 			}
-			if (this.subdirectoriesChannel)
+			if (this.folderChannel)
 			{
 				subdirectories.Append(MakeChannel(channelType));
 				subdirectories.Append(Path.DirectorySeparatorChar);
@@ -647,30 +647,30 @@ namespace YAT.Log.Settings
 		//- Subdirectories --------------------------------------------------------
 
 		/// <summary></summary>
-		[XmlElement("SubdirectoriesFormat")]
-		public virtual bool SubdirectoriesFormat
+		[XmlElement("FolderFormat")]
+		public virtual bool FolderFormat
 		{
-			get { return (this.subdirectoriesFormat); }
+			get { return (this.folderFormat); }
 			set
 			{
-				if (this.subdirectoriesFormat != value)
+				if (this.folderFormat != value)
 				{
-					this.subdirectoriesFormat = value;
+					this.folderFormat = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("SubdirectoriesChannel")]
-		public virtual bool SubdirectoriesChannel
+		[XmlElement("FolderChannel")]
+		public virtual bool FolderChannel
 		{
-			get { return (this.subdirectoriesChannel); }
+			get { return (this.folderChannel); }
 			set
 			{
-				if (this.subdirectoriesChannel != value)
+				if (this.folderChannel != value)
 				{
-					this.subdirectoriesChannel = value;
+					this.folderChannel = value;
 					SetChanged();
 				}
 			}
@@ -821,8 +821,8 @@ namespace YAT.Log.Settings
 				(NeatLogRx               == other.NeatLogRx) &&
 				(NeatExtension           == other.NeatExtension) &&
 				(WriteMode               == other.WriteMode) &&
-				(SubdirectoriesFormat    == other.SubdirectoriesFormat) &&
-				(SubdirectoriesChannel   == other.SubdirectoriesChannel) &&
+				(FolderFormat    == other.FolderFormat) &&
+				(FolderChannel   == other.FolderChannel) &&
 				(NameFormat              == other.NameFormat) &&
 				(NameChannel             == other.NameChannel) &&
 				(NameDate                == other.NameDate) &&
@@ -855,8 +855,8 @@ namespace YAT.Log.Settings
 				this.neatLogRx            .GetHashCode() ^
 				this.neatExtension        .GetHashCode() ^
 				this.writeMode            .GetHashCode() ^
-				this.subdirectoriesFormat .GetHashCode() ^
-				this.subdirectoriesChannel.GetHashCode() ^
+				this.folderFormat .GetHashCode() ^
+				this.folderChannel.GetHashCode() ^
 				this.nameFormat           .GetHashCode() ^
 				this.nameChannel          .GetHashCode() ^
 				this.nameDate             .GetHashCode() ^

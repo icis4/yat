@@ -126,10 +126,6 @@
 
 Contact YAT via "Help &gt; Request Feature" to request additional presets.</value>
   </data>
-  <data name="label_Explanations.Text" xml:space="preserve">
-    <value>The root file specifies file name and root directory for all log files. The distinctive file name of each
-output can be seen in the boxes below. Use the options below to set the file location and name.</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>59</value>
   </metadata>

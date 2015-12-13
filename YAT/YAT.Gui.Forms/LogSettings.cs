@@ -284,16 +284,16 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_Options_SubdirectoriesFormat_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.SubdirectoriesFormat = checkBox_Options_SubdirectoriesFormat.Checked;
+				this.settingsInEdit.FolderFormat = checkBox_Options_FolderFormat.Checked;
 		}
 
-		private void checkBox_Options_SubdirectoriesChannel_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Options_FolderChannel_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.SubdirectoriesChannel = checkBox_Options_SubdirectoriesChannel.Checked;
+				this.settingsInEdit.FolderChannel = checkBox_Options_FolderChannel.Checked;
 		}
 
 		private void checkBox_Options_NameFormat_CheckedChanged(object sender, EventArgs e)
@@ -421,8 +421,8 @@ namespace YAT.Gui.Forms
 			rad_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			rad_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
 
-			checkBox_Options_SubdirectoriesFormat.Checked  = this.settingsInEdit.SubdirectoriesFormat;
-			checkBox_Options_SubdirectoriesChannel.Checked = this.settingsInEdit.SubdirectoriesChannel;
+			checkBox_Options_FolderFormat.Checked  = this.settingsInEdit.FolderFormat;
+			checkBox_Options_FolderChannel.Checked = this.settingsInEdit.FolderChannel;
 
 			checkBox_Options_NameFormat.Checked  = this.settingsInEdit.NameFormat;
 			checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
@@ -524,12 +524,12 @@ namespace YAT.Gui.Forms
 		private bool ResolveNamingConflicts()
 		{
 			if ((this.settingsInEdit.SameRawAndNeat) && (this.settingsInEdit.RawExtension == this.settingsInEdit.NeatExtension) &&
-				(!this.settingsInEdit.SubdirectoriesFormat && !this.settingsInEdit.NameFormat))
+				(!this.settingsInEdit.FolderFormat && !this.settingsInEdit.NameFormat))
 			{
 				string message =
-					"To avoid naming conflicts, files must either be placed in format subdirectories or named by format (Raw/Neat). " +
-					"Do you want to place the files in subdirectories (Yes) or name them by format (No)? You can also press " +
-					"Cancel and set different extensions.";
+					"To avoid naming conflicts, files must either be placed in format folders or named by format (Raw/Neat). " +
+					"Do you want to place the files in folders (Yes) or name them by format (No)? You may also cancel and" +
+					"set different extensions.";
 
 				switch (MessageBoxEx.Show
 					(
@@ -540,14 +540,14 @@ namespace YAT.Gui.Forms
 					MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: this.settingsInEdit.SubdirectoriesFormat = true; break;
+					case DialogResult.Yes: this.settingsInEdit.FolderFormat = true; break;
 					case DialogResult.No: this.settingsInEdit.NameFormat = true; break;
 					default: return (false);
 				}
 			}
 
 			if ((this.settingsInEdit.MultipleRaw || this.settingsInEdit.MultipleNeat) &&
-				(!this.settingsInEdit.SubdirectoriesChannel && !this.settingsInEdit.NameChannel))
+				(!this.settingsInEdit.FolderChannel && !this.settingsInEdit.NameChannel))
 			{
 				string message =
 					"To avoid naming conflicts, files must either be placed in channel " +
@@ -563,7 +563,7 @@ namespace YAT.Gui.Forms
 					MessageBoxIcon.Question
 					))
 				{
-					case DialogResult.Yes: this.settingsInEdit.SubdirectoriesChannel = true; break;
+					case DialogResult.Yes: this.settingsInEdit.FolderChannel = true; break;
 					case DialogResult.No: this.settingsInEdit.NameChannel = true; break;
 					default: return (false);
 				}

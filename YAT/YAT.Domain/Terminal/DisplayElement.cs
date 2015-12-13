@@ -50,6 +50,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DisplayElement.RxData))]
 	[XmlInclude(typeof(DisplayElement.RxControl))]
 	[XmlInclude(typeof(DisplayElement.TimeStamp))]
+	[XmlInclude(typeof(DisplayElement.DirectionStamp))]
 	[XmlInclude(typeof(DisplayElement.LineLength))]
 	[XmlInclude(typeof(DisplayElement.LeftMargin))]
 	[XmlInclude(typeof(DisplayElement.Space))]
@@ -191,6 +192,23 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TimeStamp(SerialDirection direction, string timeStamp)
 				: base(direction, timeStamp)
+			{
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class DirectionStamp : DisplayElement
+		{
+			/// <summary></summary>
+			public DirectionStamp()
+				: base(SerialDirection.None, "(" + SerialDirectionEx.ToString(SerialDirection.None) + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public DirectionStamp(SerialDirection direction)
+				: base(direction, "(" + SerialDirectionEx.ToString(direction) + ")")
 			{
 			}
 		}
@@ -462,17 +480,18 @@ namespace YAT.Domain
 
 			DisplayElement clone;
 
-			if      (this is TxData)      clone = new TxData();
-			else if (this is TxControl)   clone = new TxControl();
-			else if (this is RxData)      clone = new RxData();
-			else if (this is RxControl)   clone = new RxControl();
-			else if (this is TimeStamp)   clone = new TimeStamp();
-			else if (this is LineLength)  clone = new LineLength();
-			else if (this is LeftMargin)  clone = new LeftMargin();
-			else if (this is Space)       clone = new Space();
-			else if (this is RightMargin) clone = new RightMargin();
-			else if (this is LineBreak)   clone = new LineBreak();
-			else if (this is IOError)     clone = new IOError();
+			if      (this is TxData)         clone = new TxData();
+			else if (this is TxControl)      clone = new TxControl();
+			else if (this is RxData)         clone = new RxData();
+			else if (this is RxControl)      clone = new RxControl();
+			else if (this is TimeStamp)      clone = new TimeStamp();
+			else if (this is DirectionStamp) clone = new DirectionStamp();
+			else if (this is LineLength)     clone = new LineLength();
+			else if (this is LeftMargin)     clone = new LeftMargin();
+			else if (this is Space)          clone = new Space();
+			else if (this is RightMargin)    clone = new RightMargin();
+			else if (this is LineBreak)      clone = new LineBreak();
+			else if (this is IOError)        clone = new IOError();
 			else throw (new TypeLoadException(@"Program execution should never get here, """ + this + @""" is an unknown display element type, please report this bug!"));
 
 			clone.direction = this.direction;

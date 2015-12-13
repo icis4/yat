@@ -45,6 +45,9 @@ namespace YAT.Domain.Settings
 		public const bool ShowTimeStampDefault = false;
 
 		/// <summary></summary>
+		public const bool ShowDirectionDefault = false;
+
+		/// <summary></summary>
 		public const bool ShowLengthDefault = false;
 
 		/// <summary></summary>
@@ -61,6 +64,7 @@ namespace YAT.Domain.Settings
 		private Radix rxRadix;
 		private bool showRadix;
 		private bool showTimeStamp;
+		private bool showDirection;
 		private bool showLength;
 		private bool showLineNumbers;
 		private int txMaxLineCount;
@@ -94,6 +98,7 @@ namespace YAT.Domain.Settings
 			RxRadix           = rhs.RxRadix;
 			ShowRadix         = rhs.ShowRadix;
 			ShowTimeStamp     = rhs.ShowTimeStamp;
+			ShowDirection     = rhs.ShowDirection;
 			ShowLength        = rhs.ShowLength;
 			ShowLineNumbers   = rhs.ShowLineNumbers;
 			TxMaxLineCount    = rhs.TxMaxLineCount;
@@ -115,6 +120,7 @@ namespace YAT.Domain.Settings
 			RxRadix           = RadixDefault;
 			ShowRadix         = ShowRadixDefault;
 			ShowTimeStamp     = ShowTimeStampDefault;
+			ShowDirection     = ShowDirectionDefault;
 			ShowLength        = ShowLengthDefault;
 			ShowLineNumbers   = ShowLineNumbersDefault;
 			TxMaxLineCount    = MaxLineCountDefault;
@@ -203,6 +209,21 @@ namespace YAT.Domain.Settings
 				if (this.showTimeStamp != value)
 				{
 					this.showTimeStamp = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ShowDirection")]
+		public virtual bool ShowDirection
+		{
+			get { return (this.showDirection); }
+			set
+			{
+				if (this.showDirection != value)
+				{
+					this.showDirection = value;
 					SetChanged();
 				}
 			}
@@ -325,6 +346,7 @@ namespace YAT.Domain.Settings
 				(RxRadix                   == other.RxRadix) &&
 				(ShowRadix                 == other.ShowRadix) &&
 				(ShowTimeStamp             == other.ShowTimeStamp) &&
+				(ShowDirection             == other.ShowDirection) &&
 				(ShowLength                == other.ShowLength) &&
 				(ShowLineNumbers           == other.ShowLineNumbers) &&
 				(TxMaxLineCount            == other.TxMaxLineCount) &&
@@ -351,6 +373,7 @@ namespace YAT.Domain.Settings
 				RxRadix                  .GetHashCode() ^
 				ShowRadix                .GetHashCode() ^
 				ShowTimeStamp            .GetHashCode() ^
+				ShowDirection            .GetHashCode() ^
 				ShowLength               .GetHashCode() ^
 				ShowLineNumbers          .GetHashCode() ^
 				TxMaxLineCount           .GetHashCode() ^

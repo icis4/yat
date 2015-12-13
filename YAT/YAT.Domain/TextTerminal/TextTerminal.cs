@@ -492,13 +492,18 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineBegin(LineState lineState, DateTime ts, DisplayElementCollection elements)
+		private void ExecuteLineBegin(LineState lineState, SerialDirection d, DateTime ts, DisplayElementCollection elements)
 		{
-			if (TerminalSettings.Display.ShowTimeStamp)
+			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart lp = new DisplayLinePart();
 
-				lp.Add(new DisplayElement.TimeStamp(ts));
+				if (TerminalSettings.Display.ShowTimeStamp)
+					lp.Add(new DisplayElement.TimeStamp(ts));
+
+				if (TerminalSettings.Display.ShowDirection)
+					lp.Add(new DisplayElement.DirectionStamp(d));
+
 				lp.Add(new DisplayElement.LeftMargin());
 
 				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
@@ -675,7 +680,7 @@ namespace YAT.Domain
 			{
 				// Line begin and time stamp.
 				if (lineState.LinePosition == LinePosition.Begin)
-					ExecuteLineBegin(lineState, re.TimeStamp, elements);
+					ExecuteLineBegin(lineState, re.Direction, re.TimeStamp, elements);
 
 				// Data.
 				ExecuteData(lineState, re.Direction, b, elements);

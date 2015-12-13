@@ -690,7 +690,7 @@ namespace YAT.Gui.Controls
 
 		private void Monitor_Resize(object sender, EventArgs e)
 		{
-			const int IconDistance = 16; // 16 relates to half the size of the direction icon.
+			const int IconDistance = 14; // 14 relates to half the size of the direction icon.
 			int middle = (Width / 2);
 
 			label_TimeStatus.Width  = middle - IconDistance;

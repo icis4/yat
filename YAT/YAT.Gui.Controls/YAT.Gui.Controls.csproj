@@ -380,33 +380,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_left_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_left_grey_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_refresh_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_refresh_grey_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_right_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_right_grey_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_left_purple_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_refresh_blue_purple_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Monitor\Image_Monitor_arrow_right_blue_32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Monitor\Image_Monitor_Bidir_28x28_BluePurple.png" />
   </ItemGroup>
   <ItemGroup>

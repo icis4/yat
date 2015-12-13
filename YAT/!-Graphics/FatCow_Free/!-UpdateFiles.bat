@@ -26,11 +26,9 @@ PUSHD
 :: -------------------------------------------------------------------------------------------------
 SET TARGET_FORM_TOOL=..\..\YAT.Gui.Forms\Resources\Tool
 SET TARGET_CTRL_TOOL=..\..\YAT.Gui.Controls\Resources\Tool
-SET TARGET_CTRL_MONITOR=..\..\YAT.Gui.Controls\Resources\Monitor
 
 DEL %TARGET_FORM_TOOL%\*.* /F /Q
 DEL %TARGET_CTRL_TOOL%\*.* /F /Q
-DEL %TARGET_CTRL_MONITOR%\*.* /F /Q
 :: -------------------------------------------------------------------------------------------------
 CD 16x16
 

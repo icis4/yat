@@ -654,14 +654,19 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
 
 			// Display:
+			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
+			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled      = isNotString;
 			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked      = this.settingsRoot.Display.ShowRadix;
-			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked  = this.settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked     = this.settingsRoot.Display.ShowLength;
-			
+
+			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
+
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = (isText && this.settingsRoot.TextTerminal.ShowEol);
 
-			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
 
 			// Flow control count:
 			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
@@ -749,14 +754,19 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
+		private void toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+		}
+
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowDirection_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
+			this.settingsRoot.Display.ShowDirection = !this.settingsRoot.Display.ShowDirection;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowEol_Click(object sender, EventArgs e)
@@ -764,9 +774,9 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount_Click(object sender, EventArgs e)
@@ -898,15 +908,20 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
 			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
 
+			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
+			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled     = isNotString;
 			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked     = this.settingsRoot.Display.ShowRadix;
-			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = this.settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked    = this.settingsRoot.Display.ShowLength;
+
+			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
 
 			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
 			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
@@ -969,14 +984,19 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
+		private void toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+		}
+
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowLength_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowDirection_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
+			this.settingsRoot.Display.ShowDirection = !this.settingsRoot.Display.ShowDirection;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowEol_Click(object sender, EventArgs e)
@@ -984,9 +1004,9 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowLineNumbers_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowLength_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)

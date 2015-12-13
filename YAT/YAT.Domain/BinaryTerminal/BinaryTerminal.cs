@@ -489,13 +489,18 @@ namespace YAT.Domain
 			this.bidirLineState = new BidirLineState(true, SerialDirection.Tx);
 		}
 
-		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts, DisplayElementCollection elements)
+		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, SerialDirection d, DateTime ts, DisplayElementCollection elements)
 		{
-			if (TerminalSettings.Display.ShowTimeStamp)
+			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart lp = new DisplayLinePart();
 
-				lp.Add(new DisplayElement.TimeStamp(ts));
+				if (TerminalSettings.Display.ShowTimeStamp)
+					lp.Add(new DisplayElement.TimeStamp(ts));
+
+				if (TerminalSettings.Display.ShowDirection)
+					lp.Add(new DisplayElement.DirectionStamp(d));
+
 				lp.Add(new DisplayElement.LeftMargin());
 
 				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
@@ -618,7 +623,7 @@ namespace YAT.Domain
 				// Line begin.
 				if (lineState.LinePosition == LinePosition.Begin)
 				{
-					ExecuteLineBegin(displaySettings, lineState, re.TimeStamp, elements);
+					ExecuteLineBegin(displaySettings, lineState, re.Direction, re.TimeStamp, elements);
 				}
 				else
 				{
