@@ -110,10 +110,10 @@
 			// 
 			// pictureBox_Monitor
 			// 
-			this.pictureBox_Monitor.BackgroundImage = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_arrow_refresh_grey_32x32;
+			this.pictureBox_Monitor.BackgroundImage = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_Bidir_28x28_Grey;
 			this.pictureBox_Monitor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.pictureBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pictureBox_Monitor.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_arrow_refresh_32x32;
+			this.pictureBox_Monitor.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_Bidir_28x28_BluePurple;
 			this.pictureBox_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox_Monitor.Name = "pictureBox_Monitor";
 			this.pictureBox_Monitor.Size = new System.Drawing.Size(300, 31);

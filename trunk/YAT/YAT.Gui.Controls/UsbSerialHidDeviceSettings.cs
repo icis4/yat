@@ -372,7 +372,7 @@ namespace YAT.Gui.Controls
 				(
 					this.Parent,
 					"Unable to open link." + Environment.NewLine + Environment.NewLine +
-					"System message:" + Environment.NewLine + ex.Message,
+					"System error message:" + Environment.NewLine + ex.Message,
 					"System Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning

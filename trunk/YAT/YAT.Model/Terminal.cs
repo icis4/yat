@@ -3288,8 +3288,8 @@ namespace YAT.Model
 					{
 						DialogResult dr = OnMessageInputRequest
 						(
-							"Unable to open log file." + Environment.NewLine + Environment.NewLine +
-							"System message:" + Environment.NewLine + ex.Message,
+							"Unable to open log file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+							"System error message:" + Environment.NewLine + ex.Message,
 							"Log File Error",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Error
