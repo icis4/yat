@@ -138,7 +138,7 @@ namespace YAT.Model
 		private Domain.Terminal terminal;
 
 		// Logs:
-		private Log.Logs log;
+		private Log.Provider log;
 
 		// Time status:
 		private Chronometer connectChrono;
@@ -282,7 +282,7 @@ namespace YAT.Model
 			AttachTerminalEventHandlers();
 
 			// Create log.
-			this.log = new Log.Logs(this.settingsRoot.Log);
+			this.log = new Log.Provider(this.settingsRoot.Log);
 
 			// Create chronos.
 			CreateChronos();
@@ -534,6 +534,20 @@ namespace YAT.Model
 
 				if (this.terminal != null)
 					return (this.log.IsOn);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool LogFileExists
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.terminal != null)
+					return (this.log.FileExists);
 				else
 					return (false);
 			}
@@ -981,7 +995,7 @@ namespace YAT.Model
 			// Begin logging (in case opening of terminal needs to be logged).
 			if (this.settingsRoot.LogIsOn)
 			{
-				if (!LogOn())
+				if (!SwitchLogOn())
 					return (false);
 			}
 
@@ -1703,7 +1717,7 @@ namespace YAT.Model
 
 				// Then, close log:
 				if (this.log.IsOn)
-					LogOff();
+					SwitchLogOff();
 
 				// Finally, ensure that chronos are stopped and do not fire events anymore:
 				StopChronos();
@@ -2203,7 +2217,7 @@ namespace YAT.Model
 			{
 				this.terminal.Send(data);
 			}
-			catch (System.IO.IOException ex)
+			catch (IOException ex)
 			{
 				OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
 
@@ -2256,7 +2270,7 @@ namespace YAT.Model
 				else
 					this.terminal.Send(data);
 			}
-			catch (System.IO.IOException ex)
+			catch (IOException ex)
 			{
 				OnFixedStatusTextRequest("Error sending " + sendStatusText + "!");
 
@@ -3172,13 +3186,13 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool LogOn()
+		public virtual bool SwitchLogOn()
 		{
 			try
 			{
 				// Re-apply settings immediately, makes sure date/time in filenames is refreshed:
 				this.log.Settings = this.settingsRoot.Log;
-				this.log.Begin();
+				this.log.SwitchOn();
 				this.settingsRoot.LogIsOn = true;
 
 				return (true);
@@ -3201,7 +3215,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool LogClear()
+		public virtual bool ClearLog()
 		{
 			try
 			{
@@ -3209,7 +3223,7 @@ namespace YAT.Model
 
 				return (true);
 			}
-			catch (System.IO.IOException ex)
+			catch (IOException ex)
 			{
 				OnMessageInputRequest
 				(
@@ -3227,17 +3241,17 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool LogOff()
+		public virtual bool SwitchLogOff()
 		{
-			return LogOff(true);
+			return SwitchLogOff(true);
 		}
 
 		/// <summary></summary>
-		public virtual bool LogOff(bool saveStatus)
+		public virtual bool SwitchLogOff(bool saveStatus)
 		{
 			try
 			{
-				this.log.End();
+				this.log.SwitchOff();
 
 				if (saveStatus)
 					this.settingsRoot.LogIsOn = false;
@@ -3256,6 +3270,52 @@ namespace YAT.Model
 				);
 
 				return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool OpenLogFile()
+		{
+			IList<string> filePaths = this.log.GetFilePaths();
+			if (filePaths.Count > 0)
+			{
+				bool success = true;
+
+				foreach (string filePath in this.log.GetFilePaths())
+				{
+					Exception ex;
+					if (!Editor.TryOpenFile(filePath, out ex))
+					{
+						DialogResult dr = OnMessageInputRequest
+						(
+							"Unable to open log file." + Environment.NewLine + Environment.NewLine +
+							"System message:" + Environment.NewLine + ex.Message,
+							"Log File Error",
+							MessageBoxButtons.OKCancel,
+							MessageBoxIcon.Error
+						);
+
+						if (dr == DialogResult.Cancel)
+						{
+							success = false;
+							break;
+						}
+					}
+				}
+
+				return (success);
+			}
+			else
+			{
+				OnMessageInputRequest
+				(
+					"No log file(s) available (yet).",
+					"Log File Information",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				return (true);
 			}
 		}
 
@@ -3360,7 +3420,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException(@"A 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!"));
+					throw (new InvalidOperationException(@"Program execution should never get here, a 'Message Input' request by terminal """ + Caption + @""" was not processed by the application, please report this bug!"));
 
 				return (e.Result);
 			}

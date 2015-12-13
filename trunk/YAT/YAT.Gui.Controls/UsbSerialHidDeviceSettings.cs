@@ -366,7 +366,7 @@ namespace YAT.Gui.Controls
 		private void linkLabel_Info_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Exception ex;
-			if (!MKY.Net.Browser.BrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
+			if (!MKY.Net.Browser.TryBrowseUri(MKY.IO.Usb.SerialHidReportFormatPresetEx.TI_Link, out ex))
 			{
 				MessageBox.Show
 				(

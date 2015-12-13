@@ -1940,7 +1940,7 @@ namespace YAT.Model
 
 			foreach (Terminal t in this.terminals)
 			{
-				if (!t.LogOn())
+				if (!t.SwitchLogOn())
 					success = false;
 			}
 
@@ -1956,7 +1956,7 @@ namespace YAT.Model
 
 			foreach (Terminal t in this.terminals)
 			{
-				if (!t.LogOff())
+				if (!t.SwitchLogOff())
 					success = false;
 			}
 
@@ -1972,7 +1972,7 @@ namespace YAT.Model
 
 			foreach (Terminal t in this.terminals)
 			{
-				if (!t.LogClear())
+				if (!t.ClearLog())
 					success = false;
 			}
 

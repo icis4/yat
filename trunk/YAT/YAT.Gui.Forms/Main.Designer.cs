@@ -50,9 +50,9 @@
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,6 +110,7 @@
 			this.toolStripButton_MainTool_File_New = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_File_Open = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_File_Save = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_File_SaveWorkspace = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Settings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
@@ -133,6 +134,7 @@
 			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Log_On = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Log_Off = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Log_Open = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Format = new System.Windows.Forms.ToolStripButton();
 			this.toolStripPanel_Top = new System.Windows.Forms.ToolStripPanel();
@@ -215,7 +217,7 @@
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
@@ -300,14 +302,6 @@
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
-			// 
 			// toolStripMenuItem_MainContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_MainContextMenu_Separator_2.Name = "toolStripMenuItem_MainContextMenu_Separator_2";
@@ -319,6 +313,14 @@
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
+			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -400,6 +402,7 @@
 			// toolStripMenuItem_MainMenu_File_SaveAll
 			// 
 			this.toolStripMenuItem_MainMenu_File_SaveAll.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_SaveAll.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_save_all_16x16;
 			this.toolStripMenuItem_MainMenu_File_SaveAll.MergeIndex = 8;
 			this.toolStripMenuItem_MainMenu_File_SaveAll.Name = "toolStripMenuItem_MainMenu_File_SaveAll";
 			this.toolStripMenuItem_MainMenu_File_SaveAll.Size = new System.Drawing.Size(155, 22);
@@ -460,6 +463,7 @@
 			// 
 			// toolStripMenuItem_MainMenu_File_Workspace_Save
 			// 
+			this.toolStripMenuItem_MainMenu_File_Workspace_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_layer_save_16x16;
 			this.toolStripMenuItem_MainMenu_File_Workspace_Save.Name = "toolStripMenuItem_MainMenu_File_Workspace_Save";
 			this.toolStripMenuItem_MainMenu_File_Workspace_Save.Size = new System.Drawing.Size(184, 22);
 			this.toolStripMenuItem_MainMenu_File_Workspace_Save.Text = "&Save Workspace";
@@ -546,10 +550,10 @@
 			// 
 			// toolStripMenuItem_MainMenu_Log_AllClear
 			// 
-			this.toolStripMenuItem_MainMenu_Log_AllClear.MergeIndex = 7;
+			this.toolStripMenuItem_MainMenu_Log_AllClear.MergeIndex = 9;
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Name = "toolStripMenuItem_MainMenu_Log_AllClear";
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Size = new System.Drawing.Size(118, 22);
-			this.toolStripMenuItem_MainMenu_Log_AllClear.Text = "All Clea&r";
+			this.toolStripMenuItem_MainMenu_Log_AllClear.Text = "Clea&r All";
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllClear_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Window
@@ -563,7 +567,7 @@
             this.toolStripMenuItem_MainMenu_Window_Minimize});
 			this.toolStripMenuItem_MainMenu_Window.MergeIndex = 5;
 			this.toolStripMenuItem_MainMenu_Window.Name = "toolStripMenuItem_MainMenu_Window";
-			this.toolStripMenuItem_MainMenu_Window.Size = new System.Drawing.Size(94, 20);
+			this.toolStripMenuItem_MainMenu_Window.Size = new System.Drawing.Size(63, 20);
 			this.toolStripMenuItem_MainMenu_Window.Text = "&Window";
 			this.toolStripMenuItem_MainMenu_Window.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_MainMenu_Window_DropDownOpening);
 			// 
@@ -786,6 +790,7 @@
             this.toolStripButton_MainTool_File_New,
             this.toolStripButton_MainTool_File_Open,
             this.toolStripButton_MainTool_File_Save,
+            this.toolStripButton_MainTool_File_SaveWorkspace,
             this.toolStripMenuItem_MainTool_Separator_1,
             this.toolStripButton_MainTool_Terminal_Settings,
             this.toolStripMenuItem_MainTool_Separator_2,
@@ -809,11 +814,12 @@
             this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Terminal_Log_On,
             this.toolStripButton_MainTool_Terminal_Log_Off,
+            this.toolStripButton_MainTool_Terminal_Log_Open,
             this.toolStripSeparator1,
             this.toolStripButton_MainTool_Terminal_Format});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip_Main.Name = "toolStrip_Main";
-			this.toolStrip_Main.Size = new System.Drawing.Size(546, 25);
+			this.toolStrip_Main.Size = new System.Drawing.Size(623, 25);
 			this.toolStrip_Main.TabIndex = 0;
 			// 
 			// toolStripButton_MainTool_File_New
@@ -845,6 +851,15 @@
 			this.toolStripButton_MainTool_File_Save.Text = "Save Terminal...";
 			this.toolStripButton_MainTool_File_Save.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.toolStripButton_MainTool_File_Save.Click += new System.EventHandler(this.toolStripButton_MainTool_File_Save_Click);
+			// 
+			// toolStripButton_MainTool_File_SaveWorkspace
+			// 
+			this.toolStripButton_MainTool_File_SaveWorkspace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_File_SaveWorkspace.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_layer_save_16x16;
+			this.toolStripButton_MainTool_File_SaveWorkspace.Name = "toolStripButton_MainTool_File_SaveWorkspace";
+			this.toolStripButton_MainTool_File_SaveWorkspace.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_File_SaveWorkspace.Text = "Save Workspace...";
+			this.toolStripButton_MainTool_File_SaveWorkspace.Click += new System.EventHandler(this.toolStripButton_MainTool_File_SaveWorkspace_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_1
 			// 
@@ -1037,6 +1052,15 @@
 			this.toolStripButton_MainTool_Terminal_Log_Off.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Log_Off.Text = "Switch Log Off";
 			this.toolStripButton_MainTool_Terminal_Log_Off.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Off_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Log_Open
+			// 
+			this.toolStripButton_MainTool_Terminal_Log_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_Log_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
+			this.toolStripButton_MainTool_Terminal_Log_Open.Name = "toolStripButton_MainTool_Terminal_Log_Open";
+			this.toolStripButton_MainTool_Terminal_Log_Open.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Log_Open.Text = "Open Log File(s) In Editor...";
+			this.toolStripButton_MainTool_Terminal_Log_Open.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Open_Click);
 			// 
 			// toolStripSeparator1
 			// 
@@ -1243,5 +1267,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_Maximize;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Window_Separator1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_Minimize;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_SaveWorkspace;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Open;
 	}
 }
