@@ -127,6 +127,11 @@ namespace YAT.Model.Utilities
 				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.TimeStampFormat.FontStyle);
 				richTextProvider.SelectionColor = formatSettings.TimeStampFormat.Color;
 			}
+			else if (element is Domain.DisplayElement.DirectionStamp)
+			{
+				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.DirectionFormat.FontStyle);
+				richTextProvider.SelectionColor = formatSettings.DirectionFormat.Color;
+			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{
 				richTextProvider.SelectionFont = new Font(fontName, fontSize, formatSettings.LengthFormat.FontStyle);

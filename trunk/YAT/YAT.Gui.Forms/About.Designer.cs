@@ -68,6 +68,7 @@
 			this.label_ExecuteManualTest2 = new System.Windows.Forms.Label();
 			this.label_ExecuteManualTest3 = new System.Windows.Forms.Label();
 			this.timer_ExecuteManualTest2 = new System.Windows.Forms.Timer(this.components);
+			this.linkLabel_Thanks = new System.Windows.Forms.LinkLabel();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Product)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_License)).BeginInit();
 			this.SuspendLayout();
@@ -76,7 +77,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(531, 427);
+			this.button_Close.Location = new System.Drawing.Point(531, 420);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -189,11 +190,11 @@
 			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 414);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 409);
 			this.linkLabel_Home.Name = "linkLabel_Home";
-			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
-			this.linkLabel_Home.TabIndex = 12;
-			this.linkLabel_Home.Text = "Visit YAT on SourceForge.net. Tell us if you like it or why you don\'t.";
+			this.linkLabel_Home.Size = new System.Drawing.Size(259, 13);
+			this.linkLabel_Home.TabIndex = 14;
+			this.linkLabel_Home.Text = "Visit YAT on SourceForge.net. Feedback is welcome!";
 			this.linkLabel_Home.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Trademark
@@ -212,7 +213,7 @@
 			this.linkLabel_Environment.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 247);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
-			this.linkLabel_Environment.Size = new System.Drawing.Size(377, 156);
+			this.linkLabel_Environment.Size = new System.Drawing.Size(374, 143);
 			this.linkLabel_Environment.TabIndex = 11;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
@@ -222,10 +223,10 @@
 			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 437);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 430);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
-			this.linkLabel_Author.TabIndex = 13;
+			this.linkLabel_Author.TabIndex = 15;
 			this.linkLabel_Author.Text = "<AUTHOR>";
 			this.linkLabel_Author.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -248,7 +249,7 @@
 			this.linkLabel_License.Location = new System.Drawing.Point(394, 247);
 			this.linkLabel_License.Name = "linkLabel_License";
 			this.linkLabel_License.Size = new System.Drawing.Size(188, 13);
-			this.linkLabel_License.TabIndex = 14;
+			this.linkLabel_License.TabIndex = 12;
 			this.linkLabel_License.Text = "YAT is licensed under the GNU LGPL.";
 			this.linkLabel_License.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -269,7 +270,7 @@
 			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(605, 61);
 			this.label_ExecuteManualTest1.Name = "label_ExecuteManualTest1";
 			this.label_ExecuteManualTest1.Size = new System.Drawing.Size(16, 16);
-			this.label_ExecuteManualTest1.TabIndex = 101;
+			this.label_ExecuteManualTest1.TabIndex = 16;
 			this.label_ExecuteManualTest1.Click += new System.EventHandler(this.label_ExecuteManualTest1_Click);
 			// 
 			// label_ExecuteManualTest2
@@ -278,7 +279,7 @@
 			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(605, 135);
 			this.label_ExecuteManualTest2.Name = "label_ExecuteManualTest2";
 			this.label_ExecuteManualTest2.Size = new System.Drawing.Size(16, 16);
-			this.label_ExecuteManualTest2.TabIndex = 102;
+			this.label_ExecuteManualTest2.TabIndex = 17;
 			this.label_ExecuteManualTest2.Click += new System.EventHandler(this.label_ExecuteManualTest2_Click);
 			// 
 			// label_ExecuteManualTest3
@@ -287,12 +288,23 @@
 			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(605, 222);
 			this.label_ExecuteManualTest3.Name = "label_ExecuteManualTest3";
 			this.label_ExecuteManualTest3.Size = new System.Drawing.Size(16, 16);
-			this.label_ExecuteManualTest3.TabIndex = 103;
+			this.label_ExecuteManualTest3.TabIndex = 18;
 			this.label_ExecuteManualTest3.Click += new System.EventHandler(this.label_ExecuteManualTest3_Click);
 			// 
 			// timer_ExecuteManualTest2
 			// 
 			this.timer_ExecuteManualTest2.Tick += new System.EventHandler(this.timer_ExecuteManualTest2_Tick);
+			// 
+			// linkLabel_Thanks
+			// 
+			this.linkLabel_Thanks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.linkLabel_Thanks.AutoSize = true;
+			this.linkLabel_Thanks.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.linkLabel_Thanks.Location = new System.Drawing.Point(12, 396);
+			this.linkLabel_Thanks.Name = "linkLabel_Thanks";
+			this.linkLabel_Thanks.Size = new System.Drawing.Size(343, 13);
+			this.linkLabel_Thanks.TabIndex = 13;
+			this.linkLabel_Thanks.Text = "Many thanks to everybody who helped YAT to become what it is today!";
 			// 
 			// About
 			// 
@@ -300,7 +312,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(618, 462);
+			this.ClientSize = new System.Drawing.Size(618, 455);
+			this.Controls.Add(this.linkLabel_Thanks);
 			this.Controls.Add(this.label_ExecuteManualTest3);
 			this.Controls.Add(this.label_ExecuteManualTest2);
 			this.Controls.Add(this.label_ExecuteManualTest1);
@@ -358,5 +371,6 @@
 		private System.Windows.Forms.Label label_ExecuteManualTest2;
 		private System.Windows.Forms.Label label_ExecuteManualTest3;
 		private System.Windows.Forms.Timer timer_ExecuteManualTest2;
+		private System.Windows.Forms.LinkLabel linkLabel_Thanks;
 	}
 }

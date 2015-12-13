@@ -402,12 +402,6 @@
     <None Include="Resources\Tool\Image_Tool_application_tile_vertical_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_arrow_refresh_small_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_broom_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_bullet_blue_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_bullet_green_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_bullet_orange_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_bullet_red_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_bullet_white_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_bullet_yellow_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_delete_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_folder_add_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_page_white_delete_16x16.png" />

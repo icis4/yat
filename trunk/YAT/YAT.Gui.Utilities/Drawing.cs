@@ -60,6 +60,7 @@ namespace YAT.Gui.Utilities
 		private static DrawingElements rxData      = new DrawingElements();
 		private static DrawingElements rxControl   = new DrawingElements();
 		private static DrawingElements timeStamp   = new DrawingElements();
+		private static DrawingElements direction   = new DrawingElements();
 		private static DrawingElements lineLength  = new DrawingElements();
 		private static DrawingElements whiteSpaces = new DrawingElements();
 		private static DrawingElements error       = new DrawingElements();
@@ -227,6 +228,13 @@ namespace YAT.Gui.Utilities
 				fontColor = settings.TimeStampFormat.Color;
 				font  = SetFont (ref timeStamp.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref timeStamp.Brush, fontColor);
+			}
+			else if (element is Domain.DisplayElement.DirectionStamp)
+			{
+				fontStyle = settings.DirectionFormat.FontStyle;
+				fontColor = settings.DirectionFormat.Color;
+				font  = SetFont (ref direction.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref direction.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{

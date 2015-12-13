@@ -177,6 +177,12 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.Display.ShowTimeStamp = checkBox_ShowTimeStamp.Checked;
 		}
 
+		private void checkBox_ShowDirection_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
+		}
+
 		private void checkBox_ShowLength_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -627,6 +633,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowRadix.Checked        = this.settingsInEdit.Terminal.Display.ShowRadix;
 			checkBox_ShowLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
 			checkBox_ShowTimeStamp.Checked    = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
+			checkBox_ShowDirection.Checked    = this.settingsInEdit.Terminal.Display.ShowDirection;
 			checkBox_ShowLength.Checked       = this.settingsInEdit.Terminal.Display.ShowLength;
 			checkBox_ShowConnectTime.Checked  = this.settingsInEdit.Terminal.Status.ShowConnectTime;
 			checkBox_ShowCountAndRate.Checked = this.settingsInEdit.Terminal.Status.ShowCountAndRate;
@@ -710,6 +717,7 @@ namespace YAT.Gui.Forms
 
 			// Display:
 			this.settingsInEdit.Terminal.Display.ShowRadix           = Domain.Settings.DisplaySettings.ShowRadixDefault;
+			this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 			this.settingsInEdit.Terminal.Display.ShowTimeStamp       = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
 			this.settingsInEdit.Terminal.Display.ShowLength          = Domain.Settings.DisplaySettings.ShowLengthDefault;
 			this.settingsInEdit.Terminal.Display.ShowLineNumbers     = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;

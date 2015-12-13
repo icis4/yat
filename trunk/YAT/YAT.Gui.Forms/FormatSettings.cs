@@ -182,12 +182,14 @@ namespace YAT.Gui.Forms
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStamp(DateTime.Now)));
+			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionStamp(Domain.SerialDirection.Tx)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.LineLength(2)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOError("Message")));
 
 			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24);
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionStamp(Domain.SerialDirection.Tx));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
@@ -197,6 +199,7 @@ namespace YAT.Gui.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionStamp(Domain.SerialDirection.Rx));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
@@ -237,16 +240,16 @@ namespace YAT.Gui.Forms
 		private void InitializeControls()
 		{
 			this.monitors = new Controls.Monitor[]
-				{
-					monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
-					monitor_TimeStamp, monitor_Length, monitor_Error,
-				};
+			{
+				monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
+				monitor_TimeStamp, monitor_Direction, monitor_Length, monitor_Error,
+			};
 
 			this.textFormats = new Controls.TextFormat[]
-				{
-					textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
-					textFormat_TimeStamp, textFormat_Length, textFormat_Error,
-				};
+			{
+				textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
+				textFormat_TimeStamp, textFormat_Direction, textFormat_Length, textFormat_Error,
+			};
 
 			for (int i = 0; i < this.monitors.Length; i++)
 				this.monitors[i].AddLine(this.exampleLines[i]);
@@ -263,8 +266,9 @@ namespace YAT.Gui.Forms
 				case 2: return (this.formatSettingsInEdit.RxDataFormat);
 				case 3: return (this.formatSettingsInEdit.RxControlFormat);
 				case 4: return (this.formatSettingsInEdit.TimeStampFormat);
-				case 5: return (this.formatSettingsInEdit.LengthFormat);
-				case 6: return (this.formatSettingsInEdit.ErrorFormat);
+				case 5: return (this.formatSettingsInEdit.DirectionFormat);
+				case 6: return (this.formatSettingsInEdit.LengthFormat);
+				case 7: return (this.formatSettingsInEdit.ErrorFormat);
 			}
 			throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index!"));
 		}

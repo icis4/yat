@@ -492,6 +492,7 @@ namespace YAT.Gui.Forms
 				// Display:
 				this.settingsInEdit.Terminal.Display.ShowRadix           = f.SettingsResult.Terminal.Display.ShowRadix;
 				this.settingsInEdit.Terminal.Display.ShowTimeStamp       = f.SettingsResult.Terminal.Display.ShowTimeStamp;
+				this.settingsInEdit.Terminal.Display.ShowDirection       = f.SettingsResult.Terminal.Display.ShowDirection;
 				this.settingsInEdit.Terminal.Display.ShowLength          = f.SettingsResult.Terminal.Display.ShowLength;
 				this.settingsInEdit.Terminal.Display.ShowLineNumbers     = f.SettingsResult.Terminal.Display.ShowLineNumbers;
 				this.settingsInEdit.Terminal.Status.ShowConnectTime      = f.SettingsResult.Terminal.Status.ShowConnectTime;

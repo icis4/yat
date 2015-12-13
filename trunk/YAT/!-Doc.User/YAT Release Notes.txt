@@ -91,7 +91,7 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 ----------------------------------------------------------------------------------------------------
 
 New:
--
+- Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 
 Important changes:
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the following items.

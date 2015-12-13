@@ -34,19 +34,19 @@ namespace YAT.Model.Settings
 	public class FormatSettings : MKY.Settings.SettingsItem
 	{
 		/// <remarks>Color.Blue = 0000FF.</remarks>
-		public readonly Color TxColor = Color.Blue;
+		public readonly Color DefaultTxColor = Color.Blue;
 
 		/// <remarks>Color.Purple = 800080.</remarks>
-		public readonly Color RxColor = Color.Purple;
+		public readonly Color DefaultRxColor = Color.Purple;
 
 		/// <remarks>Color.DarkGreen = 006400.</remarks>
-		public readonly Color InfoColor = Color.DarkGreen;
+		public readonly Color DefaultInfoColor = Color.DarkGreen;
 
 		/// <remarks>Color.Black = 000000.</remarks>
-		public readonly Color WhiteSpacesColor = Color.Black;
+		public readonly Color DefaultWhiteSpacesColor = Color.Black;
 
 		/// <remarks>Color.OrangeRed = FF4500.</remarks>
-		public readonly Color ErrorColor = Color.OrangeRed;
+		public readonly Color DefaultErrorColor = Color.OrangeRed;
 
 		private FontFormat font;
 		private TextFormat txDataFormat;
@@ -54,6 +54,7 @@ namespace YAT.Model.Settings
 		private TextFormat rxDataFormat;
 		private TextFormat rxControlFormat;
 		private TextFormat timeStampFormat;
+		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
 		private TextFormat whiteSpacesFormat;
 		private TextFormat errorFormat;
@@ -86,6 +87,7 @@ namespace YAT.Model.Settings
 			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
 			RxControlFormat   = new TextFormat(rhs.RxControlFormat);
 			TimeStampFormat   = new TextFormat(rhs.TimeStampFormat);
+			DirectionFormat   = new TextFormat(rhs.DirectionFormat);
 			LengthFormat      = new TextFormat(rhs.LengthFormat);
 			WhiteSpacesFormat = new TextFormat(rhs.WhiteSpacesFormat);
 			ErrorFormat       = new TextFormat(rhs.ErrorFormat);
@@ -100,14 +102,15 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			FontFormat        = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
-			TxDataFormat      = new TextFormat(TxColor, true, false, false, false); // Bold.
-			TxControlFormat   = new TextFormat(TxColor, false, false, false, false);
-			RxDataFormat      = new TextFormat(RxColor, true, false, false, false); // Bold.
-			RxControlFormat   = new TextFormat(RxColor, false, false, false, false);
-			TimeStampFormat   = new TextFormat(InfoColor, false, false, false, false);
-			LengthFormat      = new TextFormat(InfoColor, false, false, false, false);
-			WhiteSpacesFormat = new TextFormat(WhiteSpacesColor, false, false, false, false);
-			ErrorFormat       = new TextFormat(ErrorColor, true, false, false, false); // Bold.
+			TxDataFormat      = new TextFormat(DefaultTxColor,           true, false, false, false); // Bold.
+			TxControlFormat   = new TextFormat(DefaultTxColor,          false, false, false, false);
+			RxDataFormat      = new TextFormat(DefaultRxColor,           true, false, false, false); // Bold.
+			RxControlFormat   = new TextFormat(DefaultRxColor,          false, false, false, false);
+			TimeStampFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
+			DirectionFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
+			LengthFormat      = new TextFormat(DefaultInfoColor,        false, false, false, false);
+			WhiteSpacesFormat = new TextFormat(DefaultWhiteSpacesColor, false, false, false, false);
+			ErrorFormat       = new TextFormat(DefaultErrorColor,        true, false, false, false); // Bold.
 		}
 
 		#region Properties
@@ -221,6 +224,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("DirectionFormat")]
+		public TextFormat DirectionFormat
+		{
+			get { return (this.directionFormat); }
+			set
+			{
+				if (this.directionFormat != value)
+				{
+					this.directionFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("LengthFormat")]
 		public TextFormat LengthFormat
 		{
@@ -295,6 +313,7 @@ namespace YAT.Model.Settings
 				(RxDataFormat      == other.RxDataFormat) &&
 				(RxControlFormat   == other.RxControlFormat) &&
 				(TimeStampFormat   == other.TimeStampFormat) &&
+				(DirectionFormat   == other.DirectionFormat) &&
 				(LengthFormat      == other.LengthFormat) &&
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
 				(ErrorFormat       == other.ErrorFormat)
@@ -320,6 +339,7 @@ namespace YAT.Model.Settings
 				RxDataFormat     .GetHashCode() ^
 				RxControlFormat  .GetHashCode() ^
 				TimeStampFormat  .GetHashCode() ^
+				DirectionFormat  .GetHashCode() ^
 				LengthFormat     .GetHashCode() ^
 				WhiteSpacesFormat.GetHashCode() ^
 				ErrorFormat      .GetHashCode()

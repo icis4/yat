@@ -1469,20 +1469,25 @@ namespace YAT.Domain
 		{
 			DisplayLine dl = new DisplayLine();
 
-			// Line begin and time stamp.
-			if (TerminalSettings.Display.ShowTimeStamp)
+			// Line begin and time stamp:
+			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowDirection)
 			{
-				dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
+				if (TerminalSettings.Display.ShowTimeStamp)
+					dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
+
+				if (TerminalSettings.Display.ShowDirection)
+					dl.Add(new DisplayElement.DirectionStamp(re.Direction));
+
 				dl.Add(new DisplayElement.LeftMargin());
 			}
 
-			// Data.
+			// Data:
 			foreach (byte b in re.Data)
 			{
 				dl.Add(ByteToElement(b, re.Direction));
 			}
 
-			// Line length and end.
+			// Line length and end:
 			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
