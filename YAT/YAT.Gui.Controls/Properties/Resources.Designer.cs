@@ -63,9 +63,9 @@ namespace YAT.Gui.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Monitor_arrow_left_32x32 {
+        internal static System.Drawing.Bitmap Image_Monitor_Bidir_28x28_BluePurple {
             get {
-                object obj = ResourceManager.GetObject("Image_Monitor_arrow_left_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Monitor_Bidir_28x28_BluePurple", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace YAT.Gui.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Monitor_arrow_left_grey_32x32 {
+        internal static System.Drawing.Bitmap Image_Monitor_Bidir_28x28_Grey {
             get {
-                object obj = ResourceManager.GetObject("Image_Monitor_arrow_left_grey_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Monitor_Bidir_28x28_Grey", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace YAT.Gui.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Monitor_arrow_refresh_32x32 {
+        internal static System.Drawing.Bitmap Image_Monitor_Rx_28x28_Grey {
             get {
-                object obj = ResourceManager.GetObject("Image_Monitor_arrow_refresh_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Monitor_Rx_28x28_Grey", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace YAT.Gui.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Monitor_arrow_refresh_grey_32x32 {
+        internal static System.Drawing.Bitmap Image_Monitor_Rx_28x28_Purple {
             get {
-                object obj = ResourceManager.GetObject("Image_Monitor_arrow_refresh_grey_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Monitor_Rx_28x28_Purple", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace YAT.Gui.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Monitor_arrow_right_32x32 {
+        internal static System.Drawing.Bitmap Image_Monitor_Tx_28x28_Blue {
             get {
-                object obj = ResourceManager.GetObject("Image_Monitor_arrow_right_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Monitor_Tx_28x28_Blue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace YAT.Gui.Controls.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Monitor_arrow_right_grey_32x32 {
+        internal static System.Drawing.Bitmap Image_Monitor_Tx_28x28_Grey {
             get {
-                object obj = ResourceManager.GetObject("Image_Monitor_arrow_right_grey_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Monitor_Tx_28x28_Grey", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

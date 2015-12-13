@@ -397,6 +397,33 @@
   <ItemGroup>
     <None Include="Resources\Monitor\Image_Monitor_arrow_right_grey_32x32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_left_purple_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_refresh_blue_purple_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_arrow_right_blue_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_Bidir_28x28_BluePurple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_Bidir_28x28_Grey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_Rx_28x28_Grey.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_Rx_28x28_Purple.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_Tx_28x28_Blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Monitor\Image_Monitor_Tx_28x28_Grey.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -33,6 +33,21 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class FormatSettings : MKY.Settings.SettingsItem
 	{
+		/// <remarks>Color.Blue = 0000FF.</remarks>
+		public readonly Color TxColor = Color.Blue;
+
+		/// <remarks>Color.Purple = 800080.</remarks>
+		public readonly Color RxColor = Color.Purple;
+
+		/// <remarks>Color.DarkGreen = 006400.</remarks>
+		public readonly Color InfoColor = Color.DarkGreen;
+
+		/// <remarks>Color.Black = 000000.</remarks>
+		public readonly Color WhiteSpacesColor = Color.Black;
+
+		/// <remarks>Color.OrangeRed = FF4500.</remarks>
+		public readonly Color ErrorColor = Color.OrangeRed;
+
 		private FontFormat font;
 		private TextFormat txDataFormat;
 		private TextFormat txControlFormat;
@@ -84,15 +99,15 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			FontFormat        = new FontFormat(Types.FontFormat.NameDefault, Types.FontFormat.SizeDefault, Types.FontFormat.StyleDefault);
-			TxDataFormat      = new TextFormat(Color.Blue, true, false, false, false);
-			TxControlFormat   = new TextFormat(Color.Blue, false, false, false, false);
-			RxDataFormat      = new TextFormat(Color.Purple, true, false, false, false);
-			RxControlFormat   = new TextFormat(Color.Purple, false, false, false, false);
-			TimeStampFormat   = new TextFormat(Color.DarkGreen, false, false, false, false);
-			LengthFormat      = new TextFormat(Color.DarkGreen, false, false, false, false);
-			WhiteSpacesFormat = new TextFormat(Color.Black, false, false, false, false);
-			ErrorFormat       = new TextFormat(Color.OrangeRed, true, false, false, false);
+			FontFormat        = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
+			TxDataFormat      = new TextFormat(TxColor, true, false, false, false); // Bold.
+			TxControlFormat   = new TextFormat(TxColor, false, false, false, false);
+			RxDataFormat      = new TextFormat(RxColor, true, false, false, false); // Bold.
+			RxControlFormat   = new TextFormat(RxColor, false, false, false, false);
+			TimeStampFormat   = new TextFormat(InfoColor, false, false, false, false);
+			LengthFormat      = new TextFormat(InfoColor, false, false, false, false);
+			WhiteSpacesFormat = new TextFormat(WhiteSpacesColor, false, false, false, false);
+			ErrorFormat       = new TextFormat(ErrorColor, true, false, false, false); // Bold.
 		}
 
 		#region Properties
