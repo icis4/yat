@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
 
 namespace YAT.Log
 {
@@ -38,6 +39,7 @@ namespace YAT.Log
 		private bool isDisposed;
 
 		private Settings.LogSettings settings;
+		private Encoding textTerminalEncoding;
 
 		private List<Log> logs;
 		private List<Log> rawLogs;
@@ -59,21 +61,24 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Provider(Settings.LogSettings settings)
+		public Provider(Settings.LogSettings settings, Encoding textTerminalEncoding)
 		{
 			this.settings = settings;
+			this.textTerminalEncoding = textTerminalEncoding;
 
 			this.logs     = new List<Log>();
 			this.rawLogs  = new List<Log>();
 			this.neatLogs = new List<Log>();
 
-			this.rawLogs.Add(this.rawTxLog    = new BinaryLog(this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
-			this.rawLogs.Add(this.rawBidirLog = new BinaryLog(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
-			this.rawLogs.Add(this.rawRxLog    = new BinaryLog(this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
+			this.rawLogs.Add(this.rawTxLog    = new BinaryLog(this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.NameSeparator, this.settings.WriteMode));
+			this.rawLogs.Add(this.rawBidirLog = new BinaryLog(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.NameSeparator, this.settings.WriteMode));
+			this.rawLogs.Add(this.rawRxLog    = new BinaryLog(this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.NameSeparator, this.settings.WriteMode));
 
-			this.neatLogs.Add(this.neatTxLog    = new TextLog(this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
-			this.neatLogs.Add(this.neatBidirLog = new TextLog(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
-			this.neatLogs.Add(this.neatRxLog    = new TextLog(this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator));
+			Encoding neatEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
+
+			this.neatLogs.Add(this.neatTxLog    = new TextLog(this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.NameSeparator, this.settings.WriteMode, neatEncoding));
+			this.neatLogs.Add(this.neatBidirLog = new TextLog(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.NameSeparator, this.settings.WriteMode, neatEncoding));
+			this.neatLogs.Add(this.neatRxLog    = new TextLog(this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.NameSeparator, this.settings.WriteMode, neatEncoding));
 
 			this.logs.AddRange(this.rawLogs);
 			this.logs.AddRange(this.neatLogs);
@@ -99,7 +104,7 @@ namespace YAT.Log
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, End() has already been called.
+					// In the 'normal' case, SwitchOff() has already been called.
 					SwitchOff();
 				}
 
@@ -139,20 +144,44 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
+		public virtual Encoding TextTerminalEncoding
+		{
+			get { return (this.textTerminalEncoding); }
+			set
+			{
+				if (this.textTerminalEncoding != value)
+				{
+					this.textTerminalEncoding = value;
+
+					Encoding neatEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
+
+					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.NameSeparator, this.settings.WriteMode, neatEncoding);
+					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.NameSeparator, this.settings.WriteMode, neatEncoding);
+					this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.NameSeparator, this.settings.WriteMode, neatEncoding);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual Settings.LogSettings Settings
 		{
 			get { return (this.settings); }
 			set
 			{
-				this.settings = value;
+				if (this.settings != value)
+				{
+					this.settings = value;
 
-				this.rawTxLog.SetSettings   (this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
-				this.rawBidirLog.SetSettings(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
-				this.rawRxLog.SetSettings   (this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
+					this.rawTxLog.SetSettings   (this.settings.RawLogTx,    this.settings.RawTxFilePath,    this.settings.NameSeparator, this.settings.WriteMode);
+					this.rawBidirLog.SetSettings(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.NameSeparator, this.settings.WriteMode);
+					this.rawRxLog.SetSettings   (this.settings.RawLogRx,    this.settings.RawRxFilePath,    this.settings.NameSeparator, this.settings.WriteMode);
 
-				this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
-				this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
-				this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.WriteMode, this.settings.NameSeparator);
+					Encoding neatEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
+
+					this.neatTxLog.SetSettings   (this.settings.NeatLogTx,    this.settings.NeatTxFilePath,    this.settings.NameSeparator, this.settings.WriteMode, neatEncoding);
+					this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.NameSeparator, this.settings.WriteMode, neatEncoding);
+					this.neatRxLog.SetSettings   (this.settings.NeatLogRx,    this.settings.NeatRxFilePath,    this.settings.NameSeparator, this.settings.WriteMode, neatEncoding);
+				}
 			}
 		}
 

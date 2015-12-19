@@ -34,6 +34,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.IO;
 using MKY.Windows.Forms;
 
 using YAT.Settings;
@@ -44,7 +45,7 @@ using YAT.Settings.Application;
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
-	public partial class LogSettings : System.Windows.Forms.Form
+	public partial class LogSettings : Form
 	{
 		#region Fields
 		//==========================================================================================
@@ -56,6 +57,8 @@ namespace YAT.Gui.Forms
 		private Log.Settings.LogSettings settings;
 		private Log.Settings.LogSettings settingsInEdit;
 
+		private Domain.TerminalType terminalType;
+
 		#endregion
 
 		#region Object Lifetime
@@ -64,12 +67,14 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public LogSettings(Log.Settings.LogSettings settings)
+		public LogSettings(Log.Settings.LogSettings settings, Domain.TerminalType terminalType)
 		{
 			InitializeComponent();
 
 			KeepAndCloneAndAttachSettings(settings);
 			InitializeControls();
+
+			this.terminalType = terminalType;
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -152,6 +157,23 @@ namespace YAT.Gui.Forms
 		private void button_Root_Click(object sender, EventArgs e)
 		{
 			ShowSetRootDirectoryDialog();
+		}
+
+		private void button_RootOpen_Click(object sender, EventArgs e)
+		{
+			Exception ex;
+			if (!DirectoryEx.TryOpen(this.settingsInEdit.RootPath, out ex))
+			{
+				MessageBox.Show
+				(
+					this.Parent,
+					"Unable to open folder." + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine + ex.Message,
+					"System Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+				);
+			}
 		}
 
 		private void checkBox_Raw_Tx_CheckedChanged(object sender, EventArgs e)
@@ -264,38 +286,6 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.NeatExtension = comboBox_Neat_Extension.Text;
 		}
 
-		private void rad_Options_ModeCreate_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls && rad_Options_ModeCreate.Checked)
-			{
-				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Create;
-				this.settingsInEdit.NameDate = this.settings.NameDate;
-				this.settingsInEdit.NameTime = this.settings.NameTime;
-			}
-		}
-
-		private void rad_Options_ModeAppend_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls && rad_Options_ModeAppend.Checked)
-			{
-				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Append;
-				this.settingsInEdit.NameDate = false;
-				this.settingsInEdit.NameTime = false;
-			}
-		}
-
-		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.FolderFormat = checkBox_Options_FolderFormat.Checked;
-		}
-
-		private void checkBox_Options_FolderChannel_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.FolderChannel = checkBox_Options_FolderChannel.Checked;
-		}
-
 		private void checkBox_Options_NameFormat_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -330,6 +320,50 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 				this.settingsInEdit.NameSeparator = (Log.FileNameSeparator)(comboBox_Options_NameSeparator.Text);
+		}
+
+		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.FolderFormat = checkBox_Options_FolderFormat.Checked;
+		}
+
+		private void checkBox_Options_FolderChannel_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.FolderChannel = checkBox_Options_FolderChannel.Checked;
+		}
+
+		private void radioButton_Options_ModeCreate_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls && radioButton_Options_ModeCreate.Checked)
+			{
+				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Create;
+				this.settingsInEdit.NameDate = this.settings.NameDate;
+				this.settingsInEdit.NameTime = this.settings.NameTime;
+			}
+		}
+
+		private void radioButton_Options_ModeAppend_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls && radioButton_Options_ModeAppend.Checked)
+			{
+				this.settingsInEdit.WriteMode = Log.LogFileWriteMode.Append;
+				this.settingsInEdit.NameDate = false;
+				this.settingsInEdit.NameTime = false;
+			}
+		}
+
+		private void radioButton_Options_EncodingUTF8_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls && radioButton_Options_EncodingUTF8.Checked)
+				this.settingsInEdit.TextEncoding = Log.LogFileEncoding.UTF8;
+		}
+
+		private void radioButton_Options_EncodingTerminal_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls && radioButton_Options_EncodingTerminal.Checked)
+				this.settingsInEdit.TextEncoding = Log.LogFileEncoding.Terminal;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -418,12 +452,6 @@ namespace YAT.Gui.Forms
 
 			comboBox_Neat_Extension.Text = this.settingsInEdit.NeatExtension;
 
-			rad_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
-			rad_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
-
-			checkBox_Options_FolderFormat.Checked  = this.settingsInEdit.FolderFormat;
-			checkBox_Options_FolderChannel.Checked = this.settingsInEdit.FolderChannel;
-
 			checkBox_Options_NameFormat.Checked  = this.settingsInEdit.NameFormat;
 			checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
 			checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
@@ -433,6 +461,23 @@ namespace YAT.Gui.Forms
 			bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			checkBox_Options_NameDate.Enabled = dateTimeEnabled;
 			checkBox_Options_NameTime.Enabled = dateTimeEnabled;
+
+			checkBox_Options_FolderFormat.Checked  = this.settingsInEdit.FolderFormat;
+			checkBox_Options_FolderChannel.Checked = this.settingsInEdit.FolderChannel;
+
+			radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
+			radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
+
+			groupBox_Options_Encoding.Enabled = (this.terminalType == Domain.TerminalType.Text);
+
+			if (this.terminalType == Domain.TerminalType.Text) {
+				radioButton_Options_EncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.UTF8);
+				radioButton_Options_EncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.Terminal);
+			}
+			else {
+				radioButton_Options_EncodingUTF8.Checked     = false; // Encoding is inactive for binary terminals.
+				radioButton_Options_EncodingTerminal.Checked = false; // Encoding is inactive for binary terminals.
+			}
 
 			this.isSettingControls.Leave();
 		}
@@ -551,8 +596,8 @@ namespace YAT.Gui.Forms
 			{
 				string message =
 					"To avoid naming conflicts, files must either be placed in channel " +
-					"subdirectories or named by channel (Tx/Bidir/Rx). Do you want to place " +
-					"the files in subdirectories (Yes) or name them by channel (No)?";
+					"folders or named by channel (Tx/Bidir/Rx). Do you want to place " +
+					"the files in folders (Yes) or name them by channel (No)?";
 
 				switch (MessageBoxEx.Show
 					(

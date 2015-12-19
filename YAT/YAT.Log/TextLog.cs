@@ -29,30 +29,90 @@ namespace YAT.Log
 	/// <summary></summary>
 	internal class TextLog : Log
 	{
+		private Encoding encoding;
+
 		private StreamWriter writer;
 
 		/// <summary></summary>
 		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode)
 			: base(enabled, filePath, writeMode)
 		{
+			this.encoding = Encoding.UTF8;
 		}
 
 		/// <summary></summary>
-		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
-			: base(enabled, filePath, writeMode, (FileNameSeparator)separator)
+		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode, Encoding encoding)
+			: base(enabled, filePath, writeMode)
 		{
+			this.encoding = encoding;
 		}
 
 		/// <summary></summary>
-		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
-			: base(enabled, filePath, writeMode, separator)
+		public TextLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode, Encoding encoding)
+			: base(enabled, filePath, (FileNameSeparator)separator, writeMode)
 		{
+			this.encoding = encoding;
+		}
+
+		/// <summary></summary>
+		public TextLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode, Encoding encoding)
+			: base(enabled, filePath, separator, writeMode)
+		{
+			this.encoding = encoding;
+		}
+
+		/// <summary></summary>
+		public void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, Encoding encoding)
+		{
+			if (this.IsEnabled && this.IsOn && (this.encoding != encoding))
+			{
+				Close();
+				this.encoding = encoding;
+				base.SetSettings(enabled, filePath, writeMode);
+				Open();
+			}
+			else
+			{
+				this.encoding = encoding;
+			}
+		}
+
+		/// <summary></summary>
+		public void SetSettings(bool enabled, string filePath, string separator, LogFileWriteMode writeMode, Encoding encoding)
+		{
+			if (this.IsEnabled && this.IsOn && (this.encoding != encoding))
+			{
+				Close();
+				this.encoding = encoding;
+				base.SetSettings(enabled, filePath, separator, writeMode);
+				Open();
+			}
+			else
+			{
+				this.encoding = encoding;
+			}
+		}
+
+		/// <summary></summary>
+		public void SetSettings(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode, Encoding encoding)
+		{
+			if (this.IsEnabled && this.IsOn && (this.encoding != encoding))
+			{
+				Close();
+				this.encoding = encoding;
+				base.SetSettings(enabled, filePath, separator, writeMode);
+				Open();
+			}
+			else
+			{
+				this.encoding = encoding;
+			}
 		}
 
 		/// <summary></summary>
 		protected override void OpenWriter(FileStream stream)
 		{
-			this.writer = new StreamWriter(stream, Encoding.UTF8);
+			this.writer = new StreamWriter(stream, this.encoding);
 		}
 
 		/// <summary></summary>

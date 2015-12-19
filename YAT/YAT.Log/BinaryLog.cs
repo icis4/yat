@@ -38,14 +38,14 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public BinaryLog(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
-			: base(enabled, filePath, writeMode, (FileNameSeparator)separator)
+		public BinaryLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
+			: base(enabled, filePath, (FileNameSeparator)separator, writeMode)
 		{
 		}
 
 		/// <summary></summary>
-		public BinaryLog(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
-			: base(enabled, filePath, writeMode, separator)
+		public BinaryLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
+			: base(enabled, filePath, separator, writeMode)
 		{
 		}
 

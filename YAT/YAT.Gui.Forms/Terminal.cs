@@ -2522,7 +2522,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
-			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(this.settingsRoot.Format);
+			FormatSettings f = new FormatSettings(this.settingsRoot.Format);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -3271,8 +3271,8 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText("Terminal Settings...");
 
 			// Clone settings to ensure that settings result is a different object than the original settings.
-			Settings.Terminal.ExplicitSettings clone = new Settings.Terminal.ExplicitSettings(this.settingsRoot.Explicit);
-			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(clone);
+			ExplicitSettings clone = new ExplicitSettings(this.settingsRoot.Explicit);
+			TerminalSettings f = new TerminalSettings(clone);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -3608,7 +3608,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
 		{
-			Gui.Forms.LogSettings f = new Gui.Forms.LogSettings(this.settingsRoot.Log);
+			LogSettings f = new LogSettings(this.settingsRoot.Log, this.settingsRoot.TerminalType);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();

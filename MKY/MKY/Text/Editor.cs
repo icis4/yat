@@ -32,7 +32,18 @@ namespace MKY.Text
 	public static class Editor
 	{
 		/// <summary>
-		/// Tries to open the system default editor and open the given file.
+		/// Tries to open the given file with the system's default editor.
+		/// </summary>
+		/// <param name="filePath">File to open.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public static bool TryOpenFile(string filePath)
+		{
+			Exception exception;
+			return (TryOpenFile(filePath, out exception));
+		}
+
+		/// <summary>
+		/// Tries to open the given file with the system's default editor.
 		/// </summary>
 		/// <param name="filePath">File to open.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>

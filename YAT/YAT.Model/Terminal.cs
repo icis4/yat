@@ -270,24 +270,24 @@ namespace YAT.Model
 			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
 
-			// Set ID and user name.
+			// Set ID and user name:
 			this.sequentialIndex = ++staticSequentialIndexCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
 				this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
 			else
 				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
-			// Create underlying terminal.
+			// Create underlying terminal:
 			this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
 			AttachTerminalEventHandlers();
 
-			// Create log.
-			this.log = new Log.Provider(this.settingsRoot.Log);
+			// Create log:
+			this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding);
 
-			// Create chronos.
+			// Create chronos:
 			CreateChronos();
 
-			// Create rates.
+			// Create rates:
 			CreateRates();
 
 			WriteDebugMessageLine("...successfully created.");

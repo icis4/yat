@@ -37,6 +37,10 @@ namespace YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Options_Encoding = new System.Windows.Forms.GroupBox();
+			this.radioButton_Options_EncodingTerminal = new System.Windows.Forms.RadioButton();
+			this.radioButton_Options_EncodingUTF8 = new System.Windows.Forms.RadioButton();
+			this.button_RootOpen = new System.Windows.Forms.Button();
 			this.pathLabel_Root = new MKY.Windows.Forms.PathLabel();
 			this.groupBox_Options_Folders = new System.Windows.Forms.GroupBox();
 			this.checkBox_Options_FolderFormat = new System.Windows.Forms.CheckBox();
@@ -49,8 +53,8 @@ namespace YAT.Gui.Forms
 			this.checkBox_Options_NameDate = new System.Windows.Forms.CheckBox();
 			this.label_Options_NameSeparator = new System.Windows.Forms.Label();
 			this.groupBox_Options_Mode = new System.Windows.Forms.GroupBox();
-			this.rad_Options_ModeCreate = new System.Windows.Forms.RadioButton();
-			this.rad_Options_ModeAppend = new System.Windows.Forms.RadioButton();
+			this.radioButton_Options_ModeCreate = new System.Windows.Forms.RadioButton();
+			this.radioButton_Options_ModeAppend = new System.Windows.Forms.RadioButton();
 			this.label_Root = new System.Windows.Forms.Label();
 			this.button_Root = new System.Windows.Forms.Button();
 			this.groupBox_Raw = new System.Windows.Forms.GroupBox();
@@ -74,6 +78,7 @@ namespace YAT.Gui.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
+			this.groupBox_Options_Encoding.SuspendLayout();
 			this.groupBox_Options_Folders.SuspendLayout();
 			this.groupBox_Options_Name.SuspendLayout();
 			this.groupBox_Options_Mode.SuspendLayout();
@@ -85,9 +90,9 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(546, 65);
+			this.button_Cancel.Location = new System.Drawing.Point(539, 60);
 			this.button_Cancel.Name = "button_Cancel";
-			this.button_Cancel.Size = new System.Drawing.Size(72, 24);
+			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
 			this.button_Cancel.Text = "Cancel";
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
@@ -96,9 +101,9 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(546, 35);
+			this.button_OK.Location = new System.Drawing.Point(539, 31);
 			this.button_OK.Name = "button_OK";
-			this.button_OK.Size = new System.Drawing.Size(72, 24);
+			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
 			this.button_OK.Text = "OK";
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
@@ -108,6 +113,8 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Encoding);
+			this.groupBox_Settings.Controls.Add(this.button_RootOpen);
 			this.groupBox_Settings.Controls.Add(this.pathLabel_Root);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Folders);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Name);
@@ -118,16 +125,66 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_Neat);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(516, 433);
+			this.groupBox_Settings.Size = new System.Drawing.Size(511, 433);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
+			// 
+			// groupBox_Options_Encoding
+			// 
+			this.groupBox_Options_Encoding.Controls.Add(this.radioButton_Options_EncodingTerminal);
+			this.groupBox_Options_Encoding.Controls.Add(this.radioButton_Options_EncodingUTF8);
+			this.groupBox_Options_Encoding.Location = new System.Drawing.Point(342, 350);
+			this.groupBox_Options_Encoding.Name = "groupBox_Options_Encoding";
+			this.groupBox_Options_Encoding.Size = new System.Drawing.Size(161, 75);
+			this.groupBox_Options_Encoding.TabIndex = 9;
+			this.groupBox_Options_Encoding.TabStop = false;
+			this.groupBox_Options_Encoding.Text = "File &Encoding";
+			// 
+			// radioButton_Options_EncodingTerminal
+			// 
+			this.radioButton_Options_EncodingTerminal.AutoSize = true;
+			this.radioButton_Options_EncodingTerminal.Location = new System.Drawing.Point(12, 45);
+			this.radioButton_Options_EncodingTerminal.Name = "radioButton_Options_EncodingTerminal";
+			this.radioButton_Options_EncodingTerminal.Size = new System.Drawing.Size(112, 17);
+			this.radioButton_Options_EncodingTerminal.TabIndex = 1;
+			this.radioButton_Options_EncodingTerminal.Text = "Terminal encoding";
+			this.toolTip.SetToolTip(this.radioButton_Options_EncodingTerminal, "The selected encoding of the terminal. In case of Unicode encodings, the Unicode " +
+        "BOM (Byte Order Mark) will be preceeded at the beginning of the file.");
+			this.radioButton_Options_EncodingTerminal.UseVisualStyleBackColor = true;
+			this.radioButton_Options_EncodingTerminal.CheckedChanged += new System.EventHandler(this.radioButton_Options_EncodingTerminal_CheckedChanged);
+			// 
+			// radioButton_Options_EncodingUTF8
+			// 
+			this.radioButton_Options_EncodingUTF8.AutoSize = true;
+			this.radioButton_Options_EncodingUTF8.Checked = true;
+			this.radioButton_Options_EncodingUTF8.Location = new System.Drawing.Point(12, 21);
+			this.radioButton_Options_EncodingUTF8.Name = "radioButton_Options_EncodingUTF8";
+			this.radioButton_Options_EncodingUTF8.Size = new System.Drawing.Size(107, 17);
+			this.radioButton_Options_EncodingUTF8.TabIndex = 0;
+			this.radioButton_Options_EncodingUTF8.TabStop = true;
+			this.radioButton_Options_EncodingUTF8.Text = "UTF-8  with BOM";
+			this.toolTip.SetToolTip(this.radioButton_Options_EncodingUTF8, "UFT-8 is the default encoding. The Unicode BOM (Byte Order Mark) will be preceede" +
+        "d at the beginning of the file.");
+			this.radioButton_Options_EncodingUTF8.UseVisualStyleBackColor = true;
+			this.radioButton_Options_EncodingUTF8.CheckedChanged += new System.EventHandler(this.radioButton_Options_EncodingUTF8_CheckedChanged);
+			// 
+			// button_RootOpen
+			// 
+			this.button_RootOpen.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
+			this.button_RootOpen.Location = new System.Drawing.Point(465, 19);
+			this.button_RootOpen.Name = "button_RootOpen";
+			this.button_RootOpen.Size = new System.Drawing.Size(31, 23);
+			this.button_RootOpen.TabIndex = 3;
+			this.toolTip.SetToolTip(this.button_RootOpen, "Open path...");
+			this.button_RootOpen.UseVisualStyleBackColor = true;
+			this.button_RootOpen.Click += new System.EventHandler(this.button_RootOpen_Click);
 			// 
 			// pathLabel_Root
 			// 
 			this.pathLabel_Root.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_Root.Location = new System.Drawing.Point(72, 20);
 			this.pathLabel_Root.Name = "pathLabel_Root";
-			this.pathLabel_Root.Size = new System.Drawing.Size(336, 20);
+			this.pathLabel_Root.Size = new System.Drawing.Size(340, 20);
 			this.pathLabel_Root.TabIndex = 1;
 			this.pathLabel_Root.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.pathLabel_Root, "The root file specifies file name and root directory for all log files. The effec" +
@@ -138,12 +195,12 @@ namespace YAT.Gui.Forms
 			// 
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderFormat);
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderChannel);
-			this.groupBox_Options_Folders.Location = new System.Drawing.Point(8, 349);
+			this.groupBox_Options_Folders.Location = new System.Drawing.Point(8, 350);
 			this.groupBox_Options_Folders.Name = "groupBox_Options_Folders";
-			this.groupBox_Options_Folders.Size = new System.Drawing.Size(176, 75);
-			this.groupBox_Options_Folders.TabIndex = 6;
+			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
+			this.groupBox_Options_Folders.TabIndex = 7;
 			this.groupBox_Options_Folders.TabStop = false;
-			this.groupBox_Options_Folders.Text = "F&olders";
+			this.groupBox_Options_Folders.Text = "Create F&olders";
 			// 
 			// checkBox_Options_FolderFormat
 			// 
@@ -175,10 +232,10 @@ namespace YAT.Gui.Forms
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameTime);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameDate);
 			this.groupBox_Options_Name.Controls.Add(this.label_Options_NameSeparator);
-			this.groupBox_Options_Name.Location = new System.Drawing.Point(192, 268);
+			this.groupBox_Options_Name.Location = new System.Drawing.Point(8, 268);
 			this.groupBox_Options_Name.Name = "groupBox_Options_Name";
-			this.groupBox_Options_Name.Size = new System.Drawing.Size(316, 156);
-			this.groupBox_Options_Name.TabIndex = 7;
+			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
+			this.groupBox_Options_Name.TabIndex = 8;
 			this.groupBox_Options_Name.TabStop = false;
 			this.groupBox_Options_Name.Text = "File &Naming";
 			// 
@@ -194,9 +251,10 @@ namespace YAT.Gui.Forms
 			// 
 			// comboBox_Options_NameSeparator
 			// 
-			this.comboBox_Options_NameSeparator.Location = new System.Drawing.Point(160, 125);
+			this.comboBox_Options_NameSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Options_NameSeparator.Location = new System.Drawing.Point(346, 39);
 			this.comboBox_Options_NameSeparator.Name = "comboBox_Options_NameSeparator";
-			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(144, 21);
+			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(137, 21);
 			this.comboBox_Options_NameSeparator.TabIndex = 5;
 			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, resources.GetString("comboBox_Options_NameSeparator.ToolTip"));
 			this.comboBox_Options_NameSeparator.TextChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_TextChanged);
@@ -214,7 +272,7 @@ namespace YAT.Gui.Forms
 			// checkBox_Options_NameTime
 			// 
 			this.checkBox_Options_NameTime.AutoSize = true;
-			this.checkBox_Options_NameTime.Location = new System.Drawing.Point(12, 94);
+			this.checkBox_Options_NameTime.Location = new System.Drawing.Point(179, 46);
 			this.checkBox_Options_NameTime.Name = "checkBox_Options_NameTime";
 			this.checkBox_Options_NameTime.Size = new System.Drawing.Size(96, 17);
 			this.checkBox_Options_NameTime.TabIndex = 3;
@@ -224,7 +282,7 @@ namespace YAT.Gui.Forms
 			// checkBox_Options_NameDate
 			// 
 			this.checkBox_Options_NameDate.AutoSize = true;
-			this.checkBox_Options_NameDate.Location = new System.Drawing.Point(12, 70);
+			this.checkBox_Options_NameDate.Location = new System.Drawing.Point(179, 22);
 			this.checkBox_Options_NameDate.Name = "checkBox_Options_NameDate";
 			this.checkBox_Options_NameDate.Size = new System.Drawing.Size(106, 17);
 			this.checkBox_Options_NameDate.TabIndex = 2;
@@ -233,8 +291,9 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Options_NameSeparator
 			// 
+			this.label_Options_NameSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Options_NameSeparator.AutoSize = true;
-			this.label_Options_NameSeparator.Location = new System.Drawing.Point(157, 109);
+			this.label_Options_NameSeparator.Location = new System.Drawing.Point(343, 23);
 			this.label_Options_NameSeparator.Name = "label_Options_NameSeparator";
 			this.label_Options_NameSeparator.Size = new System.Drawing.Size(56, 13);
 			this.label_Options_NameSeparator.TabIndex = 4;
@@ -242,41 +301,41 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Options_Mode
 			// 
-			this.groupBox_Options_Mode.Controls.Add(this.rad_Options_ModeCreate);
-			this.groupBox_Options_Mode.Controls.Add(this.rad_Options_ModeAppend);
-			this.groupBox_Options_Mode.Location = new System.Drawing.Point(8, 268);
+			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeCreate);
+			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeAppend);
+			this.groupBox_Options_Mode.Location = new System.Drawing.Point(175, 350);
 			this.groupBox_Options_Mode.Name = "groupBox_Options_Mode";
-			this.groupBox_Options_Mode.Size = new System.Drawing.Size(176, 75);
-			this.groupBox_Options_Mode.TabIndex = 5;
+			this.groupBox_Options_Mode.Size = new System.Drawing.Size(161, 75);
+			this.groupBox_Options_Mode.TabIndex = 6;
 			this.groupBox_Options_Mode.TabStop = false;
 			this.groupBox_Options_Mode.Text = "File Write &Mode";
 			// 
-			// rad_Options_ModeCreate
+			// radioButton_Options_ModeCreate
 			// 
-			this.rad_Options_ModeCreate.AutoSize = true;
-			this.rad_Options_ModeCreate.Checked = true;
-			this.rad_Options_ModeCreate.Location = new System.Drawing.Point(12, 21);
-			this.rad_Options_ModeCreate.Name = "rad_Options_ModeCreate";
-			this.rad_Options_ModeCreate.Size = new System.Drawing.Size(121, 17);
-			this.rad_Options_ModeCreate.TabIndex = 0;
-			this.rad_Options_ModeCreate.TabStop = true;
-			this.rad_Options_ModeCreate.Text = "Create separate files";
-			this.rad_Options_ModeCreate.CheckedChanged += new System.EventHandler(this.rad_Options_ModeCreate_CheckedChanged);
+			this.radioButton_Options_ModeCreate.AutoSize = true;
+			this.radioButton_Options_ModeCreate.Checked = true;
+			this.radioButton_Options_ModeCreate.Location = new System.Drawing.Point(12, 21);
+			this.radioButton_Options_ModeCreate.Name = "radioButton_Options_ModeCreate";
+			this.radioButton_Options_ModeCreate.Size = new System.Drawing.Size(121, 17);
+			this.radioButton_Options_ModeCreate.TabIndex = 0;
+			this.radioButton_Options_ModeCreate.TabStop = true;
+			this.radioButton_Options_ModeCreate.Text = "Create separate files";
+			this.radioButton_Options_ModeCreate.CheckedChanged += new System.EventHandler(this.radioButton_Options_ModeCreate_CheckedChanged);
 			// 
-			// rad_Options_ModeAppend
+			// radioButton_Options_ModeAppend
 			// 
-			this.rad_Options_ModeAppend.AutoSize = true;
-			this.rad_Options_ModeAppend.Location = new System.Drawing.Point(12, 45);
-			this.rad_Options_ModeAppend.Name = "rad_Options_ModeAppend";
-			this.rad_Options_ModeAppend.Size = new System.Drawing.Size(115, 17);
-			this.rad_Options_ModeAppend.TabIndex = 1;
-			this.rad_Options_ModeAppend.Text = "Append if file exists";
-			this.rad_Options_ModeAppend.CheckedChanged += new System.EventHandler(this.rad_Options_ModeAppend_CheckedChanged);
+			this.radioButton_Options_ModeAppend.AutoSize = true;
+			this.radioButton_Options_ModeAppend.Location = new System.Drawing.Point(12, 45);
+			this.radioButton_Options_ModeAppend.Name = "radioButton_Options_ModeAppend";
+			this.radioButton_Options_ModeAppend.Size = new System.Drawing.Size(115, 17);
+			this.radioButton_Options_ModeAppend.TabIndex = 1;
+			this.radioButton_Options_ModeAppend.Text = "Append if file exists";
+			this.radioButton_Options_ModeAppend.CheckedChanged += new System.EventHandler(this.radioButton_Options_ModeAppend_CheckedChanged);
 			// 
 			// label_Root
 			// 
 			this.label_Root.AutoSize = true;
-			this.label_Root.Location = new System.Drawing.Point(17, 23);
+			this.label_Root.Location = new System.Drawing.Point(17, 24);
 			this.label_Root.Name = "label_Root";
 			this.label_Root.Size = new System.Drawing.Size(49, 13);
 			this.label_Root.TabIndex = 0;
@@ -284,11 +343,12 @@ namespace YAT.Gui.Forms
 			// 
 			// button_Root
 			// 
-			this.button_Root.Location = new System.Drawing.Point(424, 18);
+			this.button_Root.Location = new System.Drawing.Point(424, 19);
 			this.button_Root.Name = "button_Root";
-			this.button_Root.Size = new System.Drawing.Size(72, 24);
+			this.button_Root.Size = new System.Drawing.Size(31, 23);
 			this.button_Root.TabIndex = 2;
-			this.button_Root.Text = "Change...";
+			this.button_Root.Text = "...";
+			this.toolTip.SetToolTip(this.button_Root, "Change...");
 			this.button_Root.Click += new System.EventHandler(this.button_Root_Click);
 			// 
 			// groupBox_Raw
@@ -305,38 +365,41 @@ namespace YAT.Gui.Forms
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Tx);
 			this.groupBox_Raw.Location = new System.Drawing.Point(8, 52);
 			this.groupBox_Raw.Name = "groupBox_Raw";
-			this.groupBox_Raw.Size = new System.Drawing.Size(500, 100);
-			this.groupBox_Raw.TabIndex = 3;
+			this.groupBox_Raw.Size = new System.Drawing.Size(495, 100);
+			this.groupBox_Raw.TabIndex = 4;
 			this.groupBox_Raw.TabStop = false;
 			this.groupBox_Raw.Text = "&Raw Outputs";
 			this.toolTip.SetToolTip(this.groupBox_Raw, "Bytes as transmitted over serial interface");
 			// 
 			// pathLabel_Raw_Rx
 			// 
+			this.pathLabel_Raw_Rx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Raw_Rx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Raw_Rx.Location = new System.Drawing.Point(184, 67);
+			this.pathLabel_Raw_Rx.Location = new System.Drawing.Point(179, 67);
 			this.pathLabel_Raw_Rx.Name = "pathLabel_Raw_Rx";
-			this.pathLabel_Raw_Rx.Size = new System.Drawing.Size(216, 20);
+			this.pathLabel_Raw_Rx.Size = new System.Drawing.Size(220, 20);
 			this.pathLabel_Raw_Rx.TabIndex = 5;
 			this.pathLabel_Raw_Rx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Raw_Rx.Click += new System.EventHandler(this.pathLabel_Raw_Rx_Click);
 			// 
 			// pathLabel_Raw_Bidir
 			// 
+			this.pathLabel_Raw_Bidir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Raw_Bidir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Raw_Bidir.Location = new System.Drawing.Point(184, 43);
+			this.pathLabel_Raw_Bidir.Location = new System.Drawing.Point(179, 43);
 			this.pathLabel_Raw_Bidir.Name = "pathLabel_Raw_Bidir";
-			this.pathLabel_Raw_Bidir.Size = new System.Drawing.Size(216, 20);
+			this.pathLabel_Raw_Bidir.Size = new System.Drawing.Size(220, 20);
 			this.pathLabel_Raw_Bidir.TabIndex = 3;
 			this.pathLabel_Raw_Bidir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Raw_Bidir.Click += new System.EventHandler(this.pathLabel_Raw_Bidir_Click);
 			// 
 			// pathLabel_Raw_Tx
 			// 
+			this.pathLabel_Raw_Tx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Raw_Tx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Raw_Tx.Location = new System.Drawing.Point(184, 20);
+			this.pathLabel_Raw_Tx.Location = new System.Drawing.Point(179, 20);
 			this.pathLabel_Raw_Tx.Name = "pathLabel_Raw_Tx";
-			this.pathLabel_Raw_Tx.Size = new System.Drawing.Size(216, 20);
+			this.pathLabel_Raw_Tx.Size = new System.Drawing.Size(220, 20);
 			this.pathLabel_Raw_Tx.TabIndex = 1;
 			this.pathLabel_Raw_Tx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Raw_Tx.Click += new System.EventHandler(this.pathLabel_Raw_Tx_Click);
@@ -353,8 +416,9 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Raw_Extension
 			// 
+			this.label_Raw_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Raw_Extension.AutoSize = true;
-			this.label_Raw_Extension.Location = new System.Drawing.Point(416, 28);
+			this.label_Raw_Extension.Location = new System.Drawing.Point(408, 28);
 			this.label_Raw_Extension.Name = "label_Raw_Extension";
 			this.label_Raw_Extension.Size = new System.Drawing.Size(56, 13);
 			this.label_Raw_Extension.TabIndex = 6;
@@ -362,7 +426,8 @@ namespace YAT.Gui.Forms
 			// 
 			// comboBox_Raw_Extension
 			// 
-			this.comboBox_Raw_Extension.Location = new System.Drawing.Point(416, 44);
+			this.comboBox_Raw_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Raw_Extension.Location = new System.Drawing.Point(411, 44);
 			this.comboBox_Raw_Extension.Name = "comboBox_Raw_Extension";
 			this.comboBox_Raw_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Raw_Extension.TabIndex = 7;
@@ -406,46 +471,50 @@ namespace YAT.Gui.Forms
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Tx);
 			this.groupBox_Neat.Location = new System.Drawing.Point(8, 160);
 			this.groupBox_Neat.Name = "groupBox_Neat";
-			this.groupBox_Neat.Size = new System.Drawing.Size(500, 100);
-			this.groupBox_Neat.TabIndex = 4;
+			this.groupBox_Neat.Size = new System.Drawing.Size(495, 100);
+			this.groupBox_Neat.TabIndex = 5;
 			this.groupBox_Neat.TabStop = false;
 			this.groupBox_Neat.Text = "&Neat Outputs";
 			this.toolTip.SetToolTip(this.groupBox_Neat, "Time stamp, radix, length,... formatted as in monitor view");
 			// 
 			// pathLabel_Neat_Rx
 			// 
+			this.pathLabel_Neat_Rx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Neat_Rx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Neat_Rx.Location = new System.Drawing.Point(184, 67);
+			this.pathLabel_Neat_Rx.Location = new System.Drawing.Point(179, 67);
 			this.pathLabel_Neat_Rx.Name = "pathLabel_Neat_Rx";
-			this.pathLabel_Neat_Rx.Size = new System.Drawing.Size(216, 20);
+			this.pathLabel_Neat_Rx.Size = new System.Drawing.Size(220, 20);
 			this.pathLabel_Neat_Rx.TabIndex = 5;
 			this.pathLabel_Neat_Rx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Neat_Rx.Click += new System.EventHandler(this.pathLabel_Neat_Rx_Click);
 			// 
 			// pathLabel_Neat_Bidir
 			// 
+			this.pathLabel_Neat_Bidir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Neat_Bidir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Neat_Bidir.Location = new System.Drawing.Point(184, 43);
+			this.pathLabel_Neat_Bidir.Location = new System.Drawing.Point(179, 43);
 			this.pathLabel_Neat_Bidir.Name = "pathLabel_Neat_Bidir";
-			this.pathLabel_Neat_Bidir.Size = new System.Drawing.Size(216, 20);
+			this.pathLabel_Neat_Bidir.Size = new System.Drawing.Size(220, 20);
 			this.pathLabel_Neat_Bidir.TabIndex = 3;
 			this.pathLabel_Neat_Bidir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Neat_Bidir.Click += new System.EventHandler(this.pathLabel_Neat_Bidir_Click);
 			// 
 			// pathLabel_Neat_Tx
 			// 
+			this.pathLabel_Neat_Tx.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_Neat_Tx.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Neat_Tx.Location = new System.Drawing.Point(184, 20);
+			this.pathLabel_Neat_Tx.Location = new System.Drawing.Point(179, 20);
 			this.pathLabel_Neat_Tx.Name = "pathLabel_Neat_Tx";
-			this.pathLabel_Neat_Tx.Size = new System.Drawing.Size(216, 20);
+			this.pathLabel_Neat_Tx.Size = new System.Drawing.Size(220, 20);
 			this.pathLabel_Neat_Tx.TabIndex = 1;
 			this.pathLabel_Neat_Tx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_Neat_Tx.Click += new System.EventHandler(this.pathLabel_Neat_Tx_Click);
 			// 
 			// label_Neat_Extension
 			// 
+			this.label_Neat_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Neat_Extension.AutoSize = true;
-			this.label_Neat_Extension.Location = new System.Drawing.Point(416, 28);
+			this.label_Neat_Extension.Location = new System.Drawing.Point(408, 28);
 			this.label_Neat_Extension.Name = "label_Neat_Extension";
 			this.label_Neat_Extension.Size = new System.Drawing.Size(56, 13);
 			this.label_Neat_Extension.TabIndex = 6;
@@ -453,7 +522,8 @@ namespace YAT.Gui.Forms
 			// 
 			// comboBox_Neat_Extension
 			// 
-			this.comboBox_Neat_Extension.Location = new System.Drawing.Point(416, 44);
+			this.comboBox_Neat_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Neat_Extension.Location = new System.Drawing.Point(411, 44);
 			this.comboBox_Neat_Extension.Name = "comboBox_Neat_Extension";
 			this.comboBox_Neat_Extension.Size = new System.Drawing.Size(72, 21);
 			this.comboBox_Neat_Extension.TabIndex = 7;
@@ -496,10 +566,9 @@ namespace YAT.Gui.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Defaults.Location = new System.Drawing.Point(546, 115);
+			this.button_Defaults.Location = new System.Drawing.Point(539, 106);
 			this.button_Defaults.Name = "button_Defaults";
-			this.button_Defaults.Size = new System.Drawing.Size(72, 24);
+			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
@@ -510,7 +579,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(634, 457);
+			this.ClientSize = new System.Drawing.Size(629, 457);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -525,6 +594,8 @@ namespace YAT.Gui.Forms
 			this.Shown += new System.EventHandler(this.LogSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
+			this.groupBox_Options_Encoding.ResumeLayout(false);
+			this.groupBox_Options_Encoding.PerformLayout();
 			this.groupBox_Options_Folders.ResumeLayout(false);
 			this.groupBox_Options_Folders.PerformLayout();
 			this.groupBox_Options_Name.ResumeLayout(false);
@@ -549,8 +620,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Label label_Options_NameSeparator;
 		private System.Windows.Forms.CheckBox checkBox_Options_FolderChannel;
 		private System.Windows.Forms.GroupBox groupBox_Options_Mode;
-		private System.Windows.Forms.RadioButton rad_Options_ModeCreate;
-		private System.Windows.Forms.RadioButton rad_Options_ModeAppend;
+		private System.Windows.Forms.RadioButton radioButton_Options_ModeCreate;
+		private System.Windows.Forms.RadioButton radioButton_Options_ModeAppend;
 		private System.Windows.Forms.GroupBox groupBox_Options_Name;
 		private System.Windows.Forms.GroupBox groupBox_Options_Folders;
 		private System.Windows.Forms.Label label_Raw_Extension;
@@ -580,5 +651,9 @@ namespace YAT.Gui.Forms
 		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Tx;
 		private System.Windows.Forms.Button button_Defaults;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.Button button_RootOpen;
+		private System.Windows.Forms.GroupBox groupBox_Options_Encoding;
+		private System.Windows.Forms.RadioButton radioButton_Options_EncodingTerminal;
+		private System.Windows.Forms.RadioButton radioButton_Options_EncodingUTF8;
 	}
 }
