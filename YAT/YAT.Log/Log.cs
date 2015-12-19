@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 
+using MKY;
 using MKY.IO;
 
 namespace YAT.Log
@@ -39,7 +40,9 @@ namespace YAT.Log
 		// Constants
 		//==========================================================================================
 
-		private const int FlushTimeout = 250;
+		// Flushing is a time-intensive operation, it may take up to 10 ms!
+		private const int FlushTimeoutMin =  750;
+		private const int FlushTimeoutMax = 1250;
 
 		#endregion
 
@@ -59,6 +62,7 @@ namespace YAT.Log
 		private FileStream fileStream;
 
 		private Timer flushTimer;
+		private Random flushTimerRandom;
 		private object flushTimerSyncObj = new object();
 
 		#endregion
@@ -92,6 +96,8 @@ namespace YAT.Log
 			this.filePath  = filePath;
 			this.separator = separator;
 			this.writeMode = writeMode;
+
+			this.flushTimerRandom = new Random(RandomEx.NextPseudoRandomSeed());
 		}
 
 		#region Disposal
@@ -299,20 +305,26 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected abstract void CloseWriter();
 
-		/// <summary></summary>
-		protected virtual void StartFlushTimer()
+		/// <summary>
+		/// Triggers the flush timer. After triggering, <see cref="Flush"/> will be called within
+		/// no more than <see cref="FlushTimeoutMax"/> milliseconds.
+		/// </summary>
+		/// <remarks>
+		/// Unfortunately, neither <see cref="Stream"/> nor any derived class implements some kind
+		/// of intelligent flushing except for <see cref="StreamWriter.AutoFlush"/>. However, that
+		/// is very inefficient. Therefore, a timer is used to flush the stream regularly. This
+		/// ensures that a log file is up to date within a reasonable time, while being performant
+		/// at the same time.
+		/// </remarks>
+		protected virtual void TriggerFlushTimer()
 		{
 			lock (flushTimerSyncObj)
 			{
-				this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, FlushTimeout, Timeout.Infinite);
+				if (this.flushTimer == null)
+				{
+					this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, flushTimerRandom.Next(FlushTimeoutMin, FlushTimeoutMax), Timeout.Infinite);
+				}
 			}
-		}
-
-		/// <summary></summary>
-		protected virtual void RestartFlushTimer()
-		{
-			StopFlushTimer();
-			StartFlushTimer();
 		}
 
 		/// <summary></summary>

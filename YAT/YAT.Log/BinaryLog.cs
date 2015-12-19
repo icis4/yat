@@ -73,7 +73,7 @@ namespace YAT.Log
 			if (IsEnabled && IsOn)
 			{
 				this.writer.Write(value);
-				RestartFlushTimer();
+				TriggerFlushTimer();
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace YAT.Log
 				byte[] array = new byte[values.Count];
 				values.CopyTo(array, 0);
 				this.writer.Write(array);
-				RestartFlushTimer();
+				TriggerFlushTimer();
 			}
 		}
 	}
