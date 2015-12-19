@@ -92,11 +92,12 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 
 New:
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
+- Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
 
 Important changes:
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the following items.
-- Additional log menu items and toolbar icons added, including indication whether logging is switched
-  on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
+- Additional log menu items and toolbar icons added, including indication whether logging is
+  switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
 - Several other menu items and toolbar icons added (includes feature request #222).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).

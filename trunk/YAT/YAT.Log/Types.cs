@@ -86,6 +86,16 @@ namespace YAT.Log
 	}
 
 	/// <summary></summary>
+	public enum LogFileEncoding
+	{
+		/// <summary></summary>
+		UTF8,
+
+		/// <summary></summary>
+		Terminal
+	}
+
+	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	public class FileNameSeparator : IEquatable<FileNameSeparator>
 	{

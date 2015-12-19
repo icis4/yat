@@ -47,35 +47,38 @@ namespace YAT.Log.Settings
 	[Serializable]
 	public class LogSettings : MKY.Settings.SettingsItem
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary></summary>
+		public readonly Encoding DefaultTextEncoding = System.Text.Encoding.UTF8;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		// root
+		// Root:
 		private string rootPath;
 		private string rootFileName;
 
-		// raw
+		// Raw:
 		private bool rawLogTx;
 		private bool rawLogBidir;
 		private bool rawLogRx;
 		private string rawExtension;
 
-		// neat
+		// Neat:
 		private bool neatLogTx;
 		private bool neatLogBidir;
 		private bool neatLogRx;
 		private string neatExtension;
 
-		// write mode
-		private LogFileWriteMode writeMode;
-
-		// folders
-		private bool folderFormat;
-		private bool folderChannel;
-
-		// naming
+		// Naming:
 		private bool nameFormat;
 		private bool nameChannel;
 		private bool nameDate;
@@ -83,6 +86,16 @@ namespace YAT.Log.Settings
 
 		[NonSerialized] // See remarks at property 'NameSeparator'.
 		private FileNameSeparator nameSeparator;
+
+		// Folders:
+		private bool folderFormat;
+		private bool folderChannel;
+
+		// Write mode:
+		private LogFileWriteMode writeMode;
+
+		// Encoding:
+		private LogFileEncoding textEncoding;
 
 		#endregion
 
@@ -126,16 +139,18 @@ namespace YAT.Log.Settings
 			NeatLogRx     = rhs.NeatLogRx;
 			NeatExtension = rhs.NeatExtension;
 
-			WriteMode = rhs.WriteMode;
-
-			FolderFormat  = rhs.FolderFormat;
-			FolderChannel = rhs.FolderChannel;
-
 			NameFormat    = rhs.NameFormat;
 			NameChannel   = rhs.NameChannel;
 			NameDate      = rhs.NameDate;
 			NameTime      = rhs.NameTime;
 			NameSeparator = rhs.NameSeparator;
+
+			FolderFormat  = rhs.FolderFormat;
+			FolderChannel = rhs.FolderChannel;
+
+			WriteMode     = rhs.WriteMode;
+
+			TextEncoding  = rhs.TextEncoding;
 
 			ClearChanged();
 		}
@@ -167,19 +182,21 @@ namespace YAT.Log.Settings
 			NeatLogRx     = false;
 			NeatExtension = ExtensionSettings.LogFilesDefault;
 
-			WriteMode = LogFileWriteMode.Create;
-
-			FolderFormat  = false;
-			FolderChannel = false;
-
 			NameFormat    = false;
 			NameChannel   = false;
 			NameDate      = true;
 			NameTime      = true;
 			NameSeparator = FileNameSeparator.DefaultSeparator;
+
+			FolderFormat  = false;
+			FolderChannel = false;
+
+			WriteMode     = LogFileWriteMode.Create;
+
+			TextEncoding  = LogFileEncoding.UTF8;
 		}
 
-		private static string MakeFormat(LogFormat format)
+		private static string ToFormatString(LogFormat format)
 		{
 			switch (format)
 			{
@@ -189,7 +206,7 @@ namespace YAT.Log.Settings
 			throw (new ArgumentException("LogFormat '" + format + "' unknown!"));
 		}
 
-		private static string MakeChannel(LogChannelType channelType)
+		private static string ToChannelString(LogChannelType channelType)
 		{
 			switch (channelType)
 			{
@@ -200,24 +217,7 @@ namespace YAT.Log.Settings
 			throw (new ArgumentException("LogChannelType '" + channelType + "' unknown!"));
 		}
 
-		private string MakeSubdirectory(LogFormat format, LogChannelType channelType)
-		{
-			StringBuilder subdirectories = new StringBuilder();
-
-			if (this.folderFormat)
-			{
-				subdirectories.Append(MakeFormat(format));
-				subdirectories.Append(Path.DirectorySeparatorChar);
-			}
-			if (this.folderChannel)
-			{
-				subdirectories.Append(MakeChannel(channelType));
-				subdirectories.Append(Path.DirectorySeparatorChar);
-			}
-			return (subdirectories.ToString());
-		}
-
-		private string MakeFileNamePostFix(LogFormat format, LogChannelType channelType)
+		private string ToFileNamePostFixString(LogFormat format, LogChannelType channelType)
 		{
 			DateTime now = DateTime.Now;
 			StringBuilder postFix = new StringBuilder();
@@ -225,12 +225,12 @@ namespace YAT.Log.Settings
 			if (this.nameFormat)
 			{
 				postFix.Append(this.nameSeparator.Separator);
-				postFix.Append(MakeFormat(format));
+				postFix.Append(ToFormatString(format));
 			}
 			if (this.nameChannel)
 			{
 				postFix.Append(this.nameSeparator.Separator);
-				postFix.Append(MakeChannel(channelType));
+				postFix.Append(ToChannelString(channelType));
 			}
 			if (this.nameDate)
 			{
@@ -247,6 +247,37 @@ namespace YAT.Log.Settings
 				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
 			}
 			return (postFix.ToString());
+		}
+
+		private string ToFolderString(LogFormat format, LogChannelType channelType)
+		{
+			StringBuilder folders = new StringBuilder();
+
+			if (this.folderFormat)
+			{
+				folders.Append(ToFormatString(format));
+				folders.Append(Path.DirectorySeparatorChar);
+			}
+			if (this.folderChannel)
+			{
+				folders.Append(ToChannelString(channelType));
+				folders.Append(Path.DirectorySeparatorChar);
+			}
+			return (folders.ToString());
+		}
+
+		/// <summary></summary>
+		public Encoding ToTextEncoding(Encoding textTerminalEncoding)
+		{
+			switch (this.textEncoding)
+			{
+				case LogFileEncoding.Terminal:
+					return (textTerminalEncoding);
+
+				case LogFileEncoding.UTF8:
+				default:
+					return (DefaultTextEncoding);
+			}
 		}
 
 		#endregion
@@ -316,9 +347,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Raw, LogChannelType.Tx) +
+				return (ToFolderString(LogFormat.Raw, LogChannelType.Tx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Raw, LogChannelType.Tx) +
+						ToFileNamePostFixString(LogFormat.Raw, LogChannelType.Tx) +
 						this.rawExtension);
 			}
 		}
@@ -351,9 +382,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Raw, LogChannelType.Bidir) +
+				return (ToFolderString(LogFormat.Raw, LogChannelType.Bidir) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Raw, LogChannelType.Bidir) +
+						ToFileNamePostFixString(LogFormat.Raw, LogChannelType.Bidir) +
 						this.rawExtension);
 			}
 		}
@@ -386,9 +417,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Raw, LogChannelType.Rx) +
+				return (ToFolderString(LogFormat.Raw, LogChannelType.Rx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Raw, LogChannelType.Rx) +
+						ToFileNamePostFixString(LogFormat.Raw, LogChannelType.Rx) +
 						this.rawExtension);
 			}
 		}
@@ -438,9 +469,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Neat, LogChannelType.Tx) +
+				return (ToFolderString(LogFormat.Neat, LogChannelType.Tx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Neat, LogChannelType.Tx) +
+						ToFileNamePostFixString(LogFormat.Neat, LogChannelType.Tx) +
 						this.neatExtension);
 			}
 		}
@@ -473,9 +504,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Neat, LogChannelType.Bidir) +
+				return (ToFolderString(LogFormat.Neat, LogChannelType.Bidir) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Neat, LogChannelType.Bidir) +
+						ToFileNamePostFixString(LogFormat.Neat, LogChannelType.Bidir) +
 						this.neatExtension);
 			}
 		}
@@ -508,9 +539,9 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (MakeSubdirectory(LogFormat.Neat, LogChannelType.Rx) +
+				return (ToFolderString(LogFormat.Neat, LogChannelType.Rx) +
 						this.rootFileName +
-						MakeFileNamePostFix(LogFormat.Neat, LogChannelType.Rx) +
+						ToFileNamePostFixString(LogFormat.Neat, LogChannelType.Rx) +
 						this.neatExtension);
 			}
 		}
@@ -627,55 +658,6 @@ namespace YAT.Log.Settings
 			get { return (RawCount + NeatCount); }
 		}
 
-		//- WriteMode -------------------------------------------------------------
-
-		/// <summary></summary>
-		[XmlElement("WriteMode")]
-		public virtual LogFileWriteMode WriteMode
-		{
-			get { return (this.writeMode); }
-			set
-			{
-				if (this.writeMode != value)
-				{
-					this.writeMode = value;
-					SetChanged();
-				}
-			}
-		}
-
-		//- Subdirectories --------------------------------------------------------
-
-		/// <summary></summary>
-		[XmlElement("FolderFormat")]
-		public virtual bool FolderFormat
-		{
-			get { return (this.folderFormat); }
-			set
-			{
-				if (this.folderFormat != value)
-				{
-					this.folderFormat = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("FolderChannel")]
-		public virtual bool FolderChannel
-		{
-			get { return (this.folderChannel); }
-			set
-			{
-				if (this.folderChannel != value)
-				{
-					this.folderChannel = value;
-					SetChanged();
-				}
-			}
-		}
-
 		//- Naming ----------------------------------------------------------------
 
 		/// <summary></summary>
@@ -786,6 +768,72 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		//- Folders ---------------------------------------------------------------
+
+		/// <summary></summary>
+		[XmlElement("FolderFormat")]
+		public virtual bool FolderFormat
+		{
+			get { return (this.folderFormat); }
+			set
+			{
+				if (this.folderFormat != value)
+				{
+					this.folderFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("FolderChannel")]
+		public virtual bool FolderChannel
+		{
+			get { return (this.folderChannel); }
+			set
+			{
+				if (this.folderChannel != value)
+				{
+					this.folderChannel = value;
+					SetChanged();
+				}
+			}
+		}
+
+		//- WriteMode -------------------------------------------------------------
+
+		/// <summary></summary>
+		[XmlElement("WriteMode")]
+		public virtual LogFileWriteMode WriteMode
+		{
+			get { return (this.writeMode); }
+			set
+			{
+				if (this.writeMode != value)
+				{
+					this.writeMode = value;
+					SetChanged();
+				}
+			}
+		}
+
+		//- Encoding -------------------------------------------------------------
+
+		/// <summary></summary>
+		[XmlElement("TextEncoding")]
+		public virtual LogFileEncoding TextEncoding
+		{
+			get { return (this.textEncoding); }
+			set
+			{
+				if (this.textEncoding != value)
+				{
+					this.textEncoding = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -820,14 +868,15 @@ namespace YAT.Log.Settings
 				(NeatLogBidir            == other.NeatLogBidir) &&
 				(NeatLogRx               == other.NeatLogRx) &&
 				(NeatExtension           == other.NeatExtension) &&
-				(WriteMode               == other.WriteMode) &&
-				(FolderFormat    == other.FolderFormat) &&
-				(FolderChannel   == other.FolderChannel) &&
 				(NameFormat              == other.NameFormat) &&
 				(NameChannel             == other.NameChannel) &&
 				(NameDate                == other.NameDate) &&
 				(NameTime                == other.NameTime) &&
-				(NameSeparator           == other.NameSeparator)
+				(NameSeparator           == other.NameSeparator) &&
+				(FolderFormat            == other.FolderFormat) &&
+				(FolderChannel           == other.FolderChannel) &&
+				(WriteMode               == other.WriteMode) &&
+				(TextEncoding            == other.TextEncoding)
 			);
 		}
 
@@ -854,14 +903,15 @@ namespace YAT.Log.Settings
 				this.neatLogBidir         .GetHashCode() ^
 				this.neatLogRx            .GetHashCode() ^
 				this.neatExtension        .GetHashCode() ^
-				this.writeMode            .GetHashCode() ^
-				this.folderFormat .GetHashCode() ^
-				this.folderChannel.GetHashCode() ^
 				this.nameFormat           .GetHashCode() ^
 				this.nameChannel          .GetHashCode() ^
 				this.nameDate             .GetHashCode() ^
 				this.nameTime             .GetHashCode() ^
-				this.nameSeparator        .GetHashCode()
+				this.nameSeparator        .GetHashCode() ^
+				this.folderFormat         .GetHashCode() ^
+				this.folderChannel        .GetHashCode() ^
+				this.writeMode            .GetHashCode() ^
+				this.textEncoding         .GetHashCode()
 			);
 		}
 

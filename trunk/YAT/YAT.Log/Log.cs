@@ -52,11 +52,11 @@ namespace YAT.Log
 
 		private bool isEnabled;
 		private string filePath;
-		private LogFileWriteMode writeMode;
 		private FileNameSeparator separator;
+		private LogFileWriteMode writeMode;
 
-		private FileStream fileStream;
 		private bool isOn;
+		private FileStream fileStream;
 
 		private Timer flushTimer;
 		private object flushTimerSyncObj = new object();
@@ -70,28 +70,28 @@ namespace YAT.Log
 
 		/// <summary></summary>
 		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode)
-			: this(enabled, filePath, writeMode, "")
+			: this(enabled, filePath, "", writeMode)
 		{
 		}
 
 		/// <summary></summary>
-		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
-			: this(enabled, filePath, writeMode, (FileNameSeparator)separator)
+		protected Log(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
+			: this(enabled, filePath, (FileNameSeparator)separator, writeMode)
 		{
 		}
 
 		/// <summary></summary>
-		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+		protected Log(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
 		{
-			Initialize(enabled, filePath, writeMode, separator);
+			Initialize(enabled, filePath, separator, writeMode);
 		}
 
-		private void Initialize(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+		private void Initialize(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
 		{
 			this.isEnabled = enabled;
 			this.filePath  = filePath;
-			this.writeMode = writeMode;
 			this.separator = separator;
+			this.writeMode = writeMode;
 		}
 
 		#region Disposal
@@ -162,12 +162,6 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual bool IsOn
-		{
-			get { return (this.isOn); }
-		}
-
-		/// <summary></summary>
 		public virtual bool FileExists
 		{
 			get { return (File.Exists(this.filePath)); }
@@ -177,6 +171,12 @@ namespace YAT.Log
 		public virtual string FilePath
 		{
 			get { return (this.filePath); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsOn
+		{
+			get { return (this.isOn); }
 		}
 
 		#endregion
@@ -189,40 +189,43 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode)
 		{
-			SetSettings(enabled, filePath, writeMode, "");
+			SetSettings(enabled, filePath, "", writeMode);
 		}
 
 		/// <summary></summary>
-		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, string separator)
+		public virtual void SetSettings(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
 		{
-			SetSettings(enabled, filePath, writeMode, (FileNameSeparator)separator);
+			SetSettings(enabled, filePath, (FileNameSeparator)separator, writeMode);
 		}
 
 		/// <summary></summary>
-		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, FileNameSeparator separator)
+		public virtual void SetSettings(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
 		{
-			if (this.isOn && (enabled != this.isEnabled))
+			if (this.isOn)
 			{
-				if (enabled)
+				if (this.isEnabled != enabled)
 				{
-					Initialize(enabled, filePath, writeMode, separator);
-					Open();
+					if (enabled)
+					{
+						Initialize(enabled, filePath, separator, writeMode);
+						Open();
+					}
+					else
+					{
+						Close();
+						Initialize(enabled, filePath, separator, writeMode);
+					}
 				}
-				else if (!enabled)
+				else if ((this.filePath != filePath) || (this.writeMode != writeMode) || (this.separator != separator))
 				{
 					Close();
-					Initialize(enabled, filePath, writeMode, separator);
+					Initialize(enabled, filePath, separator, writeMode);
+					Open();
 				}
-			}
-			else if (this.isOn && (filePath != this.filePath))
-			{
-				Close();
-				Initialize(enabled, filePath, writeMode, separator);
-				Open();
 			}
 			else
 			{
-				Initialize(enabled, filePath, writeMode, separator);
+				Initialize(enabled, filePath, separator, writeMode);
 			}
 		}
 

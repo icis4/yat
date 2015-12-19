@@ -32,7 +32,18 @@ namespace MKY.Net
 	public static class Browser
 	{
 		/// <summary>
-		/// Tries to open the system default browser and browse the given URI.
+		/// Tries to browse the given URI with the system's default browser.
+		/// </summary>
+		/// <param name="uri">URI to browse.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public static bool TryBrowseUri(string uri)
+		{
+			Exception exception;
+			return (TryBrowseUri(uri, out exception));
+		}
+
+		/// <summary>
+		/// Tries to browse the given URI with the system's default browser.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
@@ -53,7 +64,18 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Tries to open the system default browser and browse the given URI.
+		/// Tries to browse the given URI with the system's default browser.
+		/// </summary>
+		/// <param name="uri">URI to browse.</param>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		public static bool TryBrowseUri(Uri uri)
+		{
+			Exception exception;
+			return (TryBrowseUri(uri, out exception));
+		}
+
+		/// <summary>
+		/// Tries to browse the given URI with the system's default browser.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
 		/// <param name="exception">Exception object, in case of failure.</param>
