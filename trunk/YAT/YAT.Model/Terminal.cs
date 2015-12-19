@@ -3276,8 +3276,15 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenLogFile()
 		{
-			IList<string> filePaths = this.log.GetFilePaths();
-			if (filePaths.Count > 0)
+			int fileCount = 0;
+
+			if (this.log != null)
+			{
+				IList<string> filePaths = this.log.GetFilePaths();
+				fileCount = filePaths.Count;
+			}
+
+			if (fileCount > 0)
 			{
 				bool success = true;
 
@@ -3310,6 +3317,46 @@ namespace YAT.Model
 				OnMessageInputRequest
 				(
 					"No log file(s) available (yet).",
+					"Log File Information",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				return (true);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool OpenLogFolder()
+		{
+			if (this.log != null)
+			{
+				string rootPath = this.log.Settings.RootPath;
+
+				Exception ex;
+				if (!DirectoryEx.TryOpen(rootPath, out ex))
+				{
+					OnMessageInputRequest
+					(
+						"Unable to open log folder" + Environment.NewLine + rootPath + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine + ex.Message,
+						"Log File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					return (false);
+				}
+				else
+				{
+					return (true);
+				}
+			}
+			else
+			{
+				OnMessageInputRequest
+				(
+					"No log folder available (yet).",
 					"Log File Information",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information

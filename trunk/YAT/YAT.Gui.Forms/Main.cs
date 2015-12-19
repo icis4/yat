@@ -790,10 +790,11 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
 			toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
 
-			toolStripButton_MainTool_Terminal_Log_Settings.Enabled = childIsReady;
-			toolStripButton_MainTool_Terminal_Log_On.Enabled       = childIsReady && !logIsOn;
-			toolStripButton_MainTool_Terminal_Log_Off.Enabled      = childIsReady &&  logIsOn;
-			toolStripButton_MainTool_Terminal_Log_Open.Enabled     = childIsReady &&  logFileExists;
+			toolStripButton_MainTool_Terminal_Log_Settings.Enabled    = childIsReady;
+			toolStripButton_MainTool_Terminal_Log_On.Enabled          = childIsReady && !logIsOn;
+			toolStripButton_MainTool_Terminal_Log_Off.Enabled         = childIsReady &&  logIsOn;
+			toolStripButton_MainTool_Terminal_Log_Open.Enabled        = childIsReady &&  logFileExists;
+			toolStripButton_MainTool_Terminal_Log_OpenFolder.Enabled  = childIsReady &&  logFileExists;
 
 			this.isSettingControls.Leave();
 		}
@@ -906,6 +907,11 @@ namespace YAT.Gui.Forms
 		private void toolStripButton_MainTool_Terminal_Log_Open_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestOpenLogFile();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Log_OpenFolder_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestOpenLogFolder();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
