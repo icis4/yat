@@ -133,7 +133,7 @@ namespace YAT.Log
 			if (IsEnabled && IsOn)
 			{
 				this.writer.Write(value);
-				RestartFlushTimer();
+				TriggerFlushTimer();
 			}
 		}
 
@@ -143,7 +143,7 @@ namespace YAT.Log
 			if (IsEnabled && IsOn)
 			{
 				this.writer.WriteLine();
-				RestartFlushTimer();
+				TriggerFlushTimer();
 			}
 		}
 	}
