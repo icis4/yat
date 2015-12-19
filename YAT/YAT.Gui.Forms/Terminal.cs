@@ -2021,6 +2021,12 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestOpenLogFolder()
+		{
+			this.terminal.OpenLogFolder();
+		}
+
+		/// <summary></summary>
 		public virtual void RequestEditFormatSettings()
 		{
 			ShowFormatSettings();
