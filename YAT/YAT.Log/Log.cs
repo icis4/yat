@@ -41,8 +41,8 @@ namespace YAT.Log
 		//==========================================================================================
 
 		// Flushing is a time-intensive operation, it may take up to 10 ms!
-		private const int FlushTimeoutMin =  750;
-		private const int FlushTimeoutMax = 1250;
+		private const int FlushTimeoutMin =  500;
+		private const int FlushTimeoutMax = 1000;
 
 		#endregion
 

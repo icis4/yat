@@ -49,6 +49,7 @@ namespace YAT.Model.Settings
 		public readonly Color DefaultErrorColor = Color.OrangeRed;
 
 		private FontFormat font;
+
 		private TextFormat txDataFormat;
 		private TextFormat txControlFormat;
 		private TextFormat rxDataFormat;
@@ -82,6 +83,7 @@ namespace YAT.Model.Settings
 			: base(rhs)
 		{
 			FontFormat        = new FontFormat(rhs.FontFormat);
+
 			TxDataFormat      = new TextFormat(rhs.TxDataFormat);
 			TxControlFormat   = new TextFormat(rhs.TxControlFormat);
 			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
@@ -91,6 +93,7 @@ namespace YAT.Model.Settings
 			LengthFormat      = new TextFormat(rhs.LengthFormat);
 			WhiteSpacesFormat = new TextFormat(rhs.WhiteSpacesFormat);
 			ErrorFormat       = new TextFormat(rhs.ErrorFormat);
+
 			ClearChanged();
 		}
 
@@ -102,6 +105,7 @@ namespace YAT.Model.Settings
 			base.SetMyDefaults();
 
 			FontFormat        = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
+
 			TxDataFormat      = new TextFormat(DefaultTxColor,           true, false, false, false); // Bold.
 			TxControlFormat   = new TextFormat(DefaultTxColor,          false, false, false, false);
 			RxDataFormat      = new TextFormat(DefaultRxColor,           true, false, false, false); // Bold.
@@ -308,6 +312,7 @@ namespace YAT.Model.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				(Font              == other.Font) &&
+
 				(TxDataFormat      == other.TxDataFormat) &&
 				(TxControlFormat   == other.TxControlFormat) &&
 				(RxDataFormat      == other.RxDataFormat) &&
@@ -334,6 +339,7 @@ namespace YAT.Model.Settings
 				base.GetHashCode() ^
 
 				Font             .GetHashCode() ^
+
 				TxDataFormat     .GetHashCode() ^
 				TxControlFormat  .GetHashCode() ^
 				RxDataFormat     .GetHashCode() ^

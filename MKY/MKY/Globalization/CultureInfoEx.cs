@@ -36,7 +36,7 @@ namespace MKY.Globalization
 		/// <summary>
 		/// Returns the most appropriate culture info from a collection of culture information.
 		/// </summary>
-		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> items)
+		public static CultureInfo GetMostAppropriateCulture(IEnumerable<CultureInfo> items)
 		{
 			CultureInfo ci;
 			List<CultureInfo> l = new List<CultureInfo>(items);
@@ -45,7 +45,38 @@ namespace MKY.Globalization
 			if (l.Count <= 0)
 				return (null);
 
-			// 1st prio: The culture of the user interface
+			// 1st prio: The current culture
+			ci = CultureInfo.CurrentCulture;
+			if (l.Contains(ci))
+				return (ci);
+
+			// 2nd prio: The culture of the UI
+			ci = CultureInfo.CurrentUICulture;
+			if (l.Contains(ci))
+				return (ci);
+
+			// 3rd prio: English (United States)
+			ci = CultureInfo.GetCultureInfo("en-US");
+			if (l.Contains(ci))
+				return (ci);
+
+			// 4th prio: The first entry in the list
+			return (l[0]);
+		}
+
+		/// <summary>
+		/// Returns the most appropriate UI culture info from a collection of culture information.
+		/// </summary>
+		public static CultureInfo GetMostAppropriateUICulture(IEnumerable<CultureInfo> items)
+		{
+			CultureInfo ci;
+			List<CultureInfo> l = new List<CultureInfo>(items);
+
+			// Verify that list contains items
+			if (l.Count <= 0)
+				return (null);
+
+			// 1st prio: The culture of the UI
 			ci = CultureInfo.CurrentUICulture;
 			if (l.Contains(ci))
 				return (ci);

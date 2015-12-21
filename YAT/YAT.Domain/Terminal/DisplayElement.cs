@@ -51,7 +51,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DisplayElement.RxControl))]
 	[XmlInclude(typeof(DisplayElement.TimeStamp))]
 	[XmlInclude(typeof(DisplayElement.DirectionStamp))]
-	[XmlInclude(typeof(DisplayElement.LineLength))]
+	[XmlInclude(typeof(DisplayElement.Length))]
 	[XmlInclude(typeof(DisplayElement.LeftMargin))]
 	[XmlInclude(typeof(DisplayElement.Space))]
 	[XmlInclude(typeof(DisplayElement.RightMargin))]
@@ -215,28 +215,28 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class LineLength : DisplayElement
+		public class Length : DisplayElement
 		{
 			/// <summary></summary>
-			public LineLength()
+			public Length()
 				: base("(" + 0 + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public LineLength(int length)
+			public Length(int length)
 				: base("(" + length + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public LineLength(SerialDirection direction, int length)
+			public Length(SerialDirection direction, int length)
 				: base(direction, "(" + length + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public LineLength(SerialDirection direction, string length)
+			public Length(SerialDirection direction, string length)
 				: base(direction, length)
 			{
 			}
@@ -486,7 +486,7 @@ namespace YAT.Domain
 			else if (this is RxControl)      clone = new RxControl();
 			else if (this is TimeStamp)      clone = new TimeStamp();
 			else if (this is DirectionStamp) clone = new DirectionStamp();
-			else if (this is LineLength)     clone = new LineLength();
+			else if (this is Length)         clone = new Length();
 			else if (this is LeftMargin)     clone = new LeftMargin();
 			else if (this is Space)          clone = new Space();
 			else if (this is RightMargin)    clone = new RightMargin();

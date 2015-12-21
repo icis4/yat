@@ -21,72 +21,30 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.ObjectModel;
-using System.IO;
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
 
-namespace YAT.Log
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+#endregion
+
+namespace YAT.Model.Utilities
 {
-	/// <summary></summary>
-	internal class BinaryLog : Log
+	/// <summary>
+	/// Static utility class providing text writer functionality for YAT.
+	/// </summary>
+	public static class TextWriterHelper
 	{
-		private BinaryWriter writer;
-
-		/// <summary></summary>
-		public BinaryLog(bool enabled, string filePath, LogFileWriteMode writeMode)
-			: base(enabled, filePath, writeMode)
+		/// <remarks>
+		/// Pragmatic implementation of saving text to a file.
+		/// </remarks>
+		public static void LinesToFile(List<Domain.DisplayLine> lines, string filePath, Settings.FormatSettings formatSettings)
 		{
-		}
-
-		/// <summary></summary>
-		public BinaryLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
-			: base(enabled, filePath, (FileNameSeparator)separator, writeMode)
-		{
-		}
-
-		/// <summary></summary>
-		public BinaryLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
-			: base(enabled, filePath, separator, writeMode)
-		{
-		}
-
-		/// <summary></summary>
-		protected override void OpenWriter(FileStream stream)
-		{
-			this.writer = new BinaryWriter(stream);
-		}
-
-		/// <summary></summary>
-		protected override void FlushWriter()
-		{
-			this.writer.Flush();
-		}
-
-		/// <summary></summary>
-		protected override void CloseWriter()
-		{
-			this.writer.Close();
-		}
-
-		/// <summary></summary>
-		public virtual void WriteByte(byte value)
-		{
-			if (IsEnabled && IsOn)
-			{
-				this.writer.Write(value);
-				TriggerFlushTimer();
-			}
-		}
-
-		/// <summary></summary>
-		public virtual void WriteBytes(ReadOnlyCollection<byte> values)
-		{
-			if (IsEnabled && IsOn)
-			{
-				byte[] array = new byte[values.Count];
-				values.CopyTo(array, 0);
-				this.writer.Write(array);
-				TriggerFlushTimer();
-			}
+			RichTextBox richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
+			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.UnicodePlainText);
 		}
 	}
 }

@@ -26,66 +26,27 @@
 // Using
 //==================================================================================================
 
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Xml.Serialization;
+using System.Windows.Forms;
 
 #endregion
 
 namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Static utility class providing XML reader functionality for YAT.
+	/// Static utility class providing RTF reader functionality for YAT.
 	/// </summary>
-	public static class XmlReader
+	public static class RtfReaderHelper
 	{
 		/// <summary></summary>
-		public static string[] LinesFromXmlFile(string xmlFilePath)
+		public static string[] LinesFromRtfFile(string rtfFilePath)
 		{
-			object deserializedLines = null;
-			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
+			RichTextBox richTextProvider = new RichTextBox();
+			using (FileStream fs = File.OpenRead(rtfFilePath))
 			{
-				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
-				deserializedLines = serializer.Deserialize(fs);
+				richTextProvider.LoadFile(fs, RichTextBoxStreamType.RichText);
 			}
-
-			List<Domain.DisplayLine> lines = deserializedLines as List<Domain.DisplayLine>;
-			if (lines != null)
-			{
-				StringBuilder sb;
-				List<string> linesString = new List<string>();
-				foreach (Domain.DisplayLine line in (List<Domain.DisplayLine>)lines)
-				{
-					sb = new StringBuilder();
-					foreach (Domain.DisplayElement de in line)
-					{
-						if (de.IsData)
-							sb.Append(de.Text);
-					}
-					linesString.Add(sb.ToString());
-				}
-
-				return (linesString.ToArray());
-			}
-
-			return (null);
-		}
-	}
-
-	/// <summary>
-	/// Static utility class providing XML writer functionality for YAT.
-	/// </summary>
-	public static class XmlWriter
-	{
-		/// <summary></summary>
-		public static void LinesToXmlFile(List<Domain.DisplayLine> lines, string xmlFilePath)
-		{
-			using (StreamWriter sw = new StreamWriter(xmlFilePath, false, Encoding.UTF8))
-			{
-				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
-				serializer.Serialize(sw, lines);
-			}
+			return (richTextProvider.Lines);
 		}
 	}
 }

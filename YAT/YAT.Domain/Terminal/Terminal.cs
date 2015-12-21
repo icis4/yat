@@ -1491,7 +1491,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
-				dl.Add(new DisplayElement.LineLength(re.Direction, 1));
+				dl.Add(new DisplayElement.Length(re.Direction, 1));
 			}
 			dl.Add(new DisplayElement.LineBreak(re.Direction));
 

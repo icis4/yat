@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.14
+// YAT 2.0 Gamma 2 Development Version 1.99.35
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -17,44 +17,37 @@
 // Copyright © 2003-2015 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// This source code is licensed under the GNU LGPL.
+// YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace MKY.IO
+#endregion
+
+namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Thread-safe log file.
+	/// Utility class providing text writer functionality for YAT.
 	/// </summary>
-	public class LogFile : IDisposable
+	public class TextWriter : IDisposable
 	{
 		private bool isDisposed;
 
-		private string filePath;
 		private StreamWriter writer;
+		private object writerSyncObj = new object();
 
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary>
-		/// Starts log file.
-		/// </summary>
-		/// <param name="filePath">Path of log file.</param>
-		/// <param name="append">true to append to file, false to replace file.</param>
-		public LogFile(string filePath, bool append)
+		/// <summary></summary>
+		public TextWriter(FileStream stream, Encoding encoding)
 		{
-			this.filePath = filePath;
-
-			StreamWriter writer = new StreamWriter(this.filePath, append, Encoding.UTF8);
-			this.writer = (StreamWriter)TextWriter.Synchronized(writer);
+			this.writer = new StreamWriter(stream, encoding);
 		}
 
 		#region Disposal
@@ -74,21 +67,17 @@ namespace MKY.IO
 		{
 			if (!this.isDisposed)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.writer != null)
-						this.writer.Dispose();
+				if (this.writer != null) {
+					this.writer.Close();
+					this.writer.Dispose();
 				}
 
-				// Set state to disposed:
-				this.writer = null;
 				this.isDisposed = true;
 			}
 		}
 
 		/// <summary></summary>
-		~LogFile()
+		~TextWriter()
 		{
 			Dispose(false);
 
@@ -110,71 +99,44 @@ namespace MKY.IO
 
 		#endregion
 
-		#endregion
-
 		/// <summary>
-		/// Returns complete path of log file.
+		/// Clears all buffers for the current writer and causes any buffered data to be written
+		/// to the underlying <see cref="StreamWriter"/> stream.
 		/// </summary>
-		public string FilePath
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-				return (this.filePath);
-			}
-		}
-
-		/// <summary>
-		/// Returns underlying stream.
-		/// </summary>
-		public Stream UnderlyingStream
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-				return (this.writer.BaseStream);
-			}
-		}
-
-		/// <summary>
-		/// Writes a line into log file and adds a time stamp.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void WriteLine(string line)
+		public void Flush()
 		{
 			AssertNotDisposed();
 
-			DateTime now = DateTime.Now;
-			try
-			{
-				lock (this.writer)
-				{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
-					this.writer.WriteLine(now.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + "  " + line);
-					this.writer.Flush();
-				}
-			}
-			catch
-			{
-			}
+			lock (writerSyncObj)
+				this.writer.Flush();
 		}
 
 		/// <summary>
-		/// Closes log file.
+		/// Closes the current object and the underlying <see cref="StreamWriter"/> stream.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void Close()
+		public void Close()
 		{
 			AssertNotDisposed();
 
-			try
+			lock (writerSyncObj)
+				this.writer.Close();
+		}
+
+		/// <summary></summary>
+		public virtual void WriteLine(Domain.DisplayLine line)
+		{
+			AssertNotDisposed();
+
+			lock (writerSyncObj)
 			{
-				lock (this.writer)
+				foreach (Domain.DisplayElement element in line)
 				{
-					this.writer.Close();
+					// Handle line break according to current system:
+					if (element is Domain.DisplayElement.LineBreak)
+						this.writer.WriteLine();
+					else
+						this.writer.Write(element.Text);
 				}
-			}
-			catch
-			{
 			}
 		}
 	}

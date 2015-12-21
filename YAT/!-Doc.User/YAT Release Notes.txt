@@ -93,6 +93,9 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 New:
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
+- Logging in RTF format implemented (feature requests #233). Note that the log file's RTF structure
+  is incomplete while logging is ongoing. The file can only be opened by an RTF reader (e.g. Word)
+  after logging has finished, i.e. logging has been switched off or the terminal is closed.
 
 Important changes:
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the following items.
@@ -151,7 +154,6 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
 - Direct mode does not yet support special formats and commands (feature request #10).
-- Logging is limited to text, RTF format not yet implemented (feature requests #233).
 - XML logging not yet implemented, definition of schema pending (feature requests #26 and #27).
 
 

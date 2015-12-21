@@ -102,8 +102,8 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Log.cs" />
-    <Compile Include="TextLog.cs" />
-    <Compile Include="BinaryLog.cs" />
+    <Compile Include="NeatLog.cs" />
+    <Compile Include="RawLog.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Settings\LogSettings.cs" />
     <Compile Include="Types.cs" />
@@ -116,6 +116,22 @@
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\netrtfwriter\RtfWriter\RtfWriter.csproj">
+      <Project>{591bceb5-6b6f-4368-be6c-f89f668f7dcb}</Project>
+      <Name>RtfWriter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
+      <Project>{1c44a8c0-7805-4172-8746-2db750803fff}</Project>
+      <Name>YAT.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+      <Project>{e9ff1d5e-84e0-4adb-94ec-662903931295}</Project>
+      <Name>YAT.Model.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Utilities\YAT.Model.Utilities.csproj">
+      <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
+      <Name>YAT.Model.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>

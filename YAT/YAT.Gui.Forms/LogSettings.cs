@@ -470,13 +470,13 @@ namespace YAT.Gui.Forms
 
 			groupBox_Options_Encoding.Enabled = (this.terminalType == Domain.TerminalType.Text);
 
-			if (this.terminalType == Domain.TerminalType.Text) {
+			if (this.settingsInEdit.TextEncodingIsSupported(this.terminalType)) {
 				radioButton_Options_EncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.UTF8);
 				radioButton_Options_EncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.Terminal);
 			}
 			else {
-				radioButton_Options_EncodingUTF8.Checked     = false; // Encoding is inactive for binary terminals.
-				radioButton_Options_EncodingTerminal.Checked = false; // Encoding is inactive for binary terminals.
+				radioButton_Options_EncodingUTF8.Checked     = false;
+				radioButton_Options_EncodingTerminal.Checked = false;
 			}
 
 			this.isSettingControls.Leave();

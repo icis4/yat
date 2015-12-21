@@ -834,6 +834,27 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
+		public bool TextEncodingIsSupported(Domain.TerminalType terminalType)
+		{
+			switch (terminalType)
+			{
+				case Domain.TerminalType.Text:
+				{
+					if (ExtensionSettings.IsRtfFile(NeatExtension))
+						return (false);
+					else
+						return (true);
+				}
+
+				case Domain.TerminalType.Binary:
+				{
+					return (false); // Encoding is inactive for binary terminals.
+				}
+			}
+			throw (new TypeLoadException("Program execution should never get here, " + terminalType + " is an invalid terminal type, please report this bug!"));
+		}
+
 		#endregion
 
 		#region Object Members

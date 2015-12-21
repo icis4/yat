@@ -653,7 +653,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.LineLength(line.DataCount));
+				lp.Add(new DisplayElement.Length(line.DataCount));
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 

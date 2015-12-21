@@ -529,7 +529,7 @@ namespace YAT.Domain
 						lineLength += e.DataCount;
 				}
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.LineLength(lineLength));
+				lp.Add(new DisplayElement.Length(lineLength));
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 

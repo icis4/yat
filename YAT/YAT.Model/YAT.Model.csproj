@@ -147,6 +147,10 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\netrtfwriter\RtfWriter\RtfWriter.csproj">
+      <Project>{591bceb5-6b6f-4368-be6c-f89f668f7dcb}</Project>
+      <Name>RtfWriter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>

@@ -104,8 +104,14 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rtf.cs" />
-    <Compile Include="Xml.cs" />
+    <Compile Include="RtfReaderHelper.cs" />
+    <Compile Include="RtfPrinter.cs" />
+    <Compile Include="RtfWriter.cs" />
+    <Compile Include="TextWriter.cs" />
+    <Compile Include="TextWriterHelper.cs" />
+    <Compile Include="RtfWriterHelper.cs" />
+    <Compile Include="XmlReaderHelper.cs" />
+    <Compile Include="XmlWriterHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\YAT.snk" />
@@ -114,6 +120,10 @@
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\netrtfwriter\RtfWriter\RtfWriter.csproj">
+      <Project>{591bceb5-6b6f-4368-be6c-f89f668f7dcb}</Project>
+      <Name>RtfWriter</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
