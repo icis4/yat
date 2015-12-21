@@ -242,6 +242,16 @@ namespace YAT.Gui.Forms
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://dejavu.sourceforge.net/");
+			linkLabel_Environment.Text += Environment.NewLine;
+
+			textBefore = "  > ";
+			textLink   =     "RTF writer";
+			textAfter  =               " by Matt Buckley and Thomson Reuters";
+			linkLabel_Environment.Text += textBefore;
+			linkStart = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/netrtfwriter/");
+			linkLabel_Environment.Text += textAfter;
 
 			// Home:
 			linkLabel_Home.Text = "";

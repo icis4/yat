@@ -145,7 +145,8 @@ HSR and Mettler-Toledo. YAT was initially developed as XTerm232 due to the lack 
   &gt; USB HID library based on GenericHid/UsbLibrary/UsbHid by Matthias Kläy
   &gt; YAT icons from Nuvola by David Vignoni edited in GIMP
   &gt; Toolbar icons from FatCow
-  &gt; Terminal font DejaVu</value>
+  &gt; Terminal font DejaVu
+  &gt; RTF writer by Matt Buckley and Thomson Reuters</value>
   </data>
   <data name="linkLabel_VirtualPorts.Text" xml:space="preserve">
     <value>If you're looking for a tool to create and manage virtual COM ports, check out Eterlogic VSPE, TALtech TCP/Com, or

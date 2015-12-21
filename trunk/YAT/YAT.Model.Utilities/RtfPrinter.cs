@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// MKY Development Version 1.0.14
+// YAT 2.0 Gamma 2 Development Version 1.99.35
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -17,44 +17,46 @@
 // Copyright © 2003-2015 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// This source code is licensed under the GNU LGPL.
+// YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Text;
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
 
-namespace MKY.IO
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
+using System.Windows.Forms;
+
+#endregion
+
+namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Thread-safe log file.
+	/// Utility class providing RTF printer functionality for YAT.
 	/// </summary>
-	public class LogFile : IDisposable
+	public class RtfPrinter : IDisposable
 	{
 		private bool isDisposed;
 
-		private string filePath;
-		private StreamWriter writer;
+		private PrinterSettings settings;
+		private RichTextBox richTextProvider;
+		private StringReader reader;
 
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary>
-		/// Starts log file.
-		/// </summary>
-		/// <param name="filePath">Path of log file.</param>
-		/// <param name="append">true to append to file, false to replace file.</param>
-		public LogFile(string filePath, bool append)
+		/// <summary></summary>
+		public RtfPrinter(PrinterSettings settings)
 		{
-			this.filePath = filePath;
-
-			StreamWriter writer = new StreamWriter(this.filePath, append, Encoding.UTF8);
-			this.writer = (StreamWriter)TextWriter.Synchronized(writer);
+			this.settings = settings;
 		}
 
 		#region Disposal
@@ -74,21 +76,28 @@ namespace MKY.IO
 		{
 			if (!this.isDisposed)
 			{
+				if (this.richTextProvider != null) {
+					this.richTextProvider.Dispose();
+					this.richTextProvider = null;
+				}
+
+				if (this.reader != null) {
+					this.reader.Dispose();
+					this.reader = null;
+				}
+
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					if (this.writer != null)
-						this.writer.Dispose();
 				}
 
 				// Set state to disposed:
-				this.writer = null;
 				this.isDisposed = true;
 			}
 		}
 
 		/// <summary></summary>
-		~LogFile()
+		~RtfPrinter()
 		{
 			Dispose(false);
 
@@ -112,70 +121,62 @@ namespace MKY.IO
 
 		#endregion
 
-		/// <summary>
-		/// Returns complete path of log file.
-		/// </summary>
-		public string FilePath
+		/// <remarks>
+		/// Pragmatic implementation of printing RTF. 'netrtfwriter' is only used for stream-based logging.
+		/// </remarks>
+		/// <exception cref="System.Drawing.Printing.InvalidPrinterException">
+		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
+		/// </exception>
+		public virtual void Print(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-				return (this.filePath);
-			}
+			Print(RtfWriterHelper.LinesToRichTextBox(lines, formatSettings));
 		}
 
-		/// <summary>
-		/// Returns underlying stream.
-		/// </summary>
-		public Stream UnderlyingStream
+		/// <remarks>
+		/// Pragmatic implementation of printing RTF. 'netrtfwriter' is only used for stream-based logging.
+		/// </remarks>
+		/// <exception cref="System.Drawing.Printing.InvalidPrinterException">
+		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
+		/// </exception>
+		public virtual void Print(RichTextBox richTextProvider)
 		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-				return (this.writer.BaseStream);
-			}
-		}
-
-		/// <summary>
-		/// Writes a line into log file and adds a time stamp.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void WriteLine(string line)
-		{
-			AssertNotDisposed();
-
-			DateTime now = DateTime.Now;
+			this.richTextProvider = richTextProvider;
+			this.reader = new StringReader(this.richTextProvider.Text);
 			try
 			{
-				lock (this.writer)
-				{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
-					this.writer.WriteLine(now.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + "  " + line);
-					this.writer.Flush();
-				}
-			}
-			catch
-			{
-			}
-		}
-
-		/// <summary>
-		/// Closes log file.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void Close()
-		{
-			AssertNotDisposed();
-
-			try
-			{
-				lock (this.writer)
+				using (PrintDocument document = new PrintDocument())
 				{
-					this.writer.Close();
+					document.PrintPage += new PrintPageEventHandler(document_PrintPage);
+					document.PrinterSettings = this.settings;
+					document.Print();
 				}
 			}
-			catch
+			finally
 			{
+				this.reader.Close();
 			}
+		}
+
+		private void document_PrintPage(object sender, PrintPageEventArgs e)
+		{
+			// Calculate the number of lines per page:
+			int linesPerPage = (int)(e.MarginBounds.Height / this.richTextProvider.Font.GetHeight(e.Graphics));
+			int lineCount = 0;
+
+			// Print each line of the file:
+			string line = null;
+			while ((lineCount < linesPerPage) && ((line = this.reader.ReadLine()) != null))
+			{
+				float y = e.MarginBounds.Top + (lineCount * this.richTextProvider.Font.GetHeight(e.Graphics));
+				e.Graphics.DrawString(line, this.richTextProvider.Font, Brushes.Black, e.MarginBounds.Left, y, new StringFormat());
+				lineCount++;
+			}
+
+			// If more lines exist, print another page:
+			if (line != null)
+				e.HasMorePages = true;
+			else
+				e.HasMorePages = false;
 		}
 	}
 }

@@ -77,7 +77,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(531, 420);
+			this.button_Close.Location = new System.Drawing.Point(537, 431);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -101,7 +101,7 @@
 			this.label_Separator1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator1.Location = new System.Drawing.Point(9, 61);
 			this.label_Separator1.Name = "label_Separator1";
-			this.label_Separator1.Size = new System.Drawing.Size(600, 25);
+			this.label_Separator1.Size = new System.Drawing.Size(606, 25);
 			this.label_Separator1.TabIndex = 4;
 			this.label_Separator1.Text = resources.GetString("label_Separator1.Text");
 			this.label_Separator1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -123,7 +123,7 @@
 			this.label_Separator2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator2.Location = new System.Drawing.Point(9, 135);
 			this.label_Separator2.Name = "label_Separator2";
-			this.label_Separator2.Size = new System.Drawing.Size(600, 25);
+			this.label_Separator2.Size = new System.Drawing.Size(606, 25);
 			this.label_Separator2.TabIndex = 7;
 			this.label_Separator2.Text = resources.GetString("label_Separator2.Text");
 			this.label_Separator2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -146,7 +146,7 @@
 			this.linkLabel_Copyright.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Copyright.Location = new System.Drawing.Point(67, 22);
 			this.linkLabel_Copyright.Name = "linkLabel_Copyright";
-			this.linkLabel_Copyright.Size = new System.Drawing.Size(539, 26);
+			this.linkLabel_Copyright.Size = new System.Drawing.Size(545, 26);
 			this.linkLabel_Copyright.TabIndex = 2;
 			this.linkLabel_Copyright.Text = "<COPYRIGHT>";
 			this.linkLabel_Copyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
@@ -158,7 +158,7 @@
 			this.label_Separator3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator3.Location = new System.Drawing.Point(9, 222);
 			this.label_Separator3.Name = "label_Separator3";
-			this.label_Separator3.Size = new System.Drawing.Size(600, 25);
+			this.label_Separator3.Size = new System.Drawing.Size(606, 25);
 			this.label_Separator3.TabIndex = 10;
 			this.label_Separator3.Text = resources.GetString("label_Separator3.Text");
 			this.label_Separator3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -190,7 +190,7 @@
 			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 409);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 420);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(259, 13);
 			this.linkLabel_Home.TabIndex = 14;
@@ -213,7 +213,7 @@
 			this.linkLabel_Environment.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 247);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
-			this.linkLabel_Environment.Size = new System.Drawing.Size(374, 143);
+			this.linkLabel_Environment.Size = new System.Drawing.Size(374, 156);
 			this.linkLabel_Environment.TabIndex = 11;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
@@ -223,7 +223,7 @@
 			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 430);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 441);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
 			this.linkLabel_Author.TabIndex = 15;
@@ -234,7 +234,7 @@
 			// 
 			this.pictureBox_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pictureBox_License.Image = global::YAT.Gui.Forms.Properties.Resources.Image_LGPLv3_88x31;
-			this.pictureBox_License.Location = new System.Drawing.Point(442, 263);
+			this.pictureBox_License.Location = new System.Drawing.Point(448, 263);
 			this.pictureBox_License.Name = "pictureBox_License";
 			this.pictureBox_License.Size = new System.Drawing.Size(88, 31);
 			this.pictureBox_License.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -246,7 +246,7 @@
 			this.linkLabel_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_License.AutoSize = true;
 			this.linkLabel_License.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_License.Location = new System.Drawing.Point(394, 247);
+			this.linkLabel_License.Location = new System.Drawing.Point(400, 247);
 			this.linkLabel_License.Name = "linkLabel_License";
 			this.linkLabel_License.Size = new System.Drawing.Size(188, 13);
 			this.linkLabel_License.TabIndex = 12;
@@ -267,7 +267,7 @@
 			// label_ExecuteManualTest1
 			// 
 			this.label_ExecuteManualTest1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(605, 61);
+			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(611, 61);
 			this.label_ExecuteManualTest1.Name = "label_ExecuteManualTest1";
 			this.label_ExecuteManualTest1.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest1.TabIndex = 16;
@@ -276,7 +276,7 @@
 			// label_ExecuteManualTest2
 			// 
 			this.label_ExecuteManualTest2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(605, 135);
+			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(611, 135);
 			this.label_ExecuteManualTest2.Name = "label_ExecuteManualTest2";
 			this.label_ExecuteManualTest2.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest2.TabIndex = 17;
@@ -285,7 +285,7 @@
 			// label_ExecuteManualTest3
 			// 
 			this.label_ExecuteManualTest3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(605, 222);
+			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(611, 222);
 			this.label_ExecuteManualTest3.Name = "label_ExecuteManualTest3";
 			this.label_ExecuteManualTest3.Size = new System.Drawing.Size(16, 16);
 			this.label_ExecuteManualTest3.TabIndex = 18;
@@ -300,11 +300,11 @@
 			this.linkLabel_Thanks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Thanks.AutoSize = true;
 			this.linkLabel_Thanks.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Thanks.Location = new System.Drawing.Point(12, 396);
+			this.linkLabel_Thanks.Location = new System.Drawing.Point(12, 407);
 			this.linkLabel_Thanks.Name = "linkLabel_Thanks";
-			this.linkLabel_Thanks.Size = new System.Drawing.Size(343, 13);
+			this.linkLabel_Thanks.Size = new System.Drawing.Size(401, 13);
 			this.linkLabel_Thanks.TabIndex = 13;
-			this.linkLabel_Thanks.Text = "Many thanks to everybody who helped YAT to become what it is today!";
+			this.linkLabel_Thanks.Text = "And a big \"Thanks!\" to everybody else who helped YAT to become what it is today!";
 			// 
 			// About
 			// 
@@ -312,7 +312,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(618, 455);
+			this.ClientSize = new System.Drawing.Size(624, 466);
 			this.Controls.Add(this.linkLabel_Thanks);
 			this.Controls.Add(this.label_ExecuteManualTest3);
 			this.Controls.Add(this.label_ExecuteManualTest2);

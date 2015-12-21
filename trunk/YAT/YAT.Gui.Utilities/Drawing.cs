@@ -54,7 +54,7 @@ namespace YAT.Gui.Utilities
 		/// <remarks>
 		/// For performance reasons, cache fonts and brushes used for drawing.
 		/// </remarks>
-		private static DrawingElements neutral     = new DrawingElements();
+		private static DrawingElements lineNumber  = new DrawingElements();
 		private static DrawingElements txData      = new DrawingElements();
 		private static DrawingElements txControl   = new DrawingElements();
 		private static DrawingElements rxData      = new DrawingElements();
@@ -121,23 +121,27 @@ namespace YAT.Gui.Utilities
 		{
 			Font font;
 			Brush brush;
-			SetNeutralDrawingItems(formatSettings, graphics, out font, out brush);
+			SetLineNumberDrawingItems(formatSettings, graphics, out font, out brush);
 
 			graphics.DrawString(s, font, brush, bounds, lineNumberStringFormat);
 
 			requestedSize = graphics.MeasureString(s, font, int.MaxValue, lineNumberStringFormat);
 		}
 
-		private static void SetNeutralDrawingItems(Model.Settings.FormatSettings settings,
-		                                           Graphics graphics, out Font font, out Brush brush)
+		/// <remarks>
+		/// Line numbers shall be formatted the same as 'normal' Windows.Forms control text. This format
+		/// is only used here, and it is not contained in the <see cref="Model.Settings.FormatSettings"/>.
+		/// </remarks>
+		private static void SetLineNumberDrawingItems(Model.Settings.FormatSettings settings,
+		                                              Graphics graphics, out Font font, out Brush brush)
 		{
 			string    fontName  = settings.Font.Name;
 			float     fontSize  = settings.Font.Size;
 			FontStyle fontStyle = FontStyle.Regular;
 			Color     fontColor = SystemColors.ControlText;
 
-			font  = SetFont (ref neutral.Font, fontName, fontSize, fontStyle, graphics);
-			brush = SetBrush(ref neutral.Brush, fontColor);
+			font  = SetFont (ref lineNumber.Font, fontName, fontSize, fontStyle, graphics);
+			brush = SetBrush(ref lineNumber.Brush, fontColor);
 		}
 
 		/// <summary></summary>
@@ -236,7 +240,7 @@ namespace YAT.Gui.Utilities
 				font  = SetFont (ref direction.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref direction.Brush, fontColor);
 			}
-			else if (element is Domain.DisplayElement.LineLength)
+			else if (element is Domain.DisplayElement.Length)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
@@ -275,6 +279,8 @@ namespace YAT.Gui.Utilities
 			if (cachedFont == null)
 			{
 				cachedFont = new Font(fontName, fontSize, fontStyle);
+
+				// Also set tab stops accordingly.
 				SetTabStops(cachedFont, graphics);
 			}
 			else if ((cachedFont.Name  != fontName) ||
@@ -288,6 +294,7 @@ namespace YAT.Gui.Utilities
 				// Also set tab stops accordingly.
 				SetTabStops(cachedFont, graphics);
 			}
+
 			return (cachedFont);
 		}
 
@@ -321,6 +328,7 @@ namespace YAT.Gui.Utilities
 				cachedBrush.Dispose();
 				cachedBrush = new SolidBrush(color);
 			}
+
 			return (cachedBrush);
 		}
 	}

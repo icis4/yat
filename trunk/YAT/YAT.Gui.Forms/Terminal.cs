@@ -2549,7 +2549,7 @@ namespace YAT.Gui.Forms
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Copying data to clipboard...");
-			Model.Utilities.RtfWriter.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
+			Model.Utilities.RtfWriterHelper.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
 			SetTimedStatusText("Data copied to clipboard");
 		}
 
@@ -2587,15 +2587,15 @@ namespace YAT.Gui.Forms
 			try
 			{
 				if (ExtensionSettings.IsXmlFile(filePath))
-					Model.Utilities.XmlWriter.LinesToXmlFile(monitor.SelectedLines, filePath);
+					Model.Utilities.XmlWriterHelper.LinesToFile(monitor.SelectedLines, filePath);
 				else if (ExtensionSettings.IsRtfFile(filePath))
-					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.RichText);
+					Model.Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				else
-					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.PlainText);
+					Model.Utilities.TextWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 
 				SetTimedStatusText("Data saved");
 			}
-			catch (System.IO.IOException e)
+			catch (IOException e)
 			{
 				SetFixedStatusText("Error saving data!");
 
@@ -2648,7 +2648,7 @@ namespace YAT.Gui.Forms
 			{
 				try
 				{
-					printer.Print(Model.Utilities.RtfWriter.LinesToRichTextBox(monitor.SelectedLines, this.settingsRoot.Format));
+					printer.Print(monitor.SelectedLines, this.settingsRoot.Format);
 					SetTimedStatusText("Data printed");
 				}
 				catch (System.Drawing.Printing.InvalidPrinterException ex)
@@ -3618,7 +3618,7 @@ namespace YAT.Gui.Forms
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				this.terminal.SetLogSettings(f.SettingsResult);
+				this.settingsRoot.Log = f.SettingsResult;
 			}
 
 			SelectSendCommandInput();

@@ -282,7 +282,7 @@ namespace YAT.Model
 			AttachTerminalEventHandlers();
 
 			// Create log:
-			this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding);
+			this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
 
 			// Create chronos:
 			CreateChronos();
@@ -1057,17 +1057,6 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary>
-		/// Sets log settings.
-		/// </summary>
-		public virtual void SetLogSettings(Log.Settings.LogSettings settings)
-		{
-			AssertNotDisposed();
-
-			this.settingsRoot.Log = settings;
-			this.log.Settings = this.settingsRoot.Log;
-		}
-
 		#endregion
 
 		#region Settings
@@ -1115,19 +1104,40 @@ namespace YAT.Model
 			{
 				// Explicit settings have changed.
 				SettingsEventArgs explicitEventArgs = e.Inner;
-				if ((explicitEventArgs.Inner != null) && ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Terminal))
+				if (explicitEventArgs.Inner != null)
 				{
-					// Terminal settings have changed.
-					SettingsEventArgs terminalEventArgs = explicitEventArgs.Inner;
-					if ((terminalEventArgs.Inner != null) && ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.Send))
+					if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Terminal))
 					{
-						// Send settings have changed.
-						if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {
-							settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Send.SendImmediately;
+						// Terminal settings have changed.
+						SettingsEventArgs terminalEventArgs = explicitEventArgs.Inner;
+						if (terminalEventArgs.Inner != null)
+						{
+							if (ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.Send))
+							{
+								// Send settings have changed.
+								if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {
+									settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Send.SendImmediately;
 
-							// Send immediately has changed, reset the last command:
-							this.settingsRoot.SendCommand.Command.Clear();
+									// Send immediately has changed, reset the last command:
+									this.settingsRoot.SendCommand.Command.Clear();
+								}
+							}
+							else if (ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.TextTerminal))
+							{
+								// Text settings have changed.
+								this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.TextTerminal.Encoding;
+							}
 						}
+					}
+					else if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Format))
+					{
+						// Format settings have changed.
+						this.log.NeatFormat = this.settingsRoot.Format;
+					}
+					else if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Log))
+					{
+						// Log settings have changed.
+						this.log.Settings = this.settingsRoot.Log;
 					}
 				}
 			}
@@ -1894,48 +1904,12 @@ namespace YAT.Model
 		{
 			// Display:
 			OnDisplayElementsSent(e);
-
-			// Log:
-			foreach (Domain.DisplayElement de in e.Elements)
-			{
-				if (this.log.IsOn)
-				{
-					if (de is Domain.DisplayElement.LineBreak)
-					{
-						this.log.WriteEol(Log.LogChannel.NeatTx);
-						this.log.WriteEol(Log.LogChannel.NeatBidir);
-					}
-					else
-					{
-						this.log.WriteString(de.Text, Log.LogChannel.NeatTx);
-						this.log.WriteString(de.Text, Log.LogChannel.NeatBidir);
-					}
-				}
-			}
 		}
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display:
 			OnDisplayElementsReceived(e);
-
-			// Log:
-			foreach (Domain.DisplayElement de in e.Elements)
-			{
-				if (this.log.IsOn)
-				{
-					if (de is Domain.DisplayElement.LineBreak)
-					{
-						this.log.WriteEol(Log.LogChannel.NeatBidir);
-						this.log.WriteEol(Log.LogChannel.NeatRx);
-					}
-					else
-					{
-						this.log.WriteString(de.Text, Log.LogChannel.NeatBidir);
-						this.log.WriteString(de.Text, Log.LogChannel.NeatRx);
-					}
-				}
-			}
 		}
 
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
@@ -1950,6 +1924,16 @@ namespace YAT.Model
 
 			// Display:
 			OnDisplayLinesSent(e);
+
+			// Log:
+			foreach (Domain.DisplayLine de in e.Lines)
+			{
+				if (this.log.IsOn)
+				{
+					this.log.WriteLine(de, Log.LogChannel.NeatTx);
+					this.log.WriteLine(de, Log.LogChannel.NeatBidir);
+				}
+			}
 		}
 
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
@@ -1964,6 +1948,16 @@ namespace YAT.Model
 
 			// Display:
 			OnDisplayLinesReceived(e);
+
+			// Log:
+			foreach (Domain.DisplayLine de in e.Lines)
+			{
+				if (this.log.IsOn)
+				{
+					this.log.WriteLine(de, Log.LogChannel.NeatBidir);
+					this.log.WriteLine(de, Log.LogChannel.NeatRx);
+				}
+			}
 		}
 
 		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
@@ -2486,14 +2480,14 @@ namespace YAT.Model
 					if (ExtensionSettings.IsXmlFile(filePath))
 					{
 						// XML => Read all at once for simplicity:
-						string[] lines = XmlReader.LinesFromXmlFile(filePath);
+						string[] lines = XmlReaderHelper.LinesFromFile(filePath);
 						foreach (string line in lines)
 							SendLine(line);
 					}
 					else if (ExtensionSettings.IsRtfFile(filePath))
 					{
 						// RTF => Read all at once for simplicity:
-						string[] lines = RtfReader.LinesFromRtfFile(filePath);
+						string[] lines = RtfReaderHelper.LinesFromRtfFile(filePath);
 						foreach (string line in lines)
 							SendLine(line);
 					}
@@ -2504,9 +2498,7 @@ namespace YAT.Model
 						{										// Automatically detect encoding from BOM, otherwise use given setting.
 							string line;
 							while (((line = sr.ReadLine()) != null) && (!this.terminal.BreakState))
-							{
 								SendLine(line);
-							}
 						}
 					}
 				}

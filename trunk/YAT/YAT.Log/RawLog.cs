@@ -21,128 +21,104 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 
 namespace YAT.Log
 {
 	/// <summary></summary>
-	internal class TextLog : Log
+	internal class RawLog : Log
 	{
-		private Encoding encoding;
-
-		private StreamWriter writer;
+		private BinaryWriter writer;
+		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode)
+		public RawLog(bool enabled, string filePath, LogFileWriteMode writeMode)
 			: base(enabled, filePath, writeMode)
 		{
-			this.encoding = Encoding.UTF8;
 		}
 
 		/// <summary></summary>
-		public TextLog(bool enabled, string filePath, LogFileWriteMode writeMode, Encoding encoding)
-			: base(enabled, filePath, writeMode)
-		{
-			this.encoding = encoding;
-		}
-
-		/// <summary></summary>
-		public TextLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode, Encoding encoding)
+		public RawLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
 			: base(enabled, filePath, (FileNameSeparator)separator, writeMode)
 		{
-			this.encoding = encoding;
 		}
 
 		/// <summary></summary>
-		public TextLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode, Encoding encoding)
+		public RawLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
 			: base(enabled, filePath, separator, writeMode)
 		{
-			this.encoding = encoding;
 		}
 
-		/// <summary></summary>
-		public void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, Encoding encoding)
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		protected override void Dispose(bool disposing)
 		{
-			if (this.IsEnabled && this.IsOn && (this.encoding != encoding))
-			{
-				Close();
-				this.encoding = encoding;
-				base.SetSettings(enabled, filePath, writeMode);
-				Open();
-			}
-			else
-			{
-				this.encoding = encoding;
-			}
+			if (this.writer != null)
+				this.writer.Close();
+
+			base.Dispose(disposing);
 		}
 
-		/// <summary></summary>
-		public void SetSettings(bool enabled, string filePath, string separator, LogFileWriteMode writeMode, Encoding encoding)
-		{
-			if (this.IsEnabled && this.IsOn && (this.encoding != encoding))
-			{
-				Close();
-				this.encoding = encoding;
-				base.SetSettings(enabled, filePath, separator, writeMode);
-				Open();
-			}
-			else
-			{
-				this.encoding = encoding;
-			}
-		}
-
-		/// <summary></summary>
-		public void SetSettings(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode, Encoding encoding)
-		{
-			if (this.IsEnabled && this.IsOn && (this.encoding != encoding))
-			{
-				Close();
-				this.encoding = encoding;
-				base.SetSettings(enabled, filePath, separator, writeMode);
-				Open();
-			}
-			else
-			{
-				this.encoding = encoding;
-			}
-		}
+		#endregion
 
 		/// <summary></summary>
 		protected override void OpenWriter(FileStream stream)
 		{
-			this.writer = new StreamWriter(stream, this.encoding);
+			AssertNotDisposed();
+
+			lock (this.writerSyncObj)
+				this.writer = new BinaryWriter(stream);
 		}
 
 		/// <summary></summary>
 		protected override void FlushWriter()
 		{
-			this.writer.Flush();
+			AssertNotDisposed();
+
+			lock (this.writerSyncObj)
+				this.writer.Flush();
 		}
 
 		/// <summary></summary>
 		protected override void CloseWriter()
 		{
-			this.writer.Close();
+			AssertNotDisposed();
+
+			lock (this.writerSyncObj)
+				this.writer.Close();
 		}
 
 		/// <summary></summary>
-		public virtual void WriteString(string value)
+		public virtual void WriteByte(byte value)
 		{
+			AssertNotDisposed();
+
 			if (IsEnabled && IsOn)
 			{
-				this.writer.Write(value);
+				lock (this.writerSyncObj)
+					this.writer.Write(value);
+
 				TriggerFlushTimer();
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void WriteEol()
+		public virtual void WriteBytes(ReadOnlyCollection<byte> values)
 		{
+			AssertNotDisposed();
+
 			if (IsEnabled && IsOn)
 			{
-				this.writer.WriteLine();
+				byte[] array = new byte[values.Count];
+				values.CopyTo(array, 0);
+
+				lock (this.writerSyncObj)
+					this.writer.Write(array);
+
 				TriggerFlushTimer();
 			}
 		}
