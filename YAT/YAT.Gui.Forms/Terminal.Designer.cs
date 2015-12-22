@@ -191,6 +191,7 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Off = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Open = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
@@ -1306,7 +1307,7 @@
 			this.toolStripMenuItem_TerminalMenu_File_Close.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_Close.MergeIndex = 3;
 			this.toolStripMenuItem_TerminalMenu_File_Close.Name = "toolStripMenuItem_TerminalMenu_File_Close";
-			this.toolStripMenuItem_TerminalMenu_File_Close.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_File_Close.Size = new System.Drawing.Size(138, 22);
 			this.toolStripMenuItem_TerminalMenu_File_Close.Text = "&Close";
 			this.toolStripMenuItem_TerminalMenu_File_Close.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_Close_Click);
 			// 
@@ -1317,7 +1318,7 @@
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_File_Save.Name = "toolStripMenuItem_TerminalMenu_File_Save";
 			this.toolStripMenuItem_TerminalMenu_File_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.toolStripMenuItem_TerminalMenu_File_Save.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_File_Save.Size = new System.Drawing.Size(138, 22);
 			this.toolStripMenuItem_TerminalMenu_File_Save.Text = "&Save";
 			this.toolStripMenuItem_TerminalMenu_File_Save.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_Save_Click);
 			// 
@@ -1327,7 +1328,7 @@
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.MergeIndex = 7;
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Name = "toolStripMenuItem_TerminalMenu_File_SaveAs";
-			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Size = new System.Drawing.Size(138, 22);
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Text = "Save &As...";
 			this.toolStripMenuItem_TerminalMenu_File_SaveAs.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_SaveAs_Click);
 			// 
@@ -1500,6 +1501,7 @@
             this.toolStripMenuItem_PresetContextMenu_Preset_5,
             this.toolStripMenuItem_PresetContextMenu_Preset_6});
 			this.contextMenuStrip_Preset.Name = "contextMenuStrip_Preset";
+			this.contextMenuStrip_Preset.OwnerItem = this.toolStripMenuItem_TerminalMenu_Terminal_Presets;
 			this.contextMenuStrip_Preset.Size = new System.Drawing.Size(234, 136);
 			this.contextMenuStrip_Preset.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Preset_Opening);
 			// 
@@ -1630,6 +1632,7 @@
             this.toolStripMenuItem_TerminalMenu_Log_Off,
             this.toolStripMenuItem_TerminalMenu_Log_Separator_2,
             this.toolStripMenuItem_TerminalMenu_Log_Open,
+            this.toolStripMenuItem_TerminalMenu_Log_OpenFolder,
             this.toolStripMenuItem_TerminalMenu_Log_Separator_3,
             this.toolStripMenuItem_TerminalMenu_Log_Clear,
             this.toolStripMenuItem_TerminalMenu_Log_Separator_4,
@@ -1649,7 +1652,7 @@
 			this.toolStripMenuItem_TerminalMenu_Log_On.Name = "toolStripMenuItem_TerminalMenu_Log_On";
 			this.toolStripMenuItem_TerminalMenu_Log_On.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.N)));
-			this.toolStripMenuItem_TerminalMenu_Log_On.Size = new System.Drawing.Size(197, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_On.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_On.Text = "O&n";
 			this.toolStripMenuItem_TerminalMenu_Log_On.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_On_Click);
 			// 
@@ -1658,7 +1661,7 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.MergeAction = System.Windows.Forms.MergeAction.Replace;
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.MergeIndex = 2;
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Size = new System.Drawing.Size(194, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Size = new System.Drawing.Size(226, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Off
 			// 
@@ -1669,7 +1672,7 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Name = "toolStripMenuItem_TerminalMenu_Log_Off";
 			this.toolStripMenuItem_TerminalMenu_Log_Off.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F)));
-			this.toolStripMenuItem_TerminalMenu_Log_Off.Size = new System.Drawing.Size(197, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Off.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Text = "O&ff";
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Off_Click);
 			// 
@@ -1678,7 +1681,7 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.MergeAction = System.Windows.Forms.MergeAction.Replace;
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.MergeIndex = 5;
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(194, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(226, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Open
 			// 
@@ -1687,31 +1690,43 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Open.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Log_Open.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_Log_Open.Name = "toolStripMenuItem_TerminalMenu_Log_Open";
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Size = new System.Drawing.Size(197, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Open.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Open.Text = "&Open File(s) In Editor...";
 			this.toolStripMenuItem_TerminalMenu_Log_Open.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Open_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Log_OpenFolder
+			// 
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Enabled = false;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Name = "toolStripMenuItem_TerminalMenu_Log_OpenFolder";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Size = new System.Drawing.Size(229, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Text = "Open Log Folder In Explorer...";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_OpenFolder_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeIndex = 7;
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_3";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Size = new System.Drawing.Size(194, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Size = new System.Drawing.Size(226, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = false;
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 8;
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Name = "toolStripMenuItem_TerminalMenu_Log_Clear";
-			this.toolStripMenuItem_TerminalMenu_Log_Clear.Size = new System.Drawing.Size(197, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Text = "&Clear";
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Clear_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Separator_4
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_4.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_4.Size = new System.Drawing.Size(194, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_4.Size = new System.Drawing.Size(226, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Settings
 			// 
@@ -1719,7 +1734,7 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.Name = "toolStripMenuItem_TerminalMenu_Log_Settings";
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.L)));
-			this.toolStripMenuItem_TerminalMenu_Log_Settings.Size = new System.Drawing.Size(197, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_Settings.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.Text = "&Settings...";
 			this.toolStripMenuItem_TerminalMenu_Log_Settings.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Settings_Click);
 			// 
@@ -2309,7 +2324,7 @@
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -2321,8 +2336,8 @@
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Terminal.Panel2MinSize = 97;
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 464);
-			this.splitContainer_Terminal.SplitterDistance = 366;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 488);
+			this.splitContainer_Terminal.SplitterDistance = 390;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2342,7 +2357,7 @@
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 144;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 366);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 390);
 			this.splitContainer_Predefined.SplitterDistance = 525;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2355,7 +2370,7 @@
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(525, 366);
+			this.panel_Monitor.Size = new System.Drawing.Size(525, 390);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2366,7 +2381,7 @@
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 363);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(521, 387);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2386,7 +2401,7 @@
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 347);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(515, 371);
 			this.splitContainer_TxMonitor.SplitterDistance = 168;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2399,7 +2414,7 @@
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 347);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(168, 371);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2410,7 +2425,7 @@
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(162, 344);
+			this.monitor_Tx.Size = new System.Drawing.Size(162, 368);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
@@ -2430,7 +2445,7 @@
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 347);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(343, 371);
 			this.splitContainer_RxMonitor.SplitterDistance = 171;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2443,7 +2458,7 @@
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 347);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(171, 371);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2454,7 +2469,7 @@
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(165, 344);
+			this.monitor_Bidir.Size = new System.Drawing.Size(165, 368);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
@@ -2466,7 +2481,7 @@
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 347);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(168, 371);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2477,7 +2492,7 @@
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(162, 344);
+			this.monitor_Rx.Size = new System.Drawing.Size(162, 368);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
@@ -2489,7 +2504,7 @@
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(183, 366);
+			this.panel_Predefined.Size = new System.Drawing.Size(183, 390);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2499,7 +2514,7 @@
 			this.groupBox_Predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 363);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(179, 387);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2509,7 +2524,7 @@
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 16);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(173, 344);
+			this.predefined.Size = new System.Drawing.Size(173, 368);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -2843,6 +2858,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_6;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowDirection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowDirection;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_OpenFolder;
 	}
 
 	#region Copied Designer Code For Backup
