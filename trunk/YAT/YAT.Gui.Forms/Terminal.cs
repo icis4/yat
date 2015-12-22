@@ -561,11 +561,11 @@ namespace YAT.Gui.Forms
 			if (this.terminal != null)
 				logFileExists = this.terminal.LogFileExists;
 
-
-			toolStripMenuItem_TerminalMenu_Log_On.Enabled    = logIsEnabled && !logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Off.Enabled   = logIsEnabled &&  logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Open.Enabled  = logIsEnabled &&  logFileExists;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsEnabled &&  logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_On.Enabled         = logIsEnabled && !logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Off.Enabled        = logIsEnabled &&  logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Open.Enabled       = logIsEnabled &&  logFileExists;
+			toolStripMenuItem_TerminalMenu_Log_OpenFolder.Enabled = logIsEnabled &&  logFileExists;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled      = logIsEnabled && (logIsOn || logFileExists);
 
 			this.isSettingControls.Leave();
 		}
@@ -587,7 +587,12 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Log_Open_Click(object sender, EventArgs e)
 		{
+			this.terminal.OpenLogFile();
+		}
 
+		private void toolStripMenuItem_TerminalMenu_Log_OpenFolder_Click(object sender, EventArgs e)
+		{
+			this.terminal.OpenLogFolder();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Clear_Click(object sender, EventArgs e)
