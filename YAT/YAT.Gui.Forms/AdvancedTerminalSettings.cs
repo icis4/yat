@@ -186,7 +186,29 @@ namespace YAT.Gui.Forms
 		private void checkBox_ShowDirection_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
+			{
+				if (checkBox_ShowDirection.Checked && !this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled)
+				{
+					DialogResult dr = MessageBoxEx.Show
+					(
+						this,
+						"To enable this setting, lines must be broken when direction changes.",
+						"Incompatible Setting",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					);
+
+					if (dr == DialogResult.OK)
+					{
+						this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = true;
+						this.settingsInEdit.Terminal.Display.ShowDirection = true;
+					}
+				}
+				else
+				{
+					this.settingsInEdit.Terminal.Display.ShowDirection = checkBox_ShowDirection.Checked;
+				}
+			}
 		}
 
 		private void checkBox_ShowLength_CheckedChanged(object sender, EventArgs e)
@@ -222,7 +244,29 @@ namespace YAT.Gui.Forms
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
+			{
+				if (!checkBox_DirectionLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowDirection)
+				{
+					DialogResult dr = MessageBoxEx.Show
+					(
+						this,
+						"To disable this setting, direction can no longer be shown.",
+						"Incompatible Setting",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					);
+
+					if (dr == DialogResult.OK)
+					{
+						this.settingsInEdit.Terminal.Display.ShowDirection = false;
+						this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = false;
+					}
+				}
+				else
+				{
+					this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
+				}
+			}
 		}
 
 		private void textBox_MaxLineCount_TextChanged(object sender, EventArgs e)
@@ -635,8 +679,12 @@ namespace YAT.Gui.Forms
 			comboBox_RxRadix.Enabled           = separateRadix;
 			comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settingsInEdit.Terminal.Display.RxRadix;
 
+			bool isNotString = ((this.settingsInEdit.Terminal.Display.TxRadix != Domain.Radix.String) ||
+								(this.settingsInEdit.Terminal.Display.RxRadix != Domain.Radix.String));
+			checkBox_ShowRadix.Enabled = isNotString; // Attention, same code in two locations in Gui.Forms.Terminal.
+			checkBox_ShowRadix.Checked = isNotString && this.settingsInEdit.Terminal.Display.ShowRadix;
+
 			// Display:
-			checkBox_ShowRadix.Checked        = this.settingsInEdit.Terminal.Display.ShowRadix;
 			checkBox_ShowLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
 			checkBox_ShowDate.Checked         = this.settingsInEdit.Terminal.Display.ShowDate;
 			checkBox_ShowTime.Checked         = this.settingsInEdit.Terminal.Display.ShowTime;
