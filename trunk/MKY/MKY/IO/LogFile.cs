@@ -149,7 +149,7 @@ namespace MKY.IO
 			{
 				lock (this.writer)
 				{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
-					this.writer.WriteLine(now.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + "  " + line);
+					this.writer.WriteLine(now.ToString("yyyy-MM-dd HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + "  " + line);
 					this.writer.Flush();
 				}
 			}

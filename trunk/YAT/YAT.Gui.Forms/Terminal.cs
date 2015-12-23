@@ -661,7 +661,7 @@ namespace YAT.Gui.Forms
 			// Display:
 			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
 			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isNotString;
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isNotString; // Attention, same code further below as well as in Gui.Forms.AdvancedTerminalSettings.
 			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
 
 			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
@@ -921,7 +921,7 @@ namespace YAT.Gui.Forms
 
 			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
 			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isNotString;
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isNotString; // Attention, same code further above as well as in Gui.Forms.AdvancedTerminalSettings.
 			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
 
 			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
