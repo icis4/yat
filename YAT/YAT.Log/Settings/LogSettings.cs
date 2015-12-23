@@ -249,7 +249,7 @@ namespace YAT.Log.Settings
 			return (postFix.ToString());
 		}
 
-		private string ToFolderString(LogFormat format, LogChannelType channelType)
+		private string ToDirectoryString(LogFormat format, LogChannelType channelType)
 		{
 			StringBuilder folders = new StringBuilder();
 
@@ -347,7 +347,7 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (ToFolderString(LogFormat.Raw, LogChannelType.Tx) +
+				return (ToDirectoryString(LogFormat.Raw, LogChannelType.Tx) +
 						this.rootFileName +
 						ToFileNamePostFixString(LogFormat.Raw, LogChannelType.Tx) +
 						this.rawExtension);
@@ -355,10 +355,9 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual string RawTxFilePath
+		public virtual string MakeRawTxFilePath()
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath); }
+			return (this.rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath);
 		}
 
 		/// <summary></summary>
@@ -382,7 +381,7 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (ToFolderString(LogFormat.Raw, LogChannelType.Bidir) +
+				return (ToDirectoryString(LogFormat.Raw, LogChannelType.Bidir) +
 						this.rootFileName +
 						ToFileNamePostFixString(LogFormat.Raw, LogChannelType.Bidir) +
 						this.rawExtension);
@@ -390,10 +389,9 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual string RawBidirFilePath
+		public virtual string MakeRawBidirFilePath()
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath); }
+			return (this.rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath);
 		}
 
 		/// <summary></summary>
@@ -417,7 +415,7 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (ToFolderString(LogFormat.Raw, LogChannelType.Rx) +
+				return (ToDirectoryString(LogFormat.Raw, LogChannelType.Rx) +
 						this.rootFileName +
 						ToFileNamePostFixString(LogFormat.Raw, LogChannelType.Rx) +
 						this.rawExtension);
@@ -425,10 +423,9 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual string RawRxFilePath
+		public virtual string MakeRawRxFilePath()
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath); }
+			return (this.rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath);
 		}
 
 		/// <summary></summary>
@@ -469,7 +466,7 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (ToFolderString(LogFormat.Neat, LogChannelType.Tx) +
+				return (ToDirectoryString(LogFormat.Neat, LogChannelType.Tx) +
 						this.rootFileName +
 						ToFileNamePostFixString(LogFormat.Neat, LogChannelType.Tx) +
 						this.neatExtension);
@@ -477,10 +474,9 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual string NeatTxFilePath
+		public virtual string MakeNeatTxFilePath()
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath); }
+			return (this.rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath);
 		}
 
 		/// <summary></summary>
@@ -504,7 +500,7 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (ToFolderString(LogFormat.Neat, LogChannelType.Bidir) +
+				return (ToDirectoryString(LogFormat.Neat, LogChannelType.Bidir) +
 						this.rootFileName +
 						ToFileNamePostFixString(LogFormat.Neat, LogChannelType.Bidir) +
 						this.neatExtension);
@@ -512,10 +508,9 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual string NeatBidirFilePath
+		public virtual string MakeNeatBidirFilePath()
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath); }
+			return (this.rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath);
 		}
 
 		/// <summary></summary>
@@ -539,7 +534,7 @@ namespace YAT.Log.Settings
 		{
 			get
 			{
-				return (ToFolderString(LogFormat.Neat, LogChannelType.Rx) +
+				return (ToDirectoryString(LogFormat.Neat, LogChannelType.Rx) +
 						this.rootFileName +
 						ToFileNamePostFixString(LogFormat.Neat, LogChannelType.Rx) +
 						this.neatExtension);
@@ -547,10 +542,9 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual string NeatRxFilePath
+		public virtual string MakeNeatRxFilePath()
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath); }
+			return (this.rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath);
 		}
 
 		/// <summary></summary>
@@ -768,9 +762,12 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		//- Folders ---------------------------------------------------------------
+		//- Folders --------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "Folder" instead of "Directory" as today's users are more used to that term.
+		/// All other identifiers in code shall use "Directory" (same as .NET uses "Directory").
+		/// </remarks>
 		[XmlElement("FolderFormat")]
 		public virtual bool FolderFormat
 		{
@@ -785,7 +782,10 @@ namespace YAT.Log.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Using "Folder" instead of "Directory" as today's users are more used to that term.
+		/// All other identifiers in code shall use "Directory" (same as .NET uses "Directory").
+		/// </remarks>
 		[XmlElement("FolderChannel")]
 		public virtual bool FolderChannel
 		{

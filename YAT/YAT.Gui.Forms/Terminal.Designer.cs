@@ -190,8 +190,8 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Off = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Log_Open = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
@@ -1631,8 +1631,8 @@
             this.toolStripMenuItem_TerminalMenu_Log_Separator_1,
             this.toolStripMenuItem_TerminalMenu_Log_Off,
             this.toolStripMenuItem_TerminalMenu_Log_Separator_2,
-            this.toolStripMenuItem_TerminalMenu_Log_Open,
-            this.toolStripMenuItem_TerminalMenu_Log_OpenFolder,
+            this.toolStripMenuItem_TerminalMenu_Log_OpenFile,
+            this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory,
             this.toolStripMenuItem_TerminalMenu_Log_Separator_3,
             this.toolStripMenuItem_TerminalMenu_Log_Clear,
             this.toolStripMenuItem_TerminalMenu_Log_Separator_4,
@@ -1683,27 +1683,27 @@
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_2";
 			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(226, 6);
 			// 
-			// toolStripMenuItem_TerminalMenu_Log_Open
+			// toolStripMenuItem_TerminalMenu_Log_OpenFile
 			// 
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Enabled = false;
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
-			this.toolStripMenuItem_TerminalMenu_Log_Open.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Open.MergeIndex = 6;
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Name = "toolStripMenuItem_TerminalMenu_Log_Open";
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Size = new System.Drawing.Size(229, 22);
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Text = "&Open File(s) In Editor...";
-			this.toolStripMenuItem_TerminalMenu_Log_Open.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Open_Click);
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled = false;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Name = "toolStripMenuItem_TerminalMenu_Log_OpenFile";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Size = new System.Drawing.Size(229, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Text = "&Open File(s) In Editor...";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_OpenFile_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Log_OpenFolder
+			// toolStripMenuItem_TerminalMenu_Log_OpenDirectory
 			// 
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Enabled = false;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.MergeIndex = 6;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Name = "toolStripMenuItem_TerminalMenu_Log_OpenFolder";
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Size = new System.Drawing.Size(229, 22);
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Text = "Open Log Folder In Explorer...";
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFolder.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_OpenFolder_Click);
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Enabled = false;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Name = "toolStripMenuItem_TerminalMenu_Log_OpenDirectory";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Size = new System.Drawing.Size(229, 22);
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Text = "Open Log Folder In Explorer...";
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Separator_3
 			// 
@@ -2848,7 +2848,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Refresh;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_3;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_Open;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_OpenFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_4;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_8;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime;
@@ -2858,7 +2858,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_6;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowDirection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowDirection;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_OpenFolder;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_OpenDirectory;
 	}
 
 	#region Copied Designer Code For Backup

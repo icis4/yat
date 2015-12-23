@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -33,20 +34,8 @@ namespace YAT.Log
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public RawLog(bool enabled, string filePath, LogFileWriteMode writeMode)
-			: base(enabled, filePath, writeMode)
-		{
-		}
-
-		/// <summary></summary>
-		public RawLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
-			: base(enabled, filePath, (FileNameSeparator)separator, writeMode)
-		{
-		}
-
-		/// <summary></summary>
-		public RawLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
-			: base(enabled, filePath, separator, writeMode)
+		public RawLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
+			: base(enabled, makeFilePath, writeMode)
 		{
 		}
 

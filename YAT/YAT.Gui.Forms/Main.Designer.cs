@@ -134,8 +134,8 @@
 			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Log_On = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Log_Off = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Log_Open = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Format = new System.Windows.Forms.ToolStripButton();
 			this.toolStripPanel_Top = new System.Windows.Forms.ToolStripPanel();
@@ -819,8 +819,8 @@
             this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Terminal_Log_On,
             this.toolStripButton_MainTool_Terminal_Log_Off,
-            this.toolStripButton_MainTool_Terminal_Log_Open,
-            this.toolStripButton_MainTool_Terminal_Log_OpenFolder,
+            this.toolStripButton_MainTool_Terminal_Log_OpenFile,
+            this.toolStripButton_MainTool_Terminal_Log_OpenDirectory,
             this.toolStripSeparator1,
             this.toolStripButton_MainTool_Terminal_Format});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
@@ -1059,23 +1059,23 @@
 			this.toolStripButton_MainTool_Terminal_Log_Off.Text = "Switch Log Off";
 			this.toolStripButton_MainTool_Terminal_Log_Off.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Off_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_Open
+			// toolStripButton_MainTool_Terminal_Log_OpenFile
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_Open.Name = "toolStripButton_MainTool_Terminal_Log_Open";
-			this.toolStripButton_MainTool_Terminal_Log_Open.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_Open.Text = "Open Log File(s) In Editor...";
-			this.toolStripButton_MainTool_Terminal_Log_Open.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Open_Click);
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Name = "toolStripButton_MainTool_Terminal_Log_OpenFile";
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Text = "Open Log File(s) In Editor...";
+			this.toolStripButton_MainTool_Terminal_Log_OpenFile.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Open_Click);
 			// 
-			// toolStripButton_MainTool_Terminal_Log_OpenFolder
+			// toolStripButton_MainTool_Terminal_Log_OpenDirectory
 			// 
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder.Name = "toolStripButton_MainTool_Terminal_Log_OpenFolder";
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder.Text = "Open Log Folder In Explorer...";
-			this.toolStripButton_MainTool_Terminal_Log_OpenFolder.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_OpenFolder_Click);
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Name = "toolStripButton_MainTool_Terminal_Log_OpenDirectory";
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Text = "Open Log Folder In Explorer...";
+			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click);
 			// 
 			// toolStripSeparator1
 			// 
@@ -1283,7 +1283,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Window_Separator1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Window_Minimize;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_SaveWorkspace;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Open;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenFolder;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenFile;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenDirectory;
 	}
 }
