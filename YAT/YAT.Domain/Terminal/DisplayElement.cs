@@ -181,20 +181,20 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public DateInfo(DateTime dateStamp)
-				: base("(" + dateStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			public DateInfo(DateTime timeStamp)
+				: base("(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public DateInfo(SerialDirection direction, DateTime dateStamp)
-				: base(direction, "(" + dateStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			public DateInfo(SerialDirection direction, DateTime timeStamp)
+				: base(direction, "(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public DateInfo(SerialDirection direction, string dateStamp)
-				: base(direction, dateStamp)
+			public DateInfo(SerialDirection direction, string timeStamp)
+				: base(direction, timeStamp)
 			{
 			}
 		}

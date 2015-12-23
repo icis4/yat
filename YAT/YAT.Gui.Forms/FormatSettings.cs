@@ -226,13 +226,13 @@ namespace YAT.Gui.Forms
 			this.monitors = new Controls.Monitor[]
 			{
 				monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
-				monitor_TimeStamp, monitor_Direction, monitor_Length, monitor_Error,
+				monitor_Date, monitor_Time, monitor_Direction, monitor_Length, monitor_Error,
 			};
 
 			this.textFormats = new Controls.TextFormat[]
 			{
 				textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
-				textFormat_TimeStamp, textFormat_Direction, textFormat_Length, textFormat_Error,
+				textFormat_Date, textFormat_Time, textFormat_Direction, textFormat_Length, textFormat_Error,
 			};
 
 			for (int i = 0; i < this.monitors.Length; i++)
