@@ -40,21 +40,21 @@ namespace YAT.Gui.Forms
 			this.label1 = new System.Windows.Forms.Label();
 			this.monitor_Error = new YAT.Gui.Controls.Monitor();
 			this.monitor_Length = new YAT.Gui.Controls.Monitor();
-			this.monitor_TimeStamp = new YAT.Gui.Controls.Monitor();
+			this.monitor_Time = new YAT.Gui.Controls.Monitor();
 			this.monitor_RxControl = new YAT.Gui.Controls.Monitor();
 			this.monitor_RxData = new YAT.Gui.Controls.Monitor();
 			this.monitor_TxControl = new YAT.Gui.Controls.Monitor();
 			this.monitor_TxData = new YAT.Gui.Controls.Monitor();
 			this.label_Error = new System.Windows.Forms.Label();
 			this.label_Length = new System.Windows.Forms.Label();
-			this.label_TimeStamp = new System.Windows.Forms.Label();
+			this.label_Time = new System.Windows.Forms.Label();
 			this.label_RxControl = new System.Windows.Forms.Label();
 			this.label_RxData = new System.Windows.Forms.Label();
 			this.label_TxControl = new System.Windows.Forms.Label();
 			this.label_TxData = new System.Windows.Forms.Label();
 			this.textFormat_Error = new YAT.Gui.Controls.TextFormat();
 			this.textFormat_Length = new YAT.Gui.Controls.TextFormat();
-			this.textFormat_TimeStamp = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_Time = new YAT.Gui.Controls.TextFormat();
 			this.textFormat_RxControl = new YAT.Gui.Controls.TextFormat();
 			this.textFormat_RxData = new YAT.Gui.Controls.TextFormat();
 			this.textFormat_TxControl = new YAT.Gui.Controls.TextFormat();
@@ -104,21 +104,21 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.label1);
 			this.groupBox_Settings.Controls.Add(this.monitor_Error);
 			this.groupBox_Settings.Controls.Add(this.monitor_Length);
-			this.groupBox_Settings.Controls.Add(this.monitor_TimeStamp);
+			this.groupBox_Settings.Controls.Add(this.monitor_Time);
 			this.groupBox_Settings.Controls.Add(this.monitor_RxControl);
 			this.groupBox_Settings.Controls.Add(this.monitor_RxData);
 			this.groupBox_Settings.Controls.Add(this.monitor_TxControl);
 			this.groupBox_Settings.Controls.Add(this.monitor_TxData);
 			this.groupBox_Settings.Controls.Add(this.label_Error);
 			this.groupBox_Settings.Controls.Add(this.label_Length);
-			this.groupBox_Settings.Controls.Add(this.label_TimeStamp);
+			this.groupBox_Settings.Controls.Add(this.label_Time);
 			this.groupBox_Settings.Controls.Add(this.label_RxControl);
 			this.groupBox_Settings.Controls.Add(this.label_RxData);
 			this.groupBox_Settings.Controls.Add(this.label_TxControl);
 			this.groupBox_Settings.Controls.Add(this.label_TxData);
 			this.groupBox_Settings.Controls.Add(this.textFormat_Error);
 			this.groupBox_Settings.Controls.Add(this.textFormat_Length);
-			this.groupBox_Settings.Controls.Add(this.textFormat_TimeStamp);
+			this.groupBox_Settings.Controls.Add(this.textFormat_Time);
 			this.groupBox_Settings.Controls.Add(this.textFormat_RxControl);
 			this.groupBox_Settings.Controls.Add(this.textFormat_RxData);
 			this.groupBox_Settings.Controls.Add(this.textFormat_TxControl);
@@ -185,16 +185,16 @@ namespace YAT.Gui.Forms
 			this.monitor_Length.TabStop = false;
 			this.monitor_Length.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
-			// monitor_TimeStamp
+			// monitor_Time
 			// 
-			this.monitor_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.monitor_TimeStamp.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_TimeStamp.Location = new System.Drawing.Point(88, 164);
-			this.monitor_TimeStamp.Name = "monitor_TimeStamp";
-			this.monitor_TimeStamp.Size = new System.Drawing.Size(127, 23);
-			this.monitor_TimeStamp.TabIndex = 16;
-			this.monitor_TimeStamp.TabStop = false;
-			this.monitor_TimeStamp.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Time.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.monitor_Time.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Time.Location = new System.Drawing.Point(88, 164);
+			this.monitor_Time.Name = "monitor_Time";
+			this.monitor_Time.Size = new System.Drawing.Size(127, 23);
+			this.monitor_Time.TabIndex = 16;
+			this.monitor_Time.TabStop = false;
+			this.monitor_Time.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_RxControl
 			// 
@@ -256,15 +256,15 @@ namespace YAT.Gui.Forms
 			this.label_Length.TabIndex = 21;
 			this.label_Length.Text = "&Length:";
 			// 
-			// label_TimeStamp
+			// label_Time
 			// 
-			this.label_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label_TimeStamp.AutoSize = true;
-			this.label_TimeStamp.Location = new System.Drawing.Point(12, 169);
-			this.label_TimeStamp.Name = "label_TimeStamp";
-			this.label_TimeStamp.Size = new System.Drawing.Size(33, 13);
-			this.label_TimeStamp.TabIndex = 15;
-			this.label_TimeStamp.Text = "T&ime:";
+			this.label_Time.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label_Time.AutoSize = true;
+			this.label_Time.Location = new System.Drawing.Point(12, 169);
+			this.label_Time.Name = "label_Time";
+			this.label_Time.Size = new System.Drawing.Size(33, 13);
+			this.label_Time.TabIndex = 15;
+			this.label_Time.Text = "T&ime:";
 			// 
 			// label_RxControl
 			// 
@@ -326,17 +326,17 @@ namespace YAT.Gui.Forms
 			this.textFormat_Length.Tag = "7";
 			this.textFormat_Length.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
-			// textFormat_TimeStamp
+			// textFormat_Time
 			// 
-			this.textFormat_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.textFormat_TimeStamp.FormatColor = System.Drawing.Color.Black;
-			this.textFormat_TimeStamp.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_TimeStamp.Location = new System.Drawing.Point(216, 164);
-			this.textFormat_TimeStamp.Name = "textFormat_TimeStamp";
-			this.textFormat_TimeStamp.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_TimeStamp.TabIndex = 17;
-			this.textFormat_TimeStamp.Tag = "5";
-			this.textFormat_TimeStamp.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Time.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Time.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_Time.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_Time.Location = new System.Drawing.Point(216, 164);
+			this.textFormat_Time.Name = "textFormat_Time";
+			this.textFormat_Time.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_Time.TabIndex = 17;
+			this.textFormat_Time.Tag = "5";
+			this.textFormat_Time.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// textFormat_RxControl
 			// 
@@ -494,7 +494,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_Settings;
 		private YAT.Gui.Controls.TextFormat textFormat_Error;
 		private YAT.Gui.Controls.TextFormat textFormat_Length;
-		private YAT.Gui.Controls.TextFormat textFormat_TimeStamp;
+		private YAT.Gui.Controls.TextFormat textFormat_Time;
 		private YAT.Gui.Controls.TextFormat textFormat_RxControl;
 		private YAT.Gui.Controls.TextFormat textFormat_RxData;
 		private YAT.Gui.Controls.TextFormat textFormat_TxControl;
@@ -507,14 +507,14 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Label label_TxData;
 		private System.Windows.Forms.Label label_Error;
 		private System.Windows.Forms.Label label_Length;
-		private System.Windows.Forms.Label label_TimeStamp;
+		private System.Windows.Forms.Label label_Time;
 		private System.Windows.Forms.Label label_RxControl;
 		private System.Windows.Forms.Label label_RxData;
 		private System.Windows.Forms.Label label_TxControl;
 		private YAT.Gui.Controls.Monitor monitor_Example;
 		private YAT.Gui.Controls.Monitor monitor_Error;
 		private YAT.Gui.Controls.Monitor monitor_Length;
-		private YAT.Gui.Controls.Monitor monitor_TimeStamp;
+		private YAT.Gui.Controls.Monitor monitor_Time;
 		private YAT.Gui.Controls.Monitor monitor_RxControl;
 		private YAT.Gui.Controls.Monitor monitor_RxData;
 		private YAT.Gui.Controls.Monitor monitor_TxControl;

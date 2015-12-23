@@ -93,7 +93,7 @@
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="YAT.Domain.DisplayElement.TimeStamp" Collapsed="true">
+      <Class Name="YAT.Domain.DisplayElement.TimeInfo" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
