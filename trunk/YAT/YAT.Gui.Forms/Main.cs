@@ -1134,7 +1134,7 @@ namespace YAT.Gui.Forms
 
 		private void chronometer_Main_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
-			toolStripStatusLabel_MainStatus_Chrono.Text = TimeSpanEx.FormatInvariantTimeSpan(e.TimeSpan, true, true);
+			toolStripStatusLabel_MainStatus_Chrono.Text = TimeSpanEx.FormatInvariantTimeSpan(e.TimeSpan, true, true, true);
 		}
 
 		#endregion

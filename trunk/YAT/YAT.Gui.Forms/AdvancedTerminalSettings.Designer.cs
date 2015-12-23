@@ -71,6 +71,7 @@
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
+			this.checkBox_ShowDirection = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowBreakCount = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowFlowControlCount = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowLineNumbers = new System.Windows.Forms.CheckBox();
@@ -89,7 +90,8 @@
 			this.label_RxRadix = new System.Windows.Forms.Label();
 			this.checkBox_SeparateTxRxRadix = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowRadix = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowTimeStamp = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowDate = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowConnectTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCountAndRate = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowLength = new System.Windows.Forms.CheckBox();
@@ -99,7 +101,6 @@
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.checkBox_ShowDirection = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_Communication.SuspendLayout();
@@ -155,7 +156,7 @@
 			this.groupBox_Settings.Controls.Add(this.groupBox_Display);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(544, 485);
+			this.groupBox_Settings.Size = new System.Drawing.Size(544, 508);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -165,12 +166,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_User.Controls.Add(this.textBox_UserName);
 			this.groupBox_User.Controls.Add(this.label_UserName);
-			this.groupBox_User.Location = new System.Drawing.Point(6, 427);
+			this.groupBox_User.Location = new System.Drawing.Point(6, 450);
 			this.groupBox_User.Name = "groupBox_User";
 			this.groupBox_User.Size = new System.Drawing.Size(263, 52);
 			this.groupBox_User.TabIndex = 1;
 			this.groupBox_User.TabStop = false;
-			this.groupBox_User.Text = "User";
+			this.groupBox_User.Text = "User Settings";
 			// 
 			// textBox_UserName
 			// 
@@ -269,7 +270,7 @@
 			this.groupBox_Send.Controls.Add(this.checkBox_KeepCommand);
 			this.groupBox_Send.Location = new System.Drawing.Point(275, 139);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(263, 340);
+			this.groupBox_Send.Size = new System.Drawing.Size(263, 363);
 			this.groupBox_Send.TabIndex = 3;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
@@ -288,7 +289,7 @@
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnInputBreak);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.label_LimitOutputBufferSizeUnit);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnOutputBreak);
-			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 93);
+			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 91);
 			this.groupBox_Send_SerialPorts.Name = "groupBox_Send_SerialPorts";
 			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 111);
 			this.groupBox_Send_SerialPorts.TabIndex = 4;
@@ -418,7 +419,7 @@
 			this.groupBox_Send_Keywords.Controls.Add(this.checkBox_DisableKeywords);
 			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 210);
 			this.groupBox_Send_Keywords.Name = "groupBox_Send_Keywords";
-			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 124);
+			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 147);
 			this.groupBox_Send_Keywords.TabIndex = 5;
 			this.groupBox_Send_Keywords.TabStop = false;
 			this.groupBox_Send_Keywords.Text = "Keywords";
@@ -525,7 +526,7 @@
 			// 
 			this.checkBox_DisableKeywords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_DisableKeywords.AutoSize = true;
-			this.checkBox_DisableKeywords.Location = new System.Drawing.Point(6, 101);
+			this.checkBox_DisableKeywords.Location = new System.Drawing.Point(6, 124);
 			this.checkBox_DisableKeywords.Name = "checkBox_DisableKeywords";
 			this.checkBox_DisableKeywords.Size = new System.Drawing.Size(148, 17);
 			this.checkBox_DisableKeywords.TabIndex = 10;
@@ -544,7 +545,7 @@
 			// checkBox_SendImmediately
 			// 
 			this.checkBox_SendImmediately.AutoSize = true;
-			this.checkBox_SendImmediately.Location = new System.Drawing.Point(12, 67);
+			this.checkBox_SendImmediately.Location = new System.Drawing.Point(12, 65);
 			this.checkBox_SendImmediately.Name = "checkBox_SendImmediately";
 			this.checkBox_SendImmediately.Size = new System.Drawing.Size(222, 17);
 			this.checkBox_SendImmediately.TabIndex = 2;
@@ -556,7 +557,7 @@
 			// checkBox_CopyPredefined
 			// 
 			this.checkBox_CopyPredefined.AutoSize = true;
-			this.checkBox_CopyPredefined.Location = new System.Drawing.Point(12, 44);
+			this.checkBox_CopyPredefined.Location = new System.Drawing.Point(12, 42);
 			this.checkBox_CopyPredefined.Name = "checkBox_CopyPredefined";
 			this.checkBox_CopyPredefined.Size = new System.Drawing.Size(240, 17);
 			this.checkBox_CopyPredefined.TabIndex = 1;
@@ -567,7 +568,7 @@
 			// checkBox_KeepCommand
 			// 
 			this.checkBox_KeepCommand.AutoSize = true;
-			this.checkBox_KeepCommand.Location = new System.Drawing.Point(12, 21);
+			this.checkBox_KeepCommand.Location = new System.Drawing.Point(12, 19);
 			this.checkBox_KeepCommand.Name = "checkBox_KeepCommand";
 			this.checkBox_KeepCommand.Size = new System.Drawing.Size(201, 17);
 			this.checkBox_KeepCommand.TabIndex = 0;
@@ -590,7 +591,8 @@
 			this.groupBox_Display.Controls.Add(this.label_RxRadix);
 			this.groupBox_Display.Controls.Add(this.checkBox_SeparateTxRxRadix);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowRadix);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowTimeStamp);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowDate);
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowTime);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowConnectTime);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowCountAndRate);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowLength);
@@ -601,29 +603,43 @@
 			this.groupBox_Display.Controls.Add(this.label_MaxLineCount);
 			this.groupBox_Display.Location = new System.Drawing.Point(6, 13);
 			this.groupBox_Display.Name = "groupBox_Display";
-			this.groupBox_Display.Size = new System.Drawing.Size(263, 408);
+			this.groupBox_Display.Size = new System.Drawing.Size(263, 431);
 			this.groupBox_Display.TabIndex = 0;
 			this.groupBox_Display.TabStop = false;
 			this.groupBox_Display.Text = "Display Settings";
 			// 
+			// checkBox_ShowDirection
+			// 
+			this.checkBox_ShowDirection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_ShowDirection.AutoSize = true;
+			this.checkBox_ShowDirection.Location = new System.Drawing.Point(12, 164);
+			this.checkBox_ShowDirection.Name = "checkBox_ShowDirection";
+			this.checkBox_ShowDirection.Size = new System.Drawing.Size(96, 17);
+			this.checkBox_ShowDirection.TabIndex = 11;
+			this.checkBox_ShowDirection.Text = "Show &direction";
+			this.checkBox_ShowDirection.UseVisualStyleBackColor = true;
+			this.checkBox_ShowDirection.CheckedChanged += new System.EventHandler(this.checkBox_ShowDirection_CheckedChanged);
+			// 
 			// checkBox_ShowBreakCount
 			// 
+			this.checkBox_ShowBreakCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_ShowBreakCount.AutoSize = true;
-			this.checkBox_ShowBreakCount.Location = new System.Drawing.Point(131, 164);
+			this.checkBox_ShowBreakCount.Location = new System.Drawing.Point(131, 187);
 			this.checkBox_ShowBreakCount.Name = "checkBox_ShowBreakCount";
 			this.checkBox_ShowBreakCount.Size = new System.Drawing.Size(113, 17);
-			this.checkBox_ShowBreakCount.TabIndex = 13;
+			this.checkBox_ShowBreakCount.TabIndex = 14;
 			this.checkBox_ShowBreakCount.Text = "Show brea&k count";
 			this.checkBox_ShowBreakCount.UseVisualStyleBackColor = true;
 			this.checkBox_ShowBreakCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowBreakCount_CheckedChanged);
 			// 
 			// checkBox_ShowFlowControlCount
 			// 
+			this.checkBox_ShowFlowControlCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_ShowFlowControlCount.AutoSize = true;
-			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(12, 164);
+			this.checkBox_ShowFlowControlCount.Location = new System.Drawing.Point(12, 187);
 			this.checkBox_ShowFlowControlCount.Name = "checkBox_ShowFlowControlCount";
 			this.checkBox_ShowFlowControlCount.Size = new System.Drawing.Size(122, 17);
-			this.checkBox_ShowFlowControlCount.TabIndex = 12;
+			this.checkBox_ShowFlowControlCount.TabIndex = 13;
 			this.checkBox_ShowFlowControlCount.Text = "Show flo&w ctrl count";
 			this.checkBox_ShowFlowControlCount.UseVisualStyleBackColor = true;
 			this.checkBox_ShowFlowControlCount.CheckedChanged += new System.EventHandler(this.checkBox_ShowFlowControlCount_CheckedChanged);
@@ -631,7 +647,7 @@
 			// checkBox_ShowLineNumbers
 			// 
 			this.checkBox_ShowLineNumbers.AutoSize = true;
-			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(12, 118);
+			this.checkBox_ShowLineNumbers.Location = new System.Drawing.Point(131, 118);
 			this.checkBox_ShowLineNumbers.Name = "checkBox_ShowLineNumbers";
 			this.checkBox_ShowLineNumbers.Size = new System.Drawing.Size(115, 17);
 			this.checkBox_ShowLineNumbers.TabIndex = 8;
@@ -641,14 +657,14 @@
 			// 
 			// groupBox_Display_Space
 			// 
-			this.groupBox_Display_Space.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Display_Space.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Display_Space.Controls.Add(this.label_SpaceReplacementChar);
 			this.groupBox_Display_Space.Controls.Add(this.checkBox_ReplaceSpace);
-			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 360);
+			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 383);
 			this.groupBox_Display_Space.Name = "groupBox_Display_Space";
 			this.groupBox_Display_Space.Size = new System.Drawing.Size(251, 42);
-			this.groupBox_Display_Space.TabIndex = 19;
+			this.groupBox_Display_Space.TabIndex = 20;
 			this.groupBox_Display_Space.TabStop = false;
 			this.groupBox_Display_Space.Text = "Space";
 			// 
@@ -676,7 +692,7 @@
 			// 
 			// groupBox_Display_ControlChars
 			// 
-			this.groupBox_Display_ControlChars.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Display_ControlChars.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_HideXOnXOff);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceTab);
@@ -684,10 +700,10 @@
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceTab);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ControlCharacterRadix);
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceControlCharacters);
-			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 239);
+			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 262);
 			this.groupBox_Display_ControlChars.Name = "groupBox_Display_ControlChars";
 			this.groupBox_Display_ControlChars.Size = new System.Drawing.Size(251, 115);
-			this.groupBox_Display_ControlChars.TabIndex = 18;
+			this.groupBox_Display_ControlChars.TabIndex = 19;
 			this.groupBox_Display_ControlChars.TabStop = false;
 			this.groupBox_Display_ControlChars.Text = "Control Characters \\h(00) - \\h(1F), \\h(7F)";
 			// 
@@ -756,11 +772,12 @@
 			// 
 			// checkBox_DirectionLineBreak
 			// 
+			this.checkBox_DirectionLineBreak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_DirectionLineBreak.AutoSize = true;
-			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 187);
+			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 210);
 			this.checkBox_DirectionLineBreak.Name = "checkBox_DirectionLineBreak";
 			this.checkBox_DirectionLineBreak.Size = new System.Drawing.Size(194, 17);
-			this.checkBox_DirectionLineBreak.TabIndex = 14;
+			this.checkBox_DirectionLineBreak.TabIndex = 15;
 			this.checkBox_DirectionLineBreak.Text = "&Break lines when direction changes";
 			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 
@@ -772,7 +789,7 @@
 			this.comboBox_RxRadix.Location = new System.Drawing.Point(131, 91);
 			this.comboBox_RxRadix.Name = "comboBox_RxRadix";
 			this.comboBox_RxRadix.Size = new System.Drawing.Size(121, 21);
-			this.comboBox_RxRadix.TabIndex = 7;
+			this.comboBox_RxRadix.TabIndex = 6;
 			this.comboBox_RxRadix.SelectedIndexChanged += new System.EventHandler(this.comboBox_RxRadix_SelectedIndexChanged);
 			// 
 			// label_RxRadix
@@ -781,16 +798,16 @@
 			this.label_RxRadix.Location = new System.Drawing.Point(9, 94);
 			this.label_RxRadix.Name = "label_RxRadix";
 			this.label_RxRadix.Size = new System.Drawing.Size(53, 13);
-			this.label_RxRadix.TabIndex = 6;
+			this.label_RxRadix.TabIndex = 5;
 			this.label_RxRadix.Text = "R&x Radix:";
 			// 
 			// checkBox_SeparateTxRxRadix
 			// 
 			this.checkBox_SeparateTxRxRadix.AutoSize = true;
-			this.checkBox_SeparateTxRxRadix.Location = new System.Drawing.Point(97, 70);
+			this.checkBox_SeparateTxRxRadix.Location = new System.Drawing.Point(12, 70);
 			this.checkBox_SeparateTxRxRadix.Name = "checkBox_SeparateTxRxRadix";
 			this.checkBox_SeparateTxRxRadix.Size = new System.Drawing.Size(161, 17);
-			this.checkBox_SeparateTxRxRadix.TabIndex = 5;
+			this.checkBox_SeparateTxRxRadix.TabIndex = 4;
 			this.checkBox_SeparateTxRxRadix.Text = "&Separate radix for Tx and Rx";
 			this.checkBox_SeparateTxRxRadix.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateTxRxRadix.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxRadix_CheckedChanged);
@@ -798,22 +815,32 @@
 			// checkBox_ShowRadix
 			// 
 			this.checkBox_ShowRadix.AutoSize = true;
-			this.checkBox_ShowRadix.Location = new System.Drawing.Point(12, 70);
+			this.checkBox_ShowRadix.Location = new System.Drawing.Point(12, 118);
 			this.checkBox_ShowRadix.Name = "checkBox_ShowRadix";
 			this.checkBox_ShowRadix.Size = new System.Drawing.Size(78, 17);
-			this.checkBox_ShowRadix.TabIndex = 4;
+			this.checkBox_ShowRadix.TabIndex = 7;
 			this.checkBox_ShowRadix.Text = "Show &radix";
 			this.checkBox_ShowRadix.CheckedChanged += new System.EventHandler(this.checkBox_ShowRadix_CheckedChanged);
 			// 
-			// checkBox_ShowTimeStamp
+			// checkBox_ShowDate
 			// 
-			this.checkBox_ShowTimeStamp.AutoSize = true;
-			this.checkBox_ShowTimeStamp.Location = new System.Drawing.Point(131, 118);
-			this.checkBox_ShowTimeStamp.Name = "checkBox_ShowTimeStamp";
-			this.checkBox_ShowTimeStamp.Size = new System.Drawing.Size(106, 17);
-			this.checkBox_ShowTimeStamp.TabIndex = 9;
-			this.checkBox_ShowTimeStamp.Text = "Show &time stamp";
-			this.checkBox_ShowTimeStamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeStamp_CheckedChanged);
+			this.checkBox_ShowDate.AutoSize = true;
+			this.checkBox_ShowDate.Location = new System.Drawing.Point(12, 141);
+			this.checkBox_ShowDate.Name = "checkBox_ShowDate";
+			this.checkBox_ShowDate.Size = new System.Drawing.Size(77, 17);
+			this.checkBox_ShowDate.TabIndex = 9;
+			this.checkBox_ShowDate.Text = "Show d&ate";
+			this.checkBox_ShowDate.CheckedChanged += new System.EventHandler(this.checkBox_ShowDate_CheckedChanged);
+			// 
+			// checkBox_ShowTime
+			// 
+			this.checkBox_ShowTime.AutoSize = true;
+			this.checkBox_ShowTime.Location = new System.Drawing.Point(131, 141);
+			this.checkBox_ShowTime.Name = "checkBox_ShowTime";
+			this.checkBox_ShowTime.Size = new System.Drawing.Size(75, 17);
+			this.checkBox_ShowTime.TabIndex = 10;
+			this.checkBox_ShowTime.Text = "Show &time";
+			this.checkBox_ShowTime.CheckedChanged += new System.EventHandler(this.checkBox_ShowTime_CheckedChanged);
 			// 
 			// checkBox_ShowConnectTime
 			// 
@@ -837,11 +864,12 @@
 			// 
 			// checkBox_ShowLength
 			// 
+			this.checkBox_ShowLength.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_ShowLength.AutoSize = true;
-			this.checkBox_ShowLength.Location = new System.Drawing.Point(131, 141);
+			this.checkBox_ShowLength.Location = new System.Drawing.Point(131, 164);
 			this.checkBox_ShowLength.Name = "checkBox_ShowLength";
 			this.checkBox_ShowLength.Size = new System.Drawing.Size(104, 17);
-			this.checkBox_ShowLength.TabIndex = 11;
+			this.checkBox_ShowLength.TabIndex = 12;
 			this.checkBox_ShowLength.Text = "Show line &length";
 			this.checkBox_ShowLength.CheckedChanged += new System.EventHandler(this.checkBox_ShowLength_CheckedChanged);
 			// 
@@ -867,44 +895,36 @@
 			// 
 			// label_MaxLineCountUnit
 			// 
+			this.label_MaxLineCountUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_MaxLineCountUnit.AutoSize = true;
-			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(144, 213);
+			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(144, 236);
 			this.label_MaxLineCountUnit.Name = "label_MaxLineCountUnit";
 			this.label_MaxLineCountUnit.Size = new System.Drawing.Size(28, 13);
-			this.label_MaxLineCountUnit.TabIndex = 17;
+			this.label_MaxLineCountUnit.TabIndex = 18;
 			this.label_MaxLineCountUnit.Text = "lines";
 			this.label_MaxLineCountUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBox_MaxLineCount
 			// 
-			this.textBox_MaxLineCount.Location = new System.Drawing.Point(92, 210);
+			this.textBox_MaxLineCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textBox_MaxLineCount.Location = new System.Drawing.Point(92, 233);
 			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
 			this.textBox_MaxLineCount.Size = new System.Drawing.Size(48, 20);
-			this.textBox_MaxLineCount.TabIndex = 16;
+			this.textBox_MaxLineCount.TabIndex = 17;
 			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
 			this.textBox_MaxLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineCount_Validating);
 			// 
 			// label_MaxLineCount
 			// 
+			this.label_MaxLineCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_MaxLineCount.AutoSize = true;
-			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 213);
+			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 236);
 			this.label_MaxLineCount.Name = "label_MaxLineCount";
 			this.label_MaxLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaxLineCount.TabIndex = 15;
+			this.label_MaxLineCount.TabIndex = 16;
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// checkBox_ShowDirection
-			// 
-			this.checkBox_ShowDirection.AutoSize = true;
-			this.checkBox_ShowDirection.Location = new System.Drawing.Point(12, 141);
-			this.checkBox_ShowDirection.Name = "checkBox_ShowDirection";
-			this.checkBox_ShowDirection.Size = new System.Drawing.Size(96, 17);
-			this.checkBox_ShowDirection.TabIndex = 10;
-			this.checkBox_ShowDirection.Text = "Show &direction";
-			this.checkBox_ShowDirection.UseVisualStyleBackColor = true;
-			this.checkBox_ShowDirection.CheckedChanged += new System.EventHandler(this.checkBox_ShowDirection_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -912,7 +932,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(652, 509);
+			this.ClientSize = new System.Drawing.Size(652, 532);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -960,7 +980,8 @@
 		private System.Windows.Forms.TextBox textBox_MaxLineCount;
 		private System.Windows.Forms.Label label_MaxLineCount;
 		private System.Windows.Forms.CheckBox checkBox_KeepCommand;
-		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;
+		private System.Windows.Forms.CheckBox checkBox_ShowDate;
+		private System.Windows.Forms.CheckBox checkBox_ShowTime;
 		private System.Windows.Forms.CheckBox checkBox_ShowCountAndRate;
 		private System.Windows.Forms.CheckBox checkBox_ShowLength;
 		private System.Windows.Forms.ComboBox comboBox_TxRadix;

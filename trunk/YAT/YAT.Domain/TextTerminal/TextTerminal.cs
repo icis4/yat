@@ -494,12 +494,15 @@ namespace YAT.Domain
 
 		private void ExecuteLineBegin(LineState lineState, SerialDirection d, DateTime ts, DisplayElementCollection elements)
 		{
-			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart lp = new DisplayLinePart();
 
-				if (TerminalSettings.Display.ShowTimeStamp)
-					lp.Add(new DisplayElement.TimeStamp(ts));
+				if (TerminalSettings.Display.ShowDate)
+					lp.Add(new DisplayElement.DateInfo(ts));
+
+				if (TerminalSettings.Display.ShowTime)
+					lp.Add(new DisplayElement.TimeInfo(ts));
 
 				if (TerminalSettings.Display.ShowDirection)
 					lp.Add(new DisplayElement.DirectionStamp(d));

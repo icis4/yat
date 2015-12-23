@@ -71,7 +71,8 @@ namespace YAT.Model.Utilities
 		private FormatDescriptor txControlFormat;
 		private FormatDescriptor rxDataFormat;
 		private FormatDescriptor rxControlFormat;
-		private FormatDescriptor timeStampFormat;
+		private FormatDescriptor dateFormat;
+		private FormatDescriptor timeFormat;
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
 		private FormatDescriptor whiteSpacesFormat;
@@ -112,7 +113,8 @@ namespace YAT.Model.Utilities
 			this.txControlFormat   = new FormatDescriptor(settings.TxControlFormat.FontStyle,   this.document.createColor(settings.TxControlFormat.Color));
 			this.rxDataFormat      = new FormatDescriptor(settings.RxDataFormat.FontStyle,      this.document.createColor(settings.RxDataFormat.Color));
 			this.rxControlFormat   = new FormatDescriptor(settings.RxControlFormat.FontStyle,   this.document.createColor(settings.RxControlFormat.Color));
-			this.timeStampFormat   = new FormatDescriptor(settings.TimeStampFormat.FontStyle,   this.document.createColor(settings.TimeStampFormat.Color));
+			this.dateFormat        = new FormatDescriptor(settings.DateFormat.FontStyle,        this.document.createColor(settings.DateFormat.Color));
+			this.timeFormat        = new FormatDescriptor(settings.TimeFormat.FontStyle,        this.document.createColor(settings.TimeFormat.Color));
 			this.directionFormat   = new FormatDescriptor(settings.DirectionFormat.FontStyle,   this.document.createColor(settings.DirectionFormat.Color));
 			this.lengthFormat      = new FormatDescriptor(settings.LengthFormat.FontStyle,      this.document.createColor(settings.LengthFormat.Color));
 			this.whiteSpacesFormat = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle, this.document.createColor(settings.WhiteSpacesFormat.Color));
@@ -144,7 +146,8 @@ namespace YAT.Model.Utilities
 			else if (element is Domain.DisplayElement.TxControl)		{ format = this.txControlFormat; }
 			else if (element is Domain.DisplayElement.RxData)			{ format = this.rxDataFormat; }
 			else if (element is Domain.DisplayElement.RxControl)		{ format = this.rxControlFormat; }
-			else if (element is Domain.DisplayElement.TimeStamp)		{ format = this.timeStampFormat; }
+			else if (element is Domain.DisplayElement.DateInfo)			{ format = this.dateFormat; }
+			else if (element is Domain.DisplayElement.TimeInfo)			{ format = this.timeFormat; }
 			else if (element is Domain.DisplayElement.DirectionStamp)	{ format = this.directionFormat; }
 			else if (element is Domain.DisplayElement.Length)			{ format = this.lengthFormat; }
 			else if ((element is Domain.DisplayElement.LeftMargin) ||

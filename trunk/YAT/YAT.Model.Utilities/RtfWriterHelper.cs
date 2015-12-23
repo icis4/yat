@@ -47,7 +47,8 @@ namespace YAT.Model.Utilities
 		private static Font txControlFont;
 		private static Font rxDataFont;
 		private static Font rxControlFont;
-		private static Font timeStampFont;
+		private static Font dateFont;
+		private static Font timeFont;
 		private static Font directionFont;
 		private static Font lineLengthFont;
 		private static Font whiteSpacesFont;
@@ -138,11 +139,17 @@ namespace YAT.Model.Utilities
 				color     = settings.RxControlFormat.Color;
 				font      = SetFont(ref rxControlFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.TimeStamp)
+			else if (element is Domain.DisplayElement.DateInfo)
 			{
-				fontStyle = settings.TimeStampFormat.FontStyle;
-				color     = settings.TimeStampFormat.Color;
-				font      = SetFont(ref timeStampFont, fontName, fontSize, fontStyle);
+				fontStyle = settings.DateFormat.FontStyle;
+				color     = settings.DateFormat.Color;
+				font      = SetFont(ref dateFont, fontName, fontSize, fontStyle);
+			}
+			else if (element is Domain.DisplayElement.TimeInfo)
+			{
+				fontStyle = settings.TimeFormat.FontStyle;
+				color     = settings.TimeFormat.Color;
+				font      = SetFont(ref timeFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is Domain.DisplayElement.DirectionStamp)
 			{

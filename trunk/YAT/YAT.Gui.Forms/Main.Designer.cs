@@ -784,7 +784,7 @@
 			this.toolStripStatusLabel_MainStatus_Chrono.Name = "toolStripStatusLabel_MainStatus_Chrono";
 			this.toolStripStatusLabel_MainStatus_Chrono.Size = new System.Drawing.Size(47, 19);
 			this.toolStripStatusLabel_MainStatus_Chrono.Text = "0:00.00";
-			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.hs), click to Start/Stop, double-click to Reset";
+			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.ths), click to Start/Stop, double-click to Reset";
 			this.toolStripStatusLabel_MainStatus_Chrono.Click += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_Click);
 			this.toolStripStatusLabel_MainStatus_Chrono.DoubleClick += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_DoubleClick);
 			// 
