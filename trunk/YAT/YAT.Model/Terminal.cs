@@ -3319,7 +3319,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenLogFolder()
+		public virtual bool OpenLogDirectory()
 		{
 			if (this.log != null)
 			{

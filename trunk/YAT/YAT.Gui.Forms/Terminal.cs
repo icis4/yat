@@ -561,11 +561,11 @@ namespace YAT.Gui.Forms
 			if (this.terminal != null)
 				logFileExists = this.terminal.LogFileExists;
 
-			toolStripMenuItem_TerminalMenu_Log_On.Enabled         = logIsEnabled && !logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Off.Enabled        = logIsEnabled &&  logIsOn;
-			toolStripMenuItem_TerminalMenu_Log_Open.Enabled       = logIsEnabled &&  logFileExists;
-			toolStripMenuItem_TerminalMenu_Log_OpenFolder.Enabled = logIsEnabled &&  logFileExists;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled      = logIsEnabled && (logIsOn || logFileExists);
+			toolStripMenuItem_TerminalMenu_Log_On.Enabled            = logIsEnabled && !logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_Off.Enabled           = logIsEnabled &&  logIsOn;
+			toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled      = logIsEnabled &&  logFileExists;
+			toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Enabled = logIsEnabled &&  logFileExists;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled         = logIsEnabled && (logIsOn || logFileExists);
 
 			this.isSettingControls.Leave();
 		}
@@ -585,14 +585,14 @@ namespace YAT.Gui.Forms
 			this.terminal.SwitchLogOff();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Log_Open_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Log_OpenFile_Click(object sender, EventArgs e)
 		{
 			this.terminal.OpenLogFile();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Log_OpenFolder_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Log_OpenDirectory_Click(object sender, EventArgs e)
 		{
-			this.terminal.OpenLogFolder();
+			this.terminal.OpenLogDirectory();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Clear_Click(object sender, EventArgs e)
@@ -2026,9 +2026,9 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestOpenLogFolder()
+		public virtual void RequestOpenLogDirectory()
 		{
-			this.terminal.OpenLogFolder();
+			this.terminal.OpenLogDirectory();
 		}
 
 		/// <summary></summary>

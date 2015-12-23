@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Text;
 
 using YAT.Model.Utilities;
@@ -31,7 +32,8 @@ namespace YAT.Log
 	/// <summary></summary>
 	internal class NeatLog : Log
 	{
-		private enum FileType
+		/// <summary></summary>
+		protected enum FileType
 		{
 			Xml,
 			Rtf,
@@ -47,49 +49,19 @@ namespace YAT.Log
 		private TextWriter textWriter;
 
 		/// <summary></summary>
-		public NeatLog(bool enabled, string filePath, LogFileWriteMode writeMode, Model.Settings.FormatSettings format)
-			: base(enabled, filePath, writeMode)
+		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Model.Settings.FormatSettings format)
+			: base(enabled, makeFilePath, writeMode)
 		{
-			this.fileType = FilePathToFileType(filePath);
 			this.encoding = Encoding.UTF8;
 			this.format = format;
 		}
 
 		/// <summary></summary>
-		public NeatLog(bool enabled, string filePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
-			: base(enabled, filePath, writeMode)
+		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
+			: base(enabled, makeFilePath, writeMode)
 		{
-			this.fileType = FilePathToFileType(filePath);
 			this.encoding = encoding;
 			this.format = format;
-		}
-
-		/// <summary></summary>
-		public NeatLog(bool enabled, string filePath, string separator, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
-			: base(enabled, filePath, (FileNameSeparator)separator, writeMode)
-		{
-			this.fileType = FilePathToFileType(filePath);
-			this.encoding = encoding;
-			this.format = format;
-		}
-
-		/// <summary></summary>
-		public NeatLog(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
-			: base(enabled, filePath, separator, writeMode)
-		{
-			this.fileType = FilePathToFileType(filePath);
-			this.encoding = encoding;
-			this.format = format;
-		}
-
-		private FileType FilePathToFileType(string filePath)
-		{
-			if      (ExtensionSettings.IsXmlFile(filePath))
-				return (FileType.Xml);
-			else if (ExtensionSettings.IsRtfFile(filePath))
-				return (FileType.Rtf);
-			else
-				return (FileType.Text);
 		}
 
 		#region Disposal
@@ -113,72 +85,42 @@ namespace YAT.Log
 		#endregion
 
 		/// <summary></summary>
-		public void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
+		public void SetSettings(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
 		{
 			AssertNotDisposed();
 
 			if (this.IsEnabled && this.IsOn && ((this.encoding != encoding) || (this.format != format)))
 			{
 				Close();
-				this.fileType = FilePathToFileType(filePath);
 				this.encoding = encoding;
 				this.format = format;
-				base.SetSettings(enabled, filePath, writeMode);
+				base.SetSettings(enabled, makeFilePath, writeMode);
 				Open();
 			}
 			else
 			{
-				this.fileType = FilePathToFileType(filePath);
 				this.encoding = encoding;
 				this.format = format;
-				base.SetSettings(enabled, filePath, writeMode);
+				base.SetSettings(enabled, makeFilePath, writeMode);
 			}
 		}
 
 		/// <summary></summary>
-		public void SetSettings(bool enabled, string filePath, string separator, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
+		protected override void MakeFilePath()
 		{
-			AssertNotDisposed();
-
-			if (this.IsEnabled && this.IsOn && ((this.encoding != encoding) || (this.format != format)))
-			{
-				Close();
-				this.fileType = FilePathToFileType(filePath);
-				this.encoding = encoding;
-				this.format = format;
-				base.SetSettings(enabled, filePath, separator, writeMode);
-				Open();
-			}
-			else
-			{
-				this.fileType = FilePathToFileType(filePath);
-				this.encoding = encoding;
-				this.format = format;
-				base.SetSettings(enabled, filePath, separator, writeMode);
-			}
+			base.MakeFilePath();
+			this.fileType = ToFileType(FilePath);
 		}
 
 		/// <summary></summary>
-		public void SetSettings(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode, Encoding encoding, Model.Settings.FormatSettings format)
+		protected static FileType ToFileType(string filePath)
 		{
-			AssertNotDisposed();
-
-			if (this.IsEnabled && this.IsOn && ((this.encoding != encoding) || (this.format != format)))
-			{
-				Close();
-				this.fileType = FilePathToFileType(filePath);
-				this.encoding = encoding;
-				this.format = format;
-				base.SetSettings(enabled, filePath, separator, writeMode);
-				Open();
-			}
+			if (ExtensionSettings.IsXmlFile(filePath))
+				return (FileType.Xml);
+			else if (ExtensionSettings.IsRtfFile(filePath))
+				return (FileType.Rtf);
 			else
-			{
-				this.fileType = FilePathToFileType(filePath);
-				this.encoding = encoding;
-				this.format = format;
-				base.SetSettings(enabled, filePath, separator, writeMode);
-			}
+				return (FileType.Text);
 		}
 
 		/// <summary></summary>

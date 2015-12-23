@@ -39,7 +39,7 @@ namespace MKY.IO
 		#region Is...()
 
 		/// <summary>
-		/// Returns whether the folder or file path is defined.
+		/// Returns whether the directory or file path is defined.
 		/// </summary>
 		public static bool IsDefined(string path)
 		{
@@ -51,7 +51,7 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Returns whether the folder or file path is valid.
+		/// Returns whether the directory or file path is valid.
 		/// </summary>
 		/// <remarks>
 		/// This method only checks whether the path is valid but not whether it actually exists.
@@ -157,7 +157,7 @@ namespace MKY.IO
 		#region Limit...()
 
 		/// <summary>
-		/// Limits a folder or file path to the specified max length.
+		/// Limits a directory or file path to the specified max length.
 		/// </summary>
 		public static string LimitPath(string path, int length)
 		{
@@ -194,7 +194,7 @@ namespace MKY.IO
 		#region Append...()
 
 		/// <summary>
-		/// Appends a folder or file path to the specified max length.
+		/// Appends a directory or file path to the specified max length.
 		/// </summary>
 		/// <example>
 		/// <code>

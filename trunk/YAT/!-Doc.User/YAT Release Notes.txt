@@ -116,6 +116,9 @@ Fixed bugs:
   or restart the computer. In addition, it may be required to disconnect or reset any device sending
   continuous data. Otherwise, related serial COM ports may no longer be opened by an application.
   Issue is being reported by many users of .NET, but Microsoft seems to have no plans on fixing it.
+- Subsequent log files are now properly named according to the configured settings. File names that
+  include the time stamp now properly use the time stamp of the open operation (related to feature
+  requests #69, #103, #233, #245).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

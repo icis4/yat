@@ -54,11 +54,11 @@ namespace YAT.Log
 		private bool isDisposed;
 
 		private bool isEnabled;
-		private string filePath;
-		private FileNameSeparator separator;
+		private Func<string> makeFilePath;
 		private LogFileWriteMode writeMode;
 
 		private bool isOn;
+		private string filePath;
 		private FileStream fileStream;
 
 		private Timer flushTimer;
@@ -73,31 +73,18 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected Log(bool enabled, string filePath, LogFileWriteMode writeMode)
-			: this(enabled, filePath, "", writeMode)
+		protected Log(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
 		{
-		}
-
-		/// <summary></summary>
-		protected Log(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
-			: this(enabled, filePath, (FileNameSeparator)separator, writeMode)
-		{
-		}
-
-		/// <summary></summary>
-		protected Log(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
-		{
-			Initialize(enabled, filePath, separator, writeMode);
-		}
-
-		private void Initialize(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
-		{
-			this.isEnabled = enabled;
-			this.filePath  = filePath;
-			this.separator = separator;
-			this.writeMode = writeMode;
-
 			this.flushTimerRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+			Initialize(enabled, makeFilePath, writeMode);
+		}
+
+		private void Initialize(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
+		{
+			this.isEnabled    = enabled;
+			this.makeFilePath = makeFilePath;
+			this.writeMode    = writeMode;
 		}
 
 		#region Disposal
@@ -193,19 +180,7 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void SetSettings(bool enabled, string filePath, LogFileWriteMode writeMode)
-		{
-			SetSettings(enabled, filePath, "", writeMode);
-		}
-
-		/// <summary></summary>
-		public virtual void SetSettings(bool enabled, string filePath, string separator, LogFileWriteMode writeMode)
-		{
-			SetSettings(enabled, filePath, (FileNameSeparator)separator, writeMode);
-		}
-
-		/// <summary></summary>
-		public virtual void SetSettings(bool enabled, string filePath, FileNameSeparator separator, LogFileWriteMode writeMode)
+		public virtual void SetSettings(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
 		{
 			if (this.isOn)
 			{
@@ -213,26 +188,33 @@ namespace YAT.Log
 				{
 					if (enabled)
 					{
-						Initialize(enabled, filePath, separator, writeMode);
+						Initialize(enabled, makeFilePath, writeMode);
 						Open();
 					}
 					else
 					{
 						Close();
-						Initialize(enabled, filePath, separator, writeMode);
+						Initialize(enabled, makeFilePath, writeMode);
 					}
 				}
-				else if ((this.filePath != filePath) || (this.writeMode != writeMode) || (this.separator != separator))
+				else if ((this.makeFilePath != makeFilePath) || (this.writeMode != writeMode))
 				{
 					Close();
-					Initialize(enabled, filePath, separator, writeMode);
+					Initialize(enabled, makeFilePath, writeMode);
 					Open();
 				}
 			}
 			else
 			{
-				Initialize(enabled, filePath, separator, writeMode);
+				Initialize(enabled, makeFilePath, writeMode);
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void MakeFilePath()
+		{
+			string desiredFilePath = this.makeFilePath.Invoke();
+			this.filePath = FileEx.MakeUniqueFileName(desiredFilePath);
 		}
 
 		/// <summary></summary>
@@ -241,24 +223,44 @@ namespace YAT.Log
 			if (!this.isEnabled)
 				return;
 
-			if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
-				Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
+			switch (this.writeMode)
+			{
+				case LogFileWriteMode.Create:
+				{
+					// Make file path now in order to get the time stamp of the open operation:
+					MakeFilePath();
 
-			if (this.writeMode == LogFileWriteMode.Create)
-			{
-				this.filePath = FileEx.MakeUniqueFileName(this.filePath, this.separator.Separator);
-				this.fileStream = File.Open(this.filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
-			}
-			else if (this.writeMode == LogFileWriteMode.Append)
-			{
-				if (File.Exists(this.filePath))
-					this.fileStream = File.Open(this.filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
-				else
-					this.fileStream = File.Open(this.filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-			}
-			else
-			{
-				throw (new ArgumentException("Write mode not supported!"));
+					// Create directory if not existing yet:
+					if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
+						Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
+
+					// Create new file:
+					this.fileStream = File.Open(this.filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
+
+					break;
+				}
+
+				case LogFileWriteMode.Append:
+				{
+					if (File.Exists(this.filePath)) // Append to existing file:
+					{
+						this.fileStream = File.Open(this.filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
+					}
+					else // Create directory if not existing yet and create new file:
+					{
+						if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
+							Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
+
+						this.fileStream = File.Open(this.filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+					}
+
+					break;
+				}
+
+				default:
+				{
+					throw (new InvalidOperationException("Program execution should never get here, '" + this.writeMode + "' is an invalid write mode, please report this bug!"));
+				}
 			}
 
 			OpenWriter(this.fileStream);

@@ -117,7 +117,7 @@ namespace YAT.Test
 			//          > In all "<sectionGroup..." remove all content from ", System.Configuration, Version=..." up to the closing quote.
 			//            Attention: Files including the assembly information "System.Configuration" result in TypeLoadException's! Why? No clue...
 			//          > In all "<section..." remove all content from ", Version=..." up to the very last closing quote.
-			//  5. Move template files to the respective "\ConfigurationTemplate" folder.
+			//  5. Move template files to the respective "\ConfigurationTemplate" directory.
 			//  6. Compare the new template file against the former template file.
 			//  7. Update the effective solution file ".\YAT.Test.config" as required. (This is the generic base configuration.)
 			//  8. Update the effective assembly files in e.g. "..\!-TestConfig" as required. (This is the user/machine dependent configuration to be merged with.)
