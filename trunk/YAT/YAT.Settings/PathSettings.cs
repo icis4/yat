@@ -22,8 +22,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml.Serialization;
 
 using MKY.IO;
@@ -34,8 +32,7 @@ namespace YAT.Settings
 	[Serializable]
 	public class PathSettings : MKY.Settings.SettingsItem
 	{
-		private string terminalFilesPath;
-		private string workspaceFilesPath;
+		private string mainFilesPath;
 		private string sendFilesPath;
 		private string logFilesPath;
 		private string monitorFilesPath;
@@ -62,11 +59,10 @@ namespace YAT.Settings
 		public PathSettings(PathSettings rhs)
 			: base(rhs)
 		{
-			TerminalFilesPath  = rhs.TerminalFilesPath;
-			WorkspaceFilesPath = rhs.WorkspaceFilesPath;
-			SendFilesPath      = rhs.SendFilesPath;
-			LogFilesPath       = rhs.LogFilesPath;
-			MonitorFilesPath   = rhs.MonitorFilesPath;
+			MainFilesPath    = rhs.MainFilesPath;
+			SendFilesPath    = rhs.SendFilesPath;
+			LogFilesPath     = rhs.LogFilesPath;
+			MonitorFilesPath = rhs.MonitorFilesPath;
 
 			ClearChanged();
 		}
@@ -78,11 +74,10 @@ namespace YAT.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalFilesPath  = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			WorkspaceFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			SendFilesPath      = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			LogFilesPath       = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			MonitorFilesPath   = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			MainFilesPath    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			SendFilesPath    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			LogFilesPath     = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			MonitorFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 		}
 
 		#region Properties
@@ -91,30 +86,15 @@ namespace YAT.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("TerminalFilesPath")]
-		public virtual string TerminalFilesPath
+		[XmlElement("MainFilesPath")]
+		public virtual string MainFilesPath
 		{
-			get { return (this.terminalFilesPath); }
+			get { return (this.mainFilesPath); }
 			set
 			{
-				if (this.terminalFilesPath != value)
+				if (this.mainFilesPath != value)
 				{
-					this.terminalFilesPath = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("WorkspaceFilesPath")]
-		public virtual string WorkspaceFilesPath
-		{
-			get { return (this.workspaceFilesPath); }
-			set
-			{
-				if (this.workspaceFilesPath != value)
-				{
-					this.workspaceFilesPath = value;
+					this.mainFilesPath = value;
 					SetChanged();
 				}
 			}
@@ -189,11 +169,10 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(TerminalFilesPath,  other.TerminalFilesPath) &&
-				PathEx.Equals(WorkspaceFilesPath, other.WorkspaceFilesPath) &&
-				PathEx.Equals(SendFilesPath,      other.SendFilesPath) &&
-				PathEx.Equals(LogFilesPath,       other.LogFilesPath) &&
-				PathEx.Equals(MonitorFilesPath,   other.MonitorFilesPath)
+				PathEx.Equals(MainFilesPath,    other.MainFilesPath) &&
+				PathEx.Equals(SendFilesPath,    other.SendFilesPath) &&
+				PathEx.Equals(LogFilesPath,     other.LogFilesPath) &&
+				PathEx.Equals(MonitorFilesPath, other.MonitorFilesPath)
 			);
 		}
 
@@ -210,11 +189,10 @@ namespace YAT.Settings
 			(
 				base.GetHashCode() ^
 
-				this.TerminalFilesPath .GetHashCode() ^
-				this.WorkspaceFilesPath.GetHashCode() ^
-				this.SendFilesPath     .GetHashCode() ^
-				this.LogFilesPath      .GetHashCode() ^
-				this.MonitorFilesPath  .GetHashCode()
+				this.MainFilesPath   .GetHashCode() ^
+				this.SendFilesPath   .GetHashCode() ^
+				this.LogFilesPath    .GetHashCode() ^
+				this.MonitorFilesPath.GetHashCode()
 			);
 		}
 

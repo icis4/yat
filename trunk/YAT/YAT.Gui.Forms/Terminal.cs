@@ -3255,7 +3255,7 @@ namespace YAT.Gui.Forms
 			sfd.Filter      = ExtensionSettings.TerminalFilesFilter;
 			sfd.FilterIndex = ExtensionSettings.TerminalFilesFilterDefault;
 			sfd.DefaultExt  = ExtensionSettings.TerminalFile;
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath;
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
 
 			// Check wether the terminal has already been saved as a .yat file.
 			if (AutoName.EndsWith(ExtensionSettings.TerminalFile, StringComparison.OrdinalIgnoreCase))
@@ -3268,7 +3268,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.terminal.SaveAs(sfd.FileName);
