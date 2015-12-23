@@ -54,7 +54,8 @@ namespace YAT.Model.Settings
 		private TextFormat txControlFormat;
 		private TextFormat rxDataFormat;
 		private TextFormat rxControlFormat;
-		private TextFormat timeStampFormat;
+		private TextFormat dateFormat;
+		private TextFormat timeFormat;
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
 		private TextFormat whiteSpacesFormat;
@@ -88,7 +89,8 @@ namespace YAT.Model.Settings
 			TxControlFormat   = new TextFormat(rhs.TxControlFormat);
 			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
 			RxControlFormat   = new TextFormat(rhs.RxControlFormat);
-			TimeStampFormat   = new TextFormat(rhs.TimeStampFormat);
+			DateFormat        = new TextFormat(rhs.DateFormat);
+			TimeFormat        = new TextFormat(rhs.TimeFormat);
 			DirectionFormat   = new TextFormat(rhs.DirectionFormat);
 			LengthFormat      = new TextFormat(rhs.LengthFormat);
 			WhiteSpacesFormat = new TextFormat(rhs.WhiteSpacesFormat);
@@ -110,7 +112,8 @@ namespace YAT.Model.Settings
 			TxControlFormat   = new TextFormat(DefaultTxColor,          false, false, false, false);
 			RxDataFormat      = new TextFormat(DefaultRxColor,           true, false, false, false); // Bold.
 			RxControlFormat   = new TextFormat(DefaultRxColor,          false, false, false, false);
-			TimeStampFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
+			DateFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
+			TimeFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			DirectionFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			LengthFormat      = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			WhiteSpacesFormat = new TextFormat(DefaultWhiteSpacesColor, false, false, false, false);
@@ -213,15 +216,30 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("TimeStampFormat")]
-		public TextFormat TimeStampFormat
+		[XmlElement("DateFormat")]
+		public TextFormat DateFormat
 		{
-			get { return (this.timeStampFormat); }
+			get { return (this.dateFormat); }
 			set
 			{
-				if (this.timeStampFormat != value)
+				if (this.dateFormat != value)
 				{
-					this.timeStampFormat = value;
+					this.dateFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TimeFormat")]
+		public TextFormat TimeFormat
+		{
+			get { return (this.timeFormat); }
+			set
+			{
+				if (this.timeFormat != value)
+				{
+					this.timeFormat = value;
 					SetChanged();
 				}
 			}
@@ -317,7 +335,8 @@ namespace YAT.Model.Settings
 				(TxControlFormat   == other.TxControlFormat) &&
 				(RxDataFormat      == other.RxDataFormat) &&
 				(RxControlFormat   == other.RxControlFormat) &&
-				(TimeStampFormat   == other.TimeStampFormat) &&
+				(DateFormat        == other.DateFormat) &&
+				(TimeFormat        == other.TimeFormat) &&
 				(DirectionFormat   == other.DirectionFormat) &&
 				(LengthFormat      == other.LengthFormat) &&
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
@@ -344,7 +363,8 @@ namespace YAT.Model.Settings
 				TxControlFormat  .GetHashCode() ^
 				RxDataFormat     .GetHashCode() ^
 				RxControlFormat  .GetHashCode() ^
-				TimeStampFormat  .GetHashCode() ^
+				DateFormat       .GetHashCode() ^
+				TimeFormat       .GetHashCode() ^
 				DirectionFormat  .GetHashCode() ^
 				LengthFormat     .GetHashCode() ^
 				WhiteSpacesFormat.GetHashCode() ^

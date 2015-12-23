@@ -92,6 +92,7 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 
 New:
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
+- Option to display the date in addition to the time (related to feature request #14).
 - Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
 - Logging in RTF format implemented (feature requests #233). Note that the log file's RTF structure
   is incomplete while logging is ongoing. The file can only be opened by an RTF reader (e.g. Word)

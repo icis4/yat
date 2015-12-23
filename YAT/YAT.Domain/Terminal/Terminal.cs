@@ -1470,10 +1470,13 @@ namespace YAT.Domain
 			DisplayLine dl = new DisplayLine();
 
 			// Line begin and time stamp:
-			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowDate|| TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
 			{
-				if (TerminalSettings.Display.ShowTimeStamp)
-					dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
+				if (TerminalSettings.Display.ShowDate)
+					dl.Add(new DisplayElement.DateInfo(re.Direction, re.TimeStamp));
+
+				if (TerminalSettings.Display.ShowTime)
+					dl.Add(new DisplayElement.TimeInfo(re.Direction, re.TimeStamp));
 
 				if (TerminalSettings.Display.ShowDirection)
 					dl.Add(new DisplayElement.DirectionStamp(re.Direction));

@@ -661,11 +661,12 @@ namespace YAT.Gui.Forms
 			// Display:
 			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
 			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled      = isNotString;
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked      = this.settingsRoot.Display.ShowRadix;
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled = isNotString;
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
 
 			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
-			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_TerminalMenu_View_ShowDate.Checked        = this.settingsRoot.Display.ShowDate;
+			toolStripMenuItem_TerminalMenu_View_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
 			toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
@@ -764,9 +765,14 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ShowDate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
+			this.settingsRoot.Display.ShowDate = !this.settingsRoot.Display.ShowDate;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowTime_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowDirection_Click(object sender, EventArgs e)
@@ -915,11 +921,12 @@ namespace YAT.Gui.Forms
 
 			bool isNotString = ((this.settingsRoot.Display.TxRadix != Domain.Radix.String) ||
 			                    (this.settingsRoot.Display.RxRadix != Domain.Radix.String));
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled     = isNotString;
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked     = this.settingsRoot.Display.ShowRadix;
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled = isNotString;
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = isNotString && this.settingsRoot.Display.ShowRadix;
 
 			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
-			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_MonitorContextMenu_ShowDate.Checked        = this.settingsRoot.Display.ShowDate;
+			toolStripMenuItem_MonitorContextMenu_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
 			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 			bool isText = (terminalType == Domain.TerminalType.Text);
@@ -994,9 +1001,14 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowDate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
+			this.settingsRoot.Display.ShowDate = !this.settingsRoot.Display.ShowDate;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowTime_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowDirection_Click(object sender, EventArgs e)
@@ -2592,7 +2604,7 @@ namespace YAT.Gui.Forms
 			try
 			{
 				if (ExtensionSettings.IsXmlFile(filePath))
-					Model.Utilities.XmlWriterHelper.LinesToFile(monitor.SelectedLines, filePath);
+					Model.Utilities.XmlWriterHelper.LinesToFile(monitor.SelectedLines, filePath, true);
 				else if (ExtensionSettings.IsRtfFile(filePath))
 					Model.Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				else

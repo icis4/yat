@@ -49,7 +49,8 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DisplayElement.TxControl))]
 	[XmlInclude(typeof(DisplayElement.RxData))]
 	[XmlInclude(typeof(DisplayElement.RxControl))]
-	[XmlInclude(typeof(DisplayElement.TimeStamp))]
+	[XmlInclude(typeof(DisplayElement.DateInfo))]
+	[XmlInclude(typeof(DisplayElement.TimeInfo))]
 	[XmlInclude(typeof(DisplayElement.DirectionStamp))]
 	[XmlInclude(typeof(DisplayElement.Length))]
 	[XmlInclude(typeof(DisplayElement.LeftMargin))]
@@ -169,28 +170,64 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class TimeStamp : DisplayElement
+		public class DateInfo : DisplayElement
 		{
+			private const string Format = "yyyy-MM-dd";
+
 			/// <summary></summary>
-			public TimeStamp()
-				: base("(" + DateTime.Now.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + ")")
-			{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
+			public DateInfo()
+				: base("(" + DateTime.Now.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			{
 			}
 
 			/// <summary></summary>
-			public TimeStamp(DateTime timeStamp)
-				: base("(" + timeStamp.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + ")")
-			{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
+			public DateInfo(DateTime dateStamp)
+				: base("(" + dateStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			{
 			}
 
 			/// <summary></summary>
-			public TimeStamp(SerialDirection direction, DateTime timeStamp)
-				: base(direction, "(" + timeStamp.ToString("HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + ")")
-			{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
+			public DateInfo(SerialDirection direction, DateTime dateStamp)
+				: base(direction, "(" + dateStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			{
 			}
 
 			/// <summary></summary>
-			public TimeStamp(SerialDirection direction, string timeStamp)
+			public DateInfo(SerialDirection direction, string dateStamp)
+				: base(direction, dateStamp)
+			{
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class TimeInfo : DisplayElement
+		{
+			/// <remarks>
+			/// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
+			/// </remarks>
+			private const string Format = "HH:mm:ss.ff0";
+
+			/// <summary></summary>
+			public TimeInfo()
+				: base("(" + DateTime.Now.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public TimeInfo(DateTime timeStamp)
+				: base("(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public TimeInfo(SerialDirection direction, DateTime timeStamp)
+				: base(direction, "(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public TimeInfo(SerialDirection direction, string timeStamp)
 				: base(direction, timeStamp)
 			{
 			}
@@ -406,12 +443,10 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
-		[XmlAttribute("Origin")]
+		[XmlIgnore]
 		public virtual List<Pair<byte[], string>> Origin
 		{
 			get { return (this.origin); }
-			set { this.origin = value; }
 		}
 
 		/// <summary></summary>
@@ -484,7 +519,8 @@ namespace YAT.Domain
 			else if (this is TxControl)      clone = new TxControl();
 			else if (this is RxData)         clone = new RxData();
 			else if (this is RxControl)      clone = new RxControl();
-			else if (this is TimeStamp)      clone = new TimeStamp();
+			else if (this is DateInfo)       clone = new DateInfo();
+			else if (this is TimeInfo)       clone = new TimeInfo();
 			else if (this is DirectionStamp) clone = new DirectionStamp();
 			else if (this is Length)         clone = new Length();
 			else if (this is LeftMargin)     clone = new LeftMargin();

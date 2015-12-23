@@ -52,18 +52,19 @@ namespace YAT.Gui.Utilities
 		private static Font italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
 
 		/// <remarks>
-		/// For performance reasons, cache fonts and brushes used for drawing.
+		/// For performance reasons, cache elements such as fonts and brushes used for drawing.
 		/// </remarks>
-		private static DrawingElements lineNumber  = new DrawingElements();
-		private static DrawingElements txData      = new DrawingElements();
-		private static DrawingElements txControl   = new DrawingElements();
-		private static DrawingElements rxData      = new DrawingElements();
-		private static DrawingElements rxControl   = new DrawingElements();
-		private static DrawingElements timeStamp   = new DrawingElements();
-		private static DrawingElements direction   = new DrawingElements();
-		private static DrawingElements lineLength  = new DrawingElements();
-		private static DrawingElements whiteSpaces = new DrawingElements();
-		private static DrawingElements error       = new DrawingElements();
+		private static DrawingElements lineNumberElements;
+		private static DrawingElements txDataElements;
+		private static DrawingElements txControlElements;
+		private static DrawingElements rxDataElements;
+		private static DrawingElements rxControlElements;
+		private static DrawingElements dateElements;
+		private static DrawingElements timeElements;
+		private static DrawingElements directionElements;
+		private static DrawingElements lengthElements;
+		private static DrawingElements whiteSpacesElements;
+		private static DrawingElements errorElements;
 
 		/// <summary>String format used for drawing line numbers.</summary>
 		private static StringFormat lineNumberStringFormat;
@@ -140,8 +141,8 @@ namespace YAT.Gui.Utilities
 			FontStyle fontStyle = FontStyle.Regular;
 			Color     fontColor = SystemColors.ControlText;
 
-			font  = SetFont (ref lineNumber.Font, fontName, fontSize, fontStyle, graphics);
-			brush = SetBrush(ref lineNumber.Brush, fontColor);
+			font  = SetFont (ref lineNumberElements.Font, fontName, fontSize, fontStyle, graphics);
+			brush = SetBrush(ref lineNumberElements.Brush, fontColor);
 		}
 
 		/// <summary></summary>
@@ -202,50 +203,57 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				font  = SetFont (ref txData.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref txData.Brush, fontColor);
+				font  = SetFont (ref txDataElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref txDataElements.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				font  = SetFont (ref txControl.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref txControl.Brush, fontColor);
+				font  = SetFont (ref txControlElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref txControlElements.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				font  = SetFont (ref rxData.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref rxData.Brush, fontColor);
+				font  = SetFont (ref rxDataElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref rxDataElements.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				font  = SetFont (ref rxControl.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref rxControl.Brush, fontColor);
+				font  = SetFont (ref rxControlElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref rxControlElements.Brush, fontColor);
 			}
-			else if (element is Domain.DisplayElement.TimeStamp)
+			else if (element is Domain.DisplayElement.DateInfo)
 			{
-				fontStyle = settings.TimeStampFormat.FontStyle;
-				fontColor = settings.TimeStampFormat.Color;
-				font  = SetFont (ref timeStamp.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref timeStamp.Brush, fontColor);
+				fontStyle = settings.DateFormat.FontStyle;
+				fontColor = settings.DateFormat.Color;
+				font  = SetFont (ref dateElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref dateElements.Brush, fontColor);
+			}
+			else if (element is Domain.DisplayElement.TimeInfo)
+			{
+				fontStyle = settings.TimeFormat.FontStyle;
+				fontColor = settings.TimeFormat.Color;
+				font  = SetFont (ref timeElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref timeElements.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DirectionStamp)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				fontColor = settings.DirectionFormat.Color;
-				font  = SetFont (ref direction.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref direction.Brush, fontColor);
+				font  = SetFont (ref directionElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref directionElements.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Length)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				font  = SetFont (ref lineLength.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref lineLength.Brush, fontColor);
+				font  = SetFont (ref lengthElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref lengthElements.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
 			         (element is Domain.DisplayElement.Space) ||
@@ -254,15 +262,15 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				font  = SetFont (ref whiteSpaces.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref whiteSpaces.Brush, fontColor);
+				font  = SetFont (ref whiteSpacesElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref whiteSpacesElements.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.IOError)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;
-				font  = SetFont (ref error.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref error.Brush, fontColor);
+				font  = SetFont (ref errorElements.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref errorElements.Brush, fontColor);
 			}
 			else
 			{

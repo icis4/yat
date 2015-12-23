@@ -63,6 +63,9 @@ namespace YAT.Gui.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.label_Example = new System.Windows.Forms.Label();
 			this.monitor_Example = new YAT.Gui.Controls.Monitor();
+			this.label2 = new System.Windows.Forms.Label();
+			this.monitor_Date = new YAT.Gui.Controls.Monitor();
+			this.textFormat_Date = new YAT.Gui.Controls.TextFormat();
 			this.groupBox_Settings.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -93,6 +96,9 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.textFormat_Date);
+			this.groupBox_Settings.Controls.Add(this.monitor_Date);
+			this.groupBox_Settings.Controls.Add(this.label2);
 			this.groupBox_Settings.Controls.Add(this.textFormat_Direction);
 			this.groupBox_Settings.Controls.Add(this.monitor_Direction);
 			this.groupBox_Settings.Controls.Add(this.label1);
@@ -120,49 +126,51 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.button_Font);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(550, 263);
+			this.groupBox_Settings.Size = new System.Drawing.Size(550, 292);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
 			// textFormat_Direction
 			// 
-			this.textFormat_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Direction.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Direction.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Direction.Location = new System.Drawing.Point(216, 164);
+			this.textFormat_Direction.Location = new System.Drawing.Point(216, 193);
 			this.textFormat_Direction.Name = "textFormat_Direction";
 			this.textFormat_Direction.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Direction.TabIndex = 27;
-			this.textFormat_Direction.Tag = "5";
+			this.textFormat_Direction.TabIndex = 20;
+			this.textFormat_Direction.Tag = "6";
 			this.textFormat_Direction.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// monitor_Direction
 			// 
+			this.monitor_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_Direction.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Direction.Location = new System.Drawing.Point(88, 164);
+			this.monitor_Direction.Location = new System.Drawing.Point(88, 193);
 			this.monitor_Direction.Name = "monitor_Direction";
 			this.monitor_Direction.Size = new System.Drawing.Size(127, 23);
-			this.monitor_Direction.TabIndex = 26;
+			this.monitor_Direction.TabIndex = 19;
 			this.monitor_Direction.TabStop = false;
 			this.monitor_Direction.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// label1
 			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 169);
+			this.label1.Location = new System.Drawing.Point(12, 198);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(52, 13);
-			this.label1.TabIndex = 25;
+			this.label1.TabIndex = 18;
 			this.label1.Text = "&Direction:";
 			// 
 			// monitor_Error
 			// 
 			this.monitor_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_Error.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Error.Location = new System.Drawing.Point(88, 222);
+			this.monitor_Error.Location = new System.Drawing.Point(88, 251);
 			this.monitor_Error.Name = "monitor_Error";
 			this.monitor_Error.Size = new System.Drawing.Size(127, 23);
-			this.monitor_Error.TabIndex = 22;
+			this.monitor_Error.TabIndex = 25;
 			this.monitor_Error.TabStop = false;
 			this.monitor_Error.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
@@ -170,20 +178,21 @@ namespace YAT.Gui.Forms
 			// 
 			this.monitor_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_Length.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Length.Location = new System.Drawing.Point(88, 193);
+			this.monitor_Length.Location = new System.Drawing.Point(88, 222);
 			this.monitor_Length.Name = "monitor_Length";
 			this.monitor_Length.Size = new System.Drawing.Size(127, 23);
-			this.monitor_Length.TabIndex = 16;
+			this.monitor_Length.TabIndex = 22;
 			this.monitor_Length.TabStop = false;
 			this.monitor_Length.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_TimeStamp
 			// 
+			this.monitor_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_TimeStamp.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_TimeStamp.Location = new System.Drawing.Point(88, 135);
+			this.monitor_TimeStamp.Location = new System.Drawing.Point(88, 164);
 			this.monitor_TimeStamp.Name = "monitor_TimeStamp";
 			this.monitor_TimeStamp.Size = new System.Drawing.Size(127, 23);
-			this.monitor_TimeStamp.TabIndex = 13;
+			this.monitor_TimeStamp.TabIndex = 16;
 			this.monitor_TimeStamp.TabStop = false;
 			this.monitor_TimeStamp.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
@@ -231,30 +240,31 @@ namespace YAT.Gui.Forms
 			// 
 			this.label_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Error.AutoSize = true;
-			this.label_Error.Location = new System.Drawing.Point(12, 227);
+			this.label_Error.Location = new System.Drawing.Point(12, 256);
 			this.label_Error.Name = "label_Error";
 			this.label_Error.Size = new System.Drawing.Size(32, 13);
-			this.label_Error.TabIndex = 21;
+			this.label_Error.TabIndex = 24;
 			this.label_Error.Text = "&Error:";
 			// 
 			// label_Length
 			// 
 			this.label_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Length.AutoSize = true;
-			this.label_Length.Location = new System.Drawing.Point(12, 198);
+			this.label_Length.Location = new System.Drawing.Point(12, 227);
 			this.label_Length.Name = "label_Length";
 			this.label_Length.Size = new System.Drawing.Size(43, 13);
-			this.label_Length.TabIndex = 15;
+			this.label_Length.TabIndex = 21;
 			this.label_Length.Text = "&Length:";
 			// 
 			// label_TimeStamp
 			// 
+			this.label_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_TimeStamp.AutoSize = true;
-			this.label_TimeStamp.Location = new System.Drawing.Point(12, 140);
+			this.label_TimeStamp.Location = new System.Drawing.Point(12, 169);
 			this.label_TimeStamp.Name = "label_TimeStamp";
-			this.label_TimeStamp.Size = new System.Drawing.Size(66, 13);
-			this.label_TimeStamp.TabIndex = 12;
-			this.label_TimeStamp.Text = "T&ime Stamp:";
+			this.label_TimeStamp.Size = new System.Drawing.Size(33, 13);
+			this.label_TimeStamp.TabIndex = 15;
+			this.label_TimeStamp.Text = "T&ime:";
 			// 
 			// label_RxControl
 			// 
@@ -297,11 +307,11 @@ namespace YAT.Gui.Forms
 			this.textFormat_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Error.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Error.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Error.Location = new System.Drawing.Point(216, 222);
+			this.textFormat_Error.Location = new System.Drawing.Point(216, 251);
 			this.textFormat_Error.Name = "textFormat_Error";
 			this.textFormat_Error.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Error.TabIndex = 23;
-			this.textFormat_Error.Tag = "7";
+			this.textFormat_Error.TabIndex = 26;
+			this.textFormat_Error.Tag = "8";
 			this.textFormat_Error.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// textFormat_Length
@@ -309,23 +319,23 @@ namespace YAT.Gui.Forms
 			this.textFormat_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Length.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Length.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Length.Location = new System.Drawing.Point(216, 193);
+			this.textFormat_Length.Location = new System.Drawing.Point(216, 222);
 			this.textFormat_Length.Name = "textFormat_Length";
 			this.textFormat_Length.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Length.TabIndex = 17;
-			this.textFormat_Length.Tag = "6";
+			this.textFormat_Length.TabIndex = 23;
+			this.textFormat_Length.Tag = "7";
 			this.textFormat_Length.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// textFormat_TimeStamp
 			// 
-			this.textFormat_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_TimeStamp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_TimeStamp.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_TimeStamp.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_TimeStamp.Location = new System.Drawing.Point(216, 135);
+			this.textFormat_TimeStamp.Location = new System.Drawing.Point(216, 164);
 			this.textFormat_TimeStamp.Name = "textFormat_TimeStamp";
 			this.textFormat_TimeStamp.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_TimeStamp.TabIndex = 14;
-			this.textFormat_TimeStamp.Tag = "4";
+			this.textFormat_TimeStamp.TabIndex = 17;
+			this.textFormat_TimeStamp.Tag = "5";
 			this.textFormat_TimeStamp.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// textFormat_RxControl
@@ -379,17 +389,17 @@ namespace YAT.Gui.Forms
 			// button_Font
 			// 
 			this.button_Font.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Font.Location = new System.Drawing.Point(463, 120);
+			this.button_Font.Location = new System.Drawing.Point(463, 135);
 			this.button_Font.Name = "button_Font";
 			this.button_Font.Size = new System.Drawing.Size(72, 23);
-			this.button_Font.TabIndex = 24;
+			this.button_Font.TabIndex = 27;
 			this.button_Font.Text = "Font...";
 			this.button_Font.Click += new System.EventHandler(this.button_Font_Click);
 			// 
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(579, 132);
+			this.button_Defaults.Location = new System.Drawing.Point(579, 147);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(72, 23);
 			this.button_Defaults.TabIndex = 5;
@@ -400,7 +410,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
-			this.label_Example.Location = new System.Drawing.Point(24, 291);
+			this.label_Example.Location = new System.Drawing.Point(24, 320);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(50, 13);
 			this.label_Example.TabIndex = 1;
@@ -411,12 +421,45 @@ namespace YAT.Gui.Forms
 			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Example.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Example.Location = new System.Drawing.Point(100, 291);
+			this.monitor_Example.Location = new System.Drawing.Point(100, 320);
 			this.monitor_Example.Name = "monitor_Example";
 			this.monitor_Example.Size = new System.Drawing.Size(358, 58);
 			this.monitor_Example.TabIndex = 2;
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
+			// label2
+			// 
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(12, 140);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(33, 13);
+			this.label2.TabIndex = 12;
+			this.label2.Text = "D&ate:";
+			// 
+			// monitor_Date
+			// 
+			this.monitor_Date.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.monitor_Date.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Date.Location = new System.Drawing.Point(88, 135);
+			this.monitor_Date.Name = "monitor_Date";
+			this.monitor_Date.Size = new System.Drawing.Size(127, 23);
+			this.monitor_Date.TabIndex = 13;
+			this.monitor_Date.TabStop = false;
+			this.monitor_Date.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
+			// textFormat_Date
+			// 
+			this.textFormat_Date.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Date.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_Date.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_Date.Location = new System.Drawing.Point(216, 135);
+			this.textFormat_Date.Name = "textFormat_Date";
+			this.textFormat_Date.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_Date.TabIndex = 14;
+			this.textFormat_Date.Tag = "4";
+			this.textFormat_Date.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// FormatSettings
 			// 
@@ -424,7 +467,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(669, 364);
+			this.ClientSize = new System.Drawing.Size(669, 393);
 			this.Controls.Add(this.monitor_Example);
 			this.Controls.Add(this.label_Example);
 			this.Controls.Add(this.button_Defaults);
@@ -479,5 +522,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Label label1;
 		private Controls.TextFormat textFormat_Direction;
 		private Controls.Monitor monitor_Direction;
+		private Controls.TextFormat textFormat_Date;
+		private Controls.Monitor monitor_Date;
+		private System.Windows.Forms.Label label2;
 	}
 }
