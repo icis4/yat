@@ -1579,32 +1579,15 @@ namespace YAT.Gui.Forms
 			ofd.Filter      = ExtensionSettings.TerminalOrWorkspaceFilesFilter;
 			ofd.FilterIndex = ExtensionSettings.TerminalOrWorkspaceFilesFilterDefault;
 			ofd.DefaultExt  = ExtensionSettings.TerminalFile;
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath;
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
-				// \remind (2012-09-19 / mky @ Dalian ;-)
-				// As soon as "PathSettings.TerminalFilesPath and .WorkspaceFilesPath should be merged"
-				// has been implemented, the following if-elif-else can be merged back as well.
-				if (ExtensionSettings.IsTerminalFile(ofd.FileName))
-				{
-					ApplicationSettings.LocalUserSettings.Paths.TerminalFilesPath = Path.GetDirectoryName(ofd.FileName);
-					ApplicationSettings.Save();
+				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.Save();
 
-					this.main.OpenFromFile(ofd.FileName);
-				}
-				else if (ExtensionSettings.IsWorkspaceFile(ofd.FileName))
-				{
-					ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = Path.GetDirectoryName(ofd.FileName);
-					ApplicationSettings.Save();
-
-					this.main.OpenFromFile(ofd.FileName);
-				}
-				else
-				{
-					throw (new InvalidOperationException("Program execution should never get here, please report this bug!"));
-				}
+				this.main.OpenFromFile(ofd.FileName);
 			}
 			else
 			{
@@ -1644,12 +1627,12 @@ namespace YAT.Gui.Forms
 			ofd.Filter      = ExtensionSettings.WorkspaceFilesFilter;
 			ofd.FilterIndex = ExtensionSettings.WorkspaceFilesFilterDefault;
 			ofd.DefaultExt  = ExtensionSettings.WorkspaceFile;
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath;
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.main.OpenFromFile(ofd.FileName);
@@ -1670,7 +1653,7 @@ namespace YAT.Gui.Forms
 			sfd.Filter      = ExtensionSettings.WorkspaceFilesFilter;
 			sfd.FilterIndex = ExtensionSettings.WorkspaceFilesFilterDefault;
 			sfd.DefaultExt  = ExtensionSettings.WorkspaceFile;
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath;
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
 
 			// Other than for terminal files, the workspace 'Save As' always suggests 'UserName.yaw'.
 			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
@@ -1680,7 +1663,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.WorkspaceFilesPath = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.workspace.SaveAs(sfd.FileName);

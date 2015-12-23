@@ -200,21 +200,21 @@ namespace YAT.Settings.Terminal
 		/// case with 'EolComment' below.
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
-			{
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, "Endianness",                                new string[] { "Endianess" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication"      }, "FlowControl",                               new string[] { "Handshake" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                           }, "RemoteTcpPort",                             new string[] { "RemotePort" } ),
-			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "UsbSerialHidDevice", "DeviceInfo" }, "SerialString",                              new string[] { "SerialNumber" } ), Should be renamed, but doesn't work because it is part of a serializable object. Should be solved using XML transformation. */
-			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal"                                           }, "Status",                                    new string[] { "Display" } ), */
-			/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                           }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "ShowTime",                                  new string[] { "ShowTimeStamp" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Format"                                             }, "TimeFormat",                                new string[] { "TimeStampFormat" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderFormat",                              new string[] { "SubdirectoriesFormat" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderChannel",                             new string[] { "SubdirectoriesChannel" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                   new string[] { "LogIsStarted" } ),
-			};
+		{
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, "Endianness",                                new string[] { "Endianess" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication"      }, "FlowControl",                               new string[] { "Handshake" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                           }, "RemoteTcpPort",                             new string[] { "RemotePort" } ),
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "UsbSerialHidDevice", "DeviceInfo" }, "SerialString",                              new string[] { "SerialNumber" } ), Should be renamed, but doesn't work because it is part of a serializable object. Should be solved using XML transformation. */
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal"                                           }, "Status",                                    new string[] { "Display" } ), */
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                           }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "ShowTime",                                  new string[] { "ShowTimeStamp" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Format"                                             }, "TimeFormat",                                new string[] { "TimeStampFormat" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderFormat",                              new string[] { "SubdirectoriesFormat" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderChannel",                             new string[] { "SubdirectoriesChannel" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                   new string[] { "LogIsStarted" } ),
+		};
 
 		/// <summary></summary>
 		[XmlIgnore]

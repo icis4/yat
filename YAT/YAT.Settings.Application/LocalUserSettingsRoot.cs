@@ -40,9 +40,9 @@ namespace YAT.Settings.Application
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
 
-		private Settings.GeneralSettings general;
-		private Settings.PathSettings paths;
-		private Settings.AutoWorkspaceSettings autoAutoWorkspace;
+		private GeneralSettings general;
+		private PathSettings paths;
+		private AutoWorkspaceSettings autoAutoWorkspace;
 		private Model.Settings.MainWindowSettings mainWindow;
 		private Model.Settings.NewTerminalSettings newTerminal;
 		private Model.Settings.RecentFileSettings recentFiles;
@@ -51,9 +51,9 @@ namespace YAT.Settings.Application
 		public LocalUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			General       = new Settings.GeneralSettings();
-			Paths         = new Settings.PathSettings();
-			AutoWorkspace = new Settings.AutoWorkspaceSettings();
+			General       = new GeneralSettings();
+			Paths         = new PathSettings();
+			AutoWorkspace = new AutoWorkspaceSettings();
 			MainWindow    = new Model.Settings.MainWindowSettings();
 			NewTerminal   = new Model.Settings.NewTerminalSettings();
 			RecentFiles   = new Model.Settings.RecentFileSettings();
@@ -65,9 +65,9 @@ namespace YAT.Settings.Application
 		public LocalUserSettingsRoot(LocalUserSettingsRoot rhs)
 			: base(rhs)
 		{
-			General       = new Settings.GeneralSettings(rhs.General);
-			Paths         = new Settings.PathSettings(rhs.Paths);
-			AutoWorkspace = new Settings.AutoWorkspaceSettings(rhs.AutoWorkspace);
+			General       = new GeneralSettings(rhs.General);
+			Paths         = new PathSettings(rhs.Paths);
+			AutoWorkspace = new AutoWorkspaceSettings(rhs.AutoWorkspace);
 			MainWindow    = new Model.Settings.MainWindowSettings(rhs.MainWindow);
 			NewTerminal   = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
 			RecentFiles   = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
@@ -122,7 +122,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("General")]
-		public virtual Settings.GeneralSettings General
+		public virtual GeneralSettings General
 		{
 			get { return (this.general); }
 			set
@@ -148,7 +148,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("Paths")]
-		public virtual Settings.PathSettings Paths
+		public virtual PathSettings Paths
 		{
 			get { return (this.paths); }
 			set
@@ -174,7 +174,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		[XmlElement("AutoWorkspace")]
-		public virtual Settings.AutoWorkspaceSettings AutoWorkspace
+		public virtual AutoWorkspaceSettings AutoWorkspace
 		{
 			get { return (this.autoAutoWorkspace); }
 			set
@@ -279,17 +279,19 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Alternate XML elements for backward compatibility with old settings.
 		/// </summary>
-		/// <remarks>
-		/// \remind (2013-01-02 / mky)
-		/// There was the change in the NewTerminalSettings between 1.3.0 and 1.3.1 which was added
-		/// below but not made available public because it would have introduced alternate elements
-		/// to the local user settings, and the change is too minor to justify this.
-		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
-			{
-				new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
-			};
+		{
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFilesPath",       new string[] { "TerminalFilesPath" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
+		};
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual MKY.Xml.AlternateXmlElement[] AlternateXmlElements
+		{
+			get { return (StaticAlternateXmlElements); }
+		}
 
 		#endregion
 
