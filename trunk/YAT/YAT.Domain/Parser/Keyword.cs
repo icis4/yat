@@ -113,7 +113,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion

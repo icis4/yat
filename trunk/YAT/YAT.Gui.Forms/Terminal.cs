@@ -1184,62 +1184,62 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_String_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.String);
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.String);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Char_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Char);
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Char);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Bin_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Bin);
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Bin);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Oct_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Oct);
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Oct);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Dec_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Dec);
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Dec);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_Hex_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Hex);
+			SetMonitorRadix(Domain.IODirection.Tx, Domain.Radix.Hex);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_String_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.String);
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.String);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Char_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Char);
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Char);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Bin_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Bin);
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Bin);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Oct_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Oct);
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Oct);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Dec_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Dec);
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Dec);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Rx_Hex_Click(object sender, EventArgs e)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Hex);
+			SetMonitorRadix(Domain.IODirection.Rx, Domain.Radix.Hex);
 		}
 
 		#endregion
@@ -2419,15 +2419,17 @@ namespace YAT.Gui.Forms
 
 		private void SetMonitorRadix(Domain.Radix radix)
 		{
-			SetMonitorRadix(Domain.SerialDirection.Tx, radix);
+			SetMonitorRadix(Domain.IODirection.Tx, radix);
 		}
 
-		private void SetMonitorRadix(Domain.SerialDirection direction, Domain.Radix radix)
+		private void SetMonitorRadix(Domain.IODirection direction, Domain.Radix radix)
 		{
-			if (direction == Domain.SerialDirection.Tx)
-				this.settingsRoot.Display.TxRadix = radix;
-			else
-				this.settingsRoot.Display.RxRadix = radix;
+			switch (direction)
+			{
+				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
+				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
+				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction, please report this bug!"));
+			}
 		}
 
 		private void SetMonitorOrientation(Orientation orientation)
@@ -2521,7 +2523,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type, please report this bug!"));
 			}
 		}
 

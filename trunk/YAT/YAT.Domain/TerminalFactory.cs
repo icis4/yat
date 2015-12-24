@@ -22,12 +22,7 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -41,7 +36,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (new TextTerminal  (settings));
 				case TerminalType.Binary: return (new BinaryTerminal(settings));
 			}
-			throw (new TypeLoadException("Program execution should never get here, " + settings.TerminalType + " is an invalid terminal type, please report this bug!"));
+			throw (new TypeLoadException("Program execution should never get here, '" + settings.TerminalType + "' is an invalid terminal type, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -52,7 +47,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (new TextTerminal  (settings, terminal));
 				case TerminalType.Binary: return (new BinaryTerminal(settings, terminal));
 			}
-			throw (new ArgumentOutOfRangeException("settings", settings, "Program execution should never get here, " + settings.TerminalType + " is an invalid terminal type, please report this bug!"));
+			throw (new ArgumentOutOfRangeException("settings", settings, "Program execution should never get here, '" + settings.TerminalType + "' is an invalid terminal type, please report this bug!"));
 		}
 	}
 }

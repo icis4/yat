@@ -239,13 +239,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public DirectionStamp()
-				: base(SerialDirection.None, "(" + SerialDirectionEx.ToString(SerialDirection.None) + ")")
+				: base(SerialDirection.None, "(" + (SerialDirectionEx)SerialDirection.None + ")")
 			{
 			}
 
 			/// <summary></summary>
 			public DirectionStamp(SerialDirection direction)
-				: base(direction, "(" + SerialDirectionEx.ToString(direction) + ")")
+				: base(direction, "(" + (SerialDirectionEx)direction + ")")
 			{
 			}
 		}
@@ -528,7 +528,7 @@ namespace YAT.Domain
 			else if (this is RightMargin)    clone = new RightMargin();
 			else if (this is LineBreak)      clone = new LineBreak();
 			else if (this is IOError)        clone = new IOError();
-			else throw (new TypeLoadException(@"Program execution should never get here, """ + this + @""" is an unknown display element type, please report this bug!"));
+			else throw (new TypeLoadException("Program execution should never get here, '" + this + "' is an unknown display element type, please report this bug!"));
 
 			clone.direction = this.direction;
 			clone.origin    = PerformDeepClone(this.origin);
@@ -596,7 +596,7 @@ namespace YAT.Domain
 		public virtual void Append(DisplayElement de)
 		{
 			if (!AcceptsAppendOf(de))
-				throw (new InvalidOperationException("Cannot append because the given element cannot be appended to this element!"));
+				throw (new NotSupportedException("Cannot append because the given element cannot be appended to this element!"));
 
 			// \fixme (2010-04-01 / MKY):
 			// Weird ArgumentException when receiving large chunks of data.

@@ -120,7 +120,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_string);
 				case Radix.String: return (String_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -135,7 +135,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringShort);
 				case Radix.String: return (String_stringShort);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -150,7 +150,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringMiddle);
 				case Radix.String: return (String_stringMiddle);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion

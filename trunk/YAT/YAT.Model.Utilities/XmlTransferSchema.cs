@@ -29,12 +29,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Text;
-using System.Xml;
-using System.Xml.Schema;
+using System.Xml.Serialization;
 
-using MKY.Xml;
+using MKY;
 using MKY.Xml.Serialization;
 
 #endregion
@@ -42,43 +40,34 @@ using MKY.Xml.Serialization;
 namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Static utility class providing XML writer functionality for YAT.
+	/// The object model describing the XML schema for read/write i.e. import/export transfers.
 	/// </summary>
-	public static class XmlWriterHelper
+	[Serializable]
+	public class XmlTransferSchema
 	{
-		/// <summary></summary>
-		public static void LinesToFile(List<Domain.DisplayLine> lines, string filePath, bool addSchema)
-		{
-			Type type = typeof(List<Domain.DisplayLine>);
-			XmlSerializerEx.SerializeToFile(filePath, type, lines);
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
-			if (addSchema)
-				SchemaToFile(type, Path.GetFullPath(filePath), Path.GetFileNameWithoutExtension(filePath));
+		private DateTime timeStamp;
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("RootPath")]
+		public virtual DateTime TimeStamp
+		{
+			get { return (this.timeStamp); }
+			set { this.timeStamp = value;  }
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static void SchemaToFile(Type type, string path, string fileName)
-		{
-			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(type);
-			int n = document.Schemas.Schemas().Count;
-			int i = 0;
-			foreach (XmlSchema schema in document.Schemas.Schemas())
-			{
-				string filePath;
-				if (n <= 1)
-					filePath = path + fileName + ".xsd";
-				else
-					filePath = path + fileName + "-" + i + ".xsd";
-
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					schema.Write(sw);
-				}
-
-				i++;
-			}
-		}
+		#endregion
 	}
 }
 

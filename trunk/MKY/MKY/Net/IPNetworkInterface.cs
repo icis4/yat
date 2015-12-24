@@ -121,7 +121,7 @@ namespace MKY.Net
 					case IPNetworkInterfaceType.IPv6Loopback: return (IPAddress.IPv6Loopback);
 					case IPNetworkInterfaceType.Other:        return (this.otherAddress);
 				}
-				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 			}
 		}
 
@@ -209,7 +209,7 @@ namespace MKY.Net
 
 				default:
 				{
-					throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+					throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 				}
 			}
 		}

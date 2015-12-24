@@ -185,6 +185,7 @@
     <Compile Include="Windows.Forms\NativeMessageHandler.cs" />
     <Compile Include="Windows.Forms\ControlEx.cs" />
     <Compile Include="Windows.Forms\OrientationEx.cs" />
+    <Compile Include="Xml\XmlDocumentEx.cs" />
     <Compile Include="Xml\Schema\XmlSchemaEx.cs" />
     <Compile Include="Xml\Serialization\AlternateTolerantXmlSerializer.cs" />
     <Compile Include="Xml\AlternateXmlElement.cs" />

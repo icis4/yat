@@ -21,9 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -36,20 +33,22 @@ namespace YAT.Domain
 		Severe = MKY.IO.Serial.ErrorSeverity.Severe,
 
 		/// <summary></summary>
-		Fatal = MKY.IO.Serial.ErrorSeverity.Fatal,
+		Fatal = MKY.IO.Serial.ErrorSeverity.Fatal
 	}
 
 	/// <summary></summary>
 	public enum IODirection
 	{
 		/// <summary></summary>
-		Any = MKY.IO.Serial.Direction.Any,
+		None = MKY.IO.Serial.Direction.None,
 
-		/// <summary></summary>
-		Input = MKY.IO.Serial.Direction.Input,
+		/// <remarks>YAT uses term 'Tx' instead of 'Output'.</remarks>
+		/// <remarks>YAT sorts 'Tx' before 'Rx'.</remarks>
+		Tx = MKY.IO.Serial.Direction.Output,
 
-		/// <summary></summary>
-		Output = MKY.IO.Serial.Direction.Output,
+		/// <remarks>YAT uses term 'Rx' instead of 'Input'.</remarks>
+		/// <remarks>YAT sorts 'Rx' after 'Tx'.</remarks>
+		Rx = MKY.IO.Serial.Direction.Input
 	}
 }
 

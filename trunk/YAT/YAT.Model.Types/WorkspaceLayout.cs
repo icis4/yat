@@ -133,7 +133,7 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Maximize:       return (Maximize_string);
 				case WorkspaceLayout.Minimize:       return (Minimize_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion
@@ -248,13 +248,13 @@ namespace YAT.Model.Types
 		{
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
 			{
-				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout'!"));
+				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout', please report this bug!"));
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
-				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout'!"));
-				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout'!"));
-				default:                             throw (new InvalidOperationException("Invalid workspace layout!"));
+				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout', please report this bug!"));
+				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout', please report this bug!"));
+				default:                             throw (new NotSupportedException("Program execution should never get here,'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout, please report this bug!"));
 			}
 		}
 
@@ -267,8 +267,8 @@ namespace YAT.Model.Types
 				case MdiLayout.Cascade:        return (new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
-				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationInfo.ProductName + "!"));
-				default:                       throw (new InvalidOperationException("Invalid MDI layout!"));
+				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationInfo.ProductName + ", please report this bug!"));
+				default:                       throw (new NotSupportedException("Program execution should never get here,'" + layout + "' is an unknown workspace layout, please report this bug!"));
 			}
 		}
 

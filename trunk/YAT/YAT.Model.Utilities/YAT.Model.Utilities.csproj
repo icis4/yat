@@ -110,6 +110,7 @@
     <Compile Include="TextWriter.cs" />
     <Compile Include="TextWriterHelper.cs" />
     <Compile Include="RtfWriterHelper.cs" />
+    <Compile Include="XmlTransferSchema.cs" />
     <Compile Include="XmlReaderHelper.cs" />
     <Compile Include="XmlWriterHelper.cs" />
   </ItemGroup>

@@ -27,9 +27,6 @@ using System.Diagnostics.CodeAnalysis;
 
 using MKY;
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	#region Enum TerminalType
@@ -92,7 +89,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (Text_string);
 				case TerminalType.Binary: return (Binary_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new InvalidOperationException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion

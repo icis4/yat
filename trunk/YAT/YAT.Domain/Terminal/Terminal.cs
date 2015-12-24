@@ -860,7 +860,7 @@ namespace YAT.Domain
 				if (psi != null)
 					ProcessParsableSendItem(psi);
 				else
-					throw (new InvalidOperationException("Invalid send item type " + item.GetType() + "."));
+					throw (new NotSupportedException("Program execution should never get here,'" + item.GetType() + "' is an invalid send item type, please report this bug!"));
 			}
 		}
 
@@ -888,7 +888,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
@@ -897,7 +897,7 @@ namespace YAT.Domain
 			bool sendEol = item.IsLine;
 			bool performLineDelay = false;
 			bool performLineRepeat = false;
-			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Domain.Settings.SendSettings.LineRepeatInfinite);
+			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
 			int lineRepeatRemaining = TerminalSettings.Send.DefaultLineRepeat;
 
 			do // Process at least once, potentially repeat.
@@ -1013,7 +1013,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -1027,7 +1027,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -1041,17 +1041,17 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
 
 				default: // = Unknown or not-yet-supported keyword.
 				{
-					if (ElementsAreSeparate(SerialDirection.Tx)) // Add space if necessary.
-						OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Space());
+					if (ElementsAreSeparate(IODirection.Tx)) // Add space if necessary.
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.Space());
 
-					OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(((Parser.KeywordResult)result).Keyword) + " keyword is not yet supported"));
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)result.Keyword + " keyword is not yet supported"));
 					break;
 				}
 			}
@@ -1158,7 +1158,7 @@ namespace YAT.Domain
 			{
 				string leadMessage = "Unable to send data:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
-				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Output, leadMessage + Environment.NewLine + ex.Message));
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
 			}
 		}
 
@@ -1192,7 +1192,7 @@ namespace YAT.Domain
 			{
 				string leadMessage = "Unable to prepare data for sending:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
-				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Output, leadMessage + Environment.NewLine + ex.Message));
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
 			}
 		}
 
@@ -1243,19 +1243,21 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d)
+		protected virtual DisplayElement ByteToElement(byte b, IODirection d)
 		{
-			if (d == SerialDirection.Tx)
-				return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
-			else
-				return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
+			switch (d)
+			{
+				case IODirection.Tx: return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
+				case IODirection.Rx: return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d, Radix r)
+		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
 		{
 			bool replaceToAscii = ((TerminalSettings.CharReplace.ReplaceControlChars) &&
 								   (TerminalSettings.CharReplace.ControlCharRadix == ControlCharRadix.AsciiMnemonic));
@@ -1314,10 +1316,14 @@ namespace YAT.Domain
 							else
 							{
 								error = true; // Signal error.
-								if (d == SerialDirection.Tx)
-									text = "Sent";
-								else
-									text = "Received";
+
+								switch (d)
+								{
+									case IODirection.Tx: text = "Sent";     break;
+									case IODirection.Rx: text = "Received"; break;
+									default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+								}
+
 								text += " ASCII control character";
 								text += " <" + b.ToString("X2", CultureInfo.InvariantCulture) + "h>";
 								text += " cannot be displayed in the current settings, enable control character replacement to do so";
@@ -1340,7 +1346,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix, please report this bug!"));
 				}
 			}
 
@@ -1348,29 +1354,35 @@ namespace YAT.Domain
 			{
 				if ((b == '\t') && !this.terminalSettings.CharReplace.ReplaceTab) // Tab.
 				{
-					if (d == SerialDirection.Tx)
-						return (new DisplayElement.TxData(b, text));
-					else
-						return (new DisplayElement.RxData(b, text));
+					switch (d)
+					{
+						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+					}
 				}
 				else if (isControlChar)
 				{
-					if (d == SerialDirection.Tx)
-						return (new DisplayElement.TxControl(b, text));
-					else
-						return (new DisplayElement.RxControl(b, text));
+					switch (d)
+					{
+						case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
+						case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+					}
 				}
 				else
 				{
-					if (d == SerialDirection.Tx)
-						return (new DisplayElement.TxData(b, text));
-					else
-						return (new DisplayElement.RxData(b, text));
+					switch (d)
+					{
+						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+					}
 				}
 			}
 			else
 			{
-				return (new DisplayElement.IOError(d, text));
+				return (new DisplayElement.IOError((SerialDirection)d, text));
 			}
 		}
 
@@ -1421,19 +1433,21 @@ namespace YAT.Domain
 				}
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix, please report this bug!"));
 				}
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ElementsAreSeparate(SerialDirection d)
+		protected virtual bool ElementsAreSeparate(IODirection d)
 		{
-			if (d == SerialDirection.Tx)
-				return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
-			else
-				return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
+			switch (d)
+			{
+				case IODirection.Tx: return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
+				case IODirection.Rx: return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an unknown direction, please report this bug!"));
+			}
 		}
 
 		/// <summary></summary>
@@ -1449,7 +1463,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (true);
 				case Radix.String: return (false);
 			}
-			throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+			throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -1473,13 +1487,13 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowDate|| TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
 			{
 				if (TerminalSettings.Display.ShowDate)
-					dl.Add(new DisplayElement.DateInfo(re.Direction, re.TimeStamp));
+					dl.Add(new DisplayElement.DateInfo(re.TimeStamp));
 
 				if (TerminalSettings.Display.ShowTime)
-					dl.Add(new DisplayElement.TimeInfo(re.Direction, re.TimeStamp));
+					dl.Add(new DisplayElement.TimeInfo(re.TimeStamp));
 
 				if (TerminalSettings.Display.ShowDirection)
-					dl.Add(new DisplayElement.DirectionStamp(re.Direction));
+					dl.Add(new DisplayElement.DirectionStamp((SerialDirection)re.Direction));
 
 				dl.Add(new DisplayElement.LeftMargin());
 			}
@@ -1494,9 +1508,9 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
-				dl.Add(new DisplayElement.Length(re.Direction, 1));
+				dl.Add(new DisplayElement.Length((SerialDirection)re.Direction, 1));
 			}
-			dl.Add(new DisplayElement.LineBreak(re.Direction));
+			dl.Add(new DisplayElement.LineBreak((SerialDirection)re.Direction));
 
 			elements.AddRange(dl.Clone()); // Clone elements because they are needed again a line below.
 			lines.Add(dl);
@@ -1584,7 +1598,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1602,7 +1616,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
 					case RepositoryType.Rx:    return (this.rxRepository   .DataCount);
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1619,7 +1633,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.Count);
 					case RepositoryType.Rx:    return (this.rxRepository   .Count);
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1636,7 +1650,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1653,7 +1667,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1670,7 +1684,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
 					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1686,7 +1700,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
 					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
 					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
-					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+					default: throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 				}
 			}
 		}
@@ -1710,7 +1724,7 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
 					case RepositoryType.Rx:    return (this.rxRepository   .ToString(indent));
 				}
-				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, " + repository + " is an invalid repository, please report this bug!"));
+				throw (new ArgumentOutOfRangeException("repository", repository, "Program execution should never get here, '" + repository + "' is an invalid repository, please report this bug!"));
 			}
 		}
 
@@ -1856,23 +1870,23 @@ namespace YAT.Domain
 				// Handle serial port errors whenever possible.
 				switch (serialPortErrorEventArgs.SerialPortError)
 				{
-					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxFramingErrorString));        break;
-					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxBufferOverrunErrorString));  break;
-					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxBufferOverflowErrorString)); break;
-					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(RxParityErrorString));         break;
-					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(TxBufferFullErrorString));     break;
+					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.IOError(RxFramingErrorString));        break;
+					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.IOError(RxBufferOverrunErrorString));  break;
+					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.IOError(RxBufferOverflowErrorString)); break;
+					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.IOError(RxParityErrorString));         break;
+					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(TxBufferFullErrorString));     break;
 					default:                                   OnIOError(e); break;
 				}
 			}
-			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Input))
+			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx))
 			{
-				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.IOError(e.Message));
-				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.LineBreak());
+				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.IOError(e.Message));
+				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.LineBreak());
 			}
-			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Output))
+			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx))
 			{
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(e.Message));
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.LineBreak());
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(e.Message));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.LineBreak());
 			}
 			else
 			{
@@ -1936,7 +1950,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementProcessed(SerialDirection direction, DisplayElement element)
+		protected virtual void OnDisplayElementProcessed(IODirection direction, DisplayElement element)
 		{
 			DisplayElementCollection elements = new DisplayElementCollection();
 			elements.Add(element); // No clone needed as the element must be created when calling this event method.
@@ -1944,29 +1958,42 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsProcessed(SerialDirection direction, DisplayElementCollection elements)
+		protected virtual void OnDisplayElementsProcessed(IODirection direction, DisplayElementCollection elements)
 		{
-			if (direction == SerialDirection.Tx)
+			switch (direction)
 			{
-				lock (this.repositorySyncObj)
+				case IODirection.Tx:
 				{
-					this.txRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-					this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					lock (this.repositorySyncObj)
+					{
+						this.txRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					}
+
+					if (!this.eventsSuspendedForReload)
+						OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
+
+					break;
 				}
 
-				if (!this.eventsSuspendedForReload)
-					OnDisplayElementsSent(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
-			}
-			else
-			{
-				lock (this.repositorySyncObj)
+				case IODirection.Rx:
 				{
-					this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
-					this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					lock (this.repositorySyncObj)
+					{
+						this.bidirRepository.Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+						this.rxRepository   .Enqueue(elements.Clone()); // Clone elements because they are needed again below.
+					}
+
+					if (!this.eventsSuspendedForReload)
+						OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
+
+					break;
 				}
 
-				if (!this.eventsSuspendedForReload)
-					OnDisplayElementsReceived(new DisplayElementsEventArgs(elements)); // No clone needed as the elements must be created when calling this event method.
+				default:
+				{
+					throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction, please report this bug!"));
+				}
 			}
 		}
 
@@ -1985,14 +2012,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesProcessed(SerialDirection direction, List<DisplayLine> lines)
+		protected virtual void OnDisplayLinesProcessed(IODirection d, List<DisplayLine> lines)
 		{
 			if (!this.eventsSuspendedForReload)
 			{
-				if (direction == SerialDirection.Tx)
-					OnDisplayLinesSent(new DisplayLinesEventArgs(lines));
-				else
-					OnDisplayLinesReceived(new DisplayLinesEventArgs(lines));
+				switch (d)
+				{
+					case IODirection.Tx: OnDisplayLinesSent(new DisplayLinesEventArgs(lines));     break;
+					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
+					default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+				}
 			}
 		}
 

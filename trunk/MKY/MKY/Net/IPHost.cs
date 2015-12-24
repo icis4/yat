@@ -116,7 +116,7 @@ namespace MKY.Net
 					case IPHostType.IPv6Localhost: return (IPAddress.IPv6Loopback);
 					case IPHostType.Other:         return (this.otherAddress);
 				}
-				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace MKY.Net
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (this.otherAddress.ToString());
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		/// <summary>
@@ -207,7 +207,7 @@ namespace MKY.Net
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (ToUrlString(this.otherAddress.ToString()));
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#region ToString > Extensions
