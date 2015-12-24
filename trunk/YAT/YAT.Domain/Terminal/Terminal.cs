@@ -888,7 +888,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
@@ -1013,7 +1013,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(Direction.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -1027,7 +1027,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(Direction.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -1041,7 +1041,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, "Break is only supported on serial COM ports"));
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(Direction.Tx, "Break is only supported on serial COM ports"));
 					}
 					break;
 				}
@@ -1382,7 +1382,7 @@ namespace YAT.Domain
 			}
 			else
 			{
-				return (new DisplayElement.IOError((SerialDirection)d, text));
+				return (new DisplayElement.IOError((Direction)d, text));
 			}
 		}
 
@@ -1493,7 +1493,7 @@ namespace YAT.Domain
 					dl.Add(new DisplayElement.TimeInfo(re.TimeStamp));
 
 				if (TerminalSettings.Display.ShowDirection)
-					dl.Add(new DisplayElement.DirectionStamp((SerialDirection)re.Direction));
+					dl.Add(new DisplayElement.DirectionStamp((Direction)re.Direction));
 
 				dl.Add(new DisplayElement.LeftMargin());
 			}
@@ -1508,9 +1508,9 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
-				dl.Add(new DisplayElement.Length((SerialDirection)re.Direction, 1));
+				dl.Add(new DisplayElement.Length((Direction)re.Direction, 1));
 			}
-			dl.Add(new DisplayElement.LineBreak((SerialDirection)re.Direction));
+			dl.Add(new DisplayElement.LineBreak((Direction)re.Direction));
 
 			elements.AddRange(dl.Clone()); // Clone elements because they are needed again a line below.
 			lines.Add(dl);

@@ -185,7 +185,7 @@ namespace YAT.Gui.Forms
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DateInfo(now)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeInfo(now)));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionStamp(Domain.SerialDirection.Tx)));
+			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionStamp(Domain.Direction.Tx)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Length(2)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOError("Message")));
 
@@ -193,7 +193,7 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionStamp(Domain.SerialDirection.Tx));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionStamp(Domain.Direction.Tx));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
@@ -204,7 +204,7 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionStamp(Domain.SerialDirection.Rx));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionStamp(Domain.Direction.Rx));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
