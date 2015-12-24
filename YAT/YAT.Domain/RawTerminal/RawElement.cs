@@ -53,7 +53,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private ReadOnlyCollection<byte> data;
-		private SerialDirection direction;
+		private IODirection direction;
 		private DateTime timeStamp;
 
 		#endregion
@@ -64,19 +64,19 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public RawElement(IEnumerable<byte> data, SerialDirection direction)
+		public RawElement(IEnumerable<byte> data, IODirection direction)
 			: this(data, direction, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(IEnumerable<byte> data, SerialDirection direction, DateTime timeStamp)
+		public RawElement(IEnumerable<byte> data, IODirection direction, DateTime timeStamp)
 		{
 			List<byte> l = new List<byte>();
 			foreach (byte b in data)
 				l.Add(b);
 
-			this.data = new ReadOnlyCollection<byte>(l);
+			this.data      = new ReadOnlyCollection<byte>(l);
 			this.direction = direction;
 			this.timeStamp = timeStamp;
 		}
@@ -95,7 +95,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual SerialDirection Direction
+		public virtual IODirection Direction
 		{
 			get { return (this.direction); }
 		}

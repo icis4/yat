@@ -368,7 +368,7 @@ namespace YAT.Domain
 				// ensures that an outgoing request is shown above the corresponding incoming
 				// response in ther terminal monitor. // See comments in AttachIO() for more
 				// information.
-				RawElement re = new RawElement(data, SerialDirection.Tx);
+				RawElement re = new RawElement(data, IODirection.Tx);
 				lock (this.repositorySyncObj)
 				{
 					this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
@@ -385,7 +385,7 @@ namespace YAT.Domain
 					else
 						message = data.Length + " bytes could not sent!";
 
-					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Output, message));
+					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Tx, message));
 				}
 			}
 			else
@@ -396,7 +396,7 @@ namespace YAT.Domain
 				else
 					message = data.Length + " bytes not sent anymore as terminal has been closed";
 
-				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, message));
+				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Tx, message));
 			}
 		}
 
@@ -417,7 +417,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    l = this.txRepository   .ToElements(); break;
 					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
 					case RepositoryType.Rx:    l = this.rxRepository   .ToElements(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type, please report this bug!"));
 				}
 			}
 			return (l);
@@ -441,7 +441,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type, please report this bug!"));
 				}
 				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
 
@@ -469,7 +469,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    s = this.txRepository   .ToString(indent); break;
 					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
 					case RepositoryType.Rx:    s = this.rxRepository   .ToString(indent); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, " + repositoryType + " is an invalid repository type, please report this bug!"));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type, please report this bug!"));
 				}
 			}
 
@@ -481,7 +481,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			RawElement re = new RawElement(data, SerialDirection.Tx);
+			RawElement re = new RawElement(data, IODirection.Tx);
 			lock (this.repositorySyncObj)
 			{
 				this.txRepository.Enqueue(re.Clone());    // Clone elementas it is needed again below.
@@ -647,7 +647,7 @@ namespace YAT.Domain
 		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			RawElement re = new RawElement(e.Data, SerialDirection.Rx, e.TimeStamp);
+			RawElement re = new RawElement(e.Data, IODirection.Rx, e.TimeStamp);
 
 			lock (this.repositorySyncObj)
 			{

@@ -21,50 +21,36 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-#endregion
-
 namespace MKY.Xml.Serialization
 {
-	/// <summary></summary>
+	/// <summary>
+	/// XML serialization extensions.
+	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class XmlSerializerEx
 	{
-		#region Static Methods
-		//==========================================================================================
-		// Static Methods
-		//==========================================================================================
-
-		#region Static Methods > Serialize
 		//------------------------------------------------------------------------------------------
-		// Static Methods > Serialize
+		// Serialize
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public static void SerializeToFile(string filePath, Type type, object settings)
+		public static void SerializeToFile(string filePath, Type type, object obj)
 		{
 			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
 				XmlSerializer serializer = new XmlSerializer(type);
-				serializer.Serialize(sw, settings);
+				serializer.Serialize(sw, obj);
 			}
 		}
 
-		#endregion
-
-		#region Static Methods > Deserialize
 		//------------------------------------------------------------------------------------------
-		// Static Methods > Deserialize
+		// Deserialize
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -106,10 +92,6 @@ namespace MKY.Xml.Serialization
 			}
 			return (settings);
 		}
-
-		#endregion
-
-		#endregion
 	}
 }
 

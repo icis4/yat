@@ -80,7 +80,7 @@ namespace MKY.IO.Ports
 				case Parity.Mark:  return (Mark_string);
 				case Parity.Space: return (Space_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		/// <summary></summary>
@@ -94,7 +94,7 @@ namespace MKY.IO.Ports
 				case Parity.Mark: return (Mark_stringShort);
 				case Parity.Space: return (Space_stringShort);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion

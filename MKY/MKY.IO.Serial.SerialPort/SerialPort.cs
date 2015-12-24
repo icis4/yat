@@ -1650,7 +1650,7 @@ namespace MKY.IO.Serial.SerialPort
 				case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Serial port input buffer overflow!";          break;
 				case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Serial port input parity error!";             break;
 				case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Serial port output buffer full!";             break;
-				default:   severity = ErrorSeverity.Fatal; direction = Direction.Any;    message = "Unknown serial port error!";                  break;
+				default:   severity = ErrorSeverity.Fatal; direction = Direction.None;   message = "Unknown serial port error!";                  break;
 			}
 			OnIOError(new SerialPortErrorEventArgs(severity, direction, message, e.EventType));
 		}

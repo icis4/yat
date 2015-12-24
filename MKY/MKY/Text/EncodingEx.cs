@@ -759,7 +759,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.Name);
 				}
-				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 			}
 		}
 
@@ -780,7 +780,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.DisplayName);
 				}
-				throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 			}
 		}
 

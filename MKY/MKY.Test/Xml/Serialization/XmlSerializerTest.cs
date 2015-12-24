@@ -29,14 +29,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 using MKY.Collections;
+using MKY.Collections.Generic;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Recent;
-using MKY.Text;
-using MKY.Windows.Forms;
 using MKY.Xml.Serialization;
 
 using NUnit.Framework;
@@ -226,29 +224,6 @@ namespace MKY.Test.Xml.Serialization
 
 		#endregion
 
-		#region Tests > Serialization > Guid
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization > Guid
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestGuidSerialization()
-		{
-			string filePath = "";
-			System.Guid guid;
-
-			filePath = Temp.MakeTempFilePath(GetType(), "Guid", FileExtension);
-			guid = System.Guid.NewGuid();
-			TestSerializationChain(filePath, typeof(System.Guid), guid);
-
-			filePath = Temp.MakeTempFilePath(GetType(), "GuidEmpty", FileExtension);
-			guid = System.Guid.Empty;
-			TestSerializationChain(filePath, typeof(System.Guid), guid);
-		}
-
-		#endregion
-
 		#region Tests > Serialization > Array
 		//------------------------------------------------------------------------------------------
 		// Tests > Serialization > Array
@@ -416,6 +391,66 @@ namespace MKY.Test.Xml.Serialization
 
 		#endregion
 
+		#region Tests > Serialization > KeyValuePair
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > KeyValuePair
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestKeyValuePairSerialization()
+		{
+			string filePath = "";
+
+			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePair", FileExtension);
+			KeyValuePair<int, string> p = new KeyValuePair<int, string>(0, "null");
+			TestSerializationChain(filePath, typeof(KeyValuePair<int, string>), p);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePairList", FileExtension);
+			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>();
+			l.Add(new KeyValuePair<int, string>(1, "eins"));
+			l.Add(new KeyValuePair<int, string>(2, "zwei"));
+			TestSerializationChain(filePath, typeof(List<KeyValuePair<int, string>>), l);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePairArray", FileExtension);
+			KeyValuePair<int, string>[] a = l.ToArray();
+			TestSerializationChain(filePath, typeof(KeyValuePair<int, string>[]), a);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > Pair
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > Pair
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestPairSerialization()
+		{
+			string filePath = "";
+
+			filePath = Temp.MakeTempFilePath(GetType(), "Pair1", FileExtension);
+			Pair<int, string> p1 = new Pair<int, string>(0, "null");
+			TestSerializationChain(filePath, typeof(Pair<int, string>), p1);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "Pair2", FileExtension);
+			Pair<int[], string> p2 = new Pair<int[], string>(new int[] { 0, 1, 2 }, "null");
+			TestSerializationChain(filePath, typeof(Pair<int[], string>), p2);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "PairList", FileExtension);
+			List<Pair<int, string>> l = new List<Pair<int, string>>();
+			l.Add(new Pair<int, string>(1, "eins"));
+			l.Add(new Pair<int, string>(2, "zwei"));
+			TestSerializationChain(filePath, typeof(List<Pair<int, string>>), l);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "PairArray", FileExtension);
+			Pair<int, string>[] a = l.ToArray();
+			TestSerializationChain(filePath, typeof(Pair<int, string>[]), a);
+		}
+
+		#endregion
+
 		#region Tests > Serialization > Recent
 		//------------------------------------------------------------------------------------------
 		// Tests > Serialization > Recent
@@ -432,14 +467,37 @@ namespace MKY.Test.Xml.Serialization
 			TestSerializationChain(filePath, typeof(RecentItem<string>), ri);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemList", FileExtension);
-			List<RecentItem<string>> ril = new List<RecentItem<string>>();
-			ril.Add(new RecentItem<string>("RIL1"));
-			ril.Add(new RecentItem<string>("RIL2"));
-			TestSerializationChain(filePath, typeof(List<RecentItem<string>>), ril);
+			List<RecentItem<string>> l = new List<RecentItem<string>>();
+			l.Add(new RecentItem<string>("RIL1"));
+			l.Add(new RecentItem<string>("RIL2"));
+			TestSerializationChain(filePath, typeof(List<RecentItem<string>>), l);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemArray", FileExtension);
-			RecentItem<string>[] ria = ril.ToArray();
-			TestSerializationChain(filePath, typeof(RecentItem<string>[]), ria);
+			RecentItem<string>[] a = l.ToArray();
+			TestSerializationChain(filePath, typeof(RecentItem<string>[]), a);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > Guid
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > Guid
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestGuidSerialization()
+		{
+			string filePath = "";
+			System.Guid guid;
+
+			filePath = Temp.MakeTempFilePath(GetType(), "Guid", FileExtension);
+			guid = System.Guid.NewGuid();
+			TestSerializationChain(filePath, typeof(System.Guid), guid);
+
+			filePath = Temp.MakeTempFilePath(GetType(), "GuidEmpty", FileExtension);
+			guid = System.Guid.Empty;
+			TestSerializationChain(filePath, typeof(System.Guid), guid);
 		}
 
 		#endregion
@@ -478,8 +536,6 @@ namespace MKY.Test.Xml.Serialization
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
-
-				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML serialize error (using standard serialization): " + ex.Message);
 			}
 		}
@@ -495,11 +551,9 @@ namespace MKY.Test.Xml.Serialization
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
-
-				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML deserialize error (using standard deserialization): " + ex.Message);
 
-				return (null);
+				return (null); // The call above throws an exception, still return in order to successfully compile.
 			}
 		}
 
@@ -514,11 +568,9 @@ namespace MKY.Test.Xml.Serialization
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
-
-				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML deserialize error (using tolerant deserialization): " + ex.Message);
 
-				return (null);
+				return (null); // The call above throws an exception, still return in order to successfully compile.
 			}
 		}
 
@@ -533,11 +585,9 @@ namespace MKY.Test.Xml.Serialization
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(XmlSerializerTest), ex);
-
-				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML deserialize error (using alternate tolerant deserialization): " + ex.Message);
 
-				return (null);
+				return (null); // The call above throws an exception, still return in order to successfully compile.
 			}
 		}
 

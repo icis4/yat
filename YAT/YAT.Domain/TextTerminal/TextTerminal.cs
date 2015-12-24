@@ -97,7 +97,7 @@ namespace YAT.Domain
 
 			public LineState(EolQueue eol)
 			{
-				LinePosition = TextTerminal.LinePosition.Begin;
+				LinePosition = LinePosition.Begin;
 				LineElements = new DisplayLinePart();
 				EolElements  = new DisplayLinePart();
 				Eol = eol;
@@ -105,7 +105,7 @@ namespace YAT.Domain
 
 			public virtual void Reset()
 			{
-				LinePosition = TextTerminal.LinePosition.Begin;
+				LinePosition = LinePosition.Begin;
 				LineElements = new DisplayLinePart();
 				EolElements  = new DisplayLinePart();
 				Eol.Reset();
@@ -116,9 +116,9 @@ namespace YAT.Domain
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
-			public SerialDirection Direction;
+			public IODirection Direction;
 
-			public BidirLineState(bool isFirstLine, SerialDirection direction)
+			public BidirLineState(bool isFirstLine, IODirection direction)
 			{
 				IsFirstLine = isFirstLine;
 				Direction   = direction;
@@ -318,7 +318,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
-				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -407,13 +407,13 @@ namespace YAT.Domain
 			this.txLineState = new LineState(new EolQueue(txEol));
 			this.rxLineState = new LineState(new EolQueue(rxEol));
 
-			this.bidirLineState = new BidirLineState(true, SerialDirection.Tx);
+			this.bidirLineState = new BidirLineState(true, IODirection.Tx);
 
 			this.lineSendDelayState = new LineSendDelayState();
 		}
 
 		/// <summary></summary>
-		protected override DisplayElement ByteToElement(byte b, SerialDirection d, Radix r)
+		protected override DisplayElement ByteToElement(byte b, IODirection d, Radix r)
 		{
 			switch (r)
 			{
@@ -446,7 +446,7 @@ namespace YAT.Domain
 						if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
 						{
 							// Ensure that 'unknown' character 0xFFFD is not decoded yet.
-							int code = (int)chars[0];
+							int code = chars[0];
 							if (code != 0xFFFD)
 							{
 								this.rxDecodingStream.Clear();
@@ -463,10 +463,13 @@ namespace YAT.Domain
 								{
 									StringBuilder sb = new StringBuilder();
 									sb.Append(chars, 0, charCount);
-									if (d == SerialDirection.Tx)
-										return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
-									else
-										return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
+
+									switch (d)
+									{
+										case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
+										case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
+										default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+									}
 								}
 							}
 							else
@@ -487,12 +490,12 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, " + r + " is an invalid radix, please report this bug!"));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix, please report this bug!"));
 				}
 			}
 		}
 
-		private void ExecuteLineBegin(LineState lineState, SerialDirection d, DateTime ts, DisplayElementCollection elements)
+		private void ExecuteLineBegin(LineState lineState, IODirection d, DateTime ts, DisplayElementCollection elements)
 		{
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
 			{
@@ -505,7 +508,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.TimeInfo(ts));
 
 				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionStamp(d));
+					lp.Add(new DisplayElement.DirectionStamp((SerialDirection)d));
 
 				lp.Add(new DisplayElement.LeftMargin());
 
@@ -517,7 +520,7 @@ namespace YAT.Domain
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteData(LineState lineState, SerialDirection d, byte b, DisplayElementCollection elements)
+		private void ExecuteData(LineState lineState, IODirection d, byte b, DisplayElementCollection elements)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
@@ -605,7 +608,7 @@ namespace YAT.Domain
 			elements.AddRange(lp);
 		}
 
-		private void ExecuteLineEnd(LineState lineState, SerialDirection d, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Process EOL.
 			int eolLength = lineState.Eol.EolSequence.Count;
@@ -647,7 +650,7 @@ namespace YAT.Domain
 			// 2009-08-16 / mky
 			// Ran more than 50'000 SIR responses without getting a break here.
 			//
-			if ((d == SerialDirection.Rx) && (line.DataCount > 16))
+			if ((d == IODirection.Rx) && (line.DataCount > 16))
 				System.Diagnostics.Debugger.Break();
 #endif
 
@@ -658,7 +661,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.Length(line.DataCount));
 			}
-			lp.Add(new DisplayElement.LineBreak(d));
+			lp.Add(new DisplayElement.LineBreak((SerialDirection)d));
 
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 
@@ -674,10 +677,12 @@ namespace YAT.Domain
 		protected override void ProcessRawElement(RawElement re, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			LineState lineState;
-			if (re.Direction == SerialDirection.Tx)
-				lineState = this.txLineState;
-			else
-				lineState = this.rxLineState;
+			switch (re.Direction)
+			{
+				case IODirection.Tx: lineState = this.txLineState; break;
+				case IODirection.Rx: lineState = this.rxLineState; break;
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction, please report this bug!"));
+			}
 
 			foreach (byte b in re.Data)
 			{
@@ -694,7 +699,7 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ProcessAndSignalDirectionLineBreak(SerialDirection d)
+		private void ProcessAndSignalDirectionLineBreak(IODirection d)
 		{
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
@@ -705,10 +710,12 @@ namespace YAT.Domain
 				else
 				{
 					LineState lineState; // Attention: Direction changed => Use opposite state.
-					if (d == SerialDirection.Tx)
-						lineState = this.rxLineState;
-					else
-						lineState = this.txLineState;
+					switch (d)
+					{
+						case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
+						case IODirection.Rx: lineState = this.txLineState; break;
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+					}
 
 					if ((lineState.LineElements.Count > 0) &&
 						(d != this.bidirLineState.Direction))
@@ -719,7 +726,7 @@ namespace YAT.Domain
 						ExecuteLineEnd(lineState, d, elements, lines);
 
 						OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
-						OnDisplayLinesProcessed(this.bidirLineState.Direction, lines);
+						OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
 					}
 				}
 			}

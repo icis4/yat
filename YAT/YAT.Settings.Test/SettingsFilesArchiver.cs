@@ -29,15 +29,14 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using System.Xml.Serialization;
 
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
+using MKY.Xml;
 using MKY.Xml.Schema;
 
 using NUnit.Framework;
@@ -79,7 +78,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void ArchiveLocalUserSettings()
 		{
-			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(LocalUserSettingsRoot));
+			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
 			ArchiveSchema (StaticPaths.Path, "LocalUserSettingsSchema",  document);
 			ArchiveDefault(StaticPaths.Path, "LocalUserSettingsDefault", document);
 		}
@@ -98,7 +97,7 @@ namespace YAT.Settings.Test
 			// Terminal settings may rely on properly loaded applications settings.
 			SelectiveTestSetUp();
 
-			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(TerminalSettingsRoot));
+			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(typeof(TerminalSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
 			ArchiveSchema (StaticPaths.Path, "TerminalSettingsSchema",  document);
 			ArchiveDefault(StaticPaths.Path, "TerminalSettingsDefault", document);
 
@@ -119,7 +118,7 @@ namespace YAT.Settings.Test
 			// Workspace settings may rely on properly loaded applications settings.
 			SelectiveTestSetUp();
 
-			XmlDocument document = CreateSchemaAndDefaultDocument(typeof(WorkspaceSettingsRoot));
+			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(typeof(WorkspaceSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
 			ArchiveSchema (StaticPaths.Path, "WorkspaceSettingsSchema",  document);
 			ArchiveDefault(StaticPaths.Path, "WorkspaceSettingsDefault", document);
 
@@ -148,38 +147,6 @@ namespace YAT.Settings.Test
 		{
 			// Close temporary in-memory application settings.
 			ApplicationSettings.Close();
-		}
-
-		private static XmlDocument CreateSchemaAndDefaultDocument(Type type)
-		{
-			ConstructorInfo ci = type.GetConstructor(new Type[] { });
-			object obj = ci.Invoke(new object[] { });
-
-			// Serialize the empty object tree into a string.
-			// Unlike file serialization, this string serialization will be UTF-16 encoded.
-			StringBuilder sb = new StringBuilder();
-			System.Xml.XmlWriter writer = System.Xml.XmlWriter.Create(sb);
-			XmlSerializer serializer = new XmlSerializer(type);
-			serializer.Serialize(writer, obj);
-
-			// Load that string into an XML document that serves as base for new documents.
-			XmlDocument defaultDocument = new XmlDocument();
-			defaultDocument.LoadXml(sb.ToString());
-
-			// Retrieve default schema.
-			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
-			XmlTypeMapping typeMapping = reflectionImporter.ImportTypeMapping(type);
-			XmlSchemas schemas = new XmlSchemas();
-			XmlSchemaExporter schemaExporter = new XmlSchemaExporter(schemas);
-			schemaExporter.ExportTypeMapping(typeMapping);
-
-			// Set and compile default schema.
-			defaultDocument.Schemas.Add(XmlSchemaEx.GuidSchema);
-			defaultDocument.Schemas.Add(schemas[0]);
-			defaultDocument.Schemas.Compile();
-			defaultDocument.Validate(null);
-
-			return (defaultDocument);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -237,8 +204,6 @@ namespace YAT.Settings.Test
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(SettingsFilesArchiver), ex);
-
-				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 		}
@@ -262,8 +227,6 @@ namespace YAT.Settings.Test
 			catch (Exception ex)
 			{
 				TraceEx.WriteException(typeof(SettingsFilesArchiver), ex);
-
-				// Attention: The following call throws an exception, code after the call will not be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 		}

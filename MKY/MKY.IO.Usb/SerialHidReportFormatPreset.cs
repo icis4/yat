@@ -145,7 +145,7 @@ namespace MKY.IO.Usb
 				case SerialHidReportFormatPreset.TI_HidApi: return (TI_HidApi_string);
 				case SerialHidReportFormatPreset.YAT:       return (YAT_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion
@@ -242,7 +242,7 @@ namespace MKY.IO.Usb
 				case SerialHidReportFormatPreset.TI_HidApi: return (new SerialHidReportFormat(true,  TI_ID, true,  false, true ));
 				case SerialHidReportFormatPreset.YAT:		return (new SerialHidReportFormat(true,  0x00,  false, false, true )); // = Common.
 			}
-			throw (new InvalidOperationException("Program execution should never get here, item " + UnderlyingEnum.ToString() + " is unknown, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
 
 		#endregion

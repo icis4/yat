@@ -24,9 +24,6 @@
 using System;
 using System.Collections.Generic;
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -44,16 +41,16 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, string message)
-			: this(severity, IODirection.Any, message)
+			: this(severity, IODirection.None, message)
 		{
 		}
 
 		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message)
 		{
-			this.severity = severity;
+			this.severity  = severity;
 			this.direction = direction;
-			this.message = message;
+			this.message   = message;
 		}
 
 		/// <summary></summary>

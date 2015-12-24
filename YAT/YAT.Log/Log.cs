@@ -259,7 +259,7 @@ namespace YAT.Log
 
 				default:
 				{
-					throw (new InvalidOperationException("Program execution should never get here, '" + this.writeMode + "' is an invalid write mode, please report this bug!"));
+					throw (new NotSupportedException("Program execution should never get here, '" + this.writeMode + "' is an invalid write mode, please report this bug!"));
 				}
 			}
 

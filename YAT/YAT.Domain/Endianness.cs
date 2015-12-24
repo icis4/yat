@@ -24,13 +24,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 using MKY;
 
-// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
-// is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	#region Enum Endianness

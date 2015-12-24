@@ -27,9 +27,9 @@
 //==================================================================================================
 
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using System.Xml.Serialization;
+
+using MKY.Xml.Serialization;
 
 #endregion
 
@@ -44,11 +44,7 @@ namespace YAT.Model.Utilities
 		public static string[] LinesFromFile(string xmlFilePath)
 		{
 			object deserializedLines = null;
-			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
-			{
-				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
-				deserializedLines = serializer.Deserialize(fs);
-			}
+			deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(xmlFilePath, typeof(List<Domain.DisplayLine>));
 
 			List<Domain.DisplayLine> lines = deserializedLines as List<Domain.DisplayLine>;
 			if (lines != null)

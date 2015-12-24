@@ -26,10 +26,6 @@
 // makes the code less readable.
 #pragma warning disable 1591
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
@@ -43,7 +39,7 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	public enum Direction
 	{
-		Any,
+		None,
 		Input,
 		Output,
 	}

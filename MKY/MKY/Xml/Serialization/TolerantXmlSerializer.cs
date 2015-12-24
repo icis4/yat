@@ -79,61 +79,11 @@ namespace MKY.Xml.Serialization
 		public TolerantXmlSerializer(Type type)
 		{
 			this.type = type;
+			this.defaultDocument = XmlDocumentEx.CreateDefaultDocument(type, XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
 
-			// Create an empty object tree of the type to be able to serialize it afterwards.
-			object obj;
-			if (this.type.IsValueType)
-			{
-				obj = Activator.CreateInstance(this.type);
-			}
-			else if (this.type.IsInterface)
-			{
-				throw (new InvalidOperationException("Interfaces cannot be serialized!"));
-			}
-			else // IsClass
-			{
-				if (this.type.IsArray)
-				{
-					obj = Array.CreateInstance(this.type.GetElementType(), 0);
-				}
-				else
-				{
-					ConstructorInfo ci = this.type.GetConstructor(new Type[] { });
-					if (ci != null)
-						obj = ci.Invoke(new object[] { });
-					else
-						throw (new NotImplementedException("Tolerant serialization of type " + this.type.ToString() + " is not yet implemented!"));
-				}
-			}
-
-			// Serialize the empty object tree into a string.
-			// Unlike file serialization, this string serialization will be UTF-16 encoded.
-			StringBuilder sb = new StringBuilder();
-			XmlWriter writer = XmlWriter.Create(sb);
-			XmlSerializer serializer = new XmlSerializer(type);
-			serializer.Serialize(writer, obj);
-
-			// Load that string into an XML document that serves as base for new documents.
-			this.defaultDocument = new XmlDocument();
-			this.defaultDocument.LoadXml(sb.ToString());
-
-			// Retrieve default schema.
-			XmlSchemas schemas = new XmlSchemas();
-			XmlReflectionImporter importer = new XmlReflectionImporter();
-			XmlSchemaExporter exporter = new XmlSchemaExporter(schemas);
-
-			XmlTypeMapping mapping = importer.ImportTypeMapping(type);
-			exporter.ExportTypeMapping(mapping);
-
-			// Set and compile default schema.
-			this.defaultDocument.Schemas.Add(schemas[0]);
-			this.defaultDocument.Schemas.Add(XmlSchemaEx.GuidSchema);
-			this.defaultDocument.Schemas.Compile();
-			this.defaultDocument.Validate(null);
-
-		#if (WRITE_SCHEMAS_TO_FILES)
+#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(this.defaultDocument.Schemas, "DefaultSchema");
-		#endif
+#endif
 		}
 
 		#endregion
@@ -158,7 +108,7 @@ namespace MKY.Xml.Serialization
 		public object Deserialize(TextReader reader)
 		{
 			// Read input stream.
-			XmlDocument inputDocument = CreateDocumentFromInput(reader);
+			XmlDocument inputDocument = XmlDocumentEx.FromReader(reader);
 
 		#if (WRITE_DOCUMENTS_TO_FILES)
 			WriteDocumentToFile(inputDocument, "InputDocument");
@@ -195,7 +145,7 @@ namespace MKY.Xml.Serialization
 		#endif
 
 			// Create object tree from output document.
-			return (CreateObjectTreeFromDocument(outputDocument));
+			return (XmlDocumentEx.ToObjectTree(outputDocument, this.type));
 		}
 
 		#endregion
@@ -235,36 +185,6 @@ namespace MKY.Xml.Serialization
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
-
-		/// <summary>
-		/// Reads XML input stream into a document.
-		/// </summary>
-		private static XmlDocument CreateDocumentFromInput(TextReader inputReader)
-		{
-			XmlDocument document = new XmlDocument();
-			using (XmlReader reader = XmlReader.Create(inputReader))
-			{
-				document.Load(reader);
-			}
-			return (document);
-		}
-
-		/// <summary>
-		/// Creates and returns object tree from document.
-		/// </summary>
-		private object CreateObjectTreeFromDocument(XmlDocument document)
-		{
-			// Save the resulting document into a string.
-			// Unlike file serialization, this string serialization will be UTF-16 encoded.
-			StringBuilder sb = new StringBuilder();
-			XmlWriter writer = XmlWriter.Create(sb);
-			document.Save(writer);
-
-			// Deserialize that string into an object tree.
-			StringReader sr = new StringReader(sb.ToString());
-			XmlSerializer serializer = new XmlSerializer(this.type);
-			return (serializer.Deserialize(sr));
-		}
 
 		/// <summary>
 		/// Recursively traverses documents node-by-node and copies compatible nodes.

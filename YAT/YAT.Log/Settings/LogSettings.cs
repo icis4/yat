@@ -852,7 +852,7 @@ namespace YAT.Log.Settings
 					return (false); // Encoding is inactive for binary terminals.
 				}
 			}
-			throw (new TypeLoadException("Program execution should never get here, " + terminalType + " is an invalid terminal type, please report this bug!"));
+			throw (new TypeLoadException("Program execution should never get here, '" + terminalType + "' is an invalid terminal type, please report this bug!"));
 		}
 
 		#endregion

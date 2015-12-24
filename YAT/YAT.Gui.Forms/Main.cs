@@ -1726,7 +1726,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new InvalidOperationException("Program execution should never get here, " + layout + " is an invalid workspace layout!"));
+					throw (new NotSupportedException("Program execution should never get here, '" + layout + "' is an invalid workspace layout!"));
 			}
 		}
 
