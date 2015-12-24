@@ -32,7 +32,7 @@ namespace YAT.Domain
 	#region Enum TerminalType
 
 	/// <summary></summary>
-	public enum SerialDirection
+	public enum Direction
 	{
 		/// <summary></summary>
 		None,
@@ -50,7 +50,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum SerialDirectionEx.
+	/// Extended enum DirectionEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -58,7 +58,7 @@ namespace YAT.Domain
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class SerialDirectionEx : EnumEx
+	public class DirectionEx : EnumEx
 	{
 		#region String Definitions
 
@@ -69,29 +69,30 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="SerialDirection.None"/>.</summary>
-		public SerialDirectionEx()
-			: base(SerialDirection.None)
+		/// <summary>Default is <see cref="Direction.None"/>.</summary>
+		public DirectionEx()
+			: base(Direction.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected SerialDirectionEx(SerialDirection direction)
+		protected DirectionEx(Direction direction)
 			: base(direction)
 		{
 		}
+
 		#region ToString
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
-			switch ((SerialDirection)UnderlyingEnum)
+			switch ((Direction)UnderlyingEnum)
 			{
-				case SerialDirection.None:  return (None_string);
-				case SerialDirection.Tx:    return (Tx_string);
-				case SerialDirection.Rx:    return (Rx_string);
-				case SerialDirection.Bidir: return (Bidir_string);
+				case Direction.None:  return (None_string);
+				case Direction.Tx:    return (Tx_string);
+				case Direction.Rx:    return (Rx_string);
+				case Direction.Bidir: return (Bidir_string);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
 		}
@@ -101,13 +102,13 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static SerialDirectionEx[] GetItems()
+		public static DirectionEx[] GetItems()
 		{
-			List<SerialDirectionEx> a = new List<SerialDirectionEx>();
-			a.Add(new SerialDirectionEx(SerialDirection.None));
-			a.Add(new SerialDirectionEx(SerialDirection.Tx));
-			a.Add(new SerialDirectionEx(SerialDirection.Rx));
-			a.Add(new SerialDirectionEx(SerialDirection.Bidir));
+			List<DirectionEx> a = new List<DirectionEx>();
+			a.Add(new DirectionEx(Direction.None));
+			a.Add(new DirectionEx(Direction.Tx));
+			a.Add(new DirectionEx(Direction.Rx));
+			a.Add(new DirectionEx(Direction.Bidir));
 			return (a.ToArray());
 		}
 
@@ -118,40 +119,40 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static SerialDirectionEx Parse(string s)
+		public static DirectionEx Parse(string s)
 		{
-			SerialDirectionEx result;
+			DirectionEx result;
 			if (TryParse(s, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid terminal direction string."));
+				throw (new FormatException(@"""" + s + @""" is no valid serial direction string."));
 		}
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out SerialDirectionEx result)
+		public static bool TryParse(string s, out DirectionEx result)
 		{
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
-				result = new SerialDirectionEx(SerialDirection.None);
+				result = new DirectionEx(Direction.None);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tx_string))
 			{
-				result = new SerialDirectionEx(SerialDirection.Tx);
+				result = new DirectionEx(Direction.Tx);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Rx_string))
 			{
-				result = new SerialDirectionEx(SerialDirection.Rx);
+				result = new DirectionEx(Direction.Rx);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Bidir_string))
 			{
-				result = new SerialDirectionEx(SerialDirection.Bidir);
+				result = new DirectionEx(Direction.Bidir);
 				return (true);
 			}
 			else
@@ -166,37 +167,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator SerialDirection(SerialDirectionEx direction)
+		public static implicit operator Direction(DirectionEx direction)
 		{
-			return ((SerialDirection)direction.UnderlyingEnum);
+			return ((Direction)direction.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialDirectionEx(SerialDirection direction)
+		public static implicit operator DirectionEx(Direction direction)
 		{
-			return (new SerialDirectionEx(direction));
+			return (new DirectionEx(direction));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int (SerialDirectionEx direction)
+		public static implicit operator int (DirectionEx direction)
 		{
 			return (direction.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialDirectionEx(int direction)
+		public static implicit operator DirectionEx(int direction)
 		{
-			return (new SerialDirectionEx((SerialDirection)direction));
+			return (new DirectionEx((Direction)direction));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string (SerialDirectionEx direction)
+		public static implicit operator string (DirectionEx direction)
 		{
 			return (direction.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SerialDirectionEx(string direction)
+		public static implicit operator DirectionEx(string direction)
 		{
 			return (Parse(direction));
 		}

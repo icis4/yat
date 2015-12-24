@@ -88,13 +88,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TxData(byte origin, string data)
-				: base(SerialDirection.Tx, origin, data)
+				: base(Direction.Tx, origin, data)
 			{
 			}
 
 			/// <summary></summary>
 			public TxData(byte[] origin, string data, int dataCount)
-				: base(SerialDirection.Tx, origin, data, dataCount)
+				: base(Direction.Tx, origin, data, dataCount)
 			{
 			}
 		}
@@ -111,13 +111,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TxControl(byte origin, string control)
-				: base(SerialDirection.Tx, origin, control)
+				: base(Direction.Tx, origin, control)
 			{
 			}
 
 			/// <summary></summary>
 			public TxControl(byte[] origin, string control, int controlCount)
-				: base(SerialDirection.Tx, origin, control, controlCount)
+				: base(Direction.Tx, origin, control, controlCount)
 			{
 			}
 		}
@@ -134,13 +134,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public RxData(byte origin, string data)
-				: base(SerialDirection.Rx, origin, data)
+				: base(Direction.Rx, origin, data)
 			{
 			}
 
 			/// <summary></summary>
 			public RxData(byte[] origin, string data, int dataCount)
-				: base(SerialDirection.Rx, origin, data, dataCount)
+				: base(Direction.Rx, origin, data, dataCount)
 			{
 			}
 		}
@@ -157,13 +157,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public RxControl(byte origin, string control)
-				: base(SerialDirection.Rx, origin, control)
+				: base(Direction.Rx, origin, control)
 			{
 			}
 
 			/// <summary></summary>
 			public RxControl(byte[] origin, string control, int controlCount)
-				: base(SerialDirection.Rx, origin, control, controlCount)
+				: base(Direction.Rx, origin, control, controlCount)
 			{
 			}
 		}
@@ -187,13 +187,13 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public DateInfo(SerialDirection direction, DateTime timeStamp)
+			public DateInfo(Direction direction, DateTime timeStamp)
 				: base(direction, "(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public DateInfo(SerialDirection direction, string timeStamp)
+			public DateInfo(Direction direction, string timeStamp)
 				: base(direction, timeStamp)
 			{
 			}
@@ -221,13 +221,13 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TimeInfo(SerialDirection direction, DateTime timeStamp)
+			public TimeInfo(Direction direction, DateTime timeStamp)
 				: base(direction, "(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public TimeInfo(SerialDirection direction, string timeStamp)
+			public TimeInfo(Direction direction, string timeStamp)
 				: base(direction, timeStamp)
 			{
 			}
@@ -239,13 +239,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public DirectionStamp()
-				: base(SerialDirection.None, "(" + (SerialDirectionEx)SerialDirection.None + ")")
+				: base(Direction.None, "(" + (DirectionEx)Direction.None + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public DirectionStamp(SerialDirection direction)
-				: base(direction, "(" + (SerialDirectionEx)direction + ")")
+			public DirectionStamp(Direction direction)
+				: base(direction, "(" + (DirectionEx)direction + ")")
 			{
 			}
 		}
@@ -267,13 +267,13 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public Length(SerialDirection direction, int length)
+			public Length(Direction direction, int length)
 				: base(direction, "(" + length + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public Length(SerialDirection direction, string length)
+			public Length(Direction direction, string length)
 				: base(direction, length)
 			{
 			}
@@ -323,7 +323,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public LineBreak(SerialDirection direction)
+			public LineBreak(Direction direction)
 				: base(direction, "")
 			{
 			}
@@ -346,12 +346,12 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public IOError(string message)
-				: this(SerialDirection.None, message)
+				: this(Direction.None, message)
 			{
 			}
 
 			/// <summary></summary>
-			public IOError(SerialDirection direction, string message)
+			public IOError(Direction direction, string message)
 				: base(direction, "<Error: " + message + ">")
 			{
 			}
@@ -364,7 +364,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private SerialDirection direction;
+		private Direction direction;
 		private List<Pair<byte[], string>> origin;
 		private string text;
 		private int dataCount;
@@ -386,37 +386,37 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(string text)
-			: this(SerialDirection.None, text)
+			: this(Direction.None, text)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(SerialDirection direction, string text)
+		private DisplayElement(Direction direction, string text)
 		{
 			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
-		private DisplayElement(SerialDirection direction, byte origin, string text)
+		private DisplayElement(Direction direction, byte origin, string text)
 			: this(direction, new byte[] { origin }, text, 1)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount)
+		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount)
 			: this(direction, origin, text, dataCount, false)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount, bool isEol)
+		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount, bool isEol)
 		{
 			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
 			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, dataCount, true, isEol);
 		}
 
-		private void Initialize(SerialDirection direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol)
+		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol)
 		{
 			this.direction = direction;
 			this.origin    = origin;
@@ -435,7 +435,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlAttribute("Direction")]
-		public virtual SerialDirection Direction
+		public virtual Direction Direction
 		{
 			get { return (this.direction); }
 			set { this.direction = value; }

@@ -502,7 +502,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.TimeInfo(ts));
 
 				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionStamp((SerialDirection)d));
+					lp.Add(new DisplayElement.DirectionStamp((Direction)d));
 
 				lp.Add(new DisplayElement.LeftMargin());
 
@@ -534,7 +534,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.Length(lineLength));
 			}
-			lp.Add(new DisplayElement.LineBreak((SerialDirection)d));
+			lp.Add(new DisplayElement.LineBreak((Direction)d));
 
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);

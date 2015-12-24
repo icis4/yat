@@ -318,7 +318,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(SerialDirection.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -508,7 +508,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.TimeInfo(ts));
 
 				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionStamp((SerialDirection)d));
+					lp.Add(new DisplayElement.DirectionStamp((Direction)d));
 
 				lp.Add(new DisplayElement.LeftMargin());
 
@@ -661,7 +661,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.Length(line.DataCount));
 			}
-			lp.Add(new DisplayElement.LineBreak((SerialDirection)d));
+			lp.Add(new DisplayElement.LineBreak((Direction)d));
 
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 
