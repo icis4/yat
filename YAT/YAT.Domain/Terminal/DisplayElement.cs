@@ -205,9 +205,9 @@ namespace YAT.Domain
 		public class TimeInfo : DisplayElement
 		{
 			/// <remarks>
-			/// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
+			/// Output milliseconds for readability, even though last digit only provides limited accuracy.
 			/// </remarks>
-			public const string Format = "HH:mm:ss.ff0";
+			public const string Format = "HH:mm:ss.fff";
 
 			/// <summary></summary>
 			public TimeInfo()
@@ -516,19 +516,19 @@ namespace YAT.Domain
 
 			DisplayElement clone;
 
-			if      (this is TxData)         clone = new TxData();
-			else if (this is TxControl)      clone = new TxControl();
-			else if (this is RxData)         clone = new RxData();
-			else if (this is RxControl)      clone = new RxControl();
-			else if (this is DateInfo)       clone = new DateInfo();
-			else if (this is TimeInfo)       clone = new TimeInfo();
+			if      (this is TxData)        clone = new TxData();
+			else if (this is TxControl)     clone = new TxControl();
+			else if (this is RxData)        clone = new RxData();
+			else if (this is RxControl)     clone = new RxControl();
+			else if (this is DateInfo)      clone = new DateInfo();
+			else if (this is TimeInfo)      clone = new TimeInfo();
 			else if (this is DirectionInfo) clone = new DirectionInfo();
-			else if (this is Length)         clone = new Length();
-			else if (this is LeftMargin)     clone = new LeftMargin();
-			else if (this is Space)          clone = new Space();
-			else if (this is RightMargin)    clone = new RightMargin();
-			else if (this is LineBreak)      clone = new LineBreak();
-			else if (this is ErrorInfo)        clone = new ErrorInfo();
+			else if (this is Length)        clone = new Length();
+			else if (this is LeftMargin)    clone = new LeftMargin();
+			else if (this is Space)         clone = new Space();
+			else if (this is RightMargin)   clone = new RightMargin();
+			else if (this is LineBreak)     clone = new LineBreak();
+			else if (this is ErrorInfo)     clone = new ErrorInfo();
 			else throw (new TypeLoadException("Program execution should never get here, '" + this + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 
 			clone.direction = this.direction;

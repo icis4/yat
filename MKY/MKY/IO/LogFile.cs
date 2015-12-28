@@ -148,8 +148,8 @@ namespace MKY.IO
 			try
 			{
 				lock (this.writer)
-				{	// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
-					this.writer.WriteLine(now.ToString("yyyy-MM-dd HH:mm:ss.ff0", DateTimeFormatInfo.InvariantInfo) + "  " + line);
+				{	// Output milliseconds for readability, even though last digit only provides limited accuracy.
+					this.writer.WriteLine(now.ToString("yyyy-MM-dd HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo) + "  " + line);
 					this.writer.Flush();
 				}
 			}

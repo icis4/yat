@@ -2479,14 +2479,16 @@ namespace YAT.Model
 					if (ExtensionSettings.IsXmlFile(filePath))
 					{
 						// XML => Read all at once for simplicity:
-						string[] lines = XmlReaderHelper.LinesFromFile(filePath);
+						string[] lines;
+						XmlReaderHelper.LinesFromFile(filePath, out lines);
 						foreach (string line in lines)
 							SendLine(line);
 					}
 					else if (ExtensionSettings.IsRtfFile(filePath))
 					{
 						// RTF => Read all at once for simplicity:
-						string[] lines = RtfReaderHelper.LinesFromRtfFile(filePath);
+						string[] lines;
+						RtfReaderHelper.LinesFromRtfFile(filePath, out lines);
 						foreach (string line in lines)
 							SendLine(line);
 					}
@@ -2503,17 +2505,28 @@ namespace YAT.Model
 				}
 				else
 				{
-					// Binary => Send in chunks to enable breaking:
-					using (FileStream fs = File.OpenRead(filePath))
+					if (ExtensionSettings.IsXmlFile(filePath))
 					{
-						long remaining = fs.Length;
-						while ((remaining > 0) && (!this.terminal.BreakState))
+						// XML => Read all at once for simplicity:
+						string[] lines;
+						XmlReaderHelper.LinesFromFile(filePath, out lines);
+						foreach (string line in lines)
+							SendLine(line);
+					}
+					else
+					{
+						// Binary => Send in chunks to enable breaking:
+						using (FileStream fs = File.OpenRead(filePath))
 						{
-							byte[] a = new byte[1024]; // 1 KB chunks.
-							int n = fs.Read(a, 0, a.Length);
-							Array.Resize<byte>(ref a, n);
-							Send(a);
-							remaining -= n;
+							long remaining = fs.Length;
+							while ((remaining > 0) && (!this.terminal.BreakState))
+							{
+								byte[] a = new byte[1024]; // 1 KB chunks.
+								int n = fs.Read(a, 0, a.Length);
+								Array.Resize<byte>(ref a, n);
+								Send(a);
+								remaining -= n;
+							}
 						}
 					}
 				}
@@ -2522,8 +2535,8 @@ namespace YAT.Model
 			{
 				OnMessageInputRequest
 				(
-					"Error while accessing file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"System error message:"      + Environment.NewLine + ex.Message,
+					"Error reading file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+					ex.Message,
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

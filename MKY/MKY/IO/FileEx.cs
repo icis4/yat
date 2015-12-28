@@ -74,6 +74,28 @@ namespace MKY.IO
 		}
 
 		/// <summary>
+		/// Returns the size of the given file.
+		/// </summary>
+		/// <param name="filePath">The file path.</param>
+		/// <returns>
+		/// The size of the given file.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "fi", Justification = "Required to force exception.")]
+		public static long Size(string filePath)
+		{
+			try
+			{
+				FileInfo fi = new FileInfo(filePath);
+				return (fi.Length);
+			}
+			catch
+			{
+				return (0);
+			}
+		}
+
+		/// <summary>
 		/// Checks whether the given file is readable.
 		/// </summary>
 		/// <param name="filePath">The file path.</param>
