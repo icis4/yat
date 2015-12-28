@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -286,24 +286,24 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep " + ApplicationInfo.ProductName + " open after performing the requested operation.")]
+		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep " + ApplicationInfo.ProductNameConstWorkaround + " open after performing the requested operation.")]
 		public bool KeepOpen;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep " + ApplicationInfo.ProductName + " open in case there is an error while performing the requested operation.")]
+		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep " + ApplicationInfo.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation.")]
 		public bool KeepOpenOnError;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationInfo.ProductName + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
-			"For " + ApplicationInfo.ProductName + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
-			"For " + ApplicationInfo.ProductName + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
+		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationInfo.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationInfo.ProductNameConstWorkaround + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationInfo.ProductNameConstWorkaround + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationInfo.ProductName + " but neither show any dialog nor perform any operation.")]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationInfo.ProductNameConstWorkaround + " but neither show any dialog nor perform any operation.")]
 		public bool Empty;
 
 		#endregion
@@ -428,7 +428,7 @@ namespace YAT.Model
 			string myWorkspace = "MyWorkspace" + YAT.Settings.ExtensionSettings.WorkspaceFile;
 			string myTerminal  = "MyTerminal"  + YAT.Settings.ExtensionSettings.TerminalFile;
 
-			string name = Application.ProductName;
+			string name = ApplicationInfo.ProductName;
 			StringBuilder helpText = new StringBuilder();
 
 			helpText.AppendLine(                                 "Usage:");

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -24,8 +24,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
-
-using MKY.IO.Ports;
 
 namespace MKY.IO.Serial.SerialPort
 {
@@ -369,19 +367,19 @@ namespace MKY.IO.Serial.SerialPort
 			string[] sa = s.Trim().Split(delimiters.ToCharArray());
 			if (sa.Length == 5)
 			{
-				BaudRateEx baudRate;
-				if (BaudRateEx.TryParse(sa[0], out baudRate))
+				MKY.IO.Ports.BaudRateEx baudRate;
+				if (MKY.IO.Ports.BaudRateEx.TryParse(sa[0], out baudRate))
 				{
-					DataBitsEx dataBits;
-					if (DataBitsEx.TryParse(sa[1], out dataBits))
+					MKY.IO.Ports.DataBits dataBits;
+					if (MKY.IO.Ports.DataBitsEx.TryParse(sa[1], out dataBits))
 					{
-						ParityEx parity;
-						if (ParityEx.TryParse(sa[2], out parity))
+						System.IO.Ports.Parity parity;
+						if (MKY.IO.Ports.ParityEx.TryParse(sa[2], out parity))
 						{
-							StopBitsEx stopBits;
-							if (StopBitsEx.TryParse(sa[3], out stopBits))
+							System.IO.Ports.StopBits stopBits;
+							if (MKY.IO.Ports.StopBitsEx.TryParse(sa[3], out stopBits))
 							{
-								SerialFlowControlEx flowControl;
+								SerialFlowControl flowControl;
 								if (SerialFlowControlEx.TryParse(sa[4], out flowControl))
 								{
 									settings = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits, flowControl);

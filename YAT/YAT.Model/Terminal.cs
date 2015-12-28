@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -700,7 +700,7 @@ namespace YAT.Model
 								bool isClient = false;
 								bool isServer = false;
 
-								MKY.IO.Serial.Socket.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket;
+								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket);
 								if (socket != null)
 								{
 									isClient = socket.IsClient;
@@ -759,7 +759,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Serial.Usb.SerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice;
+							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
 							{
 								sb.Append(" - ");
@@ -852,7 +852,7 @@ namespace YAT.Model
 								{
 									int count = 0;
 
-									MKY.IO.Serial.Socket.TcpServer server = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpServer;
+									var server = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpServer);
 									if (server != null)
 										count = server.ConnectedClientCount;
 
@@ -891,7 +891,7 @@ namespace YAT.Model
 								bool isClient = false;
 								bool isServer = false;
 
-								MKY.IO.Serial.Socket.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket;
+								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpAutoSocket);
 								if (socket != null)
 								{
 									isClient = socket.IsClient;
@@ -945,7 +945,7 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Serial.Usb.SerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice;
+							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
 							{
 								sb.Append("USB HID device '");
@@ -2044,8 +2044,7 @@ namespace YAT.Model
 					default:
 					{
 						yatTitle = ApplicationInfo.ProductName + " error:";
-						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown! " +
-						           "Please report this issue as described in YAT > Help > Submit Bug. Thanks.";
+						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown!" + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage;
 						break;
 					}
 				}
@@ -2161,7 +2160,7 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
 			{
-				MKY.IO.Serial.SerialPort.IXOnXOffHandler x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
+				var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 				if (x != null)
 				{
 					// Since the underlying I/O provider's 'DataSent' events are no longer used to
@@ -2189,7 +2188,7 @@ namespace YAT.Model
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable)
 			{
-				MKY.IO.Ports.ISerialPort p = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+				var p = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 				if (p != null)
 					p.ToggleOutputBreak();
 				else
@@ -3005,7 +3004,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.ControlPins);
 				}
@@ -3025,7 +3024,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.ControlPinCount);
 				}
@@ -3043,7 +3042,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.SentXOnCount);
 				}
@@ -3061,7 +3060,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.SentXOffCount);
 				}
@@ -3079,7 +3078,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.ReceivedXOnCount);
 				}
@@ -3097,7 +3096,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.ReceivedXOffCount);
 				}
@@ -3113,7 +3112,7 @@ namespace YAT.Model
 
 			if (UnderlyingIOIsSerialPort)
 			{
-				MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
 					port.ResetFlowControlCount();
 			}
@@ -3128,7 +3127,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.OutputBreakCount);
 				}
@@ -3146,7 +3145,7 @@ namespace YAT.Model
 
 				if (UnderlyingIOIsSerialPort)
 				{
-					MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.InputBreakCount);
 				}
@@ -3162,7 +3161,7 @@ namespace YAT.Model
 
 			if (UnderlyingIOIsSerialPort)
 			{
-				MKY.IO.Serial.SerialPort.SerialPort port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
 					port.ResetBreakCount();
 			}
@@ -3459,7 +3458,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException(@"Program execution should never get here, a 'Message Input' request by terminal """ + Caption + @""" was not processed by the application, please report this bug!"));
+					throw (new InvalidOperationException(@"Program execution should never get here, a 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 
 				return (e.Result);
 			}

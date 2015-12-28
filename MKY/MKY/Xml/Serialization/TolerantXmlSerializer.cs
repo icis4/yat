@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -223,7 +223,7 @@ namespace MKY.Xml.Serialization
 					case XPathNodeType.Attribute:
 					{
 						// Attributes are handled by TryToCopyValue().
-						throw (new InvalidOperationException("Programm execution must never get here, please report this bug!"));
+						throw (new InvalidOperationException("Programm execution must never get here." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 					}
 
 					case XPathNodeType.Root:

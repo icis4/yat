@@ -53,7 +53,7 @@
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="YAT.Domain.DisplayElement.LineLength" Collapsed="true">
+      <Class Name="YAT.Domain.DisplayElement.Length" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>

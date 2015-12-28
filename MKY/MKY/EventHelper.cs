@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -65,7 +65,7 @@ namespace MKY
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
-				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
+				var sinkTarget = (sink.Target as ISynchronizeInvoke);
 				if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
 					InvokeSynchronized(sinkTarget, sink, args);
 				else
@@ -92,7 +92,7 @@ namespace MKY
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
-				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
+				var sinkTarget = (sink.Target as ISynchronizeInvoke);
 				if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
 					InvokeSynchronized(sinkTarget, sink, args);
 				else
@@ -122,7 +122,7 @@ namespace MKY
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
-				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
+				var sinkTarget = (sink.Target as ISynchronizeInvoke);
 				if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
 					InvokeSynchronized(sinkTarget, sink, args);
 				else
@@ -155,14 +155,14 @@ namespace MKY
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
-				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
+				var sinkTarget = (sink.Target as ISynchronizeInvoke);
 				if (sinkTarget != null)          // No need to check for InvokeRequired,
 				{                                //   async always requires invoke.
 					sinkTarget.BeginInvoke(sink, args);
 				}
 				else
 				{
-					AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
+					var asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
 					asyncInvoker.BeginInvoke(sink, args, null, null);
 				}
 			}
@@ -188,14 +188,14 @@ namespace MKY
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
-				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
+				var sinkTarget = (sink.Target as ISynchronizeInvoke);
 				if (sinkTarget != null)          // No need to check for InvokeRequired,
 				{                                //   async always requires invoke.
 					sinkTarget.BeginInvoke(sink, args);
 				}
 				else
 				{
-					AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
+					var asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
 					asyncInvoker.BeginInvoke(sink, args, null, null);
 				}
 			}

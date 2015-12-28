@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -130,7 +130,7 @@ namespace YAT.Gui.Controls
 				if (int.TryParse(textBox_LengthLineBreak.Text, out length) && (length >= 1))
 				{
 					Domain.BinaryLengthLineBreak llb = this.settings.LengthLineBreak;
-					llb.LineLength = length;
+					llb.Length = length;
 					this.settings.LengthLineBreak = llb;
 					SetControls();
 					OnSettingsChanged(EventArgs.Empty);
@@ -238,7 +238,7 @@ namespace YAT.Gui.Controls
 			enabled = this.settings.LengthLineBreak.Enabled;
 			checkBox_LengthLineBreak.Checked = enabled;
 			textBox_LengthLineBreak.Enabled = enabled;
-			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.LineLength.ToString(CultureInfo.CurrentCulture);
+			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.Length.ToString(CultureInfo.CurrentCulture);
 
 			enabled = this.settings.SequenceLineBreak.Enabled;
 			checkBox_SequenceLineBreak.Checked = enabled;

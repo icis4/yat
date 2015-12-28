@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -241,7 +241,7 @@ namespace YAT.Gui.Utilities
 				font  = SetFont (ref timeElements.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref timeElements.Brush, fontColor);
 			}
-			else if (element is Domain.DisplayElement.DirectionStamp)
+			else if (element is Domain.DisplayElement.DirectionInfo)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				fontColor = settings.DirectionFormat.Color;
@@ -265,7 +265,7 @@ namespace YAT.Gui.Utilities
 				font  = SetFont (ref whiteSpacesElements.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref whiteSpacesElements.Brush, fontColor);
 			}
-			else if (element is Domain.DisplayElement.IOError)
+			else if (element is Domain.DisplayElement.ErrorInfo)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -34,7 +34,7 @@ namespace YAT.Domain.Settings
 	public class TextTerminalSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
-		public static readonly string DefaultEol = (string)EolEx.Parse(Environment.NewLine);
+		public static readonly string DefaultEol = EolEx.Parse(Environment.NewLine);
 
 		/// <summary></summary>
 		public static readonly int DefaultEncoding = (EncodingEx)System.Text.Encoding.Default;

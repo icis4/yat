@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -377,7 +377,7 @@ namespace YAT.Domain.Parser
 			MemoryStream byteResult = new MemoryStream();
 			foreach (Result r in typedResult)
 			{
-				ByteArrayResult bar = r as ByteArrayResult;
+				var bar = (r as ByteArrayResult);
 				if (bar != null)
 				{
 					byte[] a = bar.ByteArray;
@@ -464,7 +464,7 @@ namespace YAT.Domain.Parser
 				MemoryStream bytes = new MemoryStream();
 				foreach (Result r in typedResult)
 				{
-					ByteArrayResult bar = r as ByteArrayResult;
+					var bar = (r as ByteArrayResult);
 					if (bar != null)
 					{
 						byte[] a = bar.ByteArray;

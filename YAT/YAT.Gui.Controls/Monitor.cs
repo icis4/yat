@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -576,7 +576,7 @@ namespace YAT.Gui.Controls
 			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
 			foreach (object item in lb.Items)
 			{
-				Domain.DisplayLine line = item as Domain.DisplayLine;
+				var line = (item as Domain.DisplayLine);
 				if (line != null)
 					lines.Add(line);
 			}
@@ -808,7 +808,7 @@ namespace YAT.Gui.Controls
 					SizeF drawnSize;
 
 					e.DrawBackground();
-					Drawing.DrawAndMeasureItem(lb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
+					Drawing.DrawAndMeasureItem((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
 					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
 					e.DrawFocusRectangle();
 
@@ -1046,7 +1046,7 @@ namespace YAT.Gui.Controls
 			foreach (object obj in (this.pendingElementsAndLines))
 			{
 				{
-					Domain.DisplayElement element = (obj as Domain.DisplayElement);
+					var element = (obj as Domain.DisplayElement);
 					if (element != null)
 					{
 						AddElementToListBox(element);
@@ -1054,7 +1054,7 @@ namespace YAT.Gui.Controls
 					}
 				}
 				{
-					List<Domain.DisplayElement> elements = (obj as List<Domain.DisplayElement>);
+					var elements = (obj as List<Domain.DisplayElement>);
 					if (elements != null)
 					{
 						foreach (Domain.DisplayElement element in elements)
@@ -1064,7 +1064,7 @@ namespace YAT.Gui.Controls
 					}
 				}
 				{
-					Domain.DisplayLine line = (obj as Domain.DisplayLine);
+					var line = (obj as Domain.DisplayLine);
 					if (line != null)
 					{
 						foreach (Domain.DisplayElement element in line)
@@ -1074,7 +1074,7 @@ namespace YAT.Gui.Controls
 					}
 				}
 				{
-					List<Domain.DisplayLine> lines = (obj as List<Domain.DisplayLine>);
+					var lines = (obj as List<Domain.DisplayLine>);
 					if (lines != null)
 					{
 						foreach (Domain.DisplayLine line in lines)
@@ -1121,7 +1121,7 @@ namespace YAT.Gui.Controls
 			{
 				// Get current line.
 				int lastLineIndex = lbmon.Items.Count - 1;
-				Domain.DisplayLine current = lbmon.Items[lastLineIndex] as Domain.DisplayLine;
+				Domain.DisplayLine current = (lbmon.Items[lastLineIndex] as Domain.DisplayLine);
 
 				// If first element, add element to line.
 				if (current.Count <= 0)

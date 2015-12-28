@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -391,9 +391,9 @@ namespace YAT.Gui.Forms
 					this.closingState = ClosingState.None;
 					
 					// Also revert closing state for MDI children:
-					foreach (Form f in this.MdiChildren)
+					foreach (var f in this.MdiChildren)
 					{
-						Terminal t = f as Terminal;
+						var t = (f as Terminal);
 						if (t != null)
 							t.RevertClosingState();
 					}
@@ -1925,7 +1925,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!isLayoutingMdi)
 			{
-				Terminal t = (sender as Terminal);
+				var t = (sender as Terminal);
 				if (t != null)
 				{
 					switch (t.WindowState)

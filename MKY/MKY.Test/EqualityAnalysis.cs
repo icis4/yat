@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -121,7 +121,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				ValueTypeWithOperators other = (ValueTypeWithOperators)obj;
+				var other = (ValueTypeWithOperators)obj;
 				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
@@ -138,7 +138,7 @@ namespace MKY.Test
 				if (GetType() != obj.GetType())
 					return (false);
 
-				ValueTypeWithOperators other = (ValueTypeWithOperators)obj;
+				var other = (ValueTypeWithOperators)obj;
 				return (A == other.A);
 
 			#endif
@@ -280,7 +280,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				ValueTypeWithoutOperators other = (ValueTypeWithoutOperators)obj;
+				var other = (ValueTypeWithoutOperators)obj;
 				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
@@ -297,7 +297,7 @@ namespace MKY.Test
 				if (GetType() != obj.GetType())
 					return (false);
 
-				ValueTypeWithoutOperators other = (ValueTypeWithoutOperators)obj;
+				var other = (ValueTypeWithoutOperators)obj;
 				return (A == other.A);
 
 			#endif
@@ -616,7 +616,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				BaseReferenceTypeNotIEquatableWithoutOperators other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
+				var other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
 				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
@@ -633,7 +633,7 @@ namespace MKY.Test
 				if (GetType() != obj.GetType())
 					return (false);
 
-				BaseReferenceTypeNotIEquatableWithoutOperators other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
+				var other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
 				return (A == other.A);
 
 			#endif
@@ -704,7 +704,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				DerivedReferenceTypeNotIEquatableWithoutOperators other = obj as DerivedReferenceTypeNotIEquatableWithoutOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithoutOperators);
 				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
@@ -718,7 +718,7 @@ namespace MKY.Test
 				if (!base.Equals(obj))
 					return (false);
 
-				DerivedReferenceTypeNotIEquatableWithoutOperators other = obj as DerivedReferenceTypeNotIEquatableWithoutOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithoutOperators);
 				return (B == other.B);
 
 			#endif
@@ -968,7 +968,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				BaseReferenceTypeNotIEquatableWithOperators other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
+				var other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
 				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
@@ -985,7 +985,7 @@ namespace MKY.Test
 				if (GetType() != obj.GetType())
 					return (false);
 
-				BaseReferenceTypeNotIEquatableWithOperators other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
+				var other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
 				return (A == other.A);
 
 			#endif
@@ -1121,7 +1121,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				DerivedReferenceTypeNotIEquatableWithOperators other = obj as DerivedReferenceTypeNotIEquatableWithOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithOperators);
 				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
@@ -1135,7 +1135,7 @@ namespace MKY.Test
 				if (!base.Equals(obj))
 					return (false);
 
-				DerivedReferenceTypeNotIEquatableWithOperators other = obj as DerivedReferenceTypeNotIEquatableWithOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithOperators);
 				return (B == other.B);
 
 			#endif
@@ -1270,7 +1270,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				DerivedReferenceTypeNotIEquatableWithDerivedOperators other = obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators);
 				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
@@ -1284,7 +1284,7 @@ namespace MKY.Test
 				if (!base.Equals(obj))
 					return (false);
 
-				DerivedReferenceTypeNotIEquatableWithDerivedOperators other = obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators);
 				return (B == other.B);
 
 			#endif
@@ -1357,7 +1357,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				BaseReferenceTypeNotIEquatableWithBaseOperators other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
+				var other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
 				bool result = (A == other.A);
 
 				Trace.WriteLine("Results in " + result);
@@ -1374,7 +1374,7 @@ namespace MKY.Test
 				if (GetType() != obj.GetType())
 					return (false);
 
-				BaseReferenceTypeNotIEquatableWithBaseOperators other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
+				var other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
 				return (A == other.A);
 
 			#endif
@@ -1517,7 +1517,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				DerivedReferenceTypeNotIEquatableWithBaseOperators other = obj as DerivedReferenceTypeNotIEquatableWithBaseOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithBaseOperators);
 				bool result = (B == other.B);
 
 				Trace.WriteLine("Results in " + result);
@@ -1531,7 +1531,7 @@ namespace MKY.Test
 				if (!base.Equals(obj))
 					return (false);
 
-				DerivedReferenceTypeNotIEquatableWithBaseOperators other = obj as DerivedReferenceTypeNotIEquatableWithBaseOperators;
+				var other = (obj as DerivedReferenceTypeNotIEquatableWithBaseOperators);
 				return (B == other.B);
 
 			#endif
@@ -1777,7 +1777,7 @@ namespace MKY.Test
 					return (false);
 				}
 
-				DerivedReferenceTypeDerivedIEquatableWithBaseOperators other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
+				var other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
 				bool result = (base.Equals(other) && (B == other.B));
 
 				Trace.WriteLine("Results in " + result);
@@ -1794,7 +1794,7 @@ namespace MKY.Test
 				if (GetType() != obj.GetType())
 					return (false);
 
-				DerivedReferenceTypeDerivedIEquatableWithBaseOperators other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
+				var other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
 				return (base.Equals(other) && (B == other.B));
 
 			#endif

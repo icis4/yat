@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -69,14 +69,16 @@ namespace MKY.Windows.Forms
 				case Orientation.Horizontal: return (Horizontal_string);
 				case Orientation.Vertical:   return (Vertical_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static OrientationEx[] GetItems()
 		{
 			List<OrientationEx> a = new List<OrientationEx>();
@@ -95,7 +97,7 @@ namespace MKY.Windows.Forms
 		public static OrientationEx Parse(string s)
 		{
 			OrientationEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid orientation string!"));
@@ -106,21 +108,39 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public static bool TryParse(string s, out OrientationEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
+			Orientation enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new OrientationEx(Orientation.Horizontal);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Vertical_string))
-			{
-				result = new OrientationEx(Orientation.Vertical);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out Orientation result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
+			{
+				result = Orientation.Horizontal;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Vertical_string))
+			{
+				result = Orientation.Vertical;
+				return (true);
+			}
+			else
+			{
+				result = new OrientationEx(); // Default!
 				return (false);
 			}
 		}

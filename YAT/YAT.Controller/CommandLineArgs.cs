@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -55,7 +55,7 @@ namespace YAT.Controller
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NoView", ShortName = "nv", Description = "Start the " + ApplicationInfo.ProductName + " application just on the console, without any GUI at all.")]
+		[OptionArg(Name = "NoView", ShortName = "nv", Description = "Start the " + ApplicationInfo.ProductNameConstWorkaround + " application just on the console, without any GUI at all.")]
 		public bool NoView;
 
 		/// <summary></summary>

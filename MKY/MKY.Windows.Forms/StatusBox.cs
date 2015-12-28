@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -148,12 +148,12 @@ namespace MKY.Windows.Forms
 			DialogResult dialogResult = DialogResult.OK;
 			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting, showCancel);
 
-			ISynchronizeInvoke sinkTarget = owner as ISynchronizeInvoke;
+			var sinkTarget = (owner as ISynchronizeInvoke);
 			if (sinkTarget != null)
 			{
 				if (sinkTarget.InvokeRequired)
 				{
-					ShowDialogDelegate del = new ShowDialogDelegate(staticStatusBox.ShowDialog);
+					var del = new ShowDialogDelegate(staticStatusBox.ShowDialog);
 					object[] args = { owner };
 					dialogResult = (DialogResult)sinkTarget.Invoke(del, args);
 				}
@@ -176,12 +176,12 @@ namespace MKY.Windows.Forms
 		{
 			try
 			{
-				ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+				var sinkTarget = (staticStatusBox as ISynchronizeInvoke);
 				if (sinkTarget != null)
 				{
 					if (sinkTarget.InvokeRequired)
 					{
-						StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus1);
+						var del = new StringMethodDelegate(staticStatusBox.SetStatus1);
 						object[] args = { status };
 						sinkTarget.Invoke(del, args);
 					}
@@ -211,12 +211,12 @@ namespace MKY.Windows.Forms
 		{
 			try
 			{
-				ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+				var sinkTarget = (staticStatusBox as ISynchronizeInvoke);
 				if (sinkTarget != null)
 				{
 					if (sinkTarget.InvokeRequired)
 					{
-						StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus2);
+						var del = new StringMethodDelegate(staticStatusBox.SetStatus2);
 						object[] args = { status };
 						sinkTarget.Invoke(del, args);
 					}
@@ -246,13 +246,13 @@ namespace MKY.Windows.Forms
 		{
 			try
 			{
-				ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+				var sinkTarget = (staticStatusBox as ISynchronizeInvoke);
 				if (sinkTarget != null)
 				{
-					DialogResult dialogResult = DialogResult.OK;
+					var dialogResult = DialogResult.OK;
 					if (sinkTarget.InvokeRequired)
 					{
-						DialogResultMethodDelegate del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
+						var del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
 						object[] args = { dialogResult };
 						sinkTarget.Invoke(del, args);
 					}

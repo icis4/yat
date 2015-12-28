@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -31,6 +31,8 @@ using System.Text;
 
 using MKY.Xml.Serialization;
 
+using YAT.Domain;
+
 #endregion
 
 namespace YAT.Model.Utilities
@@ -44,17 +46,16 @@ namespace YAT.Model.Utilities
 		public static string[] LinesFromFile(string xmlFilePath)
 		{
 			object deserializedLines = null;
-			deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(xmlFilePath, typeof(List<Domain.DisplayLine>));
+			deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(xmlFilePath, typeof(List<DisplayLine>));
 
-			List<Domain.DisplayLine> lines = deserializedLines as List<Domain.DisplayLine>;
+			var lines = (deserializedLines as List<DisplayLine>);
 			if (lines != null)
 			{
-				StringBuilder sb;
 				List<string> linesString = new List<string>();
-				foreach (Domain.DisplayLine line in lines)
+				foreach (DisplayLine line in lines)
 				{
-					sb = new StringBuilder();
-					foreach (Domain.DisplayElement de in line)
+					StringBuilder sb = new StringBuilder();
+					foreach (DisplayElement de in line)
 					{
 						if (de.IsData)
 							sb.Append(de.Text);

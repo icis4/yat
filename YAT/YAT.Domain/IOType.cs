@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -121,7 +121,9 @@ namespace YAT.Domain
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static IOTypeEx[] GetItems()
 		{
 			List<IOTypeEx> a = new List<IOTypeEx>();
@@ -144,7 +146,7 @@ namespace YAT.Domain
 		public static IOTypeEx Parse(string s)
 		{
 			IOTypeEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid I/O type string."));
@@ -155,47 +157,65 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out IOTypeEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_stringShort))
+			IOType enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new IOTypeEx(IOType.SerialPort);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_stringShort))
-			{
-				result = new IOTypeEx(IOType.TcpClient);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_stringShort))
-			{
-				result = new IOTypeEx(IOType.TcpServer);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_stringShort))
-			{
-				result = new IOTypeEx(IOType.TcpAutoSocket);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Udp_stringShort))
-			{
-				result = new IOTypeEx(IOType.Udp);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, UsbSerialHid_string) ||
-					 StringEx.EqualsOrdinalIgnoreCase(s, UsbSerialHid_stringShort))
-			{
-				result = new IOTypeEx(IOType.UsbSerialHid);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out IOType result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, SerialPort_stringShort))
+			{
+				result = IOType.SerialPort;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_stringShort))
+			{
+				result = IOType.TcpClient;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_stringShort))
+			{
+				result = IOType.TcpServer;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_stringShort))
+			{
+				result = IOType.TcpAutoSocket;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Udp_stringShort))
+			{
+				result = IOType.Udp;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UsbSerialHid_string) ||
+					 StringEx.EqualsOrdinalIgnoreCase(s, UsbSerialHid_stringShort))
+			{
+				result = IOType.UsbSerialHid;
+				return (true);
+			}
+			else
+			{
+				result = new IOTypeEx(); // Default!
 				return (false);
 			}
 		}

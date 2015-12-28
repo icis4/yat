@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -90,14 +90,14 @@ namespace YAT.Gui.Forms
 			{
 				case TrackerType.Feature:
 				{
-					filteredAndSortedLink = "http://sourceforge.net/p/y-a-terminal/feature-requests/search/?q=!status%3Aclosed-rejected+%26%26+!status%3Aclosed-duplicate+%26%26+!status%3Awont-fix+%26%26+!status%3Aclosed-fixed+%26%26+!status%3Aclosed&limit=25&page=0&sort=_priority_s%20desc";
-					plainLink             = "http://sourceforge.net/p/y-a-terminal/feature-requests/";
+					filteredAndSortedLink = "https://sourceforge.net/projects/y-a-terminal/feature-requests/search/?q=!status%3Aclosed-rejected+%26%26+!status%3Aclosed-duplicate+%26%26+!status%3Awont-fix+%26%26+!status%3Aclosed-fixed+%26%26+!status%3Aclosed&limit=25&page=0&sort=_priority_s%20desc";
+					plainLink             = "https://sourceforge.net/projects/y-a-terminal/feature-requests/";
 					break;
 				}
 				case TrackerType.Bug:
 				{
-					filteredAndSortedLink = "http://sourceforge.net/p/y-a-terminal/bugs/?q={%22status%22%3A+{%22%24nin%22%3A+[%22closed-rejected%22%2C+%22closed-duplicate%22%2C+%22wont-fix%22%2C+%22closed-fixed%22%2C+%22closed%22]}}&limit=25&page=0&sort=_priority%20desc";
-					plainLink             = "http://sourceforge.net/p/y-a-terminal/bugs/";
+					filteredAndSortedLink = "https://sourceforge.net/projects/y-a-terminal/bugs/?q={%22status%22%3A+{%22%24nin%22%3A+[%22closed-rejected%22%2C+%22closed-duplicate%22%2C+%22wont-fix%22%2C+%22closed-fixed%22%2C+%22closed%22]}}&limit=25&page=0&sort=_priority%20desc";
+					plainLink             = "https://sourceforge.net/projects/y-a-terminal/bugs/";
 					break;
 				}
 			}
@@ -143,7 +143,7 @@ namespace YAT.Gui.Forms
 
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			string link = e.Link.LinkData as string;
+			var link = (e.Link.LinkData as string);
 			if (link != null)
 			{
 				Exception ex;
@@ -162,7 +162,7 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException("Invalid link, program execution should never get here, please report this bug!"));
+				throw (new InvalidOperationException("Invalid link, program execution should never get here." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -34,17 +34,17 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public enum Direction
 	{
-		/// <summary></summary>
-		None,
+		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
+		None = IODirection.None,
+
+		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
+		Tx = IODirection.Tx,
+
+		/// <remarks>Same as <see cref="IODirection"/> to allow casting for optimized speed.</remarks>
+		Rx = IODirection.Rx,
 
 		/// <summary></summary>
-		Tx,
-
-		/// <summary></summary>
-		Rx,
-
-		/// <summary></summary>
-		Bidir
+		Bidir = 3
 	}
 
 	#endregion
@@ -94,14 +94,16 @@ namespace YAT.Domain
 				case Direction.Rx:    return (Rx_string);
 				case Direction.Bidir: return (Bidir_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static DirectionEx[] GetItems()
 		{
 			List<DirectionEx> a = new List<DirectionEx>();
@@ -122,7 +124,7 @@ namespace YAT.Domain
 		public static DirectionEx Parse(string s)
 		{
 			DirectionEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid serial direction string."));
@@ -133,31 +135,49 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out DirectionEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
+			Direction enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new DirectionEx(Direction.None);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tx_string))
-			{
-				result = new DirectionEx(Direction.Tx);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Rx_string))
-			{
-				result = new DirectionEx(Direction.Rx);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Bidir_string))
-			{
-				result = new DirectionEx(Direction.Bidir);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out Direction result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
+			{
+				result = Direction.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tx_string))
+			{
+				result = Direction.Tx;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Rx_string))
+			{
+				result = Direction.Rx;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Bidir_string))
+			{
+				result = Direction.Bidir;
+				return (true);
+			}
+			else
+			{
+				result = new DirectionEx(); // Default!
 				return (false);
 			}
 		}

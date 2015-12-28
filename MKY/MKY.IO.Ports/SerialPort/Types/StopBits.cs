@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -74,14 +74,16 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
 				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static StopBitsEx[] GetItems()
 		{
 			List<StopBitsEx> a = new List<StopBitsEx>();
@@ -102,7 +104,7 @@ namespace MKY.IO.Ports
 		public static StopBitsEx Parse(string s)
 		{
 			StopBitsEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid stop bits string."));
@@ -121,19 +123,51 @@ namespace MKY.IO.Ports
 			return (false);
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out StopBits result)
+		{
+			double doubleResult;
+			if (double.TryParse(s, out doubleResult)) // TryParse() trims whitespace.
+				return (TryFrom(doubleResult, out result));
+
+			result = new StopBitsEx(); // Default!
+			return (false);
+		}
+
 		/// <summary>
-		/// Tries to create a <see cref="StopBitsEx"/> object from the given port number.
+		/// Tries to create an item from the given port number.
 		/// </summary>
 		public static bool TryFrom(double stopBits, out StopBitsEx result)
+		{
+			if (IsValidStopBits(stopBits))
+			{
+				result = stopBits;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Tries to create an item from the given port number.
+		/// </summary>
+		public static bool TryFrom(double stopBits, out StopBits result)
 		{
 			if (IsValidStopBits(stopBits))
 			{
 				result = (StopBitsEx)stopBits;
 				return (true);
 			}
-
-			result = null;
-			return (false);
+			else
+			{
+				result = new StopBitsEx(); // Default!
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
@@ -174,7 +208,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 			}
-			throw (new NotSupportedException("Program execution should never get here, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>

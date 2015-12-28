@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -158,8 +158,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.EolEx eol = comboBox_TxEol.SelectedItem as Domain.EolEx;
-
+				var eol = (comboBox_TxEol.SelectedItem as Domain.EolEx);
 				if (eol != null)
 					this.settingsInEdit.TxEol = eol.ToSequenceString();
 				else
@@ -214,8 +213,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.EolEx eol = comboBox_RxEol.SelectedItem as Domain.EolEx;
-
+				var eol = (comboBox_RxEol.SelectedItem as Domain.EolEx);
 				if (eol != null)
 					this.settingsInEdit.RxEol = eol.ToSequenceString();
 				else

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -541,7 +541,7 @@ namespace MKY.IO.Serial.Socket
 			string[] sa = s.Trim().Split(delimiters.ToCharArray());
 			if (sa.Length == 5)
 			{
-				SocketHostTypeEx hostType;
+				SocketHostType hostType;
 				if (SocketHostTypeEx.TryParse(sa[0], out hostType))
 				{
 					string remoteHost = sa[1].Trim();

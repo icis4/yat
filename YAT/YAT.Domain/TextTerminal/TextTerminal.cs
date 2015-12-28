@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -189,7 +189,7 @@ namespace YAT.Domain
 		{
 			AttachTextTerminalSettings(settings.TextTerminal);
 
-			TextTerminal casted = terminal as TextTerminal;
+			var casted = (terminal as TextTerminal);
 			if (casted != null)
 			{
 				this.rxDecodingStream = casted.rxDecodingStream;
@@ -318,7 +318,7 @@ namespace YAT.Domain
 			if (hasSucceeded)
 				ProcessParsedSendItem(item, parseResult);
 			else
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
@@ -468,7 +468,7 @@ namespace YAT.Domain
 									{
 										case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
 										case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
-										default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+										default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 									}
 								}
 							}
@@ -490,7 +490,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix, please report this bug!"));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 				}
 			}
 		}
@@ -508,7 +508,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.TimeInfo(ts));
 
 				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionStamp((Direction)d));
+					lp.Add(new DisplayElement.DirectionInfo((Direction)d));
 
 				lp.Add(new DisplayElement.LeftMargin());
 
@@ -610,7 +610,7 @@ namespace YAT.Domain
 
 		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			// Process EOL.
+			// Process EOL:
 			int eolLength = lineState.Eol.EolSequence.Count;
 			DisplayLine line = new DisplayLine();
 
@@ -618,43 +618,31 @@ namespace YAT.Domain
 			{
 				line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
 			}
-			else // Remove EOL.
+			else // Remove EOL:
 			{
 				int eolAndWhiteCount = 0;
 				DisplayElement[] des = lineState.LineElements.Clone().ToArray(); // Clone elements to ensure decoupling.
 
-				// Traverse elements reverse and count EOL and white spaces to be removed.
+				// Traverse elements reverse and count EOL and white spaces to be removed:
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
-					// Detect last non-EOL data element.
+					// Detect last non-EOL data element:
 					if (des[i].IsData && !des[i].IsEol)
 						break;
 
 					eolAndWhiteCount++;
 				}
 
-				// Now traverse elements forward and add elements to line.
+				// Now traverse elements forward and add elements to line:
 				for (int i = 0; i < (des.Length - eolAndWhiteCount); i++)
 					line.Add(des[i]); // No clone needed as items have just been cloned futher above.
 
-				// Finally, remove EOL and white spaces from elements.
+				// Finally, remove EOL and white spaces from elements:
 				if (elements.Count >= eolAndWhiteCount)
 					elements.RemoveAtEnd(eolAndWhiteCount);
 			}
 
-#if (FALSE)
-			// \remind:
-			// Break debugger on SIR responses that are mixed up (more than 16 chars without EOL)
-			// Used to debug an issue that is possibly related to #2455804
-			//
-			// 2009-08-16 / mky
-			// Ran more than 50'000 SIR responses without getting a break here.
-			//
-			if ((d == IODirection.Rx) && (line.DataCount > 16))
-				System.Diagnostics.Debugger.Break();
-#endif
-
-			// Process line length.
+			// Process length:
 			DisplayLinePart lp = new DisplayLinePart();
 			if (TerminalSettings.Display.ShowLength)
 			{
@@ -665,11 +653,11 @@ namespace YAT.Domain
 
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 
-			// Also add line end to line and return it.
+			// Also add line end to line and return it:
 			line.AddRange(lp);
 			lines.Add(line);
 
-			// Reset line state.
+			// Reset line state:
 			lineState.Reset();
 		}
 
@@ -681,19 +669,19 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction, please report this bug!"));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 
 			foreach (byte b in re.Data)
 			{
-				// Line begin and time stamp.
+				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
 					ExecuteLineBegin(lineState, re.Direction, re.TimeStamp, elements);
 
-				// Data.
+				// Data:
 				ExecuteData(lineState, re.Direction, b, elements);
 
-				// Line end and length.
+				// Line end and length:
 				if (lineState.LinePosition == LinePosition.End)
 					ExecuteLineEnd(lineState, re.Direction, elements, lines);
 			}
@@ -714,7 +702,7 @@ namespace YAT.Domain
 					{
 						case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 						case IODirection.Rx: lineState = this.txLineState; break;
-						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 					}
 
 					if ((lineState.LineElements.Count > 0) &&
@@ -736,10 +724,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
-			// Check whether direction has changed.
+			// Check whether direction has changed:
 			ProcessAndSignalDirectionLineBreak(re.Direction);
 
-			// Process the raw element.
+			// Process the raw element:
 			base.ProcessAndSignalRawElement(re);
 		}
 

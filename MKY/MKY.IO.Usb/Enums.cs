@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -313,7 +313,7 @@ namespace MKY.IO.Usb
 		public static HidUsagePageEx Parse(string s)
 		{
 			HidUsagePageEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid HID usage page string."));
@@ -324,6 +324,25 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParse(string s, out HidUsagePageEx result)
 		{
+			HidUsagePage enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		[CLSCompliant(false)]
+		public static bool TryParse(string s, out HidUsagePage result)
+		{
 			int intResult;
 			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 			{
@@ -332,7 +351,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				result = null;
+				result = new HidUsagePageEx(); // Default!
 				return (false);
 			}
 		}
@@ -440,7 +459,7 @@ namespace MKY.IO.Usb
 		public static HidUsageIdEx Parse(string s)
 		{
 			HidUsageIdEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid HID usage ID string."));
@@ -451,6 +470,25 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParse(string s, out HidUsageIdEx result)
 		{
+			HidUsageId enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		[CLSCompliant(false)]
+		public static bool TryParse(string s, out HidUsageId result)
+		{
 			int intResult;
 			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 			{
@@ -459,7 +497,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				result = null;
+				result = new HidUsageIdEx(); // Default!
 				return (false);
 			}
 		}

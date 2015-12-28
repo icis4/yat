@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -164,7 +164,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB HID Device object, please report this bug!"));
+						throw (new InvalidOperationException("Invalid state within USB HID Device object." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 
 					if (NativeMessageHandler.MessageSourceIsRegistered)
 					{
@@ -198,7 +198,7 @@ namespace MKY.IO.Usb
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB HID Device object, please report this bug!"));
+						throw (new InvalidOperationException("Invalid state within USB HID Device object." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 
 					if (staticDeviceNotificationHandle != null)
 					{

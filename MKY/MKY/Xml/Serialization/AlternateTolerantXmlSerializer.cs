@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -82,7 +82,7 @@ namespace MKY.Xml.Serialization
 				return (true);
 			
 			// No success, try alternate match.
-			XmlNode inputNode = inputNavigator.UnderlyingObject as XmlNode;
+			var inputNode = (inputNavigator.UnderlyingObject as XmlNode);
 			if (inputNode != null)
 			{
 				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, this.alternates);
@@ -110,7 +110,7 @@ namespace MKY.Xml.Serialization
 				return (true);
 
 			// No success, try alternate match.
-			XmlNode inputNode = inputNavigator.UnderlyingObject as XmlNode;
+			var inputNode = (inputNavigator.UnderlyingObject as XmlNode);
 			if (inputNode != null)
 			{
 				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, this.alternates);

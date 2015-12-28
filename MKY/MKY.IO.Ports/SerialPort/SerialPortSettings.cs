@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -265,19 +265,19 @@ namespace MKY.IO.Ports
 			string[] sa = s.Trim().Split(delimiters.ToCharArray());
 			if (sa.Length == 5)
 			{
-				BaudRateEx baudRate;
+				BaudRate baudRate;
 				if (BaudRateEx.TryParse(sa[0], out baudRate))
 				{
-					DataBitsEx dataBits;
+					DataBits dataBits;
 					if (DataBitsEx.TryParse(sa[1], out dataBits))
 					{
-						ParityEx parity;
+						Parity parity;
 						if (ParityEx.TryParse(sa[2], out parity))
 						{
-							StopBitsEx stopBits;
+							StopBits stopBits;
 							if (StopBitsEx.TryParse(sa[3], out stopBits))
 							{
-								HandshakeEx handshake;
+								Handshake handshake;
 								if (HandshakeEx.TryParse(sa[4], out handshake))
 								{
 									settings = new SerialPortSettings(baudRate, dataBits, parity, stopBits, handshake);

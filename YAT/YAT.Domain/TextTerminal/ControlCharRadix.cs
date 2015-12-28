@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -76,6 +76,12 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary></summary>
+		protected ControlCharRadixEx()
+			: base()
+		{
+		}
+
+		/// <summary></summary>
 		protected ControlCharRadixEx(ControlCharRadix radix)
 			: base((Radix)radix)
 		{
@@ -97,7 +103,9 @@ namespace YAT.Domain
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static new ControlCharRadixEx[] GetItems()
 		{
 			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>();
@@ -119,7 +127,7 @@ namespace YAT.Domain
 		public static new ControlCharRadixEx Parse(string s)
 		{
 			ControlCharRadixEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid control char radix string."));
@@ -129,6 +137,24 @@ namespace YAT.Domain
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		public static bool TryParse(string s, out ControlCharRadixEx result)
+		{
+			ControlCharRadix enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out ControlCharRadix result)
 		{
 			s = s.Trim();
 
@@ -140,9 +166,16 @@ namespace YAT.Domain
 			else
 			{
 				RadixEx radix;
-				bool ret = RadixEx.TryParse(s, out radix);
-				result = (ControlCharRadixEx)radix;
-				return (ret);
+				if (TryParse(s, out radix))
+				{
+					result = (ControlCharRadixEx)radix;
+					return (true);
+				}
+				else
+				{
+					result = new ControlCharRadixEx(); // Default!
+					return (true);
+				}
 			}
 		}
 

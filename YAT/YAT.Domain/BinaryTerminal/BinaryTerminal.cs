@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -333,7 +333,7 @@ namespace YAT.Domain
 		{
 			AttachBinaryTerminalSettings(settings.BinaryTerminal);
 
-			BinaryTerminal casted = terminal as BinaryTerminal;
+			var casted = (terminal as BinaryTerminal);
 			if (casted != null)
 			{
 				this.txLineState = casted.txLineState;
@@ -442,7 +442,7 @@ namespace YAT.Domain
 							OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.Space());
 					}
 
-					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.IOError((Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals"));
+					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo((Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals"));
 					break;
 				}
 
@@ -502,7 +502,7 @@ namespace YAT.Domain
 					lp.Add(new DisplayElement.TimeInfo(ts));
 
 				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionStamp((Direction)d));
+					lp.Add(new DisplayElement.DirectionInfo((Direction)d));
 
 				lp.Add(new DisplayElement.LeftMargin());
 
@@ -525,14 +525,14 @@ namespace YAT.Domain
 
 			if (TerminalSettings.Display.ShowLength)
 			{
-				int lineLength = 0;
+				int length = 0;
 				foreach (DisplayElement e in lineState.LineElements)
 				{
 					if (e.IsData)
-						lineLength += e.DataCount;
+						length += e.DataCount;
 				}
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.Length(lineLength));
+				lp.Add(new DisplayElement.Length(length));
 			}
 			lp.Add(new DisplayElement.LineBreak((Direction)d));
 
@@ -563,14 +563,14 @@ namespace YAT.Domain
 
 		private static void EvaluateLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
 		{
-			int lineLength = 0;
+			int length = 0;
 			foreach (DisplayElement e in lineState.LineElements)
 			{
 				if (e.IsData)
-					lineLength += e.DataCount;
+					length += e.DataCount;
 			}
 
-			if (lineLength >= displaySettings.LengthLineBreak.LineLength)
+			if (length >= displaySettings.LengthLineBreak.Length)
 				lineState.LinePosition = LinePosition.End;
 		}
 
@@ -610,7 +610,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: displaySettings = BinaryTerminalSettings.TxDisplay; break;
 				case IODirection.Rx: displaySettings = BinaryTerminalSettings.RxDisplay; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction, please report this bug!"));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 
 			LineState lineState;
@@ -618,7 +618,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction, please report this bug!"));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 
 			foreach (byte b in re.Data)
@@ -663,7 +663,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 				case IODirection.Rx: lineState = this.txLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
@@ -698,7 +698,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction, please report this bug!"));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 
 			if (lineState.LineElements.Count > 0)

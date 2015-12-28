@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -199,7 +199,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public virtual int CompareTo(object obj)
 		{
-			PredefinedCommandPage other = obj as PredefinedCommandPage;
+			var other = (obj as PredefinedCommandPage);
 			if (other != null)
 				return (string.Compare(this.pageName, other.pageName, StringComparison.CurrentCulture));
 			else
@@ -217,7 +217,7 @@ namespace YAT.Model.Types
 			if (ReferenceEquals(objA, objB))
 				return (0);
 
-			PredefinedCommandPage casted = objA as PredefinedCommandPage;
+			var casted = (objA as PredefinedCommandPage);
 			if (casted != null)
 				return (casted.CompareTo(objB));
 

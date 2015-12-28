@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -145,14 +145,16 @@ namespace MKY.IO.Usb
 				case SerialHidReportFormatPreset.TI_HidApi: return (TI_HidApi_string);
 				case SerialHidReportFormatPreset.YAT:       return (YAT_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static SerialHidReportFormatPresetEx[] GetItems()
 		{
 			List<SerialHidReportFormatPresetEx> a = new List<SerialHidReportFormatPresetEx>();
@@ -175,7 +177,7 @@ namespace MKY.IO.Usb
 		public static SerialHidReportFormatPresetEx Parse(string s)
 		{
 			SerialHidReportFormatPresetEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid preset string."));
@@ -186,41 +188,59 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParse(string s, out SerialHidReportFormatPresetEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.StartsWithAny(s, None_stringStart, StringComparison.OrdinalIgnoreCase))
+			SerialHidReportFormatPreset enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.None);
-				return (true);
-			}
-			else if (StringEx.StartsWithAny(s, Plain_stringStart, StringComparison.OrdinalIgnoreCase))
-			{
-				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Plain);
-				return (true);
-			}
-			else if (StringEx.StartsWithAny(s, Common_stringStart, StringComparison.OrdinalIgnoreCase))
-			{
-				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.Common);
-				return (true);
-			}
-			else if (StringEx.StartsWithAny(s, MT_SerHid_stringStart, StringComparison.OrdinalIgnoreCase))
-			{
-				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.MT_SerHid);
-				return (true);
-			}
-			else if (StringEx.StartsWithAny(s, TI_HidApi_stringStart, StringComparison.OrdinalIgnoreCase))
-			{
-				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.TI_HidApi);
-				return (true);
-			}
-			else if (StringEx.StartsWithAny(s, YAT_stringStart, StringComparison.OrdinalIgnoreCase))
-			{
-				result = new SerialHidReportFormatPresetEx(SerialHidReportFormatPreset.YAT);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SerialHidReportFormatPreset result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.StartsWithAny(s, None_stringStart, StringComparison.OrdinalIgnoreCase))
+			{
+				result = SerialHidReportFormatPreset.None;
+				return (true);
+			}
+			else if (StringEx.StartsWithAny(s, Plain_stringStart, StringComparison.OrdinalIgnoreCase))
+			{
+				result = SerialHidReportFormatPreset.Plain;
+				return (true);
+			}
+			else if (StringEx.StartsWithAny(s, Common_stringStart, StringComparison.OrdinalIgnoreCase))
+			{
+				result = SerialHidReportFormatPreset.Common;
+				return (true);
+			}
+			else if (StringEx.StartsWithAny(s, MT_SerHid_stringStart, StringComparison.OrdinalIgnoreCase))
+			{
+				result = SerialHidReportFormatPreset.MT_SerHid;
+				return (true);
+			}
+			else if (StringEx.StartsWithAny(s, TI_HidApi_stringStart, StringComparison.OrdinalIgnoreCase))
+			{
+				result = SerialHidReportFormatPreset.TI_HidApi;
+				return (true);
+			}
+			else if (StringEx.StartsWithAny(s, YAT_stringStart, StringComparison.OrdinalIgnoreCase))
+			{
+				result = SerialHidReportFormatPreset.YAT;
+				return (true);
+			}
+			else
+			{
+				result = new SerialHidReportFormatPresetEx(); // Default!
 				return (false);
 			}
 		}
@@ -242,7 +262,7 @@ namespace MKY.IO.Usb
 				case SerialHidReportFormatPreset.TI_HidApi: return (new SerialHidReportFormat(true,  TI_ID, true,  false, true ));
 				case SerialHidReportFormatPreset.YAT:		return (new SerialHidReportFormat(true,  0x00,  false, false, true )); // = Common.
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -121,7 +121,7 @@ namespace YAT.Domain
 				case Eol.Tab:  return (Tab_string);
 				case Eol.Nul:  return (Nul_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>
@@ -137,14 +137,16 @@ namespace YAT.Domain
 				case Eol.Tab:  return (Tab_string);
 				case Eol.Nul:  return (Nul_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static EolEx[] GetItems()
 		{
 			List<EolEx> a = new List<EolEx>();
@@ -169,65 +171,83 @@ namespace YAT.Domain
 		public static EolEx Parse(string s)
 		{
 			EolEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid EOL string."));
 		}
 
 		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out EolEx result)
+		{
+			Eol enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
 		/// Opposed to the convention of the .NET framework, whitespace is NOT
 		/// trimmed from <paramref name="s"/> as all EOL sequences are whitespaces.
 		/// </remarks>
-		public static bool TryParse(string s, out EolEx result)
+		public static bool TryParse(string s, out Eol result)
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringSequence))
 			{
-				result = new EolEx(Eol.None);
+				result = Eol.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cr_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Cr_stringNative))
 			{
-				result = new EolEx(Eol.Cr);
+				result = Eol.Cr;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Lf_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Lf_stringNative))
 			{
-				result = new EolEx(Eol.Lf);
+				result = Eol.Lf;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, CrLf_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, CrLf_stringNative))
 			{
-				result = new EolEx(Eol.CrLf);
+				result = Eol.CrLf;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, LfCr_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, LfCr_stringNative))
 			{
-				result = new EolEx(Eol.LfCr);
+				result = Eol.LfCr;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tab_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Tab_stringNative))
 			{
-				result = new EolEx(Eol.Tab);
+				result = Eol.Tab;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Nul_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Nul_stringNative))
 			{
-				result = new EolEx(Eol.Nul);
+				result = Eol.Nul;
 				return (true);
 			}
 			else
 			{
-				result = null;
+				result = new EolEx(); // Default!
 				return (false);
 			}
 		}

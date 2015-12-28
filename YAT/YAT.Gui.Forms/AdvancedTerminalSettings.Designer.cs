@@ -868,9 +868,9 @@
 			this.checkBox_ShowLength.AutoSize = true;
 			this.checkBox_ShowLength.Location = new System.Drawing.Point(131, 164);
 			this.checkBox_ShowLength.Name = "checkBox_ShowLength";
-			this.checkBox_ShowLength.Size = new System.Drawing.Size(104, 17);
+			this.checkBox_ShowLength.Size = new System.Drawing.Size(85, 17);
 			this.checkBox_ShowLength.TabIndex = 12;
-			this.checkBox_ShowLength.Text = "Show line &length";
+			this.checkBox_ShowLength.Text = "Show &length";
 			this.checkBox_ShowLength.CheckedChanged += new System.EventHandler(this.checkBox_ShowLength_CheckedChanged);
 			// 
 			// comboBox_TxRadix
