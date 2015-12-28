@@ -93,6 +93,7 @@
 			this.toolStripMenuItem_MainMenu_Help_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -529,7 +530,7 @@
 			// 
 			this.toolStripMenuItem_MainMenu_Log_AllOn.MergeIndex = 1;
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Name = "toolStripMenuItem_MainMenu_Log_AllOn";
-			this.toolStripMenuItem_MainMenu_Log_AllOn.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_MainMenu_Log_AllOn.Size = new System.Drawing.Size(118, 22);
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Text = "&All On";
 			this.toolStripMenuItem_MainMenu_Log_AllOn.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllOn_Click);
 			// 
@@ -537,13 +538,13 @@
 			// 
 			this.toolStripMenuItem_MainMenu_Log_Separator_1.MergeIndex = 2;
 			this.toolStripMenuItem_MainMenu_Log_Separator_1.Name = "toolStripMenuItem_MainMenu_Log_Separator_1";
-			this.toolStripMenuItem_MainMenu_Log_Separator_1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_MainMenu_Log_Separator_1.Size = new System.Drawing.Size(115, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Log_AllOff
 			// 
 			this.toolStripMenuItem_MainMenu_Log_AllOff.MergeIndex = 4;
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Name = "toolStripMenuItem_MainMenu_Log_AllOff";
-			this.toolStripMenuItem_MainMenu_Log_AllOff.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_MainMenu_Log_AllOff.Size = new System.Drawing.Size(118, 22);
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Text = "A&ll Off";
 			this.toolStripMenuItem_MainMenu_Log_AllOff.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllOff_Click);
 			// 
@@ -551,13 +552,13 @@
 			// 
 			this.toolStripMenuItem_MainMenu_Log_Separator_2.MergeIndex = 5;
 			this.toolStripMenuItem_MainMenu_Log_Separator_2.Name = "toolStripMenuItem_MainMenu_Log_Separator_2";
-			this.toolStripMenuItem_MainMenu_Log_Separator_2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_MainMenu_Log_Separator_2.Size = new System.Drawing.Size(115, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Log_AllClear
 			// 
 			this.toolStripMenuItem_MainMenu_Log_AllClear.MergeIndex = 7;
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Name = "toolStripMenuItem_MainMenu_Log_AllClear";
-			this.toolStripMenuItem_MainMenu_Log_AllClear.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_MainMenu_Log_AllClear.Size = new System.Drawing.Size(118, 22);
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Text = "Clea&r All";
 			this.toolStripMenuItem_MainMenu_Log_AllClear.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Log_AllClear_Click);
 			// 
@@ -643,6 +644,7 @@
             this.toolStripMenuItem_MainMenu_Help_Separator_1,
             this.toolStripMenuItem_MainMenu_Help_ReleaseNotes,
             this.toolStripMenuItem_MainMenu_Help_Separator_2,
+            this.toolStripMenuItem_MainMenu_Help_RequestSupport,
             this.toolStripMenuItem_MainMenu_Help_RequestFeature,
             this.toolStripMenuItem_MainMenu_Help_SubmitBug,
             this.toolStripMenuItem_MainMenu_Help_Separator_3,
@@ -657,51 +659,58 @@
 			this.toolStripMenuItem_MainMenu_Help_Contents.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_help_16x16;
 			this.toolStripMenuItem_MainMenu_Help_Contents.Name = "toolStripMenuItem_MainMenu_Help_Contents";
 			this.toolStripMenuItem_MainMenu_Help_Contents.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(158, 22);
+			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(161, 22);
 			this.toolStripMenuItem_MainMenu_Help_Contents.Text = "&Contents";
 			this.toolStripMenuItem_MainMenu_Help_Contents.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_Contents_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Separator_1
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_1.Name = "toolStripMenuItem_MainMenu_Help_Separator_1";
-			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(155, 6);
+			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(158, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_ReleaseNotes
 			// 
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Name = "toolStripMenuItem_MainMenu_Help_ReleaseNotes";
-			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Size = new System.Drawing.Size(158, 22);
+			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Size = new System.Drawing.Size(161, 22);
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Text = "&Release Notes";
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Separator_2
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_2.Name = "toolStripMenuItem_MainMenu_Help_Separator_2";
-			this.toolStripMenuItem_MainMenu_Help_Separator_2.Size = new System.Drawing.Size(155, 6);
+			this.toolStripMenuItem_MainMenu_Help_Separator_2.Size = new System.Drawing.Size(158, 6);
+			// 
+			// toolStripMenuItem_MainMenu_Help_RequestSupport
+			// 
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Name = "toolStripMenuItem_MainMenu_Help_RequestSupport";
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Size = new System.Drawing.Size(161, 22);
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Text = "Request &Support";
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_RequestSupport_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_RequestFeature
 			// 
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Name = "toolStripMenuItem_MainMenu_Help_RequestFeature";
-			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Size = new System.Drawing.Size(158, 22);
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Size = new System.Drawing.Size(161, 22);
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Text = "Request &Feature";
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_RequestFeature_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_SubmitBug
 			// 
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Name = "toolStripMenuItem_MainMenu_Help_SubmitBug";
-			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Size = new System.Drawing.Size(158, 22);
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Size = new System.Drawing.Size(161, 22);
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Text = "Submit &Bug";
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_SubmitBug_Click);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Separator_3
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_3.Name = "toolStripMenuItem_MainMenu_Help_Separator_3";
-			this.toolStripMenuItem_MainMenu_Help_Separator_3.Size = new System.Drawing.Size(155, 6);
+			this.toolStripMenuItem_MainMenu_Help_Separator_3.Size = new System.Drawing.Size(158, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_About
 			// 
 			this.toolStripMenuItem_MainMenu_Help_About.Image = global::YAT.Gui.Forms.Properties.Resources.Image_YAT_16x16;
 			this.toolStripMenuItem_MainMenu_Help_About.Name = "toolStripMenuItem_MainMenu_Help_About";
-			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(158, 22);
+			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(161, 22);
 			this.toolStripMenuItem_MainMenu_Help_About.Text = "&About...";
 			this.toolStripMenuItem_MainMenu_Help_About.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_About_Click);
 			// 
@@ -761,7 +770,7 @@
 			// 
 			this.toolStripStatusLabel_MainStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_MainStatus_Status.Name = "toolStripStatusLabel_MainStatus_Status";
-			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(730, 19);
+			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(693, 19);
 			this.toolStripStatusLabel_MainStatus_Status.Spring = true;
 			this.toolStripStatusLabel_MainStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_MainStatus_Status.ToolTipText = "Program Status";
@@ -782,8 +791,8 @@
 			this.toolStripStatusLabel_MainStatus_Chrono.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_MainStatus_Chrono.DoubleClickEnabled = true;
 			this.toolStripStatusLabel_MainStatus_Chrono.Name = "toolStripStatusLabel_MainStatus_Chrono";
-			this.toolStripStatusLabel_MainStatus_Chrono.Size = new System.Drawing.Size(47, 19);
-			this.toolStripStatusLabel_MainStatus_Chrono.Text = "0:00.00";
+			this.toolStripStatusLabel_MainStatus_Chrono.Size = new System.Drawing.Size(53, 19);
+			this.toolStripStatusLabel_MainStatus_Chrono.Text = "0:00.000";
 			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.ths), click to Start/Stop, double-click to Reset";
 			this.toolStripStatusLabel_MainStatus_Chrono.Click += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_Click);
 			this.toolStripStatusLabel_MainStatus_Chrono.DoubleClick += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_DoubleClick);
@@ -1285,5 +1294,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_File_SaveWorkspace;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenFile;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_OpenDirectory;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestSupport;
 	}
 }

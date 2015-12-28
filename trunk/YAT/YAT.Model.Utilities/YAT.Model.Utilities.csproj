@@ -112,7 +112,9 @@
     <Compile Include="RtfWriterHelper.cs" />
     <Compile Include="XmlTransfer.cs" />
     <Compile Include="XmlReaderHelper.cs" />
-    <Compile Include="XmlWriterHelper.cs" />
+    <Compile Include="XmlHelper.cs" />
+    <Compile Include="XmlWriterHelperRaw.cs" />
+    <Compile Include="XmlWriterHelperNeat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\YAT.snk" />

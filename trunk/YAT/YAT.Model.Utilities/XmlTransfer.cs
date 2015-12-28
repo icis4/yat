@@ -90,6 +90,7 @@ namespace YAT.Model.Utilities
 	public class XmlTransferRawLine : XmlTransferLine
 	{
 		private byte[] data;
+		private string errorText;
 
 		/// <summary></summary>
 		public XmlTransferRawLine()
@@ -97,18 +98,35 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferRawLine(DateTime timeStamp, Direction direction, int length, byte[] data)
+		public XmlTransferRawLine(DateTime timeStamp, Direction direction, int length, byte[] data, string errorText)
 			: base (timeStamp, direction, length)
 		{
 			this.data = data;
+			this.errorText = errorText;
 		}
 
 		/// <remarks>Data byte array is converted to Base64 encoded string.</remarks>
-		[XmlAttribute("Data")]
-		public virtual string Data
+		[XmlAttribute("DataAsBase64")]
+		public virtual string DataAsBase64
 		{
 			get { return (Convert.ToBase64String(this.data));  }
 			set { this.data = Convert.FromBase64String(value); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual byte[] Data
+		{
+			get { return (this.data); }
+			set { this.data = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("ErrorText")]
+		public virtual string ErrorText
+		{
+			get { return (this.errorText); }
+			set { this.errorText = value; }
 		}
 	}
 

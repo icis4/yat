@@ -94,8 +94,11 @@ New:
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to display the date in addition to the time (related to feature request #14).
 - Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
-- Logging in RTF format implemented (feature requests #233). Note that the log file's RTF structure
+- Logging in RTF format implemented (feature request #233). Note that the log file's RTF structure
   is incomplete while logging is ongoing. The file can only be opened by an RTF reader (e.g. Word)
+  after logging has finished, i.e. logging has been switched off or the terminal is closed.
+- Logging in XML format implemented (feature requests #26 and #27). Note that the log file's XML
+  structure is incomplete while logging is ongoing. The file can only be opened by an XML reader
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
 
 Important changes:
@@ -103,6 +106,8 @@ Important changes:
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
 - Several other menu items and toolbar icons added (includes feature request #222).
+- XML schema on 'Monitor > Save To File...' aligned with XML schema of logging in XML. Schema
+  is saved in additional .xsd file (related to feature requests #26 and #27).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
@@ -158,7 +163,6 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
 - Direct mode does not yet support special formats and commands (feature request #10).
-- XML logging not yet implemented, definition of schema pending (feature requests #26 and #27).
 
 
 YAT 2.0 Gamma 1'' Version 1.99.34 :: 2015-06-13

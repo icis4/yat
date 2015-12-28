@@ -28,14 +28,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Schema;
 
-using MKY.Xml;
 using MKY.Xml.Serialization;
 
 using YAT.Domain;
@@ -47,7 +42,7 @@ namespace YAT.Model.Utilities
 	/// <summary>
 	/// Static utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public static class XmlWriterHelper
+	public static class XmlWriterHelperNeat
 	{
 		/// <returns>Returns <c>true</c> if the line could succesfully be converted.</returns>
 		private static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
@@ -74,7 +69,8 @@ namespace YAT.Model.Utilities
 				// Try to cast to the more frequent Tx/Rx elements first, in order to improve speed!
 				{
 					var casted = (e as DisplayElement.TxData);
-					if (casted != null) {
+					if (casted != null)
+					{
 						textStr += casted.Text;
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -82,7 +78,8 @@ namespace YAT.Model.Utilities
 				}
 				{
 					var casted = (e as DisplayElement.TxControl);
-					if (casted != null) {
+					if (casted != null)
+					{
 						textStr += casted.Text;
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -90,7 +87,8 @@ namespace YAT.Model.Utilities
 				}
 				{
 					var casted = (e as DisplayElement.RxData);
-					if (casted != null) {
+					if (casted != null)
+					{
 						textStr += casted.Text;
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -98,7 +96,8 @@ namespace YAT.Model.Utilities
 				}
 				{
 					var casted = (e as DisplayElement.RxControl);
-					if (casted != null) {
+					if (casted != null)
+					{
 						textStr += casted.Text;
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types!
@@ -106,7 +105,8 @@ namespace YAT.Model.Utilities
 				}
 				{
 					var casted = (e as DisplayElement.ErrorInfo);
-					if (casted != null) {
+					if (casted != null)
+					{
 						errorStr += casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
@@ -223,7 +223,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <returns>Returns the number of lines that could succesfully be written to the file.</returns>
-		public static int LinesToFileNeat(List<DisplayLine> displayLines, string filePath, bool addSchema)
+		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
 			List<XmlTransferNeatLine> transferLines;
 			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
@@ -233,37 +233,13 @@ namespace YAT.Model.Utilities
 				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
 
 				if (addSchema)
-					SchemaToFile(type, Path.GetFullPath(filePath), Path.GetFileNameWithoutExtension(filePath));
+					XmlHelper.SchemaToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
 
 				return (count);
 			}
 			else
 			{
 				return (0);
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static void SchemaToFile(Type type, string path, string fileName)
-		{
-			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(type);
-			int n = document.Schemas.Schemas().Count;
-			int i = 0;
-			foreach (XmlSchema schema in document.Schemas.Schemas())
-			{
-				string filePath;
-				if (n <= 1)
-					filePath = path + fileName + ".xsd";
-				else
-					filePath = path + fileName + "-" + i + ".xsd";
-
-				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-				{
-					schema.Write(sw);
-				}
-
-				i++;
 			}
 		}
 	}

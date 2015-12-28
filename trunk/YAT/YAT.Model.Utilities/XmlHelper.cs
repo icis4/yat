@@ -26,28 +26,46 @@
 // Using
 //==================================================================================================
 
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Windows.Forms;
+using System.Text;
+using System.Xml;
+using System.Xml.Schema;
+
+using MKY.Xml;
 
 #endregion
 
 namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Static utility class providing RTF reader functionality for YAT.
+	/// Static utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public static class RtfReaderHelper
+	public static class XmlHelper
 	{
 		/// <summary></summary>
-		public static int LinesFromRtfFile(string filePath, out string[] lines)
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public static void SchemaToFile(Type type, string directory, string fileName)
 		{
-			RichTextBox richTextProvider = new RichTextBox();
-			using (FileStream fs = File.OpenRead(filePath))
+			XmlDocument document = XmlDocumentEx.CreateDefaultDocument(type);
+			int n = document.Schemas.Schemas().Count;
+			int i = 0;
+			foreach (XmlSchema schema in document.Schemas.Schemas())
 			{
-				richTextProvider.LoadFile(fs, RichTextBoxStreamType.RichText);
+				string filePath;
+				if (n <= 1)
+					filePath = directory + Path.DirectorySeparatorChar + fileName + ".xsd";
+				else
+					filePath = directory + Path.DirectorySeparatorChar + fileName + "-" + i + ".xsd";
+
+				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+				{
+					schema.Write(sw);
+				}
+
+				i++;
 			}
-			lines = richTextProvider.Lines;
-			return (lines.Length);
 		}
 	}
 }

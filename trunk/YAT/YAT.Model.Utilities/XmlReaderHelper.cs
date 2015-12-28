@@ -26,12 +26,14 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Text;
 
+using MKY.IO;
 using MKY.Xml.Serialization;
-
-using YAT.Domain;
 
 #endregion
 
@@ -42,31 +44,122 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public static class XmlReaderHelper
 	{
-		/// <summary></summary>
-		public static string[] LinesFromFile(string xmlFilePath)
+		/// <exception cref="FileNotFoundException">
+		/// A <see cref="FileNotFoundException"/> is thrown if the file could not be found.
+		/// </exception>
+		/// <exception cref="UnauthorizedAccessException">
+		/// A <see cref="UnauthorizedAccessException"/> is thrown if the file could not be accessed.
+		/// </exception>
+		/// <exception cref="InvalidDataException">
+		/// A <see cref="InvalidDataException"/> is thrown if the file is empty or doesn't match the expected XML schema.
+		/// </exception>
+		public static int LinesFromFile(string filePath, out string[] lines)
 		{
-			object deserializedLines = null;
-			deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(xmlFilePath, typeof(List<DisplayLine>));
+			if (!File.Exists(filePath))
+				throw (new FileNotFoundException("File not found!"));
 
-			var lines = (deserializedLines as List<DisplayLine>);
-			if (lines != null)
+			if (!FileEx.IsReadable(filePath))
+				throw (new UnauthorizedAccessException("File not readable!"));
+
+			if (FileEx.Size(filePath) <= 0)
+				throw (new InvalidDataException("File is empty!"));
+
+			StringBuilder sb = new StringBuilder();
+
+			// First, try to deserialize from raw XML file:
+			try
 			{
-				List<string> linesString = new List<string>();
-				foreach (DisplayLine line in lines)
-				{
-					StringBuilder sb = new StringBuilder();
-					foreach (DisplayElement de in line)
-					{
-						if (de.IsData)
-							sb.Append(de.Text);
-					}
-					linesString.Add(sb.ToString());
-				}
+				if (LinesFromRawFile(filePath, out lines) > 0)
+					return (lines.Length);
 
-				return (linesString.ToArray());
+				sb.AppendLine("File does not match the YAT raw XML transfer schema.");
+				sb.AppendLine();
+			}
+			catch (Exception exRaw)
+			{
+				sb.AppendLine(exRaw.Message);
+				sb.AppendLine();
 			}
 
-			return (null);
+			// If raw XML fails, try to deserialize from neat XML file:
+			try
+			{
+				if (LinesFromNeatFile(filePath, out lines) > 0)
+					return (lines.Length);
+
+				sb.AppendLine("File does not match the YAT neat XML transfer schema.");
+				sb.AppendLine();
+			}
+			catch (Exception exNeat)
+			{
+				sb.AppendLine(exNeat.Message);
+				sb.AppendLine();
+			}
+
+			// If both fail, throw:
+			sb.Append("Could not retrieve data from file!");
+			throw (new InvalidDataException(sb.ToString()));
+		}
+
+		private static int LinesFromRawFile(string filePath, out string[] lines)
+		{
+			Type type = typeof(List<XmlTransferRawLine>);
+			object deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+			var rawLines = (deserializedLines as List<XmlTransferRawLine>);
+			if (rawLines != null)
+			{
+				List<string> l = new List<string>();
+				foreach (XmlTransferRawLine rawLine in rawLines)
+				{
+					if (rawLine.Data != null)
+					{
+						StringBuilder sb = new StringBuilder();
+						sb.Append(@"\h(");
+						bool isFirst = true;
+						foreach (byte b in rawLine.Data)
+						{
+							if (isFirst)
+								isFirst = false;
+							else
+								sb.Append(" ");
+
+							sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
+						}
+						sb.Append(")");
+						l.Add(sb.ToString());
+					}
+				}
+				lines = l.ToArray();
+				return (lines.Length);
+			}
+			else
+			{
+				lines = null;
+				return (-1);
+			}
+		}
+
+		private static int LinesFromNeatFile(string filePath, out string[] lines)
+		{
+			Type type = typeof(List<XmlTransferNeatLine>);
+			object deserializedLines = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
+			var neatLines = (deserializedLines as List<XmlTransferNeatLine>);
+			if (neatLines != null)
+			{
+				List<string> l = new List<string>();
+				foreach (XmlTransferNeatLine neatLine in neatLines)
+				{
+					if (neatLine.Text != null)
+						l.Add(neatLine.Text);
+				}
+				lines = l.ToArray();
+				return (lines.Length);
+			}
+			else
+			{
+				lines = null;
+				return (-1);
+			}
 		}
 	}
 }
