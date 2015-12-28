@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -44,20 +44,20 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	[XmlInclude(typeof(DisplayElement.NoData))]
-	[XmlInclude(typeof(DisplayElement.TxData))]
-	[XmlInclude(typeof(DisplayElement.TxControl))]
-	[XmlInclude(typeof(DisplayElement.RxData))]
-	[XmlInclude(typeof(DisplayElement.RxControl))]
-	[XmlInclude(typeof(DisplayElement.DateInfo))]
-	[XmlInclude(typeof(DisplayElement.TimeInfo))]
-	[XmlInclude(typeof(DisplayElement.DirectionStamp))]
-	[XmlInclude(typeof(DisplayElement.Length))]
-	[XmlInclude(typeof(DisplayElement.LeftMargin))]
-	[XmlInclude(typeof(DisplayElement.Space))]
-	[XmlInclude(typeof(DisplayElement.RightMargin))]
-	[XmlInclude(typeof(DisplayElement.LineBreak))]
-	[XmlInclude(typeof(DisplayElement.IOError))]
+	[XmlInclude(typeof(NoData))]
+	[XmlInclude(typeof(TxData))]
+	[XmlInclude(typeof(TxControl))]
+	[XmlInclude(typeof(RxData))]
+	[XmlInclude(typeof(RxControl))]
+	[XmlInclude(typeof(DateInfo))]
+	[XmlInclude(typeof(TimeInfo))]
+	[XmlInclude(typeof(DirectionInfo))]
+	[XmlInclude(typeof(Length))]
+	[XmlInclude(typeof(LeftMargin))]
+	[XmlInclude(typeof(Space))]
+	[XmlInclude(typeof(RightMargin))]
+	[XmlInclude(typeof(LineBreak))]
+	[XmlInclude(typeof(ErrorInfo))]
 	public class DisplayElement
 	{
 		#region Types
@@ -172,7 +172,8 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class DateInfo : DisplayElement
 		{
-			private const string Format = "yyyy-MM-dd";
+			/// <summary></summary>
+			public const string Format = "yyyy-MM-dd";
 
 			/// <summary></summary>
 			public DateInfo()
@@ -206,7 +207,7 @@ namespace YAT.Domain
 			/// <remarks>
 			/// Output milliseconds for readability, but fix last digit to '0' as its accuracy is not given.
 			/// </remarks>
-			private const string Format = "HH:mm:ss.ff0";
+			public const string Format = "HH:mm:ss.ff0";
 
 			/// <summary></summary>
 			public TimeInfo()
@@ -235,16 +236,16 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DirectionStamp : DisplayElement
+		public class DirectionInfo : DisplayElement
 		{
 			/// <summary></summary>
-			public DirectionStamp()
+			public DirectionInfo()
 				: base(Direction.None, "(" + (DirectionEx)Direction.None + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public DirectionStamp(Direction direction)
+			public DirectionInfo(Direction direction)
 				: base(direction, "(" + (DirectionEx)direction + ")")
 			{
 			}
@@ -333,25 +334,25 @@ namespace YAT.Domain
 		/// This element type should rather be called 'Error' because it applies to any errors
 		/// that shall be displayed in the terminal. However, 'Error' is a keyword in certain
 		/// .NET languages such as VB.NET. As a result, any identifier called 'Error' or 'error'
-		/// will cause StyleCop/FxCop to issue a severe warning. So 'IOError' is used instead.
+		/// will cause StyleCop/FxCop to issue a severe warning. So 'ErrorInfo' is used instead.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class IOError : DisplayElement
+		public class ErrorInfo : DisplayElement
 		{
 			/// <summary></summary>
-			public IOError()
+			public ErrorInfo()
 				: base()
 			{
 			}
 
 			/// <summary></summary>
-			public IOError(string message)
+			public ErrorInfo(string message)
 				: this(Direction.None, message)
 			{
 			}
 
 			/// <summary></summary>
-			public IOError(Direction direction, string message)
+			public ErrorInfo(Direction direction, string message)
 				: base(direction, "<Error: " + message + ">")
 			{
 			}
@@ -521,14 +522,14 @@ namespace YAT.Domain
 			else if (this is RxControl)      clone = new RxControl();
 			else if (this is DateInfo)       clone = new DateInfo();
 			else if (this is TimeInfo)       clone = new TimeInfo();
-			else if (this is DirectionStamp) clone = new DirectionStamp();
+			else if (this is DirectionInfo) clone = new DirectionInfo();
 			else if (this is Length)         clone = new Length();
 			else if (this is LeftMargin)     clone = new LeftMargin();
 			else if (this is Space)          clone = new Space();
 			else if (this is RightMargin)    clone = new RightMargin();
 			else if (this is LineBreak)      clone = new LineBreak();
-			else if (this is IOError)        clone = new IOError();
-			else throw (new TypeLoadException("Program execution should never get here, '" + this + "' is an unknown display element type, please report this bug!"));
+			else if (this is ErrorInfo)        clone = new ErrorInfo();
+			else throw (new TypeLoadException("Program execution should never get here, '" + this + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 
 			clone.direction = this.direction;
 			clone.origin    = PerformDeepClone(this.origin);

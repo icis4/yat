@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -27,23 +27,29 @@ using System.Windows.Forms;
 namespace YAT.Utilities
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	public static class ApplicationInfo
 	{
+		/// <summary>
+		/// Constant string to expand the application's product name in places where neither
+		/// <see cref="ProductName"/> nor <see cref="Application.ProductName"/> can be used,
+		/// e.g. in case of attribute arguments.
+		/// </summary>
+		public const string ProductNameConstWorkaround = "YAT";
+
 		/// <summary>The product name.</summary>
-		public const string ProductName = "YAT";
+		public static readonly string ProductName = Application.ProductName;
 
 		/////// <summary>The product name postfix that describes the build.</summary>
-		////public const string ProductBuildName = " Final";
+		////public static readonly string ProductBuildName = " Final";
 
 		/// <summary>The product name postfix that describes the build.</summary>
-		////public const string ProductBuildName = " Gamma 2";
+		////public static readonly string ProductBuildName = " Gamma 2";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
-		public const string ProductBuildName = " Gamma 2 Development";
+		public static readonly string ProductBuildName = " Gamma 2 Development";
 
 		/////// <summary>The product name postfix that describes the build.</summary>
-		////public const string ProductBuildName = " Gamma 2 Preliminary";
+		////public static readonly string ProductBuildName = " Gamma 2 Preliminary";
 
 		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = ProductName + ProductBuildName;
@@ -66,7 +72,7 @@ namespace YAT.Utilities
 			"Supports RS-232/422/423/485...",
 			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
 			"",
-			"Visit YAT at http://sourceforge.net/projects/y-a-terminal.",
+			"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",
 			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
 			"",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",

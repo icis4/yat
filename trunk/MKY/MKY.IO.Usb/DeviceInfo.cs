@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -622,7 +622,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
 		{
-			DeviceInfo other = obj as DeviceInfo;
+			var other = (obj as DeviceInfo);
 			if (other != null)
 			{
 				if      (VendorId != other.VendorId)
@@ -649,7 +649,7 @@ namespace MKY.IO.Usb
 			if (ReferenceEquals(objA, objB))
 				return (0);
 
-			DeviceInfo casted = objA as DeviceInfo;
+			var casted = (objA as DeviceInfo);
 			if (casted != null)
 				return (casted.CompareTo(objB));
 

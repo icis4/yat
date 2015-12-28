@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -1903,7 +1903,7 @@ namespace YAT.Model.Test
 
 		private void terminal2_SaveAsFileDialogRequest_SaveAs(object sender, DialogEventArgs e)
 		{
-			Terminal terminal = sender as Terminal;
+			Terminal terminal = (sender as Terminal);
 			Assert.IsTrue(terminal.SaveAs(this.normalTerminal2FilePath), "Terminal 2 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
@@ -1915,7 +1915,7 @@ namespace YAT.Model.Test
 
 		private void terminal3_SaveAsFileDialogRequest_SaveAsOK(object sender, DialogEventArgs e)
 		{
-			Terminal terminal = sender as Terminal;
+			Terminal terminal = (sender as Terminal);
 			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as!");
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}

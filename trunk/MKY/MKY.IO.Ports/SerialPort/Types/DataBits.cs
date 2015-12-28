@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -85,7 +85,9 @@ namespace MKY.IO.Ports
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static DataBitsEx[] GetItems()
 		{
 			List<DataBitsEx> a = new List<DataBitsEx>();
@@ -106,7 +108,7 @@ namespace MKY.IO.Ports
 		public static DataBitsEx Parse(string s)
 		{
 			DataBitsEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid data bits string."));
@@ -125,19 +127,51 @@ namespace MKY.IO.Ports
 			return (false);
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out DataBits result)
+		{
+			int intResult;
+			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
+				return (TryFrom(intResult, out result));
+
+			result = new DataBitsEx(); // Default!
+			return (false);
+		}
+
 		/// <summary>
-		/// Tries to create a <see cref="DataBitsEx"/> object from the given port number.
+		/// Tries to create an item from the given port number.
 		/// </summary>
 		public static bool TryFrom(int dataBits, out DataBitsEx result)
+		{
+			if (IsValidDataBits(dataBits))
+			{
+				result = dataBits;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Tries to create an item from the given port number.
+		/// </summary>
+		public static bool TryFrom(int dataBits, out DataBits result)
 		{
 			if (IsValidDataBits(dataBits))
 			{
 				result = (DataBitsEx)dataBits;
 				return (true);
 			}
-
-			result = null;
-			return (false);
+			else
+			{
+				result = new DataBitsEx(); // Default!
+				return (false);
+			}
 		}
 
 		/// <summary></summary>

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -81,7 +81,7 @@ namespace YAT.Gui.Forms
 			if (width < width2)
 				width = width2;
 
-			label_Version.Text = "Version " + Application.ProductVersion;
+			label_Version.Text = "Version " + ApplicationInfo.ProductVersion;
 			width2 = label_Version.Left + label_Version.Width + Margin;
 			if (width < width2)
 				width = width2;

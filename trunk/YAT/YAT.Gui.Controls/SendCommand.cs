@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -583,7 +583,7 @@ namespace YAT.Gui.Controls
 
 				if (comboBox_Command.SelectedItem != null)
 				{
-					RecentItem<Command> ri = (comboBox_Command.SelectedItem as RecentItem<Command>);
+					var ri = (comboBox_Command.SelectedItem as RecentItem<Command>);
 					if (ri != null)
 					{
 						this.command = ri.Item;

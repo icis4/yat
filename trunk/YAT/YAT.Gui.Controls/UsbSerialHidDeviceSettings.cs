@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -345,7 +345,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				MKY.IO.Usb.SerialHidReportFormatPresetEx preset = comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidReportFormatPresetEx;
+				var preset = (comboBox_Preset.SelectedItem as MKY.IO.Usb.SerialHidReportFormatPresetEx);
 				if (preset != null)
 				{
 					if (preset != MKY.IO.Usb.SerialHidReportFormatPreset.None)

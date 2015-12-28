@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -43,14 +43,14 @@ namespace YAT.Domain
 
 		/// <summary>In chars or bytes.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public getter/setter is required for default XML serialization/deserialization anyway.")]
-		[XmlElement("LineLength")]
-		public int LineLength;
+		[XmlElement("Length")]
+		public int Length;
 
 		/// <summary></summary>
-		public BinaryLengthLineBreak(bool enabled, int lineLength)
+		public BinaryLengthLineBreak(bool enabled, int length)
 		{
 			Enabled = enabled;
-			LineLength = lineLength;
+			Length  = length;
 		}
 
 		#region Object Members
@@ -73,8 +73,8 @@ namespace YAT.Domain
 			BinaryLengthLineBreak other = (BinaryLengthLineBreak)obj;
 			return
 			(
-				(Enabled    == other.Enabled) &&
-				(LineLength == other.LineLength)
+				(Enabled == other.Enabled) &&
+				(Length  == other.Length)
 			);
 		}
 
@@ -89,8 +89,8 @@ namespace YAT.Domain
 		{
 			return
 			(
-				Enabled   .GetHashCode() ^
-				LineLength.GetHashCode()
+				Enabled.GetHashCode() ^
+				Length .GetHashCode()
 			);
 		}
 
@@ -141,7 +141,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public BinarySequenceLineBreak(bool enabled, string sequence)
 		{
-			Enabled = enabled;
+			Enabled  = enabled;
 			Sequence = sequence;
 		}
 

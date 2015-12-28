@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -190,7 +190,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_Device_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
+				DeviceInfo = (comboBox_Device.SelectedItem as DeviceInfo);
 		}
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)

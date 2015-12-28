@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -29,6 +29,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
+using YAT.Domain;
+
 #endregion
 
 namespace YAT.Model.Utilities
@@ -41,10 +43,12 @@ namespace YAT.Model.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of saving text to a file.
 		/// </remarks>
-		public static void LinesToFile(List<Domain.DisplayLine> lines, string filePath, Settings.FormatSettings formatSettings)
+		public static int LinesToFile(List<DisplayLine> lines, string filePath, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox richTextProvider = RtfWriterHelper.LinesToRichTextBox(lines, formatSettings);
 			richTextProvider.SaveFile(filePath, RichTextBoxStreamType.UnicodePlainText);
+
+			return (lines.Count); // Assume success, an exception should otherwise be thrown above.
 		}
 	}
 }

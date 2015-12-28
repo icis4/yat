@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -29,6 +29,8 @@
 using System;
 using System.IO;
 using System.Text;
+
+using YAT.Domain;
 
 #endregion
 
@@ -123,16 +125,16 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public virtual void WriteLine(Domain.DisplayLine line)
+		public virtual void WriteLine(DisplayLine line)
 		{
 			AssertNotDisposed();
 
 			lock (writerSyncObj)
 			{
-				foreach (Domain.DisplayElement element in line)
+				foreach (DisplayElement element in line)
 				{
 					// Handle line break according to current system:
-					if (element is Domain.DisplayElement.LineBreak)
+					if (element is DisplayElement.LineBreak)
 						this.writer.WriteLine();
 					else
 						this.writer.Write(element.Text);

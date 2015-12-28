@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -291,7 +291,7 @@ namespace YAT.Gui.Controls
 
 				if (pathComboBox_FilePath.SelectedItem != null)
 				{
-					RecentItem<Command> ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
+					var ri = (pathComboBox_FilePath.SelectedItem as RecentItem<Command>);
 					if (ri != null)
 						CreateAndConfirmCommand(ri.Item.FilePath);
 				}
@@ -362,14 +362,14 @@ namespace YAT.Gui.Controls
 			{
 				for (int i = 0; i < pathComboBox_FilePath.Items.Count; i++)
 				{
-					Command c = pathComboBox_FilePath.Items[i] as Command;
+					var c = (pathComboBox_FilePath.Items[i] as Command);
 					if ((c != null) && (c == this.command))
 					{
 						selectedIndex = i;
 						break;
 					}
 
-					RecentItem<Command> r = pathComboBox_FilePath.Items[i] as RecentItem<Command>;
+					var r = (pathComboBox_FilePath.Items[i] as RecentItem<Command>);
 					if ((r != null) && (r.Item == this.command))
 					{
 						selectedIndex = i;

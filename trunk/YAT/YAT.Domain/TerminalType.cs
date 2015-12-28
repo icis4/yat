@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -89,14 +89,16 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (Text_string);
 				case TerminalType.Binary: return (Binary_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new InvalidOperationException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static TerminalTypeEx[] GetItems()
 		{
 			List<TerminalTypeEx> a = new List<TerminalTypeEx>();
@@ -115,7 +117,7 @@ namespace YAT.Domain
 		public static TerminalTypeEx Parse(string s)
 		{
 			TerminalTypeEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid terminal type string."));
@@ -126,25 +128,43 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out TerminalTypeEx result)
 		{
+			TerminalType enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out TerminalType result)
+		{
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Text_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Text_stringShort) ||
 			         s.StartsWith(Text_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
-				result = new TerminalTypeEx(TerminalType.Text);
+				result = TerminalType.Text;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Binary_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Binary_stringShort) ||
 			         s.StartsWith(Binary_stringStart, StringComparison.OrdinalIgnoreCase))
 			{
-				result = new TerminalTypeEx(TerminalType.Binary);
+				result = TerminalType.Binary;
 				return (true);
 			}
 			else
 			{
-				result = null;
+				result = new TerminalTypeEx(); // Default!
 				return (false);
 			}
 		}

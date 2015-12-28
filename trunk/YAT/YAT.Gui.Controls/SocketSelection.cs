@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -333,7 +333,7 @@ namespace YAT.Gui.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				IPHost remoteHost = comboBox_RemoteHost.SelectedItem as IPHost;
+				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHost);
 				if ((remoteHost != null) && (remoteHost.IPAddress != IPAddress.None) && StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = remoteHost;
@@ -415,7 +415,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_LocalInterface_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				LocalInterface = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
+				LocalInterface = (comboBox_LocalInterface.SelectedItem as IPNetworkInterface);
 		}
 
 		private void button_RefreshLocalInterfaces_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -90,7 +90,7 @@ namespace MKY.Collections.Generic
 			if (GetType() != obj.GetType())
 				return (false);
 
-			Pair<T1, T2> other = (Pair<T1, T2>)obj;
+			var other = (Pair<T1, T2>)obj;
 			return
 			(
 				(Value1.Equals(other.Value1)) &&

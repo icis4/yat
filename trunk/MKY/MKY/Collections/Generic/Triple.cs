@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -106,7 +106,7 @@ namespace MKY.Collections.Generic
 			if (GetType() != obj.GetType())
 				return (false);
 
-			Triple<T1, T2, T3> other = (Triple<T1, T2, T3>)obj;
+			var other = (Triple<T1, T2, T3>)obj;
 			return
 			(
 				(Value1.Equals(other.Value1)) &&

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -133,14 +133,16 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Maximize:       return (Maximize_string);
 				case WorkspaceLayout.Minimize:       return (Minimize_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static WorkspaceLayoutEx[] GetItems()
 		{
 			List<WorkspaceLayoutEx> a = new List<WorkspaceLayoutEx>();
@@ -163,7 +165,7 @@ namespace YAT.Model.Types
 		public static WorkspaceLayoutEx Parse(string s)
 		{
 			WorkspaceLayoutEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid workspace layout string!"));
@@ -174,42 +176,60 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static bool TryParse(string s, out WorkspaceLayoutEx result)
 		{
-			s = s.Trim();
-
-			if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string))
+			WorkspaceLayout enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.Manual);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
-			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.Cascade);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileHorizontal_string))
-			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileVertical_string))
-			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.TileVertical);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Maximize_string) ||
-			         string.IsNullOrEmpty(s)) // Default!
-			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.Maximize);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Minimize_string))
-			{
-				result = new WorkspaceLayoutEx(WorkspaceLayout.Minimize);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out WorkspaceLayout result)
+		{
+			s = s.Trim();
+
+			if (StringEx.EqualsOrdinalIgnoreCase(s, Manual_string))
+			{
+				result = WorkspaceLayout.Manual;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cascade_string))
+			{
+				result = WorkspaceLayout.Cascade;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileHorizontal_string))
+			{
+				result = WorkspaceLayout.TileHorizontal;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TileVertical_string))
+			{
+				result = WorkspaceLayout.TileVertical;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Maximize_string) ||
+			         string.IsNullOrEmpty(s)) // Default!
+			{
+				result = WorkspaceLayout.Maximize;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Minimize_string))
+			{
+				result = WorkspaceLayout.Minimize;
+				return (true);
+			}
+			else
+			{
+				result = new WorkspaceLayoutEx(); // Default!
 				return (false);
 			}
 		}
@@ -248,13 +268,13 @@ namespace YAT.Model.Types
 		{
 			switch ((WorkspaceLayout)layout.UnderlyingEnum)
 			{
-				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout', please report this bug!"));
+				case WorkspaceLayout.Manual:         throw (new NotSupportedException("'Manual' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 				case WorkspaceLayout.Cascade:        return (MdiLayout.Cascade);
 				case WorkspaceLayout.TileHorizontal: return (MdiLayout.TileHorizontal);
 				case WorkspaceLayout.TileVertical:   return (MdiLayout.TileVertical);
-				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout', please report this bug!"));
-				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout', please report this bug!"));
-				default:                             throw (new NotSupportedException("Program execution should never get here,'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout, please report this bug!"));
+				case WorkspaceLayout.Maximize:       throw (new NotSupportedException("'Maximize' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				case WorkspaceLayout.Minimize:       throw (new NotSupportedException("'Minimize' is not supported by 'Windows.Forms.MdiLayout'." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default:                             throw (new NotSupportedException("Program execution should never get here,'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is an unknown workspace layout." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -267,8 +287,8 @@ namespace YAT.Model.Types
 				case MdiLayout.Cascade:        return (new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
 				case MdiLayout.TileHorizontal: return (new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
-				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationInfo.ProductName + ", please report this bug!"));
-				default:                       throw (new NotSupportedException("Program execution should never get here,'" + layout + "' is an unknown workspace layout, please report this bug!"));
+				case MdiLayout.ArrangeIcons:   throw (new NotSupportedException("'ArrangeIcons' is not supported by " + ApplicationInfo.ProductName + "." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default:                       throw (new NotSupportedException("Program execution should never get here,'" + layout + "' is an unknown workspace layout." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 

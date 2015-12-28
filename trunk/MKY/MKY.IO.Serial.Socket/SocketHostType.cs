@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -100,7 +100,9 @@ namespace MKY.IO.Serial.Socket
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static SocketHostTypeEx[] GetItems()
 		{
 			List<SocketHostTypeEx> a = new List<SocketHostTypeEx>();
@@ -121,7 +123,7 @@ namespace MKY.IO.Serial.Socket
 		public static SocketHostTypeEx Parse(string s)
 		{
 			SocketHostTypeEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid socket host type string."));
@@ -132,31 +134,49 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static bool TryParse(string s, out SocketHostTypeEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string))
+			SocketHostType enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new SocketHostTypeEx(SocketHostType.TcpClient);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_string))
-			{
-				result = new SocketHostTypeEx(SocketHostType.TcpServer);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string))
-			{
-				result = new SocketHostTypeEx(SocketHostType.TcpAutoSocket);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string))
-			{
-				result = new SocketHostTypeEx(SocketHostType.Udp);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SocketHostType result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string))
+			{
+				result = SocketHostType.TcpClient;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_string))
+			{
+				result = SocketHostType.TcpServer;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string))
+			{
+				result = SocketHostType.TcpAutoSocket;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string))
+			{
+				result = SocketHostType.Udp;
+				return (true);
+			}
+			else
+			{
+				result = new SocketHostTypeEx(); // Default!
 				return (false);
 			}
 		}

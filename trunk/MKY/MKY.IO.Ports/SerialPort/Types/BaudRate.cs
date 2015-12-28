@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -127,7 +127,9 @@ namespace MKY.IO.Ports
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static BaudRateEx[] GetItems()
 		{
 			List<BaudRateEx> a = new List<BaudRateEx>();
@@ -167,7 +169,7 @@ namespace MKY.IO.Ports
 		public static BaudRateEx Parse(string s)
 		{
 			BaudRateEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid baud rate string."));
@@ -181,24 +183,56 @@ namespace MKY.IO.Ports
 			int intResult;
 			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
 				return (TryFrom(intResult, out result));
-			
+
 			result = null;
 			return (false);
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out BaudRate result)
+		{
+			int intResult;
+			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
+				return (TryFrom(intResult, out result));
+
+			result = new BaudRateEx();
+			return (false);
+		}
+
 		/// <summary>
-		/// Tries to create a <see cref="BaudRateEx"/> object from the given port number.
+		/// Tries to create an item from the given port number.
 		/// </summary>
 		public static bool TryFrom(int baudRate, out BaudRateEx result)
 		{
 			if (IsPotentiallyValidBaudRate(baudRate))
 			{
-				result = new BaudRateEx(baudRate);
+				result = baudRate;
 				return (true);
 			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
 
-			result = null;
-			return (false);
+		/// <summary>
+		/// Tries to create an item from the given port number.
+		/// </summary>
+		public static bool TryFrom(int baudRate, out BaudRate result)
+		{
+			if (IsPotentiallyValidBaudRate(baudRate))
+			{
+				result = (BaudRateEx)baudRate;
+				return (true);
+			}
+			else
+			{
+				result = new BaudRateEx(); // Default!
+				return (false);
+			}
 		}
 
 		/// <summary></summary>

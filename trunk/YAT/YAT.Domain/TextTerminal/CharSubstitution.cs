@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -93,14 +93,16 @@ namespace YAT.Domain
 				case CharSubstitution.ToUpper: return (ToUpper_string);
 				case CharSubstitution.ToLower: return (ToLower_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static CharSubstitutionEx[] GetItems()
 		{
 			List<CharSubstitutionEx> a = new List<CharSubstitutionEx>();
@@ -120,7 +122,7 @@ namespace YAT.Domain
 		public static CharSubstitutionEx Parse(string s)
 		{
 			CharSubstitutionEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid char substitution string."));
@@ -131,27 +133,45 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out CharSubstitutionEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
+			CharSubstitution enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new CharSubstitutionEx(CharSubstitution.ToUpper);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToLower_string))
-			{
-				result = new CharSubstitutionEx(CharSubstitution.ToLower);
-				return (true);
-			}
-			else if ((StringEx.EqualsOrdinalIgnoreCase(s, None_string)) ||
-			         (string.IsNullOrEmpty(s))) // Default!
-			{
-				result = new CharSubstitutionEx(CharSubstitution.None);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out CharSubstitution result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
+			{
+				result = CharSubstitution.ToUpper;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToLower_string))
+			{
+				result = CharSubstitution.ToLower;
+				return (true);
+			}
+			else if ((StringEx.EqualsOrdinalIgnoreCase(s, None_string)) ||
+			         (string.IsNullOrEmpty(s))) // Default!
+			{
+				result = CharSubstitution.None;
+				return (true);
+			}
+			else
+			{
+				result = new CharSubstitutionEx(); // Default!
 				return (false);
 			}
 		}

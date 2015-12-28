@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -681,7 +681,7 @@ namespace MKY.Text
 	#endregion
 
 	/// <summary>
-	/// Extended enum XEncoding.
+	/// Extended enum EncodingEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -759,7 +759,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.Name);
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -780,7 +780,7 @@ namespace MKY.Text
 					if ((int)((SupportedEncoding)UnderlyingEnum) == info.CodePage)
 						return (info.DisplayName);
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -878,6 +878,9 @@ namespace MKY.Text
 		/// <summary>
 		/// Returns all available encodings in a useful order.
 		/// </summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static EncodingEx[] GetItems()
 		{
 			List<EncodingEx> a = new List<EncodingEx>();
@@ -1065,7 +1068,7 @@ namespace MKY.Text
 		public static EncodingEx Parse(string s)
 		{
 			EncodingEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid encoding string!"));

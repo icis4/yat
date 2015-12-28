@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -113,14 +113,16 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static KeywordEx[] GetItems()
 		{
 			List<KeywordEx> a = new List<KeywordEx>();
@@ -146,7 +148,7 @@ namespace YAT.Domain.Parser
 		public static KeywordEx Parse(string s)
 		{
 			KeywordEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid keyword."));
@@ -157,56 +159,74 @@ namespace YAT.Domain.Parser
 		/// </remarks>
 		public static bool TryParse(string s, out KeywordEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
+			Keyword enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new KeywordEx(Keyword.Clear);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Delay_string))
-			{
-				result = new KeywordEx(Keyword.Delay);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineDelay_string))
-			{
-				result = new KeywordEx(Keyword.LineDelay);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineRepeat_string))
-			{
-				result = new KeywordEx(Keyword.LineRepeat);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Eol_string))
-			{
-				result = new KeywordEx(Keyword.Eol);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, NoEol_string))
-			{
-				result = new KeywordEx(Keyword.NoEol);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOn_string))
-			{
-				result = new KeywordEx(Keyword.OutputBreakOn);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOff_string))
-			{
-				result = new KeywordEx(Keyword.OutputBreakOff);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakToggle_string))
-			{
-				result = new KeywordEx(Keyword.OutputBreakToggle);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out Keyword result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
+			{
+				result = Keyword.Clear;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Delay_string))
+			{
+				result = Keyword.Delay;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineDelay_string))
+			{
+				result = Keyword.LineDelay;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LineRepeat_string))
+			{
+				result = Keyword.LineRepeat;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Eol_string))
+			{
+				result = Keyword.Eol;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, NoEol_string))
+			{
+				result = Keyword.NoEol;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOn_string))
+			{
+				result = Keyword.OutputBreakOn;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOff_string))
+			{
+				result = Keyword.OutputBreakOff;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakToggle_string))
+			{
+				result = Keyword.OutputBreakToggle;
+				return (true);
+			}
+			else
+			{
+				result = new KeywordEx(); // Default!
 				return (false);
 			}
 		}

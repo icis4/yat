@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -128,7 +128,9 @@ namespace MKY.IO.Serial.SerialPort
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static new SerialFlowControlEx[] GetItems()
 		{
 			List<SerialFlowControlEx> a = new List<SerialFlowControlEx>();
@@ -164,47 +166,65 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static bool TryParse(string s, out SerialFlowControlEx result)
 		{
+			SerialFlowControl enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out SerialFlowControl result)
+		{
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualHardware_stringAlternatives))
 			{
-				result = new SerialFlowControlEx(SerialFlowControl.ManualHardware);
+				result = SerialFlowControl.ManualHardware;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ManualSoftware_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualSoftware_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualSoftware_stringAlternatives))
 			{
-				result = new SerialFlowControlEx(SerialFlowControl.ManualSoftware);
+				result = SerialFlowControl.ManualSoftware;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ManualCombined_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualCombined_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualCombined_stringAlternatives))
 			{
-				result = new SerialFlowControlEx(SerialFlowControl.ManualCombined);
+				result = SerialFlowControl.ManualCombined;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (s, RS485_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (s, RS485_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, RS485_stringAlternatives))
 			{
-				result = new SerialFlowControlEx(SerialFlowControl.RS485);
+				result = SerialFlowControl.RS485;
 				return (true);
 			}
 			else
 			{
-				Ports.HandshakeEx handshake;
-				if (Ports.HandshakeEx.TryParse(s, out handshake))
+				System.IO.Ports.Handshake handshake;
+				if (TryParse(s, out handshake))
 				{
-					result = new SerialFlowControlEx((SerialFlowControl)(System.IO.Ports.Handshake)handshake);
+					result = new SerialFlowControlEx((SerialFlowControlEx)handshake);
 					return (true);
 				}
 				else
 				{
-					result = null;
+					result = new SerialFlowControlEx(); // Default!
 					return (false);
 				}
 			}

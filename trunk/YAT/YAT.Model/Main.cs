@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -638,7 +638,7 @@ namespace YAT.Model
 		{
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
 			{
-				Domain.TerminalTypeEx terminalType;
+				Domain.TerminalType terminalType;
 				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
 					terminalSettings.TerminalType = terminalType;
 				else
@@ -647,7 +647,7 @@ namespace YAT.Model
 
 			if (this.commandLineArgs.OptionIsGiven("PortType"))
 			{
-				Domain.IOTypeEx ioType;
+				Domain.IOType ioType;
 				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
 					terminalSettings.IO.IOType = ioType;
 				else
@@ -675,7 +675,7 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("DataBits"))
 				{
-					MKY.IO.Ports.DataBitsEx dataBits;
+					MKY.IO.Ports.DataBits dataBits;
 					if (MKY.IO.Ports.DataBitsEx.TryFrom(this.commandLineArgs.DataBits, out dataBits))
 						terminalSettings.IO.SerialPort.Communication.DataBits = dataBits;
 					else
@@ -683,7 +683,7 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("Parity"))
 				{
-					MKY.IO.Ports.ParityEx parity;
+					System.IO.Ports.Parity parity;
 					if (MKY.IO.Ports.ParityEx.TryParse(this.commandLineArgs.Parity, out parity))
 						terminalSettings.IO.SerialPort.Communication.Parity = parity;
 					else
@@ -691,7 +691,7 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("StopBits"))
 				{
-					MKY.IO.Ports.StopBitsEx stopBits;
+					System.IO.Ports.StopBits stopBits;
 					if (MKY.IO.Ports.StopBitsEx.TryFrom(this.commandLineArgs.StopBits, out stopBits))
 						terminalSettings.IO.SerialPort.Communication.StopBits = stopBits;
 					else
@@ -699,7 +699,7 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
 				{
-					MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
+					MKY.IO.Serial.SerialPort.SerialFlowControl flowControl;
 					if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
 						terminalSettings.IO.SerialPort.Communication.FlowControl = flowControl;
 					else

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -120,7 +120,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_string);
 				case Radix.String: return (String_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>
@@ -135,7 +135,7 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringShort);
 				case Radix.String: return (String_stringShort);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>
@@ -150,14 +150,16 @@ namespace YAT.Domain
 				case Radix.Char:   return (Char_stringMiddle);
 				case Radix.String: return (String_stringMiddle);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static RadixEx[] GetItems()
 		{
 			List<RadixEx> a = new List<RadixEx>();
@@ -180,7 +182,7 @@ namespace YAT.Domain
 		public static RadixEx Parse(string s)
 		{
 			RadixEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid radix string."));
@@ -191,41 +193,59 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out RadixEx result)
 		{
+			Radix enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
+			{
+				result = enumResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out Radix result)
+		{
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_string))
 			{
-				result = new RadixEx(Radix.Bin);
+				result = Radix.Bin;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Oct_string))
 			{
-				result = new RadixEx(Radix.Oct);
+				result = Radix.Oct;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Dec_string))
 			{
-				result = new RadixEx(Radix.Dec);
+				result = Radix.Dec;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Hex_string))
 			{
-				result = new RadixEx(Radix.Hex);
+				result = Radix.Hex;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Char_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Char_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Char_string))
 			{
-				result = new RadixEx(Radix.Char);
+				result = Radix.Char;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
@@ -233,12 +253,12 @@ namespace YAT.Domain
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_string) ||
 			         string.IsNullOrEmpty(s)) // Default!
 			{
-				result = new RadixEx(Radix.String);
+				result = Radix.String;
 				return (true);
 			}
 			else
 			{
-				result = null;
+				result = new RadixEx(); // Default!
 				return (false);
 			}
 		}

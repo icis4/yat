@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -100,7 +100,7 @@ namespace MKY.Windows.Forms.Test
 
 			if (lbe.Items.Count > 0)
 			{
-				string item = lbe.Items[lbe.Items.Count - 1] as string;
+				string item = (lbe.Items[lbe.Items.Count - 1] as string);
 				if (item != null)
 				{
 					item += append;
@@ -133,7 +133,7 @@ namespace MKY.Windows.Forms.Test
 
 			if (lbe.Items.Count > 0)
 			{
-				string item = lbe.Items[lbe.Items.Count - 1] as string;
+				string item = (lbe.Items[lbe.Items.Count - 1] as string);
 				if (item != null)
 				{
 					item += "0123456789";

@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -808,7 +808,7 @@ namespace MKY.IO.Serial.Usb
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for USB Ser/HID devices, please report this bug!"));
+			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for USB Ser/HID devices." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>

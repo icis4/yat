@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -32,6 +32,8 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
+
+using YAT.Domain;
 
 #endregion
 
@@ -124,10 +126,10 @@ namespace YAT.Model.Utilities
 		/// <remarks>
 		/// Pragmatic implementation of printing RTF. 'netrtfwriter' is only used for stream-based logging.
 		/// </remarks>
-		/// <exception cref="System.Drawing.Printing.InvalidPrinterException">
+		/// <exception cref="InvalidPrinterException">
 		/// The printer named in the <see cref="PrinterSettings.PrinterName"/> property does not exist.
 		/// </exception>
-		public virtual void Print(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
+		public virtual void Print(List<DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
 			Print(RtfWriterHelper.LinesToRichTextBox(lines, formatSettings));
 		}

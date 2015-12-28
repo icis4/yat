@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -626,7 +626,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
 		{
-			SerialPortId other = obj as SerialPortId;
+			var other = (obj as SerialPortId);
 			if (other != null)
 			{
 				if (IsStandardPort && other.IsStandardPort)
@@ -651,7 +651,7 @@ namespace MKY.IO.Ports
 			if (ReferenceEquals(objA, objB))
 				return (0);
 
-			SerialPortId casted = objA as SerialPortId;
+			var casted = (objA as SerialPortId);
 			if (casted != null)
 				return (casted.CompareTo(objB));
 

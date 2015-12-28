@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -852,7 +852,7 @@ namespace YAT.Log.Settings
 					return (false); // Encoding is inactive for binary terminals.
 				}
 			}
-			throw (new TypeLoadException("Program execution should never get here, '" + terminalType + "' is an invalid terminal type, please report this bug!"));
+			throw (new TypeLoadException("Program execution should never get here, '" + terminalType + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion

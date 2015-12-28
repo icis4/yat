@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -136,7 +136,7 @@ namespace MKY.Settings
 				this.name = name;
 				this.settings = new TSettings();
 
-				IAlternateXmlElementProvider aep = this.settings as IAlternateXmlElementProvider;
+				var aep = (this.settings as IAlternateXmlElementProvider);
 				if (aep != null)
 					this.alternateXmlElements = aep.AlternateXmlElements;
 

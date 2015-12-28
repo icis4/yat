@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -35,6 +35,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Security.Permissions;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -2428,7 +2429,7 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction, please report this bug!"));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -2523,7 +2524,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type, please report this bug!"));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -2602,25 +2603,59 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
-			SetFixedStatusText("Saving data...");
+			SetFixedStatusText("Saving selected lines...");
 			try
 			{
-				if (ExtensionSettings.IsXmlFile(filePath))
-					Model.Utilities.XmlWriterHelper.LinesToFile(monitor.SelectedLines, filePath, true);
-				else if (ExtensionSettings.IsRtfFile(filePath))
-					Model.Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
-				else
-					Model.Utilities.TextWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+				int requestedCount = monitor.SelectedLines.Count;
+				int savedCount;
 
-				SetTimedStatusText("Data saved");
+				if (ExtensionSettings.IsXmlFile(filePath))
+					savedCount = Model.Utilities.XmlWriterHelper.LinesToFileNeat(monitor.SelectedLines, filePath, true);
+				else if (ExtensionSettings.IsRtfFile(filePath))
+					savedCount = Model.Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+				else
+					savedCount = Model.Utilities.TextWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+
+				if (savedCount == requestedCount)
+				{
+					SetTimedStatusText("Selected lines successfully saved");
+				}
+				else
+				{
+					SetFixedStatusText("Selected lines only partially saved!");
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.Append("Selected lines only partially saved to file, only ");
+					sb.Append(savedCount.ToString(CultureInfo.InvariantCulture));
+					sb.Append(" instead of ");
+					sb.Append(requestedCount.ToString(CultureInfo.InvariantCulture));
+					sb.AppendLine(" could be saved");
+					sb.AppendLine();
+
+					sb.Append("This issue should never happen! ");
+					sb.Append(ApplicationEx.SubmitBugMessage);
+					sb.Append(" Attach a screenshot of the monitor as well as the partially saved file to the submitted bug, thanks!");
+
+					MessageBoxEx.Show
+					(
+						this,
+						sb.ToString(),
+						"File Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+					);
+
+					ResetStatusText();
+				}
 			}
 			catch (IOException e)
 			{
-				SetFixedStatusText("Error saving data!");
+				SetFixedStatusText("Selected lines not saved!");
 
 				string message =
-					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"System error message:"       + Environment.NewLine + e.Message;
+					"Unable to save selected lines to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+					"System error message:"                 + Environment.NewLine + e.Message;
 
 				MessageBoxEx.Show
 				(
@@ -2628,10 +2663,10 @@ namespace YAT.Gui.Forms
 					message,
 					"File Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
+					MessageBoxIcon.Error
 				);
 
-				SetTimedStatusText("Data not saved!");
+				ResetStatusText();
 			}
 		}
 
@@ -2672,7 +2707,7 @@ namespace YAT.Gui.Forms
 				}
 				catch (System.Drawing.Printing.InvalidPrinterException ex)
 				{
-					SetFixedStatusText("Error printing data!");
+					SetFixedStatusText("Data not printed!");
 
 					string message =
 						"Unable to print data!" + Environment.NewLine + Environment.NewLine +
@@ -2687,7 +2722,7 @@ namespace YAT.Gui.Forms
 						MessageBoxIcon.Warning
 					);
 
-					SetTimedStatusText("Data not printed!");
+					ResetStatusText();
 				}
 			}
 		}
@@ -3131,7 +3166,7 @@ namespace YAT.Gui.Forms
 			OnTerminalChanged(EventArgs.Empty);
 
 			bool showErrorModally = false;
-			Main main = (this.mdiParent as Main);
+			var main = (this.mdiParent as Main);
 			if (main != null)
 				showErrorModally = main.UnderlyingMain.StartArgs.KeepOpenOnError;
 
@@ -3488,10 +3523,11 @@ namespace YAT.Gui.Forms
 
 				if (isOpen)
 				{
-					MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
-					MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
+					var pins = new MKY.IO.Ports.SerialPortControlPins();
 					bool inputBreak = false;
 					bool outputBreak = false;
+
+					var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (port != null)
 					{
 						pins        = port.ControlPins;
@@ -3511,7 +3547,7 @@ namespace YAT.Gui.Forms
 					bool indicateXOnXOff = manualXOnXOff; // Indication only properly works if manual XOn/XOff (bug #214).
 					bool outputIsXOn     = false;
 					bool inputIsXOn      = false;
-					MKY.IO.Serial.SerialPort.IXOnXOffHandler x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
+					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 					if (x != null)
 					{
 					////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
@@ -3603,8 +3639,9 @@ namespace YAT.Gui.Forms
 
 			if (isOpen)
 			{
-				MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
-				MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+				var pins = new MKY.IO.Ports.SerialPortControlPins();
+
+				var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 				if (port != null)
 					pins = port.ControlPins;
 

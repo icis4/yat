@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -80,7 +80,7 @@ namespace MKY.IO.Ports
 				case Parity.Mark:  return (Mark_string);
 				case Parity.Space: return (Space_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>
@@ -94,14 +94,16 @@ namespace MKY.IO.Ports
 				case Parity.Mark: return (Mark_stringShort);
 				case Parity.Space: return (Space_stringShort);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item, please report this bug!"));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
 
 		#region GetItems
 
-		/// <summary></summary>
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
 		public static ParityEx[] GetItems()
 		{
 			List<ParityEx> a = new List<ParityEx>();
@@ -123,7 +125,7 @@ namespace MKY.IO.Ports
 		public static ParityEx Parse(string s)
 		{
 			ParityEx result;
-			if (TryParse(s, out result))
+			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
 				throw (new FormatException(@"""" + s + @""" is no valid parity string."));
@@ -134,41 +136,59 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static bool TryParse(string s, out ParityEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Even_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Even_stringShort))
+			Parity enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new ParityEx(Parity.Even);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Odd_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Odd_stringShort))
-			{
-				result = new ParityEx(Parity.Odd);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringShort))
-			{
-				result = new ParityEx(Parity.None);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Mark_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Mark_stringShort))
-			{
-				result = new ParityEx(Parity.Mark);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringShort))
-			{
-				result = new ParityEx(Parity.Space);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out Parity result)
+		{
+			s = s.Trim();
+
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Even_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Even_stringShort))
+			{
+				result = Parity.Even;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Odd_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Odd_stringShort))
+			{
+				result = Parity.Odd;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringShort))
+			{
+				result = Parity.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Mark_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Mark_stringShort))
+			{
+				result = Parity.Mark;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringShort))
+			{
+				result = Parity.Space;
+				return (true);
+			}
+			else
+			{
+				result = new ParityEx(); // Default!
 				return (false);
 			}
 		}

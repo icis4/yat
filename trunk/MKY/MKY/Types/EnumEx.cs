@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -281,7 +281,7 @@ namespace MKY
 		/// </summary>
 		public virtual int CompareTo(object obj)
 		{
-			EnumEx other = obj as EnumEx;
+			var other = (obj as EnumEx);
 			if (other != null)
 				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
 			else
@@ -533,7 +533,7 @@ namespace MKY
 			if (ReferenceEquals(objA, objB))
 				return (0);
 
-			EnumEx casted = objA as EnumEx;
+			var casted = (objA as EnumEx);
 			if (casted != null)
 				return (casted.CompareTo(objB));
 

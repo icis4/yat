@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -65,7 +65,7 @@ namespace MKY.Windows.Forms
 
 		private static bool IsRightToLeft(IWin32Window owner)
 		{
-			Control control = owner as Control;
+			var control = (owner as Control);
 			if (control != null)
 				return (control.RightToLeft == RightToLeft.Yes);
 

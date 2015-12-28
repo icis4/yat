@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -302,7 +302,7 @@ namespace YAT.Gui.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				SerialPortId id = comboBox_Port.SelectedItem as SerialPortId;
+				var id = comboBox_Port.SelectedItem as SerialPortId;
 				if ((id != null) && id.Equals(comboBox_Port.Text))
 				{
 					PortId = id;

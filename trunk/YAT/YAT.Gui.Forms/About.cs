@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -305,7 +305,7 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException("Invalid link, program execution should never get here, please report this bug!"));
+				throw (new InvalidOperationException("Invalid link, program execution should never get here." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
 			}
 		}
 

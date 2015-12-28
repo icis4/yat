@@ -1,6 +1,6 @@
 ﻿//==================================================================================================
 // YAT - Yet Another Terminal.
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal/.
+// Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
@@ -36,6 +36,7 @@ using DW.RtfWriter;
 
 using MKY.Collections.Generic;
 
+using YAT.Domain;
 using YAT.Model.Settings;
 
 #endregion
@@ -140,21 +141,21 @@ namespace YAT.Model.Utilities
 			this.writer.Write(rtf);
 		}
 
-		private void SetFormat(Domain.DisplayElement element, out FormatDescriptor format)
+		private void SetFormat(DisplayElement element, out FormatDescriptor format)
 		{
-			if      (element is Domain.DisplayElement.TxData)			{ format = this.txDataFormat; }
-			else if (element is Domain.DisplayElement.TxControl)		{ format = this.txControlFormat; }
-			else if (element is Domain.DisplayElement.RxData)			{ format = this.rxDataFormat; }
-			else if (element is Domain.DisplayElement.RxControl)		{ format = this.rxControlFormat; }
-			else if (element is Domain.DisplayElement.DateInfo)			{ format = this.dateFormat; }
-			else if (element is Domain.DisplayElement.TimeInfo)			{ format = this.timeFormat; }
-			else if (element is Domain.DisplayElement.DirectionStamp)	{ format = this.directionFormat; }
-			else if (element is Domain.DisplayElement.Length)			{ format = this.lengthFormat; }
-			else if ((element is Domain.DisplayElement.LeftMargin) ||
-			         (element is Domain.DisplayElement.Space) ||
-			         (element is Domain.DisplayElement.RightMargin) ||
-			         (element is Domain.DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
-			else if (element is Domain.DisplayElement.IOError)			{ format = this.errorFormat; }
+			if      (element is DisplayElement.TxData)			{ format = this.txDataFormat; }
+			else if (element is DisplayElement.TxControl)		{ format = this.txControlFormat; }
+			else if (element is DisplayElement.RxData)			{ format = this.rxDataFormat; }
+			else if (element is DisplayElement.RxControl)		{ format = this.rxControlFormat; }
+			else if (element is DisplayElement.DateInfo)		{ format = this.dateFormat; }
+			else if (element is DisplayElement.TimeInfo)		{ format = this.timeFormat; }
+			else if (element is DisplayElement.DirectionInfo)	{ format = this.directionFormat; }
+			else if (element is DisplayElement.Length)			{ format = this.lengthFormat; }
+			else if ((element is DisplayElement.LeftMargin) ||
+			         (element is DisplayElement.Space) ||
+			         (element is DisplayElement.RightMargin) ||
+			         (element is DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
+			else if (element is DisplayElement.ErrorInfo)		{ format = this.errorFormat; }
 			else { throw (new NotImplementedException("Unknown DisplayElement!")); }
 		}
 
@@ -238,7 +239,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public virtual void WriteLine(Domain.DisplayLine line)
+		public virtual void WriteLine(DisplayLine line)
 		{
 			AssertNotDisposed();
 
@@ -247,14 +248,14 @@ namespace YAT.Model.Utilities
 				// Analyze the line and split it into segments:
 				int position = 0;
 				StringBuilder text = new StringBuilder();
-				var segments = new List<Pair<Domain.DisplayElement, Pair<int, int>>>();
-				foreach (Domain.DisplayElement element in line)
+				var segments = new List<Pair<DisplayElement, Pair<int, int>>>();
+				foreach (DisplayElement element in line)
 				{
 					if (element.Text.Length > 0)
 					{
 						string segment = element.Text;
 						text.Append(segment);     // segment begin            segment end
-						segments.Add(new Pair<Domain.DisplayElement, Pair<int, int>>(element, new Pair<int, int>(position, (position + segment.Length - 1))));
+						segments.Add(new Pair<DisplayElement, Pair<int, int>>(element, new Pair<int, int>(position, (position + segment.Length - 1))));
 						position += segment.Length;
 					}
 				}
@@ -267,7 +268,7 @@ namespace YAT.Model.Utilities
 					par.setText(text.ToString());
 
 					// Set the text format segment-by-segment:
-					foreach (Pair<Domain.DisplayElement, Pair<int, int>> segment in segments)
+					foreach (Pair<DisplayElement, Pair<int, int>> segment in segments)
 					{
 						RtfCharFormat fmt = par.addCharFormat(segment.Value2.Value1, segment.Value2.Value2);
 
