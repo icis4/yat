@@ -44,9 +44,10 @@ namespace YAT.Log
 		private Encoding encoding;
 		private Model.Settings.FormatSettings format;
 
-// TODO		private XmlWriter textWriter;
+		private XmlWriterNeat xmlWriter;
 		private RtfWriter rtfWriter;
 		private TextWriter textWriter;
+		private object writerSyncObj = new object();
 
 		/// <summary></summary>
 		public NeatLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Model.Settings.FormatSettings format)
@@ -73,7 +74,7 @@ namespace YAT.Log
 		{
 			switch (this.fileType)
 			{
-				case FileType.Xml:		/* TODO */													break;
+				case FileType.Xml:		if (this.xmlWriter != null)		this.xmlWriter.Close();		break;
 				case FileType.Rtf:		if (this.rtfWriter != null)		this.rtfWriter.Close();		break;
 				case FileType.Text:
 				default:				if (this.textWriter != null)	this.textWriter.Close();	break;
@@ -128,12 +129,15 @@ namespace YAT.Log
 		{
 			AssertNotDisposed();
 
-			switch (this.fileType)
+			lock (this.writerSyncObj)
 			{
-				case FileType.Xml:		/* TODO */																break;
-				case FileType.Rtf:		this.rtfWriter = new RtfWriter(stream, this.encoding, this.format);		break;
-				case FileType.Text:
-				default:				this.textWriter = new TextWriter(stream, this.encoding);				break;
+				switch (this.fileType)
+				{
+					case FileType.Xml:		this.xmlWriter = new XmlWriterNeat(stream, true, FilePath);			break;
+					case FileType.Rtf:		this.rtfWriter = new RtfWriter(stream, this.encoding, this.format);	break;
+					case FileType.Text:
+					default:				this.textWriter = new TextWriter(stream, this.encoding);			break;
+				}
 			}
 		}
 
@@ -142,12 +146,15 @@ namespace YAT.Log
 		{
 			AssertNotDisposed();
 
-			switch (this.fileType)
+			lock (this.writerSyncObj)
 			{
-				case FileType.Xml:		/* TODO */					break;
-				case FileType.Rtf:		this.rtfWriter.Flush();		break;
-				case FileType.Text:
-				default:				this.textWriter.Flush();	break;
+				switch (this.fileType)
+				{
+					case FileType.Xml:		this.xmlWriter.Flush();		break;
+					case FileType.Rtf:		this.rtfWriter.Flush();		break;
+					case FileType.Text:
+					default:				this.textWriter.Flush();	break;
+				}
 			}
 		}
 
@@ -156,12 +163,15 @@ namespace YAT.Log
 		{
 			AssertNotDisposed();
 
-			switch (this.fileType)
+			lock (this.writerSyncObj)
 			{
-				case FileType.Xml:		/* TODO */												break;
-				case FileType.Rtf:		this.rtfWriter.Close();		this.rtfWriter = null;		break;
-				case FileType.Text:
-				default:				this.textWriter.Close();	this.textWriter = null;		break;
+				switch (this.fileType)
+				{
+					case FileType.Xml:		this.xmlWriter.Close();		this.xmlWriter = null;		break;
+					case FileType.Rtf:		this.rtfWriter.Close();		this.rtfWriter = null;		break;
+					case FileType.Text:
+					default:				this.textWriter.Close();	this.textWriter = null;		break;
+				}
 			}
 		}
 
@@ -172,12 +182,15 @@ namespace YAT.Log
 
 			if (IsEnabled && IsOn)
 			{
-				switch (this.fileType)
+				lock (this.writerSyncObj)
 				{
-					case FileType.Xml:		/* TODO */							break;
-					case FileType.Rtf:		this.rtfWriter.WriteLine(line);		break;
-					case FileType.Text:
-					default:				this.textWriter.WriteLine(line);	break;
+					switch (this.fileType)
+					{
+						case FileType.Xml:		this.xmlWriter.WriteLine(line);		break;
+						case FileType.Rtf:		this.rtfWriter.WriteLine(line);		break;
+						case FileType.Text:
+						default:				this.textWriter.WriteLine(line);	break;
+					}
 				}
 
 				TriggerFlushTimer();

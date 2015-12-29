@@ -37,9 +37,9 @@ namespace YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-			this.groupBox_Options_Encoding = new System.Windows.Forms.GroupBox();
-			this.radioButton_Options_EncodingTerminal = new System.Windows.Forms.RadioButton();
-			this.radioButton_Options_EncodingUTF8 = new System.Windows.Forms.RadioButton();
+			this.groupBox_Options_TextEncoding = new System.Windows.Forms.GroupBox();
+			this.radioButton_Options_TextEncodingTerminal = new System.Windows.Forms.RadioButton();
+			this.radioButton_Options_TextEncodingUTF8 = new System.Windows.Forms.RadioButton();
 			this.button_RootOpen = new System.Windows.Forms.Button();
 			this.pathLabel_Root = new MKY.Windows.Forms.PathLabel();
 			this.groupBox_Options_Folders = new System.Windows.Forms.GroupBox();
@@ -78,7 +78,7 @@ namespace YAT.Gui.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
-			this.groupBox_Options_Encoding.SuspendLayout();
+			this.groupBox_Options_TextEncoding.SuspendLayout();
 			this.groupBox_Options_Folders.SuspendLayout();
 			this.groupBox_Options_Name.SuspendLayout();
 			this.groupBox_Options_Mode.SuspendLayout();
@@ -113,7 +113,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Encoding);
+			this.groupBox_Settings.Controls.Add(this.groupBox_Options_TextEncoding);
 			this.groupBox_Settings.Controls.Add(this.button_RootOpen);
 			this.groupBox_Settings.Controls.Add(this.pathLabel_Root);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Folders);
@@ -129,44 +129,44 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
-			// groupBox_Options_Encoding
+			// groupBox_Options_TextEncoding
 			// 
-			this.groupBox_Options_Encoding.Controls.Add(this.radioButton_Options_EncodingTerminal);
-			this.groupBox_Options_Encoding.Controls.Add(this.radioButton_Options_EncodingUTF8);
-			this.groupBox_Options_Encoding.Location = new System.Drawing.Point(342, 350);
-			this.groupBox_Options_Encoding.Name = "groupBox_Options_Encoding";
-			this.groupBox_Options_Encoding.Size = new System.Drawing.Size(161, 75);
-			this.groupBox_Options_Encoding.TabIndex = 9;
-			this.groupBox_Options_Encoding.TabStop = false;
-			this.groupBox_Options_Encoding.Text = "File &Encoding";
+			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingTerminal);
+			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingUTF8);
+			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(342, 350);
+			this.groupBox_Options_TextEncoding.Name = "groupBox_Options_TextEncoding";
+			this.groupBox_Options_TextEncoding.Size = new System.Drawing.Size(161, 75);
+			this.groupBox_Options_TextEncoding.TabIndex = 9;
+			this.groupBox_Options_TextEncoding.TabStop = false;
+			this.groupBox_Options_TextEncoding.Text = "Text File &Encoding";
 			// 
-			// radioButton_Options_EncodingTerminal
+			// radioButton_Options_TextEncodingTerminal
 			// 
-			this.radioButton_Options_EncodingTerminal.AutoSize = true;
-			this.radioButton_Options_EncodingTerminal.Location = new System.Drawing.Point(12, 45);
-			this.radioButton_Options_EncodingTerminal.Name = "radioButton_Options_EncodingTerminal";
-			this.radioButton_Options_EncodingTerminal.Size = new System.Drawing.Size(112, 17);
-			this.radioButton_Options_EncodingTerminal.TabIndex = 1;
-			this.radioButton_Options_EncodingTerminal.Text = "Terminal encoding";
-			this.toolTip.SetToolTip(this.radioButton_Options_EncodingTerminal, "The selected encoding of the terminal. In case of Unicode encodings, the Unicode " +
+			this.radioButton_Options_TextEncodingTerminal.AutoSize = true;
+			this.radioButton_Options_TextEncodingTerminal.Location = new System.Drawing.Point(12, 45);
+			this.radioButton_Options_TextEncodingTerminal.Name = "radioButton_Options_TextEncodingTerminal";
+			this.radioButton_Options_TextEncodingTerminal.Size = new System.Drawing.Size(112, 17);
+			this.radioButton_Options_TextEncodingTerminal.TabIndex = 1;
+			this.radioButton_Options_TextEncodingTerminal.Text = "Terminal encoding";
+			this.toolTip.SetToolTip(this.radioButton_Options_TextEncodingTerminal, "The selected encoding of the terminal. In case of Unicode encodings, the Unicode " +
         "BOM (Byte Order Mark) will be preceeded at the beginning of the file.");
-			this.radioButton_Options_EncodingTerminal.UseVisualStyleBackColor = true;
-			this.radioButton_Options_EncodingTerminal.CheckedChanged += new System.EventHandler(this.radioButton_Options_EncodingTerminal_CheckedChanged);
+			this.radioButton_Options_TextEncodingTerminal.UseVisualStyleBackColor = true;
+			this.radioButton_Options_TextEncodingTerminal.CheckedChanged += new System.EventHandler(this.radioButton_Options_TextEncodingTerminal_CheckedChanged);
 			// 
-			// radioButton_Options_EncodingUTF8
+			// radioButton_Options_TextEncodingUTF8
 			// 
-			this.radioButton_Options_EncodingUTF8.AutoSize = true;
-			this.radioButton_Options_EncodingUTF8.Checked = true;
-			this.radioButton_Options_EncodingUTF8.Location = new System.Drawing.Point(12, 21);
-			this.radioButton_Options_EncodingUTF8.Name = "radioButton_Options_EncodingUTF8";
-			this.radioButton_Options_EncodingUTF8.Size = new System.Drawing.Size(107, 17);
-			this.radioButton_Options_EncodingUTF8.TabIndex = 0;
-			this.radioButton_Options_EncodingUTF8.TabStop = true;
-			this.radioButton_Options_EncodingUTF8.Text = "UTF-8  with BOM";
-			this.toolTip.SetToolTip(this.radioButton_Options_EncodingUTF8, "UFT-8 is the default encoding. The Unicode BOM (Byte Order Mark) will be preceede" +
+			this.radioButton_Options_TextEncodingUTF8.AutoSize = true;
+			this.radioButton_Options_TextEncodingUTF8.Checked = true;
+			this.radioButton_Options_TextEncodingUTF8.Location = new System.Drawing.Point(12, 21);
+			this.radioButton_Options_TextEncodingUTF8.Name = "radioButton_Options_TextEncodingUTF8";
+			this.radioButton_Options_TextEncodingUTF8.Size = new System.Drawing.Size(107, 17);
+			this.radioButton_Options_TextEncodingUTF8.TabIndex = 0;
+			this.radioButton_Options_TextEncodingUTF8.TabStop = true;
+			this.radioButton_Options_TextEncodingUTF8.Text = "UTF-8  with BOM";
+			this.toolTip.SetToolTip(this.radioButton_Options_TextEncodingUTF8, "UFT-8 is the default encoding. The Unicode BOM (Byte Order Mark) will be preceede" +
         "d at the beginning of the file.");
-			this.radioButton_Options_EncodingUTF8.UseVisualStyleBackColor = true;
-			this.radioButton_Options_EncodingUTF8.CheckedChanged += new System.EventHandler(this.radioButton_Options_EncodingUTF8_CheckedChanged);
+			this.radioButton_Options_TextEncodingUTF8.UseVisualStyleBackColor = true;
+			this.radioButton_Options_TextEncodingUTF8.CheckedChanged += new System.EventHandler(this.radioButton_Options_TextEncodingUTF8_CheckedChanged);
 			// 
 			// button_RootOpen
 			// 
@@ -594,8 +594,8 @@ namespace YAT.Gui.Forms
 			this.Shown += new System.EventHandler(this.LogSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
-			this.groupBox_Options_Encoding.ResumeLayout(false);
-			this.groupBox_Options_Encoding.PerformLayout();
+			this.groupBox_Options_TextEncoding.ResumeLayout(false);
+			this.groupBox_Options_TextEncoding.PerformLayout();
 			this.groupBox_Options_Folders.ResumeLayout(false);
 			this.groupBox_Options_Folders.PerformLayout();
 			this.groupBox_Options_Name.ResumeLayout(false);
@@ -652,8 +652,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Defaults;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Button button_RootOpen;
-		private System.Windows.Forms.GroupBox groupBox_Options_Encoding;
-		private System.Windows.Forms.RadioButton radioButton_Options_EncodingTerminal;
-		private System.Windows.Forms.RadioButton radioButton_Options_EncodingUTF8;
+		private System.Windows.Forms.GroupBox groupBox_Options_TextEncoding;
+		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingTerminal;
+		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingUTF8;
 	}
 }

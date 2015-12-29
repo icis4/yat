@@ -57,8 +57,6 @@ namespace YAT.Gui.Forms
 		private Log.Settings.LogSettings settings;
 		private Log.Settings.LogSettings settingsInEdit;
 
-		private Domain.TerminalType terminalType;
-
 		#endregion
 
 		#region Object Lifetime
@@ -67,14 +65,12 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public LogSettings(Log.Settings.LogSettings settings, Domain.TerminalType terminalType)
+		public LogSettings(Log.Settings.LogSettings settings)
 		{
 			InitializeComponent();
 
 			KeepAndCloneAndAttachSettings(settings);
 			InitializeControls();
-
-			this.terminalType = terminalType;
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -216,7 +212,8 @@ namespace YAT.Gui.Forms
 				e.Cancel = true;
 				return;
 			}
-			if (this.settingsInEdit.BothRawAndNeat && (comboBox_Raw_Extension.Text == this.settingsInEdit.NeatExtension))
+			if ((this.settingsInEdit.BothRawAndNeat && (comboBox_Raw_Extension.Text == this.settingsInEdit.NeatExtension)) &&
+			    (!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
 			{
 				ExtensionConflictMessage();
 				e.Cancel = true;
@@ -271,7 +268,8 @@ namespace YAT.Gui.Forms
 				e.Cancel = true;
 				return;
 			}
-			if (this.settingsInEdit.BothRawAndNeat && (comboBox_Neat_Extension.Text == this.settingsInEdit.RawExtension))
+			if ((this.settingsInEdit.BothRawAndNeat && (comboBox_Neat_Extension.Text == this.settingsInEdit.RawExtension)) &&
+			    (!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
 			{
 				ExtensionConflictMessage();
 				e.Cancel = true;
@@ -354,15 +352,15 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void radioButton_Options_EncodingUTF8_CheckedChanged(object sender, EventArgs e)
+		private void radioButton_Options_TextEncodingUTF8_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_Options_EncodingUTF8.Checked)
+			if (!this.isSettingControls && radioButton_Options_TextEncodingUTF8.Checked)
 				this.settingsInEdit.TextEncoding = Log.LogFileEncoding.UTF8;
 		}
 
-		private void radioButton_Options_EncodingTerminal_CheckedChanged(object sender, EventArgs e)
+		private void radioButton_Options_TextEncodingTerminal_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls && radioButton_Options_EncodingTerminal.Checked)
+			if (!this.isSettingControls && radioButton_Options_TextEncodingTerminal.Checked)
 				this.settingsInEdit.TextEncoding = Log.LogFileEncoding.Terminal;
 		}
 
@@ -468,15 +466,15 @@ namespace YAT.Gui.Forms
 			radioButton_Options_ModeCreate.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			radioButton_Options_ModeAppend.Checked = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Append);
 
-			groupBox_Options_Encoding.Enabled = (this.terminalType == Domain.TerminalType.Text);
-
-			if (this.settingsInEdit.TextEncodingIsSupported(this.terminalType)) {
-				radioButton_Options_EncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.UTF8);
-				radioButton_Options_EncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.Terminal);
+			if (this.settingsInEdit.TextEncodingIsSupported()) {
+				groupBox_Options_TextEncoding.Enabled            = true;
+				radioButton_Options_TextEncodingUTF8.Checked     = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.UTF8);
+				radioButton_Options_TextEncodingTerminal.Checked = (this.settingsInEdit.TextEncoding == Log.LogFileEncoding.Terminal);
 			}
 			else {
-				radioButton_Options_EncodingUTF8.Checked     = false;
-				radioButton_Options_EncodingTerminal.Checked = false;
+				groupBox_Options_TextEncoding.Enabled            = false;
+				radioButton_Options_TextEncodingUTF8.Checked     = false;
+				radioButton_Options_TextEncodingTerminal.Checked = false;
 			}
 
 			this.isSettingControls.Leave();
@@ -554,10 +552,15 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ExtensionConflictMessage()
 		{
+			string message =
+				"To avoid naming conflicts, files must either be placed in format folders or named by format or have different extensions. " +
+				Environment.NewLine + Environment.NewLine +
+				"First choose a different extension. You may then change one of the other options to resolve the naming conflict.";
+
 			MessageBoxEx.Show
 			(
 				this,
-				"To avoid naming conflicts, raw and neat log files must have different extensions. Choose a different extension.",
+				message,
 				"Extension Conflict",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Exclamation
@@ -569,10 +572,11 @@ namespace YAT.Gui.Forms
 		private bool ResolveNamingConflicts()
 		{
 			if ((this.settingsInEdit.SameRawAndNeat) && (this.settingsInEdit.RawExtension == this.settingsInEdit.NeatExtension) &&
-				(!this.settingsInEdit.FolderFormat && !this.settingsInEdit.NameFormat))
+				(!(this.settingsInEdit.FolderFormat || this.settingsInEdit.NameFormat)))
 			{
 				string message =
-					"To avoid naming conflicts, files must either be placed in format folders or named by format (Raw/Neat). " +
+					"To avoid naming conflicts, files must either be placed in format folders or named by format or have different extensions. " +
+					Environment.NewLine + Environment.NewLine +
 					"Do you want to place the files in folders (Yes) or name them by format (No)? You may also cancel and" +
 					"set different extensions.";
 
@@ -586,13 +590,13 @@ namespace YAT.Gui.Forms
 					))
 				{
 					case DialogResult.Yes: this.settingsInEdit.FolderFormat = true; break;
-					case DialogResult.No: this.settingsInEdit.NameFormat = true; break;
+					case DialogResult.No:  this.settingsInEdit.NameFormat   = true; break;
 					default: return (false);
 				}
 			}
 
 			if ((this.settingsInEdit.MultipleRaw || this.settingsInEdit.MultipleNeat) &&
-				(!this.settingsInEdit.FolderChannel && !this.settingsInEdit.NameChannel))
+				(!(this.settingsInEdit.FolderChannel || this.settingsInEdit.NameChannel)))
 			{
 				string message =
 					"To avoid naming conflicts, files must either be placed in channel " +

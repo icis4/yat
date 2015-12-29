@@ -835,24 +835,21 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		public bool TextEncodingIsSupported(Domain.TerminalType terminalType)
+		public bool TextEncodingIsSupported()
 		{
-			switch (terminalType)
+			if (AnyNeat)
 			{
-				case Domain.TerminalType.Text:
-				{
-					if (ExtensionSettings.IsRtfFile(NeatExtension))
-						return (false);
-					else
-						return (true);
-				}
-
-				case Domain.TerminalType.Binary:
-				{
-					return (false); // Encoding is inactive for binary terminals.
-				}
+				if      (ExtensionSettings.IsRtfFile(NeatExtension))
+					return (false); // RTF is limited to ANSI/ASCII.
+				else if (ExtensionSettings.IsXmlFile(NeatExtension))
+					return (false); // YAT always uses UTF-8 for XML.
+				else
+					return (true);
 			}
-			throw (new TypeLoadException("Program execution should never get here, '" + terminalType + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			else // RawOnly => Not supported.
+			{
+				return (false);
+			}
 		}
 
 		#endregion

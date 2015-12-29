@@ -45,23 +45,58 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public static class XmlWriterHelperRaw
 	{
-		/// <returns>Returns <c>true</c> if the line could succesfully be converted.</returns>
-		private static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferRawLine transferLine)
+		/// <returns>Returns the number of lines that could succesfully be written to the file.</returns>
+		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
-			bool success = true;
+			List<XmlTransferRawLine> transferLines;
+			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
+			if (count > 0)
+			{
+				Type type = typeof(List<XmlTransferRawLine>);
+				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
 
+				if (addSchema)
+					XmlHelper.SchemaToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+
+				return (count);
+			}
+			else
+			{
+				return (0);
+			}
+		}
+
+		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
+		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferRawLine> transferLines)
+		{
+			transferLines = new List<XmlTransferRawLine>();
+			foreach (DisplayLine dl in displayLines)
+			{
+				XmlTransferRawLine tl;
+				if (LineFromDisplayToTransfer(dl, out tl))
+					transferLines.Add(tl);
+				else
+					break; // Immediately break, 'output' will only contain successfully converted lines.
+			}
+
+			return (transferLines.Count);
+		}
+
+		/// <returns>Returns <c>true</c> if the line could succesfully be converted.</returns>
+		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferRawLine transferLine)
+		{
 			// Note that display elements are text-only and no longer contain the underlying typed
 			// information such as the time-stamp of the origin. Since the XML schema is strongly-
 			// typed again, the items need to be reconstructed. Not optimal, but simply a trade-off
 			// between display and log performance. After all, XML logging is probably rarly used.
 
+			bool success = true;
+
 			List<byte> data = new List<byte>();
 
-			string errorStr     = "";
 			string dateStr      = "";
 			string timeStr      = "";
 			string directionStr = "";
-			string lengthStr    = "";
 
 			bool containsTx = false;
 			bool containsRx = false;
@@ -113,43 +148,40 @@ namespace YAT.Model.Utilities
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
-				{
-					var casted = (e as DisplayElement.ErrorInfo);
-					if (casted != null)
-					{
-						errorStr += casted.Text;
-						continue; // Immediately continue, makes no sense to also try other types!
-					}
-				}
 				// Then try to cast to the singleton elements:
 				{
 					var casted = (e as DisplayElement.DateInfo);
 					if (casted != null)
+					{
 						dateStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				{
 					var casted = (e as DisplayElement.TimeInfo);
 					if (casted != null)
+					{
 						timeStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				{
 					var casted = (e as DisplayElement.DirectionInfo);
 					if (casted != null)
+					{
 						directionStr = casted.Text;
-				}
-				{
-					var casted = (e as DisplayElement.Length);
-					if (casted != null)
-						lengthStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				// All white-space elements do not need to be processed.
+				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
+				// 'Length' is not used with 'XmlTransferRawLine'.
 			}
 
 			// Trim () from the singleton elements and try to create strongly-typed elements:
 
 			DateTime timeStamp = DateTime.MinValue;
 			Direction direction = Direction.None;
-			int length = -1;
 
 			if (!string.IsNullOrEmpty(dateStr) || !string.IsNullOrEmpty(timeStr))
 			{
@@ -202,55 +234,9 @@ namespace YAT.Model.Utilities
 					direction = Direction.None;
 			}
 
-			if (!string.IsNullOrEmpty(lengthStr))
-			{
-				lengthStr = lengthStr.TrimStart('(');
-				lengthStr = lengthStr.TrimEnd(')');
-
-				if (!int.TryParse(lengthStr, out length))
-					success = false;
-			}
-
-			transferLine = new XmlTransferRawLine(timeStamp, direction, length, data.ToArray(), errorStr);
+			transferLine = new XmlTransferRawLine(timeStamp, direction, data.AsReadOnly());
 
 			return (success);
-		}
-
-		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
-		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferRawLine> transferLines)
-		{
-			transferLines = new List<XmlTransferRawLine>();
-			foreach (DisplayLine dl in displayLines)
-			{
-				XmlTransferRawLine tl;
-				if (LineFromDisplayToTransfer(dl, out tl))
-					transferLines.Add(tl);
-				else
-					break; // Immediately break, 'output' will only contain successfully converted lines.
-			}
-
-			return (transferLines.Count);
-		}
-
-		/// <returns>Returns the number of lines that could succesfully be written to the file.</returns>
-		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
-		{
-			List<XmlTransferRawLine> transferLines;
-			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
-			if (count > 0)
-			{
-				Type type = typeof(List<XmlTransferRawLine>);
-				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
-
-				if (addSchema)
-					XmlHelper.SchemaToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
-
-				return (count);
-			}
-			else
-			{
-				return (0);
-			}
 		}
 	}
 }

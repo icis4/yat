@@ -44,18 +44,56 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public static class XmlWriterHelperNeat
 	{
-		/// <returns>Returns <c>true</c> if the line could succesfully be converted.</returns>
-		private static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
+		/// <returns>Returns the number of lines that could succesfully be written to the file.</returns>
+		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
 		{
-			bool success = true;
+			List<XmlTransferNeatLine> transferLines;
+			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
+			if (count > 0)
+			{
+				Type type = typeof(List<XmlTransferNeatLine>);
+				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
 
+				if (addSchema)
+					XmlHelper.SchemaToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+
+				return (count);
+			}
+			else
+			{
+				return (0);
+			}
+		}
+
+		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
+		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
+		{
+			transferLines = new List<XmlTransferNeatLine>();
+			foreach (DisplayLine dl in displayLines)
+			{
+				XmlTransferNeatLine tl;
+				if (LineFromDisplayToTransfer(dl, out tl))
+					transferLines.Add(tl);
+				else
+					break; // Immediately break, 'output' will only contain successfully converted lines.
+			}
+
+			return (transferLines.Count);
+		}
+
+		/// <returns>Returns <c>true</c> if the line could succesfully be converted.</returns>
+		public static bool LineFromDisplayToTransfer(DisplayLine displayLine, out XmlTransferNeatLine transferLine)
+		{
 			// Note that display elements are text-only and no longer contain the underlying typed
 			// information such as the time-stamp of the origin. Since the XML schema is strongly-
 			// typed again, the items need to be reconstructed. Not optimal, but simply a trade-off
 			// between display and log performance. After all, XML logging is probably rarly used.
 
+			bool success = true;
+
 			string textStr      = "";
 			string errorStr     = "";
+
 			string dateStr      = "";
 			string timeStr      = "";
 			string directionStr = "";
@@ -115,22 +153,34 @@ namespace YAT.Model.Utilities
 				{
 					var casted = (e as DisplayElement.DateInfo);
 					if (casted != null)
+					{
 						dateStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				{
 					var casted = (e as DisplayElement.TimeInfo);
 					if (casted != null)
+					{
 						timeStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				{
 					var casted = (e as DisplayElement.DirectionInfo);
 					if (casted != null)
+					{
 						directionStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				{
 					var casted = (e as DisplayElement.Length);
 					if (casted != null)
+					{
 						lengthStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
 				}
 				// All white-space elements do not need to be processed.
 			}
@@ -201,46 +251,9 @@ namespace YAT.Model.Utilities
 					success = false;
 			}
 
-			transferLine = new XmlTransferNeatLine(timeStamp, direction, length, textStr, errorStr);
+			transferLine = new XmlTransferNeatLine(timeStamp, direction, textStr, errorStr, length);
 
 			return (success);
-		}
-
-		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
-		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
-		{
-			transferLines = new List<XmlTransferNeatLine>();
-			foreach (DisplayLine dl in displayLines)
-			{
-				XmlTransferNeatLine tl;
-				if (LineFromDisplayToTransfer(dl, out tl))
-					transferLines.Add(tl);
-				else
-					break; // Immediately break, 'output' will only contain successfully converted lines.
-			}
-
-			return (transferLines.Count);
-		}
-
-		/// <returns>Returns the number of lines that could succesfully be written to the file.</returns>
-		public static int LinesToFile(List<DisplayLine> displayLines, string filePath, bool addSchema)
-		{
-			List<XmlTransferNeatLine> transferLines;
-			int count = LinesFromDisplayToTransfer(displayLines, out transferLines);
-			if (count > 0)
-			{
-				Type type = typeof(List<XmlTransferNeatLine>);
-				XmlSerializerEx.SerializeToFile(filePath, type, transferLines);
-
-				if (addSchema)
-					XmlHelper.SchemaToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
-
-				return (count);
-			}
-			else
-			{
-				return (0);
-			}
 		}
 	}
 }

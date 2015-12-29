@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
 using YAT.Domain;
@@ -43,7 +44,6 @@ namespace YAT.Model.Utilities
 	{
 		private DateTime timeStamp;
 		private Direction direction;
-		private int length;
 
 		/// <summary></summary>
 		public XmlTransferLine()
@@ -51,11 +51,10 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferLine(DateTime timeStamp, Direction direction, int length)
+		public XmlTransferLine(DateTime timeStamp, Direction direction)
 		{
 			this.timeStamp = timeStamp;
 			this.direction = direction;
-			this.length    = length;
 		}
 
 		/// <summary></summary>
@@ -73,14 +72,6 @@ namespace YAT.Model.Utilities
 			get { return (this.direction); }
 			set { this.direction = value;  }
 		}
-
-		/// <summary></summary>
-		[XmlAttribute("Length")]
-		public virtual int Length
-		{
-			get { return (this.length); }
-			set { this.length = value;  }
-		}
 	}
 
 	/// <summary>
@@ -90,7 +81,6 @@ namespace YAT.Model.Utilities
 	public class XmlTransferRawLine : XmlTransferLine
 	{
 		private byte[] data;
-		private string errorText;
 
 		/// <summary></summary>
 		public XmlTransferRawLine()
@@ -98,11 +88,12 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferRawLine(DateTime timeStamp, Direction direction, int length, byte[] data, string errorText)
-			: base (timeStamp, direction, length)
+		public XmlTransferRawLine(DateTime timeStamp, Direction direction, ReadOnlyCollection<byte> data)
+			: base (timeStamp, direction)
 		{
-			this.data = data;
-			this.errorText = errorText;
+			byte[] dataAsArray = new byte[data.Count];
+			data.CopyTo(dataAsArray, 0);
+			this.data = dataAsArray;
 		}
 
 		/// <remarks>Data byte array is converted to Base64 encoded string.</remarks>
@@ -120,14 +111,6 @@ namespace YAT.Model.Utilities
 			get { return (this.data); }
 			set { this.data = value;  }
 		}
-
-		/// <summary></summary>
-		[XmlAttribute("ErrorText")]
-		public virtual string ErrorText
-		{
-			get { return (this.errorText); }
-			set { this.errorText = value; }
-		}
 	}
 
 	/// <summary>
@@ -138,6 +121,7 @@ namespace YAT.Model.Utilities
 	{
 		private string text;
 		private string errorText;
+		private int length;
 
 		/// <summary></summary>
 		public XmlTransferNeatLine()
@@ -145,11 +129,12 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferNeatLine(DateTime timeStamp, Direction direction, int length, string text, string errorText)
-			: base(timeStamp, direction, length)
+		public XmlTransferNeatLine(DateTime timeStamp, Direction direction, string text, string errorText, int length)
+			: base(timeStamp, direction)
 		{
-			this.text = text;
+			this.text      = text;
 			this.errorText = errorText;
+			this.length    = length;
 		}
 
 		/// <summary></summary>
@@ -166,6 +151,14 @@ namespace YAT.Model.Utilities
 		{
 			get { return (this.errorText); }
 			set { this.errorText = value;  }
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("Length")]
+		public virtual int Length
+		{
+			get { return (this.length); }
+			set { this.length = value;  }
 		}
 	}
 }

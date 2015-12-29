@@ -208,36 +208,6 @@ namespace YAT.Model.Utilities
 
 		#endregion
 
-		/// <summary>
-		/// Clears all buffers for the current writer and causes any buffered data to be written
-		/// to the underlying <see cref="StreamWriter"/> stream.
-		/// </summary>
-		public void Flush()
-		{
-			AssertNotDisposed();
-
-			lock (writerSyncObj)
-				this.writer.Flush();
-		}
-
-		/// <summary>
-		/// Closes the current object and the underlying <see cref="StreamWriter"/> stream.
-		/// </summary>
-		public void Close()
-		{
-			AssertNotDisposed();
-
-			lock (writerSyncObj)
-			{
-				// Render and write the RTF ending into the file:
-				string rtf = this.document.renderEnding();
-				this.writer.Write(rtf);
-
-				// Close the file:
-				this.writer.Close();
-			}
-		}
-
 		/// <summary></summary>
 		public virtual void WriteLine(DisplayLine line)
 		{
@@ -294,6 +264,36 @@ namespace YAT.Model.Utilities
 				{
 					MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Clears all buffers for the current writer and causes any buffered data to be written
+		/// to the underlying <see cref="StreamWriter"/> stream.
+		/// </summary>
+		public void Flush()
+		{
+			AssertNotDisposed();
+
+			lock (writerSyncObj)
+				this.writer.Flush();
+		}
+
+		/// <summary>
+		/// Closes the current object and the underlying <see cref="StreamWriter"/> stream.
+		/// </summary>
+		public void Close()
+		{
+			AssertNotDisposed();
+
+			lock (writerSyncObj)
+			{
+				// Render and write the RTF ending into the file:
+				string rtf = this.document.renderEnding();
+				this.writer.Write(rtf);
+
+				// Close the file:
+				this.writer.Close();
 			}
 		}
 	}
