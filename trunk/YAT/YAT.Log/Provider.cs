@@ -284,9 +284,9 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual void WriteBytes(ReadOnlyCollection<byte> values, LogChannel writeChannel)
+		public virtual void Write(Domain.RawElement element, LogChannel writeChannel)
 		{
-			((RawLog)GetLog(writeChannel)).WriteBytes(values);
+			((RawLog)GetLog(writeChannel)).Write(element);
 		}
 
 		/// <summary></summary>

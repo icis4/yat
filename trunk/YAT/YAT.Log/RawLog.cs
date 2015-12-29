@@ -22,15 +22,27 @@
 //==================================================================================================
 
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
+
+using YAT.Model.Utilities;
+using YAT.Settings;
 
 namespace YAT.Log
 {
 	/// <summary></summary>
 	internal class RawLog : Log
 	{
-		private BinaryWriter writer;
+		/// <summary></summary>
+		protected enum FileType
+		{
+			Xml,
+			Binary
+		}
+
+		private FileType fileType;
+
+		private XmlWriterRaw xmlWriter;
+		private BinaryWriter binaryWriter;
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
@@ -46,8 +58,12 @@ namespace YAT.Log
 
 		protected override void Dispose(bool disposing)
 		{
-			if (this.writer != null)
-				this.writer.Close();
+			switch (this.fileType)
+			{
+				case FileType.Xml:		if (this.xmlWriter != null)		this.xmlWriter.Close();		break;
+				case FileType.Binary:
+				default:				if (this.binaryWriter != null)	this.binaryWriter.Close();	break;
+			}
 
 			base.Dispose(disposing);
 		}
@@ -55,12 +71,35 @@ namespace YAT.Log
 		#endregion
 
 		/// <summary></summary>
+		protected override void MakeFilePath()
+		{
+			base.MakeFilePath();
+			this.fileType = ToFileType(FilePath);
+		}
+
+		/// <summary></summary>
+		protected static FileType ToFileType(string filePath)
+		{
+			if (ExtensionSettings.IsXmlFile(filePath))
+				return (FileType.Xml);
+			else
+				return (FileType.Binary);
+		}
+
+		/// <summary></summary>
 		protected override void OpenWriter(FileStream stream)
 		{
 			AssertNotDisposed();
 
 			lock (this.writerSyncObj)
-				this.writer = new BinaryWriter(stream);
+			{
+				switch (this.fileType)
+				{
+					case FileType.Xml:		this.xmlWriter = new XmlWriterRaw(stream, true, FilePath);		break;
+					case FileType.Binary:
+					default:				this.binaryWriter = new BinaryWriter(stream);					break;
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -69,7 +108,14 @@ namespace YAT.Log
 			AssertNotDisposed();
 
 			lock (this.writerSyncObj)
-				this.writer.Flush();
+			{
+				switch (this.fileType)
+				{
+					case FileType.Xml:		this.xmlWriter.Flush();		break;
+					case FileType.Binary:
+					default:				this.binaryWriter.Flush();	break;
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -78,35 +124,43 @@ namespace YAT.Log
 			AssertNotDisposed();
 
 			lock (this.writerSyncObj)
-				this.writer.Close();
-		}
-
-		/// <summary></summary>
-		public virtual void WriteByte(byte value)
-		{
-			AssertNotDisposed();
-
-			if (IsEnabled && IsOn)
 			{
-				lock (this.writerSyncObj)
-					this.writer.Write(value);
-
-				TriggerFlushTimer();
+				switch (this.fileType)
+				{
+					case FileType.Xml:		this.xmlWriter.Close();		this.xmlWriter = null;		break;
+					case FileType.Binary:
+					default:				this.binaryWriter.Close();	this.binaryWriter = null;	break;
+				}
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void WriteBytes(ReadOnlyCollection<byte> values)
+		public virtual void Write(Domain.RawElement element)
 		{
 			AssertNotDisposed();
 
 			if (IsEnabled && IsOn)
 			{
-				byte[] array = new byte[values.Count];
-				values.CopyTo(array, 0);
-
 				lock (this.writerSyncObj)
-					this.writer.Write(array);
+				{
+					switch (this.fileType)
+					{
+						case FileType.Xml:
+						{
+							this.xmlWriter.WriteLine(element);
+							break;
+						}
+
+						case FileType.Binary:
+						default:
+						{
+							byte[] dataAsArray = new byte[element.Data.Count];
+							element.Data.CopyTo(dataAsArray, 0);
+							this.binaryWriter.Write(dataAsArray);
+							break;
+						}
+					}
+				}
 
 				TriggerFlushTimer();
 			}

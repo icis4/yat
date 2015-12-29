@@ -1875,8 +1875,8 @@ namespace YAT.Model
 			// Log:
 			if (this.log.IsOn)
 			{
-				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawTx);
-				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
+				this.log.Write(e.Element, Log.LogChannel.RawTx);
+				this.log.Write(e.Element, Log.LogChannel.RawBidir);
 			}
 		}
 
@@ -1895,8 +1895,8 @@ namespace YAT.Model
 			// Log:
 			if (this.log.IsOn)
 			{
-				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawBidir);
-				this.log.WriteBytes(e.Element.Data, Log.LogChannel.RawRx);
+				this.log.Write(e.Element, Log.LogChannel.RawBidir);
+				this.log.Write(e.Element, Log.LogChannel.RawRx);
 			}
 		}
 

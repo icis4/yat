@@ -37,18 +37,6 @@ namespace MKY.Diagnostics
 		//==========================================================================================
 
 		/// <summary>
-		/// Gets or sets the indent level.
-		/// </summary>
-		/// <value>
-		/// The indent level. The default is zero.
-		/// </value>
-		public virtual int IndentLevel
-		{
-			get { return (Trace.IndentLevel); }
-			set { Trace.IndentLevel = value;  }
-		}
-
-		/// <summary>
 		/// Gets or sets the number of spaces in an indent.
 		/// </summary>
 		/// <value>
@@ -58,6 +46,18 @@ namespace MKY.Diagnostics
 		{
 			get { return (Trace.IndentSize); }
 			set { Trace.IndentSize = value;  }
+		}
+
+		/// <summary>
+		/// Gets or sets the indent level.
+		/// </summary>
+		/// <value>
+		/// The indent level. The default is zero.
+		/// </value>
+		public virtual int IndentLevel
+		{
+			get { return (Trace.IndentLevel); }
+			set { Trace.IndentLevel = value;  }
 		}
 
 		/// <summary>

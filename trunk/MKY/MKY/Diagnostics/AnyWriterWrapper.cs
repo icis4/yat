@@ -54,21 +54,10 @@ namespace MKY.Diagnostics
 		// Indent
 		//==========================================================================================
 
-		private int indentLevel; // = 0;
 		private int indentSize = 4;
-		private string indentString = "    ";
+		private string indentString = new string(' ', 4);
 
-		/// <summary>
-		/// Gets or sets the indent level.
-		/// </summary>
-		/// <value>
-		/// The indent level. The default is zero.
-		/// </value>
-		public virtual int IndentLevel
-		{
-			get { return (this.indentLevel); }
-			set { this.indentLevel = value; }
-		}
+		private int indentLevel; // = 0;
 
 		/// <summary>
 		/// Gets or sets the number of spaces in an indent.
@@ -82,12 +71,20 @@ namespace MKY.Diagnostics
 			set
 			{
 				this.indentSize = value;
-
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < this.indentSize; i++)
-					sb.Append(" ");
-				this.indentString = sb.ToString();
+				this.indentString = new string(' ', this.indentSize);
 			}
+		}
+
+		/// <summary>
+		/// Gets or sets the indent level.
+		/// </summary>
+		/// <value>
+		/// The indent level. The default is zero.
+		/// </value>
+		public virtual int IndentLevel
+		{
+			get { return (this.indentLevel); }
+			set { this.indentLevel = value; }
 		}
 
 		/// <summary>

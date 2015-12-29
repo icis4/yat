@@ -160,21 +160,48 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static int LogFilesFilterDefault
+		public static string BinaryFilesFilter
+		{
+			get
+			{
+				return ("Binary Files (*.dat;*.bin;*.binary)|*.dat;*.bin;*.binary" +
+						"|" +
+						"XML Files (*.xml)|*.xml" +
+						"|" +
+						"All Files (*.*)|*.*");
+			}
+		}
+
+		/// <summary></summary>
+		public static ReadOnlyCollection<string> BinaryFilesWithDot
+		{
+			get
+			{
+				List<string> l = new List<string>();
+				l.Add(".dat");
+				l.Add(".bin");
+				l.Add(".binary");
+				l.Add(".xml");
+				return (l.AsReadOnly());
+			}
+		}
+
+		/// <summary></summary>
+		public static int BinaryFilesFilterDefault
 		{
 			get { return (1); }
+		}
+
+		/// <summary></summary>
+		public static string BinaryFilesDefault
+		{
+			get { return (".dat"); }
 		}
 
 		/// <summary></summary>
 		public static string LogFilesDefault
 		{
 			get { return (".log"); }
-		}
-
-		/// <summary></summary>
-		public static int MonitorFilesFilterDefault
-		{
-			get { return (2); }
 		}
 
 		/// <summary></summary>
@@ -201,6 +228,23 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
+		public static bool IsBinaryFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".dat"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".bin"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".binary"))
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary></summary>
 		public static bool IsRtfFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
@@ -215,52 +259,10 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static string BinaryFilesFilter
-		{
-			get
-			{
-				return ("Binary Files (*.dat;*.bin;*.binary)|*.dat;*.bin;*.binary" +
-						"|" +
-						"All Files (*.*)|*.*");
-			}
-		}
-
-		/// <summary></summary>
-		public static ReadOnlyCollection<string> BinaryFilesWithDot
-		{
-			get
-			{
-				List<string> l = new List<string>();
-				l.Add(".dat");
-				l.Add(".bin");
-				l.Add(".binary");
-				return (l.AsReadOnly());
-			}
-		}
-
-		/// <summary></summary>
-		public static int BinaryFilesFilterDefault
-		{
-			get { return (1); }
-		}
-
-		/// <summary></summary>
-		public static string BinaryFilesDefault
-		{
-			get { return (".dat"); }
-		}
-
-		/// <summary></summary>
-		public static string ExecutableFile
-		{
-			get { return (".exe"); }
-		}
-
-		/// <summary></summary>
 		public static bool IsExecutableFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ExecutableFile));
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".exe"));
 		}
 
 		/// <summary></summary>

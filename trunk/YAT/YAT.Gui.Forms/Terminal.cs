@@ -2611,7 +2611,7 @@ namespace YAT.Gui.Forms
 
 				if (ExtensionSettings.IsXmlFile(filePath))
 				{
-#if FALSE // Enable to test raw XML export.
+#if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
 					savedCount = Model.Utilities.XmlWriterHelperRaw.LinesToFile(monitor.SelectedLines, filePath, true);
 #else
 					savedCount = Model.Utilities.XmlWriterHelperNeat.LinesToFile(monitor.SelectedLines, filePath, true);
@@ -3680,7 +3680,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowLogSettings()
 		{
-			LogSettings f = new LogSettings(this.settingsRoot.Log, this.settingsRoot.TerminalType);
+			LogSettings f = new LogSettings(this.settingsRoot.Log);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
