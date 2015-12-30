@@ -26,7 +26,6 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 
 using MKY.Settings;
 

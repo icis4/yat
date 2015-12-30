@@ -422,7 +422,7 @@ namespace YAT.Gui.Controls
 						t.Start();
 
 						while (this.retrieveDescriptionsThread.IsRetrieving)
-							Application.DoEvents();
+							System.Windows.Forms.Application.DoEvents();
 
 						t.Join(); // Debug.Assert(t.ManagedThreadId != ...) makes no sense here, just created the thread above.
 
@@ -443,7 +443,7 @@ namespace YAT.Gui.Controls
 						t.Start();
 
 						while (this.markPortsInUseThread.IsScanning)
-							Application.DoEvents();
+							System.Windows.Forms.Application.DoEvents();
 
 						t.Join(); // Debug.Assert(t.ManagedThreadId != ...) makes no sense here, just created the thread above.
 

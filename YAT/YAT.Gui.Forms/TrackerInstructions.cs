@@ -25,8 +25,6 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
-using YAT.Utilities;
-
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -54,7 +52,7 @@ namespace YAT.Gui.Forms
 
 			// Form:
 			sb = new StringBuilder();
-			sb.Append(ApplicationInfo.ProductName);
+			sb.Append(ApplicationEx.ProductName);
 			switch (tracker)
 			{
 				case TrackerType.Support: sb.Append(" Support Request"); break;

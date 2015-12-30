@@ -26,26 +26,23 @@ using System.Xml.Serialization;
 
 using MKY.IO;
 
-namespace YAT.Settings
+namespace YAT.Application.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PathSettings : MKY.Settings.SettingsItem
+	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem
 	{
-		private string mainFilesPath;
-		private string sendFilesPath;
-		private string logFilesPath;
-		private string monitorFilesPath;
+		private string filePath;
 
 		/// <summary></summary>
-		public PathSettings()
+		public AutoWorkspaceSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public PathSettings(MKY.Settings.SettingsType settingsType)
+		public AutoWorkspaceSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -56,13 +53,10 @@ namespace YAT.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public PathSettings(PathSettings rhs)
+		public AutoWorkspaceSettings(AutoWorkspaceSettings rhs)
 			: base(rhs)
 		{
-			MainFilesPath    = rhs.MainFilesPath;
-			SendFilesPath    = rhs.SendFilesPath;
-			LogFilesPath     = rhs.LogFilesPath;
-			MonitorFilesPath = rhs.MonitorFilesPath;
+			FilePath     = rhs.FilePath;
 
 			ClearChanged();
 		}
@@ -74,10 +68,7 @@ namespace YAT.Settings
 		{
 			base.SetMyDefaults();
 
-			MainFilesPath    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			SendFilesPath    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			LogFilesPath     = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			MonitorFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			FilePath = "";
 		}
 
 		#region Properties
@@ -86,63 +77,24 @@ namespace YAT.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("MainFilesPath")]
-		public virtual string MainFilesPath
+		[XmlElement("FilePath")]
+		public virtual string FilePath
 		{
-			get { return (this.mainFilesPath); }
+			get { return (this.filePath); }
 			set
 			{
-				if (this.mainFilesPath != value)
+				if (this.filePath != value)
 				{
-					this.mainFilesPath = value;
+					this.filePath = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("SendFilesPath")]
-		public virtual string SendFilesPath
+		public virtual void ResetFilePath()
 		{
-			get { return (this.sendFilesPath); }
-			set
-			{
-				if (this.sendFilesPath != value)
-				{
-					this.sendFilesPath = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("LogFilesPath")]
-		public virtual string LogFilesPath
-		{
-			get { return (this.logFilesPath); }
-			set
-			{
-				if (this.logFilesPath != value)
-				{
-					this.logFilesPath = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("MonitorFilesPath")]
-		public virtual string MonitorFilesPath
-		{
-			get { return (this.monitorFilesPath); }
-			set
-			{
-				if (this.monitorFilesPath != value)
-				{
-					this.monitorFilesPath = value;
-					SetChanged();
-				}
-			}
+			FilePath = "";
 		}
 
 		#endregion
@@ -164,15 +116,12 @@ namespace YAT.Settings
 			if (GetType() != obj.GetType())
 				return (false);
 
-			PathSettings other = (PathSettings)obj;
+			AutoWorkspaceSettings other = (AutoWorkspaceSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(MainFilesPath,    other.MainFilesPath) &&
-				PathEx.Equals(SendFilesPath,    other.SendFilesPath) &&
-				PathEx.Equals(LogFilesPath,     other.LogFilesPath) &&
-				PathEx.Equals(MonitorFilesPath, other.MonitorFilesPath)
+				PathEx.Equals(FilePath, other.FilePath)
 			);
 		}
 
@@ -189,10 +138,7 @@ namespace YAT.Settings
 			(
 				base.GetHashCode() ^
 
-				this.MainFilesPath   .GetHashCode() ^
-				this.SendFilesPath   .GetHashCode() ^
-				this.LogFilesPath    .GetHashCode() ^
-				this.MonitorFilesPath.GetHashCode()
+				FilePath.GetHashCode()
 			);
 		}
 

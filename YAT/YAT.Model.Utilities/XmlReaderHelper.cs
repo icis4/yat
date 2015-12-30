@@ -125,7 +125,7 @@ namespace YAT.Model.Utilities
 
 							sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
 						}
-						sb.Append(")");
+						sb.Append(@")\!(NoEOL)"); // Ensure not to send EOL twice!
 						l.Add(sb.ToString());
 					}
 				}

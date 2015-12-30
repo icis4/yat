@@ -34,7 +34,6 @@ using System.Windows.Forms;
 using MKY;
 
 using YAT.Settings.Application;
-using YAT.Utilities;
 
 #endregion
 
@@ -76,12 +75,12 @@ namespace YAT.Gui.Forms
 			int width = Width;
 			int width2 = 0;
 
-			label_Name.Text = ApplicationInfo.ProductNameAndBuildName;
+			label_Name.Text = ApplicationEx.ProductNameAndBuildName;
 			width2 = label_Name.Left + label_Name.Width + Margin;
 			if (width < width2)
 				width = width2;
 
-			label_Version.Text = "Version " + ApplicationInfo.ProductVersion;
+			label_Version.Text = "Version " + ApplicationEx.ProductVersion;
 			width2 = label_Version.Left + label_Version.Width + Margin;
 			if (width < width2)
 				width = width2;

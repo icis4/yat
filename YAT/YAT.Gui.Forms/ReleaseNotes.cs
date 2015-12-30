@@ -34,8 +34,6 @@ using System.Windows.Forms;
 
 using MKY.IO;
 
-using YAT.Utilities;
-
 #endregion
 
 namespace YAT.Gui.Forms
@@ -44,10 +42,10 @@ namespace YAT.Gui.Forms
 	public partial class ReleaseNotes : Form
 	{
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
-		private static readonly string ReleaseNotesFileName = ApplicationInfo.ProductName + " Release Notes.txt";
+		private static readonly string ReleaseNotesFileName = ApplicationEx.ProductName + " Release Notes.txt";
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
-		private static readonly string ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
+		private static readonly string ReleaseNotesFilePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is meant to be a constant.")]
 		private static readonly string ReleaseNotesDevelopmentRelativeFilePath =
@@ -63,11 +61,11 @@ namespace YAT.Gui.Forms
 
 			// Get file path depending on development or installation:
 			string filePath;
-			switch (Path.GetFileName(Application.StartupPath))
+			switch (Path.GetFileName(System.Windows.Forms.Application.StartupPath))
 			{
 				case "Debug":
 				case "Release":
-					filePath = PathEx.CombineDirectoryAndFilePaths(Application.StartupPath, ReleaseNotesDevelopmentRelativeFilePath);
+					filePath = PathEx.CombineDirectoryAndFilePaths(System.Windows.Forms.Application.StartupPath, ReleaseNotesDevelopmentRelativeFilePath);
 					break;
 
 				default:
@@ -76,7 +74,7 @@ namespace YAT.Gui.Forms
 			}
 
 			// Set form title:
-			Text = ApplicationInfo.ProductName + " Release Notes";
+			Text = ApplicationEx.ProductName + " Release Notes";
 
 			// Open and fill release notes:
 			textBox_ReleaseNotes.Text = "";

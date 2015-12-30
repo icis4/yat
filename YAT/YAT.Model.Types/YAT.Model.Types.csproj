@@ -120,13 +120,13 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
+      <Project>{a3e80010-9146-47ef-87b0-138a60406a9e}</Project>
+      <Name>YAT.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Utilities\YAT.Utilities.csproj">
-      <Project>{5e374ff3-3ce6-4fd2-b41c-679329ff05a5}</Project>
-      <Name>YAT.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

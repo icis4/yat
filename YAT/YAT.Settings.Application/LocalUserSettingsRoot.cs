@@ -25,7 +25,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-using YAT.Utilities;
+using YAT.Application.Settings;
+using YAT.Application.Utilities;
 
 namespace YAT.Settings.Application
 {
@@ -38,10 +39,11 @@ namespace YAT.Settings.Application
 		private string settingsVersion = "1.4.1";
 
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
-		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
+		private string productVersion = ApplicationEx.ProductVersion;
 
 		private GeneralSettings general;
 		private PathSettings paths;
+		private ExtensionSettings extensions;
 		private AutoWorkspaceSettings autoAutoWorkspace;
 		private Model.Settings.MainWindowSettings mainWindow;
 		private Model.Settings.NewTerminalSettings newTerminal;
@@ -53,6 +55,7 @@ namespace YAT.Settings.Application
 		{
 			General       = new GeneralSettings();
 			Paths         = new PathSettings();
+			Extensions    = new ExtensionSettings();
 			AutoWorkspace = new AutoWorkspaceSettings();
 			MainWindow    = new Model.Settings.MainWindowSettings();
 			NewTerminal   = new Model.Settings.NewTerminalSettings();
@@ -67,6 +70,7 @@ namespace YAT.Settings.Application
 		{
 			General       = new GeneralSettings(rhs.General);
 			Paths         = new PathSettings(rhs.Paths);
+			Extensions    = new ExtensionSettings(rhs.Extensions);
 			AutoWorkspace = new AutoWorkspaceSettings(rhs.AutoWorkspace);
 			MainWindow    = new Model.Settings.MainWindowSettings(rhs.MainWindow);
 			NewTerminal   = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
@@ -84,7 +88,7 @@ namespace YAT.Settings.Application
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationInfo.ProductName + " local user settings"); }
+			get { return (ApplicationEx.ProductName + " local user settings"); }
 			set { } // Do nothing.
 		}
 
@@ -139,7 +143,7 @@ namespace YAT.Settings.Application
 				}
 				else if (this.general != value)
 				{
-					Settings.GeneralSettings old = this.general;
+					GeneralSettings old = this.general;
 					this.general = value;
 					ReplaceNode(old, this.general);
 				}
@@ -165,9 +169,35 @@ namespace YAT.Settings.Application
 				}
 				else if (this.paths != value)
 				{
-					Settings.PathSettings old = this.paths;
+					PathSettings old = this.paths;
 					this.paths = value;
 					ReplaceNode(old, this.paths);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Extensions")]
+		public virtual ExtensionSettings Extensions
+		{
+			get { return (this.extensions); }
+			set
+			{
+				if (value == null)
+				{
+					DetachNode(this.extensions);
+					this.extensions = null;
+				}
+				else if (this.extensions == null)
+				{
+					this.extensions = value;
+					AttachNode(this.extensions);
+				}
+				else if (this.extensions != value)
+				{
+					ExtensionSettings old = this.extensions;
+					this.extensions = value;
+					ReplaceNode(old, this.extensions);
 				}
 			}
 		}
@@ -191,7 +221,7 @@ namespace YAT.Settings.Application
 				}
 				else if (this.autoAutoWorkspace != value)
 				{
-					Settings.AutoWorkspaceSettings old = this.autoAutoWorkspace;
+					AutoWorkspaceSettings old = this.autoAutoWorkspace;
 					this.autoAutoWorkspace = value;
 					ReplaceNode(old, this.autoAutoWorkspace);
 				}
@@ -282,7 +312,11 @@ namespace YAT.Settings.Application
 		[SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Justification = "See comment above.")]
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
 		{
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFilesPath",       new string[] { "TerminalFilesPath" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFiles",           new string[] { "TerminalFilesPath" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MainFilesPath",       new string[] { "WorkspaceFilesPath" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "SendFiles",           new string[] { "SendFilesPath" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "LogFiles",            new string[] { "LogFilesPath" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Paths"       }, "MonitorFiles",        new string[] { "MonitorFilesPath" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "NewTerminal" }, "SocketRemoteTcpPort", new string[] { "SocketRemotePort" } ),
 		};
 

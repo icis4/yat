@@ -27,19 +27,16 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
 
 using MKY;
 using MKY.CommandLine;
 using MKY.IO.Usb;
 
-using YAT.Settings;
+using YAT.Application.Utilities;
 using YAT.Settings.Application;
-using YAT.Utilities;
 
 #endregion
 
@@ -286,24 +283,24 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep " + ApplicationInfo.ProductNameConstWorkaround + " open after performing the requested operation.")]
+		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep " + ApplicationEx.ProductNameConstWorkaround + " open after performing the requested operation.")]
 		public bool KeepOpen;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep " + ApplicationInfo.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation.")]
+		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep " + ApplicationEx.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation.")]
 		public bool KeepOpenOnError;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationInfo.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
-			"For " + ApplicationInfo.ProductNameConstWorkaround + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
-			"For " + ApplicationInfo.ProductNameConstWorkaround + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
+		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationEx.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationEx.ProductNameConstWorkaround + ".exe, interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
+			"For " + ApplicationEx.ProductNameConstWorkaround + "Console.exe, interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationInfo.ProductNameConstWorkaround + " but neither show any dialog nor perform any operation.")]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start " + ApplicationEx.ProductNameConstWorkaround + " but neither show any dialog nor perform any operation.")]
 		public bool Empty;
 
 		#endregion
@@ -345,8 +342,8 @@ namespace YAT.Model
 			{
 				if (File.Exists(RequestedFilePath))
 				{
-					if (!ExtensionSettings.IsWorkspaceFile(RequestedFilePath) &&
-						!ExtensionSettings.IsTerminalFile (RequestedFilePath))
+					if (!ExtensionHelper.IsWorkspaceFile(RequestedFilePath) &&
+						!ExtensionHelper.IsTerminalFile (RequestedFilePath))
 					{
 						RequestedFilePath = null;
 						Invalidate("Requested file is no workspace nor terminal file");
@@ -374,8 +371,8 @@ namespace YAT.Model
 						string mostRecent = ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[0];
 						if (File.Exists(mostRecent))
 						{
-							if (ExtensionSettings.IsWorkspaceFile(mostRecent) ||
-								ExtensionSettings.IsTerminalFile(mostRecent))
+							if (ExtensionHelper.IsWorkspaceFile(mostRecent) ||
+								ExtensionHelper.IsTerminalFile(mostRecent))
 							{
 								MostRecentFilePath = mostRecent;
 							}
@@ -422,13 +419,13 @@ namespace YAT.Model
 		/// </summary>
 		public override string GetHelpText(int maxWidth)
 		{
-			string anyWorkspace = "<Workspace>" + YAT.Settings.ExtensionSettings.WorkspaceFile;
-			string anyTerminal  = "<Terminal>"  + YAT.Settings.ExtensionSettings.TerminalFile;
+			string anyWorkspace = "<Workspace>" + ExtensionHelper.WorkspaceFile;
+			string anyTerminal  = "<Terminal>"  + ExtensionHelper.TerminalFile;
 
-			string myWorkspace = "MyWorkspace" + YAT.Settings.ExtensionSettings.WorkspaceFile;
-			string myTerminal  = "MyTerminal"  + YAT.Settings.ExtensionSettings.TerminalFile;
+			string myWorkspace = "MyWorkspace" + ExtensionHelper.WorkspaceFile;
+			string myTerminal  = "MyTerminal"  + ExtensionHelper.TerminalFile;
 
-			string name = ApplicationInfo.ProductName;
+			string name = ApplicationEx.ProductName;
 			StringBuilder helpText = new StringBuilder();
 
 			helpText.AppendLine(                                 "Usage:");
@@ -439,25 +436,25 @@ namespace YAT.Model
 			helpText.AppendLine(                                 "Usage examples:");
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myWorkspace));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and open the given workspace."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and open the given workspace."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and open the given terminal."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and open the given terminal."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " " + myTerminal + " /b=19200"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " with the given terminal, but change the baud rate to 19200 baud."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " with the given terminal, but change the baud rate to 19200 baud."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /r"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and open the most recent file."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and open the most recent file."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /n /p=1 /b=19200"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and create a new terminal on COM1 using 19200 baud."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and create a new terminal on COM1 using 19200 baud."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " and show the 'New Terminal' dialog."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " and show the 'New Terminal' dialog."));
 			helpText.AppendLine();
 			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, name + " /e"));
-			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationInfo.ProductName + " but neither show any dialog nor perform any operation."));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,        "Start " + ApplicationEx.ProductName + " but neither show any dialog nor perform any operation."));
 			helpText.AppendLine();
 
 			helpText.Append(base.GetHelpText(maxWidth));

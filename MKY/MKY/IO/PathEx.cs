@@ -69,6 +69,40 @@ namespace MKY.IO
 
 		#endregion
 
+		#region ...Extension()
+
+		/// <summary>
+		/// Normalizes an extension, i.e. prepends a '.' if missing.
+		/// </summary>
+		public static string NormalizeExtension(string extension)
+		{
+			if (string.IsNullOrEmpty(extension))
+				return (extension);
+
+			if (extension[0] == '.') // Already normalized.
+				return (extension);
+
+			// Normalize:
+			return (extension.Insert(0, "."));
+		}
+
+		/// <summary>
+		/// Denormalizes an extension, i.e. removes a '.' if apparent.
+		/// </summary>
+		public static string DenormalizeExtension(string extension)
+		{
+			if (string.IsNullOrEmpty(extension))
+				return (extension);
+
+			if (extension[0] != '.') // Already denormalized.
+				return (extension);
+
+			// Denormalize:
+			return (extension.TrimStart('.'));
+		}
+
+		#endregion
+
 		#region InvalidPathRoot
 
 		/// <summary>

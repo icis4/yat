@@ -50,11 +50,12 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.IO;
 using MKY.Recent;
 using MKY.Windows.Forms;
 
+using YAT.Application.Utilities;
 using YAT.Model.Types;
-using YAT.Settings;
 using YAT.Settings.Application;
 
 #endregion
@@ -421,30 +422,55 @@ namespace YAT.Gui.Controls
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Set File";
+
+			string initialExtension;
 			switch (this.terminalType)
 			{
 				case Domain.TerminalType.Binary:
 				{
-					ofd.Filter      = ExtensionSettings.BinaryFilesFilter;
-					ofd.FilterIndex = ExtensionSettings.BinaryFilesFilterDefault;
-					ofd.DefaultExt  = ExtensionSettings.BinaryFilesDefault;
+					initialExtension = ApplicationSettings.LocalUserSettings.Extensions.BinarySendFiles;
+
+					ofd.Filter      = ExtensionHelper.BinaryFilesFilter;
+					ofd.FilterIndex = ExtensionHelper.BinaryFilesFilterHelper(initialExtension);
 					break;
 				}
-				default: // Includes Domain.TerminalType.Text:
+
+				case Domain.TerminalType.Text:
+				default:
 				{
-					ofd.Filter      = ExtensionSettings.TextFilesFilter;
-					ofd.FilterIndex = ExtensionSettings.TextFilesFilterDefault;
-					ofd.DefaultExt  = ExtensionSettings.TextFilesDefault;
+					initialExtension = ApplicationSettings.LocalUserSettings.Extensions.TextSendFiles;
+
+					ofd.Filter      = ExtensionHelper.TextFilesFilter;
+					ofd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
 					break;
 				}
 			}
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFilesPath;
+
+			ofd.DefaultExt = PathEx.DenormalizeExtension(initialExtension);
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFiles;
+
 			bool success = ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0));
 			if (success)
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
+				switch (this.terminalType)
+				{
+					case Domain.TerminalType.Binary:
+					{
+						ApplicationSettings.LocalUserSettings.Extensions.BinarySendFiles = Path.GetExtension(ofd.FileName);
+						break;
+					}
+
+					case Domain.TerminalType.Text:
+					default:
+					{
+						ApplicationSettings.LocalUserSettings.Extensions.TextSendFiles = Path.GetExtension(ofd.FileName);
+						break;
+					}
+				}
+
+				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				CreateAndConfirmCommand(ofd.FileName);

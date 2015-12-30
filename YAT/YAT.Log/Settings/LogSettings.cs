@@ -35,9 +35,8 @@ using System.Xml.Serialization;
 
 using MKY.IO;
 
-using YAT.Settings;
+using YAT.Application.Utilities;
 using YAT.Settings.Application;
-using YAT.Utilities;
 
 #endregion
 
@@ -108,6 +107,7 @@ namespace YAT.Log.Settings
 		public LogSettings()
 		{
 			SetMyDefaults();
+			OverrideMyDefaults();
 			ClearChanged();
 		}
 
@@ -116,6 +116,7 @@ namespace YAT.Log.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
+			OverrideMyDefaults();
 			ClearChanged();
 		}
 
@@ -169,18 +170,18 @@ namespace YAT.Log.Settings
 		{
 			base.SetMyDefaults();
 
-			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFilesPath;
-			RootFileName = ApplicationInfo.ProductName + "-Log";
+			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
+			RootFileName = ApplicationEx.ProductName + "-Log";
 
 			RawLogTx     = false;
 			RawLogBidir  = false;
 			RawLogRx     = false;
-			RawExtension = ExtensionSettings.BinaryFilesDefault;
+			RawExtension = ExtensionHelper.RawLogFilesDefault;
 
 			NeatLogTx     = false;
 			NeatLogBidir  = true;
 			NeatLogRx     = false;
-			NeatExtension = ExtensionSettings.LogFilesDefault;
+			NeatExtension = ExtensionHelper.NeatLogFilesDefault;
 
 			NameFormat    = false;
 			NameChannel   = false;
@@ -194,6 +195,15 @@ namespace YAT.Log.Settings
 			WriteMode     = LogFileWriteMode.Create;
 
 			TextEncoding  = LogFileEncoding.UTF8;
+		}
+
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
+		protected virtual void OverrideMyDefaults()
+		{
+			RawExtension  = ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles;
+			NeatExtension = ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles;
 		}
 
 		private static string ToFormatString(LogFormat format)
@@ -839,9 +849,9 @@ namespace YAT.Log.Settings
 		{
 			if (AnyNeat)
 			{
-				if      (ExtensionSettings.IsRtfFile(NeatExtension))
+				if      (ExtensionHelper.IsRtfFile(NeatExtension))
 					return (false); // RTF is limited to ANSI/ASCII.
-				else if (ExtensionSettings.IsXmlFile(NeatExtension))
+				else if (ExtensionHelper.IsXmlFile(NeatExtension))
 					return (false); // YAT always uses UTF-8 for XML.
 				else
 					return (true);

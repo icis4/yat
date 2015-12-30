@@ -952,30 +952,31 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses <paramref name="value"/> for keywords.
+		/// Parses <paramref name="s"/> for keywords.
 		/// </summary>
-		/// <param name="value">String to be parsed.</param>
+		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">Array containing the results.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Non-static for orthogonality with other TryParse() methods.")]
-		internal virtual bool TryParseContiguousKeywords(string value, out Result[] result, ref FormatException formatException)
+		internal virtual bool TryParseContiguousKeywords(string s, out Result[] result, ref FormatException formatException)
 		{
 			List<Result> l = new List<Result>();
-			string[] items = value.Split(' ');
-			foreach (string item in items)
+			string[] tokens = s.Split(' ');
+			foreach (string token in tokens)
 			{
-				if (item.Length == 0)
+				if (token.Length == 0)
 					continue;
 
-				try
+				Keyword keyword;
+				if (KeywordEx.TryParse(token, out keyword))
 				{
-					l.Add(new KeywordResult((KeywordEx)item));
+					l.Add(new KeywordResult(keyword));
 				}
-				catch (ArgumentException)
+				else
 				{
 					result = new Result[] { };
-					formatException = new FormatException(@"""" + item + @""" is no valid keyword.");
+					formatException = new FormatException(@"""" + token + @""" is no valid keyword.");
 					return (false);
 				}
 			}
@@ -996,13 +997,13 @@ namespace YAT.Domain.Parser
 		/// <remarks>
 		/// Required to allow multiple use of parser.
 		/// </remarks>
-		private void InitializeTopLevel(string value, Modes modes)
+		private void InitializeTopLevel(string s, Modes modes)
 		{
 			DisposeAndReset();
 
 			this.modes           = modes;
 
-			this.charReader      = new StringReader(value);
+			this.charReader      = new StringReader(s);
 			this.bytesWriter     = new MemoryStream();
 			this.result          = new List<Result>();
 			this.state           = new DefaultState();

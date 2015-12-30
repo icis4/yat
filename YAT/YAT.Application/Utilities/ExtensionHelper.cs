@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -28,13 +33,20 @@ using System.IO;
 
 using MKY;
 
-namespace YAT.Settings
+#endregion
+
+namespace YAT.Application.Utilities
 {
 	/// <summary>
 	/// Defines extension filters for open/save dialogs.
 	/// </summary>
-	public static class ExtensionSettings
+	public static class ExtensionHelper
 	{
+		#region Terminal/Workspace
+		//------------------------------------------------------------------------------------------
+		// Terminal/Workspace
+		//------------------------------------------------------------------------------------------
+
 		private static string terminalFile  = ".yat";
 		private static string workspaceFile = ".yaw";
 
@@ -117,6 +129,83 @@ namespace YAT.Settings
 			get { return (3); }
 		}
 
+		#endregion
+
+		#region Text/Binary/Send/Monitor/Log
+		//------------------------------------------------------------------------------------------
+		// Text/Binary/Send/Monitor/Log
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public static bool IsTextExtension(string extension)
+		{
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".txt"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".text"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".log"))
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool IsTextFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsTextExtension(extension));
+		}
+
+		/// <summary></summary>
+		public static bool IsBinaryExtension(string extension)
+		{
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".dat"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".bin"))
+				return (true);
+
+			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".binary"))
+				return (true);
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool IsBinaryFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsBinaryExtension(extension));
+		}
+
+		/// <summary></summary>
+		public static bool IsRtfExtension(string extension)
+		{
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".rtf"));
+		}
+
+		/// <summary></summary>
+		public static bool IsRtfFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsRtfExtension(extension));
+		}
+
+		/// <summary></summary>
+		public static bool IsXmlExtension(string extension)
+		{
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".xml"));
+		}
+
+		/// <summary></summary>
+		public static bool IsXmlFile(string filePath)
+		{
+			string extension = Path.GetExtension(filePath);
+			return (IsXmlExtension(extension));
+		}
+
 		/// <summary></summary>
 		public static string TextFilesFilter
 		{
@@ -130,6 +219,19 @@ namespace YAT.Settings
 						"|" +
 						"All Files (*.*)|*.*");
 			}
+		}
+
+		/// <summary></summary>
+		public static int TextFilesFilterHelper(string extension)
+		{
+			if      (IsTextFile(extension))
+				return (1);
+			else if (IsRtfExtension(extension))
+				return (2);
+			else if (IsXmlExtension(extension))
+				return (3);
+			else
+				return (4);
 		}
 
 		/// <summary></summary>
@@ -148,15 +250,15 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static int TextFilesFilterDefault
-		{
-			get { return (1); }
-		}
-
-		/// <summary></summary>
 		public static string TextFilesDefault
 		{
 			get { return (".txt"); }
+		}
+
+		/// <summary></summary>
+		public static string NeatLogFilesDefault
+		{
+			get { return (".log"); }
 		}
 
 		/// <summary></summary>
@@ -170,6 +272,17 @@ namespace YAT.Settings
 						"|" +
 						"All Files (*.*)|*.*");
 			}
+		}
+
+		/// <summary></summary>
+		public static int BinaryFilesFilterHelper(string extension)
+		{
+			if      (IsBinaryFile(extension))
+				return (1);
+			else if (IsXmlExtension(extension))
+				return (2);
+			else
+				return (3);
 		}
 
 		/// <summary></summary>
@@ -187,21 +300,15 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public static int BinaryFilesFilterDefault
-		{
-			get { return (1); }
-		}
-
-		/// <summary></summary>
 		public static string BinaryFilesDefault
 		{
 			get { return (".dat"); }
 		}
 
 		/// <summary></summary>
-		public static string LogFilesDefault
+		public static string RawLogFilesDefault
 		{
-			get { return (".log"); }
+			get { return (".dat"); } // = BinaryFilesDefault
 		}
 
 		/// <summary></summary>
@@ -210,66 +317,40 @@ namespace YAT.Settings
 			get { return (".rtf"); }
 		}
 
-		/// <summary></summary>
-		public static bool IsTextFile(string filePath)
-		{
-			string extension = Path.GetExtension(filePath);
+		#endregion
 
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".txt"))
-				return (true);
-
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".text"))
-				return (true);
-
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".log"))
-				return (true);
-
-			return (false);
-		}
+		#region Executable
+		//------------------------------------------------------------------------------------------
+		// Executable
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public static bool IsBinaryFile(string filePath)
+		public static bool IsExecutableExtension(string extension)
 		{
-			string extension = Path.GetExtension(filePath);
-
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".dat"))
-				return (true);
-
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".bin"))
-				return (true);
-
-			if (StringEx.EqualsOrdinalIgnoreCase(extension, ".binary"))
-				return (true);
-
-			return (false);
-		}
-
-		/// <summary></summary>
-		public static bool IsRtfFile(string filePath)
-		{
-			string extension = Path.GetExtension(filePath);
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".rtf"));
-		}
-
-		/// <summary></summary>
-		public static bool IsXmlFile(string filePath)
-		{
-			string extension = Path.GetExtension(filePath);
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".xml"));
+			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".exe"));
 		}
 
 		/// <summary></summary>
 		public static bool IsExecutableFile(string filePath)
 		{
 			string extension = Path.GetExtension(filePath);
-			return (StringEx.EqualsOrdinalIgnoreCase(extension, ".exe"));
+			return (IsExecutableExtension(extension));
 		}
+
+		#endregion
+
+		#region All
+		//------------------------------------------------------------------------------------------
+		// All
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public static string AllFilesFilter
 		{
 			get { return ("All Files (*.*)|*.*"); }
 		}
+
+		#endregion
 	}
 }
 

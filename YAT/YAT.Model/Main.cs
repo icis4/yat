@@ -41,12 +41,10 @@ using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
 
-using YAT.Settings;
+using YAT.Application.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
-
-using YAT.Utilities;
 
 #endregion
 
@@ -268,7 +266,7 @@ namespace YAT.Model
 				if (this.workspace != null)
 					return (this.workspace.AutoName);
 				else
-					return (ApplicationInfo.ProductName);
+					return (ApplicationEx.ProductName);
 			}
 		}
 
@@ -513,7 +511,7 @@ namespace YAT.Model
 			// Open the requested settings file:
 			if (!string.IsNullOrEmpty(requestedFilePath))
 			{
-				if (ExtensionSettings.IsWorkspaceFile(requestedFilePath))
+				if (ExtensionHelper.IsWorkspaceFile(requestedFilePath))
 				{
 					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 					if (OpenWorkspaceFile(requestedFilePath, out sh))
@@ -521,7 +519,7 @@ namespace YAT.Model
 					else
 						return (false);
 				}
-				else if (ExtensionSettings.IsTerminalFile(requestedFilePath))
+				else if (ExtensionHelper.IsTerminalFile(requestedFilePath))
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					if (OpenTerminalFile(requestedFilePath, out sh))
@@ -954,7 +952,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			string extension = Path.GetExtension(filePath);
-			if (ExtensionSettings.IsWorkspaceFile(extension))
+			if (ExtensionHelper.IsWorkspaceFile(extension))
 			{
 				if (OpenWorkspaceFromFile(filePath))
 				{
@@ -970,7 +968,7 @@ namespace YAT.Model
 					return (false);
 				}
 			}
-			else if (ExtensionSettings.IsTerminalFile(extension))
+			else if (ExtensionHelper.IsTerminalFile(extension))
 			{
 				// Create workspace if it doesn't exist yet.
 				bool newWorkspaceSoSignalStarted = false;
@@ -1067,7 +1065,7 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnFixedStatusTextRequest("Exiting " + ApplicationInfo.ProductName + "...");
+				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
 				cancel = false;
 
 				// Close the static application settings:
@@ -1353,7 +1351,7 @@ namespace YAT.Model
 					settings = s;
 
 					// Try to retrieve GUID from file path (in case of auto saved workspace files).
-					if (!GuidEx.TryCreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
+					if (!GuidEx.TryCreateGuidFromFilePath(filePath, Application.Settings.GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
 						guid = Guid.NewGuid();
 
 					exception = null;
