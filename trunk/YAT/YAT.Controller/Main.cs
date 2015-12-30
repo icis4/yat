@@ -27,20 +27,15 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-using MKY;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
-using YAT.Settings;
 using YAT.Settings.Application;
-using YAT.Utilities;
 
 #endregion
 
@@ -444,9 +439,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private Result RunFullyWithView()
 		{
-			ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
-			ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
-			ApplicationEx.SubmitBugMessage      =      "Please report this issue as described in 'Help > Submit Bug'.";
+			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
+			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
+			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage      =      "Please report this issue as described in 'Help > Submit Bug'.";
 
 		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
@@ -456,7 +451,7 @@ namespace YAT.Controller
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
+				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 
 				try
 				{
@@ -475,9 +470,9 @@ namespace YAT.Controller
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						string message = "An unhandled synchronous exception occurred while preparing " + ApplicationInfo.ProductName + ".";
+						string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-							Application.Restart();
+							System.Windows.Forms.Application.Restart();
 					}
 					return (Result.UnhandledException);
 				}
@@ -488,15 +483,15 @@ namespace YAT.Controller
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
-						Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
 						// \attention:
 						// This call does not return until the application exits.
-						Application.Run(view);
+						System.Windows.Forms.Application.Run(view);
 
-						Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
 						Model.Main.Result viewResult = view.Result;
 						return (ConvertToMainResult(viewResult));
@@ -506,9 +501,9 @@ namespace YAT.Controller
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						string message = "An unhandled synchronous exception occurred while running " + ApplicationInfo.ProductName + ".";
+						string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-							Application.Restart();
+							System.Windows.Forms.Application.Restart();
 					}
 					return (Result.UnhandledException);
 				}
@@ -516,25 +511,25 @@ namespace YAT.Controller
 		}
 
 		/// <remarks>
-		/// In case of an <see cref="Application.ThreadException"/>, it is possible to continue operation.
+		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
 		private void RunFullyWithView_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
 			if (this.commandLineArgs.Interactive)
 			{
-				string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationInfo.ProductName + ".";
+				string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
 				Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, Gui.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
 
 				if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-					Application.Restart();
+					System.Windows.Forms.Application.Restart();
 				else if (result == Gui.Forms.UnhandledExceptionResult.Continue)
 					return; // Ignore, do nothing.
 				else
-					Application.Exit();
+					System.Windows.Forms.Application.Exit();
 			}
 			else
 			{
-				Application.Exit();
+				System.Windows.Forms.Application.Exit();
 			}
 		}
 
@@ -547,19 +542,19 @@ namespace YAT.Controller
 			if (this.commandLineArgs.Interactive)
 			{
 				Exception ex = (e.ExceptionObject as Exception);
-				string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
+				string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 				Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
 
 				if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-					Application.Restart();
+					System.Windows.Forms.Application.Restart();
 				else if (result == Gui.Forms.UnhandledExceptionResult.Continue)
 					return; // Ignore, do nothing.
 				else
-					Application.Exit();
+					System.Windows.Forms.Application.Exit();
 			}
 			else
 			{
-				Application.Exit();
+				System.Windows.Forms.Application.Exit();
 			}
 		}
 #endif // !DEBUG
@@ -575,9 +570,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private Result RunWithViewButOutputErrorsOnConsole()
 		{
-			ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
-			ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
-			ApplicationEx.SubmitBugMessage      =      "Please report this issue as described in 'Help > Submit Bug'.";
+			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
+			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
+			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage      =      "Please report this issue as described in 'Help > Submit Bug'.";
 
 		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
@@ -587,7 +582,7 @@ namespace YAT.Controller
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
+				MKY.Windows.Forms.ApplicationEx.EnableVisualStylesAndSetTextRenderingIfNotAlreadyDoneSo();
 
 				try
 				{
@@ -604,7 +599,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationInfo.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
@@ -619,15 +614,15 @@ namespace YAT.Controller
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
-						Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
 						// \attention:
 						// This call does not return until the application exits.
-						Application.Run(view);
+						System.Windows.Forms.Application.Run(view);
 
-						Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
+						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
 						Model.Main.Result viewResult = view.Result;
 						return (ConvertToMainResult(viewResult));
@@ -635,7 +630,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + ApplicationInfo.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
@@ -647,11 +642,11 @@ namespace YAT.Controller
 		}
 
 		/// <remarks>
-		/// In case of an <see cref="Application.ThreadException"/>, it is possible to continue operation.
+		/// In case of an <see cref="System.Windows.Forms.Application.ThreadException"/>, it is possible to continue operation.
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_Application_ThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationInfo.ProductName + ".";
+			string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
 			Console.Error.WriteLine(message);
 
 			Exception ex = e.Exception;
@@ -665,7 +660,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunWithViewButOutputErrorsOnConsole_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
+			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
 
 			Exception ex = (e.ExceptionObject as Exception);
@@ -687,9 +682,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private Result RunFullyFromConsole()
 		{
-			ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
-			ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
-			ApplicationEx.SubmitBugMessage =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
+			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
+			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
+			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 
 		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
@@ -716,7 +711,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationInfo.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
@@ -735,7 +730,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + ApplicationInfo.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
 					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
@@ -751,7 +746,7 @@ namespace YAT.Controller
 		/// </remarks>
 		private void RunFullyFromConsole_currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + Application.ProductName + ".";
+			string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
 			Console.Error.WriteLine(message);
 
 			Exception ex = (e.ExceptionObject as Exception);
@@ -773,9 +768,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private Result RunInvisible()
 		{
-			ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
-			ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
-			ApplicationEx.SubmitBugMessage =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
+			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
+			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
+			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -797,7 +792,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationInfo.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (Result.UnhandledException);
@@ -813,7 +808,7 @@ namespace YAT.Controller
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occurred while running " + ApplicationInfo.ProductName + ".";
+					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (Result.UnhandledException);
@@ -835,7 +830,7 @@ namespace YAT.Controller
 
 			if (showLogo)
 			{
-				foreach (string line in ApplicationInfo.ProductLogo)
+				foreach (string line in ApplicationEx.ProductLogo)
 					sb.AppendLine(line);
 
 				sb.AppendLine();
@@ -847,7 +842,7 @@ namespace YAT.Controller
 			foreach (string line in ResultText)
 				sb.AppendLine(line);
 
-			MessageBoxEx.Show(sb.ToString(), ApplicationInfo.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			MessageBoxEx.Show(sb.ToString(), ApplicationEx.ProductNameLong, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
 		#endregion
@@ -878,13 +873,13 @@ namespace YAT.Controller
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 			Console.Out.WriteLine();
 
-			Console.Out.WriteLine(ApplicationInfo.ProductNameAndBuildNameAndVersion);
+			Console.Out.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
 
 			Console.Out.WriteLine();
 			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
 			Console.Out.WriteLine();
 
-			foreach (string line in ApplicationInfo.ProductLogo)
+			foreach (string line in ApplicationEx.ProductLogo)
 				Console.Out.WriteLine(line);
 
 			Console.Out.WriteLine();

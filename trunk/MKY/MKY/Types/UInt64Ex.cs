@@ -259,40 +259,40 @@ namespace MKY
 		/// Parses a binary string (e.g. "00101011"). String must not contain
 		/// other characters than '0' or '1'.
 		/// </summary>
-		/// <param name="value">String to be parsed.</param>
+		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value value equivalent to the
-		/// number contained in <paramref name="value"/>, if the conversion succeeded, or zero if
-		/// the conversion failed. The conversion fails if the <paramref name="value"/> parameter
+		/// number contained in <paramref name="s"/>, if the conversion succeeded, or zero if
+		/// the conversion failed. The conversion fails if the <paramref name="s"/> parameter
 		/// is <c>null</c>, is not of the correct format, or represents a number less than
 		/// <see cref="UInt64.MinValue"/> or greater than <see cref="UInt64.MaxValue"/>.
 		/// This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
 		[CLSCompliant(false)]
-		public static bool TryParseBinary(string value, out ulong result)
+		public static bool TryParseBinary(string s, out ulong result)
 		{
-			return (TryParseNumericBase(2, value, out result));
+			return (TryParseNumericBase(2, s, out result));
 		}
 
 		/// <summary>
 		/// Parses a octal string (e.g. "54"). String must not contain other
 		/// characters than '0' to '7'.
 		/// </summary>
-		/// <param name="value">String to be parsed.</param>
+		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value value equivalent to the
-		/// number contained in <paramref name="value"/>, if the conversion succeeded, or zero if
-		/// the conversion failed. The conversion fails if the <paramref name="value"/> parameter
+		/// number contained in <paramref name="s"/>, if the conversion succeeded, or zero if
+		/// the conversion failed. The conversion fails if the <paramref name="s"/> parameter
 		/// is <c>null</c>, is not of the correct format, or represents a number less than
 		/// <see cref="UInt64.MinValue"/> or greater than <see cref="UInt64.MaxValue"/>.
 		/// This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
 		[CLSCompliant(false)]
-		public static bool TryParseOctal(string value, out ulong result)
+		public static bool TryParseOctal(string s, out ulong result)
 		{
-			return (TryParseNumericBase(8, value, out result));
+			return (TryParseNumericBase(8, s, out result));
 		}
 
 		/// <summary>
@@ -300,20 +300,20 @@ namespace MKY
 		/// contain leading or trailing non-numeric characters.
 		/// </summary>
 		/// <param name="numericBase">Numeric base (e.g. 4 or 8).</param>
-		/// <param name="value">String to be parsed.</param>
+		/// <param name="s">String to be parsed.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value value equivalent to the
-		/// number contained in <paramref name="value"/>, if the conversion succeeded, or zero if
-		/// the conversion failed. The conversion fails if the <paramref name="value"/> parameter
+		/// number contained in <paramref name="s"/>, if the conversion succeeded, or zero if
+		/// the conversion failed. The conversion fails if the <paramref name="s"/> parameter
 		/// is <c>null</c>, is not of the correct format, or represents a number less than
 		/// <see cref="UInt64.MinValue"/> or greater than <see cref="UInt64.MaxValue"/>.
 		/// This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
 		[CLSCompliant(false)]
-		public static bool TryParseNumericBase(int numericBase, string value, out ulong result)
+		public static bool TryParseNumericBase(int numericBase, string s, out ulong result)
 		{
-			char[] from = value.ToCharArray();
+			char[] from = s.ToCharArray();
 			result = 0;
 			for (int power = 0; power < from.Length; power++)
 			{

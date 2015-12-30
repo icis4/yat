@@ -37,11 +37,11 @@ using MKY.Settings;
 using NUnit;
 using NUnit.Framework;
 
+using YAT.Application.Utilities;
 using YAT.Controller;
 using YAT.Domain;
 using YAT.Model.Settings;
 using YAT.Model.Types;
-using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
@@ -102,9 +102,9 @@ namespace YAT.Gui.Test
 		[MinuteDurationCategory(1)]
 		public virtual void TestTransmissionDisplay()
 		{
-			string workspaceSettingsFilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);
-			string terminalSettings1FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
-			string terminalSettings2FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
+			string workspaceSettingsFilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.WorkspaceFile);
+			string terminalSettings1FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
+			string terminalSettings2FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
 
 			DocumentSettingsHandler<WorkspaceSettingsRoot> workspaceSettings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			DocumentSettingsHandler<TerminalSettingsRoot> terminalSettings1 = new DocumentSettingsHandler<TerminalSettingsRoot>();

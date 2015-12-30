@@ -32,8 +32,6 @@ using System.Windows.Forms;
 
 using MKY.Windows.Forms;
 
-using YAT.Utilities;
-
 #endregion
 
 namespace YAT.Gui.Forms
@@ -92,9 +90,9 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, UnhandledExceptionType exceptionType, bool mayBeContinued)
 		{
-			if (Application.OpenForms.Count > 0)
+			if (System.Windows.Forms.Application.OpenForms.Count > 0)
 			{
-				Form f = Application.OpenForms[0];
+				Form f = System.Windows.Forms.Application.OpenForms[0];
 				if (f.InvokeRequired)
 				{
 					ProvideExceptionToUserDelegate invoker = new ProvideExceptionToUserDelegate(ProvideExceptionToUserInvocation);
@@ -111,7 +109,7 @@ namespace YAT.Gui.Forms
 			if (!staticHandleExceptions)
 				return (UnhandledExceptionResult.Continue);
 
-			string productName = ApplicationInfo.ProductName;
+			string productName = ApplicationEx.ProductName;
 
 			StringBuilder titleBuilder = new StringBuilder(productName);
 			{

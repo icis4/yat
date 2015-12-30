@@ -24,8 +24,8 @@
 using System;
 using System.Text;
 
+using YAT.Application.Utilities;
 using YAT.Model.Utilities;
-using YAT.Settings;
 
 namespace YAT.Log
 {
@@ -116,9 +116,9 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected static FileType ToFileType(string filePath)
 		{
-			if (ExtensionSettings.IsXmlFile(filePath))
+			if      (ExtensionHelper.IsXmlFile(filePath))
 				return (FileType.Xml);
-			else if (ExtensionSettings.IsRtfFile(filePath))
+			else if (ExtensionHelper.IsRtfFile(filePath))
 				return (FileType.Rtf);
 			else
 				return (FileType.Text);

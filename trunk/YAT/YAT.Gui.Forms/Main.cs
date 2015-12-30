@@ -41,14 +41,12 @@ using MKY;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
-using MKY.Time;
 using MKY.Windows.Forms;
 
+using YAT.Application.Utilities;
 using YAT.Model.Types;
-using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-using YAT.Utilities;
 
 #endregion
 
@@ -239,9 +237,9 @@ namespace YAT.Gui.Forms
 					{
 						if (showErrorModally)
 						{
-							string executableName = Path.GetFileName(Application.ExecutablePath);
+							string executableName = Path.GetFileName(System.Windows.Forms.Application.ExecutablePath);
 							string message =
-								ApplicationInfo.ProductName + " could not be started because the given command line is invalid." + Environment.NewLine +
+								ApplicationEx.ProductName + " could not be started because the given command line is invalid." + Environment.NewLine +
 								@"Use """ + executableName + @" /?"" for command line help.";
 
 							MessageBoxEx.Show
@@ -263,7 +261,7 @@ namespace YAT.Gui.Forms
 							MessageBoxEx.Show
 							(
 								this,
-								ApplicationInfo.ProductName + " could not successfully be started with the given settings in the current environment!",
+								ApplicationEx.ProductName + " could not successfully be started with the given settings in the current environment!",
 								"Start Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
@@ -279,7 +277,7 @@ namespace YAT.Gui.Forms
 							MessageBoxEx.Show
 							(
 								this,
-								ApplicationInfo.ProductName + " could not successfully execute the requested operation!",
+								ApplicationEx.ProductName + " could not successfully execute the requested operation!",
 								"Execution Warning",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning
@@ -1220,7 +1218,7 @@ namespace YAT.Gui.Forms
 			{
 				try
 				{
-					SetFixedStatusText("Automatically closing " + ApplicationInfo.ProductName);
+					SetFixedStatusText("Automatically closing " + ApplicationEx.ProductName);
 					Close();
 				}
 				catch (Exception ex)
@@ -1585,15 +1583,15 @@ namespace YAT.Gui.Forms
 
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open Terminal or Workspace";
-			ofd.Filter      = ExtensionSettings.TerminalOrWorkspaceFilesFilter;
-			ofd.FilterIndex = ExtensionSettings.TerminalOrWorkspaceFilesFilterDefault;
-			ofd.DefaultExt  = ExtensionSettings.TerminalFile;
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
+			ofd.Filter      = ExtensionHelper.TerminalOrWorkspaceFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.TerminalOrWorkspaceFilesFilterDefault;
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.main.OpenFromFile(ofd.FileName);
@@ -1633,15 +1631,15 @@ namespace YAT.Gui.Forms
 
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open Workspace";
-			ofd.Filter      = ExtensionSettings.WorkspaceFilesFilter;
-			ofd.FilterIndex = ExtensionSettings.WorkspaceFilesFilterDefault;
-			ofd.DefaultExt  = ExtensionSettings.WorkspaceFile;
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
+			ofd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.main.OpenFromFile(ofd.FileName);
@@ -1659,20 +1657,21 @@ namespace YAT.Gui.Forms
 
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save Workspace As";
-			sfd.Filter      = ExtensionSettings.WorkspaceFilesFilter;
-			sfd.FilterIndex = ExtensionSettings.WorkspaceFilesFilterDefault;
-			sfd.DefaultExt  = ExtensionSettings.WorkspaceFile;
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
+			sfd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
-			// Other than for terminal files, the workspace 'Save As' always suggests 'UserName.yaw'.
-			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
+			// Other than for terminals, workspace 'Save As' always suggests 'UserName.yaw':
+			sfd.FileName = Environment.UserName + PathEx.NormalizeExtension(sfd.DefaultExt);
+			// Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			DialogResult dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.workspace.SaveAs(sfd.FileName);

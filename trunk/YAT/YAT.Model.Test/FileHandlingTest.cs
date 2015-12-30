@@ -34,7 +34,7 @@ using MKY.Settings;
 
 using NUnit.Framework;
 
-using YAT.Model.Settings;
+using YAT.Application.Utilities;
 using YAT.Settings.Application;
 
 #endregion
@@ -55,10 +55,10 @@ namespace YAT.Model.Test
 		private bool autoSaveWorkspaceToRestore;
 		private string workspaceFilePathToRestore;
 
-		private string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
-		private string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
-		private string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
-		private string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalWorkspace", ExtensionHelper.WorkspaceFile);
+		private string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal1", ExtensionHelper.TerminalFile);
+		private string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal2", ExtensionHelper.TerminalFile);
+		private string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal3", ExtensionHelper.TerminalFile);
 
 		#endregion
 

@@ -37,7 +37,7 @@ using MKY;
 using MKY.IO;
 using MKY.Windows.Forms;
 
-using YAT.Settings;
+using YAT.Application.Utilities;
 using YAT.Settings.Application;
 
 #endregion
@@ -106,6 +106,10 @@ namespace YAT.Gui.Forms
 		{
 			this.settingsInEdit.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
 			this.settings = this.settingsInEdit;
+
+			ApplicationSettings.LocalUserSettings.Extensions.RawLogFiles  = this.settings.RawExtension;
+			ApplicationSettings.LocalUserSettings.Extensions.NeatLogFiles = this.settings.NeatExtension;
+			ApplicationSettings.Save();
 		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -407,11 +411,11 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			comboBox_Neat_Extension.Items.Clear();
-			foreach (string s in ExtensionSettings.TextFilesWithDot)
+			foreach (string s in ExtensionHelper.TextFilesWithDot)
 				comboBox_Neat_Extension.Items.Add(s);
 
 			comboBox_Raw_Extension.Items.Clear();
-			foreach (string s in ExtensionSettings.BinaryFilesWithDot)
+			foreach (string s in ExtensionHelper.BinaryFilesWithDot)
 				comboBox_Raw_Extension.Items.Add(s);
 
 			comboBox_Options_NameSeparator.Items.Clear();
@@ -473,7 +477,7 @@ namespace YAT.Gui.Forms
 			}
 			else {
 				groupBox_Options_TextEncoding.Enabled            = false;
-				radioButton_Options_TextEncodingUTF8.Checked     = false;
+				radioButton_Options_TextEncodingUTF8.Checked     = true; // Show default, XML is UTF-8 too, RTF don't care.
 				radioButton_Options_TextEncodingTerminal.Checked = false;
 			}
 
@@ -485,12 +489,12 @@ namespace YAT.Gui.Forms
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Set Root";
-			ofd.Filter = ExtensionSettings.AllFilesFilter;
+			ofd.Filter = ExtensionHelper.AllFilesFilter;
 
 			if (Directory.Exists(this.settingsInEdit.RootPath))
 				ofd.InitialDirectory = this.settingsInEdit.RootPath;
 			else
-				ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.LogFilesPath;
+				ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
 
 			ofd.FileName = this.settingsInEdit.RootFileName;
 			ofd.CheckPathExists = false;
@@ -499,7 +503,7 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.LogFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				this.settingsInEdit.RootPath = Path.GetDirectoryName(ofd.FileName);

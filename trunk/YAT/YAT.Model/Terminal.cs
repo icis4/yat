@@ -44,13 +44,12 @@ using MKY.Settings;
 using MKY.Text;
 using MKY.Time;
 
+using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Model.Utilities;
-using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-using YAT.Utilities;
 
 #endregion
 
@@ -1301,8 +1300,15 @@ namespace YAT.Model
 			{
 				if (isAutoSave)
 				{
-					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFile;
-					this.settingsHandler.SettingsFilePath = autoSaveFilePath;
+					StringBuilder autoSaveFilePath = new StringBuilder();
+
+					autoSaveFilePath.Append(Application.Settings.GeneralSettings.AutoSaveRoot);
+					autoSaveFilePath.Append(Path.DirectorySeparatorChar);
+					autoSaveFilePath.Append(Application.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
+					autoSaveFilePath.Append(Guid.ToString());
+					autoSaveFilePath.Append(ExtensionHelper.TerminalFile);
+
+					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString();
 				}
 				else if (userInteractionIsAllowed)
 				{
@@ -2021,7 +2027,7 @@ namespace YAT.Model
 				{
 					case Domain.IOType.SerialPort:
 					{
-						yatTitle = ApplicationInfo.ProductName + " hints:";
+						yatTitle = ApplicationEx.ProductName + " hints:";
 						yatText  = "Make sure the selected serial port is available and not already in use. " +
 						           "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
 						break;
@@ -2031,19 +2037,19 @@ namespace YAT.Model
 					case Domain.IOType.TcpAutoSocket:
 					case Domain.IOType.Udp:
 					{
-						yatTitle = ApplicationInfo.ProductName + " hint:";
+						yatTitle = ApplicationEx.ProductName + " hint:";
 						yatText  = "Make sure the selected socket is not already in use.";
 						break;
 					}
 					case Domain.IOType.UsbSerialHid:
 					{
-						yatTitle = ApplicationInfo.ProductName + " hint:";
+						yatTitle = ApplicationEx.ProductName + " hint:";
 						yatText  = "Make sure the selected USB device is connected.";
 						break;
 					}
 					default:
 					{
-						yatTitle = ApplicationInfo.ProductName + " error:";
+						yatTitle = ApplicationEx.ProductName + " error:";
 						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown!" + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage;
 						break;
 					}
@@ -2476,7 +2482,7 @@ namespace YAT.Model
 
 				if (this.terminal is Domain.TextTerminal)
 				{
-					if (ExtensionSettings.IsXmlFile(filePath))
+					if (ExtensionHelper.IsXmlFile(filePath))
 					{
 						// XML => Read all at once for simplicity:
 						string[] lines;
@@ -2484,7 +2490,7 @@ namespace YAT.Model
 						foreach (string line in lines)
 							SendLine(line);
 					}
-					else if (ExtensionSettings.IsRtfFile(filePath))
+					else if (ExtensionHelper.IsRtfFile(filePath))
 					{
 						// RTF => Read all at once for simplicity:
 						string[] lines;
@@ -2505,7 +2511,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					if (ExtensionSettings.IsXmlFile(filePath))
+					if (ExtensionHelper.IsXmlFile(filePath))
 					{
 						// XML => Read all at once for simplicity:
 						string[] lines;
@@ -3207,7 +3213,7 @@ namespace YAT.Model
 				(
 					"Unable to switch log on."                           + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
+					ApplicationEx.ProductName + " hint:" + Environment.NewLine +
 					"Log file could already be in use.",
 					"Log File Error",
 					MessageBoxButtons.OK,
@@ -3233,7 +3239,7 @@ namespace YAT.Model
 				(
 					"Unable to clear log."                               + Environment.NewLine + Environment.NewLine +
 					"System message:" + Environment.NewLine + ex.Message + Environment.NewLine + Environment.NewLine +
-					ApplicationInfo.ProductName + " hint:" + Environment.NewLine +
+					ApplicationEx.ProductName + " hint:" + Environment.NewLine +
 					"Log file could already be in use.",
 					"Log File Error",
 					MessageBoxButtons.OK,

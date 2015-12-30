@@ -42,13 +42,12 @@ using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
 
+using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
-using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
-using YAT.Utilities;
 
 #endregion
 
@@ -270,7 +269,7 @@ namespace YAT.Model
 				if (this.activeTerminal != null)
 					return (this.activeTerminal.AutoName);
 				else
-					return (ApplicationInfo.ProductName);
+					return (ApplicationEx.ProductName);
 			}
 		}
 
@@ -629,8 +628,15 @@ namespace YAT.Model
 			{
 				if (isAutoSave)
 				{
-					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
-					this.settingsHandler.SettingsFilePath = autoSaveFilePath;
+					StringBuilder autoSaveFilePath = new StringBuilder();
+
+					autoSaveFilePath.Append(Application.Settings.GeneralSettings.AutoSaveRoot);
+					autoSaveFilePath.Append(Path.DirectorySeparatorChar);
+					autoSaveFilePath.Append(Application.Settings.GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
+					autoSaveFilePath.Append(Guid.ToString());
+					autoSaveFilePath.Append(ExtensionHelper.WorkspaceFile);
+
+					this.settingsHandler.SettingsFilePath = autoSaveFilePath.ToString();
 				}
 				else if (userInteractionIsAllowed)
 				{

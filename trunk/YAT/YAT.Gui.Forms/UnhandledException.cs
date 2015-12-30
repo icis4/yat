@@ -38,8 +38,6 @@ using System.Windows.Forms;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
-using YAT.Utilities;
-
 #endregion
 
 namespace YAT.Gui.Forms
@@ -74,7 +72,7 @@ namespace YAT.Gui.Forms
 			{
 				text.WriteLine(this.originMessage);
 				text.WriteLine();
-				text.WriteLine(ApplicationInfo.ProductNameAndBuildNameAndVersion);
+				text.WriteLine(ApplicationEx.ProductNameAndBuildNameAndVersion);
 				text.WriteLine();
 
 				AnyWriter.WriteException(text, null, this.exception);

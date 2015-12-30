@@ -24,8 +24,8 @@
 using System;
 using System.Xml.Serialization;
 
+using YAT.Application.Utilities;
 using YAT.Model.Settings;
-using YAT.Utilities;
 
 namespace YAT.Settings.Workspace
 {
@@ -38,7 +38,7 @@ namespace YAT.Settings.Workspace
 		private string settingsVersion = "1.2.0";
 
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
-		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
+		private string productVersion = ApplicationEx.ProductVersion;
 
 		private bool autoSaved;
 		private WorkspaceSettings workspace;
@@ -68,7 +68,7 @@ namespace YAT.Settings.Workspace
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationInfo.ProductName + " Workspace Settings"); }
+			get { return (ApplicationEx.ProductName + " Workspace Settings"); }
 			set { } // Do nothing.
 		}
 

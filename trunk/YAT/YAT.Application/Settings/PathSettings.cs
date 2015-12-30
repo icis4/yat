@@ -24,45 +24,31 @@
 using System;
 using System.Xml.Serialization;
 
-using MKY;
 using MKY.IO;
 
-namespace YAT.Model.Settings
+namespace YAT.Application.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IGuidProvider
+	public class PathSettings : MKY.Settings.SettingsItem
 	{
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// </remarks>
-		public const int FirstFixedIndex = 1;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default'.
-		/// </remarks>
-		public const int DefaultFixedIndex = 0;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index -1 means 'invalid'.
-		/// </remarks>
-		public const int InvalidFixedIndex = -1;
-
-		private string filePath;
-		private Guid guid;
-		private int fixedIndex;
-		private WindowSettings window;
+		private string mainFiles;
+		private string sendFiles;
+		private string logFiles;
+		private string monitorFiles;
 
 		/// <summary></summary>
-		public TerminalSettingsItem()
-			: base(MKY.Settings.SettingsType.Implicit)
+		public PathSettings()
 		{
 			SetMyDefaults();
+			ClearChanged();
+		}
 
-			Window = new WindowSettings(SettingsType);
-
+		/// <summary></summary>
+		public PathSettings(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
+		{
+			SetMyDefaults();
 			ClearChanged();
 		}
 
@@ -70,14 +56,13 @@ namespace YAT.Model.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public TerminalSettingsItem(TerminalSettingsItem rhs)
+		public PathSettings(PathSettings rhs)
 			: base(rhs)
 		{
-			FilePath   = rhs.FilePath;
-			Guid       = rhs.Guid;
-			FixedIndex = rhs.FixedIndex;
-
-			Window = new WindowSettings(rhs.Window);
+			MainFiles    = rhs.MainFiles;
+			SendFiles    = rhs.SendFiles;
+			LogFiles     = rhs.LogFiles;
+			MonitorFiles = rhs.MonitorFiles;
 
 			ClearChanged();
 		}
@@ -89,9 +74,10 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			FilePath   = "";
-			Guid       = Guid.Empty;
-			FixedIndex = DefaultFixedIndex;
+			MainFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			SendFiles    = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			LogFiles     = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			MonitorFiles = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 		}
 
 		#region Properties
@@ -100,93 +86,62 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("FilePath")]
-		public virtual string FilePath
+		[XmlElement("MainFiles")]
+		public virtual string MainFiles
 		{
-			get { return (this.filePath); }
+			get { return (this.mainFiles); }
 			set
 			{
-				if (this.filePath != value)
+				if (this.mainFiles != value)
 				{
-					this.filePath = value;
-					SetChanged();
-				}
-				
-				// Create GUID from file path:
-				if (PathEx.IsDefined(this.filePath) && (this.guid == Guid.Empty))
-				{
-					Guid guid;
-					if (GuidEx.TryCreateGuidFromFilePath(this.filePath, Application.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix, out guid))
-						this.guid = guid;
-					else
-						this.guid = Guid.NewGuid();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual Guid Guid
-		{
-			get { return (this.guid); }
-			set
-			{
-				if (this.guid != value)
-				{
-					this.guid = value;
+					this.mainFiles = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("FixedIndex")]
-		public virtual int FixedIndex
+		[XmlElement("SendFiles")]
+		public virtual string SendFiles
 		{
-			get { return (this.fixedIndex); }
+			get { return (this.sendFiles); }
 			set
 			{
-				if (this.fixedIndex != value)
+				if (this.sendFiles != value)
 				{
-					this.fixedIndex = value;
+					this.sendFiles = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Window")]
-		public virtual WindowSettings Window
+		[XmlElement("LogFiles")]
+		public virtual string LogFiles
 		{
-			get { return (this.window); }
+			get { return (this.logFiles); }
 			set
 			{
-				if (value == null)
+				if (this.logFiles != value)
 				{
-					DetachNode(this.window);
-					this.window = null;
-				}
-				else if (this.window == null)
-				{
-					this.window = value;
-					AttachNode(this.window);
-				}
-				else if (this.window != value)
-				{
-					WindowSettings old = this.window;
-					this.window = value;
-					ReplaceNode(old, this.window);
+					this.logFiles = value;
+					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool IsDefined
+		[XmlElement("MonitorFiles")]
+		public virtual string MonitorFiles
 		{
-			get
+			get { return (this.monitorFiles); }
+			set
 			{
-				return (PathEx.IsDefined(this.filePath) && (this.guid != Guid.Empty));
+				if (this.monitorFiles != value)
+				{
+					this.monitorFiles = value;
+					SetChanged();
+				}
 			}
 		}
 
@@ -209,14 +164,15 @@ namespace YAT.Model.Settings
 			if (GetType() != obj.GetType())
 				return (false);
 
-			TerminalSettingsItem other = (TerminalSettingsItem)obj;
+			PathSettings other = (PathSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(FilePath, other.FilePath) &&
-				(Guid                == other.Guid) &&
-				(FixedIndex          == other.FixedIndex)
+				PathEx.Equals(MainFiles,    other.MainFiles) &&
+				PathEx.Equals(SendFiles,    other.SendFiles) &&
+				PathEx.Equals(LogFiles,     other.LogFiles) &&
+				PathEx.Equals(MonitorFiles, other.MonitorFiles)
 			);
 		}
 
@@ -233,9 +189,10 @@ namespace YAT.Model.Settings
 			(
 				base.GetHashCode() ^
 
-				FilePath  .GetHashCode() ^
-				Guid      .GetHashCode() ^
-				FixedIndex.GetHashCode()
+				this.MainFiles   .GetHashCode() ^
+				this.SendFiles   .GetHashCode() ^
+				this.LogFiles    .GetHashCode() ^
+				this.MonitorFiles.GetHashCode()
 			);
 		}
 

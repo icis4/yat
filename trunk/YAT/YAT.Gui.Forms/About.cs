@@ -33,8 +33,6 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
-using YAT.Utilities;
-
 #endregion
 
 #region Module-level FxCop suppressions
@@ -63,10 +61,10 @@ namespace YAT.Gui.Forms
 			int linkStart = 0;
 
 			// Form:
-			Text = ApplicationInfo.ProductNameLong;
+			Text = ApplicationEx.ProductNameLong;
 
 			// Title:
-			linkLabel_Title.Text = ApplicationInfo.ProductNameAndBuildNameAndVersion;
+			linkLabel_Title.Text = ApplicationEx.ProductNameAndBuildNameAndVersion;
 
 			// Copyright:
 			linkLabel_Copyright.Text = "";
@@ -305,7 +303,7 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException("Invalid link, program execution should never get here." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+				throw (new InvalidOperationException("Invalid link, program execution should never get here." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 

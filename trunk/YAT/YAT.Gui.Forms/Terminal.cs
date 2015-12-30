@@ -40,10 +40,11 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
-using YAT.Settings;
+using YAT.Application.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 
@@ -2429,7 +2430,7 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -2524,7 +2525,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 			}
 		}
 
@@ -2580,15 +2581,17 @@ namespace YAT.Gui.Forms
 
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
-			sfd.Filter      = ExtensionSettings.TextFilesFilter;
-			sfd.FilterIndex = ExtensionSettings.TextFilesFilterDefault;
-			sfd.DefaultExt  = ExtensionSettings.TextFilesDefault;
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MonitorFilesPath;
+			string initialExtension = ApplicationSettings.LocalUserSettings.Extensions.MonitorFiles;
+			sfd.Filter      = ExtensionHelper.TextFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MonitorFiles;
 			if (sfd.ShowDialog(this) == DialogResult.OK && sfd.FileName.Length > 0)
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.MonitorFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Extensions.MonitorFiles = Path.GetExtension(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MonitorFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				SaveMonitor(monitor, sfd.FileName);
@@ -2609,7 +2612,7 @@ namespace YAT.Gui.Forms
 				int requestedCount = monitor.SelectedLines.Count;
 				int savedCount;
 
-				if (ExtensionSettings.IsXmlFile(filePath))
+				if (ExtensionHelper.IsXmlFile(filePath))
 				{
 #if FALSE // Enable to use the raw instead of neat XML export schema, useful for development purposes of the raw XML schema.
 					savedCount = Model.Utilities.XmlWriterHelperRaw.LinesToFile(monitor.SelectedLines, filePath, true);
@@ -2617,7 +2620,7 @@ namespace YAT.Gui.Forms
 					savedCount = Model.Utilities.XmlWriterHelperNeat.LinesToFile(monitor.SelectedLines, filePath, true);
 #endif
 				}
-				else if (ExtensionSettings.IsRtfFile(filePath))
+				else if (ExtensionHelper.IsRtfFile(filePath))
 				{
 					savedCount = Model.Utilities.RtfWriterHelper.LinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
 				}
@@ -2644,7 +2647,7 @@ namespace YAT.Gui.Forms
 					sb.AppendLine();
 
 					sb.Append("This issue should never happen! ");
-					sb.Append(ApplicationEx.SubmitBugMessage);
+					sb.Append(MKY.Windows.Forms.ApplicationEx.SubmitBugMessage);
 					sb.Append(" Attach a screenshot of the monitor as well as the partially saved file to the submitted bug, thanks!");
 
 					MessageBoxEx.Show
@@ -3299,23 +3302,24 @@ namespace YAT.Gui.Forms
 
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save " + AutoName + " As";
-			sfd.Filter      = ExtensionSettings.TerminalFilesFilter;
-			sfd.FilterIndex = ExtensionSettings.TerminalFilesFilterDefault;
-			sfd.DefaultExt  = ExtensionSettings.TerminalFile;
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFilesPath;
+			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
 			// Check wether the terminal has already been saved as a .yat file.
-			if (AutoName.EndsWith(ExtensionSettings.TerminalFile, StringComparison.OrdinalIgnoreCase))
+			if (AutoName.EndsWith(ExtensionHelper.TerminalFile, StringComparison.OrdinalIgnoreCase))
 				sfd.FileName = AutoName;
 			else
-				sfd.FileName = AutoName + "." + sfd.DefaultExt;
+				sfd.FileName = AutoName + PathEx.NormalizeExtension(sfd.DefaultExt);
+				// Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			DialogResult dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUserSettings.Paths.MainFilesPath = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
 				this.terminal.SaveAs(sfd.FileName);

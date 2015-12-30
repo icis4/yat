@@ -25,7 +25,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace YAT.Settings
+namespace YAT.Application.Utilities
 {
 	/// <summary></summary>
 	[Serializable]

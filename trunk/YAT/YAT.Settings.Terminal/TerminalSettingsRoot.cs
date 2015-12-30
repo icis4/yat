@@ -25,7 +25,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-using YAT.Utilities;
+using YAT.Application.Utilities;
 
 namespace YAT.Settings.Terminal
 {
@@ -38,7 +38,7 @@ namespace YAT.Settings.Terminal
 		private string settingsVersion = "1.4.1";
 
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
-		private string productVersion = Utilities.ApplicationInfo.ProductVersion;
+		private string productVersion = ApplicationEx.ProductVersion;
 
 		private bool autoSaved;
 
@@ -75,7 +75,7 @@ namespace YAT.Settings.Terminal
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
-			get { return (ApplicationInfo.ProductName + " Terminal Settings"); }
+			get { return (ApplicationEx.ProductName + " Terminal Settings"); }
 			set { } // Do nothing.
 		}
 

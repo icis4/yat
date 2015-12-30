@@ -377,13 +377,9 @@
       <Project>{942BA759-57F9-4213-BDC8-E9A8325631B0}</Project>
       <Name>YAT.Settings.Workspace</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings\YAT.Settings.csproj">
+    <ProjectReference Include="..\YAT.Application\YAT.Application.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
-      <Name>YAT.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Utilities\YAT.Utilities.csproj">
-      <Project>{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}</Project>
-      <Name>YAT.Utilities</Name>
+      <Name>YAT.Application</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
