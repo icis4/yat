@@ -5,7 +5,7 @@
   <ProductVersion>1.99.34</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2015-09-14T21:22:43.8317138+02:00</TimeStamp>
+    <TimeStamp>2016-02-01T21:39:40.0816806+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -17,12 +17,12 @@
       <Window>
         <State>Normal</State>
         <Location>
-          <X>638</X>
+          <X>669</X>
           <Y>0</Y>
         </Location>
         <Size>
-          <Width>638</Width>
-          <Height>667</Height>
+          <Width>669</Width>
+          <Height>638</Height>
         </Size>
       </Window>
     </TerminalSettings>
@@ -36,8 +36,8 @@
           <Y>0</Y>
         </Location>
         <Size>
-          <Width>638</Width>
-          <Height>667</Height>
+          <Width>669</Width>
+          <Height>638</Height>
         </Size>
       </Window>
     </TerminalSettings>

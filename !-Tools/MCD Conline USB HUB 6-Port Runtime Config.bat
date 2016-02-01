@@ -51,7 +51,7 @@ GOTO END
 ECHO.
 ECHO The required %USB_HUB_CTRL_EXE% is not available!
 ECHO Make sure that the "MCD Conline USB HUB" drivers are installed, and...
-ECHO ..."\Tools\CommandLine\USBHubControl.exe" has been added to the system's PATH!
+ECHO ..."<MCD>\Tools\CommandLine" has been added to the system's PATH!
 ECHO.
 PAUSE
 GOTO END
