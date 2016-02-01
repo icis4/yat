@@ -17,7 +17,7 @@
 
 4. Demonstrate internet device communication with YAT
     > YAT                      @ YAT > TCP Client > 192.168.178.1:80 > Text Settings <LF> / UTF-8
-    > Plain HTML               @ YAT >> "GET / HTTP/1.0" + ""
+    > Plain HTML               @ YAT >> "GET / HTTP/1.0" + "" oder "GET / HTTP/1.0\!(EOL)"
                                @ YAT << "HTTP/1.0 200 OK"...
                                  => YAT Basic Principle_Terminal 1_Internet Device.yat
 

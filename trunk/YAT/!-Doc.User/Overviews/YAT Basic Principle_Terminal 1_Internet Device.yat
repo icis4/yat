@@ -5,7 +5,7 @@
   <ProductVersion>1.99.34</ProductVersion>
   <Warning>Modifying this file may cause undefined behavior!</Warning>
   <Saved>
-    <TimeStamp>2015-09-14T21:29:20.1583823+02:00</TimeStamp>
+    <TimeStamp>2016-02-01T22:25:59.8438618+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -44,14 +44,14 @@
         </SerialPort>
         <Socket>
           <HostType>TcpClient</HostType>
-          <RemoteHost>192.168.178.1</RemoteHost>
+          <RemoteHost>192.168.188.1</RemoteHost>
           <RemoteTcpPort>80</RemoteTcpPort>
           <RemoteUdpPort>10000</RemoteUdpPort>
           <LocalInterface>IPv4 any (0.0.0.0)</LocalInterface>
           <LocalTcpPort>80</LocalTcpPort>
           <LocalUdpPort>10001</LocalUdpPort>
           <TcpClientAutoReconnect>
-            <Enabled>false</Enabled>
+            <Enabled>true</Enabled>
             <Interval>500</Interval>
           </TcpClientAutoReconnect>
         </Socket>
@@ -109,7 +109,7 @@
         <HideXOnXOff>false</HideXOnXOff>
       </CharReplace>
       <Send>
-        <KeepCommand>false</KeepCommand>
+        <KeepCommand>true</KeepCommand>
         <CopyPredefined>false</CopyPredefined>
         <SendImmediately>false</SendImmediately>
         <DefaultDelay>100</DefaultDelay>
@@ -239,12 +239,23 @@
     <SendCommand>
       <Command>
         <IsDefined>true</IsDefined>
-        <Description />
-        <CommandLines />
+        <Description>GET / HTTP/1.0\!(EOL)</Description>
+        <CommandLines>GET / HTTP/1.0\!(EOL)</CommandLines>
         <DefaultRadix>String</DefaultRadix>
         <IsFilePath>false</IsFilePath>
         <FilePath />
       </Command>
+      <RecentCommands>
+        <Item>
+          <IsDefined>true</IsDefined>
+          <Description>GET / HTTP/1.0\!(EOL)</Description>
+          <CommandLines>GET / HTTP/1.0\!(EOL)</CommandLines>
+          <DefaultRadix>String</DefaultRadix>
+          <IsFilePath>false</IsFilePath>
+          <FilePath />
+        </Item>
+        <TimeStamp>2016-02-01T21:38:02.2713028+01:00</TimeStamp>
+      </RecentCommands>
       <RecentCommands>
         <Item>
           <IsDefined>true</IsDefined>
@@ -288,8 +299,8 @@
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>638</Width>
-        <Height>667</Height>
+        <Width>669</Width>
+        <Height>638</Height>
       </Size>
     </Window>
     <Layout>
@@ -300,7 +311,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.7491961</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.747320056</PredefinedSplitterRatio>
       <SendCommandPanelIsVisible>true</SendCommandPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>
