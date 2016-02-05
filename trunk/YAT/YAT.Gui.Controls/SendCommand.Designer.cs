@@ -47,7 +47,7 @@
 			this.button_MultiLineCommand.Size = new System.Drawing.Size(25, 21);
 			this.button_MultiLineCommand.TabIndex = 3;
 			this.button_MultiLineCommand.Text = "...";
-			this.toolTip.SetToolTip(this.button_MultiLineCommand, "Multi Line Command");
+			this.toolTip.SetToolTip(this.button_MultiLineCommand, "Multi-line command");
 			this.button_MultiLineCommand.UseVisualStyleBackColor = true;
 			this.button_MultiLineCommand.Click += new System.EventHandler(this.button_MultiLineCommand_Click);
 			// 
@@ -61,7 +61,7 @@
 			this.button_Send.Size = new System.Drawing.Size(177, 21);
 			this.button_Send.TabIndex = 4;
 			this.button_Send.Text = "Send Command (F3)";
-			this.toolTip.SetToolTip(this.button_Send, "Send Command");
+			this.toolTip.SetToolTip(this.button_Send, "Send command");
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
 			// comboBox_Command
@@ -73,7 +73,7 @@
 			this.comboBox_Command.Size = new System.Drawing.Size(319, 21);
 			this.comboBox_Command.TabIndex = 1;
 			this.toolTip.SetToolTip(this.comboBox_Command, "Fill-in command, <Enter> to send,\r\ndrop down for recent commands,\r\n<...> to enter" +
-        " multi line command");
+        " multi-line command");
 			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
 			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
 			this.comboBox_Command.Enter += new System.EventHandler(this.comboBox_Command_Enter);

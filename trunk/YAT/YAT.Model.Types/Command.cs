@@ -41,7 +41,7 @@ using MKY.IO;
 namespace YAT.Model.Types
 {
 	/// <summary>
-	/// Stores information about a single line, multi line or file command.
+	/// Stores information about a single line, multi-line or file command.
 	/// </summary>
 	/// <remarks>
 	/// This class intentionally combines all three command types in a single class to allow
@@ -63,7 +63,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
-		public const string MultiLineCommandText = "<Multi line...>";
+		public const string MultiLineCommandText = "<Multi-line...>";
 
 		/// <summary></summary>
 		public const string UndefinedFilePathText = "<Set a file...>";
@@ -549,7 +549,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The multi line text shall be of the same type as the command lines, thus an array.")]
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "The multi-line text shall be of the same type as the command lines, thus an array.")]
 		[XmlIgnore]
 		public virtual string[] MultiLineText
 		{

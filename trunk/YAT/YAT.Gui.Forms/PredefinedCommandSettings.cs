@@ -253,7 +253,10 @@ namespace YAT.Gui.Forms
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
+			{
 				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag), CultureInfo.InvariantCulture));
+				SetClearControls();
+			}
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)
@@ -329,6 +332,7 @@ namespace YAT.Gui.Forms
 		{
 			SetPagesControls();
 			SetPageControls();
+			SetClearControls();
 		}
 
 		private void SetPagesControls()
@@ -338,7 +342,7 @@ namespace YAT.Gui.Forms
 			int pageCount = this.settingsInEdit.Pages.Count;
 			bool pageIsSelected = (this.selectedPage != 0);
 
-			// Page list.
+			// Page list:
 			if (pageCount > 0)
 			{
 				listBox_Pages.Enabled = true;
@@ -356,7 +360,7 @@ namespace YAT.Gui.Forms
 				listBox_Pages.Items.Clear();
 			}
 
-			// Page list buttons.
+			// Page list buttons:
 			button_NamePage.Enabled = pageIsSelected;
 			button_InsertPage.Enabled = pageIsSelected;
 			button_AddPage.Enabled = true;
@@ -366,7 +370,7 @@ namespace YAT.Gui.Forms
 			button_MovePageDown.Enabled = pageIsSelected && (this.selectedPage < pageCount);
 			button_DeletePages.Enabled = (pageCount > 0);
 
-			// Selected page.
+			// Selected page:
 			if (pageIsSelected)
 				groupBox_Page.Text = this.settingsInEdit.Pages[SelectedPageIndex].PageName;
 			else
@@ -393,13 +397,25 @@ namespace YAT.Gui.Forms
 
 				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 					this.predefinedCommandSettingsSets[i].Command = new Model.Types.Command();
-
-				button_ClearPage.Enabled = (commandCount > 0);
 			}
 			else
 			{
 				groupBox_Page.Enabled = true;
 			}
+
+			this.isSettingControls.Leave();
+		}
+
+		private void SetClearControls()
+		{
+			this.isSettingControls.Enter();
+
+			int pageCount = this.settingsInEdit.Pages.Count;
+			int commandCount = 0;
+			if (pageCount >= this.selectedPage)
+				commandCount = this.settingsInEdit.Pages[SelectedPageIndex].Commands.Count;
+
+			button_ClearPage.Enabled = (commandCount > 0);
 
 			this.isSettingControls.Leave();
 		}

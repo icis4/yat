@@ -320,7 +320,7 @@ namespace YAT.Gui.Forms
 						DialogResult dr = MessageBoxEx.Show
 						(
 							this,
-							"Font '" + fd.Font.Name + "' does not support regular style. Choose a different font.",
+							"Font '" + fd.Font.Name + "' does not support regular style. Select a different font.",
 							"Font Not Supported",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Exclamation

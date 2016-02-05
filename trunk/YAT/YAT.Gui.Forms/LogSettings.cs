@@ -559,7 +559,7 @@ namespace YAT.Gui.Forms
 			string message =
 				"To avoid naming conflicts, files must either be placed in format folders or named by format or have different extensions. " +
 				Environment.NewLine + Environment.NewLine +
-				"First choose a different extension. You may then change one of the other options to resolve the naming conflict.";
+				"First select a different extension. You may then change one of the other options to resolve the naming conflict.";
 
 			MessageBoxEx.Show
 			(

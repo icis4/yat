@@ -238,7 +238,7 @@ Fixed bugs:
 - Manually entered non-standard baud rate is properly restored in settings dialog again (bug #283)
 - Shortcuts are now always routed to the correct terminal window (i.e. MDI child) (bug #152)
 - Handling of recent commands in 'Send Command' improved, arrows up/down properly work again
-- Representation of description of multi line commands in 'Send Command' improved
+- Representation of description of multi-line commands in 'Send Command' improved
 - Issues with 'Send Command' fixed, additional test cases added (bugs #276, #282 and #291)
 - Issues with line break fixed (bugs #269 and #281)
 - Issue with escape sequences following a C-style escape fixed (bug #290)

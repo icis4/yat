@@ -347,7 +347,7 @@ namespace YAT.Model.Utilities
 			//  1. Enable raw export in YAT.Gui.Forms.Terminal.SaveMonitor().
 			//  2. Send some data
 			//  3. Select some lines in the monitor.
-			//  4. Select 'Save To File...' and choose .xml as file extension.
+			//  4. Select 'Save To File...' and select .xml as file extension.
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append(@"<XmlTransferRawLine");
@@ -415,7 +415,7 @@ namespace YAT.Model.Utilities
 			// To recreate this example and validate the schema implemented below:
 			//  1. Send some data
 			//  2. Select some lines in the monitor.
-			//  3. Select 'Save To File...' and choose .xml as file extension.
+			//  3. Select 'Save To File...' and select .xml as file extension.
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append(@"<XmlTransferNeatLine");

@@ -104,7 +104,7 @@
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "Multi Line Command";
+			this.Text = "Multi-Line Command";
 			this.Shown += new System.EventHandler(this.MultiLineBox_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();

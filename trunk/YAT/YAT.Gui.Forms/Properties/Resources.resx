@@ -130,9 +130,6 @@
   <data name="Icon_YAT_WorkspaceSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\YAT\Icon_YAT_WorkspaceSettings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_LGPLv3_147x51" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\LGPL\Image_LGPLv3_147x51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Image_LGPLv3_88x31" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LGPL\Image_LGPLv3_88x31.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -171,9 +168,6 @@
   </data>
   <data name="Image_Tool_arrow_refresh_small_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_arrow_refresh_small_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Tool_broom_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Tool_broom_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_Tool_delete_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_delete_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -282,5 +276,17 @@
   </data>
   <data name="Image_Tool_folder_explorer_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_folder_explorer_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Tool_lightning_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Tool_lightning_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Tool_table_lightning_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Tool_table_lightning_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_LGPLv3_147x51" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LGPL\Image_LGPLv3_147x51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Tool_page_white_lightning_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Tool_page_white_lightning_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

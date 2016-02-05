@@ -744,7 +744,7 @@
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Clear
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
+			this.toolStripMenuItem_MonitorContextMenu_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Name = "toolStripMenuItem_MonitorContextMenu_Clear";
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Clear.Text = "Clear";
@@ -1408,7 +1408,7 @@
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Clear
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Delete)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(216, 22);
@@ -1724,7 +1724,7 @@
 			// toolStripMenuItem_TerminalMenu_Log_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = false;
-			this.toolStripMenuItem_TerminalMenu_Log_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_lightning_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Name = "toolStripMenuItem_TerminalMenu_Log_Clear";

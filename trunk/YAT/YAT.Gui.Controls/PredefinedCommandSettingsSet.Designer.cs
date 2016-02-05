@@ -42,15 +42,15 @@
 			// 
 			// pathLabel_FilePath
 			// 
-			this.pathLabel_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.pathLabel_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_FilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_FilePath.Location = new System.Drawing.Point(21, 0);
 			this.pathLabel_FilePath.Name = "pathLabel_FilePath";
 			this.pathLabel_FilePath.Size = new System.Drawing.Size(313, 20);
 			this.pathLabel_FilePath.TabIndex = 2;
 			this.pathLabel_FilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File  Path, click or press <...> to choose file");
+			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File path, click or press <...> to browse for a file");
 			this.pathLabel_FilePath.Click += new System.EventHandler(this.pathLabel_FilePath_Click);
 			// 
 			// checkBox_IsFile
@@ -72,7 +72,7 @@
 			this.button_SetMultiLineCommand.Size = new System.Drawing.Size(25, 20);
 			this.button_SetMultiLineCommand.TabIndex = 3;
 			this.button_SetMultiLineCommand.Text = "...";
-			this.toolTip.SetToolTip(this.button_SetMultiLineCommand, "Multi Line Command");
+			this.toolTip.SetToolTip(this.button_SetMultiLineCommand, "Multi-line command");
 			this.button_SetMultiLineCommand.Click += new System.EventHandler(this.button_SetMultiLineCommand_Click);
 			// 
 			// label_Shortcut
@@ -92,21 +92,21 @@
 			this.textBox_Description.Name = "textBox_Description";
 			this.textBox_Description.Size = new System.Drawing.Size(120, 20);
 			this.textBox_Description.TabIndex = 5;
-			this.toolTip.SetToolTip(this.textBox_Description, "Command Description");
+			this.toolTip.SetToolTip(this.textBox_Description, "Command description");
 			this.textBox_Description.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Description_Validating);
 			// 
 			// textBox_Command
 			// 
-			this.textBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_Command.Location = new System.Drawing.Point(21, 0);
 			this.textBox_Command.Name = "textBox_Command";
 			this.textBox_Command.Size = new System.Drawing.Size(313, 20);
 			this.textBox_Command.TabIndex = 1;
-			this.toolTip.SetToolTip(this.textBox_Command, "Enter Command, press <...> to enter multi line command");
+			this.toolTip.SetToolTip(this.textBox_Command, "Enter command, press <...> to enter multi-line command");
 			this.textBox_Command.TextChanged += new System.EventHandler(this.textBox_Command_TextChanged);
-			this.textBox_Command.Leave += new System.EventHandler(this.textBox_Command_Leave);
 			this.textBox_Command.Enter += new System.EventHandler(this.textBox_Command_Enter);
+			this.textBox_Command.Leave += new System.EventHandler(this.textBox_Command_Leave);
 			this.textBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Command_Validating);
 			// 
 			// button_SetFile
@@ -117,19 +117,19 @@
 			this.button_SetFile.Size = new System.Drawing.Size(25, 20);
 			this.button_SetFile.TabIndex = 4;
 			this.button_SetFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_SetFile, "Choose File");
+			this.toolTip.SetToolTip(this.button_SetFile, "Browse for file");
 			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
 			// 
 			// button_Delete
 			// 
 			this.button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Delete.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Tool_broom_16x16;
+			this.button_Delete.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Tool_lightning_16x16;
 			this.button_Delete.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.button_Delete.Location = new System.Drawing.Point(557, 0);
 			this.button_Delete.Name = "button_Delete";
 			this.button_Delete.Size = new System.Drawing.Size(24, 20);
 			this.button_Delete.TabIndex = 7;
-			this.toolTip.SetToolTip(this.button_Delete, "Refresh serial port list");
+			this.toolTip.SetToolTip(this.button_Delete, "Clear command");
 			this.button_Delete.Click += new System.EventHandler(this.button_Delete_Click);
 			// 
 			// PredefinedCommandSettingsSet
