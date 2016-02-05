@@ -104,6 +104,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="Command.cs" />
+    <Compile Include="BackFormat.cs" />
     <Compile Include="WorkspaceLayout.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="FontFormat.cs" />

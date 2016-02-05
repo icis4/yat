@@ -215,7 +215,7 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Format")]
-		[Description("The color.")]
+		[Description("The format color.")]
 		public Color FormatColor
 		{
 			get { return (this.color); }

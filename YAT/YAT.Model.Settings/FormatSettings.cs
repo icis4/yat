@@ -34,19 +34,22 @@ namespace YAT.Model.Settings
 	public class FormatSettings : MKY.Settings.SettingsItem
 	{
 		/// <remarks>Color.Blue = 0000FF.</remarks>
-		public readonly Color DefaultTxColor = Color.Blue;
+		public static readonly Color DefaultTxColor = Color.Blue;
 
 		/// <remarks>Color.Purple = 800080.</remarks>
-		public readonly Color DefaultRxColor = Color.Purple;
+		public static readonly Color DefaultRxColor = Color.Purple;
 
 		/// <remarks>Color.DarkGreen = 006400.</remarks>
-		public readonly Color DefaultInfoColor = Color.DarkGreen;
+		public static readonly Color DefaultInfoColor = Color.DarkGreen;
 
 		/// <remarks>Color.Black = 000000.</remarks>
-		public readonly Color DefaultWhiteSpacesColor = Color.Black;
+		public static readonly Color DefaultWhiteSpacesColor = Color.Black;
 
 		/// <remarks>Color.OrangeRed = FF4500.</remarks>
-		public readonly Color DefaultErrorColor = Color.OrangeRed;
+		public static readonly Color DefaultErrorColor = Color.OrangeRed;
+
+		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
+		public static readonly Color DefaultBackColor = SystemColors.Window;
 
 		private FontFormat font;
 
@@ -60,6 +63,8 @@ namespace YAT.Model.Settings
 		private TextFormat lengthFormat;
 		private TextFormat whiteSpacesFormat;
 		private TextFormat errorFormat;
+
+		private BackFormat backFormat;
 
 		/// <summary></summary>
 		public FormatSettings()
@@ -96,6 +101,8 @@ namespace YAT.Model.Settings
 			WhiteSpacesFormat = new TextFormat(rhs.WhiteSpacesFormat);
 			ErrorFormat       = new TextFormat(rhs.ErrorFormat);
 
+			BackFormat  = new BackFormat(rhs.BackFormat);
+
 			ClearChanged();
 		}
 
@@ -118,6 +125,8 @@ namespace YAT.Model.Settings
 			LengthFormat      = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			WhiteSpacesFormat = new TextFormat(DefaultWhiteSpacesColor, false, false, false, false);
 			ErrorFormat       = new TextFormat(DefaultErrorColor,        true, false, false, false); // Bold.
+
+			BackFormat  = new BackFormat(DefaultBackColor);
 		}
 
 		#region Properties
@@ -305,6 +314,36 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("BackFormat")]
+		public BackFormat BackFormat
+		{
+			get { return (this.backFormat); }
+			set
+			{
+				if (this.backFormat != value)
+				{
+					this.backFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public Color BackColor
+		{
+			get { return (this.backFormat.Color); }
+			set
+			{
+				if (this.backFormat.Color != value)
+				{
+					this.backFormat.Color = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -340,7 +379,9 @@ namespace YAT.Model.Settings
 				(DirectionFormat   == other.DirectionFormat) &&
 				(LengthFormat      == other.LengthFormat) &&
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
-				(ErrorFormat       == other.ErrorFormat)
+				(ErrorFormat       == other.ErrorFormat) &&
+
+				(BackFormat  == other.BackFormat)
 			);
 		}
 
@@ -368,7 +409,9 @@ namespace YAT.Model.Settings
 				DirectionFormat  .GetHashCode() ^
 				LengthFormat     .GetHashCode() ^
 				WhiteSpacesFormat.GetHashCode() ^
-				ErrorFormat      .GetHashCode()
+				ErrorFormat      .GetHashCode() ^
+
+				BackFormat .GetHashCode()
 			);
 		}
 

@@ -43,7 +43,7 @@ namespace YAT.Gui.Utilities
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Drawing
 	{
-		private struct DrawingElements
+		private struct DrawingObjects
 		{
 			public Font Font;
 			public SolidBrush Brush;
@@ -54,17 +54,17 @@ namespace YAT.Gui.Utilities
 		/// <remarks>
 		/// For performance reasons, cache elements such as fonts and brushes used for drawing.
 		/// </remarks>
-		private static DrawingElements lineNumberElements;
-		private static DrawingElements txDataElements;
-		private static DrawingElements txControlElements;
-		private static DrawingElements rxDataElements;
-		private static DrawingElements rxControlElements;
-		private static DrawingElements dateElements;
-		private static DrawingElements timeElements;
-		private static DrawingElements directionElements;
-		private static DrawingElements lengthElements;
-		private static DrawingElements whiteSpacesElements;
-		private static DrawingElements errorElements;
+		private static DrawingObjects lineNumberObjects;
+		private static DrawingObjects txDataObjects;
+		private static DrawingObjects txControlObjects;
+		private static DrawingObjects rxDataObjects;
+		private static DrawingObjects rxControlObjects;
+		private static DrawingObjects dateObjects;
+		private static DrawingObjects timeObjects;
+		private static DrawingObjects directionObjects;
+		private static DrawingObjects lengthObjects;
+		private static DrawingObjects whiteSpacesObjects;
+		private static DrawingObjects errorObjects;
 
 		/// <summary>String format used for drawing line numbers.</summary>
 		private static StringFormat lineNumberStringFormat;
@@ -116,13 +116,13 @@ namespace YAT.Gui.Utilities
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLineNumberString(string s, Model.Settings.FormatSettings formatSettings,
+		public static void DrawAndMeasureLineNumberString(string s, Model.Settings.FormatSettings settings,
 		                                                  Graphics graphics, RectangleF bounds,
 		                                                  out SizeF requestedSize)
 		{
 			Font font;
 			Brush brush;
-			SetLineNumberDrawingItems(formatSettings, graphics, out font, out brush);
+			SetLineNumberDrawingObjects(settings, graphics, out font, out brush);
 
 			graphics.DrawString(s, font, brush, bounds, lineNumberStringFormat);
 
@@ -133,22 +133,22 @@ namespace YAT.Gui.Utilities
 		/// Line numbers shall be formatted the same as 'normal' Windows.Forms control text. This format
 		/// is only used here, and it is not contained in the <see cref="Model.Settings.FormatSettings"/>.
 		/// </remarks>
-		private static void SetLineNumberDrawingItems(Model.Settings.FormatSettings settings,
-		                                              Graphics graphics, out Font font, out Brush brush)
+		private static void SetLineNumberDrawingObjects(Model.Settings.FormatSettings settings,
+		                                                Graphics graphics, out Font font, out Brush brush)
 		{
 			string    fontName  = settings.Font.Name;
 			float     fontSize  = settings.Font.Size;
 			FontStyle fontStyle = FontStyle.Regular;
 			Color     fontColor = SystemColors.ControlText;
 
-			font  = SetFont (ref lineNumberElements.Font, fontName, fontSize, fontStyle, graphics);
-			brush = SetBrush(ref lineNumberElements.Brush, fontColor);
+			font  = SetFont (ref lineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
+			brush = SetBrush(ref lineNumberObjects.Brush, fontColor);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
+		public static void DrawAndMeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
 		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
 		                                      out SizeF requestedSize, out SizeF drawnSize)
 		{
@@ -158,7 +158,7 @@ namespace YAT.Gui.Utilities
 			{
 				SizeF requestedElementSize;
 				SizeF drawnElementSize;
-				DrawAndMeasureItem(de, formatSettings, graphics,
+				DrawAndMeasureItem(de, settings, graphics,
 				                   new RectangleF(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
 				                   state, out requestedElementSize, out drawnElementSize);
 				requestedWidth += requestedElementSize.Width;
@@ -171,28 +171,28 @@ namespace YAT.Gui.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
+		public static void DrawAndMeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
 		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
 		                                      out SizeF requestedSize, out SizeF drawnSize)
 		{
 			Font font;
 			Brush brush;
-			SetDrawingItems(element, formatSettings, graphics, out font, out brush);
+			SetDrawingObjects(element, settings, graphics, out font, out brush);
 
-			// Select the highlight brush if the item is selected.
+			// Select the highlight brush if the item is selected:
 			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
 				brush = SystemBrushes.HighlightText;
 
-			// Perform drawing.
+			// Perform drawing of text:
 			graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
 
-			// Measure consumed rectangle: Requested virtual and effectively drawn.
+			// Measure consumed rectangle: Requested virtual and effectively drawn:
 			requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
 			drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
 		}
 
-		private static void SetDrawingItems(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                    Graphics graphics, out Font font, out Brush brush)
+		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		                                      Graphics graphics, out Font font, out Brush brush)
 		{
 			string fontName = settings.Font.Name;
 			float fontSize  = settings.Font.Size;
@@ -203,57 +203,57 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				font  = SetFont (ref txDataElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref txDataElements.Brush, fontColor);
+				font  = SetFont (ref txDataObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref txDataObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				font  = SetFont (ref txControlElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref txControlElements.Brush, fontColor);
+				font  = SetFont (ref txControlObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref txControlObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				font  = SetFont (ref rxDataElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref rxDataElements.Brush, fontColor);
+				font  = SetFont (ref rxDataObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref rxDataObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				font  = SetFont (ref rxControlElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref rxControlElements.Brush, fontColor);
+				font  = SetFont (ref rxControlObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref rxControlObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DateInfo)
 			{
 				fontStyle = settings.DateFormat.FontStyle;
 				fontColor = settings.DateFormat.Color;
-				font  = SetFont (ref dateElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref dateElements.Brush, fontColor);
+				font  = SetFont (ref dateObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref dateObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TimeInfo)
 			{
 				fontStyle = settings.TimeFormat.FontStyle;
 				fontColor = settings.TimeFormat.Color;
-				font  = SetFont (ref timeElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref timeElements.Brush, fontColor);
+				font  = SetFont (ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref timeObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				fontColor = settings.DirectionFormat.Color;
-				font  = SetFont (ref directionElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref directionElements.Brush, fontColor);
+				font  = SetFont (ref directionObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref directionObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Length)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				font  = SetFont (ref lengthElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref lengthElements.Brush, fontColor);
+				font  = SetFont (ref lengthObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref lengthObjects.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
 			         (element is Domain.DisplayElement.Space) ||
@@ -262,15 +262,15 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				font  = SetFont (ref whiteSpacesElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref whiteSpacesElements.Brush, fontColor);
+				font  = SetFont (ref whiteSpacesObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref whiteSpacesObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;
-				font  = SetFont (ref errorElements.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref errorElements.Brush, fontColor);
+				font  = SetFont (ref errorObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref errorObjects.Brush, fontColor);
 			}
 			else
 			{

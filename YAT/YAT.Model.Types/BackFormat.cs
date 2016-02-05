@@ -37,35 +37,26 @@ namespace YAT.Model.Types
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TextFormat : IEquatable<TextFormat>
+	public class BackFormat : IEquatable<BackFormat>
 	{
 		private Color color;
-		private FontStyle fontStyle;
 
 		/// <summary></summary>
-		public TextFormat()
+		public BackFormat()
 		{
 			this.color = Color.Black;
-			this.fontStyle = FontStyle.Regular;
 		}
 
 		/// <summary></summary>
-		public TextFormat(Color color, bool bold, bool italic, bool underline, bool strikeout)
+		public BackFormat(Color color)
 		{
 			this.color = color;
-
-			this.fontStyle = FontStyle.Regular;
-			Bold = bold;
-			Italic = italic;
-			Underline = underline;
-			Strikeout = strikeout;
 		}
 
 		/// <summary></summary>
-		public TextFormat(TextFormat rhs)
+		public BackFormat(BackFormat rhs)
 		{
 			this.color = rhs.color;
-			this.fontStyle = rhs.fontStyle;
 		}
 
 		#region Properties
@@ -90,70 +81,6 @@ namespace YAT.Model.Types
 			set { this.color = Color.FromArgb(value); }
 		}
 
-		/// <summary></summary>
-		[XmlElement("FontStyle")]
-		public virtual FontStyle FontStyle
-		{
-			get { return (this.fontStyle); }
-			set { this.fontStyle = value; }
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Bold
-		{
-			get { return ((this.fontStyle & FontStyle.Bold) == FontStyle.Bold); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Bold;
-				else
-					this.fontStyle &= ~FontStyle.Bold;
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Italic
-		{
-			get { return ((this.fontStyle & FontStyle.Italic) == FontStyle.Italic); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Italic;
-				else
-					this.fontStyle &= ~FontStyle.Italic;
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Underline
-		{
-			get { return ((this.fontStyle & FontStyle.Underline) == FontStyle.Underline); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Underline;
-				else
-					this.fontStyle &= ~FontStyle.Underline;
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual bool Strikeout
-		{
-			get { return ((this.fontStyle & FontStyle.Strikeout) == FontStyle.Strikeout); }
-			set
-			{
-				if (value)
-					this.fontStyle |= FontStyle.Strikeout;
-				else
-					this.fontStyle &= ~FontStyle.Strikeout;
-			}
-		}
-
 		#endregion
 
 		#region Object Members
@@ -163,7 +90,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as TextFormat));
+			return (Equals(obj as BackFormat));
 		}
 
 		/// <summary>
@@ -173,7 +100,7 @@ namespace YAT.Model.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(TextFormat other)
+		public bool Equals(BackFormat other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
@@ -183,8 +110,7 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(Color     == other.Color) &&
-				(FontStyle == other.FontStyle)
+				(Color == other.Color)
 			);
 		}
 
@@ -199,8 +125,7 @@ namespace YAT.Model.Types
 		{
 			return
 			(
-				Color    .GetHashCode() ^
-				FontStyle.GetHashCode()
+				Color.GetHashCode()
 			);
 		}
 
@@ -211,7 +136,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(TextFormat lhs, TextFormat rhs)
+		public static bool operator ==(BackFormat lhs, BackFormat rhs)
 		{
 			// Base reference type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -229,7 +154,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(TextFormat lhs, TextFormat rhs)
+		public static bool operator !=(BackFormat lhs, BackFormat rhs)
 		{
 			return (!(lhs == rhs));
 		}
