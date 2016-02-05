@@ -137,6 +137,11 @@ namespace YAT.Gui.Forms
 			ShowFontDialog();
 		}
 
+		private void button_Background_Click(object sender, EventArgs e)
+		{
+			ShowBackgroundColorDialog();
+		}
+
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.formatSettings = this.formatSettingsInEdit;
@@ -339,6 +344,19 @@ namespace YAT.Gui.Forms
 					this.formatSettingsInEdit.Font = f;
 					SetControls();
 				}
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowBackgroundColorDialog()
+		{
+			ColorDialog cd = new ColorDialog();
+			cd.Color = this.formatSettingsInEdit.BackFormat.Color;
+			if (cd.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+				this.formatSettingsInEdit.BackFormat.Color = cd.Color;
+				SetControls();
 			}
 		}
 

@@ -54,12 +54,14 @@ namespace YAT.Model.Utilities
 		private struct FormatDescriptor
 		{
 			public System.Drawing.FontStyle FontStyle;
-			public ColorDescriptor Color;
+			public ColorDescriptor FontColor;
+			public ColorDescriptor BackColor;
 
-			public FormatDescriptor(System.Drawing.FontStyle fontStyle, ColorDescriptor color)
+			public FormatDescriptor(System.Drawing.FontStyle fontStyle, ColorDescriptor fontColor, ColorDescriptor backColor)
 			{
 				this.FontStyle = fontStyle;
-				this.Color = color;
+				this.FontColor = fontColor;
+				this.BackColor = backColor;
 			}
 		}
 
@@ -110,16 +112,16 @@ namespace YAT.Model.Utilities
 			this.alignement = Align.Left;
 
 			// Formats:
-			this.txDataFormat      = new FormatDescriptor(settings.TxDataFormat.FontStyle,      this.document.createColor(settings.TxDataFormat.Color));
-			this.txControlFormat   = new FormatDescriptor(settings.TxControlFormat.FontStyle,   this.document.createColor(settings.TxControlFormat.Color));
-			this.rxDataFormat      = new FormatDescriptor(settings.RxDataFormat.FontStyle,      this.document.createColor(settings.RxDataFormat.Color));
-			this.rxControlFormat   = new FormatDescriptor(settings.RxControlFormat.FontStyle,   this.document.createColor(settings.RxControlFormat.Color));
-			this.dateFormat        = new FormatDescriptor(settings.DateFormat.FontStyle,        this.document.createColor(settings.DateFormat.Color));
-			this.timeFormat        = new FormatDescriptor(settings.TimeFormat.FontStyle,        this.document.createColor(settings.TimeFormat.Color));
-			this.directionFormat   = new FormatDescriptor(settings.DirectionFormat.FontStyle,   this.document.createColor(settings.DirectionFormat.Color));
-			this.lengthFormat      = new FormatDescriptor(settings.LengthFormat.FontStyle,      this.document.createColor(settings.LengthFormat.Color));
-			this.whiteSpacesFormat = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle, this.document.createColor(settings.WhiteSpacesFormat.Color));
-			this.errorFormat       = new FormatDescriptor(settings.ErrorFormat.FontStyle,       this.document.createColor(settings.ErrorFormat.Color));
+			this.txDataFormat      = new FormatDescriptor(settings.TxDataFormat.FontStyle,      this.document.createColor(settings.TxDataFormat.Color),      this.document.createColor(settings.BackColor));
+			this.txControlFormat   = new FormatDescriptor(settings.TxControlFormat.FontStyle,   this.document.createColor(settings.TxControlFormat.Color),   this.document.createColor(settings.BackColor));
+			this.rxDataFormat      = new FormatDescriptor(settings.RxDataFormat.FontStyle,      this.document.createColor(settings.RxDataFormat.Color),      this.document.createColor(settings.BackColor));
+			this.rxControlFormat   = new FormatDescriptor(settings.RxControlFormat.FontStyle,   this.document.createColor(settings.RxControlFormat.Color),   this.document.createColor(settings.BackColor));
+			this.dateFormat        = new FormatDescriptor(settings.DateFormat.FontStyle,        this.document.createColor(settings.DateFormat.Color),        this.document.createColor(settings.BackColor));
+			this.timeFormat        = new FormatDescriptor(settings.TimeFormat.FontStyle,        this.document.createColor(settings.TimeFormat.Color),        this.document.createColor(settings.BackColor));
+			this.directionFormat   = new FormatDescriptor(settings.DirectionFormat.FontStyle,   this.document.createColor(settings.DirectionFormat.Color),   this.document.createColor(settings.BackColor));
+			this.lengthFormat      = new FormatDescriptor(settings.LengthFormat.FontStyle,      this.document.createColor(settings.LengthFormat.Color),      this.document.createColor(settings.BackColor));
+			this.whiteSpacesFormat = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle, this.document.createColor(settings.WhiteSpacesFormat.Color), this.document.createColor(settings.BackColor));
+			this.errorFormat       = new FormatDescriptor(settings.ErrorFormat.FontStyle,       this.document.createColor(settings.ErrorFormat.Color),       this.document.createColor(settings.BackColor));
 
 			// Header:
 			RtfParagraph header = this.document.Header.addParagraph();
@@ -250,7 +252,8 @@ namespace YAT.Model.Utilities
 						if ((format.FontStyle & System.Drawing.FontStyle.Underline) == System.Drawing.FontStyle.Underline) fmt.FontStyle.addStyle(FontStyleFlag.Underline);
 						if ((format.FontStyle & System.Drawing.FontStyle.Strikeout) == System.Drawing.FontStyle.Strikeout) fmt.FontStyle.addStyle(FontStyleFlag.Strike);
 
-						fmt.FgColor = format.Color;
+						fmt.FgColor = format.FontColor;
+						fmt.BgColor = format.BackColor;
 					}
 
 					// Render and write the RTF line into the file:

@@ -83,6 +83,8 @@ namespace YAT.Model.Utilities
 		internal static RichTextBox LinesToRichTextBox(List<DisplayLine> lines, Settings.FormatSettings settings)
 		{
 			RichTextBox richTextProvider = new RichTextBox();
+			richTextProvider.BackColor = settings.BackColor;
+
 			foreach (DisplayLine line in lines)
 				AppendDisplayLine(richTextProvider, line, settings);
 

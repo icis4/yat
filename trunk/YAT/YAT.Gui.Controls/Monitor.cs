@@ -260,8 +260,12 @@ namespace YAT.Gui.Controls
 				if (this.formatSettings != value)
 				{
 					bool fontHasChanged = (this.formatSettings.Font != value.Font);
+					bool backHasChanged = (this.formatSettings.BackColor != value.BackColor);
 
 					this.formatSettings = value;
+
+					if (backHasChanged)
+						fastListBox_Monitor.BackColor = this.formatSettings.BackColor;
 
 					if (fontHasChanged)
 					{
@@ -807,9 +811,18 @@ namespace YAT.Gui.Controls
 					SizeF requestedSize;
 					SizeF drawnSize;
 
+					// Handle non-standard background:
+					if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
+					{
+						if ((e.State & DrawItemState.Selected) != DrawItemState.Selected) // Change only needed if item is not selected
+							e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, this.formatSettings.BackColor);
+					}
+
 					e.DrawBackground();
+
 					Drawing.DrawAndMeasureItem((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
 					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
+
 					e.DrawFocusRectangle();
 
 					// Only handle the item width and horizontal extent.
