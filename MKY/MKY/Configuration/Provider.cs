@@ -121,7 +121,7 @@ namespace MKY.Configuration
 		/// <typeparam name="T">The type of the section to retrieve.</typeparam>
 		/// <param name="selectionGroupName">Name of the selection configuration group.</param>
 		/// <param name="sectionsGroupName">Name of the configuration sections group.</param>
-		/// <param name="solutionConfigurationFileNameSuffix">An optional suffix to choose a dedicated file (e.g. ".Test" for a test configuration file).</param>
+		/// <param name="solutionConfigurationFileNameSuffix">An optional suffix to select a dedicated file (e.g. ".Test" for a test configuration file).</param>
 		/// <param name="userConfigurationEnvironmentVariableName">Name of the user configuration environment variable.</param>
 		/// <param name="resultingConfiguration">The resulting configuration (default, solution, user or merged).</param>
 		public static bool TryOpenAndMergeConfigurations<T>(string selectionGroupName, string sectionsGroupName, string solutionConfigurationFileNameSuffix, string userConfigurationEnvironmentVariableName, out T resultingConfiguration)

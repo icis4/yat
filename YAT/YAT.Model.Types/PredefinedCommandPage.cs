@@ -113,16 +113,22 @@ namespace YAT.Model.Types
 		{
 			if (selectedCommand >= 0)
 			{
+				Command value;
+				if (command.IsDefined)
+					value = new Command(command);
+				else
+					value = new Command();
+
 				if (selectedCommand < this.commands.Count)
 				{
-					this.commands[selectedCommand] = new Command(command);
+					this.commands[selectedCommand] = value;
 				}
 				else
 				{
 					while (this.commands.Count < (selectedCommand))
-						this.commands.Add(new Command());
+						this.commands.Add(value);
 
-					this.commands.Add(new Command(command));
+					this.commands.Add(value);
 				}
 			}
 		}

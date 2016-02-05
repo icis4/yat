@@ -174,7 +174,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Model.Types.Command Command
+		public virtual Command Command
 		{
 			get { return (this.command); }
 			set
@@ -182,7 +182,7 @@ namespace YAT.Gui.Controls
 				if (value != null)
 					this.command = value;
 				else
-					this.command = new Model.Types.Command();
+					this.command = new Command();
 
 				OnCommandChanged(EventArgs.Empty);
 				SetControls();
@@ -489,7 +489,7 @@ namespace YAT.Gui.Controls
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
-			// Indicate multi line command:
+			// Indicate multi-line command:
 			this.isSettingControls.Enter();
 			textBox_Command.Text      = Command.MultiLineCommandText;
 			textBox_Command.ForeColor = SystemColors.ControlText;
@@ -502,13 +502,13 @@ namespace YAT.Gui.Controls
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
-			// Show multi line box:
+			// Show multi-line box:
 			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				this.command = f.CommandResult;
-				this.isValidated = true; // Command has been validated by multi line box.
+				this.isValidated = true; // Command has been validated by multi-line box.
 
 				SetControls();
 				textBox_Description.Select();

@@ -744,9 +744,9 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-		#region Private Methods > Multi Line Command
+		#region Private Methods > Multi-Line Command
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Multi Line Command
+		// Private Methods > Multi-Line Command
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -755,7 +755,7 @@ namespace YAT.Gui.Controls
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
-			// Indicate multi line command.
+			// Indicate multi-line command.
 			this.isSettingControls.Enter();
 			comboBox_Command.Text      = Command.MultiLineCommandText;
 			comboBox_Command.ForeColor = SystemColors.ControlText;
@@ -768,13 +768,13 @@ namespace YAT.Gui.Controls
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
-			// Show multi line box.
+			// Show multi-line box.
 			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 
-				this.isValidated = true; // Command has been validated by multi line box.
+				this.isValidated = true; // Command has been validated by multi-line box.
 				this.command = f.CommandResult;
 
 				SetCommandControls();

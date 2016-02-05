@@ -47,7 +47,7 @@
 			this.button_OpenFile.Size = new System.Drawing.Size(25, 21);
 			this.button_OpenFile.TabIndex = 3;
 			this.button_OpenFile.Text = "...";
-			this.toolTip.SetToolTip(this.button_OpenFile, "Choose File");
+			this.toolTip.SetToolTip(this.button_OpenFile, "Browse for a file");
 			this.button_OpenFile.Click += new System.EventHandler(this.button_OpenFile_Click);
 			// 
 			// button_Send
@@ -60,7 +60,7 @@
 			this.button_Send.Size = new System.Drawing.Size(176, 21);
 			this.button_Send.TabIndex = 4;
 			this.button_Send.Text = "Send File (F4)";
-			this.toolTip.SetToolTip(this.button_Send, "Send File");
+			this.toolTip.SetToolTip(this.button_Send, "Send file");
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
 			// pathComboBox_FilePath
@@ -74,7 +74,7 @@
 			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
 			this.pathComboBox_FilePath.Size = new System.Drawing.Size(319, 21);
 			this.pathComboBox_FilePath.TabIndex = 1;
-			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "<Enter> to send file, drop down\r\nfor recent files, <...> to choose file");
+			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "<Enter> to send file, drop down\r\nfor recent files, <...> to browse for a file");
 			this.pathComboBox_FilePath.SelectedIndexChanged += new System.EventHandler(this.pathComboBox_FilePath_SelectedIndexChanged);
 			// 
 			// splitContainer

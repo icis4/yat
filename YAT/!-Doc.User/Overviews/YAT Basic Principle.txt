@@ -12,7 +12,7 @@
     > Browser                  @ Firefox > http://fritz.box/
     > Interpreted HTML         @ Firefox
     > Show HTML data           @ Firefox > Extras > Web Designer > Source Code (Ctrl+U)
-  ( > Show messages            @ Message Analyzer > Loopback & Unencrypted > *Address == 192.168.178.1 )
+  ( > Show messages            @ Message Analyzer > Loopback & Unencrypted > *Address == 192.168.188.1 )
   ( > Browser                  @ Firefox > http://fritz.box/ > Reload )
 
 4. Demonstrate internet device communication with YAT

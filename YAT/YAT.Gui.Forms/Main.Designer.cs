@@ -989,7 +989,7 @@
 			// toolStripButton_MainTool_Terminal_Clear
 			// 
 			this.toolStripButton_MainTool_Terminal_Clear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_broom_16x16;
+			this.toolStripButton_MainTool_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripButton_MainTool_Terminal_Clear.Name = "toolStripButton_MainTool_Terminal_Clear";
 			this.toolStripButton_MainTool_Terminal_Clear.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Clear.Text = "Clear Terminal Monitor(s)";

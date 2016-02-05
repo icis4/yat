@@ -39,7 +39,7 @@ MKY.IO.Usb is based on three existing libraries available on the web:
  > 'UsbLibrary' from <http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038>
  > 'UsbHid'     from <http://www.florian-leitner.de/index.php/category/usb-hid-library/>
 
-The approach of merging these libraries into MKY.IO.Usb was choosen due to:
+The approach of merging these libraries into MKY.IO.Usb was chosen due to:
  > None of the libraries provided all the features required for USB Ser/HID for YAT
  > Need for a compact though complete library for USB Ser/HID for YAT
 

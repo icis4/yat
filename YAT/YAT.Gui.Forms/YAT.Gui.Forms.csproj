@@ -430,6 +430,9 @@
     <None Include="Resources\Tool\Image_Tool_layer_save_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_page_white_magnify_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_folder_explorer_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_lightning_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_table_lightning_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_page_white_lightning_16x16.png" />
     <Content Include="Resources\YAT\Icon_YAT.ico" />
     <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />

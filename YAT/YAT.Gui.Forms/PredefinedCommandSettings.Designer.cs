@@ -59,7 +59,7 @@
 			this.label_ExampleBinary_Description = new System.Windows.Forms.Label();
 			this.label_ExampleBinary_Data = new System.Windows.Forms.Label();
 			this.label_predefinedCommandSettingsSet_1 = new System.Windows.Forms.Label();
-			this.label_Delete = new System.Windows.Forms.Label();
+			this.label_Clear = new System.Windows.Forms.Label();
 			this.label_Shortcut = new System.Windows.Forms.Label();
 			this.label_Data = new System.Windows.Forms.Label();
 			this.label_Description = new System.Windows.Forms.Label();
@@ -112,14 +112,14 @@
 			this.button_ClearPage.Name = "button_ClearPage";
 			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
 			this.button_ClearPage.TabIndex = 34;
-			this.button_ClearPage.Text = "Dele&te All...";
+			this.button_ClearPage.Text = "Clear All...";
 			this.button_ClearPage.Click += new System.EventHandler(this.button_ClearPage_Click);
 			// 
 			// groupBox_Page
 			// 
-			this.groupBox_Page.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Page.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Page.Controls.Add(this.predefinedCommandSettingsSet_12);
 			this.groupBox_Page.Controls.Add(this.predefinedCommandSettingsSet_11);
 			this.groupBox_Page.Controls.Add(this.predefinedCommandSettingsSet_10);
@@ -148,7 +148,7 @@
 			this.groupBox_Page.Controls.Add(this.label_ExampleBinary_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleBinary_Data);
 			this.groupBox_Page.Controls.Add(this.label_predefinedCommandSettingsSet_1);
-			this.groupBox_Page.Controls.Add(this.label_Delete);
+			this.groupBox_Page.Controls.Add(this.label_Clear);
 			this.groupBox_Page.Controls.Add(this.label_Shortcut);
 			this.groupBox_Page.Controls.Add(this.label_Data);
 			this.groupBox_Page.Controls.Add(this.label_Description);
@@ -164,8 +164,8 @@
 			// 
 			// predefinedCommandSettingsSet_12
 			// 
-			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(30, 318);
 			this.predefinedCommandSettingsSet_12.Name = "predefinedCommandSettingsSet_12";
 			this.predefinedCommandSettingsSet_12.ShortcutString = "Shift+F12";
@@ -176,8 +176,8 @@
 			// 
 			// predefinedCommandSettingsSet_11
 			// 
-			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(30, 292);
 			this.predefinedCommandSettingsSet_11.Name = "predefinedCommandSettingsSet_11";
 			this.predefinedCommandSettingsSet_11.ShortcutString = "Shift+F11";
@@ -188,8 +188,8 @@
 			// 
 			// predefinedCommandSettingsSet_10
 			// 
-			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(30, 266);
 			this.predefinedCommandSettingsSet_10.Name = "predefinedCommandSettingsSet_10";
 			this.predefinedCommandSettingsSet_10.ShortcutString = "Shift+F10";
@@ -200,8 +200,8 @@
 			// 
 			// predefinedCommandSettingsSet_9
 			// 
-			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(30, 240);
 			this.predefinedCommandSettingsSet_9.Name = "predefinedCommandSettingsSet_9";
 			this.predefinedCommandSettingsSet_9.ShortcutString = "Shift+F9";
@@ -212,8 +212,8 @@
 			// 
 			// predefinedCommandSettingsSet_8
 			// 
-			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(30, 214);
 			this.predefinedCommandSettingsSet_8.Name = "predefinedCommandSettingsSet_8";
 			this.predefinedCommandSettingsSet_8.ShortcutString = "Shift+F8";
@@ -224,8 +224,8 @@
 			// 
 			// predefinedCommandSettingsSet_7
 			// 
-			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(30, 188);
 			this.predefinedCommandSettingsSet_7.Name = "predefinedCommandSettingsSet_7";
 			this.predefinedCommandSettingsSet_7.ShortcutString = "Shift+F7";
@@ -236,8 +236,8 @@
 			// 
 			// predefinedCommandSettingsSet_6
 			// 
-			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(30, 162);
 			this.predefinedCommandSettingsSet_6.Name = "predefinedCommandSettingsSet_6";
 			this.predefinedCommandSettingsSet_6.ShortcutString = "Shift+F6";
@@ -248,8 +248,8 @@
 			// 
 			// predefinedCommandSettingsSet_5
 			// 
-			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(30, 136);
 			this.predefinedCommandSettingsSet_5.Name = "predefinedCommandSettingsSet_5";
 			this.predefinedCommandSettingsSet_5.ShortcutString = "Shift+F5";
@@ -260,8 +260,8 @@
 			// 
 			// predefinedCommandSettingsSet_4
 			// 
-			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(30, 110);
 			this.predefinedCommandSettingsSet_4.Name = "predefinedCommandSettingsSet_4";
 			this.predefinedCommandSettingsSet_4.ShortcutString = "Shift+F4";
@@ -272,8 +272,8 @@
 			// 
 			// predefinedCommandSettingsSet_3
 			// 
-			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(30, 84);
 			this.predefinedCommandSettingsSet_3.Name = "predefinedCommandSettingsSet_3";
 			this.predefinedCommandSettingsSet_3.ShortcutString = "Shift+F3";
@@ -284,8 +284,8 @@
 			// 
 			// predefinedCommandSettingsSet_1
 			// 
-			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(30, 32);
 			this.predefinedCommandSettingsSet_1.Name = "predefinedCommandSettingsSet_1";
 			this.predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(584, 20);
@@ -295,8 +295,8 @@
 			// 
 			// predefinedCommandSettingsSet_2
 			// 
-			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(30, 58);
 			this.predefinedCommandSettingsSet_2.Name = "predefinedCommandSettingsSet_2";
 			this.predefinedCommandSettingsSet_2.ShortcutString = "Shift+F2";
@@ -443,16 +443,16 @@
 			this.label_predefinedCommandSettingsSet_1.TabIndex = 5;
 			this.label_predefinedCommandSettingsSet_1.Text = "&1:";
 			// 
-			// label_Delete
+			// label_Clear
 			// 
-			this.label_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_Delete.AutoSize = true;
-			this.label_Delete.Location = new System.Drawing.Point(583, 16);
-			this.label_Delete.Name = "label_Delete";
-			this.label_Delete.Size = new System.Drawing.Size(26, 13);
-			this.label_Delete.TabIndex = 4;
-			this.label_Delete.Text = "Del:";
-			this.label_Delete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Clear.AutoSize = true;
+			this.label_Clear.Location = new System.Drawing.Point(583, 16);
+			this.label_Clear.Name = "label_Clear";
+			this.label_Clear.Size = new System.Drawing.Size(34, 13);
+			this.label_Clear.TabIndex = 4;
+			this.label_Clear.Text = "Clear:";
+			this.label_Clear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_Shortcut
 			// 
@@ -528,9 +528,9 @@
 			// 
 			// groupBox_Predefined
 			// 
-			this.groupBox_Predefined.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Predefined.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Predefined.Controls.Add(this.groupBox_Pages);
 			this.groupBox_Predefined.Controls.Add(this.groupBox_Page);
 			this.groupBox_Predefined.Location = new System.Drawing.Point(12, 12);
@@ -541,8 +541,8 @@
 			// 
 			// groupBox_Pages
 			// 
-			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_Pages.Controls.Add(this.button_CopyPage);
 			this.groupBox_Pages.Controls.Add(this.listBox_Pages);
 			this.groupBox_Pages.Controls.Add(this.button_DeletePages);
@@ -718,6 +718,6 @@
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_11;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_10;
 		private System.Windows.Forms.Button button_CopyPage;
-		private System.Windows.Forms.Label label_Delete;
+		private System.Windows.Forms.Label label_Clear;
 	}
 }
