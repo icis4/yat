@@ -13,7 +13,7 @@
 // See SVN change log for revision details.
 // See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2015 Matthias Kläy.
+// Copyright © 2007-2016 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.

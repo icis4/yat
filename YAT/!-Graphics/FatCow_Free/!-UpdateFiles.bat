@@ -5,15 +5,15 @@
 ::  Visit YAT at http:REMsourceforge.net/projects/y-a-terminal/.
 ::  Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 ::  -----------------------------------------------------------------------------------------------
-::  $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Scripts/CleanFiles.bat $
-::  $Author: maettu_this $
-::  $Date: 2015-11-08 21:40:09 +0100 (So, 08 Nov 2015) $
-::  $Revision: 819 $
+::  $URL$
+::  $Author$
+::  $Date$
+::  $Revision$
 ::  -----------------------------------------------------------------------------------------------
 ::  See SVN change log for revision details.
 ::  See release notes for product version details.
 ::  -----------------------------------------------------------------------------------------------
-::  Copyright © 2003-2015 Matthias Kläy.
+::  Copyright © 2003-2016 Matthias Kläy.
 ::  All rights reserved.
 ::  -----------------------------------------------------------------------------------------------
 ::  This source code is licensed under the GNU LGPL.
@@ -62,5 +62,5 @@ GOTO End
 
 :: =================================================================================================
 ::  End of
-::  $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Scripts/CleanFiles.bat $
+::  $URL$
 :: =================================================================================================
