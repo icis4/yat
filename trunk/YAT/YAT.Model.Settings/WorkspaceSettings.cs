@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			Layout           = WorkspaceLayout.Manual;
+			Layout           = WorkspaceLayout.Automatic;
 			TerminalSettings = new GuidList<TerminalSettingsItem>();
 		}
 
