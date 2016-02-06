@@ -114,7 +114,7 @@ namespace YAT.Gui.Forms
 		private Model.Workspace workspace;
 
 		// Settings:
-		private LocalUserSettingsRoot settingsRoot;
+		private LocalUserSettingsRoot localUserSettingsRoot;
 
 		#endregion
 
@@ -160,8 +160,8 @@ namespace YAT.Gui.Forms
 			Text = this.main.AutoName;
 
 			// Link and attach to terminal settings:
-			this.settingsRoot = ApplicationSettings.LocalUserSettings;
-			AttachSettingsEventHandlers();
+			this.localUserSettingsRoot = ApplicationSettings.LocalUserSettings;
+			AttachLocalUserSettingsEventHandlers();
 
 			ApplyWindowSettingsAccordingToStartup();
 
@@ -417,8 +417,8 @@ namespace YAT.Gui.Forms
 			DetachMainEventHandlers();
 			this.main = null;
 
-			DetachSettingsEventHandlers();
-			this.settingsRoot = null;
+			DetachLocalUserSettingsEventHandlers();
+			this.localUserSettingsRoot = null;
 		}
 
 		#endregion
@@ -621,6 +621,12 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
+			bool workspaceIsReady = (this.workspace != null);
+			toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Enabled = workspaceIsReady;
+
+			bool alwaysOnTop = ((this.workspace != null) ? this.workspace.SettingsRoot.Workspace.AlwaysOnTop : false);
+			toolStripMenuItem_MainMenu_Window_AlwaysOnTop.Checked = alwaysOnTop;
+
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_Window_Automatic.Enabled      = childIsReady;
 			toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
@@ -645,6 +651,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
+		}
+
+		private void toolStripMenuItem_MainMenu_Window_AlwaysOnTop_Click(object sender, EventArgs e)
+		{
+			ToggleAlwaysOnTop();
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Automatic_Click(object sender, EventArgs e)
@@ -945,31 +956,20 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Context Menu
 		//------------------------------------------------------------------------------------------
 
-		/// <remarks>
-		/// Must be called each time recent status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
-		/// </remarks>
-		private void contextMenuStrip_Main_SetRecentMenuItems()
-		{
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
-
-			this.isSettingControls.Enter();
-
-			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
-
-			this.isSettingControls.Leave();
-		}
-
 		private void contextMenuStrip_Main_Opening(object sender, CancelEventArgs e)
 		{
-			// Prevent context menu being displayed within the child window.
+			// Prevent context menu being displayed within the child window:
 			if (ActiveMdiChild != null)
 			{
 				e.Cancel = true;
 				return;
 			}
 
-			contextMenuStrip_Main_SetRecentMenuItems();
+			// Update and show recent files:
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.ValidateAll();
+			this.isSettingControls.Enter();
+			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
+			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_New_Click(object sender, EventArgs e)
@@ -1348,36 +1348,22 @@ namespace YAT.Gui.Forms
 		// Settings
 		//==========================================================================================
 
-		#region Settings > Lifetime
-		//------------------------------------------------------------------------------------------
-		// Settings > Lifetime
-		//------------------------------------------------------------------------------------------
-
-		private void AttachSettingsEventHandlers()
+		private void AttachLocalUserSettingsEventHandlers()
 		{
-			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+			if (this.localUserSettingsRoot != null)
+				this.localUserSettingsRoot.Changed += new EventHandler<SettingsEventArgs>(localUserSettingsRoot_Changed);
 		}
 
-		private void DetachSettingsEventHandlers()
+		private void DetachLocalUserSettingsEventHandlers()
 		{
-			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
+			if (this.localUserSettingsRoot != null)
+				this.localUserSettingsRoot.Changed -= new EventHandler<SettingsEventArgs>(localUserSettingsRoot_Changed);
 		}
 
-		#endregion
-
-		#region Settings > Event Handlers
-		//------------------------------------------------------------------------------------------
-		// Settings > Event Handlers
-		//------------------------------------------------------------------------------------------
-
-		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
+		private void localUserSettingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetMainControls();
 		}
-
-		#endregion
 
 		#endregion
 
@@ -1530,6 +1516,7 @@ namespace YAT.Gui.Forms
 		{
 			toolStripButton_MainTool_SetControls();
 
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Log_SetMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
@@ -1537,15 +1524,18 @@ namespace YAT.Gui.Forms
 
 		private void SetRecentControls()
 		{
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
-
-			contextMenuStrip_Main_SetRecentMenuItems();
 			contextMenuStrip_FileRecent_SetRecentMenuItems();
 		}
 
 		private void SetWorkspaceControls()
 		{
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
+
+			if (this.workspace != null)
+				this.TopMost = this.workspace.SettingsRoot.Workspace.AlwaysOnTop;
 		}
 
 		#region Main > Methods > New
@@ -1695,6 +1685,12 @@ namespace YAT.Gui.Forms
 			return (dr);
 		}
 
+		private void ToggleAlwaysOnTop()
+		{
+			if (this.workspace != null)
+				this.workspace.SettingsRoot.Workspace.AlwaysOnTop = !this.workspace.SettingsRoot.Workspace.AlwaysOnTop;
+		}
+
 		/// <summary>
 		/// Sets the terminal layout including forwarding the setting to the workspace.
 		/// </summary>
@@ -1827,6 +1823,9 @@ namespace YAT.Gui.Forms
 				this.workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(workspace_SaveAsFileDialogRequest);
 				
 				this.workspace.Closed += new EventHandler<Model.ClosedEventArgs>(workspace_Closed);
+
+				if (this.workspace.SettingsRoot != null)
+					this.workspace.SettingsRoot.Changed += new EventHandler<SettingsEventArgs>(workspaceSettingsRoot_Changed);
 			}
 		}
 
@@ -1844,6 +1843,9 @@ namespace YAT.Gui.Forms
 				this.workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(workspace_SaveAsFileDialogRequest);
 
 				this.workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(workspace_Closed);
+
+				if (this.workspace.SettingsRoot != null)
+					this.workspace.SettingsRoot.Changed -= new EventHandler<SettingsEventArgs>(workspaceSettingsRoot_Changed);
 			}
 		}
 
@@ -1906,6 +1908,11 @@ namespace YAT.Gui.Forms
 			this.workspace = null;
 
 			SetChildControls();
+		}
+
+		private void workspaceSettingsRoot_Changed(object sender, SettingsEventArgs e)
+		{
+			SetWorkspaceControls();
 		}
 
 		#endregion

@@ -434,6 +434,7 @@
     <None Include="Resources\Tool\Image_Tool_table_lightning_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_page_white_lightning_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_application_lightning_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_new_window_16x16.png" />
     <Content Include="Resources\YAT\Icon_YAT.ico" />
     <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />

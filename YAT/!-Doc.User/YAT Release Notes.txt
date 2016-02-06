@@ -94,6 +94,7 @@ New:
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to display the date in addition to the time (related to feature request #14).
 - Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
+- Window can be configured to always stay on top (feature request #241).
 - Selectable background color added to format settings (feature request #250).
 - Logging in RTF format implemented (feature request #233). Note that the log file's RTF structure
   is incomplete while logging is ongoing. The file can only be opened by an RTF reader (e.g. Word)

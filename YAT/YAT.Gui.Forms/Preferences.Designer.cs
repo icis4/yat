@@ -36,7 +36,7 @@
 			this.groupBox_Main = new System.Windows.Forms.GroupBox();
 			this.checkBox_ShowChrono = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTerminalInfo = new System.Windows.Forms.CheckBox();
-			this.groupBox_Port = new System.Windows.Forms.GroupBox();
+			this.groupBox_SerialPorts = new System.Windows.Forms.GroupBox();
 			this.checkBox_RetrieveSerialPortCaptions = new System.Windows.Forms.CheckBox();
 			this.label_SerialPortDiscovery = new System.Windows.Forms.Label();
 			this.checkBox_DetectSerialPortsInUse = new System.Windows.Forms.CheckBox();
@@ -47,7 +47,7 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Preferences.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
-			this.groupBox_Port.SuspendLayout();
+			this.groupBox_SerialPorts.SuspendLayout();
 			this.groupBox_Workspace.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -89,7 +89,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Main);
-			this.groupBox_Preferences.Controls.Add(this.groupBox_Port);
+			this.groupBox_Preferences.Controls.Add(this.groupBox_SerialPorts);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Workspace);
 			this.groupBox_Preferences.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Preferences.Name = "groupBox_Preferences";
@@ -132,20 +132,20 @@
 			this.checkBox_ShowTerminalInfo.UseVisualStyleBackColor = true;
 			this.checkBox_ShowTerminalInfo.CheckedChanged += new System.EventHandler(this.checkBox_ShowTerminalInfo_CheckedChanged);
 			// 
-			// groupBox_Port
+			// groupBox_SerialPorts
 			// 
-			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Port.Controls.Add(this.checkBox_RetrieveSerialPortCaptions);
-			this.groupBox_Port.Controls.Add(this.label_SerialPortDiscovery);
-			this.groupBox_Port.Controls.Add(this.checkBox_DetectSerialPortsInUse);
-			this.groupBox_Port.Location = new System.Drawing.Point(6, 188);
-			this.groupBox_Port.Name = "groupBox_Port";
-			this.groupBox_Port.Size = new System.Drawing.Size(246, 88);
-			this.groupBox_Port.TabIndex = 2;
-			this.groupBox_Port.TabStop = false;
-			this.groupBox_Port.Text = "Port";
-			this.toolTip.SetToolTip(this.groupBox_Port, "On certain computers, discovery of serial ports takes several seconds.\r\nIn such c" +
+			this.groupBox_SerialPorts.Controls.Add(this.checkBox_RetrieveSerialPortCaptions);
+			this.groupBox_SerialPorts.Controls.Add(this.label_SerialPortDiscovery);
+			this.groupBox_SerialPorts.Controls.Add(this.checkBox_DetectSerialPortsInUse);
+			this.groupBox_SerialPorts.Location = new System.Drawing.Point(6, 188);
+			this.groupBox_SerialPorts.Name = "groupBox_SerialPorts";
+			this.groupBox_SerialPorts.Size = new System.Drawing.Size(246, 88);
+			this.groupBox_SerialPorts.TabIndex = 2;
+			this.groupBox_SerialPorts.TabStop = false;
+			this.groupBox_SerialPorts.Text = "Serial Ports";
+			this.toolTip.SetToolTip(this.groupBox_SerialPorts, "On certain computers, discovery of serial ports takes several seconds.\r\nIn such c" +
         "ases it can be useful to disable one or both of these options.");
 			// 
 			// checkBox_RetrieveSerialPortCaptions
@@ -248,8 +248,8 @@
 			this.groupBox_Preferences.ResumeLayout(false);
 			this.groupBox_Main.ResumeLayout(false);
 			this.groupBox_Main.PerformLayout();
-			this.groupBox_Port.ResumeLayout(false);
-			this.groupBox_Port.PerformLayout();
+			this.groupBox_SerialPorts.ResumeLayout(false);
+			this.groupBox_SerialPorts.PerformLayout();
 			this.groupBox_Workspace.ResumeLayout(false);
 			this.groupBox_Workspace.PerformLayout();
 			this.ResumeLayout(false);
@@ -265,7 +265,7 @@
 		private System.Windows.Forms.GroupBox groupBox_Workspace;
 		private System.Windows.Forms.CheckBox checkBox_AutoSaveWorkspace;
 		private System.Windows.Forms.CheckBox checkBox_AutoOpenWorkspace;
-		private System.Windows.Forms.GroupBox groupBox_Port;
+		private System.Windows.Forms.GroupBox groupBox_SerialPorts;
 		private System.Windows.Forms.CheckBox checkBox_DetectSerialPortsInUse;
 		private System.Windows.Forms.CheckBox checkBox_UseRelativePaths;
 		private System.Windows.Forms.GroupBox groupBox_Main;
