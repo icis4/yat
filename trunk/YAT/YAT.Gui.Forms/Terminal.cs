@@ -3004,7 +3004,7 @@ namespace YAT.Gui.Forms
 
 #endregion
 
-#region Settings > Suspend
+		#region Settings > Suspend
 		//------------------------------------------------------------------------------------------
 		// Settings > Suspend
 		//------------------------------------------------------------------------------------------
@@ -3026,7 +3026,7 @@ namespace YAT.Gui.Forms
 			SetMonitorCountAndRateStatus();
 		}
 
-#endregion
+		#endregion
 
 		#endregion
 
