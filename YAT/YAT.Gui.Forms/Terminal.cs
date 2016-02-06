@@ -257,8 +257,19 @@ namespace YAT.Gui.Forms
 
 		private void Terminal_Activated(object sender, EventArgs e)
 		{
+			monitor_Tx   .Activate();
+			monitor_Bidir.Activate();
+			monitor_Rx   .Activate();
+
 			// Select send command control to enable immediate user input.
 			SelectSendCommandInput();
+		}
+
+		private void Terminal_Deactivate(object sender, EventArgs e)
+		{
+			monitor_Tx   .Deactivate();
+			monitor_Bidir.Deactivate();
+			monitor_Rx   .Deactivate();
 		}
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
@@ -2744,7 +2755,7 @@ namespace YAT.Gui.Forms
 
 #endregion
 
-#region Predefined Panel
+		#region Predefined Panel
 		//==========================================================================================
 		// Predefined Panel
 		//==========================================================================================
@@ -2816,9 +2827,9 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-#endregion
+		#endregion
 
-#region Send Panel
+		#region Send Panel
 		//==========================================================================================
 		// Send Panel
 		//==========================================================================================
@@ -2828,14 +2839,14 @@ namespace YAT.Gui.Forms
 			send.SelectSendCommandInput();
 		}
 
-#endregion
+		#endregion
 
-#region Settings
+		#region Settings
 		//==========================================================================================
 		// Settings
 		//==========================================================================================
 
-#region Settings > Lifetime
+		#region Settings > Lifetime
 		//------------------------------------------------------------------------------------------
 		// Settings > Lifetime
 		//------------------------------------------------------------------------------------------
@@ -2852,9 +2863,9 @@ namespace YAT.Gui.Forms
 				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
-#endregion
+		#endregion
 
-#region Settings > Event Handlers
+		#region Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
@@ -3017,14 +3028,14 @@ namespace YAT.Gui.Forms
 
 #endregion
 
-#endregion
+		#endregion
 
-#region Terminal
+		#region Terminal
 		//==========================================================================================
 		// Terminal
 		//==========================================================================================
 
-#region Terminal > Lifetime
+		#region Terminal > Lifetime
 		//------------------------------------------------------------------------------------------
 		// Terminal > Lifetime
 		//------------------------------------------------------------------------------------------
@@ -3090,9 +3101,9 @@ namespace YAT.Gui.Forms
 			get { return ((this.terminal != null) && (!this.terminal.IsDisposed)); }
 		}
 
-#endregion
+		#endregion
 
-#region Terminal > Event Handlers
+		#region Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
@@ -3288,9 +3299,9 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-#endregion
+		#endregion
 
-#region Terminal > Methods
+		#region Terminal > Methods
 		//------------------------------------------------------------------------------------------
 		// Terminal > Methods
 		//------------------------------------------------------------------------------------------
@@ -3332,9 +3343,9 @@ namespace YAT.Gui.Forms
 			return (dr);
 		}
 
-#endregion
+		#endregion
 
-#region Terminal > Settings
+		#region Terminal > Settings
 		//------------------------------------------------------------------------------------------
 		// Terminal > Settings
 		//------------------------------------------------------------------------------------------
@@ -3371,9 +3382,9 @@ namespace YAT.Gui.Forms
 			SelectSendCommandInput();
 		}
 
-#endregion
+		#endregion
 
-#region Terminal > View
+		#region Terminal > View
 		//------------------------------------------------------------------------------------------
 		// Terminal > View
 		//------------------------------------------------------------------------------------------
@@ -3667,11 +3678,11 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-#endregion
+		#endregion
 
-#endregion
+		#endregion
 
-#region Log
+		#region Log
 		//==========================================================================================
 		// Log
 		//==========================================================================================
@@ -3694,9 +3705,9 @@ namespace YAT.Gui.Forms
 			SelectSendCommandInput();
 		}
 
-#endregion
+		#endregion
 
-#region Event Invoking
+		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
 		//==========================================================================================
@@ -3713,9 +3724,9 @@ namespace YAT.Gui.Forms
 			EventHelper.FireSync<Model.SavedEventArgs>(Saved, this, e);
 		}
 
-#endregion
+		#endregion
 
-#region Status
+		#region Status
 		//==========================================================================================
 		// Status
 		//==========================================================================================
@@ -3770,9 +3781,9 @@ namespace YAT.Gui.Forms
 			ResetStatusText();
 		}
 
-#endregion
+		#endregion
 
-#region Debug
+		#region Debug
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
@@ -3802,7 +3813,7 @@ namespace YAT.Gui.Forms
 			);
 		}
 
-#endregion
+		#endregion
 	}
 }
 

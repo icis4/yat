@@ -103,6 +103,8 @@ New:
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
 
 Important changes:
+- Active terminal is highlighted/emphasized (feature request #247).
+- Automatic terminal layout added. Use 'Window > ...' for dedicated layout (feature request #247).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).

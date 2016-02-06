@@ -528,6 +528,26 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		public virtual void Activate()
+		{
+			label_TimeStatus     .BackColor = SystemColors.GradientActiveCaption;
+			label_TimeStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
+
+			label_CountStatus     .BackColor = SystemColors.GradientActiveCaption;
+			label_CountStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
+		}
+
+		/// <summary></summary>
+		public virtual void Deactivate()
+		{
+			label_TimeStatus     .BackColor = SystemColors.Control;
+			label_TimeStatusEmpty.BackColor = SystemColors.Control;
+
+			label_CountStatus     .BackColor = SystemColors.Control;
+			label_CountStatusEmpty.BackColor = SystemColors.Control;
+		}
+
+		/// <summary></summary>
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
 			AddElementsOrLines(element);
@@ -697,10 +717,13 @@ namespace YAT.Gui.Controls
 			const int IconDistance = 14; // 14 relates to half the size of the direction icon.
 			int middle = (Width / 2);
 
-			label_TimeStatus.Width  = middle - IconDistance;
+			label_TimeStatus     .Width  = middle - IconDistance;
+			label_TimeStatusEmpty.Width  = middle - IconDistance;
 
-			label_CountStatus.Left  = middle + IconDistance;
-			label_CountStatus.Width = middle - IconDistance;
+			label_CountStatus     .Left  = middle + IconDistance;
+			label_CountStatusEmpty.Left  = middle + IconDistance;
+			label_CountStatus     .Width = middle - IconDistance;
+			label_CountStatusEmpty.Width = middle - IconDistance;
 		}
 
 		#endregion
@@ -979,7 +1002,9 @@ namespace YAT.Gui.Controls
 			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.totalConnectTime));
 
 			label_TimeStatus.Text = sb.ToString();
-			label_TimeStatus.Visible = this.showTimeStatus;
+
+			label_TimeStatus.Visible      =  this.showTimeStatus;
+			label_TimeStatusEmpty.Visible = !this.showTimeStatus;
 		}
 
 		private void SetCountAndRateStatusControls()
@@ -1006,8 +1031,10 @@ namespace YAT.Gui.Controls
 				}
 			}
 
-			label_CountStatus.Visible = this.showCountAndRateStatus;
 			label_CountStatus.Text = sb.ToString();
+
+			label_CountStatus.Visible      =  this.showCountAndRateStatus;
+			label_CountStatusEmpty.Visible = !this.showCountAndRateStatus;
 		}
 
 		private void AppendTxStatus(StringBuilder sb)

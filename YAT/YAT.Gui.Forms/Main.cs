@@ -105,6 +105,7 @@ namespace YAT.Gui.Forms
 		private bool isStartingUp = true;
 		private SettingControlsHelper isSettingControls;
 		private bool isLayoutingMdi = false;
+		private bool invokeLayout = false;
 		private ClosingState closingState = ClosingState.None;
 		private Model.Main.Result result = Model.Main.Result.Success;
 
@@ -321,7 +322,7 @@ namespace YAT.Gui.Forms
 					else if (this.main.StartArgs.TileVertical)
 						LayoutTerminals(WorkspaceLayout.TileVertical);
 					else
-						LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
+						LayoutTerminals();
 				}
 
 				// Automatically trigger start operation if desired:
@@ -358,8 +359,13 @@ namespace YAT.Gui.Forms
 				this.workspace.ActivateTerminal(((Terminal)ActiveMdiChild).UnderlyingTerminal);
 
 				// Activate the MDI child, to ensure that shortcuts effect the correct terminal.
-				// Fixes bug #2996684.
-				ActiveMdiChild.BringToFront();
+				ActiveMdiChild.BringToFront(); // Fixes bug #2996684>#152.
+
+				if (this.invokeLayout)
+				{
+					this.invokeLayout = false;
+					LayoutTerminals();
+				}
 
 				SetTimedStatus(Status.ChildActivated);
 				SetTerminalText(this.workspace.ActiveTerminalStatusText);
@@ -616,11 +622,12 @@ namespace YAT.Gui.Forms
 			this.isSettingControls.Enter();
 
 			bool childIsReady = (ActiveMdiChild != null);
+			toolStripMenuItem_MainMenu_Window_Automatic.Enabled      = childIsReady;
 			toolStripMenuItem_MainMenu_Window_Cascade.Enabled        = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled   = childIsReady;
-			toolStripMenuItem_MainMenu_Window_Maximize.Enabled       = childIsReady;
 			toolStripMenuItem_MainMenu_Window_Minimize.Enabled       = childIsReady;
+			toolStripMenuItem_MainMenu_Window_Maximize.Enabled       = childIsReady;
 
 			this.isSettingControls.Leave();
 
@@ -640,6 +647,11 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 		}
 
+		private void toolStripMenuItem_MainMenu_Window_Automatic_Click(object sender, EventArgs e)
+		{
+			SetTerminalLayout(WorkspaceLayout.Automatic);
+		}
+
 		private void toolStripMenuItem_MainMenu_Window_Cascade_Click(object sender, EventArgs e)
 		{
 			SetTerminalLayout(WorkspaceLayout.Cascade);
@@ -655,14 +667,14 @@ namespace YAT.Gui.Forms
 			SetTerminalLayout(WorkspaceLayout.TileVertical);
 		}
 
-		private void toolStripMenuItem_MainMenu_Window_Maximize_Click(object sender, EventArgs e)
-		{
-			SetTerminalLayout(WorkspaceLayout.Maximize);
-		}
-
 		private void toolStripMenuItem_MainMenu_Window_Minimize_Click(object sender, EventArgs e)
 		{
 			SetTerminalLayout(WorkspaceLayout.Minimize);
+		}
+
+		private void toolStripMenuItem_MainMenu_Window_Maximize_Click(object sender, EventArgs e)
+		{
+			SetTerminalLayout(WorkspaceLayout.Maximize);
 		}
 
 		#endregion
@@ -1701,8 +1713,7 @@ namespace YAT.Gui.Forms
 		private void ResizeTerminals()
 		{
 			// Simply forward the resize request to the MDI layout engine:
-			if (this.workspace != null)
-				LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
+			LayoutTerminals();
 		}
 
 		/// <summary>
@@ -1711,12 +1722,28 @@ namespace YAT.Gui.Forms
 		/// <remarks>
 		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
 		/// </remarks>
+		private void LayoutTerminals()
+		{
+			if (this.workspace != null)
+				LayoutTerminals(this.workspace.SettingsRoot.Workspace.Layout);
+		}
+
+		/// <summary>
+		/// Performs the layout operation on the terminals. This method does not notify the workspace.
+		/// </summary>
+		/// <remarks>
+		/// Uses the MDI functionality Windows.Forms environment to perform the layout.
+		/// </remarks>
 		private void LayoutTerminals(WorkspaceLayout layout)
 		{
 			switch (layout)
 			{
-				case WorkspaceLayout.Manual:
-					// Nothing to do. Manual layout is kept as is.
+				case WorkspaceLayout.Automatic:
+					int terminalCount = ((this.workspace != null) ? this.workspace.TerminalCount : 0);
+					if (terminalCount <= 1)
+						MaximizeMdi();
+					else
+						LayoutMdi(MdiLayout.TileVertical);
 					break;
 
 				case WorkspaceLayout.Cascade:
@@ -1725,12 +1752,16 @@ namespace YAT.Gui.Forms
 					LayoutMdi((WorkspaceLayoutEx)layout);
 					break;
 
-				case WorkspaceLayout.Maximize:
-					MaximizeMdi();
+				case WorkspaceLayout.Manual:
+					// Nothing to do. Manual layout is kept as is.
 					break;
 
 				case WorkspaceLayout.Minimize:
 					MinimizeMdi();
+					break;
+
+				case WorkspaceLayout.Maximize:
+					MaximizeMdi();
 					break;
 
 				default:
@@ -1755,22 +1786,22 @@ namespace YAT.Gui.Forms
 			this.isLayoutingMdi = false;
 		}
 
-		private void MaximizeMdi()
-		{
-			if (ActiveMdiChild != null)
-			{
-				this.isLayoutingMdi = true;
-				ActiveMdiChild.WindowState = FormWindowState.Maximized;
-				this.isLayoutingMdi = false;
-			}
-		}
-
 		private void MinimizeMdi()
 		{
 			if (ActiveMdiChild != null)
 			{
 				this.isLayoutingMdi = true;
 				ActiveMdiChild.WindowState = FormWindowState.Minimized;
+				this.isLayoutingMdi = false;
+			}
+		}
+
+		private void MaximizeMdi()
+		{
+			if (ActiveMdiChild != null)
+			{
+				this.isLayoutingMdi = true;
+				ActiveMdiChild.WindowState = FormWindowState.Maximized;
 				this.isLayoutingMdi = false;
 			}
 		}
@@ -1831,7 +1862,12 @@ namespace YAT.Gui.Forms
 			// Create terminal form and immediately show it.
 			Terminal mdiChild = new Terminal(e.Terminal);
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
+
+			this.isLayoutingMdi = true;
 			mdiChild.Show();
+			this.isLayoutingMdi = false;
+
+			LayoutTerminals();
 			SetChildControls();
 		}
 
@@ -1918,6 +1954,7 @@ namespace YAT.Gui.Forms
 		private void terminalMdiChild_Changed(object sender, EventArgs e)
 		{
 			SetTimedStatus(Status.ChildChanged);
+
 			SetChildControls();
 		}
 
@@ -1931,7 +1968,7 @@ namespace YAT.Gui.Forms
 
 		private void terminalMdiChild_Resize(object sender, EventArgs e)
 		{
-			if (!isLayoutingMdi)
+			if (!this.isLayoutingMdi)
 			{
 				var t = (sender as Terminal);
 				if (t != null)
@@ -1957,11 +1994,13 @@ namespace YAT.Gui.Forms
 
 		private void terminalMdiChild_FormClosed(object sender, FormClosedEventArgs e)
 		{
+			SetTimedStatus(Status.ChildClosed);
+	
 			// Sender MUST be a terminal, otherwise something must have freaked out...
 			DetachTerminalEventHandlersAndMdiChildFromParent(sender as Terminal);
 
-			SetTimedStatus(Status.ChildClosed);
-			SetChildControls();
+			// Update the layout AFTER to ensure that closed MDI child has been disposed:
+			this.invokeLayout = true;
 		}
 
 		#endregion

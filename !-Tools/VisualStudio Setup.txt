@@ -26,6 +26,7 @@ Tools > Options...
   > Text Editor
     > All Languages > General > Diplay > Line numers = true
     > C# > Tabs > Keep tabs
+    > C# > Advanced > Place 'System' usings first
     > C# > Code Style > Qualify member access with 'this' = yes
     > C# > Code Style > Use 'var' when generating locals = no
     > C# > Formatting > All auto = no

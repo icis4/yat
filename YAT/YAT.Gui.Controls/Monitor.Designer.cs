@@ -39,6 +39,8 @@
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
 			this.timer_UpdateTimeout = new System.Windows.Forms.Timer(this.components);
+			this.label_CountStatusEmpty = new System.Windows.Forms.Label();
+			this.label_TimeStatusEmpty = new System.Windows.Forms.Label();
 			this.panel_Monitor.SuspendLayout();
 			this.panel_Picture.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).BeginInit();
@@ -75,18 +77,22 @@
 			// 
 			// panel_Picture
 			// 
-			this.panel_Picture.Controls.Add(this.label_TimeStatus);
 			this.panel_Picture.Controls.Add(this.label_CountStatus);
+			this.panel_Picture.Controls.Add(this.label_TimeStatus);
+			this.panel_Picture.Controls.Add(this.label_CountStatusEmpty);
+			this.panel_Picture.Controls.Add(this.label_TimeStatusEmpty);
 			this.panel_Picture.Controls.Add(this.pictureBox_Monitor);
 			this.panel_Picture.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel_Picture.Location = new System.Drawing.Point(0, 0);
 			this.panel_Picture.Name = "panel_Picture";
-			this.panel_Picture.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
+			this.panel_Picture.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
 			this.panel_Picture.Size = new System.Drawing.Size(300, 34);
 			this.panel_Picture.TabIndex = 0;
 			// 
 			// label_TimeStatus
 			// 
+			this.label_TimeStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_TimeStatus.AutoEllipsis = true;
 			this.label_TimeStatus.Location = new System.Drawing.Point(0, 0);
 			this.label_TimeStatus.Name = "label_TimeStatus";
@@ -98,12 +104,13 @@
 			// 
 			// label_CountStatus
 			// 
-			this.label_CountStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_CountStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_CountStatus.AutoEllipsis = true;
 			this.label_CountStatus.Location = new System.Drawing.Point(166, 0);
 			this.label_CountStatus.Name = "label_CountStatus";
 			this.label_CountStatus.Size = new System.Drawing.Size(134, 30);
-			this.label_CountStatus.TabIndex = 1;
+			this.label_CountStatus.TabIndex = 2;
 			this.label_CountStatus.Text = "888 | 888 @ 8/s | 8/s\r\n888 | 888 @ 8/s | 8/s";
 			this.label_CountStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.label_CountStatus, "Number of bytes | lines @ bytes | lines per second");
@@ -116,7 +123,7 @@
 			this.pictureBox_Monitor.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Monitor_Bidir_28x28_BluePurple;
 			this.pictureBox_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.pictureBox_Monitor.Name = "pictureBox_Monitor";
-			this.pictureBox_Monitor.Size = new System.Drawing.Size(300, 31);
+			this.pictureBox_Monitor.Size = new System.Drawing.Size(300, 30);
 			this.pictureBox_Monitor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
 			this.pictureBox_Monitor.TabIndex = 1;
 			this.pictureBox_Monitor.TabStop = false;
@@ -145,6 +152,24 @@
 			// 
 			this.timer_UpdateTimeout.Tick += new System.EventHandler(this.timer_UpdateTimeout_Tick);
 			// 
+			// label_CountStatusEmpty
+			// 
+			this.label_CountStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_CountStatusEmpty.Location = new System.Drawing.Point(166, 0);
+			this.label_CountStatusEmpty.Name = "label_CountStatusEmpty";
+			this.label_CountStatusEmpty.Size = new System.Drawing.Size(134, 30);
+			this.label_CountStatusEmpty.TabIndex = 3;
+			// 
+			// label_TimeStatusEmpty
+			// 
+			this.label_TimeStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_TimeStatusEmpty.Location = new System.Drawing.Point(0, 0);
+			this.label_TimeStatusEmpty.Name = "label_TimeStatusEmpty";
+			this.label_TimeStatusEmpty.Size = new System.Drawing.Size(134, 30);
+			this.label_TimeStatusEmpty.TabIndex = 1;
+			// 
 			// Monitor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,5 +197,7 @@
 		private System.Windows.Forms.Label label_TimeStatus;
 		private System.Windows.Forms.Timer timer_UpdateTimeout;
 		private MKY.Windows.Forms.FastListBox fastListBox_LineNumbers;
+		private System.Windows.Forms.Label label_CountStatusEmpty;
+		private System.Windows.Forms.Label label_TimeStatusEmpty;
 	}
 }
