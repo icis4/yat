@@ -2702,6 +2702,15 @@ namespace YAT.Model
 		}
 
 		/// <summary>
+		/// Forces complete reload of given repository.
+		/// </summary>
+		public virtual void ReloadRepository(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			this.terminal.ReloadRepository(repositoryType);
+		}
+
+		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
 		public virtual List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)

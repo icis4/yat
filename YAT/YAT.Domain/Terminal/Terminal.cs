@@ -1563,11 +1563,30 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual void ReloadRepositories()
+		public virtual void ReloadRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
 			// Clear repository:
+			ClearMyRepository(repository);
+			OnRepositoryCleared(new RepositoryEventArgs(repository));
+
+			// Reload repository:
+			SuspendEventsForReload();
+			foreach (RawElement re in this.rawTerminal.RepositoryToElements(repository))
+			{
+				ProcessAndSignalRawElement(re);
+			}
+			ResumeEventsAfterReload();
+			OnRepositoryReloaded(new RepositoryEventArgs(repository));
+		}
+
+		/// <summary></summary>
+		public virtual void ReloadRepositories()
+		{
+			AssertNotDisposed();
+
+			// Clear repositories
 			ClearMyRepository(RepositoryType.Tx);
 			ClearMyRepository(RepositoryType.Bidir);
 			ClearMyRepository(RepositoryType.Rx);
@@ -1575,7 +1594,7 @@ namespace YAT.Domain
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
 
-			// Reload repository:
+			// Reload repositories:
 			SuspendEventsForReload();
 			foreach (RawElement re in this.rawTerminal.RepositoryToElements(RepositoryType.Bidir))
 			{
