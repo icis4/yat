@@ -1068,6 +1068,15 @@ namespace YAT.Gui.Forms
 				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString() + "!"));
 		}
 
+		private void toolStripMenuItem_MonitorContextMenu_Refresh_Click(object sender, EventArgs e)
+		{
+			Domain.RepositoryType repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
+			if (repositoryType != Domain.RepositoryType.None)
+				RefreshMonitor(repositoryType);
+			else
+				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString() + "!"));
+		}
+
 		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
 		{
 			GetMonitor(contextMenuStrip_Monitor.SourceControl).SelectAll();
@@ -2540,6 +2549,21 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void RefreshMonitor(Domain.RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case Domain.RepositoryType.Tx:
+				case Domain.RepositoryType.Bidir:
+				case Domain.RepositoryType.Rx:
+					this.terminal.ReloadRepository(repositoryType);
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			}
+		}
+
 		private void ClearMonitors()
 		{
 			this.terminal.ClearRepositories();
@@ -3230,14 +3254,14 @@ namespace YAT.Gui.Forms
 
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display elements immediately.
+			// Display elements immediately:
 			monitor_Tx.AddElements(e.Elements.Clone());    // Clone elements to ensure decoupling from event source.
 			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 		}
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display elements immediately.
+			// Display elements immediately:
 			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 			monitor_Rx.AddElements(e.Elements.Clone());    // Clone elements to ensure decoupling from event source.
 		}
