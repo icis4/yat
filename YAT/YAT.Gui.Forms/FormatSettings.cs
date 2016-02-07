@@ -305,7 +305,9 @@ namespace YAT.Gui.Forms
 			{
 				fd = new FontDialog();
 				fd.Font = this.formatSettingsInEdit.Font;
-				fd.ShowEffects = false;
+				fd.ShowColor = false; // Color is selected by display element format.
+				fd.ShowEffects = false; // Effects make no sense.
+				fd.AllowVerticalFonts = false; // Not supported by YAT
 				if (fd.ShowDialog(this) != DialogResult.OK)
 				{
 					cancel = true;

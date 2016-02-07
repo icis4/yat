@@ -67,6 +67,8 @@ namespace YAT.Gui.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.label_Example = new System.Windows.Forms.Label();
 			this.monitor_Example = new YAT.Gui.Controls.Monitor();
+			this.label_FontRemark1 = new System.Windows.Forms.Label();
+			this.label_FontRemark2 = new System.Windows.Forms.Label();
 			this.groupBox_Settings.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -97,6 +99,8 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.label_FontRemark2);
+			this.groupBox_Settings.Controls.Add(this.label_FontRemark1);
 			this.groupBox_Settings.Controls.Add(this.button_Background);
 			this.groupBox_Settings.Controls.Add(this.textFormat_Date);
 			this.groupBox_Settings.Controls.Add(this.monitor_Date);
@@ -137,7 +141,7 @@ namespace YAT.Gui.Forms
 			this.button_Background.Location = new System.Drawing.Point(88, 280);
 			this.button_Background.Name = "button_Background";
 			this.button_Background.Size = new System.Drawing.Size(127, 23);
-			this.button_Background.TabIndex = 28;
+			this.button_Background.TabIndex = 30;
 			this.button_Background.Text = "Background...";
 			this.button_Background.UseVisualStyleBackColor = true;
 			this.button_Background.Click += new System.EventHandler(this.button_Background_Click);
@@ -453,6 +457,28 @@ namespace YAT.Gui.Forms
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
+			// label_FontRemark1
+			// 
+			this.label_FontRemark1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_FontRemark1.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_FontRemark1.Location = new System.Drawing.Point(454, 161);
+			this.label_FontRemark1.Name = "label_FontRemark1";
+			this.label_FontRemark1.Size = new System.Drawing.Size(96, 26);
+			this.label_FontRemark1.TabIndex = 28;
+			this.label_FontRemark1.Text = "Font and size\r\nfor all formats.";
+			this.label_FontRemark1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// label_FontRemark2
+			// 
+			this.label_FontRemark2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_FontRemark2.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_FontRemark2.Location = new System.Drawing.Point(454, 202);
+			this.label_FontRemark2.Name = "label_FontRemark2";
+			this.label_FontRemark2.Size = new System.Drawing.Size(96, 63);
+			this.label_FontRemark2.TabIndex = 29;
+			this.label_FontRemark2.Text = "Style and color separately for each format.";
+			this.label_FontRemark2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// FormatSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -518,5 +544,7 @@ namespace YAT.Gui.Forms
 		private Controls.Monitor monitor_Date;
 		private System.Windows.Forms.Label label_Date;
 		private System.Windows.Forms.Button button_Background;
+		private System.Windows.Forms.Label label_FontRemark2;
+		private System.Windows.Forms.Label label_FontRemark1;
 	}
 }
