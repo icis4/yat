@@ -389,17 +389,17 @@ namespace YAT.Domain
 			{
 				if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out txEol))
 				{
-					// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
-					// the EOL sequence when the user enters it. However, the user might manually edit the EOL
-					// sequence in a settings file.
+					// In case of an invalid EOL sequence, default it. This should never happen,
+					// YAT verifies the EOL sequence when the user enters it. However, the user might
+					// manually edit the EOL sequence in a settings file.
 					TextTerminalSettings.TxEol = Settings.TextTerminalSettings.DefaultEol;
 					txEol = p.Parse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution);
 				}
 				if (!p.TryParse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution, Parser.Modes.AllByteArrayResults, out rxEol))
 				{
-					// In case of an invalid EOL sequence, default it. This should never happen, YAT verifies
-					// the EOL sequence when the user enters it. However, the user might manually edit the EOL
-					// sequence in a settings file.
+					// In case of an invalid EOL sequence, default it. This should never happen,
+					// YAT verifies the EOL sequence when the user enters it. However, the user might
+					// manually edit the EOL sequence in a settings file.
 					TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
 					rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
 				}
