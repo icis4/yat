@@ -108,7 +108,7 @@
     <Compile Include="Endianness.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Eol.cs" />
-    <Compile Include="EolQueue.cs" />
+    <Compile Include="SequenceQueue.cs" />
     <Compile Include="IOFactory.cs" />
     <Compile Include="IOType.cs" />
     <Compile Include="Parser\Exceptions.cs" />

@@ -32,9 +32,6 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings1 = new YAT.Domain.Settings.BinaryDisplaySettings();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BinaryTerminalSettings));
-			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings2 = new YAT.Domain.Settings.BinaryDisplaySettings();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_Defaults = new System.Windows.Forms.Button();
@@ -53,7 +50,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(319, 29);
+			this.button_OK.Location = new System.Drawing.Point(328, 29);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -64,7 +61,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(319, 58);
+			this.button_Cancel.Location = new System.Drawing.Point(328, 58);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -74,7 +71,7 @@ namespace YAT.Gui.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(319, 120);
+			this.button_Defaults.Location = new System.Drawing.Point(328, 120);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
@@ -83,71 +80,70 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Display
 			// 
-			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Display.Controls.Add(this.groupBox_RxDisplay);
 			this.groupBox_Display.Controls.Add(this.groupBox_TxDisplay);
 			this.groupBox_Display.Controls.Add(this.checkBox_SeparateTxRxDisplay);
 			this.groupBox_Display.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Display.Name = "groupBox_Display";
-			this.groupBox_Display.Size = new System.Drawing.Size(293, 255);
+			this.groupBox_Display.Size = new System.Drawing.Size(302, 301);
 			this.groupBox_Display.TabIndex = 0;
 			this.groupBox_Display.TabStop = false;
 			this.groupBox_Display.Text = "Display Settings";
 			// 
 			// groupBox_RxDisplay
 			// 
-			this.groupBox_RxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_RxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_RxDisplay.Controls.Add(this.binaryTerminalSettingsSet_Rx);
-			this.groupBox_RxDisplay.Location = new System.Drawing.Point(6, 153);
+			this.groupBox_RxDisplay.Location = new System.Drawing.Point(6, 176);
 			this.groupBox_RxDisplay.Name = "groupBox_RxDisplay";
-			this.groupBox_RxDisplay.Size = new System.Drawing.Size(281, 96);
+			this.groupBox_RxDisplay.Size = new System.Drawing.Size(290, 119);
 			this.groupBox_RxDisplay.TabIndex = 2;
 			this.groupBox_RxDisplay.TabStop = false;
 			this.groupBox_RxDisplay.Text = "&Rx";
 			// 
 			// binaryTerminalSettingsSet_Rx
 			// 
-			this.binaryTerminalSettingsSet_Rx.Location = new System.Drawing.Point(12, 19);
+			this.binaryTerminalSettingsSet_Rx.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.binaryTerminalSettingsSet_Rx.Location = new System.Drawing.Point(9, 19);
 			this.binaryTerminalSettingsSet_Rx.Name = "binaryTerminalSettingsSet_Rx";
-			binaryDisplaySettings1.LengthLineBreak = ((YAT.Domain.BinaryLengthLineBreak)(resources.GetObject("binaryDisplaySettings1.LengthLineBreak")));
-			binaryDisplaySettings1.SequenceLineBreak = ((YAT.Domain.BinarySequenceLineBreak)(resources.GetObject("binaryDisplaySettings1.SequenceLineBreak")));
-			binaryDisplaySettings1.TimedLineBreak = ((YAT.Domain.BinaryTimedLineBreak)(resources.GetObject("binaryDisplaySettings1.TimedLineBreak")));
-			this.binaryTerminalSettingsSet_Rx.Settings = binaryDisplaySettings1;
-			this.binaryTerminalSettingsSet_Rx.Size = new System.Drawing.Size(263, 68);
+			this.binaryTerminalSettingsSet_Rx.Size = new System.Drawing.Size(272, 91);
 			this.binaryTerminalSettingsSet_Rx.TabIndex = 0;
 			this.binaryTerminalSettingsSet_Rx.SettingsChanged += new System.EventHandler(this.binaryTerminalSettingsSet_Rx_SettingsChanged);
 			// 
 			// groupBox_TxDisplay
 			// 
-			this.groupBox_TxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_TxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_TxDisplay.Controls.Add(this.binaryTerminalSettingsSet_Tx);
 			this.groupBox_TxDisplay.Location = new System.Drawing.Point(6, 19);
 			this.groupBox_TxDisplay.Name = "groupBox_TxDisplay";
-			this.groupBox_TxDisplay.Size = new System.Drawing.Size(281, 96);
+			this.groupBox_TxDisplay.Size = new System.Drawing.Size(290, 119);
 			this.groupBox_TxDisplay.TabIndex = 0;
 			this.groupBox_TxDisplay.TabStop = false;
 			this.groupBox_TxDisplay.Text = "&Tx and Rx";
 			// 
 			// binaryTerminalSettingsSet_Tx
 			// 
+			this.binaryTerminalSettingsSet_Tx.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.binaryTerminalSettingsSet_Tx.Location = new System.Drawing.Point(9, 19);
 			this.binaryTerminalSettingsSet_Tx.Name = "binaryTerminalSettingsSet_Tx";
-			binaryDisplaySettings2.LengthLineBreak = ((YAT.Domain.BinaryLengthLineBreak)(resources.GetObject("binaryDisplaySettings2.LengthLineBreak")));
-			binaryDisplaySettings2.SequenceLineBreak = ((YAT.Domain.BinarySequenceLineBreak)(resources.GetObject("binaryDisplaySettings2.SequenceLineBreak")));
-			binaryDisplaySettings2.TimedLineBreak = ((YAT.Domain.BinaryTimedLineBreak)(resources.GetObject("binaryDisplaySettings2.TimedLineBreak")));
-			this.binaryTerminalSettingsSet_Tx.Settings = binaryDisplaySettings2;
-			this.binaryTerminalSettingsSet_Tx.Size = new System.Drawing.Size(263, 68);
+			this.binaryTerminalSettingsSet_Tx.Size = new System.Drawing.Size(272, 91);
 			this.binaryTerminalSettingsSet_Tx.TabIndex = 0;
 			this.binaryTerminalSettingsSet_Tx.SettingsChanged += new System.EventHandler(this.binaryTerminalSettingsSet_Tx_SettingsChanged);
 			// 
 			// checkBox_SeparateTxRxDisplay
 			// 
-			this.checkBox_SeparateTxRxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_SeparateTxRxDisplay.AutoSize = true;
-			this.checkBox_SeparateTxRxDisplay.Location = new System.Drawing.Point(18, 130);
+			this.checkBox_SeparateTxRxDisplay.Location = new System.Drawing.Point(18, 153);
 			this.checkBox_SeparateTxRxDisplay.Name = "checkBox_SeparateTxRxDisplay";
 			this.checkBox_SeparateTxRxDisplay.Size = new System.Drawing.Size(175, 17);
 			this.checkBox_SeparateTxRxDisplay.TabIndex = 1;
@@ -161,7 +157,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(406, 279);
+			this.ClientSize = new System.Drawing.Size(415, 325);
 			this.Controls.Add(this.groupBox_Display);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);

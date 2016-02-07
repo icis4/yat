@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
+using MKY.Collections.Generic;
 
 #endregion
 
@@ -198,19 +199,23 @@ namespace YAT.Domain
 		{
 			private bool isDisposed;
 
-			public LinePosition LinePosition;
-			public DisplayLine LineElements;
-			public EolQueue SequenceBreak;
-			public DateTime TimeStamp;
-			public LineBreakTimer LineBreakTimer;
+			public LinePosition         LinePosition;
+			public DisplayLine          LineElements;
+			public SequenceQueue        SequenceAfter;
+			public SequenceQueue        SequenceBefore;
+			public List<DisplayElement> PendingSequenceBeforeElements;
+			public DateTime             TimeStamp;
+			public LineBreakTimer       LineBreakTimer;
 
-			public LineState(EolQueue sequenceBreak, DateTime timeStamp, LineBreakTimer lineBreakTimer)
+			public LineState(SequenceQueue sequenceAfter, SequenceQueue sequenceBefore, DateTime timeStamp, LineBreakTimer lineBreakTimer)
 			{
-				LinePosition   = LinePosition.Begin;
-				LineElements   = new DisplayLine();
-				SequenceBreak  = sequenceBreak;
-				TimeStamp      = timeStamp;
-				LineBreakTimer = lineBreakTimer;
+				LinePosition                  = LinePosition.Begin;
+				LineElements                  = new DisplayLine();
+				SequenceAfter                 = sequenceAfter;
+				SequenceBefore                = sequenceBefore;
+				PendingSequenceBeforeElements = new List<DisplayElement>();
+				TimeStamp                     = timeStamp;
+				LineBreakTimer                = lineBreakTimer;
 			}
 
 			#region Disposal
@@ -272,10 +277,12 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				LinePosition = LinePosition.Begin;
-				LineElements = new DisplayLine();
-				SequenceBreak.Reset();
-				TimeStamp    = DateTime.Now;
+				LinePosition                  = LinePosition.Begin;
+				LineElements                  = new DisplayLine();
+				SequenceAfter                  .Reset();
+				SequenceBefore                 .Reset();
+				PendingSequenceBeforeElements = new List<DisplayElement>();
+				TimeStamp                     = DateTime.Now;
 			}
 		}
 
@@ -467,23 +474,35 @@ namespace YAT.Domain
 			{
 				LineBreakTimer t;
 
-				// Tx.
-				byte[] txSequenceBreak;
-				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreak.Sequence, out txSequenceBreak))
-					txSequenceBreak = null;
+				// Tx:
+
+				byte[] txSequenceBreakAfter;
+				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Sequence, out txSequenceBreakAfter))
+					txSequenceBreakAfter = null;
+
+				byte[] txSequenceBreakBefore;
+				if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Sequence, out txSequenceBreakBefore))
+					txSequenceBreakBefore = null;
 
 				t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
 				t.Timeout += new EventHandler(txTimer_Timeout);
-				this.txLineState = new LineState(new EolQueue(txSequenceBreak), DateTime.Now, t);
 
-				// Rx.
-				byte[] rxSequenceBreak;
-				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreak.Sequence, out rxSequenceBreak))
-					rxSequenceBreak = null;
+				this.txLineState = new LineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
+
+				// Rx:
+
+				byte[] rxSequenceBreakAfter;
+				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Sequence, out rxSequenceBreakAfter))
+					rxSequenceBreakAfter = null;
+
+				byte[] rxSequenceBreakBefore;
+				if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Sequence, out rxSequenceBreakBefore))
+					rxSequenceBreakBefore = null;
 
 				t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
 				t.Timeout += new EventHandler(rxTimer_Timeout);
-				this.rxLineState = new LineState(new EolQueue(rxSequenceBreak), DateTime.Now, t);
+
+				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 			}
 
 			this.bidirLineState = new BidirLineState(true, IODirection.Tx);
@@ -512,16 +531,117 @@ namespace YAT.Domain
 
 			lineState.LinePosition = LinePosition.Data;
 			lineState.TimeStamp = ts;
+		}
 
-			if (displaySettings.TimedLineBreak.Enabled)
-				lineState.LineBreakTimer.Start();
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		private void ExecuteData(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, byte b, DisplayElementCollection elements, out List<DisplayElement> elementsForNextLine)
+		{
+			elementsForNextLine = null;
+
+			// Process data:
+			DisplayElement de = ByteToElement(b, d);
+			DisplayLinePart lp = new DisplayLinePart();
+
+			// Evaluate line breaks:
+			//  1. Evaluate the easiest case: Length line break.
+			//  2. Evaluate the other easy case: Sequence after.
+			//  3. Evaluate the tricky case: Sequence before.
+			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
+
+			if ((displaySettings.LengthLineBreak.Enabled) &&
+				(lineState.LinePosition != LinePosition.End))
+			{
+				if (lineState.LineElements.DataCount >= displaySettings.LengthLineBreak.Length)
+					lineState.LinePosition = LinePosition.End;
+			}
+
+			if ((displaySettings.SequenceLineBreakAfter.Enabled) &&
+				(lineState.LinePosition != LinePosition.End))
+			{
+				lineState.SequenceAfter.Enqueue(b);
+				if (lineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
+					lineState.LinePosition = LinePosition.End;
+			}
+
+			if ((displaySettings.SequenceLineBreakBefore.Enabled && (lineState.LineElements.DataCount > 0) &&
+				(lineState.LinePosition != LinePosition.End)))   // Also skip if line has just been brokwn.
+			{
+				lineState.SequenceBefore.Enqueue(b);
+				if (lineState.SequenceBefore.IsCompleteMatch)
+				{
+					// Sequence is complete, move them to the next line:
+					lineState.PendingSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+
+					de = null; // Indicate that element has been consumed.
+
+					elementsForNextLine = new List<DisplayElement>();
+					foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
+						elementsForNextLine.Add(dePending.Clone());
+
+					lineState.LinePosition = LinePosition.End;
+				}
+				else if (lineState.SequenceBefore.IsPartlyMatchContinued)
+				{
+					// Keep sequence elements and delay them until sequence is either complete or refused:
+					lineState.PendingSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+
+					de = null; // Indicate that element has been consumed.
+				}
+				else if (lineState.SequenceBefore.IsPartlyMatchBeginning)
+				{
+					// Previous was no match, previous sequence can be treated as normal:
+					TreatSequenceBeforeAsNormal(lineState, d, lp);
+
+					// Keep sequence elements and delay them until sequence is either complete or refused:
+					lineState.PendingSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+
+					de = null; // Indicate that element has been consumed.
+				}
+				else
+				{
+					// No match at all, previous sequence can be treated as normal:
+					TreatSequenceBeforeAsNormal(lineState, d, lp);
+				}
+			}
+
+			// Add current element if it wasn't consumed above:
+			if (de != null)
+			{
+				AddSpaceIfNecessary(lineState, d, lp);
+				lp.Add(de);
+			}
+
+			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+			elements.AddRange(lp);
+		}
+
+		private void TreatSequenceBeforeAsNormal(LineState lineState, IODirection d, DisplayLinePart lp)
+		{
+			if (lineState.PendingSequenceBeforeElements.Count > 0)
+			{
+				foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
+				{
+					AddSpaceIfNecessary(lineState, d, lp);
+					lp.Add(dePending);
+				}
+
+				lineState.PendingSequenceBeforeElements.Clear();
+			}
+		}
+
+		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp)
+		{
+			if (ElementsAreSeparate(d))
+			{
+				if (lineState.LineElements.DataCount > 0)
+					lp.Add(new DisplayElement.Space());
+			}
 		}
 
 		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
-
-			lineState.LineBreakTimer.Stop();
 
 			if (TerminalSettings.Display.ShowLength)
 			{
@@ -534,6 +654,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.Length(length));
 			}
+
 			lp.Add(new DisplayElement.LineBreak((Direction)d));
 
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
@@ -544,62 +665,6 @@ namespace YAT.Domain
 			lineState.Reset();
 
 			lines.Add(line);
-		}
-
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
-		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
-		                                           IODirection d, DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
-		{
-			if (lineState.LineElements.Count > 0)
-			{
-				TimeSpan span = ts - lineState.TimeStamp;
-				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout)
-					ExecuteLineEnd(lineState, d, elements, lines);
-			}
-			lineState.TimeStamp = ts;
-		}
-
-		private static void EvaluateLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
-		{
-			int length = 0;
-			foreach (DisplayElement e in lineState.LineElements)
-			{
-				if (e.IsData)
-					length += e.DataCount;
-			}
-
-			if (length >= displaySettings.LengthLineBreak.Length)
-				lineState.LinePosition = LinePosition.End;
-		}
-
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private static void EvaluateSequenceLineBreak(LineState lineState, byte b)
-		{
-			lineState.SequenceBreak.Enqueue(b);
-			if (lineState.SequenceBreak.IsCompleteMatch)
-				lineState.LinePosition = LinePosition.End;
-		}
-
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void ExecuteData(IODirection d, LineState lineState, byte b, DisplayElementCollection elements)
-		{
-			DisplayLinePart lp = new DisplayLinePart();
-
-			// Add space if necessary.
-			if (ElementsAreSeparate(d))
-			{
-				if (lineState.LineElements.DataCount > 0)
-					lp.Add(new DisplayElement.Space());
-			}
-
-			// Add data.
-			lp.Add(ByteToElement(b, d));
-
-			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-			elements.AddRange(lp);
 		}
 
 		/// <summary></summary>
@@ -623,36 +688,72 @@ namespace YAT.Domain
 
 			foreach (byte b in re.Data)
 			{
-				// In case of reload, timed line breaks are executed here.
+				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
 					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.Direction, re.TimeStamp, elements, lines);
 
-				// Line begin.
+				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
 				{
 					ExecuteLineBegin(displaySettings, lineState, re.Direction, re.TimeStamp, elements);
+
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.LineBreakTimer.Start();
 				}
 				else
 				{
 					if (displaySettings.TimedLineBreak.Enabled)
-						lineState.LineBreakTimer.Restart();
+						lineState.LineBreakTimer.Restart(); // Restart as timeout refers to time after last received byte.
 				}
 
-				// Data.
-				ExecuteData(re.Direction, lineState, b, elements);
+				// Data:
+				List<DisplayElement> elementsForNextLine;
+				ExecuteData(displaySettings, lineState, re.Direction, b, elements, out elementsForNextLine);
 
-				// Evaluate length line breaks.
-				if (displaySettings.LengthLineBreak.Enabled)
-					EvaluateLengthLineBreak(displaySettings, lineState);
-
-				// Evaluate binary sequence break.
-				if (displaySettings.SequenceLineBreak.Enabled)
-					EvaluateSequenceLineBreak(lineState, b);
-
-				// Line end and length.
+				// Line end and length:
 				if (lineState.LinePosition == LinePosition.End)
+				{
+					if (displaySettings.TimedLineBreak.Enabled)
+						lineState.LineBreakTimer.Stop();
+
 					ExecuteLineEnd(lineState, re.Direction, elements, lines);
+
+					// In case of a pending immediately insert the sequence into a new line:
+					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
+					{
+						ExecuteLineBegin(displaySettings, lineState, re.Direction, re.TimeStamp, elements);
+
+						foreach (DisplayElement de in elementsForNextLine)
+						{
+							foreach (Pair<byte[], string> origin in de.Origin)
+							{
+								foreach (byte originByte in origin.Value1)
+								{
+									List<DisplayElement> elementsForNextLineDummy;
+									ExecuteData(displaySettings, lineState, re.Direction, originByte, elements, out elementsForNextLineDummy);
+									// Note that 're.Direction' abive is OK, this function is processing all in the same direction.
+								}
+							}
+						}
+					}
+				}
 			}
+		}
+
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
+		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
+		                                           IODirection d, DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
+		{
+			if (lineState.LineElements.Count > 0)
+			{
+				TimeSpan span = ts - lineState.TimeStamp;
+				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout) {
+					ExecuteLineEnd(lineState, d, elements, lines);
+				}
+			}
+			lineState.TimeStamp = ts;
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
@@ -716,10 +817,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
-			// Check whether direction has changed.
+			// Check whether direction has changed:
 			ProcessAndSignalDirectionLineBreak(re.Direction);
 
-			// Process the raw element.
+			// Process the raw element:
 			base.ProcessAndSignalRawElement(re);
 		}
 

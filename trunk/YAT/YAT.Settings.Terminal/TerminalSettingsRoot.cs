@@ -182,47 +182,6 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
-		/// <summary>
-		/// Alternate XML elements for backward compatibility with old settings.
-		/// </summary>
-		/// <remarks>
-		/// \remind (2008-06-07 / mky) (2 hours to the first Euro2008 game :-)
-		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
-		/// in a future version. Such approach would be beneficial in terms of modularity because the
-		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
-		/// not the case currently.
-		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
-		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
-		/// due to limitation described above.
-		/// \remind (2012-10-29 / mky)
-		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
-		/// alternate the depth of the path as well. Such alternate is required for the commented
-		/// case with 'EolComment' below.
-		/// </remarks>
-		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
-		{
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, "Endianness",                                new string[] { "Endianess" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication"      }, "FlowControl",                               new string[] { "Handshake" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                           }, "RemoteTcpPort",                             new string[] { "RemotePort" } ),
-		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "UsbSerialHidDevice", "DeviceInfo" }, "SerialString",                              new string[] { "SerialNumber" } ), Should be renamed, but doesn't work because it is part of a serializable object. Should be solved using XML transformation. */
-		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal"                                           }, "Status",                                    new string[] { "Display" } ), */
-		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                           }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), */
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "ShowTime",                                  new string[] { "ShowTimeStamp" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Format"                                             }, "TimeFormat",                                new string[] { "TimeStampFormat" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderFormat",                              new string[] { "SubdirectoriesFormat" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderChannel",                             new string[] { "SubdirectoriesChannel" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsStarted",                              new string[] { "LogIsOpen" } ),
-			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                   new string[] { "LogIsStarted" } ),
-		};
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual MKY.Xml.AlternateXmlElement[] AlternateXmlElements
-		{
-			get { return (StaticAlternateXmlElements); }
-		}
-
 		#endregion
 
 		#region Property Shortcuts
@@ -436,6 +395,55 @@ namespace YAT.Settings.Terminal
 		{
 			get { return (this.explicit_.Log); }
 			set { this.explicit_.Log = value;  }
+		}
+
+		#endregion
+
+		#region Alternate Elements
+		//==========================================================================================
+		// Alternate Elements
+		//==========================================================================================
+
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2008-06-07 / mky) (2 hours to the first Euro2008 game :-)
+		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
+		/// in a future version. Such approach would be beneficial in terms of modularity because the
+		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
+		/// not the case currently.
+		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
+		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
+		/// due to limitation described above.
+		/// \remind (2012-10-29 / mky)
+		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
+		/// alternate the depth of the path as well. Such alternate is required for the commented
+		/// case with 'EolComment' below.
+		/// </remarks>
+		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
+		{
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, "Endianness",                                new string[] { "Endianess" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication"      }, "FlowControl",                               new string[] { "Handshake" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                           }, "RemoteTcpPort",                             new string[] { "RemotePort" } ),
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "UsbSerialHidDevice", "DeviceInfo" }, "SerialString",                              new string[] { "SerialNumber" } ), => Should be renamed, but doesn't work because it is part of a serializable object. Should be solved using XML transformation. */
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal"                                           }, "Status",                                    new string[] { "Display" } ), */
+		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                           }, new string[] { "EolComment", "Indicators" }, new string[] { "EolCommentIndicators" } ), => Should be renamed, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "BinaryTerminal", "TxDisplay"            }, "SequenceLineBreakAfter",                    new string[] { "SequenceLineBreak" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "Display"                                }, "ShowTime",                                  new string[] { "ShowTimeStamp" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Format"                                             }, "TimeFormat",                                new string[] { "TimeStampFormat" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderFormat",                              new string[] { "SubdirectoriesFormat" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Log"                                                }, "FolderChannel",                             new string[] { "SubdirectoriesChannel" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "TerminalIsStarted",                         new string[] { "TerminalIsOpen" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                   new string[] { "LogIsOpen" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                   new string[] { "LogIsStarted" } ),
+		};
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual MKY.Xml.AlternateXmlElement[] AlternateXmlElements
+		{
+			get { return (StaticAlternateXmlElements); }
 		}
 
 		#endregion

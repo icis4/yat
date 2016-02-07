@@ -91,17 +91,18 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 ----------------------------------------------------------------------------------------------------
 
 New:
+- Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to display the date in addition to the time (related to feature request #14).
 - Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
-- Window can be configured to always stay on top (feature request #241).
-- Selectable background color added to format settings (feature request #250).
 - Logging in RTF format implemented (feature request #233). Note that the log file's RTF structure
   is incomplete while logging is ongoing. The file can only be opened by an RTF reader (e.g. Word)
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
 - Logging in XML format implemented (feature requests #26 and #27). Note that the log file's XML
   structure is incomplete while logging is ongoing. The file can only be opened by an XML reader
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
+- Selectable background color added to format settings (feature request #250).
+- Window can be configured to always stay on top (feature request #241).
 
 Important changes:
 - Active terminal is highlighted/emphasized (feature request #247).
