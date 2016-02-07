@@ -127,13 +127,9 @@ namespace YAT.Domain.Settings
 
 					// Set radix according to terminal type:
 					if (Display != null) {
-						Display.TxRadix = (value == Domain.TerminalType.Binary ? Radix.Hex : Radix.String);
-						Display.RxRadix = (value == Domain.TerminalType.Binary ? Radix.Hex : Radix.String);
+						Display.TxRadix = (value == TerminalType.Binary ? Radix.Hex : Radix.String);
+						Display.RxRadix = (value == TerminalType.Binary ? Radix.Hex : Radix.String);
 					}
-
-					// Also set character replacement according to terminal type:
-					if (CharReplace != null)
-						CharReplace.ReplaceControlChars = (value != Domain.TerminalType.Binary);
 
 					SetChanged();
 				}

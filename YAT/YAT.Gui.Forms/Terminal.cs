@@ -2294,6 +2294,7 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Send_SetMenuItems();
 
 			this.isSettingControls.Enter();
+			send.TerminalType           = this.settingsRoot.TerminalType;
 			send.Command                = this.settingsRoot.SendCommand.Command;
 			send.RecentCommands         = this.settingsRoot.SendCommand.RecentCommands;
 			send.FileCommand            = this.settingsRoot.SendFile.Command;
