@@ -93,9 +93,9 @@ namespace YAT.Domain
 			public LinePosition LinePosition;
 			public DisplayLinePart LineElements;
 			public DisplayLinePart EolElements;
-			public EolQueue Eol;
+			public SequenceQueue Eol;
 
-			public LineState(EolQueue eol)
+			public LineState(SequenceQueue eol)
 			{
 				LinePosition = LinePosition.Begin;
 				LineElements = new DisplayLinePart();
@@ -328,7 +328,7 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Eol:
 				{
-					ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+					ForwardDataToRawTerminal(this.txLineState.Eol.Sequence);
 					break;
 				}
 
@@ -344,7 +344,7 @@ namespace YAT.Domain
 		protected override void ProcessLineEnd(bool sendEol)
 		{
 			if (sendEol)
-				ForwardDataToRawTerminal(this.txLineState.Eol.EolSequence);
+				ForwardDataToRawTerminal(this.txLineState.Eol.Sequence);
 		}
 
 		/// <summary></summary>
@@ -404,8 +404,8 @@ namespace YAT.Domain
 					rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
 				}
 			}
-			this.txLineState = new LineState(new EolQueue(txEol));
-			this.rxLineState = new LineState(new EolQueue(rxEol));
+			this.txLineState = new LineState(new SequenceQueue(txEol));
+			this.rxLineState = new LineState(new SequenceQueue(rxEol));
 
 			this.bidirLineState = new BidirLineState(true, IODirection.Tx);
 
@@ -524,27 +524,27 @@ namespace YAT.Domain
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
-			// Add space if necessary.
+			// Add space if necessary:
 			if (ElementsAreSeparate(d))
 			{
 				if (lineState.LineElements.DataCount > 0)
 					lp.Add(new DisplayElement.Space());
 			}
 
-			// Process data.
+			// Process data:
 			DisplayElement de = ByteToElement(b, d);
 
-			// Evaluate EOL, i.e. check whether EOL is about to start or has already started.
+			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
 			lineState.Eol.Enqueue(b);
 			if (lineState.Eol.IsCompleteMatch)
 			{
 				if (de.IsData)
 					lineState.EolElements.Add(de); // No clone needed as element has just been created.
 
-				// Normal case, EOL consists of a single sequence of control characters.
-				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.EolSequence.Count))
+				// Normal case, EOL consists of a single sequence of control characters:
+				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Count))
 				{
-					// Mark element as EOL.
+					// Mark element as EOL:
 					DisplayElement item = lineState.EolElements[0].Clone();
 					item.IsEol = true;
 					lp.Add(item); // No clone needed as element has just been cloned above.
@@ -554,7 +554,7 @@ namespace YAT.Domain
 					// Ensure that only as many elements as EOL contains are marked as EOL.
 					// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
 					
-					// Unfold the elements into single elements for easier processing.
+					// Unfold the elements into single elements for easier processing:
 					List<DisplayElement> l = new List<DisplayElement>();
 					foreach (DisplayElement item in lineState.EolElements)
 					{
@@ -562,13 +562,13 @@ namespace YAT.Domain
 							l.Add(item.RecreateFromOriginItem(originItem));
 					}
 
-					// Count data.
+					// Count data:
 					int dataCount = 0;
 					foreach (DisplayElement item in l)
 						dataCount += item.DataCount;
 
-					// Mark only true EOL element as EOL.
-					int firstEolIndex = dataCount - lineState.Eol.EolSequence.Count;
+					// Mark only true EOL element as EOL:
+					int firstEolIndex = dataCount - lineState.Eol.Sequence.Count;
 					int currentIndex = 0;
 					foreach (DisplayElement item in l)
 					{
@@ -584,34 +584,47 @@ namespace YAT.Domain
 				lineState.EolElements.Clear();
 				lineState.LinePosition = LinePosition.End;
 			}
-			else if (lineState.Eol.IsPartlyMatch)
+			else if (lineState.Eol.IsPartlyMatchContinued)
 			{
-				// Keep EOL elements but delay them until EOL is complete.
+				// Keep EOL elements and delay them until EOL is complete:
+				if (de.IsData)
+					lineState.EolElements.Add(de); // No clone needed as element has just been created further above.
+			}
+			else if (lineState.Eol.IsPartlyMatchBeginning)
+			{
+				// Previous was no match, previous EOL elements can be treated as normal:
+				TreatEolAsNormal(lineState, lp);
+
+				// Keep EOL elements and delay them until EOL is complete:
 				if (de.IsData)
 					lineState.EolElements.Add(de); // No clone needed as element has just been created further above.
 			}
 			else
 			{
-				// Retrieve potential EOL elements on incomplete EOL.
-				if (lineState.EolElements.Count > 0)
-				{
-					lp.AddRange(lineState.EolElements.Clone()); // Clone elements to ensure decoupling.
-					lineState.EolElements.Clear();
-				}
+				// No match at all, previous EOL elements can be treated as normal:
+				TreatEolAsNormal(lineState, lp);
 
-				// Add non-EOL data.
-				if (de.IsData)
-					lp.Add(de); // No clone needed as element has just been created further above.
+				// Add non-EOL element:
+				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 		}
 
+		private void TreatEolAsNormal(LineState lineState, DisplayLinePart lp)
+		{
+			if (lineState.EolElements.Count > 0)
+			{
+				lp.AddRange(lineState.EolElements.Clone()); // Clone elements to ensure decoupling.
+				lineState.EolElements.Clear();
+			}
+		}
+
 		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Process EOL:
-			int eolLength = lineState.Eol.EolSequence.Count;
+			int eolLength = lineState.Eol.Sequence.Count;
 			DisplayLine line = new DisplayLine();
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
@@ -620,15 +633,13 @@ namespace YAT.Domain
 			}
 			else // Remove EOL:
 			{
+				// Traverse elements reverse and count EOL and white spaces to be removed:
 				int eolAndWhiteCount = 0;
 				DisplayElement[] des = lineState.LineElements.Clone().ToArray(); // Clone elements to ensure decoupling.
-
-				// Traverse elements reverse and count EOL and white spaces to be removed:
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
-					// Detect last non-EOL data element:
 					if (des[i].IsData && !des[i].IsEol)
-						break;
+						break; // Break at last non-EOL data element.
 
 					eolAndWhiteCount++;
 				}

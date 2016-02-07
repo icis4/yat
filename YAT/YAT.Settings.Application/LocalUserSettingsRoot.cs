@@ -33,7 +33,7 @@ namespace YAT.Settings.Application
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]
-	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem
+	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a normal variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.4.1";
@@ -305,6 +305,13 @@ namespace YAT.Settings.Application
 				}
 			}
 		}
+
+		#endregion
+
+		#region Alternate Elements
+		//==========================================================================================
+		// Alternate Elements
+		//==========================================================================================
 
 		/// <summary>
 		/// Alternate XML elements for backward compatibility with old settings.

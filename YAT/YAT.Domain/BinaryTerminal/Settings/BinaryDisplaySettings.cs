@@ -31,7 +31,8 @@ namespace YAT.Domain.Settings
 	public class BinaryDisplaySettings : MKY.Settings.SettingsItem
 	{
 		private BinaryLengthLineBreak   lengthLineBreak;
-		private BinarySequenceLineBreak sequenceLineBreak;
+		private BinarySequenceLineBreak sequenceLineBreakBefore;
+		private BinarySequenceLineBreak sequenceLineBreakAfter;
 		private BinaryTimedLineBreak    timedLineBreak;
 
 		/// <summary></summary>
@@ -56,9 +57,10 @@ namespace YAT.Domain.Settings
 		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
-			LengthLineBreak   = rhs.LengthLineBreak;
-			SequenceLineBreak = rhs.SequenceLineBreak;
-			TimedLineBreak    = rhs.TimedLineBreak;
+			LengthLineBreak         = rhs.LengthLineBreak;
+			SequenceLineBreakBefore = rhs.SequenceLineBreakBefore;
+			SequenceLineBreakAfter  = rhs.SequenceLineBreakAfter;
+			TimedLineBreak          = rhs.TimedLineBreak;
 			ClearChanged();
 		}
 
@@ -70,9 +72,10 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			LengthLineBreak   = new BinaryLengthLineBreak(false, 16);
-			SequenceLineBreak = new BinarySequenceLineBreak(false, @"\h(00)");
-			TimedLineBreak    = new BinaryTimedLineBreak(false, 500);
+			LengthLineBreak         = new BinaryLengthLineBreak(false, 16);
+			SequenceLineBreakBefore = new BinarySequenceLineBreak(false, @"ABC");
+			SequenceLineBreakAfter  = new BinarySequenceLineBreak(false, @"\h(00)");
+			TimedLineBreak          = new BinaryTimedLineBreak(false, 500);
 		}
 
 		#region Properties
@@ -96,15 +99,30 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SequenceLineBreak")]
-		public BinarySequenceLineBreak SequenceLineBreak
+		[XmlElement("SequenceLineBreakBefore")]
+		public BinarySequenceLineBreak SequenceLineBreakBefore
 		{
-			get { return (this.sequenceLineBreak); }
+			get { return (this.sequenceLineBreakBefore); }
 			set
 			{
-				if (this.sequenceLineBreak != value)
+				if (this.sequenceLineBreakBefore != value)
 				{
-					this.sequenceLineBreak = value;
+					this.sequenceLineBreakBefore = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SequenceLineBreakAfter")]
+		public BinarySequenceLineBreak SequenceLineBreakAfter
+		{
+			get { return (this.sequenceLineBreakAfter); }
+			set
+			{
+				if (this.sequenceLineBreakAfter != value)
+				{
+					this.sequenceLineBreakAfter = value;
 					SetChanged();
 				}
 			}
@@ -149,9 +167,10 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(LengthLineBreak   == other.LengthLineBreak) &&
-				(SequenceLineBreak == other.SequenceLineBreak) &&
-				(TimedLineBreak    == other.TimedLineBreak)
+				(LengthLineBreak         == other.LengthLineBreak) &&
+				(SequenceLineBreakBefore == other.SequenceLineBreakBefore) &&
+				(SequenceLineBreakAfter  == other.SequenceLineBreakAfter) &&
+				(TimedLineBreak          == other.TimedLineBreak)
 			);
 		}
 
@@ -168,9 +187,10 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				LengthLineBreak  .GetHashCode() ^
-				SequenceLineBreak.GetHashCode() ^
-				TimedLineBreak   .GetHashCode()
+				LengthLineBreak        .GetHashCode() ^
+				SequenceLineBreakBefore.GetHashCode() ^
+				SequenceLineBreakAfter .GetHashCode() ^
+				TimedLineBreak         .GetHashCode()
 			);
 		}
 

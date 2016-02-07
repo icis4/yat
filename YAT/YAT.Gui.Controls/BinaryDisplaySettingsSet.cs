@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -31,6 +36,8 @@ using MKY.Windows.Forms;
 
 using YAT.Domain.Settings;
 using YAT.Gui.Utilities;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -79,6 +86,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public BinaryDisplaySettings Settings
 		{
 			get { return (this.settings); }
@@ -150,33 +159,64 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void checkBox_SequenceLineBreak_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_SequenceLineBreakBefore_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreak;
-				slb.Enabled = checkBox_SequenceLineBreak.Checked;
-				this.settings.SequenceLineBreak = slb;
+				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreakBefore;
+				slb.Enabled = checkBox_SequenceLineBreakBefore.Checked;
+				this.settings.SequenceLineBreakBefore = slb;
 				SetControls();
 				OnSettingsChanged(EventArgs.Empty);
 			}
 		}
 
-		private void textBox_SequenceLineBreakSequence_Validating(object sender, CancelEventArgs e)
+		private void textBox_SequenceLineBreakBeforeSequence_Validating(object sender, CancelEventArgs e)
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakSequence.Text, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
+			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakBeforeSequence.Text, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
 			{
-				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreak;
-				slb.Sequence = textBox_SequenceLineBreakSequence.Text;
-				this.settings.SequenceLineBreak = slb;
+				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreakBefore;
+				slb.Sequence = textBox_SequenceLineBreakBeforeSequence.Text;
+				this.settings.SequenceLineBreakBefore = slb;
 				SetControls();
 				OnSettingsChanged(EventArgs.Empty);
 			}
 			else
 			{
-				textBox_SequenceLineBreakSequence.Select(invalidTextStart, invalidTextLength);
+				textBox_SequenceLineBreakBeforeSequence.Select(invalidTextStart, invalidTextLength);
+				e.Cancel = true;
+			}
+		}
+
+		private void checkBox_SequenceLineBreakAfter_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreakAfter;
+				slb.Enabled = checkBox_SequenceLineBreakAfter.Checked;
+				this.settings.SequenceLineBreakAfter = slb;
+				SetControls();
+				OnSettingsChanged(EventArgs.Empty);
+			}
+		}
+
+		private void textBox_SequenceLineBreakAfterSequence_Validating(object sender, CancelEventArgs e)
+		{
+			int invalidTextStart;
+			int invalidTextLength;
+			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakAfterSequence.Text, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
+			{
+				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreakAfter;
+				slb.Sequence = textBox_SequenceLineBreakAfterSequence.Text;
+				this.settings.SequenceLineBreakAfter = slb;
+				SetControls();
+				OnSettingsChanged(EventArgs.Empty);
+			}
+			else
+			{
+				textBox_SequenceLineBreakAfterSequence.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
 		}
@@ -240,10 +280,15 @@ namespace YAT.Gui.Controls
 			textBox_LengthLineBreak.Enabled = enabled;
 			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.Length.ToString(CultureInfo.CurrentCulture);
 
-			enabled = this.settings.SequenceLineBreak.Enabled;
-			checkBox_SequenceLineBreak.Checked = enabled;
-			textBox_SequenceLineBreakSequence.Enabled = enabled;
-			textBox_SequenceLineBreakSequence.Text = this.settings.SequenceLineBreak.Sequence;
+			enabled = this.settings.SequenceLineBreakBefore.Enabled;
+			checkBox_SequenceLineBreakBefore.Checked = enabled;
+			textBox_SequenceLineBreakBeforeSequence.Enabled = enabled;
+			textBox_SequenceLineBreakBeforeSequence.Text = this.settings.SequenceLineBreakBefore.Sequence;
+
+			enabled = this.settings.SequenceLineBreakAfter.Enabled;
+			checkBox_SequenceLineBreakAfter.Checked = enabled;
+			textBox_SequenceLineBreakAfterSequence.Enabled = enabled;
+			textBox_SequenceLineBreakAfterSequence.Text = this.settings.SequenceLineBreakAfter.Sequence;
 
 			enabled = this.settings.TimedLineBreak.Enabled;
 			checkBox_TimedLineBreak.Checked = enabled;
