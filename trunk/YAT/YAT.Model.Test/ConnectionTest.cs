@@ -27,13 +27,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO.Ports;
 using System.Threading;
-using System.Reflection;
 
-using MKY.IO.Ports;
 using MKY.IO.Ports.Test;
 using MKY.Settings;
 
