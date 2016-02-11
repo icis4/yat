@@ -31,7 +31,6 @@ Tools > Options...
     > C# > Code Style > Use 'var' when generating locals = no
     > C# > Formatting > All auto = no
   > Debugging
-    > General > Step over properties and operators = false
     > General > Require source files to excatly match the original version = false
 
 Edit > Advanced

@@ -20,13 +20,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Text;
 
 using NUnit.Framework;
+
+#endregion
 
 namespace MKY.Test.Types
 {

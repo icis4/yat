@@ -13,12 +13,12 @@ Settings
     > Visual Studio
        > Enable = true
 
-Categories
- > Add all N/A categories to the 'Selected Categories'
- > Tick 'Exclude these categories'
-
 
 YAT test suite
 --------------
 
 Three-tier based settings environment as described in 'MKY.Configuration.Provider'
+
+Categories
+ > Add all N/A categories to the 'Selected Categories'
+ > Tick 'Exclude these categories'

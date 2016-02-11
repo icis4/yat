@@ -259,7 +259,7 @@ namespace YAT.Model.Test.Transmission
 					Trace.WriteLine(@">> """ + stimulus + @""" (" + i + ")");
 					terminal.SendText(stimulusCommand);
 					expectedTotalByteCount += expectedBytes.Length;
-					Utilities.WaitForTransmission(terminal, i + 1, expectedTotalByteCount); // i = transmission count equals line count.
+					Utilities.WaitForReceiving(terminal, i + 1, expectedTotalByteCount); // i = transmission count equals line count.
 
 					// Verify response:
 					Domain.DisplayLine lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);

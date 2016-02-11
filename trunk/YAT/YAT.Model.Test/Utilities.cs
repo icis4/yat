@@ -593,19 +593,6 @@ namespace YAT.Model.Test
 		// Wait
 		//==========================================================================================
 
-		internal static void WaitForDisconnection(Terminal terminal)
-		{
-			int timeout = 0;
-			while (terminal.IsConnected)
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
-
-				if (timeout >= WaitTimeoutForConnectionChange)
-					Assert.Fail("Disconnect timeout!");
-			}
-		}
-
 		internal static void WaitForConnection(Terminal terminal)
 		{
 			int timeout = 0;
@@ -634,26 +621,49 @@ namespace YAT.Model.Test
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 		}
 
-		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, TestSet testSet)
+		internal static void WaitForDisconnection(Terminal terminal)
 		{
-			WaitForTransmission(terminalA, terminalB, testSet.ExpectedLineCount, 1); // Single cycle.
+			int timeout = 0;
+			while (terminal.IsConnected)
+			{
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeoutForConnectionChange)
+					Assert.Fail("Disconnect timeout!");
+			}
 		}
 
-		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedPerCycleLineCountRx)
+		internal static void WaitForDisconnection(Terminal terminalA, Terminal terminalB)
 		{
-			WaitForTransmission(terminalA, terminalB, expectedPerCycleLineCountRx, 1); // Single cycle.
+			int timeout = 0;
+			while (terminalA.IsConnected || terminalB.IsConnected)
+			{
+				Thread.Sleep(WaitInterval);
+				timeout += WaitInterval;
+
+				if (timeout >= WaitTimeoutForConnectionChange)
+					Assert.Fail("Disconnect timeout!");
+			}
 		}
 
-		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void WaitForTransmission(Terminal terminalA, Terminal terminalB, int expectedPerCycleLineCountRx, int cycle)
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
+		{
+			WaitForTransmission(terminalTx, terminalRx, testSet.ExpectedLineCount, 1); // Single cycle.
+		}
+
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleLineCount)
+		{
+			WaitForTransmission(terminalTx, terminalRx, expectedPerCycleLineCount, 1); // Single cycle.
+		}
+
+		internal static void WaitForTransmission(Terminal terminalTx, Terminal terminalRx, int expectedPerCycleLineCount, int cycle)
 		{
 			// Calculate total expected line count at the receiver side:
-			int expectedTotalLineCountRx = (expectedPerCycleLineCountRx * cycle);
+			int expectedTotalLineCount = (expectedPerCycleLineCount * cycle);
 
 			// Calculate timeout factor per line, taking cases with 0 lines into account:
-			int timeoutFactorPerLine = ((expectedPerCycleLineCountRx > 0) ? expectedPerCycleLineCountRx : 1);
+			int timeoutFactorPerLine = ((expectedPerCycleLineCount > 0) ? expectedPerCycleLineCount : 1);
 
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -662,16 +672,16 @@ namespace YAT.Model.Test
 				timeout += WaitInterval;
 
 				if (timeout >= (WaitTimeoutForLineTransmission * timeoutFactorPerLine))
-					Assert.Fail("Transmission timeout! Try to re-run test case.");
+					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
 
-				if (terminalB.RxLineCount > expectedTotalLineCountRx) // Break in case of too much data to improve speed of test.
+				if (terminalRx.RxLineCount > expectedTotalLineCount) // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + terminalB.RxLineCount +
-						" mismatches expected = " + expectedTotalLineCountRx + ".");
+						" Number of received lines = " + terminalRx.RxLineCount +
+						" mismatches expected = " + expectedTotalLineCount + ".");
 			}
-			while ((terminalB.RxLineCount != expectedTotalLineCountRx) ||
-			       (terminalB.RxLineCount != terminalA.TxLineCount) ||
-			       (terminalB.RxByteCount != terminalA.TxByteCount));
+			while ((terminalRx.RxLineCount != expectedTotalLineCount) ||
+			       (terminalRx.RxLineCount != terminalTx.TxLineCount) ||
+			       (terminalRx.RxByteCount != terminalTx.TxByteCount));
 
 			// Attention: Terminal line count is not always equal to display line count!
 			//  > Terminal line count = number of *completed* lines in terminal
@@ -679,7 +689,7 @@ namespace YAT.Model.Test
 			// This function uses terminal line count for verification!
 		}
 
-		internal static void WaitForTransmission(Terminal terminal, int expectedTotalLineCountRx, int expectedTotalByteCountRx)
+		internal static void WaitForReceiving(Terminal terminalRx, int expectedTotalLineCount, int expectedTotalByteCount)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
@@ -687,17 +697,17 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= (WaitTimeoutForLineTransmission * expectedTotalLineCountRx))
-					Assert.Fail("Transmission timeout! Try to re-run test case.");
+				if (timeout >= (WaitTimeoutForLineTransmission * expectedTotalLineCount))
+					Assert.Fail("Transmission timeout! Not enough lines received within expected interval.");
 
-				if ((terminal.RxLineCount > expectedTotalLineCountRx) ||
-					(terminal.RxByteCount > expectedTotalByteCountRx)) // Break in case of too much data to improve speed of test.
+				if ((terminalRx.RxLineCount > expectedTotalLineCount) ||
+					(terminalRx.RxByteCount > expectedTotalByteCount)) // Break in case of too much data to improve speed of test.
 					Assert.Fail("Transmission error!" +
-						" Number of received lines = " + terminal.RxLineCount + " / bytes = " + terminal.RxByteCount +
-						" mismatches expected = " + expectedTotalLineCountRx + " / " + expectedTotalByteCountRx + ".");
+						" Number of received lines = " + terminalRx.RxLineCount + " / bytes = " + terminalRx.RxByteCount +
+						" mismatches expected = " + expectedTotalLineCount + " / " + expectedTotalByteCount + ".");
 			}
-			while ((terminal.RxLineCount != expectedTotalLineCountRx) ||
-			       (terminal.RxByteCount != expectedTotalByteCountRx));
+			while ((terminalRx.RxLineCount != expectedTotalLineCount) ||
+			       (terminalRx.RxByteCount != expectedTotalByteCount));
 
 			// Attention: Terminal line count is not always equal to display line count!
 			//  > Terminal line count = number of *completed* lines in terminal

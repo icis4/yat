@@ -45,8 +45,9 @@ namespace YAT.Domain
 		Lf,
 		CrLf,
 		LfCr,
-		Tab,
 		Nul,
+		Tab,
+		Space
 	}
 
 	#pragma warning restore 1591
@@ -73,24 +74,27 @@ namespace YAT.Domain
 		private const string None_string = "None";
 		private const string None_stringSequence = "";
 
-		private const string Cr_string = "<CR>";
+		private const string Cr_stringSequence = "<CR>";
 		private const string Cr_stringNative = "\r";
 
-		private const string Lf_string = "<LF>";
+		private const string Lf_stringSequence = "<LF>";
 		private const string Lf_stringNative = "\n";
 
-		private const string CrLf_string = "<CR><LF>";
+		private const string CrLf_stringSequence = "<CR><LF>";
 		private const string CrLf_stringNative = "\r\n";
 		
-		private const string LfCr_string = "<LF><CR>";
+		private const string LfCr_stringSequence = "<LF><CR>";
 		private const string LfCr_stringNative = "\n\r";
 		
-		private const string Tab_string = "<TAB>";
-		private const string Tab_stringNative = "\t";
-		
-		private const string Nul_string = "<NUL>";
+		private const string Nul_stringSequence = "<NUL>";
 		private const string Nul_stringNative = "\0";
 
+		private const string Tab_stringSequence = "<TAB>";
+		private const string Tab_stringNative = "\t";
+		
+		private const string Space_string = "Space";
+		private const string Space_stringSequence = " ";
+		
 		#endregion
 
 		/// <summary>Default is <see cref="Eol.CrLf"/>.</summary>
@@ -113,13 +117,14 @@ namespace YAT.Domain
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None: return (None_string);
-				case Eol.Cr:   return (Cr_string);
-				case Eol.Lf:   return (Lf_string);
-				case Eol.CrLf: return (CrLf_string);
-				case Eol.LfCr: return (LfCr_string);
-				case Eol.Tab:  return (Tab_string);
-				case Eol.Nul:  return (Nul_string);
+				case Eol.None:  return (None_string);
+				case Eol.Cr:    return (Cr_stringSequence);
+				case Eol.Lf:    return (Lf_stringSequence);
+				case Eol.CrLf:  return (CrLf_stringSequence);
+				case Eol.LfCr:  return (LfCr_stringSequence);
+				case Eol.Nul:   return (Nul_stringSequence);
+				case Eol.Tab:   return (Tab_stringSequence);
+				case Eol.Space: return (Space_string);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
@@ -129,13 +134,14 @@ namespace YAT.Domain
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None: return (None_stringSequence);
-				case Eol.Cr:   return (Cr_string);
-				case Eol.Lf:   return (Lf_string);
-				case Eol.CrLf: return (CrLf_string);
-				case Eol.LfCr: return (LfCr_string);
-				case Eol.Tab:  return (Tab_string);
-				case Eol.Nul:  return (Nul_string);
+				case Eol.None:  return (None_stringSequence);
+				case Eol.Cr:    return (Cr_stringSequence);
+				case Eol.Lf:    return (Lf_stringSequence);
+				case Eol.CrLf:  return (CrLf_stringSequence);
+				case Eol.LfCr:  return (LfCr_stringSequence);
+				case Eol.Nul:   return (Nul_stringSequence);
+				case Eol.Tab:   return (Tab_stringSequence);
+				case Eol.Space: return (Space_stringSequence);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
@@ -155,8 +161,9 @@ namespace YAT.Domain
 			a.Add(new EolEx(Eol.Lf));
 			a.Add(new EolEx(Eol.CrLf));
 			a.Add(new EolEx(Eol.LfCr));
-			a.Add(new EolEx(Eol.Tab));
 			a.Add(new EolEx(Eol.Nul));
+			a.Add(new EolEx(Eol.Tab));
+			a.Add(new EolEx(Eol.Space));
 			return (a.ToArray());
 		}
 
@@ -209,40 +216,46 @@ namespace YAT.Domain
 				result = Eol.None;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cr_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Cr_stringSequence) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Cr_stringNative))
 			{
 				result = Eol.Cr;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Lf_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Lf_stringSequence) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Lf_stringNative))
 			{
 				result = Eol.Lf;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, CrLf_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, CrLf_stringSequence) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, CrLf_stringNative))
 			{
 				result = Eol.CrLf;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, LfCr_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, LfCr_stringSequence) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, LfCr_stringNative))
 			{
 				result = Eol.LfCr;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tab_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Nul_stringSequence) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Nul_stringNative))
+			{
+				result = Eol.Nul;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Tab_stringSequence) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Tab_stringNative))
 			{
 				result = Eol.Tab;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Nul_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Nul_stringNative))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringSequence))
 			{
-				result = Eol.Nul;
+				result = Eol.Space;
 				return (true);
 			}
 			else
