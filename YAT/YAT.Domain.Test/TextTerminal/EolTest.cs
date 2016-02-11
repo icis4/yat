@@ -26,7 +26,9 @@
 //==================================================================================================
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 using NUnit.Framework;
 
@@ -37,7 +39,7 @@ using MKY.Net.Test;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
-	public static class EolTestData
+	public static class EolSequenceTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -45,24 +47,46 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
+		public static IEnumerable<string> Sequences
+		{
+			get
+			{
+				// Control characters:
+				yield return ("<CR><LF>");
+				yield return ("<LF>"); // Note that <LF><CR> and <CR> cannot be used because it is used in the test implementation further below.
+				yield return ("<TAB>");
+				yield return ("<NUL>");
+
+				// Normal characters:
+				yield return ("ABC");
+				yield return ("CR");
+				yield return ("X");
+
+				// Mixed:
+				yield return ("AB<CR>");
+				yield return ("CR<LF>");
+				yield return ("X<NUL>");
+
+				// Space:
+				yield return (" ");
+			}
+		}
+
+		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
 			get
 			{
-
-
-					=> TestData = verschiedene EOL
-						> Beide gleich
-						> Unterschiedlich
-
-					=> PingPong mit verschiedenen Texten, welche zum Teil Überschneidungen mit EOL haben
-						> <ASCII>
-						> Normal
-						> Gemischt
-
-
-				// ToUpper.
-				yield return (new TestCaseData(CharSubstitution.ToUpper, @"\c(A)\c(b)CdEfGhIiKlMnOpQrStUvWxYz<Cr><Lf>", new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x49, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x0D, 0x0A } ).SetName("ToUpper"));
+				foreach (string eolAB in Sequences)
+				{
+					foreach (string eolBA in Sequences)
+					{
+						if (eolAB == eolBA)
+							yield return (new TestCaseData(eolAB, eolBA).SetName(@"Symmetric """ + eolAB + @""""));
+						else
+							yield return (new TestCaseData(eolAB, eolBA).SetName(@"Asymmetric """ + eolAB + @""" | """ + eolBA + @""""));
+					}
+				}
 			}
 		}
 
@@ -78,82 +102,153 @@ namespace YAT.Domain.Test.TextTerminal
 		// Test
 		//==========================================================================================
 
-		#region Test SubstitutionParser
-		//------------------------------------------------------------------------------------------
-		// Test SubstitutionParser
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
-		[Test, IPv4LoopbackIsAvailableCategory, TestCaseSource(typeof(EolTestData), "TestCases")]
-		public virtual void TestSubstitutionParser(string eolAB, string eolBA)
+		[Test, IPv4LoopbackIsAvailableCategory, TestCaseSource(typeof(EolSequenceTestData), "TestCases")]
+		public virtual void TestEolSequence(string eolAB, string eolBA)
 		{
+			const int WaitForDisposal = 100;
+
 			Settings.TerminalSettings settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 			settingsA.TextTerminal.TxEol = eolAB;
 			settingsA.TextTerminal.RxEol = eolBA;
 			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
 			{
-				terminalA.Start();
+				Assert.IsTrue(terminalA.Start(), "Terminal A could not be started");
 
 				Settings.TerminalSettings settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
 				settingsB.TextTerminal.TxEol = eolBA;
 				settingsB.TextTerminal.RxEol = eolAB;
 				using (Domain.TextTerminal terminalB = new Domain.TextTerminal(settingsB))
 				{
-					terminalB.Start();
+					Assert.IsTrue(terminalB.Start(), "Terminal B could not be started");
+					Utilities.WaitForConnection(terminalA, terminalB);
 
 					int countA = 0;
 					int countB = 0;
 
 					terminalA.SendLine(""); // A#1
 					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, countA);
+					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
 
 					terminalA.SendLine("AA"); // A#2
 					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, countA);
+					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
 
 					terminalA.SendLine("ABABAB"); // A#3
 					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, countA);
+					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
 
 					terminalB.SendLine("<CR>"); // B#1
 					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, countB);
+					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
 
 					terminalB.SendLine("<CR><CR>"); // B#2
 					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, countB);
+					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
 
-					terminalB.SendLine("<LF><CR>"); // B#3
+					terminalB.SendLine("<CR><CR><ESC>"); // B#3
 					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, countB);
+					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
 
-					terminalA.SendLine("<CR>"); // A#4
+					terminalA.SendLine("<ESC>"); // A#4
 					countA++;
-					Verify(terminalA, terminalB, eolAB, eolBA, countA);
+					Verify(terminalA, terminalB, eolAB, eolBA, 1, countA);
 
 					terminalB.SendLine("BBBB"); // B#4
 					countB++;
-					Verify(terminalB, terminalA, eolBA, eolAB, countB);
+					Verify(terminalB, terminalA, eolBA, eolAB, 1, countB);
+
+					terminalB.Stop();
+					Utilities.WaitForDisconnection(terminalB);
 				}
+
+				terminalA.Stop();
+				Utilities.WaitForDisconnection(terminalA);
 			}
+
+			Thread.Sleep(WaitForDisposal);
 		}
 
-		#endregion
-
-		private void Verify(Domain.TextTerminal terminalA, Domain.TextTerminal terminalB, string eolAB, string eolBA, int count)
+		/// <remarks>Verification simply waits for transmission. If line count mismatches, a timeout assertion will get thrown.</remarks>
+		private void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, string eolTx, string eolRx, int currentLineCount, int expectedTotalLineCount)
 		{
-			if (eolAB == eolBA)
-			{
-				Utilities.WaitForTransmission(terminalA, terminalB, count);
-				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(RepositoryType.Tx), terminalB.RepositoryToDisplayLines(RepositoryType.Rx), count);
-			}
+			if (eolTx == eolRx)
+				Utilities.WaitForTransmission(terminalTx, terminalRx, currentLineCount, expectedTotalLineCount);
 			else
+				Utilities.WaitForSending(terminalTx, currentLineCount, expectedTotalLineCount);
+		}
+
+		/// <summary></summary>
+		[Test, IPv4LoopbackIsAvailableCategory]
+		public virtual void TestEolSpace()
+		{
+			const int WaitForOperation = 100;
+			const int WaitForDisposal = 100;
+
+			Settings.TerminalSettings settingsA = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+			settingsA.TextTerminal.TxEol = "";
+			settingsA.TextTerminal.RxEol = "";
+			using (Domain.TextTerminal terminalA = new Domain.TextTerminal(settingsA))
 			{
-				Utilities.WaitForTransmission(terminalA, count);
-				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(RepositoryType.Tx), count);
+				Assert.IsTrue(terminalA.Start(), "Terminal A could not be started");
+
+				Settings.TerminalSettings settingsB = Utilities.GetTextTcpAutoSocketOnIPv4LoopbackSettings();
+				settingsB.TextTerminal.TxEol = "";
+				settingsB.TextTerminal.RxEol = "";
+				using (Domain.TextTerminal terminalB = new Domain.TextTerminal(settingsB))
+				{
+					Assert.IsTrue(terminalB.Start(), "Terminal B could not be started");
+					Utilities.WaitForConnection(terminalA, terminalB);
+
+					terminalA.SendLine("A"); // Line #1 A > B, must not result in line break.
+					Thread.Sleep(WaitForOperation);
+					Verify(terminalA, terminalB, 1);
+
+					terminalB.SendLine("BB"); // Line #2 B > A, due to direction line break.
+					Thread.Sleep(WaitForOperation);
+					Verify(terminalB, terminalA, 2);
+
+					terminalB.SendLine("BB"); // Still line #2 B > A, must not result in additional line break.
+					Thread.Sleep(WaitForOperation);
+					Verify(terminalB, terminalA, 2);
+
+					terminalB.SendLine("BB"); // Still line #2 B > A, must not result in additional line break.
+					Thread.Sleep(WaitForOperation);
+					Verify(terminalB, terminalA, 2);
+
+					terminalA.SendLine("AAA"); // Line #3 A > B, due to direction line break.
+					Thread.Sleep(WaitForOperation);
+					Verify(terminalA, terminalB, 3);
+
+					terminalA.SendLine("AAA"); // Still line #3 A > B, must not result in additional line break.
+					Thread.Sleep(WaitForOperation);
+					Verify(terminalA, terminalB, 3);
+
+					terminalB.Stop();
+					Utilities.WaitForDisconnection(terminalB);
+				}
+
+				terminalA.Stop();
+				Utilities.WaitForDisconnection(terminalA);
 			}
+
+			Thread.Sleep(WaitForDisposal);
+		}
+
+		private void Verify(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int expectedTotalLineCount)
+		{
+			int txTotalLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Bidir);
+			int rxTotalLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Bidir);
+
+			Assert.AreEqual(expectedTotalLineCount, txTotalLineCount,
+				"Error!" +
+				" Number of total lines = " + txTotalLineCount +
+				" mismatches expected = " + expectedTotalLineCount + ".");
+
+			Assert.AreEqual(expectedTotalLineCount, rxTotalLineCount,
+				"Error!" +
+				" Number of total lines = " + rxTotalLineCount +
+				" mismatches expected = " + expectedTotalLineCount + ".");
 		}
 
 		#endregion

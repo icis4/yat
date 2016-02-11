@@ -40,10 +40,10 @@ namespace YAT.Domain
 	/// detect end-of-line sequences.
 	/// </summary>
 	/// <remarks>
-	/// Implementation used to evaluate match on request only. However, when adding
-	/// <see cref="IsPartlyMatch"/>, evaluation was moved to <see cref="Enqueue"/> and enqueue
-	/// was optimized. This implementation is far better performing if properties are regularly
-	/// read.
+	/// Implementation used to evaluate match on request only. However, when adding 'IsPartlyMatch'
+	/// (predecessor of <see cref="IsPartlyMatchBeginning"/> and <see cref="IsPartlyMatchContinued"/>,
+	/// evaluation was moved to <see cref="Enqueue"/> and enqueue was optimized. This implementation
+	/// is far better performing if properties are regularly read.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "This class indeed implements a queue, but not using inheritance.")]
 	public class SequenceQueue
@@ -185,44 +185,42 @@ namespace YAT.Domain
 			}
 
 			// Precondition:
-			// - Sequence >= 1
-			// - Queue >= 1
-
-			// \fixme (2010-04-01 / MKY):
-			// Weird InvalidOperationException when receiving large chunks of data.
-			try
+			//  > Sequence >= 1
+			//  > Queue >= 1
+			//
+			// Evaluate sequence until there is either a match or no match.
+			// Covers cases like <LF>, <LF><LF>, <CR><CR><LF>,...
+			State evaluatedState = State.Armed;
+			while ((evaluatedState == State.Armed) && (this.queue.Count > 0))
 			{
-				// Evaluate sequence until there is either a match or no match.
-				// Covers cases like <CR><CR><LF>.
-				State evaluatedState = State.Armed;
-				while ((evaluatedState == State.Armed) && (this.queue.Count > 0))
+				byte[] queue = this.queue.ToArray();
+				for (int i = 0; ((i < queue.Length) &&  (i < this.sequence.Count)); i++)
 				{
-					byte[] queue = this.queue.ToArray();
-					for (int i = 0; i < queue.Length; i++)
+					if (queue[i] == this.sequence[i])
 					{
-						if (queue[i] == this.sequence[i])
+						if (this.sequence.Count == 1)
 						{
-							if (i < 1)
+							evaluatedState = State.CompleteMatch;
+						}
+						else // this.sequence.Count >= 2
+						{
+							if (i == 0)
 								evaluatedState = State.PartlyMatchBeginning;
 							else if (i < (this.sequence.Count - 1))
 								evaluatedState = State.PartlyMatchContinued;
-							else
+							else // i == (this.sequence.Count - 1)
 								evaluatedState = State.CompleteMatch;
 						}
-						else
-						{
-							this.queue.Dequeue(); // Dequeue one element, then retry.
-							evaluatedState = State.Armed;
-							break;
-						}
+					}
+					else
+					{
+						this.queue.Dequeue(); // Dequeue one element, then retry.
+						evaluatedState = State.Armed;
+						break;
 					}
 				}
-				this.state = evaluatedState;
 			}
-			catch (InvalidOperationException ex)
-			{
-				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "Queue.Count = " + this.queue.Count);
-			}
+			this.state = evaluatedState;
 		}
 
 		#endregion
