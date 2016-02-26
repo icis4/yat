@@ -575,19 +575,6 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "IOIs", Justification = "What's wrong? 'IO' is according to the guideline, 'Is' is a verb...")]
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly",   MessageId = "IOIs", Justification = "What's wrong? 'IO' is according to the guideline, 'Is' is a verb...")]
-		public virtual bool UnderlyingIOIsSerialPort
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				return ((this.settingsRoot != null) && (this.settingsRoot.IOType == Domain.IOType.SerialPort));
-			}
-		}
-
-		/// <summary></summary>
 		public virtual string Caption
 		{
 			get
@@ -2122,88 +2109,6 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > IO Control
-		//------------------------------------------------------------------------------------------
-		// Terminal > IO Control
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Toggles RFR line if current flow control settings allow this.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
-		public virtual void RequestToggleRfr()
-		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
-			{
-				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				if (p != null)
-					p.ToggleRfr();
-				else
-					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
-			}
-		}
-
-		/// <summary>
-		/// Toggles DTR line if current flow control settings allow this.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
-		public virtual void RequestToggleDtr()
-		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
-			{
-				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				if (p != null)
-					p.ToggleDtr();
-				else
-					throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
-			}
-		}
-
-		/// <summary>
-		/// Toggles the input XOn/XOff state.
-		/// </summary>
-		public virtual void RequestToggleInputXOnXOff()
-		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
-			{
-				var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
-				if (x != null)
-				{
-					// Since the underlying I/O provider's 'DataSent' events are no longer used to
-					// feed the outgoing data into the repositories, outgoing XOn/XOff characters
-					// must manually be fed into the repositories. Do so before actually sending the
-					// character to ensure that it is placed before eventual data.
-					if (x.InputIsXOn)
-						this.terminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOffByte });
-					else
-						this.terminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
-
-					x.ToggleInputXOnXOff();
-				}
-				else
-				{
-					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler!"));
-				}
-			}
-		}
-
-		/// <summary>
-		/// Toggles the output break state.
-		/// </summary>
-		public virtual void RequestToggleOutputBreak()
-		{
-			if (this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable)
-			{
-				var p = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-				if (p != null)
-					p.ToggleOutputBreak();
-				else
-					throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
-			}
-		}
-
-		#endregion
-
 		#region Terminal > Send
 		//------------------------------------------------------------------------------------------
 		// Terminal > Send
@@ -2787,10 +2692,11 @@ namespace YAT.Model
 		{
 			this.connectChrono = new Chronometer();
 			this.connectChrono.Interval = 1000;
-			this.connectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
+			// No elapsed event, events are fired by total connect chrono.
+
 			this.totalConnectChrono = new Chronometer();
 			this.totalConnectChrono.Interval = 1000;
-			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(connectChrono_TimeSpanChanged);
+			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
 		}
 
 		private void StopChronos()
@@ -2803,13 +2709,14 @@ namespace YAT.Model
 		{
 			if (this.connectChrono != null)
 			{
-				this.connectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
+				// No elapsed event, events are fired by total connect chrono.
 				this.connectChrono.Dispose();
 				this.connectChrono = null;
 			}
+
 			if (this.totalConnectChrono != null)
 			{
-				this.totalConnectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(connectChrono_TimeSpanChanged);
+				this.totalConnectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
 				this.totalConnectChrono.Dispose();
 				this.totalConnectChrono = null;
 			}
@@ -2841,11 +2748,6 @@ namespace YAT.Model
 			AssertNotDisposed();
 			this.connectChrono.Restart();
 			this.totalConnectChrono.Restart();
-		}
-
-		private void connectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
-		{
-			// Don't fire event. Events are fired by total connect chrono anyway.
 		}
 
 		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
@@ -3030,14 +2932,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.ControlPins);
-				}
-
-				return (new MKY.IO.Ports.SerialPortControlPins());
+				return (this.terminal.SerialPortControlPins);
 			}
 		}
 
@@ -3050,14 +2945,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.ControlPinCount);
-				}
-
-				return (new MKY.IO.Ports.SerialPortControlPinCount());
+				return (this.terminal.SerialPortControlPinCount);
 			}
 		}
 
@@ -3068,14 +2956,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.SentXOnCount);
-				}
-
-				return (0);
+				return (this.terminal.SentXOnCount);
 			}
 		}
 
@@ -3086,14 +2967,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.SentXOffCount);
-				}
-
-				return (0);
+				return (this.terminal.SentXOffCount);
 			}
 		}
 
@@ -3104,14 +2978,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.ReceivedXOnCount);
-				}
-
-				return (0);
+				return (this.terminal.ReceivedXOnCount);
 			}
 		}
 
@@ -3122,14 +2989,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.ReceivedXOffCount);
-				}
-
-				return (0);
+				return (this.terminal.ReceivedXOffCount);
 			}
 		}
 
@@ -3138,12 +2998,7 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			if (UnderlyingIOIsSerialPort)
-			{
-				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-				if (port != null)
-					port.ResetFlowControlCount();
-			}
+			this.terminal.ResetFlowControlCount();
 		}
 
 		/// <summary></summary>
@@ -3153,14 +3008,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.OutputBreakCount);
-				}
-
-				return (0);
+				return (this.terminal.OutputBreakCount);
 			}
 		}
 
@@ -3171,14 +3019,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (UnderlyingIOIsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.InputBreakCount);
-				}
-
-				return (0);
+				return (this.terminal.InputBreakCount);
 			}
 		}
 
@@ -3187,12 +3028,56 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			if (UnderlyingIOIsSerialPort)
-			{
-				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-				if (port != null)
-					port.ResetBreakCount();
-			}
+			this.terminal.ResetBreakCount();
+		}
+
+		#endregion
+
+		#region Terminal > I/O Control
+		//------------------------------------------------------------------------------------------
+		// Terminal > I/O Control
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Toggles RFR line if current flow control settings allow this.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		public virtual void ToggleRfr()
+		{
+			AssertNotDisposed();
+
+			this.terminal.ToggleRfr();
+		}
+
+		/// <summary>
+		/// Toggles DTR line if current flow control settings allow this.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		public virtual void ToggleDtr()
+		{
+			AssertNotDisposed();
+
+			this.terminal.ToggleDtr();
+		}
+
+		/// <summary>
+		/// Toggles the input XOn/XOff state.
+		/// </summary>
+		public virtual void ToggleInputXOnXOff()
+		{
+			AssertNotDisposed();
+
+			this.terminal.ToggleInputXOnXOff();
+		}
+
+		/// <summary>
+		/// Toggles the output break state.
+		/// </summary>
+		public virtual void ToggleOutputBreak()
+		{
+			AssertNotDisposed();
+
+			this.terminal.ToggleOutputBreak();
 		}
 
 		#endregion

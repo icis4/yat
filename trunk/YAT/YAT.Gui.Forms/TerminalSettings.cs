@@ -447,7 +447,7 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.TerminalType.Text:
 				{
-					Gui.Forms.TextTerminalSettings f = new Gui.Forms.TextTerminalSettings(this.settingsInEdit.Terminal.TextTerminal);
+					TextTerminalSettings f = new TextTerminalSettings(this.settingsInEdit.Terminal.TextTerminal);
 					if (f.ShowDialog(this) == DialogResult.OK)
 					{
 						Refresh();
@@ -457,7 +457,7 @@ namespace YAT.Gui.Forms
 				}
 				case Domain.TerminalType.Binary:
 				{
-					Gui.Forms.BinaryTerminalSettings f = new Gui.Forms.BinaryTerminalSettings(this.settingsInEdit.Terminal.BinaryTerminal);
+					BinaryTerminalSettings f = new BinaryTerminalSettings(this.settingsInEdit.Terminal.BinaryTerminal);
 					if (f.ShowDialog(this) == DialogResult.OK)
 					{
 						Refresh();
@@ -517,17 +517,19 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 				// Send:
-				this.settingsInEdit.Terminal.Send.KeepCommand                  = f.SettingsResult.Terminal.Send.KeepCommand;
-				this.settingsInEdit.Terminal.Send.CopyPredefined               = f.SettingsResult.Terminal.Send.CopyPredefined;
-				this.settingsInEdit.Terminal.Send.SendImmediately              = f.SettingsResult.Terminal.Send.SendImmediately;
-				this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer   = f.SettingsResult.Terminal.IO.SerialPort.LimitOutputBuffer;
-				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate         = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak  = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
-				this.settingsInEdit.Terminal.Send.DefaultDelay                 = f.SettingsResult.Terminal.Send.DefaultDelay;
-				this.settingsInEdit.Terminal.Send.DefaultLineDelay             = f.SettingsResult.Terminal.Send.DefaultLineDelay;
-				this.settingsInEdit.Terminal.Send.DefaultLineRepeat            = f.SettingsResult.Terminal.Send.DefaultLineRepeat;
-				this.settingsInEdit.Terminal.Send.DisableKeywords              = f.SettingsResult.Terminal.Send.DisableKeywords;
+				this.settingsInEdit.Terminal.Send.KeepCommand                     = f.SettingsResult.Terminal.Send.KeepCommand;
+				this.settingsInEdit.Terminal.Send.CopyPredefined                  = f.SettingsResult.Terminal.Send.CopyPredefined;
+				this.settingsInEdit.Terminal.Send.SendImmediately                 = f.SettingsResult.Terminal.Send.SendImmediately;
+				this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer      = f.SettingsResult.Terminal.IO.SerialPort.LimitOutputBuffer;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
+				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
+				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;
+				this.settingsInEdit.Terminal.Send.DefaultDelay                    = f.SettingsResult.Terminal.Send.DefaultDelay;
+				this.settingsInEdit.Terminal.Send.DefaultLineDelay                = f.SettingsResult.Terminal.Send.DefaultLineDelay;
+				this.settingsInEdit.Terminal.Send.DefaultLineRepeat               = f.SettingsResult.Terminal.Send.DefaultLineRepeat;
+				this.settingsInEdit.Terminal.Send.DisableKeywords                 = f.SettingsResult.Terminal.Send.DisableKeywords;
 
 				this.settingsInEdit.UserName = f.SettingsResult.UserName;
 			}

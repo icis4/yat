@@ -259,6 +259,8 @@ namespace YAT.Domain
 
 		private bool eventsSuspendedForReload;
 
+		private System.Timers.Timer periodicXOnTimer;
+
 		#endregion
 
 		#region Events
@@ -364,6 +366,9 @@ namespace YAT.Domain
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					// In the 'normal' case, the timer will already have been stopped in Stop().
+					DisposePeriodicXOnTimer();
+
 					// In the 'normal' case, the terminal will already have been stopped in Stop().
 					if (this.rawTerminal != null)
 						this.rawTerminal.Dispose();
@@ -616,9 +621,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.UnderlyingIOProvider);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.UnderlyingIOProvider);
+				else
+					return (null);
 			}
 		}
 
@@ -627,9 +635,12 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (this.rawTerminal.UnderlyingIOInstance);
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.UnderlyingIOInstance);
+				else
+					return (null);
 			}
 		}
 
@@ -668,7 +679,11 @@ namespace YAT.Domain
 				// Do not clear the send queue, it already got cleared when stopping. This setup
 				// potentially allows to call Send() and buffer data before starting the terminal.
 
-				return (this.rawTerminal.Start());
+				bool result = this.rawTerminal.Start();
+
+				ConfigurePeriodicXOnTimer();
+
+				return (result);
 			}
 			else
 			{
@@ -694,6 +709,8 @@ namespace YAT.Domain
 				// send thread has indeed stopped. However, this results in dead-locks if Stop()
 				// is called from the same thread where the ..Sent events get invoked (e.g. the UI
 				// thread).
+
+				DisablePeriodicXOnTimer();
 
 				this.rawTerminal.Stop();
 
@@ -754,6 +771,14 @@ namespace YAT.Domain
 			// Each send request shall resume a pending break condition:
 			ResumeBreak();
 
+			if (this.terminalSettings.Send.SignalXOnBeforeEachTransmission)
+				SendXOn();
+
+			DoSend(item);
+		}
+
+		private void DoSend(SendItem item)
+		{
 			// Enqueue the items for sending:
 			lock (this.sendQueue)
 				this.sendQueue.Enqueue(item);
@@ -1231,6 +1256,383 @@ namespace YAT.Domain
 			{
 				lock (this.breakStateSyncObj)
 					return (this.breakState);
+			}
+		}
+
+		#endregion
+
+		#region Methods > I/O Control
+		//------------------------------------------------------------------------------------------
+		// Methods > I/O Control
+		//------------------------------------------------------------------------------------------
+
+		private bool IsSerialPort
+		{
+			get { return ((this.terminalSettings != null) && (this.terminalSettings.IO.IOType == IOType.SerialPort)); }
+		}
+
+
+		/// <summary>
+		/// Serial port control pins.
+		/// </summary>
+		public virtual MKY.IO.Ports.SerialPortControlPins SerialPortControlPins
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ControlPins);
+				}
+
+				return (new MKY.IO.Ports.SerialPortControlPins());
+			}
+		}
+
+		/// <summary>
+		/// Serial port control pin counts.
+		/// </summary>
+		public virtual MKY.IO.Ports.SerialPortControlPinCount SerialPortControlPinCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ControlPinCount);
+				}
+
+				return (new MKY.IO.Ports.SerialPortControlPinCount());
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int SentXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.SentXOnCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int SentXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.SentXOffCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int ReceivedXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ReceivedXOnCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int ReceivedXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.ReceivedXOffCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ResetFlowControlCount()
+		{
+			AssertNotDisposed();
+
+			if (IsSerialPort)
+			{
+				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+				if (port != null)
+					port.ResetFlowControlCount();
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int OutputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.OutputBreakCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int InputBreakCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (IsSerialPort)
+				{
+					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+					if (port != null)
+						return (port.InputBreakCount);
+				}
+
+				return (0);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual void ResetBreakCount()
+		{
+			AssertNotDisposed();
+
+			if (IsSerialPort)
+			{
+				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+				if (port != null)
+					port.ResetBreakCount();
+			}
+		}
+
+		/// <summary>
+		/// Toggles RFR line if current flow control settings allow this.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
+		public virtual void ToggleRfr()
+		{
+			AssertNotDisposed();
+
+			if (IsSerialPort)
+			{
+				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
+				{
+					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+					if (p != null)
+						p.ToggleRfr();
+					else
+						throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
+				}
+			}
+		}
+
+		/// <summary>
+		/// Toggles DTR line if current flow control settings allow this.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
+		public virtual void ToggleDtr()
+		{
+			AssertNotDisposed();
+
+			if (IsSerialPort)
+			{
+				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
+				{
+					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+					if (p != null)
+						p.ToggleDtr();
+					else
+						throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
+				}
+			}
+		}
+
+		/// <summary>
+		/// Toggles the input XOn/XOff state.
+		/// </summary>
+		public virtual void ToggleInputXOnXOff()
+		{
+			AssertNotDisposed();
+
+			if (IsSerialPort)
+			{
+				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
+				{
+					var x = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
+					if (x != null)
+					{
+						// Since the underlying I/O provider's 'DataSent' events are no longer used to
+						// feed the outgoing data into the repositories, outgoing XOn/XOff characters
+						// must manually be fed into the repositories. Do so before actually sending the
+						// character to ensure that it is placed before eventual data.
+						if (x.InputIsXOn)
+							ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOffByte });
+						else
+							ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
+
+						x.ToggleInputXOnXOff();
+					}
+					else
+					{
+						throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler!"));
+					}
+				}
+			}
+		}
+
+		private void SendXOn()
+		{
+			if (IsSerialPort)
+			{
+				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlUsesXOnXOff)
+				{
+					var x = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
+					if (x != null)
+					{
+						// Since the underlying I/O provider's 'DataSent' events are no longer used to
+						// feed the outgoing data into the repositories, outgoing XOn/XOff characters
+						// must manually be fed into the repositories. Do so before actually sending the
+						// character to ensure that it is placed before eventual data.
+						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
+
+						x.SignalInputXOn();
+					}
+					else
+					{
+						throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler!"));
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Toggles the output break state.
+		/// </summary>
+		public virtual void ToggleOutputBreak()
+		{
+			AssertNotDisposed();
+
+			if (IsSerialPort)
+			{
+				if (this.terminalSettings.IO.SerialPortOutputBreakIsModifiable)
+				{
+					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+					if (p != null)
+						p.ToggleOutputBreak();
+					else
+						throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
+				}
+			}
+		}
+
+		private void ConfigurePeriodicXOnTimer()
+		{
+			if (this.terminalSettings.Send.SignalXOnPeriodically.Enabled)
+				EnablePeriodicXOnTimer(this.terminalSettings.Send.SignalXOnPeriodically.Interval);
+			else
+				DisablePeriodicXOnTimer();
+		}
+
+		private void EnablePeriodicXOnTimer(int interval)
+		{
+			if (this.periodicXOnTimer == null)
+				CreatePeriodicXOnTimer();
+
+			this.periodicXOnTimer.Interval = interval;
+
+			if (!this.periodicXOnTimer.Enabled)
+				this.periodicXOnTimer.Start();
+		}
+
+		private void DisablePeriodicXOnTimer()
+		{
+			if (this.periodicXOnTimer != null)
+			{
+				if (this.periodicXOnTimer.Enabled)
+					this.periodicXOnTimer.Stop();
+			}
+		}
+
+		private void CreatePeriodicXOnTimer()
+		{
+			if (this.periodicXOnTimer == null)
+			{
+				this.periodicXOnTimer = new System.Timers.Timer();
+				this.periodicXOnTimer.AutoReset = true;
+				this.periodicXOnTimer.Elapsed += periodicXOnTimer_Elapsed;
+			}
+		}
+
+		private void DisposePeriodicXOnTimer()
+		{
+			if (this.periodicXOnTimer != null)
+			{
+				this.periodicXOnTimer.Elapsed -= periodicXOnTimer_Elapsed;
+				this.periodicXOnTimer.Dispose();
+				this.periodicXOnTimer = null;
+			}
+		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private object periodicXOnTimer_Elapsed_SyncObj = new object();
+
+		private void periodicXOnTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			// Ensure that only one timer elapsed event thread is active at a time.
+			// Without this exclusivity, two timer threads could create a race condition.
+			if (Monitor.TryEnter(periodicXOnTimer_Elapsed_SyncObj))
+			{
+				try
+				{
+					// Ensure not to forward events during closing anymore.
+					if (!this.isDisposed && this.IsReadyToSend)
+						SendXOn();
+				}
+				finally
+				{
+					Monitor.Exit(periodicXOnTimer_Elapsed_SyncObj);
+				}
 			}
 		}
 
@@ -1788,6 +2190,7 @@ namespace YAT.Domain
 			ApplyIOSettings();
 			ApplyBufferSettings();
 			ApplyDisplaySettings();
+			ApplySendSettings();
 		}
 
 		private void ApplyIOSettings()
@@ -1809,6 +2212,11 @@ namespace YAT.Domain
 			this.rxRepository.Capacity    = this.terminalSettings.Display.RxMaxLineCount;
 
 			ReloadRepositories();
+		}
+
+		private void ApplySendSettings()
+		{
+			ConfigurePeriodicXOnTimer();
 		}
 
 		#endregion
@@ -1841,6 +2249,11 @@ namespace YAT.Domain
 				{
 					// DisplaySettings changed
 					ApplyDisplaySettings();
+				}
+				else if (Settings.SendSettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.Send))
+				{
+					// SendSettings changed
+					ApplySendSettings();
 				}
 			}
 		}

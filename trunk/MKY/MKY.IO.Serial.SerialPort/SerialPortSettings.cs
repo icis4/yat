@@ -50,16 +50,16 @@ namespace MKY.IO.Serial.SerialPort
 		public const int AutoReopenMinimumInterval = 100;
 
 		/// <summary></summary>
-		public const byte XOnByte = MKY.IO.Ports.SerialPortSettings.XOnByte;
+		public const byte XOnByte = Ports.SerialPortSettings.XOnByte;
 
 		/// <summary></summary>
-		public const byte XOffByte = MKY.IO.Ports.SerialPortSettings.XOffByte;
+		public const byte XOffByte = Ports.SerialPortSettings.XOffByte;
 
 		/// <summary></summary>
-		public const string XOnDescription = MKY.IO.Ports.SerialPortSettings.XOnDescription;
+		public const string XOnDescription = Ports.SerialPortSettings.XOnDescription;
 
 		/// <summary></summary>
-		public const string XOffDescription = MKY.IO.Ports.SerialPortSettings.XOffDescription;
+		public const string XOffDescription = Ports.SerialPortSettings.XOffDescription;
 
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
@@ -102,6 +102,7 @@ namespace MKY.IO.Serial.SerialPort
 		private AutoRetry autoReopen;
 		private LimitOutputBuffer limitOutputBuffer;
 		private SendRate maxSendRate;
+
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
 
@@ -175,6 +176,7 @@ namespace MKY.IO.Serial.SerialPort
 			AutoReopen          = rhs.autoReopen;
 			LimitOutputBuffer   = rhs.LimitOutputBuffer;
 			MaxSendRate         = rhs.MaxSendRate;
+
 			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
 			NoSendOnInputBreak  = rhs.NoSendOnInputBreak;
 
@@ -184,8 +186,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
 		/// 
-		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
-		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
+		/// Attention: Do not use <see cref="Ports.SerialPortId.FirstAvailablePort"/>
+		/// for the default port. <see cref="Ports.SerialPortId.FirstStandardPort"/>
 		/// is way better performing and good enough for most use cases.
 		/// </remarks>
 		protected override void SetMyDefaults()
@@ -198,6 +200,7 @@ namespace MKY.IO.Serial.SerialPort
 			AutoReopen          = AutoReopenDefault;
 			LimitOutputBuffer   = LimitOutputBufferDefault;
 			MaxSendRate         = MaxSendRateDefault;
+
 			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
 			NoSendOnInputBreak  = NoSendOnInputBreakDefault;
 		}
@@ -353,10 +356,10 @@ namespace MKY.IO.Serial.SerialPort
 				base.Equals(other) && // Compare all settings nodes.
 
 				(PortId              == other.PortId) &&
-				(Communication       == other.Communication) &&
 				(AutoReopen          == other.AutoReopen) &&
 				(LimitOutputBuffer   == other.LimitOutputBuffer) &&
 				(MaxSendRate         == other.MaxSendRate) &&
+
 				(NoSendOnOutputBreak == other.NoSendOnOutputBreak) &&
 				(NoSendOnInputBreak  == other.NoSendOnInputBreak)
 			);
@@ -377,13 +380,13 @@ namespace MKY.IO.Serial.SerialPort
 
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				portIdHashCode     .GetHashCode() ^
-				Communication      .GetHashCode() ^
 				AutoReopen         .GetHashCode() ^
 				LimitOutputBuffer  .GetHashCode() ^
 				MaxSendRate        .GetHashCode() ^
+
 				NoSendOnOutputBreak.GetHashCode() ^
 				NoSendOnInputBreak .GetHashCode()
 			);

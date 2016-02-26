@@ -32,7 +32,7 @@ namespace YAT.Domain.Settings
 	public class IOSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
-		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
+		public const IOType IOTypeDefault = IOType.SerialPort;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
@@ -46,11 +46,13 @@ namespace YAT.Domain.Settings
 
 		private const string Undefined = "<Undefined>";
 
-		private Domain.IOType ioType;
+		private IOType ioType;
 		private MKY.IO.Serial.SerialPort.SerialPortSettings serialPort;
 		private MKY.IO.Serial.Socket.SocketSettings socket;
 		private MKY.IO.Serial.Usb.SerialHidDeviceSettings usbSerialHidDevice;
 		private Endianness endianness;
+
+		// Serial port specific I/O settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
 		private bool indicateSerialPortBreakStates;
 		private bool serialPortOutputBreakIsModifiable;
 
@@ -118,7 +120,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("IOType")]
-		public virtual Domain.IOType IOType
+		public virtual IOType IOType
 		{
 			get { return (this.ioType); }
 			set
@@ -129,7 +131,7 @@ namespace YAT.Domain.Settings
 
 					// Set socket host type as well:
 					if (Socket != null)
-						Socket.HostType = (Domain.IOTypeEx)value;
+						Socket.HostType = (IOTypeEx)value;
 
 					SetChanged();
 				}
@@ -303,7 +305,7 @@ namespace YAT.Domain.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				IOType    .GetHashCode() ^
 				Endianness.GetHashCode() ^
@@ -318,16 +320,16 @@ namespace YAT.Domain.Settings
 		{
 			switch (ioType)
 			{
-				case Domain.IOType.SerialPort:
+				case IOType.SerialPort:
 					return (this.serialPort.ToShortPortString());
 
-				case Domain.IOType.TcpClient:
-				case Domain.IOType.TcpServer:
-				case Domain.IOType.TcpAutoSocket:
-				case Domain.IOType.Udp:
+				case IOType.TcpClient:
+				case IOType.TcpServer:
+				case IOType.TcpAutoSocket:
+				case IOType.Udp:
 					return (this.socket.ToShortEndPointString());
 
-				case Domain.IOType.UsbSerialHid:
+				case IOType.UsbSerialHid:
 					return (this.usbSerialHidDevice.ToShortDeviceInfoString());
 
 				default:

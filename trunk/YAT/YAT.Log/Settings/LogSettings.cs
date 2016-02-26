@@ -919,7 +919,7 @@ namespace YAT.Log.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				this.rootPath             .GetHashCode() ^
 				this.rootFileName         .GetHashCode() ^

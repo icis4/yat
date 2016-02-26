@@ -140,7 +140,7 @@ namespace MKY.Test.Settings
 			{
 				return
 				(
-					base.GetHashCode() ^
+					base.GetHashCode() ^ // Get hash code of all settings nodes.
 					SimpleValue.GetHashCode()
 				);
 			}
@@ -293,7 +293,7 @@ namespace MKY.Test.Settings
 			{
 				return
 				(
-					base.GetHashCode() ^
+					base.GetHashCode() ^ // Get hash code of all settings nodes.
 					SimpleValue.GetHashCode()
 				);
 			}
@@ -415,7 +415,7 @@ namespace MKY.Test.Settings
 			{
 				return
 				(
-					base.GetHashCode() ^
+					base.GetHashCode() ^ // Get hash code of all settings nodes.
 					SimpleValue.GetHashCode()
 				);
 			}

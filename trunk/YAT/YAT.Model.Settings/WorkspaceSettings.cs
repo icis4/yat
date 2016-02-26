@@ -173,7 +173,7 @@ namespace YAT.Model.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				AlwaysOnTop     .GetHashCode() ^
 				Layout          .GetHashCode() ^

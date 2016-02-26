@@ -373,7 +373,7 @@ namespace YAT.Settings.Application
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				ProductVersion.GetHashCode()
 			);

@@ -4,91 +4,48 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL$
-// $Author$
-// $Date$
-// $Revision$
+// $Author: stroppel-1$
+// $Date: Donnerstag, 5. September 2013 11:02:41$
+// $Revision: 2$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 2 Development Version 1.99.35
+// MKY Version 1.0.9
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2016 Matthias Kläy.
+// Copyright © 2007-2016 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace YAT.Model.Settings
+namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PredefinedSettings : MKY.Settings.SettingsItem
+	public struct PeriodicSetting
 	{
-		private int selectedPage;
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("Enabled")]
+		public bool Enabled;
+
+		/// <summary>Interval of reconnect in milliseconds.</summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("Interval")]
+		public int Interval;
 
 		/// <summary></summary>
-		public PredefinedSettings()
+		public PeriodicSetting(bool enabled, int interval)
 		{
-			SetMyDefaults();
-			ClearChanged();
+			Enabled = enabled;
+			Interval = interval;
 		}
-
-		/// <summary></summary>
-		public PredefinedSettings(MKY.Settings.SettingsType settingsType)
-			: base(settingsType)
-		{
-			SetMyDefaults();
-			ClearChanged();
-		}
-
-		/// <remarks>
-		/// Set fields through properties even though changed flag will be cleared anyway.
-		/// There potentially is additional code that needs to be run within the property method.
-		/// </remarks>
-		public PredefinedSettings(PredefinedSettings rhs)
-			: base(rhs)
-		{
-			SelectedPage = rhs.SelectedPage;
-			ClearChanged();
-		}
-
-		/// <remarks>
-		/// Set fields through properties to ensure correct setting of changed flag.
-		/// </remarks>
-		protected override void SetMyDefaults()
-		{
-			base.SetMyDefaults();
-
-			SelectedPage = 1;
-		}
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("SelectedPage")]
-		public virtual int SelectedPage
-		{
-			get { return (this.selectedPage); }
-			set
-			{
-				if (this.selectedPage != value)
-				{
-					this.selectedPage = value;
-					SetChanged();
-				}
-			}
-		}
-
-		#endregion
 
 		#region Object Members
 
@@ -107,12 +64,11 @@ namespace YAT.Model.Settings
 			if (GetType() != obj.GetType())
 				return (false);
 
-			PredefinedSettings other = (PredefinedSettings)obj;
+			PeriodicSetting other = (PeriodicSetting)obj;
 			return
 			(
-				base.Equals(other) && // Compare all settings nodes.
-
-				(SelectedPage == other.SelectedPage)
+				(Enabled  == other.Enabled) &&
+				(Interval == other.Interval)
 			);
 		}
 
@@ -127,9 +83,24 @@ namespace YAT.Model.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+				Enabled .GetHashCode() ^
+				Interval.GetHashCode()
+			);
+		}
 
-				SelectedPage.GetHashCode()
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				Enabled + ", " +
+				Interval
 			);
 		}
 
@@ -137,8 +108,28 @@ namespace YAT.Model.Settings
 
 		#region Comparison Operators
 
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityTest for details.
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(PeriodicSetting lhs, PeriodicSetting rhs)
+		{
+			// Value type implementation of operator ==.
+			// See MKY.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(PeriodicSetting lhs, PeriodicSetting rhs)
+		{
+			return (!(lhs == rhs));
+		}
 
 		#endregion
 	}

@@ -54,6 +54,18 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool DisableKeywordsDefault = false;
 
+		/// <summary></summary>
+		public const bool SignalXOnBeforeEachTransmissionDefault = false;
+
+		/// <remarks>
+		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
+		/// </remarks>
+		public static PeriodicSetting SignalXOnPeriodicallyDefault
+		{
+			get { return (new PeriodicSetting(false, 1000)); }
+		}
+
 		private bool keepCommand;
 		private bool copyPredefined;
 		private bool sendImmediately;
@@ -61,6 +73,10 @@ namespace YAT.Domain.Settings
 		private int defaultLineDelay;
 		private int defaultLineRepeat;
 		private bool disableKeywords;
+
+		// Serial port specific send settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
+		private bool signalXOnBeforeEachTransmission;
+		private PeriodicSetting signalXOnPeriodically;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -92,6 +108,9 @@ namespace YAT.Domain.Settings
 			DefaultLineRepeat = rhs.DefaultLineRepeat;
 			DisableKeywords   = rhs.DisableKeywords;
 
+			SignalXOnBeforeEachTransmission = rhs.SignalXOnBeforeEachTransmission;
+			SignalXOnPeriodically           = rhs.SignalXOnPeriodically;
+
 			ClearChanged();
 		}
 
@@ -109,6 +128,9 @@ namespace YAT.Domain.Settings
 			DefaultLineDelay  = DefaultLineDelayDefault;
 			DefaultLineRepeat = DefaultLineRepeatDefault;
 			DisableKeywords   = DisableKeywordsDefault;
+
+			SignalXOnBeforeEachTransmission = SignalXOnBeforeEachTransmissionDefault;
+			SignalXOnPeriodically           = SignalXOnPeriodicallyDefault;
 		}
 
 		#region Properties
@@ -221,6 +243,36 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("SignalXOnBeforeEachTransmission")]
+		public virtual bool SignalXOnBeforeEachTransmission
+		{
+			get { return (this.signalXOnBeforeEachTransmission); }
+			set
+			{
+				if (this.signalXOnBeforeEachTransmission != value)
+				{
+					this.signalXOnBeforeEachTransmission = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SignalXOnPeriodically")]
+		public virtual PeriodicSetting SignalXOnPeriodically
+		{
+			get { return (this.signalXOnPeriodically); }
+			set
+			{
+				if (this.signalXOnPeriodically != value)
+				{
+					this.signalXOnPeriodically = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -267,7 +319,10 @@ namespace YAT.Domain.Settings
 				(DefaultDelay      == other.DefaultDelay) &&
 				(DefaultLineDelay  == other.DefaultLineDelay) &&
 				(DefaultLineRepeat == other.DefaultLineRepeat) &&
-				(DisableKeywords   == other.DisableKeywords)
+				(DisableKeywords   == other.DisableKeywords) &&
+
+				(SignalXOnBeforeEachTransmission == other.SignalXOnBeforeEachTransmission) &&
+				(SignalXOnPeriodically           == other.SignalXOnPeriodically)
 			);
 		}
 
@@ -282,7 +337,7 @@ namespace YAT.Domain.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				KeepCommand      .GetHashCode() ^
 				CopyPredefined   .GetHashCode() ^
@@ -290,7 +345,10 @@ namespace YAT.Domain.Settings
 				DefaultDelay     .GetHashCode() ^
 				DefaultLineDelay .GetHashCode() ^
 				DefaultLineRepeat.GetHashCode() ^
-				DisableKeywords  .GetHashCode()
+				DisableKeywords  .GetHashCode() ^
+
+				SignalXOnBeforeEachTransmission.GetHashCode() ^
+				SignalXOnPeriodically          .GetHashCode()
 			);
 		}
 
