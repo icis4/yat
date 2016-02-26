@@ -71,7 +71,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public NoData()
-				: base()
+				: base(true)
 			{
 			}
 		}
@@ -286,7 +286,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LeftMargin()
-				: base(" ")
+				: base(" ", true)
 			{
 			}
 		}
@@ -297,7 +297,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public Space()
-				: base(" ")
+				: base(" ", true)
 			{
 			}
 		}
@@ -308,7 +308,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RightMargin()
-				: base(" ")
+				: base(" ", true)
 			{
 			}
 		}
@@ -319,13 +319,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineBreak()
-				: base()
+				: base(true)
 			{
 			}
 
 			/// <summary></summary>
 			public LineBreak(Direction direction)
-				: base(direction, "")
+				: base(direction, "", true)
 			{
 			}
 		}
@@ -371,6 +371,7 @@ namespace YAT.Domain
 		private int dataCount;
 		private bool isData;
 		private bool isEol;
+		private bool isWhiteSpace;
 
 		#endregion
 
@@ -394,7 +395,25 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, string text)
 		{
-			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false);
+			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false, false);
+		}
+
+		/// <summary></summary>
+		private DisplayElement(bool isWhiteSpace)
+			: this("", isWhiteSpace)
+		{
+		}
+
+		/// <summary></summary>
+		private DisplayElement(string text, bool isWhiteSpace)
+			: this(Direction.None, text, isWhiteSpace)
+		{
+		}
+
+		/// <summary></summary>
+		private DisplayElement(Direction direction, string text, bool isWhiteSpace)
+		{
+			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false, isWhiteSpace);
 		}
 
 		/// <summary></summary>
@@ -414,17 +433,18 @@ namespace YAT.Domain
 		{
 			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, dataCount, true, isEol);
+			Initialize(direction, l, text, dataCount, true, isEol, false);
 		}
 
-		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol)
+		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol, bool isWhiteSpace)
 		{
-			this.direction = direction;
-			this.origin    = origin;
-			this.text      = text;
-			this.dataCount = dataCount;
-			this.isData    = isData;
-			this.isEol     = isEol;
+			this.direction    = direction;
+			this.origin       = origin;
+			this.text         = text;
+			this.dataCount    = dataCount;
+			this.isData       = isData;
+			this.isEol        = isEol;
+			this.isWhiteSpace = isWhiteSpace;
 		}
 
 		#endregion
@@ -494,6 +514,14 @@ namespace YAT.Domain
 		{
 			get { return (this.isEol); }
 			set { this.isEol = value; }
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("IsWhiteSpace")]
+		public virtual bool IsWhiteSpace
+		{
+			get { return (this.isWhiteSpace); }
+			set { this.isWhiteSpace = value;  }
 		}
 
 		#endregion
@@ -584,6 +612,9 @@ namespace YAT.Domain
 			if (this.isEol != de.isEol) // Check needed to deal with incomplete EOL sequences.
 				return (false);
 
+			if (this.isWhiteSpace != de.isWhiteSpace) // Self-explaining.
+				return (false);
+
 			return (true);
 		}
 
@@ -662,13 +693,14 @@ namespace YAT.Domain
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(indent); sb.Append("> Type:      "); sb.AppendLine(GetType().Name);
-			sb.Append(indent); sb.Append("> Direction: "); sb.AppendLine(this.direction.ToString());
-			sb.Append(indent); sb.Append("> Origin:    "); sb.AppendLine(this.origin.ToString());
-			sb.Append(indent); sb.Append("> Text:      "); sb.AppendLine(this.text);
-			sb.Append(indent); sb.Append("> DataCount: "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
-			sb.Append(indent); sb.Append("> IsData:    "); sb.AppendLine(this.isData.ToString());
-			sb.Append(indent); sb.Append("> IsEol:     "); sb.AppendLine(this.isEol.ToString());
+			sb.Append(indent); sb.Append("> Type:         "); sb.AppendLine(GetType().Name);
+			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(this.direction.ToString());
+			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(this.origin.ToString());
+			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(this.text);
+			sb.Append(indent); sb.Append("> DataCount:    "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
+			sb.Append(indent); sb.Append("> IsData:       "); sb.AppendLine(this.isData.ToString());
+			sb.Append(indent); sb.Append("> IsEol:        "); sb.AppendLine(this.isEol.ToString());
+			sb.Append(indent); sb.Append("> IsWhiteSpace: "); sb.AppendLine(this.isWhiteSpace.ToString());
 
 			return (sb.ToString());
 		}

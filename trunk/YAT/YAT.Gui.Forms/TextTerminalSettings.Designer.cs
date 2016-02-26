@@ -245,7 +245,7 @@ namespace YAT.Gui.Forms
 			this.checkBox_SkipEolCommentWhiteSpace.Name = "checkBox_SkipEolCommentWhiteSpace";
 			this.checkBox_SkipEolCommentWhiteSpace.Size = new System.Drawing.Size(193, 17);
 			this.checkBox_SkipEolCommentWhiteSpace.TabIndex = 3;
-			this.checkBox_SkipEolCommentWhiteSpace.Text = "Omit white spaces before indicators";
+			this.checkBox_SkipEolCommentWhiteSpace.Text = "Omit whitespaces before indicators";
 			this.checkBox_SkipEolCommentWhiteSpace.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolCommentWhiteSpace_CheckedChanged);
 			// 
 			// stringListEdit_EolCommentIndicators
