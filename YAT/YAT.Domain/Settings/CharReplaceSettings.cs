@@ -209,7 +209,7 @@ namespace YAT.Domain.Settings
 				(ControlCharRadix    == other.ControlCharRadix) &&
 				(ReplaceTab          == other.ReplaceTab) &&
 				(ReplaceSpace        == other.ReplaceSpace) &&
-				(HideXOnXOff       == other.HideXOnXOff)
+				(HideXOnXOff         == other.HideXOnXOff)
 			);
 		}
 
@@ -224,13 +224,13 @@ namespace YAT.Domain.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				ReplaceControlChars.GetHashCode() ^
 				ControlCharRadix   .GetHashCode() ^
 				ReplaceTab         .GetHashCode() ^
 				ReplaceSpace       .GetHashCode() ^
-				HideXOnXOff      .GetHashCode()
+				HideXOnXOff        .GetHashCode()
 			);
 		}
 

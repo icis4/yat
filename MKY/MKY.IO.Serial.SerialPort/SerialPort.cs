@@ -914,7 +914,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOn state.
 		/// </summary>
-		public virtual void SetInputXOn()
+		public virtual void SignalInputXOn()
 		{
 			AssertNotDisposed();
 
@@ -924,7 +924,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
-		public virtual void SetInputXOff()
+		public virtual void SignalInputXOff()
 		{
 			AssertNotDisposed();
 
@@ -940,9 +940,9 @@ namespace MKY.IO.Serial.SerialPort
 			// 'InputIsXOn' property.
 
 			if (InputIsXOn)
-				SetInputXOff();
+				SignalInputXOff();
 			else
-				SetInputXOn();
+				SignalInputXOn();
 		}
 
 		/// <summary>
@@ -1196,14 +1196,14 @@ namespace MKY.IO.Serial.SerialPort
 							wasXOn = this.manualInputWasXOn;
 
 						if (wasXOn)
-							SetInputXOn();
+							SignalInputXOn();
 
 						break;
 					}
 
 					default:
 					{
-						SetInputXOn();
+						SignalInputXOn();
 						break;
 					}
 				}

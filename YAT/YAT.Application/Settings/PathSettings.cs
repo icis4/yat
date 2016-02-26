@@ -187,7 +187,7 @@ namespace YAT.Application.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				this.MainFiles   .GetHashCode() ^
 				this.SendFiles   .GetHashCode() ^

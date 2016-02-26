@@ -222,7 +222,7 @@ namespace YAT.Application.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				AutoOpenWorkspace         .GetHashCode() ^
 				AutoSaveWorkspace         .GetHashCode() ^

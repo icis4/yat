@@ -45,12 +45,12 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOn state.
 		/// </summary>
-		void SetInputXOn();
+		void SignalInputXOn();
 
 		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
-		void SetInputXOff();
+		void SignalInputXOff();
 
 		/// <summary>
 		/// Toggles the input XOn/XOff state.

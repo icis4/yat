@@ -203,7 +203,7 @@ namespace YAT.Settings.Workspace
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				ProductVersion.GetHashCode()
 			);

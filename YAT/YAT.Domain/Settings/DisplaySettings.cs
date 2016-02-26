@@ -388,7 +388,7 @@ namespace YAT.Domain.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				SeparateTxRxRadix        .GetHashCode() ^
 				TxRadix                  .GetHashCode() ^

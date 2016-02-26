@@ -428,9 +428,9 @@ namespace YAT.Gui.Forms
 		{
 			int bytes;
 			if (int.TryParse(textBox_MaxSendRateSize.Text, out bytes) && (Math.Abs(bytes) == 1))
-				label_MaxSendRateInterval1.Text = "byte per";
+				label_MaxSendRateIntervalUnit1.Text = "byte per";
 			else
-				label_MaxSendRateInterval1.Text = "bytes per";
+				label_MaxSendRateIntervalUnit1.Text = "bytes per";
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -502,6 +502,49 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
+		}
+
+		private void checkBox_SignalXOnBeforeEachTransmission_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = checkBox_SignalXOnBeforeEachTransmission.Checked;
+		}
+
+		private void checkBox_SignalXOnPeriodicallyEnable_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				Domain.PeriodicSetting ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
+				ps.Enabled = checkBox_SignalXOnPeriodicallyEnable.Checked;
+				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically= ps;
+			}
+		}
+
+		private void textBox_SignalXOnPeriodicallyInterval_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int interval;
+				if (int.TryParse(textBox_SignalXOnPeriodicallyInterval.Text, out interval) && (interval >= 1))
+				{
+					Domain.PeriodicSetting ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
+					ps.Interval = interval;
+					this.settingsInEdit.Terminal.Send.SignalXOnPeriodically= ps;
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"Interval must be at least 1 ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					e.Cancel = true;
+				}
+			}
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -723,17 +766,24 @@ namespace YAT.Gui.Forms
 			checkBox_CopyPredefined.Checked  = this.settingsInEdit.Terminal.Send.CopyPredefined;
 			checkBox_SendImmediately.Checked = this.settingsInEdit.Terminal.Send.SendImmediately;
 
-			groupBox_Send_SerialPorts.Enabled     = isSerialPort;
-			checkBox_LimitOutputBuffer.Checked    = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
-			textBox_LimitOutputBufferSize.Enabled = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
-			textBox_LimitOutputBufferSize.Text    = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Size.ToString(CultureInfo.CurrentCulture);
-			checkBox_MaxSendRateEnable.Checked    = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateSize.Enabled       = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateSize.Text          = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
-			textBox_MaxSendRateInterval.Enabled   = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
-			textBox_MaxSendRateInterval.Text      = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
-			checkBox_NoSendOnOutputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-			checkBox_NoSendOnInputBreak.Checked   = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
+			groupBox_Send_SerialPorts.Enabled                = isSerialPort;
+			checkBox_LimitOutputBuffer.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
+			textBox_LimitOutputBufferSize.Enabled            = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
+			textBox_LimitOutputBufferSize.Text               = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Size.ToString(CultureInfo.CurrentCulture);
+			checkBox_MaxSendRateEnable.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+			textBox_MaxSendRateSize.Enabled                  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+			textBox_MaxSendRateSize.Text                     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
+			textBox_MaxSendRateInterval.Enabled              = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
+			textBox_MaxSendRateInterval.Text                 = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
+			checkBox_NoSendOnOutputBreak.Checked             = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+			checkBox_NoSendOnInputBreak.Checked              = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
+			checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
+			checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
+			checkBox_SignalXOnPeriodicallyEnable.Enabled     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
+			checkBox_SignalXOnPeriodicallyEnable.Checked     = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Enabled;
+			textBox_SignalXOnPeriodicallyInterval.Enabled    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
+			textBox_SignalXOnPeriodicallyInterval.Text       = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Interval.ToString(CultureInfo.CurrentCulture);
+			label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
 
 			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
 			//// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
@@ -799,16 +849,18 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
 			// Send:
-			this.settingsInEdit.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
-			this.settingsInEdit.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
-			this.settingsInEdit.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer   = MKY.IO.Serial.SerialPort.SerialPortSettings.LimitOutputBufferDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate         = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak  = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
-			this.settingsInEdit.Terminal.Send.DefaultDelay                 = Domain.Settings.SendSettings.DefaultDelayDefault;
-			this.settingsInEdit.Terminal.Send.DefaultLineDelay             = Domain.Settings.SendSettings.DefaultLineDelayDefault;
-			this.settingsInEdit.Terminal.Send.DisableKeywords              = Domain.Settings.SendSettings.DisableKeywordsDefault;
+			this.settingsInEdit.Terminal.Send.KeepCommand                     = Domain.Settings.SendSettings.KeepCommandDefault;
+			this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
+			this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer      = MKY.IO.Serial.SerialPort.SerialPortSettings.LimitOutputBufferDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
+			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
+			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
+			this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
+			this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
+			this.settingsInEdit.Terminal.Send.DisableKeywords                 = Domain.Settings.SendSettings.DisableKeywordsDefault;
 
 			// User:
 			this.settingsInEdit.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;

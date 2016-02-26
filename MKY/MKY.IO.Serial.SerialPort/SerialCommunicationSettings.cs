@@ -317,7 +317,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				BaudRate   .GetHashCode() ^
 				DataBits   .GetHashCode() ^

@@ -694,8 +694,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
 			// Break count:
-			bool showBreakCount = (this.settingsRoot.Status.ShowBreakCount && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
-			toolStripMenuItem_TerminalMenu_View_BreakCount.Enabled            = (isSerialPort && showBreakCount);
+			bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
+			toolStripMenuItem_TerminalMenu_View_BreakCount.Enabled            = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
 			toolStripMenuItem_TerminalMenu_View_BreakCount_ShowCount.Checked  = showBreakCount;
 			toolStripMenuItem_TerminalMenu_View_BreakCount_ResetCount.Enabled = showBreakCount;
 
@@ -1616,8 +1616,8 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Status_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
 			// Break count:
-			bool showBreakCount = (this.settingsRoot.Status.ShowBreakCount && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
-			contextMenuStrip_Status_BreakCount.Enabled            = (isSerialPort && showBreakCount);
+			bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
+			contextMenuStrip_Status_BreakCount.Enabled            = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
 			contextMenuStrip_Status_BreakCount_ShowCount.Checked  = showBreakCount;
 			contextMenuStrip_Status_BreakCount_ResetCount.Enabled = showBreakCount;
 
@@ -1837,22 +1837,22 @@ namespace YAT.Gui.Forms
 
 		private void toolStripStatusLabel_TerminalStatus_RFR_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleRfr();
+			this.terminal.ToggleRfr();
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_DTR_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleDtr();
+			this.terminal.ToggleDtr();
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_InputXOnXOff_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleInputXOnXOff();
+			this.terminal.ToggleInputXOnXOff();
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_OutputBreak_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleOutputBreak();
+			this.terminal.ToggleOutputBreak();
 		}
 
 		#endregion

@@ -295,7 +295,7 @@ namespace YAT.Settings.Terminal
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				TerminalIsStarted.GetHashCode() ^
 				LogIsOn          .GetHashCode()

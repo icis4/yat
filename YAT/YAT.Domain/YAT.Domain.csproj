@@ -120,6 +120,7 @@
     <Compile Include="Settings\CharReplaceSettings.cs" />
     <Compile Include="Settings\StatusSettings.cs" />
     <Compile Include="Settings\IOSettings.cs" />
+    <Compile Include="Structs.cs" />
     <Compile Include="TerminalFactory.cs" />
     <Compile Include="Terminal\DisplayLine.cs" />
     <Compile Include="Terminal\SendItem.cs" />

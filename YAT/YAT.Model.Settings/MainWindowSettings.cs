@@ -229,7 +229,7 @@ namespace YAT.Model.Settings
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				StartPosition.GetHashCode() ^
 				WindowState  .GetHashCode() ^

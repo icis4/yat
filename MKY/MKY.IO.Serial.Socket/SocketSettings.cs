@@ -485,7 +485,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				this.hostType              .GetHashCode() ^
 				this.remoteHost            .GetHashCode() ^

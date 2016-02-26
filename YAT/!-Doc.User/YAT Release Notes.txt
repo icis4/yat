@@ -110,11 +110,12 @@ Important changes:
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
-- Several other menu items and toolbar icons added (includes feature request #222).
 - XML schema on 'Monitor > Save To File...' aligned with XML schema of logging in XML. Schema
   is saved in additional .xsd file (related to feature requests #26 and #27).
+- Several other menu items and toolbar icons added (includes feature request #222).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).
+- Option to send XOn more frequently added for serial COM ports (feature request #206).
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
 - Help window is now sizeable to display more/all content (feature request #237).
 - Visual Studio upgraded to 2015 Community Edition, including installer (VSI).

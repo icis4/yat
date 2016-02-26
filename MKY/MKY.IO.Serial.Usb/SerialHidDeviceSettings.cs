@@ -236,7 +236,7 @@ namespace MKY.IO.Serial.Usb
 
 			return
 			(
-				base.GetHashCode() ^
+				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
 				deviceInfoHashCode ^
 				ReportFormat.GetHashCode() ^
