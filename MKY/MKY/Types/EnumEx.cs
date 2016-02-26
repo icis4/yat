@@ -450,7 +450,7 @@ namespace MKY
 		/// enumExType or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
-		/// value is either an empty string or only contains white space.
+		/// value is either an empty string or only contains whitespace.
 		/// 
 		/// -or-
 		/// 
@@ -474,7 +474,7 @@ namespace MKY
 		/// enumExType or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
-		/// value is either an empty string or only contains white space.
+		/// value is either an empty string or only contains whitespace.
 		/// 
 		/// -or-
 		/// 

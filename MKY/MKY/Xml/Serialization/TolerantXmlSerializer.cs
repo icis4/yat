@@ -309,7 +309,7 @@ namespace MKY.Xml.Serialization
 						break;
 					}
 
-					default: // Covers comments, text and white spaces.
+					default: // Covers comments, text and whitespaces.
 					{
 						TryToCopyValue(inputNavigator, outputNavigator);
 						break;
