@@ -677,7 +677,7 @@ namespace MKY.IO.Usb
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				lock (this.receiveQueue)
+				lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					bytesReceived = this.receiveQueue.Count;
 					data = new byte[bytesReceived];
@@ -849,7 +849,7 @@ namespace MKY.IO.Usb
 					if (acceptReport)
 					{
 						// Read data on this thread:
-						lock (this.receiveQueue)
+						lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 						{
 							foreach (byte b in input.Payload)
 								this.receiveQueue.Enqueue(b);

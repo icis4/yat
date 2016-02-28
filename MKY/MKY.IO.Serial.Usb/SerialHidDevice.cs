@@ -352,7 +352,7 @@ namespace MKY.IO.Serial.Usb
 
 			if (IsStarted)
 			{
-				lock (this.sendQueue)
+				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					foreach (byte b in data)
 						this.sendQueue.Enqueue(b);
@@ -410,12 +410,12 @@ namespace MKY.IO.Serial.Usb
 				// Ensure not to forward any events during closing anymore.
 				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive) // Check 'IsDisposed' first!
 				{
-					byte[] data;
-					lock (this.sendQueue)
-					{
-						if (this.sendQueue.Count <= 0)
-							break; // Let other threads do their job and wait until signaled again.
+					if (this.sendQueue.Count <= 0) // No lock required, just checking for empty.
+						break; // Let other threads do their job and wait until signaled again.
 
+					byte[] data;
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					{
 						data = this.sendQueue.ToArray();
 						this.sendQueue.Clear();
 					}
@@ -707,11 +707,11 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		private void device_DataReceived(object sender, EventArgs e)
 		{
-			byte[] data;
-			this.device.Receive(out data);
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized. At the
+			{                        // same time this lock prevents race-conditions of 'DataReceived'.
+				byte[] data;
+				this.device.Receive(out data);
 
-			lock (this.receiveQueue)
-			{
 				foreach (byte b in data)
 					this.receiveQueue.Enqueue(b);
 			}
@@ -765,12 +765,12 @@ namespace MKY.IO.Serial.Usb
 				// Ensure not to forward any events during closing anymore.
 				while (!IsDisposed && this.receiveThreadRunFlag && IsOpen) // Check 'IsDisposed' first!
 				{
-					byte[] data;
-					lock (this.receiveQueue)
-					{
-						if (this.receiveQueue.Count <= 0)
-							break; // Let other threads do their job and wait until signaled again.
+					if (this.receiveQueue.Count <= 0) // No lock required, just checking for empty.
+						break; // Let other threads do their job and wait until signaled again.
 
+					byte[] data;
+					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+					{
 						data = this.receiveQueue.ToArray();
 						this.receiveQueue.Clear();
 					}
