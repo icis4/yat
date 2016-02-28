@@ -49,6 +49,35 @@ namespace MKY.Diagnostics
 	#endif
 
 		/// <summary>
+		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Trace"/>.
+		/// </summary>
+		[Conditional("TRACE")]
+		public static void WriteTimeStamp(Type type)
+		{
+			WriteTimeStamp(type, "");
+		}
+
+		/// <summary>
+		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Trace"/>.
+		/// </summary>
+		[Conditional("TRACE")]
+		public static void WriteTimeStamp(Type type, string callerMemberName)
+		{
+			WriteTimeStamp(type, callerMemberName, "");
+		}
+
+		/// <summary>
+		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Trace"/>.
+		/// </summary>
+		[Conditional("TRACE")]
+		public static void WriteTimeStamp(Type type, string callerMemberName, string message)
+		{
+		#if (TRACE)
+			DiagnosticsWriterOutput.WriteTimeStamp(traceWrapper, type, callerMemberName, message);
+		#endif
+		}
+
+		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>

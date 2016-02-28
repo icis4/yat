@@ -29,6 +29,7 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -45,6 +46,51 @@ namespace MKY.Diagnostics
 		//==========================================================================================
 		// Static Methods
 		//==========================================================================================
+
+		/// <summary>
+		/// Writes source, type and time stamp to the given writer.
+		/// </summary>
+		/// <remarks>
+		/// There are predefined variants for the static objects
+		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Trace"/> and
+		/// <see cref="System.Console"/> available in
+		/// <see cref="MKY.Diagnostics.DebugEx"/> and
+		/// <see cref="MKY.Diagnostics.TraceEx"/> and
+		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// </remarks>
+		public static void WriteTimeStamp(IDiagnosticsWriter writer, Type type, string callerMemberName, string message)
+		{
+			writer.Write(DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo));
+
+			if (type != null)
+			{
+				writer.Write(" @ ");
+				writer.Write(type.FullName);
+			}
+
+			if (!string.IsNullOrEmpty(callerMemberName))
+			{
+				if (type != null)
+				{
+					writer.Write(".");
+					writer.Write(callerMemberName);
+				}
+				else
+				{
+					writer.Write(" @ ");
+					writer.Write(callerMemberName);
+				}
+			}
+
+			if (!string.IsNullOrEmpty(message))
+			{
+				writer.Write(" : ");
+				writer.Write(message);
+			}
+
+			writer.WriteLine("");
+		}
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
@@ -183,6 +229,41 @@ namespace MKY.Diagnostics
 		// Private Static Methods
 		//==========================================================================================
 
+		private static void WriteException(IDiagnosticsWriter writer, Exception ex)
+		{
+			Exception exception = ex;
+			int exceptionLevel = 0;
+
+			while (exception != null)
+			{
+				if (exceptionLevel == 0)
+					writer.WriteLine("Exception:");
+				else
+					writer.WriteLine("Inner exception level " + exceptionLevel + ":");
+
+				writer.Indent();
+				{
+					WriteType   (writer, exception.GetType());
+					WriteMessage(writer, exception.Message);
+					WriteSource (writer, exception.Source);
+					WriteStack  (writer, exception.StackTrace);
+				}
+				writer.Unindent();
+
+				exception = exception.InnerException;
+				exceptionLevel++;
+			}
+		}
+
+		private static void WriteType(IDiagnosticsWriter writer, Type type)
+		{
+			if (type != null)
+			{
+				writer.Write("Type: ");
+				writer.WriteLine(type.ToString());
+			}
+		}
+
 		private static void WriteMessage(IDiagnosticsWriter writer, string message)
 		{
 			if (!string.IsNullOrEmpty(message))
@@ -202,38 +283,6 @@ namespace MKY.Diagnostics
 				}
 				writer.Unindent();
 			}
-		}
-
-		private static void WriteException(IDiagnosticsWriter writer, Exception ex)
-		{
-			Exception exception = ex;
-			int exceptionLevel = 0;
-
-			while (exception != null)
-			{
-				if (exceptionLevel == 0)
-					writer.WriteLine("Exception:");
-				else
-					writer.WriteLine("Inner exception level " + exceptionLevel + ":");
-
-				writer.Indent();
-				{
-					WriteType(writer, exception.GetType());
-					WriteMessage(writer, exception.Message);
-					WriteSource(writer, exception.Source);
-					WriteStack(writer, exception.StackTrace);
-				}
-				writer.Unindent();
-
-				exception = exception.InnerException;
-				exceptionLevel++;
-			}
-		}
-
-		private static void WriteType(IDiagnosticsWriter writer, Type type)
-		{
-			writer.Write("Type: ");
-			writer.WriteLine(type.ToString());
 		}
 
 		private static void WriteSource(IDiagnosticsWriter writer, string source)
