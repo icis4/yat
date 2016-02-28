@@ -59,6 +59,30 @@ namespace MKY.Diagnostics
 			}
 
 			/// <summary>
+			/// Writes source, type and time stamp to the output writer of this object.
+			/// </summary>
+			public void WriteTimeStamp(Type type)
+			{
+				WriteTimeStamp(type, "");
+			}
+
+			/// <summary>
+			/// Writes source, type and time stamp to the output writer of this object.
+			/// </summary>
+			public void WriteTimeStamp(Type type, string callerMemberName)
+			{
+				WriteTimeStamp(type, callerMemberName, "");
+			}
+
+			/// <summary>
+			/// Writes source, type and time stamp to the output writer of this object.
+			/// </summary>
+			public void WriteTimeStamp(Type type, string callerMemberName, string message)
+			{
+				DiagnosticsWriterOutput.WriteTimeStamp(writer, type, callerMemberName, message);
+			}
+
+			/// <summary>
 			/// Writes source, type, message and stack of the given exception and its inner
 			/// exceptions to the output writer of this object.
 			/// </summary>
