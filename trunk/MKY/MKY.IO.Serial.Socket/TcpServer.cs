@@ -726,7 +726,7 @@ namespace MKY.IO.Serial.Socket
 			// No clue why the 'Sent' event fires once before actual data is being sent...
 			if (e.Buffer != null)
 			{
-				lock (this.dataSentQueue)
+				lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					foreach (byte b in e.Buffer)
 						this.dataSentQueue.Enqueue(b);
@@ -781,12 +781,12 @@ namespace MKY.IO.Serial.Socket
 				// Ensure not to forward any events during closing anymore.
 				while (!IsDisposed && this.dataSentThreadRunFlag && IsOpen) // Check 'IsDisposed' first!
 				{
-					byte[] data;
-					lock (this.dataSentQueue)
-					{
-						if (this.dataSentQueue.Count <= 0)
-							break; // Let other threads do their job and wait until signaled again.
+					if (this.dataSentQueue.Count <= 0) // No lock required, just checking for empty.
+						break; // Let other threads do their job and wait until signaled again.
 
+					byte[] data;
+					lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+					{
 						data = this.dataSentQueue.ToArray();
 						this.dataSentQueue.Clear();
 					}
