@@ -524,60 +524,67 @@ namespace YAT.Domain
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
-			// Add space if necessary:
-			if (ElementsAreSeparate(d))
-			{
-				if (lineState.LineElements.DataCount > 0)
-					lp.Add(new DisplayElement.Space());
-			}
-
-			// Process data:
+			// Convert data:
 			DisplayElement de = ByteToElement(b, d);
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
 			lineState.Eol.Enqueue(b);
 			if (lineState.Eol.IsCompleteMatch)
 			{
-				if (de.IsData)
-					lineState.EolElements.Add(de); // No clone needed as element has just been created.
+				if (TextTerminalSettings.ShowEol)
+				{
+					if (de.IsData)
+						lineState.EolElements.Add(de); // No clone needed as element has just been created.
 
-				// Normal case, EOL consists of a single sequence of control characters:
-				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Count))
-				{
-					// Mark element as EOL:
-					DisplayElement item = lineState.EolElements[0].Clone();
-					item.IsEol = true;
-					lp.Add(item); // No clone needed as element has just been cloned above.
-				}
-				else
-				{
-					// Ensure that only as many elements as EOL contains are marked as EOL.
-					// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
-					
-					// Unfold the elements into single elements for easier processing:
-					List<DisplayElement> l = new List<DisplayElement>();
-					foreach (DisplayElement item in lineState.EolElements)
+					// Normal case, EOL consists of a single sequence of control characters:
+					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Count))
 					{
-						foreach (Pair<byte[], string> originItem in item.Origin)
-							l.Add(item.RecreateFromOriginItem(originItem));
+						// Unfold the elements into single elements for correct processing:
+						List<DisplayElement> l = new List<DisplayElement>();
+						foreach (DisplayElement item in lineState.EolElements)
+						{
+							foreach (Pair<byte[], string> originItem in item.Origin)
+								l.Add(item.RecreateFromOriginItem(originItem));
+						}
+
+						// Add them as separate items:
+						foreach (DisplayElement item in l)
+						{
+							AddSpaceIfNecessary(lineState, d, lp);
+							lp.Add(item); // No clone needed as all items have just been recreated futher above.
+						}
 					}
-
-					// Count data:
-					int dataCount = 0;
-					foreach (DisplayElement item in l)
-						dataCount += item.DataCount;
-
-					// Mark only true EOL element as EOL:
-					int firstEolIndex = dataCount - lineState.Eol.Sequence.Count;
-					int currentIndex = 0;
-					foreach (DisplayElement item in l)
+					else
 					{
-						currentIndex += item.DataCount;
+						// Ensure that only as many elements as EOL contains are marked as EOL.
+						// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
+					
+						// Unfold the elements into single elements for correct processing:
+						List<DisplayElement> l = new List<DisplayElement>();
+						foreach (DisplayElement item in lineState.EolElements)
+						{
+							foreach (Pair<byte[], string> originItem in item.Origin)
+								l.Add(item.RecreateFromOriginItem(originItem));
+						}
 
-						if (currentIndex > firstEolIndex)
-							item.IsEol = true;
+						// Count data:
+						int dataCount = 0;
+						foreach (DisplayElement item in l)
+							dataCount += item.DataCount;
 
-						lp.Add(item); // No clone needed as all items have just been recreated futher above.
+						// Mark only true EOL elements as EOL:
+						int firstEolIndex = dataCount - lineState.Eol.Sequence.Count;
+						int currentIndex = 0;
+						foreach (DisplayElement item in l)
+						{
+							currentIndex += item.DataCount;
+
+							if (currentIndex > firstEolIndex)
+								item.IsEol = true;
+
+							AddSpaceIfNecessary(lineState, d, lp);
+							lp.Add(item); // No clone needed as all items have just been recreated futher above.
+						}
 					}
 				}
 
@@ -605,11 +612,21 @@ namespace YAT.Domain
 				TreatEolAsNormal(lineState, lp);
 
 				// Add non-EOL element:
+				AddSpaceIfNecessary(lineState, d, lp);
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
+		}
+
+		private void AddSpaceIfNecessary(LineState lineState, IODirection d, DisplayLinePart lp)
+		{
+			if (ElementsAreSeparate(d))
+			{
+				if (lineState.LineElements.DataCount > 0)
+					lp.Add(new DisplayElement.Space());
+			}
 		}
 
 		private void TreatEolAsNormal(LineState lineState, DisplayLinePart lp)

@@ -848,9 +848,9 @@ namespace MKY.IO.Serial.SerialPort
 								{
 									string errorText;
 									if (this.settings.Communication.FlowControlUsesRfrCts && this.port.CtsHolding)
-										errorText = "No data can be sent while port is in CTS holding state, data is being queued and will be sent when holding has resumed";
+										errorText = "No data can be sent while output is in CTS holding state, data is being queued and will be sent when holding has resumed";
 									else if (this.settings.Communication.FlowControlUsesXOnXOff)
-										errorText = "No data can be sent while port is in output XOff state, data is being queued and will be sent after XOn has been received";
+										errorText = "No data can be sent while output is in XOff state, data is being queued and will be sent after XOn has been received";
 									else
 										errorText = "No data can currently be sent, data is being queued and will be sent when possible again";
 
@@ -879,7 +879,7 @@ namespace MKY.IO.Serial.SerialPort
 								(
 									ErrorSeverity.Acceptable,
 									Direction.Output,
-									"No data can be sent while port is in output break state, data is being queued and will be sent when break has resumed")
+									"No data can be sent while output is in break state, data is being queued and will be sent when break has resumed")
 								);
 
 								isOutputBreakOldAndErrorHasBeenSignaled = true;

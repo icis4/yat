@@ -751,7 +751,7 @@ namespace YAT.Gui.Forms
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
 			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
-			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
 			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharReplace.HideXOnXOff;
 
 			// Communication:
