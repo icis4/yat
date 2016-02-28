@@ -714,7 +714,7 @@ namespace YAT.Domain
 
 				this.rawTerminal.Stop();
 
-				lock (this.sendQueue)
+				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					this.sendQueue.Clear();
 				}
@@ -780,7 +780,7 @@ namespace YAT.Domain
 		private void DoSend(SendItem item)
 		{
 			// Enqueue the items for sending:
-			lock (this.sendQueue)
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				this.sendQueue.Enqueue(item);
 
 			// Signal send thread:
@@ -829,12 +829,13 @@ namespace YAT.Domain
 				// Ensure not to forward any events during closing anymore.
 				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend) // Check 'IsDisposed' first!
 				{
-					SendItem[] pendingItems;
-					lock (this.sendQueue)
-					{
-						if (this.sendQueue.Count <= 0)
-							break; // Let other threads do their job and wait until signaled again.
+					if (this.sendQueue.Count <= 0) // No lock required, just checking for empty.
+						break; // Let other threads do their job and wait until signaled again.
 
+					// Retrieve elements from queue one-by-one
+					SendItem[] pendingItems;
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					{
 						pendingItems = this.sendQueue.ToArray();
 						this.sendQueue.Clear();
 					}
@@ -1619,8 +1620,10 @@ namespace YAT.Domain
 
 		private void periodicXOnTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			// Ensure that only one timer elapsed event thread is active at a time.
-			// Without this exclusivity, two timer threads could create a race condition.
+			// Ensure that only one timer elapsed event thread is active at a time. Because if the
+			// execution takes longer than the timer interval, more and more timer threads will pend
+			// here, and then be executed after the previous has been executed. This will require
+			// more and more resources and lead to a drop in performance.
 			if (Monitor.TryEnter(periodicXOnTimer_Elapsed_SyncObj))
 			{
 				try
@@ -2313,12 +2316,12 @@ namespace YAT.Domain
 			}
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx))
 			{
-				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(e.Message));
+				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
 				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.LineBreak());
 			}
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx))
 			{
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(e.Message));
+				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
 				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.LineBreak());
 			}
 			else

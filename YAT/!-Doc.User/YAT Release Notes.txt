@@ -115,7 +115,8 @@ Important changes:
 - Several other menu items and toolbar icons added (includes feature request #222).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).
-- Option to send XOn more frequently added for serial COM ports (feature request #206).
+- Serial COM port options to send XOn (flow control) more frequently added (feature request #206).
+- Handling of serial COM port XOff state (flow control) improved (bugs #255 and #295).
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
 - Help window is now sizeable to display more/all content (feature request #237).
 - Visual Studio upgraded to 2015 Community Edition, including installer (VSI).
