@@ -539,7 +539,7 @@ namespace YAT.Domain
 		{
 			elementsForNextLine = null;
 
-			// Process data:
+			// Convert data:
 			DisplayElement de = ByteToElement(b, d);
 			DisplayLinePart lp = new DisplayLinePart();
 

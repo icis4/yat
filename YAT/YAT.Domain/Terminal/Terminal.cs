@@ -51,7 +51,6 @@ using System.Threading;
 
 using MKY;
 using MKY.Diagnostics;
-using MKY.Text;
 using MKY.Windows.Forms;
 
 #endregion
@@ -1665,13 +1664,11 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
 		{
-			bool replaceToAscii = ((TerminalSettings.CharReplace.ReplaceControlChars) &&
-								   (TerminalSettings.CharReplace.ControlCharRadix == ControlCharRadix.AsciiMnemonic));
-			bool hideXOnXOff    =  (TerminalSettings.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually &&
-								    TerminalSettings.CharReplace.HideXOnXOff);
+			bool isXOnXOffByte = MKY.IO.Ports.SerialPortSettings.IsXOnXOffByte(b);
+			bool hideXOnXOff   = (TerminalSettings.IO.SerialPort.Communication.FlowControlUsesXOnXOff && TerminalSettings.CharReplace.HideXOnXOff);
+			bool isByteToHide  = (isXOnXOffByte && hideXOnXOff);
 
-			bool isControlChar = ((b  < 0x20) || (b == 0x7F));
-			bool isXOnXOffChar = ((b == 0x11) || (b == 0x13));
+			bool isControlByte = MKY.Text.Ascii.IsControlByte(b);
 
 			bool error = false;
 			string text = "";
@@ -1683,23 +1680,20 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					if (isControlChar)
+					if (isByteToHide)
 					{
-						if (isXOnXOffChar && hideXOnXOff)
-						{
-							// Do nothing, ignore the character, this results in hiding.
-						}
+						// Do nothing, ignore the character, this results in hiding.
+					}
+					else if (isControlByte)
+					{
+						if (TerminalSettings.CharReplace.ReplaceControlChars)
+							text = ByteToControlCharReplacementString(b, r);
 						else
-						{
-							if (replaceToAscii)
-								text = ByteToAsciiString(b);
-							else
-								text = ByteToNumericRadixString(b, r);
-						}
+							text = ByteToNumericRadixString(b, r); // Current display radix.
 					}
 					else
 					{
-						text = ByteToNumericRadixString(b, r);
+						text = ByteToNumericRadixString(b, r); // Current display radix.
 					}
 					break;
 				}
@@ -1707,34 +1701,16 @@ namespace YAT.Domain
 				case Radix.Char:
 				case Radix.String:
 				{
-					if (isControlChar)
+					if (isByteToHide)
 					{
-						if (isXOnXOffChar && hideXOnXOff)
-						{
-							// Do nothing, ignore the character, this results in hiding.
-						}
+						// Do nothing, ignore the character, this results in hiding.
+					}
+					else if (isControlByte)
+					{
+						if (TerminalSettings.CharReplace.ReplaceControlChars)
+							text = ByteToControlCharReplacementString(b, r);
 						else
-						{
-							if (replaceToAscii)
-							{
-								text = ByteToAsciiString(b);
-							}
-							else
-							{
-								error = true; // Signal error.
-
-								switch (d)
-								{
-									case IODirection.Tx: text = "Sent";     break;
-									case IODirection.Rx: text = "Received"; break;
-									default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
-								}
-
-								text += " ASCII control character";
-								text += " <" + b.ToString("X2", CultureInfo.InvariantCulture) + "h>";
-								text += " cannot be displayed in the current settings, enable control character replacement to do so";
-							}
-						}
+							text = ByteToCharacterString(b);
 					}
 					else if (b == ' ') // Space.
 					{
@@ -1745,7 +1721,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						text = ((char)b).ToString();
+						ByteToCharacterString(b);
 					}
 					break;
 				}
@@ -1758,16 +1734,11 @@ namespace YAT.Domain
 
 			if (!error)
 			{
-				if ((b == '\t') && !this.terminalSettings.CharReplace.ReplaceTab) // Tab.
+				if (isByteToHide)
 				{
-					switch (d)
-					{
-						case IODirection.Tx: return (new DisplayElement.TxData(b, text));
-						case IODirection.Rx: return (new DisplayElement.RxData(b, text));
-						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
-					}
+					return (new DisplayElement.NoData()); // Return nothing, ignore the character, this results in hiding.
 				}
-				else if (isControlChar)
+				else if (isControlByte)
 				{
 					switch (d)
 					{
@@ -1794,12 +1765,19 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected virtual string ByteToCharacterString(byte b)
+		{
+			return (((char)b).ToString());
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToAsciiString(byte b)
 		{
 			if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab)
 				return ("\t");
 			else
-				return ("<" + Ascii.ConvertToMnemonic(b) + ">");
+				return ("<" + MKY.Text.Ascii.ConvertToMnemonic(b) + ">");
 		}
 
 		/// <summary></summary>
@@ -1841,6 +1819,29 @@ namespace YAT.Domain
 				{
 					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
 				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected virtual string ByteToControlCharReplacementString(byte b, Radix r)
+		{
+			switch (TerminalSettings.CharReplace.ControlCharRadix)
+			{
+				case ControlCharRadix.Bin:
+				case ControlCharRadix.Oct:
+				case ControlCharRadix.Dec:
+				case ControlCharRadix.Hex:
+					return (ByteToNumericRadixString(b, (Radix)TerminalSettings.CharReplace.ControlCharRadix));
+
+				case ControlCharRadix.Chr:
+					return (ByteToCharacterString(b));
+
+				case ControlCharRadix.AsciiMnemonic:
+					return (ByteToAsciiString(b));
+
+				default:
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid ASCII control character radix." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
 			}
 		}
 

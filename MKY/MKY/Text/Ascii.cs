@@ -44,6 +44,14 @@ namespace MKY.Text
 		public const int MnemonicMaxLength = 4;
 
 		/// <summary>
+		/// Returns whether the given byte is a control byte.
+		/// </summary>
+		public static bool IsControlByte(byte code)
+		{
+			return ((code  < 0x20) || (code == 0x7F));
+		}
+
+		/// <summary>
 		/// Converts an ASCII code into according mnemonic.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>

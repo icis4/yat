@@ -55,8 +55,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		Chr = Radix.Char,
 
-		/// <summary></summary>
-		Str = Radix.String,
+		// String makes no sense for single byte/character replacement.
 
 		/// <summary></summary>
 		AsciiMnemonic,
@@ -111,7 +110,8 @@ namespace YAT.Domain
 			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>();
 			foreach (RadixEx radix in RadixEx.GetItems())
 			{
-				items.Add((ControlCharRadixEx)((Radix)radix));
+				if (radix != Radix.String) // String makes no sense for single byte/character replacement.
+					items.Add((Radix)radix);
 			}
 			items.Add(new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic));
 			return (items.ToArray());

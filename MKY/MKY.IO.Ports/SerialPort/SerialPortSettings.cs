@@ -313,6 +313,14 @@ namespace MKY.IO.Ports
 			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
 		}
 
+		/// <summary>
+		/// Returns whether the given byte is an XOn or XOff byte.
+		/// </summary>
+		public static bool IsXOnXOffByte(byte b)
+		{
+			return ((b == XOnByte) || (b == XOffByte));
+		}
+
 		#region Comparison Operators
 
 		/// <summary></summary>

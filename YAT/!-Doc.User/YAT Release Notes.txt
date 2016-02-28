@@ -116,7 +116,6 @@ Important changes:
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).
 - Serial COM port options to send XOn (flow control) more frequently added (feature request #206).
-- Handling of serial COM port XOff state (flow control) improved (bugs #255 and #295).
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
 - Help window is now sizeable to display more/all content (feature request #237).
 - Visual Studio upgraded to 2015 Community Edition, including installer (VSI).
@@ -129,6 +128,8 @@ Fixed bugs:
   or restart the computer. In addition, it may be required to disconnect or reset any device sending
   continuous data. Otherwise, related serial COM ports may no longer be opened by an application.
   Issue is being reported by many users of .NET, but Microsoft seems to have no plans on fixing it.
+- Handling of serial COM port XOff state (flow control) fixed and improved (bugs #255 and #295).
+- Settings related to XOn/XOff and ASCII control character replacement improved (bug #319).
 - Subsequent log files are now properly named according to the configured settings. File names that
   include the time stamp now properly use the time stamp of the open operation (related to feature
   requests #69, #103, #233, #245).
