@@ -250,8 +250,10 @@ namespace MKY.Time
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			// Ensure that only one timer elapsed event thread is active at a time.
-			// Without this exclusivity, two timer threads could create a race condition.
+			// Ensure that only one timer elapsed event thread is active at a time. Because if the
+			// execution takes longer than the timer interval, more and more timer threads will pend
+			// here, and then be executed after the previous has been executed. This will require
+			// more and more resources and lead to a drop in performance.
 			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
 			{
 				try
