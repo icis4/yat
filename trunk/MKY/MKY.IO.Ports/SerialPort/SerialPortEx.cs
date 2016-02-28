@@ -56,7 +56,10 @@ namespace MKY.IO.Ports
 	/// Serial port component based on <see cref="System.IO.Ports.SerialPort"/>.
 	/// </summary>
 	/// <remarks>
-	/// There is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
+	/// Some detailed information on .NET implementation can be found at Kim Hamilton's post at
+	/// http://www.innovatic.dk/knowledg/SerialCOM/SerialCOM.htm.
+	/// 
+	/// Note, there is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
 	/// 
 	/// Google for...
 	///  > [UnauthorizedAccessException "access to the port"]
@@ -635,6 +638,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Serial port control pins.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public virtual SerialPortControlPins ControlPins
 		{
 			get
@@ -643,18 +647,25 @@ namespace MKY.IO.Ports
 
 				SerialPortControlPins pins = new SerialPortControlPins();
 
-				if (HandshakeIsNotUsingRts)
-					pins.Rfr = RfrEnable; // 'RfrEnable' must not be accessed if it is used by the base class!
-				else
-					pins.Rfr = true;
-
-				pins.Dtr = DtrEnable;
-
-				if (IsOpen) // Ensure that incoming signals are only retrieved while port is open.
+				try
 				{
-					pins.Cts = CtsHolding;
-					pins.Dsr = DsrHolding;
-					pins.Dcd = CDHolding;
+					if (HandshakeIsNotUsingRts)
+						pins.Rfr = RfrEnable; // 'RfrEnable' must not be accessed if it is used by the base class!
+					else
+						pins.Rfr = true;
+
+					pins.Dtr = DtrEnable;
+
+					if (IsOpen) // Ensure that incoming signals are only retrieved while port is open.
+					{
+						pins.Cts = CtsHolding;
+						pins.Dsr = DsrHolding;
+						pins.Dcd = CDHolding;
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex);
 				}
 
 				return (pins);
@@ -884,10 +895,11 @@ namespace MKY.IO.Ports
 			{
 				try
 				{
-					// Flush() can throw System.Exception! Work-around by simply waiting!
-
 					while (BytesToWrite > 0)
 						Thread.Sleep(TimeSpan.Zero);
+
+					// Alternatively, base.BaseStream.Flush() could be called.
+					// But that approach doesn't offer flexibility, so no-go.
 				}
 				catch (Exception ex)
 				{
@@ -908,6 +920,7 @@ namespace MKY.IO.Ports
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
 		/// </exception>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public new void Close()
 		{
 			AssertNotDisposed();

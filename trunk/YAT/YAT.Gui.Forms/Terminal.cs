@@ -3656,11 +3656,25 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
+					// By default, all are visible and disabled:
+
 					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 						sl.Image = off;
 
 					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 						sl.ForeColor = SystemColors.ControlText;
+
+					// Exceptions:
+
+					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+					toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
+					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 				}
 			}
 		}

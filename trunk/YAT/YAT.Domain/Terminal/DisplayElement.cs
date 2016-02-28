@@ -353,7 +353,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public ErrorInfo(Direction direction, string message)
-				: base(direction, "<Error: " + message + ">")
+				: this(Direction.None, message, false)
+			{
+			}
+
+			/// <summary></summary>
+			public ErrorInfo(Direction direction, string message, bool warningOnly)
+				: base(direction, (warningOnly ? ("<Warning: " + message + ">") : ("<Error: " + message + ">")))
 			{
 			}
 		}
