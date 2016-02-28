@@ -48,7 +48,6 @@ namespace MKY.Time
 		private int window;
 
 		private Queue<TimeStampItem<int>> queue = new Queue<TimeStampItem<int>>();
-		private object queueSyncObj = new object();
 		private int value;
 
 		#endregion
@@ -134,13 +133,13 @@ namespace MKY.Time
 
 		private void ClearQueue()
 		{
-			lock (this.queueSyncObj)
+			lock (this.queue) // Lock is required because type is not synchronized and whole queue is accessed via ToArray().
 				this.queue.Clear();
 		}
 
 		private void AddValueToQueue(int value)
 		{
-			lock (this.queueSyncObj)
+			lock (this.queue) // Lock is required because type is not synchronized and whole queue is accessed via ToArray().
 				this.queue.Enqueue(new TimeStampItem<int>(value));
 		}
 
@@ -154,7 +153,7 @@ namespace MKY.Time
 			bool isWithinWindow = true;
 			DateTime otherEndOfWindow = (now - TimeSpan.FromMilliseconds(this.window));
 
-			lock (this.queueSyncObj)
+			lock (this.queue) // Lock is required because type is not synchronized and whole queue is accessed via ToArray().
 			{
 				while ((this.queue.Count > 0) && isWithinWindow)
 				{
@@ -190,7 +189,7 @@ namespace MKY.Time
 				DateTime now = DateTime.Now;
 
 				TimeStampItem<int>[] qa;
-				lock (this.queueSyncObj)
+				lock (this.queue) // Lock is required because type is not synchronized and whole queue is accessed via ToArray().
 					qa = this.queue.ToArray();
 
 				foreach (TimeStampItem<int> tsi in qa)
