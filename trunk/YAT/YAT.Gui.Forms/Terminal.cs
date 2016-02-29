@@ -40,6 +40,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
@@ -3516,6 +3517,7 @@ namespace YAT.Gui.Forms
 			ioStatusIndicatorFlashingIsOn = false; // Reset flashing phase (initially 'false').
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void SetIOControlControls()
 		{
 			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
@@ -3580,9 +3582,16 @@ namespace YAT.Gui.Forms
 					var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (port != null)
 					{
-						pins        = port.ControlPins;
-						inputBreak  = port.InputBreak;
-						outputBreak = port.OutputBreak;
+						try // Fail-safe implementation, especially catching exceptions while closing.
+						{
+							pins        = port.ControlPins;
+							inputBreak  = port.InputBreak;
+							outputBreak = port.OutputBreak;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to retrieve control pin state");
+						}
 					}
 					else
 					{
@@ -3600,9 +3609,16 @@ namespace YAT.Gui.Forms
 					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 					if (x != null)
 					{
-					////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
-						outputIsXOn     = x.OutputIsXOn;
-						inputIsXOn      = x.InputIsXOn;
+						try // Fail-safe implementation, especially catching exceptions while closing.
+						{
+						////indicateXOnXOff = x.XOnXOffIsInUse; >> See above (bug #214).
+							outputIsXOn     = x.OutputIsXOn;
+							inputIsXOn      = x.InputIsXOn;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
+						}
 					}
 
 					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;

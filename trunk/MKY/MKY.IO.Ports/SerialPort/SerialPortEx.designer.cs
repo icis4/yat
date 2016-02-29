@@ -17,6 +17,7 @@ namespace MKY.IO.Ports
 		/// Clean up any resources being used.
 		/// </summary>
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:
@@ -31,15 +32,16 @@ namespace MKY.IO.Ports
 						// Attention, the base stream is only available if the port is open!
 						if ((this.IsOpen) && (this.BaseStream != null))
 						{
-							this.BaseStream.Flush();
+							// Attention, do not call BaseStream.Flush() !!!
+							// It will block if the device is no longer available !!!
+
 							this.BaseStream.Close();
 
 							// Attention, do not call BaseStream.Dispose() !!!
 							// It can throw after a call to Close() !!!
 						}
 					}
-					catch (ObjectDisposedException) { }     // May happen on BaseStream.Close().
-					catch (UnauthorizedAccessException) { } // May happen on BaseStream.Close().
+					catch (Exception) { } // May be 'IOException' or 'ObjectDisposedException' or ...
 				}
 
 				// Dispose designer generated managed resources if requested:
@@ -57,7 +59,7 @@ namespace MKY.IO.Ports
 				// This fixes a result of the deadlock issue described in the header of this class.
 				base.Dispose(disposing);
 			}
-			catch (UnauthorizedAccessException) { }
+			catch (Exception) { } // May be 'UnauthorizedAccessException' or ...
 		}
 
 		#region Component Designer generated code

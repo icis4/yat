@@ -321,7 +321,7 @@ namespace MKY.IO.Ports
 		[Category("Port")]
 		[Description("Port ID.")]
 		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
-		[TypeConverter(typeof(IO.Ports.SerialPortIdConverter))]
+		[TypeConverter(typeof(SerialPortIdConverter))]
 		public virtual SerialPortId PortId
 		{
 			get
@@ -493,7 +493,7 @@ namespace MKY.IO.Ports
 		[Category("Port")]
 		[Description("Port settings. Default settings are '" + PortSettingsDefault + "'.")]
 		[DefaultValue(PortSettingsDefault)]
-		[TypeConverter(typeof(IO.Ports.SerialPortSettingsConverter))]
+		[TypeConverter(typeof(SerialPortSettingsConverter))]
 		public virtual SerialPortSettings PortSettings
 		{
 			get
@@ -1050,7 +1050,7 @@ namespace MKY.IO.Ports
 				{
 					case System.IO.Ports.SerialPinChange.CtsChanged:
 					{
-						if (IsOpen && !CtsHolding)
+						if (IsOpen && !CtsHolding) // Count inactive signals!
 							Interlocked.Increment(ref this.controlPinCount.CtsDisableCount);
 
 						break;
@@ -1058,7 +1058,7 @@ namespace MKY.IO.Ports
 
 					case System.IO.Ports.SerialPinChange.DsrChanged:
 					{
-						if (IsOpen && !DsrHolding)
+						if (IsOpen && !DsrHolding) // Count inactive signals!
 							Interlocked.Increment(ref this.controlPinCount.DsrDisableCount);
 
 						break;
@@ -1066,7 +1066,7 @@ namespace MKY.IO.Ports
 
 					case System.IO.Ports.SerialPinChange.CDChanged:
 					{
-						if (IsOpen && CDHolding) // Count signals!
+						if (IsOpen && CDHolding)
 							Interlocked.Increment(ref this.controlPinCount.DcdCount);
 
 						break;
