@@ -125,10 +125,15 @@ namespace YAT.Domain.Settings
 				{
 					this.terminalType = value;
 
-					// Set radix according to terminal type:
+					// Set terminal type dependent settings:
+
 					if (Display != null) {
 						Display.TxRadix = (value == TerminalType.Binary ? Radix.Hex : Radix.String);
 						Display.RxRadix = (value == TerminalType.Binary ? Radix.Hex : Radix.String);
+					}
+
+					if (CharReplace != null) {
+						CharReplace.ReplaceControlChars = (value != TerminalType.Binary);
 					}
 
 					SetChanged();

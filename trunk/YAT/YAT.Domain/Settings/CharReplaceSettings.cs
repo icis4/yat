@@ -82,7 +82,7 @@ namespace YAT.Domain.Settings
 			ControlCharRadix    = rhs.ControlCharRadix;
 			ReplaceTab          = rhs.ReplaceTab;
 			ReplaceSpace        = rhs.ReplaceSpace;
-			HideXOnXOff       = rhs.HideXOnXOff;
+			HideXOnXOff         = rhs.HideXOnXOff;
 
 			ClearChanged();
 		}
@@ -98,7 +98,7 @@ namespace YAT.Domain.Settings
 			ControlCharRadix    = ControlCharRadixDefault;
 			ReplaceTab          = ReplaceTabDefault;
 			ReplaceSpace        = ReplaceSpaceDefault;
-			HideXOnXOff       = HideXOnXOffDefault;
+			HideXOnXOff         = HideXOnXOffDefault;
 		}
 
 		#region Properties
