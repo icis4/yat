@@ -782,22 +782,25 @@ namespace MKY.IO.Serial.SerialPort
 
 					// Inner loop, runs as long as there is data in the send queue.
 					// Ensure not to forward any events during closing anymore.
-					while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive) // Check 'IsDisposed' first!
-					{
-						// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
-						// an exception when trying to write while in output break!
-						bool isOutputBreak;
-						lock (this.portSyncObj)
-							isOutputBreak = this.port.OutputBreak;
+					while (!IsDisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0) && IsOpen) // Not 'IsTransmissive' to allow handling break below!
+					{   // Check 'IsDisposed' first!          No lock required, just checking for empty.
 
-						if (!isOutputBreak)
+						// Handle output break state. System.IO.Ports.SerialPort.Write() will raise
+						// an 'InvalidOperationException' when trying to write while in output break!
+						if (!this.port.OutputBreak) // No lock required, not modifying anything.
 						{
-							// Reset the flag, once the output break has been reset:
+							// Reset flag as soon as output break has resumed:
 							isOutputBreakOldAndErrorHasBeenSignaled = false;
 
 							// In case of XOff:
 							if (XOnXOffIsInUse && !OutputIsXOn)
-								break; // Let other threads do their job and wait until signaled again.
+							{
+								byte b = this.sendQueue.Peek(); // No lock required, not modifying anything.
+								if ((b != SerialPortSettings.XOnByte) && (b != SerialPortSettings.XOffByte))
+									break; // Let other threads do their job and wait until signaled again.
+
+								// Control bytes must be sent even in case of XOff!
+							}
 
 							// In case of disabled CTS line:
 							if (this.settings.Communication.FlowControlUsesRfrCts)
@@ -810,11 +813,7 @@ namespace MKY.IO.Serial.SerialPort
 									break; // Let other threads do their job and wait until signaled again.
 							}
 
-							// No break, no XOff, no CTS disable, ready to send.
-
-							// Something to send?
-							if (this.sendQueue.Count <= 0) // No lock required, just checking for empty.
-								break; // Let other threads do their job and wait until signaled again.
+							// --- No break, no XOff, no CTS disable, ready to send: ---
 
 							// By default, stuff as much data as possible into output buffer:
 							int maxChunkSize = (this.port.WriteBufferSize - this.port.BytesToWrite);
@@ -827,7 +826,8 @@ namespace MKY.IO.Serial.SerialPort
 
 							List<byte> effectiveChunkData;
 							bool isWriteTimeout;
-							TrySendChunk(maxChunkSize, out effectiveChunkData, out isWriteTimeout);
+							bool isOutputBreak;
+							TrySendChunk(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
 
 							if ((effectiveChunkData != null) && (effectiveChunkData.Count > 0))
 							{
@@ -842,8 +842,8 @@ namespace MKY.IO.Serial.SerialPort
 								Thread.Sleep(TimeSpan.Zero);
 							}
 
-							if (isWriteTimeout) // May only be partial, some data may have been sent before timeout.
-							{
+							if (isWriteTimeout) // Timeout detected while trying to call System.IO.Ports.SerialPort.Write().
+							{                   // May only be partial, some data may have been sent before timeout.
 								if (!isWriteTimeoutOldAndErrorHasBeenSignaled)
 								{
 									string errorText;
@@ -868,12 +868,30 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								isWriteTimeoutOldAndErrorHasBeenSignaled = false;
 							}
+
+							if (isOutputBreak) // Output break detected *WHILE* trying to call System.IO.Ports.SerialPort.Write().
+							{                  // May only be partial, some data may have been sent before break.
+								if (!isOutputBreakOldAndErrorHasBeenSignaled)
+								{
+									OnIOError(new IOErrorEventArgs
+									(
+										ErrorSeverity.Acceptable,
+										Direction.Output,
+										"No data can be sent while output is in break state, data is being queued and will be sent when break has resumed")
+									);
+
+									isOutputBreakOldAndErrorHasBeenSignaled = true;
+								}
+							}
+							else
+							{
+								isOutputBreakOldAndErrorHasBeenSignaled = false;
+							}
 						}
-						else // isOutputBreak
+						else // Output break detected *BEFORE* trying to call System.IO.Ports.SerialPort.Write().
 						{
-							// If data is intended to be sent, and the output has changed to break,
-							// write an error message onto the terminal:
-							if ((this.sendQueue.Count > 0) && isOutputBreak && !isOutputBreakOldAndErrorHasBeenSignaled)
+							// If output has changed to break and data is intended to be sent:
+							if (!isOutputBreakOldAndErrorHasBeenSignaled && (this.sendQueue.Count > 0))
 							{
 								OnIOError(new IOErrorEventArgs
 								(
@@ -897,9 +915,10 @@ namespace MKY.IO.Serial.SerialPort
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
 
-		private void TrySendChunk(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout)
+		private void TrySendChunk(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
 		{
 			isWriteTimeout = false;
+			isOutputBreak = false;
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
@@ -937,6 +956,11 @@ namespace MKY.IO.Serial.SerialPort
 				catch (TimeoutException)
 				{
 					isWriteTimeout = true;
+					break; // Break and try again in the next loop.
+				}
+				catch (InvalidOperationException)
+				{
+					isOutputBreak = true;
 					break; // Break and try again in the next loop.
 				}
 				catch (Exception)
@@ -1355,38 +1379,39 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (this.sendThread != null)
 				{
-					WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
-
-					// Ensure that send thread has stopped after the stop request:
-					try
+					// Attention, this method may also be called from exception handler within SendThread()!
+					if (this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
 					{
-						Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+						WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
 
-						int accumulatedTimeout = 0;
-						int interval = 0; // Use a relatively short random interval to trigger the thread:
-						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
+						try
 						{
-							this.sendThreadEvent.Set();
-
-							accumulatedTimeout += interval;
-							if (accumulatedTimeout >= ThreadWaitTimeout)
+							int accumulatedTimeout = 0;
+							int interval = 0; // Use a relatively short random interval to trigger the thread:
+							while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
 							{
-								WriteDebugThreadStateMessageLine("...failed! Aborting...");
-								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
-								this.sendThread.Abort();
-								break;
+								this.sendThreadEvent.Set();
+
+								accumulatedTimeout += interval;
+								if (accumulatedTimeout >= ThreadWaitTimeout)
+								{
+									WriteDebugThreadStateMessageLine("...failed! Aborting...");
+									WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+									this.sendThread.Abort();
+									break;
+								}
+
+								WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 							}
-
-							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
 						}
-					}
-					catch (ThreadStateException)
-					{
-						// Ignore thread state exceptions such as "Thread has not been started" and
-						// "Thread cannot be aborted" as it just needs to be ensured that the thread
-						// has or will be terminated for sure.
+						catch (ThreadStateException)
+						{
+							// Ignore thread state exceptions such as "Thread has not been started" and
+							// "Thread cannot be aborted" as it just needs to be ensured that the thread
+							// has or will be terminated for sure.
 
-						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+							WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						}
 					}
 
 					this.sendThreadEvent.Close();
@@ -1574,12 +1599,9 @@ namespace MKY.IO.Serial.SerialPort
 				//   (\YAT\!-SendFiles\Stress-2-Large.txt, 106 kB)
 				// This is considered an acceptable CPU load.
 				// 
-				// Ensure not to forward any events during closing anymore.
-				while (!IsDisposed && this.receiveThreadRunFlag && IsOpen) // Check 'IsDisposed' first!
-				{
-					if (this.receiveQueue.Count <= 0) // No lock required, just checking for empty.
-						break; // Let other threads do their job and wait until signaled again.
-
+				// Ensure not to forward any events during closing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0) && IsOpen)
+				{                                         // No lock required, just checking for empty.
 					byte[] data;
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
