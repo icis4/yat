@@ -438,6 +438,25 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendThreadSafely()
+		{
+			try
+			{
+				if (this.sendThreadEvent != null)
+					this.sendThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
 		private void StopSendThread()
 		{
 			lock (this.sendThreadSyncObj)
@@ -457,7 +476,7 @@ namespace YAT.Domain
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
 						{
-							this.sendThreadEvent.Set();
+							SignalSendThreadSafely();
 
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
@@ -481,6 +500,7 @@ namespace YAT.Domain
 					}
 
 					this.sendThreadEvent.Close();
+					this.sendThreadEvent = null;
 					this.sendThread = null;
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
@@ -783,7 +803,7 @@ namespace YAT.Domain
 				this.sendQueue.Enqueue(item);
 
 			// Signal send thread:
-			this.sendThreadEvent.Set();
+			SignalSendThreadSafely();
 		}
 
 		/// <summary>
@@ -825,9 +845,9 @@ namespace YAT.Domain
 				}
 
 				// Inner loop, runs as long as there is data in the send queue.
-				// Ensure not to forward any events during closing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0) && IsReadyToSend)
-				{                                      // No lock required, just checking for empty.
+				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend && (this.sendQueue.Count > 0))
+				{                                                             // No lock required, just checking for empty.
 					// Retrieve elements from queue one-by-one
 					SendItem[] pendingItems;
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.

@@ -359,7 +359,7 @@ namespace MKY.IO.Serial.Usb
 				}
 
 				// Signal send thread:
-				this.sendThreadEvent.Set();
+				SignalSendThreadSafely();
 
 				return (true);
 			}
@@ -407,9 +407,9 @@ namespace MKY.IO.Serial.Usb
 				}
 
 				// Inner loop, runs as long as there is data in the send queue.
-				// Ensure not to forward any events during closing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0) && IsTransmissive)
-				{                                      // No lock required, just checking for empty.
+				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
+				{                                                              // No lock required, just checking for empty.
 					byte[] data;
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
@@ -571,6 +571,44 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendThreadSafely()
+		{
+			try
+			{
+				if (this.sendThreadEvent != null)
+					this.sendThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalReceiveThreadSafely()
+		{
+			try
+			{
+				if (this.receiveThreadEvent != null)
+					this.receiveThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
 		private void StopThreads()
 		{
 			// First clear both flags to reduce the time to stop the receive thread, it may already
@@ -595,7 +633,7 @@ namespace MKY.IO.Serial.Usb
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
 						{
-							this.sendThreadEvent.Set();
+							SignalSendThreadSafely();
 
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
@@ -619,6 +657,7 @@ namespace MKY.IO.Serial.Usb
 					}
 
 					this.sendThreadEvent.Close();
+					this.sendThreadEvent = null;
 					this.sendThread = null;
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
@@ -640,7 +679,7 @@ namespace MKY.IO.Serial.Usb
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
 						{
-							this.receiveThreadEvent.Set();
+							SignalReceiveThreadSafely();
 
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
@@ -664,6 +703,7 @@ namespace MKY.IO.Serial.Usb
 					}
 
 					this.receiveThreadEvent.Close();
+					this.receiveThreadEvent = null;
 					this.receiveThread = null;
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
@@ -714,7 +754,7 @@ namespace MKY.IO.Serial.Usb
 			}
 
 			// Signal receive thread:
-			this.receiveThreadEvent.Set();
+			SignalReceiveThreadSafely();
 		}
 
 		/// <summary>
@@ -755,13 +795,10 @@ namespace MKY.IO.Serial.Usb
 					break;
 				}
 
-				// Inner loop, runs as long as there is data to be received. Must be done to
-				// ensure that events are fired even for data that was enqueued above while the
-				// 'OnDataReceived' event was being handled.
-				// 
-				// Ensure not to forward any events during closing anymore. Check 'IsDisposed' first!
-				while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0) && IsOpen)
-				{                                         // No lock required, just checking for empty.
+				// Inner loop, runs as long as there is data in the receive queue.
+				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
+				{                                               // No lock required, just checking for empty.
 					byte[] data;
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{

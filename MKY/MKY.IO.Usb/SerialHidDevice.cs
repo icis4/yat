@@ -730,6 +730,25 @@ namespace MKY.IO.Usb
 			}
 		}
 
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalReceiveThreadSafely()
+		{
+			try
+			{
+				if (this.receiveThreadEvent != null)
+					this.receiveThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
 		private void StopReceiveThread()
 		{
 			lock (this.receiveThreadSyncObj)
@@ -749,7 +768,7 @@ namespace MKY.IO.Usb
 						int interval = 0; // Use a relatively short random interval to trigger the thread:
 						while (!this.receiveThread.Join(interval = staticRandom.Next(5, 20)))
 						{
-							this.receiveThreadEvent.Set();
+							SignalReceiveThreadSafely();
 
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
@@ -773,6 +792,7 @@ namespace MKY.IO.Usb
 					}
 
 					this.receiveThreadEvent.Close();
+					this.receiveThreadEvent = null;
 					this.receiveThread = null;
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
@@ -856,7 +876,7 @@ namespace MKY.IO.Usb
 						}
 
 						// Signal receive thread:
-						this.receiveThreadEvent.Set();
+						SignalReceiveThreadSafely();
 					}
 
 					// Trigger the next async read.
@@ -915,12 +935,9 @@ namespace MKY.IO.Usb
 					break;
 				}
 
-				// Inner loop, runs as long as there is data to be received. Must be done to
-				// ensure that events are fired even for data that was enqueued above while the
-				// 'OnDataReceived' event was being handled.
-				// 
-				// Ensure not to forward any events during closing anymore.
-				while (!IsDisposed && this.receiveThreadRunFlag && IsOpen && (BytesAvailable > 0)) // Check 'IsDisposed' first!
+				// Inner loop, runs as long as there is data in the receive queue.
+				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.receiveThreadRunFlag && (BytesAvailable > 0))
 				{
 					OnDataReceived(EventArgs.Empty);
 
