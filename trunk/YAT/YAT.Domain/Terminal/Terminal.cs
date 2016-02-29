@@ -825,12 +825,9 @@ namespace YAT.Domain
 				}
 
 				// Inner loop, runs as long as there is data in the send queue.
-				// Ensure not to forward any events during closing anymore.
-				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend) // Check 'IsDisposed' first!
-				{
-					if (this.sendQueue.Count <= 0) // No lock required, just checking for empty.
-						break; // Let other threads do their job and wait until signaled again.
-
+				// Ensure not to forward any events during closing anymore. Check 'IsDisposed' first!
+				while (!IsDisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0) && IsReadyToSend)
+				{                                      // No lock required, just checking for empty.
 					// Retrieve elements from queue one-by-one
 					SendItem[] pendingItems;
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
