@@ -55,7 +55,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		Chr = Radix.Char,
 
-		// String makes no sense for single byte/character replacement.
+		/// <remarks>
+		/// String makes no sense for single byte/character replacement. Still, keep this item to
+		/// ensure that items can 1:1 be mapped to <see cref="Radix"/> and that additional items
+		/// get distinct enum identifiers.
+		/// </remarks>
+		[Obsolete]
+		Str = Radix.String,
 
 		/// <summary></summary>
 		AsciiMnemonic,
@@ -108,12 +114,19 @@ namespace YAT.Domain
 		public static new ControlCharRadixEx[] GetItems()
 		{
 			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>();
+
+			// Re-use items from base:
 			foreach (RadixEx radix in RadixEx.GetItems())
 			{
-				if (radix != Radix.String) // String makes no sense for single byte/character replacement.
-					items.Add((Radix)radix);
+				if (radix == Radix.String) // String makes no sense for single byte/character replacement.
+					continue;              // See remark for 'ControlCharRadix.Str' for details.
+
+				items.Add((Radix)radix);
 			}
+
+			// Add additional items:
 			items.Add(new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic));
+
 			return (items.ToArray());
 		}
 

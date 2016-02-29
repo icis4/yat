@@ -1740,11 +1740,23 @@ namespace YAT.Domain
 				}
 				else if (isControlByte)
 				{
-					switch (d)
+					if (TerminalSettings.CharReplace.ReplaceControlChars)
 					{
-						case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
-						case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
-						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+						switch (d) // Use dedicated control elements:
+						{
+							case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
+							case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
+							default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+						}
+					}
+					else
+					{
+						switch (d) // Use normal data elements:
+						{
+							case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+							case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+							default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+						}
 					}
 				}
 				else
