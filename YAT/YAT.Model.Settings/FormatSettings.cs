@@ -124,7 +124,7 @@ namespace YAT.Model.Settings
 			DirectionFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			LengthFormat      = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			WhiteSpacesFormat = new TextFormat(DefaultWhiteSpacesColor, false, false, false, false);
-			ErrorFormat       = new TextFormat(DefaultErrorColor,       false, false, false, false);
+			ErrorFormat       = new TextFormat(DefaultErrorColor,        true, false, false, false); // Bold.
 
 			BackFormat  = new BackFormat(DefaultBackColor);
 		}

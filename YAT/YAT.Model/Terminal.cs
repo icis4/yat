@@ -3039,45 +3039,81 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Toggles RFR line if current flow control settings allow this.
+		/// Toggles RFR control pin if current flow control settings allow this.
 		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
-		public virtual void ToggleRfr()
+		public virtual bool RequestToggleRfr()
 		{
 			AssertNotDisposed();
 
-			this.terminal.ToggleRfr();
+			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
+			bool isSuccess = this.terminal.RequestToggleRfr(out pinState);
+			this.SettingsRoot.IO.SerialPort.Communication.RfrPin = pinState;
+			return (isSuccess);
+
+			// Note, this user requested change of the current settings is handled here,
+			// and not in the 'terminal_IOControlChanged' event handler, for two reasons:
+			//  1. The event will be fired after any change of the control pins, separating
+			//     user indended and other events would be cumbersome.
+			//  2. The event will be fired asynchronously, accessing the settings here
+			//     synchronously is the better option.
+			//  3. Here, it is obvious that the user indeed wants to change a pin setting,
+			//     and therefore expects the setting to be modified.
 		}
 
 		/// <summary>
-		/// Toggles DTR line if current flow control settings allow this.
+		/// Toggles DTR control pin if current flow control settings allow this.
 		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
-		public virtual void ToggleDtr()
+		public virtual bool RequestToggleDtr()
 		{
 			AssertNotDisposed();
 
-			this.terminal.ToggleDtr();
+			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
+			bool isSuccess = this.terminal.RequestToggleDtr(out pinState);
+			this.SettingsRoot.IO.SerialPort.Communication.DtrPin = pinState;
+			return (isSuccess);
+
+			// Note, this user requested change of the current settings is handled here,
+			// and not in the 'terminal_IOControlChanged' event handler, for two reasons:
+			//  1. The event will be fired after any change of the control pins, separating
+			//     user indended and other events would be cumbersome.
+			//  2. The event will be fired asynchronously, accessing the settings here
+			//     synchronously is the better option.
+			//  3. Here, it is obvious that the user indeed wants to change a pin setting,
+			//     and therefore expects the setting to be modified.
 		}
 
 		/// <summary>
-		/// Toggles the input XOn/XOff state.
+		/// Toggles the input XOn/XOff state if current flow control settings allow this.
 		/// </summary>
-		public virtual void ToggleInputXOnXOff()
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool RequestToggleInputXOnXOff()
 		{
 			AssertNotDisposed();
 
-			this.terminal.ToggleInputXOnXOff();
+			return (this.terminal.RequestToggleInputXOnXOff());
 		}
 
 		/// <summary>
-		/// Toggles the output break state.
+		/// Toggles the output break state if current port settings allow this.
 		/// </summary>
-		public virtual void ToggleOutputBreak()
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool RequestToggleOutputBreak()
 		{
 			AssertNotDisposed();
 
-			this.terminal.ToggleOutputBreak();
+			return (this.terminal.RequestToggleOutputBreak());
 		}
 
 		#endregion

@@ -80,16 +80,22 @@ namespace MKY.IO.Ports
 		bool RfrEnable { get; set; }
 
 		/// <summary>
-		/// Toggles the RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// Toggles the RFR (Ready For Receiving) control pin. This pin was formerly called RTS (Request To Send).
 		/// </summary>
+		/// <returns>
+		/// The new state of the RFR control pin.
+		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
-		void ToggleRfr();
+		bool ToggleRfr();
 
 		/// <summary>
-		/// Toggles the DTR (Data Terminal Ready) control line.
+		/// Toggles the DTR (Data Terminal Ready) control pin.
 		/// </summary>
+		/// <returns>
+		/// The new state of the DTR control pin.
+		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
-		void ToggleDtr();
+		bool ToggleDtr();
 
 		/// <summary>
 		/// Serial port control pins.

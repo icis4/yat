@@ -791,7 +791,7 @@ namespace YAT.Domain
 			ResumeBreak();
 
 			if (this.terminalSettings.Send.SignalXOnBeforeEachTransmission)
-				SendXOn();
+				RequestSignalInputXOn();
 
 			DoSend(item);
 		}
@@ -1464,51 +1464,82 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Toggles RFR line if current flow control settings allow this.
+		/// Toggles RFR control pin if current flow control settings allow this.
 		/// </summary>
+		/// <param name="pinState">
+		/// <c>true</c> if the control pin has become enabled.; otherwise, <c>false</c>
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rfr", Justification = "RFR is a common term for serial ports.")]
-		public virtual void ToggleRfr()
+		public virtual bool RequestToggleRfr(out MKY.IO.Serial.SerialPort.SerialControlPinState pinState)
 		{
 			AssertNotDisposed();
 
 			if (IsSerialPort)
 			{
-				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
+				if (!this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically)
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
-						p.ToggleRfr();
-					else
-						throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
+					{
+						if (p.ToggleRfr())
+							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Enabled;
+						else
+							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Disabled;
+
+						return (true);
+					}
 				}
 			}
+
+			pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Automatic;
+			return (false);
 		}
 
 		/// <summary>
-		/// Toggles DTR line if current flow control settings allow this.
+		/// Toggles DTR control pin if current flow control settings allow this.
 		/// </summary>
+		/// <param name="pinState">
+		/// <c>true</c> if the control pin has become enabled.; otherwise, <c>false</c>
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "DTR is a common term for serial ports.")]
-		public virtual void ToggleDtr()
+		public virtual bool RequestToggleDtr(out MKY.IO.Serial.SerialPort.SerialControlPinState pinState)
 		{
 			AssertNotDisposed();
 
 			if (IsSerialPort)
 			{
-				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually)
+				if (!this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically)
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
-						p.ToggleDtr();
-					else
-						throw (new InvalidOperationException("The underlying I/O provider is no serial COM port!"));
+					{
+						if (p.ToggleDtr())
+							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Enabled;
+						else
+							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Disabled;
+
+						return (true);
+					}
 				}
 			}
+
+			pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Automatic;
+			return (false);
 		}
 
 		/// <summary>
-		/// Toggles the input XOn/XOff state.
+		/// Toggles the input XOn/XOff state if current flow control settings allow this.
 		/// </summary>
-		public virtual void ToggleInputXOnXOff()
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool RequestToggleInputXOnXOff()
 		{
 			AssertNotDisposed();
 
@@ -1529,16 +1560,22 @@ namespace YAT.Domain
 							ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
 
 						x.ToggleInputXOnXOff();
-					}
-					else
-					{
-						throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler!"));
+
+						return (true);
 					}
 				}
 			}
+
+			return (false);
 		}
 
-		private void SendXOn()
+		/// <summary>
+		/// Signals XOn if current flow control settings allow this.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool RequestSignalInputXOn()
 		{
 			if (IsSerialPort)
 			{
@@ -1554,19 +1591,22 @@ namespace YAT.Domain
 						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
 
 						x.SignalInputXOn();
-					}
-					else
-					{
-						throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler!"));
+
+						return (true);
 					}
 				}
 			}
+
+			return (false);
 		}
 
 		/// <summary>
-		/// Toggles the output break state.
+		/// Toggles the output break state if current port settings allow this.
 		/// </summary>
-		public virtual void ToggleOutputBreak()
+		/// <returns>
+		/// <c>true</c> if the request has been executed; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool RequestToggleOutputBreak()
 		{
 			AssertNotDisposed();
 
@@ -1576,11 +1616,14 @@ namespace YAT.Domain
 				{
 					var p = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 					if (p != null)
+					{
 						p.ToggleOutputBreak();
-					else
-						throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
+						return (true);
+					}
 				}
 			}
+
+			return (false);
 		}
 
 		private void ConfigurePeriodicXOnTimer()
@@ -1646,7 +1689,7 @@ namespace YAT.Domain
 				{
 					// Ensure not to forward events during closing anymore.
 					if (!this.isDisposed && this.IsReadyToSend)
-						SendXOn();
+						RequestSignalInputXOn();
 				}
 				finally
 				{
@@ -2347,12 +2390,10 @@ namespace YAT.Domain
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx))
 			{
 				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
-				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.LineBreak());
 			}
 			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx))
 			{
 				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
-				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.LineBreak());
 			}
 			else
 			{

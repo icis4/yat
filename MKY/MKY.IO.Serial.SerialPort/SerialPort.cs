@@ -139,16 +139,6 @@ namespace MKY.IO.Serial.SerialPort
 		private Thread receiveThread;
 		private object receiveThreadSyncObj = new object();
 
-		/// <remarks>
-		/// In case of manual RFR/CTS + DTR/DSR, RFR is enabled after initialization.
-		/// </remarks>
-		private bool manualRfrWasEnabled = true;
-
-		/// <remarks>
-		/// In case of manual RFR/CTS + DTR/DSR, DTR is disabled after initialization.
-		/// </remarks>
-		private bool manualDtrWasEnabled; // = false
-
 		/// <summary>
 		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
 		/// </summary>
@@ -988,7 +978,7 @@ namespace MKY.IO.Serial.SerialPort
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
-					"Output break state, retaining data."
+					"Output break state, retaining data..."
 				)
 			);
 		}
@@ -999,7 +989,7 @@ namespace MKY.IO.Serial.SerialPort
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
-					"CTS inactive, retaining data."
+					"CTS inactive, retaining data..."
 				)
 			);
 		}
@@ -1010,7 +1000,7 @@ namespace MKY.IO.Serial.SerialPort
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
-					"XOff state, retaining data."
+					"XOff state, retaining data..."
 				)
 			);
 		}
@@ -1021,7 +1011,7 @@ namespace MKY.IO.Serial.SerialPort
 				(
 					ErrorSeverity.Acceptable,
 					Direction.Output,
-					"Inactive, retaining data."
+					"Inactive, retaining data..."
 				)
 			);
 		}
@@ -1139,6 +1129,22 @@ namespace MKY.IO.Serial.SerialPort
 				this.port.Parity    = s.Parity;
 				this.port.StopBits  = s.StopBits;
 				this.port.Handshake = (SerialFlowControlEx)s.FlowControl;
+
+				switch (s.RfrPin)
+				{
+					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
+					case SerialControlPinState.Enabled:   this.port.RfrEnable = true;  break;
+					case SerialControlPinState.Disabled:  this.port.RfrEnable = false; break;
+					default: throw (new NotSupportedException("Program execution should never get here,'" + s.RfrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+				}
+
+				switch (s.DtrPin)
+				{
+					case SerialControlPinState.Automatic: /* Do not access the pin! */ break;
+					case SerialControlPinState.Enabled:   this.port.DtrEnable = true;  break;
+					case SerialControlPinState.Disabled:  this.port.DtrEnable = false; break;
+					default: throw (new NotSupportedException("Program execution should never get here,'" + s.DtrPin.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+				}
 			}
 		}
 
@@ -1265,46 +1271,10 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			lock (this.portSyncObj) // Ensure that whole operation is performed at once!
 			{
-				CreatePort();       // Port must be created each time because this.port.Close()
-				ApplySettings();    //   disposes the underlying IO instance
-
-				// RFR (formerly RTS)
-				switch (this.settings.Communication.FlowControl)
-				{
-					case SerialFlowControl.Hardware:
-					case SerialFlowControl.Combined:
-						// Do nothing, RFR is handled by the underlying serial port object.
-						break;
-
-					case SerialFlowControl.RS485:
-						this.port.RfrEnable = false;
-						break;
-
-					case SerialFlowControl.ManualHardware:
-					case SerialFlowControl.ManualCombined:
-						this.port.RfrEnable = this.manualRfrWasEnabled;
-						break;
-
-					default:
-						this.port.RfrEnable = false;
-						break;
-				}
-
-				// DTR
-				switch (this.settings.Communication.FlowControl)
-				{
-					case SerialFlowControl.ManualHardware:
-					case SerialFlowControl.ManualCombined:
-						this.port.DtrEnable = this.manualDtrWasEnabled;
-						break;
-
-					default:
-						this.port.DtrEnable = false;
-						break;
-				}
-
-				OpenPort(); // Port shall be indicated 'IsOpen' upon first execution of thread and timer.
-			} // lock (this.portSyncObj)
+				CreatePort();    // Port must be created each time because this.port.Close()
+				ApplySettings(); //   disposes the underlying IO instance
+				OpenPort();
+			}
 
 			StartThreads();
 			StartAliveTimer();
@@ -1781,12 +1751,6 @@ namespace MKY.IO.Serial.SerialPort
 					// Force access to port to check whether the port is still alive:
 					bool ctsHoldingDummy = this.port.CtsHolding;
 					UnusedLocal.PreventAnalysisWarning(ctsHoldingDummy);
-
-					if (this.settings.Communication.FlowControlManagesRfrCtsDtrDsrManually)
-					{
-						this.manualRfrWasEnabled = this.port.RfrEnable;
-						this.manualDtrWasEnabled = this.port.DtrEnable;
-					}
 
 					// Signal pin change to threads:
 					SignalThreadsSafely();

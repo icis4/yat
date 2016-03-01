@@ -1836,24 +1836,46 @@ namespace YAT.Gui.Forms
 			ShowTerminalSettings();
 		}
 
+		/// <remarks>
+		/// Note that label must always be enabled to have the correct appearance, and can thus
+		/// always be clicked. It is the responsibility of the underlying Request...() method
+		/// to decide whether the request can currently be executed or not.
+		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_RFR_Click(object sender, EventArgs e)
 		{
-			this.terminal.ToggleRfr();
+			this.terminal.RequestToggleRfr();
+
+			// Note that label must always be enabled to show the correct pro, and can therefore
 		}
 
+		/// <remarks>
+		/// Note that label must always be enabled to have the correct appearance, and can thus
+		/// always be clicked. It is the responsibility of the underlying Request...() method
+		/// to decide whether the request can currently be executed or not.
+		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_DTR_Click(object sender, EventArgs e)
 		{
-			this.terminal.ToggleDtr();
+			this.terminal.RequestToggleDtr();
 		}
 
+		/// <remarks>
+		/// Note that label must always be enabled to have the correct appearance, and can thus
+		/// always be clicked. It is the responsibility of the underlying Request...() method
+		/// to decide whether the request can currently be executed or not.
+		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_InputXOnXOff_Click(object sender, EventArgs e)
 		{
-			this.terminal.ToggleInputXOnXOff();
+			this.terminal.RequestToggleInputXOnXOff();
 		}
 
+		/// <remarks>
+		/// Note that label must always be enabled to have the correct appearance, and can thus
+		/// always be clicked. It is the responsibility of the underlying Request...() method
+		/// to decide whether the request can currently be executed or not.
+		/// </remarks>
 		private void toolStripStatusLabel_TerminalStatus_OutputBreak_Click(object sender, EventArgs e)
 		{
-			this.terminal.ToggleOutputBreak();
+			this.terminal.RequestToggleOutputBreak();
 		}
 
 		#endregion
@@ -3598,14 +3620,11 @@ namespace YAT.Gui.Forms
 						throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
 					}
 
-					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485);
-
-					bool manualRfrDtr  = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsDtrDsrManually;
-					bool manualXOnXOff = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
-
-					bool indicateXOnXOff = manualXOnXOff; // Indication only properly works if manual XOn/XOff (bug #214).
+					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+					bool indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
 					bool outputIsXOn     = false;
 					bool inputIsXOn      = false;
+
 					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
 					if (x != null)
 					{
@@ -3621,9 +3640,7 @@ namespace YAT.Gui.Forms
 						}
 					}
 
-					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
-					bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
-					if (rs485FlowControl)
+					if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialPort.SerialFlowControl.RS485)
 					{
 						if (pins.Rfr)
 							TriggerRfrLuminescence();
@@ -3638,9 +3655,12 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Dcd ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_RFR.ForeColor = (manualRfrDtr ? SystemColors.ControlText : SystemColors.GrayText);
+					bool allowRfr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically;
+					bool allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
+
+					toolStripStatusLabel_TerminalStatus_RFR.ForeColor = (allowRfr ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualRfrDtr ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
@@ -3651,8 +3671,11 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (manualXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+
+					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+					bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 					toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
 					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
