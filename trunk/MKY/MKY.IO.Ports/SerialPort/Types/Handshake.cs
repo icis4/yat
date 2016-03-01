@@ -48,15 +48,15 @@ namespace MKY.IO.Ports
 		private static readonly string[] None_stringAlternatives = new string[] { "N" };
 
 		private const string             RfrCts_string = "Hardware (RFR/CTS)";
-		private const string             RfrCts_stringShort = "RFR/CTS";
+		private const string             RfrCts_stringShort = "Hardware";
 		private static readonly string[] RfrCts_stringAlternatives = new string[] { "Hardware", "Hard", "HW", "H" };
 
 		private const string             XOnXOff_string = "Software (XOn/XOff)";
-		private const string             XOnXOff_stringShort = "XOn/XOff";
+		private const string             XOnXOff_stringShort = "Software";
 		private static readonly string[] XOnXOff_stringAlternatives = new string[] { "Software", "Soft", "SW", "S" };
 
 		private const string             RfrCtsXOnXOff_string = "Combined (RFR/CTS + XOn/XOff)";
-		private const string             RfrCtsXOnXOff_stringShort = "RFR/CTS + XOn/XOff";
+		private const string             RfrCtsXOnXOff_stringShort = "Combined";
 		private static readonly string[] RfrCtsXOnXOff_stringAlternatives = new string[] { "Combined", "Combi", "C" };
 
 		#endregion

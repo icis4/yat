@@ -2187,8 +2187,7 @@
 			this.toolStripStatusLabel_TerminalStatus_RFR.Text = "RFR";
 			this.toolStripStatusLabel_TerminalStatus_RFR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RFR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-			this.toolStripStatusLabel_TerminalStatus_RFR.ToolTipText = "Ready For Receiving (Out) which is now the official name of the formerly called R" +
-    "TS (Request To Send) control line";
+			this.toolStripStatusLabel_TerminalStatus_RFR.ToolTipText = "Ready For Receiving (Out), also known as RTS (Request To Send)";
 			this.toolStripStatusLabel_TerminalStatus_RFR.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_RFR_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_CTS

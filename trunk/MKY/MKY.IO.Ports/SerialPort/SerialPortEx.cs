@@ -584,13 +584,16 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Toggles the RFR (Ready For Receiving) control line. This line was formerly called RTS (Request To Send).
+		/// Toggles the RFR (Ready For Receiving) control pin. This pin was formerly called RTS (Request To Send).
 		/// </summary>
-		public virtual void ToggleRfr()
+		/// <returns>
+		/// The new state of the RFR control pin.
+		/// </returns>
+		public virtual bool ToggleRfr()
 		{
 			AssertNotDisposed();
 
-			this.RfrEnable = !this.RfrEnable;
+			return (this.RfrEnable = !this.RfrEnable);
 		}
 
 		/// <summary>
@@ -626,13 +629,16 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Toggles the DTR (Data Terminal Ready) control line.
+		/// Toggles the DTR (Data Terminal Ready) control pin.
 		/// </summary>
-		public virtual void ToggleDtr()
+		/// <returns>
+		/// The new state of the DTR control pin.
+		/// </returns>
+		public virtual bool ToggleDtr()
 		{
 			AssertNotDisposed();
 
-			this.DtrEnable = !this.DtrEnable;
+			return (this.DtrEnable = !this.DtrEnable);
 		}
 
 		/// <summary>

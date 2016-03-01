@@ -99,6 +99,7 @@
     <Compile Include="IXOnXOffHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialCommunicationSettings.cs" />
+    <Compile Include="SerialControlPinState.cs" />
     <Compile Include="SerialFlowControl.cs" />
     <Compile Include="SerialPort.cs" />
     <Compile Include="SerialPortSettings.cs" />
