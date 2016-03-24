@@ -550,7 +550,8 @@ namespace YAT.Domain
 
 			DisplayElement clone;
 
-			if      (this is TxData)        clone = new TxData();
+			if      (this is NoData)        clone = new NoData();
+			else if (this is TxData)        clone = new TxData();
 			else if (this is TxControl)     clone = new TxControl();
 			else if (this is RxData)        clone = new RxData();
 			else if (this is RxControl)     clone = new RxControl();
@@ -563,7 +564,7 @@ namespace YAT.Domain
 			else if (this is RightMargin)   clone = new RightMargin();
 			else if (this is LineBreak)     clone = new LineBreak();
 			else if (this is ErrorInfo)     clone = new ErrorInfo();
-			else throw (new TypeLoadException("Program execution should never get here, '" + this + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			else throw (new TypeLoadException("Program execution should never get here, '" + this.GetType() + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 
 			clone.direction = this.direction;
 			clone.origin    = PerformDeepClone(this.origin);

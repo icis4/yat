@@ -171,7 +171,8 @@ namespace YAT.Model.Utilities
 				color     = settings.LengthFormat.Color;
 				font      = SetFont(ref lengthFont, fontName, fontSize, fontStyle);
 			}
-			else if ((element is DisplayElement.LeftMargin) ||
+			else if ((element is DisplayElement.NoData) ||
+			         (element is DisplayElement.LeftMargin) ||
 			         (element is DisplayElement.Space) ||
 			         (element is DisplayElement.RightMargin) ||
 			         (element is DisplayElement.LineBreak))
