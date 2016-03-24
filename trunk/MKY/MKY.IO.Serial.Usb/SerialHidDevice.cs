@@ -55,7 +55,7 @@ using MKY.Diagnostics;
 namespace MKY.IO.Serial.Usb
 {
 	/// <summary></summary>
-	public class SerialHidDevice : IIOProvider, IDisposable
+	public class SerialHidDevice : IIOProvider, IXOnXOffHandler, IDisposable
 	{
 		#region Constants
 		//==========================================================================================
@@ -113,6 +113,12 @@ namespace MKY.IO.Serial.Usb
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
 		private object receiveThreadSyncObj = new object();
+
+		/// <remarks>
+		/// Only used with <see cref="SerialHidFlowControl.Software"/>
+		/// and <see cref="SerialHidFlowControl.ManualSoftware"/>.
+		/// </remarks>
+		private IXOnXOffHelper iXOnXOffHelper = new IXOnXOffHelper();
 
 		#endregion
 
@@ -306,6 +312,116 @@ namespace MKY.IO.Serial.Usb
 			get { return (IsOpen); }
 		}
 
+		/// <summary>
+		/// Returns <c>true</c> if XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
+		/// flow control is active.
+		/// </summary>
+		public virtual bool XOnXOffIsInUse
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return (this.settings.FlowControlUsesXOnXOff);
+			}
+		}
+
+		/// <summary>
+		/// Gets the input XOn/XOff state.
+		/// </summary>
+		public virtual bool InputIsXOn
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.FlowControlManagesXOnXOffManually)
+					return (this.iXOnXOffHelper.InputIsXOn);
+				else
+					return (true);
+			}
+		}
+
+		/// <summary>
+		/// Gets the output XOn/XOff state.
+		/// </summary>
+		public virtual bool OutputIsXOn
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.FlowControlManagesXOnXOffManually)
+					return (this.iXOnXOffHelper.OutputIsXOn);
+				else
+					return (true);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signaling.
+		/// </summary>
+		public virtual int SentXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.FlowControlManagesXOnXOffManually)
+					return (this.iXOnXOffHelper.SentXOnCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signaling.
+		/// </summary>
+		public virtual int SentXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.FlowControlManagesXOnXOffManually)
+					return (this.iXOnXOffHelper.SentXOffCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signaling.
+		/// </summary>
+		public virtual int ReceivedXOnCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.FlowControlManagesXOnXOffManually)
+					return (this.iXOnXOffHelper.ReceivedXOnCount);
+				else
+					return (0);
+			}
+		}
+
+		/// <summary>
+		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signaling.
+		/// </summary>
+		public virtual int ReceivedXOffCount
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.settings.FlowControlManagesXOnXOffManually)
+					return (this.iXOnXOffHelper.ReceivedXOffCount);
+				else
+					return (0);
+			}
+		}
+
 		/// <summary></summary>
 		public virtual object UnderlyingIOInstance
 		{
@@ -346,20 +462,62 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
+		protected virtual bool Send(byte data)
+		{
+			// AssertNotDisposed() is called by 'Send()' below.
+
+			return (Send(new byte[] { data }));
+		}
+
+		/// <summary></summary>
 		public virtual bool Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 			{
+				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+				// Changes here must most likely be applied there too!
+				bool signalXOnXOff = false;
+				bool signalXOnXOffCount = false;
+
 				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					foreach (byte b in data)
+					{
 						this.sendQueue.Enqueue(b);
-				}
 
-				// Signal send thread:
+						// Handle input XOn/XOff.
+						if (this.settings.FlowControlManagesXOnXOffManually)
+						{
+							if (b == XOnXOff.XOnByte)
+							{
+								if (this.iXOnXOffHelper.NotifyXOnSent())
+									signalXOnXOff = true;
+
+								signalXOnXOffCount = true;
+							}
+							else if (b == XOnXOff.XOffByte)
+							{
+								if (this.iXOnXOffHelper.NotifyXOffSent())
+									signalXOnXOff = true;
+
+								signalXOnXOffCount = true;
+							}
+						}
+					} // foreach (byte b in data)
+				} // lock (this.sendQueue)
+
+				// Signal XOn/XOff change to receive thread:
+				if (signalXOnXOff)
+					SignalReceiveThreadSafely();
+
+				// Signal data notification to send thread:
 				SignalSendThreadSafely();
+
+				// Invoke the event:
+				if (signalXOnXOff || signalXOnXOffCount)
+					OnIOControlChanged(EventArgs.Empty);
 
 				return (true);
 			}
@@ -384,6 +542,8 @@ namespace MKY.IO.Serial.Usb
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
+			bool isXOffStateOldAndErrorHasBeenSignaled = false;
+
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
@@ -410,6 +570,26 @@ namespace MKY.IO.Serial.Usb
 				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
 				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
 				{                                                              // No lock required, just checking for empty.
+					// Handle XOff state:
+					if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
+					{
+						byte b = this.sendQueue.Peek(); // No lock required, not modifying anything.
+						if ((b != XOnXOff.XOnByte) && (b != XOnXOff.XOffByte))
+						{
+							if (!isXOffStateOldAndErrorHasBeenSignaled)
+							{
+								InvokeXOffErrorEvent();
+								isXOffStateOldAndErrorHasBeenSignaled = true;
+							}
+
+							break; // Let other threads do their job and wait until signaled again.
+						}
+
+						// Control bytes must be sent even in case of XOff!
+					}
+
+					// --- No XOff, ready to send: ---
+
 					byte[] data;
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
@@ -427,6 +607,74 @@ namespace MKY.IO.Serial.Usb
 			}
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+		}
+
+		private void InvokeXOffErrorEvent()
+		{
+			OnIOError(new IOErrorEventArgs
+				(
+					ErrorSeverity.Acceptable,
+					Direction.Output,
+					"XOff state, retaining data..."
+				)
+			);
+		}
+
+		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+		// Changes here must most likely be applied there too!
+
+		/// <summary></summary>
+		protected virtual void AssumeOutputXOn()
+		{
+			this.iXOnXOffHelper.OutputIsXOn = true;
+
+			OnIOControlChanged(EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOn state.
+		/// </summary>
+		public virtual void SignalInputXOn()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOnByte);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOff state.
+		/// </summary>
+		public virtual void SignalInputXOff()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOffByte);
+		}
+
+		/// <summary>
+		/// Toggles the input XOn/XOff state.
+		/// </summary>
+		public virtual void ToggleInputXOnXOff()
+		{
+			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
+			// 'InputIsXOn' property.
+
+			if (InputIsXOn)
+				SignalInputXOff();
+			else
+				SignalInputXOn();
+		}
+
+		/// <summary>
+		/// Resets the XOn/XOff signaling count.
+		/// </summary>
+		public virtual void ResetXOnXOffCount()
+		{
+			AssertNotDisposed();
+
+			this.iXOnXOffHelper.ResetCounts();
+
+			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		/// <summary></summary>
@@ -453,8 +701,11 @@ namespace MKY.IO.Serial.Usb
 				else
 					return (false);
 			}
-			catch
+			catch (Exception ex)
 			{
+				string message = "Error while creating and starting the USB Ser/HID device" + Environment.NewLine + ToString();
+				DebugEx.WriteException(GetType(), ex, message);
+
 				DisposeDeviceAndThreads();
 				return (false);
 			}
@@ -490,6 +741,32 @@ namespace MKY.IO.Serial.Usb
 				////this.device.DataSent is not used, see remarks above.
 					this.device.IOError        += new EventHandler<IO.Usb.ErrorEventArgs>(device_IOError);
 				}
+
+				// Handle XOn/XOff:
+				if (this.settings.FlowControlUsesXOnXOff)
+				{
+					AssumeOutputXOn();
+
+					// Immediately send XOn if software flow control is enabled to ensure that
+					//   device gets put into XOn if it was XOff before.
+					switch (this.settings.FlowControl)
+					{
+						case SerialHidFlowControl.ManualSoftware:
+						{
+							if (this.iXOnXOffHelper.ManualInputWasXOn)
+								SignalInputXOn();
+
+							break;
+						}
+
+						default:
+						{
+							SignalInputXOn();
+							break;
+						}
+					}
+				}
+
 				return (true);
 			}
 			else
@@ -838,8 +1115,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for USB Ser/HID devices." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>

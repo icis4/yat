@@ -103,6 +103,7 @@ New:
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
 - Selectable background color added to format settings (feature request #250).
 - Window can be configured to always stay on top (feature request #241).
+- USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
 
 Important changes:
 - Active terminal is highlighted/emphasized (feature request #247).

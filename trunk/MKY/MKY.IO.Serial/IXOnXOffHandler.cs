@@ -21,7 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-namespace MKY.IO.Serial.SerialPort
+namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	public interface IXOnXOffHandler

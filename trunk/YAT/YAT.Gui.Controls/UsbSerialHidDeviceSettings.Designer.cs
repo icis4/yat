@@ -42,6 +42,7 @@
 			this.checkBox_SeparateRxId = new System.Windows.Forms.CheckBox();
 			this.textBox_RxId = new System.Windows.Forms.TextBox();
 			this.comboBox_Preset = new System.Windows.Forms.ComboBox();
+			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
 			this.label_Line = new System.Windows.Forms.Label();
 			this.label_Preset = new System.Windows.Forms.Label();
 			this.label_Preview_1 = new System.Windows.Forms.Label();
@@ -52,23 +53,23 @@
 			this.label_Preview_6 = new System.Windows.Forms.Label();
 			this.label_Preview_7 = new System.Windows.Forms.Label();
 			this.reportFormatPreview = new YAT.Gui.Controls.UsbSerialHidReportFormatPreview();
+			this.label_FlowControl = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// checkBox_AutoOpen
 			// 
-			this.checkBox_AutoOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_AutoOpen.AutoSize = true;
-			this.checkBox_AutoOpen.Location = new System.Drawing.Point(3, 214);
+			this.checkBox_AutoOpen.Location = new System.Drawing.Point(3, 240);
 			this.checkBox_AutoOpen.Name = "checkBox_AutoOpen";
 			this.checkBox_AutoOpen.Size = new System.Drawing.Size(256, 17);
-			this.checkBox_AutoOpen.TabIndex = 20;
+			this.checkBox_AutoOpen.TabIndex = 22;
 			this.checkBox_AutoOpen.Text = "&When device is connected, automatically open it";
 			this.checkBox_AutoOpen.UseVisualStyleBackColor = true;
 			this.checkBox_AutoOpen.CheckedChanged += new System.EventHandler(this.checkBox_AutoOpen_CheckedChanged);
 			// 
 			// linkLabel_Info
 			// 
-			this.linkLabel_Info.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel_Info.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_Info.AutoSize = true;
 			this.linkLabel_Info.Location = new System.Drawing.Point(54, 191);
 			this.linkLabel_Info.Name = "linkLabel_Info";
@@ -81,7 +82,7 @@
 			// label_ReportFormat
 			// 
 			this.label_ReportFormat.AutoSize = true;
-			this.label_ReportFormat.Location = new System.Drawing.Point(0, 6);
+			this.label_ReportFormat.Location = new System.Drawing.Point(3, 6);
 			this.label_ReportFormat.Name = "label_ReportFormat";
 			this.label_ReportFormat.Size = new System.Drawing.Size(99, 13);
 			this.label_ReportFormat.TabIndex = 0;
@@ -184,21 +185,34 @@
 			// 
 			// comboBox_Preset
 			// 
-			this.comboBox_Preset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_Preset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Preset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Preset.FormattingEnabled = true;
-			this.comboBox_Preset.Location = new System.Drawing.Point(54, 168);
+			this.comboBox_Preset.Location = new System.Drawing.Point(49, 168);
 			this.comboBox_Preset.Name = "comboBox_Preset";
-			this.comboBox_Preset.Size = new System.Drawing.Size(203, 21);
+			this.comboBox_Preset.Size = new System.Drawing.Size(208, 21);
 			this.comboBox_Preset.TabIndex = 17;
 			this.toolTip.SetToolTip(this.comboBox_Preset, "For the ease of use, select a preset from the list.\r\n\r\nContact YAT via \"Help > Re" +
         "quest Feature\" to request additional presets.");
 			this.comboBox_Preset.SelectedIndexChanged += new System.EventHandler(this.comboBox_Preset_SelectedIndexChanged);
 			// 
+			// comboBox_FlowControl
+			// 
+			this.comboBox_FlowControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_FlowControl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_FlowControl.Location = new System.Drawing.Point(74, 213);
+			this.comboBox_FlowControl.Name = "comboBox_FlowControl";
+			this.comboBox_FlowControl.Size = new System.Drawing.Size(183, 21);
+			this.comboBox_FlowControl.TabIndex = 21;
+			this.toolTip.SetToolTip(this.comboBox_FlowControl, "RFR (Ready For Receiving) is the official name of the formerly called RTS (Reques" +
+        "t To Send) control line");
+			this.comboBox_FlowControl.SelectedIndexChanged += new System.EventHandler(this.comboBox_FlowControl_SelectedIndexChanged);
+			// 
 			// label_Line
 			// 
-			this.label_Line.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.label_Line.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.label_Line.Location = new System.Drawing.Point(3, 208);
@@ -208,7 +222,6 @@
 			// 
 			// label_Preset
 			// 
-			this.label_Preset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Preset.AutoSize = true;
 			this.label_Preset.Location = new System.Drawing.Point(3, 171);
 			this.label_Preset.Name = "label_Preset";
@@ -313,10 +326,21 @@
 			this.reportFormatPreview.TabIndex = 8;
 			this.reportFormatPreview.UseId = false;
 			// 
+			// label_FlowControl
+			// 
+			this.label_FlowControl.AutoSize = true;
+			this.label_FlowControl.Location = new System.Drawing.Point(3, 216);
+			this.label_FlowControl.Name = "label_FlowControl";
+			this.label_FlowControl.Size = new System.Drawing.Size(68, 13);
+			this.label_FlowControl.TabIndex = 20;
+			this.label_FlowControl.Text = "Flow Control:";
+			// 
 			// UsbSerialHidDeviceSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.comboBox_FlowControl);
+			this.Controls.Add(this.label_FlowControl);
 			this.Controls.Add(this.label_Preview_7);
 			this.Controls.Add(this.label_Preview_6);
 			this.Controls.Add(this.label_Preview_5);
@@ -339,7 +363,7 @@
 			this.Controls.Add(this.linkLabel_Info);
 			this.Controls.Add(this.checkBox_AutoOpen);
 			this.Name = "UsbSerialHidDeviceSettings";
-			this.Size = new System.Drawing.Size(285, 234);
+			this.Size = new System.Drawing.Size(285, 260);
 			this.EnabledChanged += new System.EventHandler(this.UsbSerialHidDeviceSettings_EnabledChanged);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbSerialHidPortSettings_Paint);
 			this.ResumeLayout(false);
@@ -371,5 +395,7 @@
 		private System.Windows.Forms.Label label_Preview_5;
 		private System.Windows.Forms.Label label_Preview_6;
 		private System.Windows.Forms.Label label_Preview_7;
+		private System.Windows.Forms.Label label_FlowControl;
+		private System.Windows.Forms.ComboBox comboBox_FlowControl;
 	}
 }

@@ -492,18 +492,6 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
-		}
-
-		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
-		}
-
 		private void checkBox_SignalXOnBeforeEachTransmission_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -516,7 +504,7 @@ namespace YAT.Gui.Forms
 			{
 				Domain.PeriodicSetting ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
 				ps.Enabled = checkBox_SignalXOnPeriodicallyEnable.Checked;
-				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically= ps;
+				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically = ps;
 			}
 		}
 
@@ -529,7 +517,7 @@ namespace YAT.Gui.Forms
 				{
 					Domain.PeriodicSetting ps = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically;
 					ps.Interval = interval;
-					this.settingsInEdit.Terminal.Send.SignalXOnPeriodically= ps;
+					this.settingsInEdit.Terminal.Send.SignalXOnPeriodically = ps;
 				}
 				else
 				{
@@ -545,6 +533,18 @@ namespace YAT.Gui.Forms
 					e.Cancel = true;
 				}
 			}
+		}
+
+		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
+		}
+
+		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
@@ -751,7 +751,7 @@ namespace YAT.Gui.Forms
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
 			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
-			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
+			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharReplace.HideXOnXOff;
 
 			// Communication:
@@ -766,6 +766,14 @@ namespace YAT.Gui.Forms
 			checkBox_CopyPredefined.Checked  = this.settingsInEdit.Terminal.Send.CopyPredefined;
 			checkBox_SendImmediately.Checked = this.settingsInEdit.Terminal.Send.SendImmediately;
 
+			checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+			checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
+			checkBox_SignalXOnPeriodicallyEnable.Enabled     = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+			checkBox_SignalXOnPeriodicallyEnable.Checked     = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Enabled;
+			textBox_SignalXOnPeriodicallyInterval.Enabled    = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+			textBox_SignalXOnPeriodicallyInterval.Text       = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Interval.ToString(CultureInfo.CurrentCulture);
+			label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+
 			groupBox_Send_SerialPorts.Enabled                = isSerialPort;
 			checkBox_LimitOutputBuffer.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
 			textBox_LimitOutputBufferSize.Enabled            = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
@@ -777,13 +785,6 @@ namespace YAT.Gui.Forms
 			textBox_MaxSendRateInterval.Text                 = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Interval.ToString(CultureInfo.CurrentCulture);
 			checkBox_NoSendOnOutputBreak.Checked             = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 			checkBox_NoSendOnInputBreak.Checked              = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
-			checkBox_SignalXOnBeforeEachTransmission.Enabled = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
-			checkBox_SignalXOnBeforeEachTransmission.Checked = this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission;
-			checkBox_SignalXOnPeriodicallyEnable.Enabled     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
-			checkBox_SignalXOnPeriodicallyEnable.Checked     = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Enabled;
-			textBox_SignalXOnPeriodicallyInterval.Enabled    = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
-			textBox_SignalXOnPeriodicallyInterval.Text       = this.settingsInEdit.Terminal.Send.SignalXOnPeriodically.Interval.ToString(CultureInfo.CurrentCulture);
-			label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControlUsesXOnXOff;
 
 			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
 			//// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
@@ -852,12 +853,12 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.Send.KeepCommand                     = Domain.Settings.SendSettings.KeepCommandDefault;
 			this.settingsInEdit.Terminal.Send.CopyPredefined                  = Domain.Settings.SendSettings.CopyPredefinedDefault;
 			this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
+			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer      = MKY.IO.Serial.SerialPort.SerialPortSettings.LimitOutputBufferDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
-			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
-			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
 			this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
 			this.settingsInEdit.Terminal.Send.DisableKeywords                 = Domain.Settings.SendSettings.DisableKeywordsDefault;

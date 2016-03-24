@@ -238,9 +238,9 @@ namespace YAT.Gui.Controls
 				autoReconnectIntervalText = "";
 
 			textBox_TcpClientAutoReconnectInterval.Enabled = autoReconnectEnabled;
-			textBox_TcpClientAutoReconnectInterval.Text = autoReconnectIntervalText;
+			textBox_TcpClientAutoReconnectInterval.Text    = autoReconnectIntervalText;
 
-			label_TcpClientAutoReconnectInterval.Enabled = enabledTcpClient;
+			label_TcpClientAutoReconnectInterval.Enabled     = enabledTcpClient;
 			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledTcpClient;
 
 			this.isSettingControls.Leave();

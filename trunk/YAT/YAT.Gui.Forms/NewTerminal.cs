@@ -270,6 +270,11 @@ namespace YAT.Gui.Forms
 			this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage = usbSerialHidDeviceSettings.RxIdUsage;
 		}
 
+		private void usbSerialHidDeviceSettings_FlowControlChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.UsbSerialHidFlowControl = usbSerialHidDeviceSettings.FlowControl;
+		}
+
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
 			this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
@@ -312,6 +317,7 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.RxIdUsage         = this.newTerminalSettings.UsbSerialHidRxIdUsage;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.FlowControl       = this.newTerminalSettings.UsbSerialHidFlowControl;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen          = this.newTerminalSettings.UsbSerialHidAutoOpen;
 
 			this.terminalSettings.TerminalIsStarted = this.newTerminalSettings.StartTerminal;
@@ -415,6 +421,7 @@ namespace YAT.Gui.Forms
 
 			usbSerialHidDeviceSettings.ReportFormat = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
 			usbSerialHidDeviceSettings.RxIdUsage    = this.newTerminalSettingsInEdit.UsbSerialHidRxIdUsage;
+			usbSerialHidDeviceSettings.FlowControl  = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
 			usbSerialHidDeviceSettings.AutoOpen     = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
 
 			serialPortSelection.PortId     = this.newTerminalSettingsInEdit.SerialPortId;

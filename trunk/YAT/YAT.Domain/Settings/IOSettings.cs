@@ -262,6 +262,36 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool FlowControlUsesXOnXOff
+		{
+			get
+			{
+				switch (this.ioType)
+				{
+					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlUsesXOnXOff);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlUsesXOnXOff);
+					default:                  return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool FlowControlManagesXOnXOffManually
+		{
+			get
+			{
+				switch (this.ioType)
+				{
+					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlManagesXOnXOffManually);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlManagesXOnXOffManually);
+					default:                  return (false);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members

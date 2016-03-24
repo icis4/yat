@@ -139,34 +139,11 @@ namespace MKY.IO.Serial.SerialPort
 		private Thread receiveThread;
 		private object receiveThreadSyncObj = new object();
 
-		/// <summary>
-		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
-		/// </summary>
 		/// <remarks>
-		/// Only applies in case of <see cref="SerialFlowControl.ManualSoftware"/> or <see cref="SerialFlowControl.ManualCombined"/>.
+		/// Only used with <see cref="SerialFlowControl.ManualSoftware"/>
+		/// and <see cref="SerialFlowControl.ManualCombined"/>.
 		/// </remarks>
-		private bool inputIsXOn;
-		private object inputIsXOnSyncObj = new object();
-
-		/// <summary>
-		/// Output XOn/XOff reflects the XOn/XOff state of the communication counterpart, i.e. a device.
-		/// </summary>
-		/// <remarks>
-		/// Only applies in case of <see cref="SerialFlowControl.ManualSoftware"/> or <see cref="SerialFlowControl.ManualCombined"/>.
-		/// </remarks>
-		private bool outputIsXOn;
-		private object outputIsXOnSyncObj = new object();
-
-		/// <remarks>
-		/// In case of manual XOn/XOff, input is initialized to XOn.
-		/// </remarks>
-		private bool manualInputWasXOn = true;
-		private object manualInputWasXOnSyncObj = new object();
-
-		private int sentXOnCount;
-		private int sentXOffCount;
-		private int receivedXOnCount;
-		private int receivedXOffCount;
+		private IXOnXOffHelper iXOnXOffHelper = new IXOnXOffHelper();
 
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
@@ -456,14 +433,9 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-				{
-					lock (this.inputIsXOnSyncObj)
-						return (this.inputIsXOn);
-				}
+					return (this.iXOnXOffHelper.InputIsXOn);
 				else
-				{
 					return (true);
-				}
 			}
 		}
 
@@ -477,14 +449,9 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-				{
-					lock (this.outputIsXOnSyncObj)
-						return (this.outputIsXOn);
-				}
+						return (this.iXOnXOffHelper.OutputIsXOn);
 				else
-				{
 					return (true);
-				}
 			}
 		}
 
@@ -498,7 +465,7 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-					return (this.sentXOnCount);
+					return (this.iXOnXOffHelper.SentXOnCount);
 				else
 					return (0);
 			}
@@ -514,7 +481,7 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-					return (this.sentXOffCount);
+					return (this.iXOnXOffHelper.SentXOffCount);
 				else
 					return (0);
 			}
@@ -530,7 +497,7 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-					return (this.receivedXOnCount);
+					return (this.iXOnXOffHelper.ReceivedXOnCount);
 				else
 					return (0);
 			}
@@ -546,7 +513,7 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-					return (this.receivedXOffCount);
+					return (this.iXOnXOffHelper.ReceivedXOffCount);
 				else
 					return (0);
 			}
@@ -661,6 +628,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsStarted)
 			{
+				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+				// Changes here must most likely be applied there too!
 				bool signalXOnXOff = false;
 				bool signalXOnXOffCount = false;
 
@@ -673,32 +642,18 @@ namespace MKY.IO.Serial.SerialPort
 						// Handle input XOn/XOff.
 						if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 						{
-							if (b == SerialPortSettings.XOnByte)
+							if (b == XOnXOff.XOnByte)
 							{
-								lock (this.inputIsXOnSyncObj)
-								{
-									if (BooleanEx.SetIfCleared(ref this.inputIsXOn))
-										signalXOnXOff = true;
+								if (this.iXOnXOffHelper.NotifyXOnSent())
+									signalXOnXOff = true;
 
-									lock (this.manualInputWasXOnSyncObj)
-										this.manualInputWasXOn = true;
-								}
-
-								Interlocked.Increment(ref this.sentXOnCount);
 								signalXOnXOffCount = true;
 							}
-							else if (b == SerialPortSettings.XOffByte)
+							else if (b == XOnXOff.XOffByte)
 							{
-								lock (this.inputIsXOnSyncObj)
-								{
-									if (BooleanEx.ClearIfSet(ref this.inputIsXOn))
-										signalXOnXOff = true;
+								if (this.iXOnXOffHelper.NotifyXOffSent())
+									signalXOnXOff = true;
 
-									lock (this.manualInputWasXOnSyncObj)
-										this.manualInputWasXOn = false;
-								}
-
-								Interlocked.Increment(ref this.sentXOffCount);
 								signalXOnXOffCount = true;
 							}
 						}
@@ -777,6 +732,10 @@ namespace MKY.IO.Serial.SerialPort
 					// Note that 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
 					while (!IsDisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
 					{                                                      // No lock required, just checking for empty.
+						bool isWriteTimeout = false;
+						bool isOutputBreak  = false;
+						List<byte> effectiveChunkData = null;
+
 						// Handle output break state:
 						if (this.port.OutputBreak) // No lock required, not modifying anything.
 						{
@@ -804,8 +763,16 @@ namespace MKY.IO.Serial.SerialPort
 						// Handle XOff state:
 						if (this.settings.Communication.FlowControlUsesXOnXOff && !OutputIsXOn)
 						{
-							byte b = this.sendQueue.Peek(); // No lock required, not modifying anything.
-							if ((b != SerialPortSettings.XOnByte) && (b != SerialPortSettings.XOffByte))
+							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
+							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
+							{
+								TrySendByte(XOnXOff.XOnByte, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+							}
+							else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
+							{
+								TrySendByte(XOnXOff.XOffByte, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+							}
+							else
 							{
 								if (!isXOffStateOldAndErrorHasBeenSignaled)
 								{
@@ -815,25 +782,21 @@ namespace MKY.IO.Serial.SerialPort
 
 								break; // Let other threads do their job and wait until signaled again.
 							}
-
-							// Control bytes must be sent even in case of XOff!
 						}
-
-						// --- No break, no inactive CTS, no XOff, ready to send: ---
-
-						// By default, stuff as much data as possible into output buffer:
-						int maxChunkSize = (this.port.WriteBufferSize - this.port.BytesToWrite);
-						if (this.settings.MaxSendRate.Enabled)
+						else // No break, no inactive CTS, no XOff state:
 						{
-							// Reduce chunk size if maximum send rate is specified:
-							int remainingSizeInInterval = (this.settings.MaxSendRate.Size - sendRate.Value);
-							maxChunkSize = Int32Ex.LimitToBounds(maxChunkSize, 0, remainingSizeInInterval);
-						}
+							// By default, stuff as much data as possible into output buffer:
+							int maxChunkSize = (this.port.WriteBufferSize - this.port.BytesToWrite);
 
-						List<byte> effectiveChunkData;
-						bool isWriteTimeout;
-						bool isOutputBreak;
-						TrySendChunk(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+							if (this.settings.MaxSendRate.Enabled)
+							{
+								// Reduce chunk size if maximum send rate is specified:
+								int remainingSizeInInterval = (this.settings.MaxSendRate.Size - sendRate.Value);
+								maxChunkSize = Int32Ex.LimitToBounds(maxChunkSize, 0, remainingSizeInInterval);
+							}
+
+							TrySendChunk(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+						}
 
 						if ((effectiveChunkData != null) && (effectiveChunkData.Count > 0))
 						{
@@ -911,6 +874,62 @@ namespace MKY.IO.Serial.SerialPort
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
 
+		/// <remarks>
+		/// Attention, sending a whole chunk is implemented in <see cref="TrySendChunk"/> below.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		private void TrySendByte(byte b, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
+		{
+			isWriteTimeout = false;
+			isOutputBreak = false;
+
+			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+			{
+				this.port.RfrEnable = true;
+			}
+
+			effectiveChunkData = new List<byte>(1);
+			try
+			{
+				byte[] a = { b };
+
+				// Note the remark in SerialPort.Write():
+				// "If there are too many bytes in the output buffer and 'Handshake' is set to
+				//  'XOnXOff' then the 'SerialPort' object may raise a 'TimeoutException' while
+				//  it waits for the device to be ready to accept more data."
+
+				// Try to write the byte, will raise a 'TimeoutException' if not possible:
+				this.port.Write(a, 0, a.Length); // Do not lock, may take some time!
+
+				effectiveChunkData.Add(b);
+
+				// Ensure not to lock the queue while potentially pending in Write(), that would
+				// result in a severe performance drop because enqueuing was no longer possible.
+			}
+			catch (TimeoutException)
+			{
+				isWriteTimeout = true;
+			}
+			catch (InvalidOperationException)
+			{
+				isOutputBreak = true;
+			}
+			catch (Exception)
+			{
+				throw; // Re-throw!
+			}
+
+			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+			{
+				this.port.Flush(); // Make sure that data is sent before restoring RFR.
+				this.port.RfrEnable = false;
+			}
+		}
+
+		/// <remarks>
+		/// Attention, sending a single byte is implemented in <see cref="TrySendByte"/> above.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		private void TrySendChunk(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
 		{
 			isWriteTimeout = false;
@@ -1016,11 +1035,13 @@ namespace MKY.IO.Serial.SerialPort
 			);
 		}
 
+		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+		// Changes here must most likely be applied there too!
+
 		/// <summary></summary>
 		protected virtual void AssumeOutputXOn()
 		{
-			lock (this.outputIsXOnSyncObj)
-				this.outputIsXOn = true;
+			this.iXOnXOffHelper.OutputIsXOn = true;
 
 			OnIOControlChanged(EventArgs.Empty);
 		}
@@ -1032,7 +1053,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			AssertNotDisposed();
 
-			Send(SerialPortSettings.XOnByte);
+			Send(XOnXOff.XOnByte);
 		}
 
 		/// <summary>
@@ -1042,7 +1063,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			AssertNotDisposed();
 
-			Send(SerialPortSettings.XOffByte);
+			Send(XOnXOff.XOffByte);
 		}
 
 		/// <summary>
@@ -1066,10 +1087,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			AssertNotDisposed();
 
-			Interlocked.Exchange(ref this.sentXOnCount, 0);
-			Interlocked.Exchange(ref this.sentXOffCount, 0);
-			Interlocked.Exchange(ref this.receivedXOnCount, 0);
-			Interlocked.Exchange(ref this.receivedXOffCount, 0);
+			this.iXOnXOffHelper.ResetCounts();
 
 			OnIOControlChanged(EventArgs.Empty);
 		}
@@ -1292,11 +1310,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialFlowControl.ManualSoftware:
 					case SerialFlowControl.ManualCombined:
 					{
-						bool wasXOn = false;
-						lock (this.manualInputWasXOnSyncObj)
-							wasXOn = this.manualInputWasXOn;
-
-						if (wasXOn)
+						if (this.iXOnXOffHelper.ManualInputWasXOn)
 							SignalInputXOn();
 
 						break;
@@ -1587,26 +1601,18 @@ namespace MKY.IO.Serial.SerialPort
 							// Handle output XOn/XOff.
 							if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 							{
-								if (b == SerialPortSettings.XOnByte)
+								if (b == XOnXOff.XOnByte)
 								{
-									lock (this.outputIsXOnSyncObj)
-									{
-										if (BooleanEx.SetIfCleared(ref this.outputIsXOn))
-											signalXOnXOff = true;
-									}
+									if (this.iXOnXOffHelper.NotifyXOnReceived())
+										signalXOnXOff = true;
 
-									Interlocked.Increment(ref this.receivedXOnCount);
 									signalXOnXOffCount = true;
 								}
-								else if (b == SerialPortSettings.XOffByte)
+								else if (b == XOnXOff.XOffByte)
 								{
-									lock (this.outputIsXOnSyncObj)
-									{
-										if (BooleanEx.ClearIfSet(ref this.outputIsXOn))
-											signalXOnXOff = true;
-									}
+									if (this.iXOnXOffHelper.NotifyXOffReceived())
+										signalXOnXOff = true;
 
-									Interlocked.Increment(ref this.receivedXOffCount);
 									signalXOnXOffCount = true;
 								}
 							}

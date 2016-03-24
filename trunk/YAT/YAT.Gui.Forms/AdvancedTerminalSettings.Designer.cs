@@ -265,15 +265,19 @@
 			this.groupBox_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Send.Controls.Add(this.label_SignalXOnPeriodicallyIntervalUnit);
 			this.groupBox_Send.Controls.Add(this.groupBox_Send_SerialPorts);
+			this.groupBox_Send.Controls.Add(this.textBox_SignalXOnPeriodicallyInterval);
 			this.groupBox_Send.Controls.Add(this.groupBox_Send_Keywords);
+			this.groupBox_Send.Controls.Add(this.checkBox_SignalXOnPeriodicallyEnable);
 			this.groupBox_Send.Controls.Add(this.label_SendImmediately);
+			this.groupBox_Send.Controls.Add(this.checkBox_SignalXOnBeforeEachTransmission);
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_Send.Controls.Add(this.checkBox_KeepCommand);
 			this.groupBox_Send.Location = new System.Drawing.Point(275, 135);
 			this.groupBox_Send.Name = "groupBox_Send";
-			this.groupBox_Send.Size = new System.Drawing.Size(263, 373);
+			this.groupBox_Send.Size = new System.Drawing.Size(263, 367);
 			this.groupBox_Send.TabIndex = 3;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
@@ -283,10 +287,6 @@
 			this.groupBox_Send_SerialPorts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Send_SerialPorts.Controls.Add(this.label_SignalXOnPeriodicallyIntervalUnit);
-			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_SignalXOnPeriodicallyInterval);
-			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_SignalXOnPeriodicallyEnable);
-			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_SignalXOnBeforeEachTransmission);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.textBox_LimitOutputBufferSize);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_LimitOutputBuffer);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.label_MaxSendRateIntervalUnit2);
@@ -297,9 +297,9 @@
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnInputBreak);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.label_LimitOutputBufferSizeUnit);
 			this.groupBox_Send_SerialPorts.Controls.Add(this.checkBox_NoSendOnOutputBreak);
-			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 91);
+			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 134);
 			this.groupBox_Send_SerialPorts.Name = "groupBox_Send_SerialPorts";
-			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 158);
+			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 109);
 			this.groupBox_Send_SerialPorts.TabIndex = 4;
 			this.groupBox_Send_SerialPorts.TabStop = false;
 			this.groupBox_Send_SerialPorts.Text = "Serial COM ports";
@@ -307,7 +307,7 @@
 			// label_SignalXOnPeriodicallyIntervalUnit
 			// 
 			this.label_SignalXOnPeriodicallyIntervalUnit.AutoSize = true;
-			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(211, 135);
+			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(232, 112);
 			this.label_SignalXOnPeriodicallyIntervalUnit.Name = "label_SignalXOnPeriodicallyIntervalUnit";
 			this.label_SignalXOnPeriodicallyIntervalUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 7;
@@ -316,7 +316,7 @@
 			// 
 			// textBox_SignalXOnPeriodicallyInterval
 			// 
-			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(163, 132);
+			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(184, 109);
 			this.textBox_SignalXOnPeriodicallyInterval.Name = "textBox_SignalXOnPeriodicallyInterval";
 			this.textBox_SignalXOnPeriodicallyInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 6;
@@ -326,7 +326,7 @@
 			// checkBox_SignalXOnPeriodicallyEnable
 			// 
 			this.checkBox_SignalXOnPeriodicallyEnable.AutoSize = true;
-			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(6, 134);
+			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(12, 111);
 			this.checkBox_SignalXOnPeriodicallyEnable.Name = "checkBox_SignalXOnPeriodicallyEnable";
 			this.checkBox_SignalXOnPeriodicallyEnable.Size = new System.Drawing.Size(159, 17);
 			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 11;
@@ -337,7 +337,7 @@
 			// checkBox_SignalXOnBeforeEachTransmission
 			// 
 			this.checkBox_SignalXOnBeforeEachTransmission.AutoSize = true;
-			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(6, 111);
+			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(12, 88);
 			this.checkBox_SignalXOnBeforeEachTransmission.Name = "checkBox_SignalXOnBeforeEachTransmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.Size = new System.Drawing.Size(195, 17);
 			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 10;
@@ -465,7 +465,7 @@
 			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultDelay);
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultDelay);
 			this.groupBox_Send_Keywords.Controls.Add(this.checkBox_DisableKeywords);
-			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 255);
+			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 249);
 			this.groupBox_Send_Keywords.Name = "groupBox_Send_Keywords";
 			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 112);
 			this.groupBox_Send_Keywords.TabIndex = 5;

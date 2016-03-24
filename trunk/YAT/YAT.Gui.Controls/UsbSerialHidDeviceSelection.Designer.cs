@@ -28,11 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.button_RefreshPorts = new System.Windows.Forms.Button();
 			this.comboBox_Device = new System.Windows.Forms.ComboBox();
 			this.label_Device = new System.Windows.Forms.Label();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.toolTip = new System.Windows.Forms.ToolTip();
 			this.SuspendLayout();
 			// 
 			// button_RefreshPorts
@@ -53,9 +52,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Device.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Device.ItemHeight = 13;
-			this.comboBox_Device.Location = new System.Drawing.Point(6, 22);
+			this.comboBox_Device.Location = new System.Drawing.Point(3, 22);
 			this.comboBox_Device.Name = "comboBox_Device";
-			this.comboBox_Device.Size = new System.Drawing.Size(251, 21);
+			this.comboBox_Device.Size = new System.Drawing.Size(254, 21);
 			this.comboBox_Device.TabIndex = 1;
 			this.comboBox_Device.SelectedIndexChanged += new System.EventHandler(this.comboBox_Device_SelectedIndexChanged);
 			// 
