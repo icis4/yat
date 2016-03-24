@@ -255,7 +255,8 @@ namespace YAT.Gui.Utilities
 				font  = SetFont (ref lengthObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref lengthObjects.Brush, fontColor);
 			}
-			else if ((element is Domain.DisplayElement.LeftMargin) ||
+			else if ((element is Domain.DisplayElement.NoData) ||
+			         (element is Domain.DisplayElement.LeftMargin) ||
 			         (element is Domain.DisplayElement.Space) ||
 			         (element is Domain.DisplayElement.RightMargin) ||
 			         (element is Domain.DisplayElement.LineBreak))

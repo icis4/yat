@@ -145,15 +145,16 @@ namespace YAT.Model.Utilities
 
 		private void SetFormat(DisplayElement element, out FormatDescriptor format)
 		{
-			if      (element is DisplayElement.TxData)			{ format = this.txDataFormat; }
-			else if (element is DisplayElement.TxControl)		{ format = this.txControlFormat; }
-			else if (element is DisplayElement.RxData)			{ format = this.rxDataFormat; }
-			else if (element is DisplayElement.RxControl)		{ format = this.rxControlFormat; }
-			else if (element is DisplayElement.DateInfo)		{ format = this.dateFormat; }
-			else if (element is DisplayElement.TimeInfo)		{ format = this.timeFormat; }
-			else if (element is DisplayElement.DirectionInfo)	{ format = this.directionFormat; }
-			else if (element is DisplayElement.Length)			{ format = this.lengthFormat; }
-			else if ((element is DisplayElement.LeftMargin) ||
+			if      ( element is DisplayElement.TxData)			{ format = this.txDataFormat; }
+			else if ( element is DisplayElement.TxControl)		{ format = this.txControlFormat; }
+			else if ( element is DisplayElement.RxData)			{ format = this.rxDataFormat; }
+			else if ( element is DisplayElement.RxControl)		{ format = this.rxControlFormat; }
+			else if ( element is DisplayElement.DateInfo)		{ format = this.dateFormat; }
+			else if ( element is DisplayElement.TimeInfo)		{ format = this.timeFormat; }
+			else if ( element is DisplayElement.DirectionInfo)	{ format = this.directionFormat; }
+			else if ( element is DisplayElement.Length)			{ format = this.lengthFormat; }
+			else if ((element is DisplayElement.NoData) ||
+			         (element is DisplayElement.LeftMargin) ||
 			         (element is DisplayElement.Space) ||
 			         (element is DisplayElement.RightMargin) ||
 			         (element is DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
