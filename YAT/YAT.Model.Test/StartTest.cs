@@ -419,6 +419,7 @@ namespace YAT.Model.Test
 
 				Assert.AreEqual("1234", main.StartArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo.VendorIdString);
 				Assert.AreEqual("ABCD", main.StartArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo.ProductIdString);
+				Assert.AreEqual(MKY.IO.Serial.Usb.SerialHidFlowControl.None, main.StartArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.FlowControl);
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.AutoOpen);
 
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.TerminalIsStarted);

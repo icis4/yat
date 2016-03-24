@@ -804,6 +804,14 @@ namespace YAT.Model
 				{
 					terminalSettings.IO.UsbSerialHidDevice.ReportFormat = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.commandLineArgs.FormatPreset;
 				}
+				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
+				{
+					MKY.IO.Serial.Usb.SerialHidFlowControl flowControl;
+					if (MKY.IO.Serial.Usb.SerialHidFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
+						terminalSettings.IO.UsbSerialHidDevice.FlowControl = flowControl;
+					else
+						return (false);
+				}
 				if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
 				{
 					terminalSettings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
@@ -855,6 +863,7 @@ namespace YAT.Model
 			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo   = newTerminalSettings.UsbSerialHidDeviceInfo;
 			terminalSettings.IO.UsbSerialHidDevice.ReportFormat = newTerminalSettings.UsbSerialHidReportFormat;
 			terminalSettings.IO.UsbSerialHidDevice.RxIdUsage    = newTerminalSettings.UsbSerialHidRxIdUsage;
+			terminalSettings.IO.UsbSerialHidDevice.FlowControl  = newTerminalSettings.UsbSerialHidFlowControl;
 			terminalSettings.IO.UsbSerialHidDevice.AutoOpen     = newTerminalSettings.UsbSerialHidAutoOpen;
 
 			bool terminalIsStarted = newTerminalSettings.StartTerminal;
@@ -880,6 +889,7 @@ namespace YAT.Model
 				newTerminalSettings.UsbSerialHidDeviceInfo   = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
 				newTerminalSettings.UsbSerialHidReportFormat = terminalSettings.IO.UsbSerialHidDevice.ReportFormat;
 				newTerminalSettings.UsbSerialHidRxIdUsage    = terminalSettings.IO.UsbSerialHidDevice.RxIdUsage;
+				newTerminalSettings.UsbSerialHidFlowControl  = terminalSettings.IO.UsbSerialHidDevice.FlowControl;
 				newTerminalSettings.UsbSerialHidAutoOpen     = terminalSettings.IO.UsbSerialHidDevice.AutoOpen;
 
 				return (true);

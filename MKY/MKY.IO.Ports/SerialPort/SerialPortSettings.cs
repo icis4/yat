@@ -46,22 +46,10 @@ namespace MKY.IO.Ports
 	[TypeConverter(typeof(SerialPortSettingsConverter))]
 	public class SerialPortSettings : IEquatable<SerialPortSettings>
 	{
-		/// <summary></summary>
-		public const byte XOnByte  = 0x11;
-
-		/// <summary></summary>
-		public const byte XOffByte = 0x13;
-
-		/// <summary></summary>
-		public const string XOnDescription = "XOn = 11h (DC1)";
-
-		/// <summary></summary>
-		public const string XOffDescription = "XOff = 13h (DC3)";
-
-		private BaudRate baudRate;
-		private DataBits dataBits;
-		private Parity parity;
-		private StopBits stopBits;
+		private BaudRate  baudRate;
+		private DataBits  dataBits;
+		private Parity    parity;
+		private StopBits  stopBits;
 		private Handshake handshake;
 
 		/// <summary>
@@ -311,14 +299,6 @@ namespace MKY.IO.Ports
 		public long PacketDuration
 		{
 			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
-		}
-
-		/// <summary>
-		/// Returns whether the given byte is an XOn or XOff byte.
-		/// </summary>
-		public static bool IsXOnXOffByte(byte b)
-		{
-			return ((b == XOnByte) || (b == XOffByte));
 		}
 
 		#region Comparison Operators

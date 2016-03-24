@@ -42,7 +42,7 @@
 			this.comboBox_TerminalType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_TerminalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_TerminalType.Location = new System.Drawing.Point(101, 3);
+			this.comboBox_TerminalType.Location = new System.Drawing.Point(104, 3);
 			this.comboBox_TerminalType.Name = "comboBox_TerminalType";
 			this.comboBox_TerminalType.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_TerminalType.TabIndex = 1;
@@ -63,7 +63,7 @@
 			this.comboBox_IOType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_IOType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_IOType.Location = new System.Drawing.Point(101, 30);
+			this.comboBox_IOType.Location = new System.Drawing.Point(104, 30);
 			this.comboBox_IOType.Name = "comboBox_IOType";
 			this.comboBox_IOType.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_IOType.TabIndex = 3;
@@ -87,7 +87,7 @@
 			this.Controls.Add(this.comboBox_IOType);
 			this.Controls.Add(this.label_IOType);
 			this.Name = "TerminalSelection";
-			this.Size = new System.Drawing.Size(260, 54);
+			this.Size = new System.Drawing.Size(263, 54);
 			this.EnabledChanged += new System.EventHandler(this.TerminalSelection_EnabledChanged);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TerminalSelection_Paint);
 			this.ResumeLayout(false);

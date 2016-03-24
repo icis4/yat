@@ -46,6 +46,9 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		public const SerialHidFlowControl FlowControlDefault = SerialHidFlowControl.None;
+
+		/// <summary></summary>
 		public const bool AutoOpenDefault = IO.Usb.SerialHidDevice.AutoOpenDefault;
 
 		#endregion
@@ -62,6 +65,7 @@ namespace MKY.IO.Serial.Usb
 		private SerialHidReportFormat reportFormat;
 		private SerialHidRxIdUsage rxIdUsage;
 
+		private SerialHidFlowControl flowControl;
 		private bool autoOpen;
 
 		#endregion
@@ -102,7 +106,8 @@ namespace MKY.IO.Serial.Usb
 			ReportFormat = new SerialHidReportFormat(rhs.ReportFormat);
 			RxIdUsage    = new SerialHidRxIdUsage   (rhs.RxIdUsage);
 
-			AutoOpen = rhs.AutoOpen;
+			FlowControl = rhs.FlowControl;
+			AutoOpen    = rhs.AutoOpen;
 
 			ClearChanged();
 		}
@@ -119,7 +124,8 @@ namespace MKY.IO.Serial.Usb
 			ReportFormat = new SerialHidReportFormat();
 			RxIdUsage    = new SerialHidRxIdUsage();
 
-			AutoOpen = AutoOpenDefault;
+			FlowControl = FlowControlDefault;
+			AutoOpen    = AutoOpenDefault;
 		}
 
 		#endregion
@@ -176,6 +182,61 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
+		[XmlElement("FlowControl")]
+		public virtual SerialHidFlowControl FlowControl
+		{
+			get { return (this.flowControl); }
+			set
+			{
+				if (this.flowControl != value)
+				{
+					this.flowControl = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if flow control is active, i.e. the receiver can pause the sender.
+		/// </summary>
+		public virtual bool FlowControlIsActive
+		{
+			get { return (!FlowControlIsInactive); }
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if flow control is inactive, i.e. the receiver cannot pause the sender.
+		/// </summary>
+		public virtual bool FlowControlIsInactive
+		{
+			get { return (this.flowControl == SerialHidFlowControl.None); }
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
+		/// flow control is active.
+		/// </summary>
+		public virtual bool FlowControlUsesXOnXOff
+		{
+			get
+			{
+				return ((this.flowControl == SerialHidFlowControl.Software) ||
+						(this.flowControl == SerialHidFlowControl.ManualSoftware));
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if XOn/XOff is managed manually.
+		/// </summary>
+		public virtual bool FlowControlManagesXOnXOffManually
+		{
+			get
+			{
+				return (this.flowControl == SerialHidFlowControl.ManualSoftware);
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("AutoOpen")]
 		public virtual bool AutoOpen
 		{
@@ -217,6 +278,7 @@ namespace MKY.IO.Serial.Usb
 				(DeviceInfo   == other.DeviceInfo) &&
 				(ReportFormat == other.ReportFormat) &&
 				(RxIdUsage    == other.RxIdUsage) &&
+				(FlowControl  == other.FlowControl) &&
 				(AutoOpen     == other.AutoOpen)
 			);
 		}
@@ -241,6 +303,7 @@ namespace MKY.IO.Serial.Usb
 				deviceInfoHashCode ^
 				ReportFormat.GetHashCode() ^
 				RxIdUsage   .GetHashCode() ^
+				FlowControl .GetHashCode() ^
 				AutoOpen    .GetHashCode()
 			);
 		}

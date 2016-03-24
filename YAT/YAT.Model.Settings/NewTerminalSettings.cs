@@ -50,6 +50,7 @@ namespace YAT.Model.Settings
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
 		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
 		private MKY.IO.Usb.SerialHidRxIdUsage usbSerialHidRxIdUsage;
+		private MKY.IO.Serial.Usb.SerialHidFlowControl usbSerialHidFlowControl;
 		private bool usbSerialHidAutoOpen;
 
 		private bool startTerminal;
@@ -101,6 +102,7 @@ namespace YAT.Model.Settings
 			UsbSerialHidDeviceInfo   = rhs.UsbSerialHidDeviceInfo;
 			UsbSerialHidReportFormat = rhs.UsbSerialHidReportFormat;
 			UsbSerialHidRxIdUsage    = rhs.UsbSerialHidRxIdUsage;
+			UsbSerialHidFlowControl  = rhs.UsbSerialHidFlowControl;
 			UsbSerialHidAutoOpen     = rhs.UsbSerialHidAutoOpen;
 
 			StartTerminal            = rhs.StartTerminal;
@@ -137,6 +139,7 @@ namespace YAT.Model.Settings
 			UsbSerialHidDeviceInfo   = null;
 			UsbSerialHidReportFormat = new MKY.IO.Usb.SerialHidReportFormat();
 			UsbSerialHidRxIdUsage    = new MKY.IO.Usb.SerialHidRxIdUsage();
+			UsbSerialHidFlowControl  = MKY.IO.Serial.Usb.SerialHidDeviceSettings.FlowControlDefault;
 			UsbSerialHidAutoOpen     = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
 			StartTerminal            = true;
@@ -427,6 +430,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("UsbSerialHidFlowControl")]
+		public virtual MKY.IO.Serial.Usb.SerialHidFlowControl UsbSerialHidFlowControl
+		{
+			get { return (this.usbSerialHidFlowControl); }
+			set
+			{
+				if (this.usbSerialHidFlowControl != value)
+				{
+					this.usbSerialHidFlowControl = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("UsbSerialHidAutoOpen")]
 		public virtual bool UsbSerialHidAutoOpen
 		{
@@ -498,6 +516,7 @@ namespace YAT.Model.Settings
 				(UsbSerialHidDeviceInfo   == other.UsbSerialHidDeviceInfo) &&
 				(UsbSerialHidReportFormat == other.UsbSerialHidReportFormat) &&
 				(UsbSerialHidRxIdUsage    == other.UsbSerialHidRxIdUsage) &&
+				(UsbSerialHidFlowControl  == other.UsbSerialHidFlowControl) &&
 				(UsbSerialHidAutoOpen     == other.UsbSerialHidAutoOpen) &&
 
 				(StartTerminal            == other.StartTerminal)
@@ -543,6 +562,7 @@ namespace YAT.Model.Settings
 				usbSerialHidDeviceInfoHashCode ^
 				UsbSerialHidReportFormat.GetHashCode() ^
 				UsbSerialHidRxIdUsage   .GetHashCode() ^
+				UsbSerialHidFlowControl .GetHashCode() ^
 				UsbSerialHidAutoOpen    .GetHashCode() ^
 
 				StartTerminal           .GetHashCode()

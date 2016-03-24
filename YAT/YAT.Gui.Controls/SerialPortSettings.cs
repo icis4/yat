@@ -438,16 +438,16 @@ namespace YAT.Gui.Controls
 
 			if (Enabled)
 			{
-				bool autoReopenEnabled = this.autoReopen.Enabled;
-				checkBox_AutoReopen.Checked = autoReopenEnabled;
+				bool autoReopenEnabled             = this.autoReopen.Enabled;
+				checkBox_AutoReopen.Checked        = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString(CultureInfo.CurrentCulture);
+				textBox_AutoReopenInterval.Text    = this.autoReopen.Interval.ToString(CultureInfo.CurrentCulture);
 			}
 			else
 			{
-				checkBox_AutoReopen.Checked = false;
+				checkBox_AutoReopen.Checked        = false;
 				textBox_AutoReopenInterval.Enabled = false;
-				textBox_AutoReopenInterval.Text = "";
+				textBox_AutoReopenInterval.Text    = "";
 			}
 
 			this.isSettingControls.Leave();

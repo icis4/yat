@@ -47,7 +47,8 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool AutoOpenDefault = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
+		private const MKY.IO.Serial.Usb.SerialHidFlowControl FlowControlDefault = MKY.IO.Serial.Usb.SerialHidFlowControl.None;
+		private const bool AutoOpenDefault                                      = MKY.IO.Serial.Usb.SerialHidDeviceSettings.AutoOpenDefault;
 
 		private const string AnyIdIndication = "*";
 
@@ -63,7 +64,8 @@ namespace YAT.Gui.Controls
 		private MKY.IO.Usb.SerialHidReportFormat reportFormat = new MKY.IO.Usb.SerialHidReportFormat();
 		private MKY.IO.Usb.SerialHidRxIdUsage    rxIdUsage    = new MKY.IO.Usb.SerialHidRxIdUsage();
 
-		private bool autoOpen = AutoOpenDefault;
+		private MKY.IO.Serial.Usb.SerialHidFlowControl flowControl = FlowControlDefault;
+		private bool autoOpen                                      = AutoOpenDefault;
 
 		#endregion
 
@@ -81,6 +83,11 @@ namespace YAT.Gui.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the RxIdUsage property is changed.")]
 		public event EventHandler RxIdUsageChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the FlowControl property is changed.")]
+		public event EventHandler FlowControlChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -144,6 +151,24 @@ namespace YAT.Gui.Controls
 					this.rxIdUsage = value;
 					SetControls();
 					OnRxIdUsageChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("USB Ser/HID")]
+		[Description("The flow control type.")]
+		[DefaultValue(FlowControlDefault)]
+		public virtual MKY.IO.Serial.Usb.SerialHidFlowControl FlowControl
+		{
+			get { return (this.flowControl); }
+			set
+			{
+				if (this.flowControl != value)
+				{
+					this.flowControl = value;
+					SetControls();
+					OnFlowControlChanged(EventArgs.Empty);
 				}
 			}
 		}
@@ -380,6 +405,12 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				FlowControl = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)comboBox_FlowControl.SelectedItem;
+		}
+
 		private void checkBox_AutoOpen_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -397,7 +428,8 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			comboBox_Preset.Items.AddRange(MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
+			comboBox_Preset.Items.AddRange     (MKY.IO.Usb.SerialHidReportFormatPresetEx.GetItems());
+			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.Usb.SerialHidFlowControlEx.GetItems());
 
 			this.isSettingControls.Leave();
 		}
@@ -415,7 +447,6 @@ namespace YAT.Gui.Controls
 
 				checkBox_UseId.Checked        =  Enabled;
 				checkBox_SeparateRxId.Checked = (Enabled ? this.rxIdUsage.SeparateRxId : false);
-				textBox_Id.Enabled            =  Enabled;
 				textBox_RxId.Enabled          = (Enabled ? this.rxIdUsage.SeparateRxId : false);
 
 				textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
@@ -448,19 +479,15 @@ namespace YAT.Gui.Controls
 			checkBox_PrependPayloadByteLength.Checked = (Enabled ? this.reportFormat.PrependPayloadByteLength : false);
 			checkBox_AppendTerminatingZero.Checked    = (Enabled ? this.reportFormat.AppendTerminatingZero : false);
 		////checkBox_FillLastReport.Checked           = (Enabled ? this.reportFormat.FillLastReport : false);
+			checkBox_FillLastReport.Checked           = true; // Windows HID.dll requires that outgoing reports are always filled!
 
-			// Windows HID.dll requires that outgoing reports are always filled!
-			checkBox_FillLastReport.Checked = true;
-
-			reportFormatPreview.Enabled = Enabled;
-			reportFormatPreview.Format = this.reportFormat;
-
-			label_Preset.Enabled = Enabled;
-			comboBox_Preset.Enabled = Enabled;
+			reportFormatPreview.Format  = this.reportFormat;
 			comboBox_Preset.SelectedItem = (MKY.IO.Usb.SerialHidReportFormatPresetEx)this.reportFormat;
-			linkLabel_Info.Enabled = Enabled;
 
-			label_Line.Enabled = Enabled;
+			if (Enabled)
+				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.Usb.SerialHidFlowControlEx)this.flowControl;
+			else
+				comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
 
 			checkBox_AutoOpen.Checked = (Enabled ? this.autoOpen : false);
 
@@ -484,6 +511,12 @@ namespace YAT.Gui.Controls
 		protected virtual void OnRxIdUsageChanged(EventArgs e)
 		{
 			EventHelper.FireSync(RxIdUsageChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFlowControlChanged(EventArgs e)
+		{
+			EventHelper.FireSync(FlowControlChanged, this, e);
 		}
 
 		/// <summary></summary>

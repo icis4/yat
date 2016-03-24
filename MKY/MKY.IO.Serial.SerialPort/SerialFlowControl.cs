@@ -57,7 +57,13 @@ namespace MKY.IO.Serial.SerialPort
 
 	#endregion
 
-	/// <summary></summary>
+	/// <summary>
+	/// Extended enum SerialFlowControlEx.
+	/// </summary>
+	/// <remarks>
+	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
+	/// Make sure to use the underlying enum for serialization.
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order of 'const' and 'readonly' according to meaning.")]
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]

@@ -643,8 +643,9 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isText       = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
-			bool isSerialPort = (this.settingsRoot.IOType       == Domain.IOType.SerialPort);
+			bool isText         = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
+			bool isSerialPort   = (this.settingsRoot.IOType       == Domain.IOType.SerialPort);
+			bool isUsbSerialHid = (this.settingsRoot.IOType       == Domain.IOType.UsbSerialHid);
 
 			// Layout, disable monitor item if the other monitors are hidden:
 			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
@@ -690,7 +691,7 @@ namespace YAT.Gui.Forms
 
 			// Flow control count:
 			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
-			toolStripMenuItem_TerminalMenu_View_FlowControlCount.Enabled            = isSerialPort;
+			toolStripMenuItem_TerminalMenu_View_FlowControlCount.Enabled            = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
 			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
 			toolStripMenuItem_TerminalMenu_View_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
@@ -1608,11 +1609,12 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort   = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isUsbSerialHid = (this.settingsRoot.IOType == Domain.IOType.UsbSerialHid);
 
 			// Flow control count:
 			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
-			contextMenuStrip_Status_FlowControlCount.Enabled            = isSerialPort;
+			contextMenuStrip_Status_FlowControlCount.Enabled            = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
 			contextMenuStrip_Status_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
 			contextMenuStrip_Status_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
@@ -1782,53 +1784,52 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Status
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private List<ToolStripStatusLabel> statusLabels_ioControlSerialPort;
+		private List<ToolStripStatusLabel> terminalStatusLabels;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Dictionary<ToolStripStatusLabel, string> statusLabels_ioControlSerialPort_DefaultText;
+		private Dictionary<ToolStripStatusLabel, string> terminalStatusLabels_DefaultText;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Dictionary<ToolStripStatusLabel, string> statusLabels_ioControlSerialPort_DefaultToolTipText;
+		private Dictionary<ToolStripStatusLabel, string> terminalStatusLabels_DefaultToolTipText;
 
 		private void toolStripStatusLabel_TerminalStatus_Initialize()
 		{
-			this.statusLabels_ioControlSerialPort = new List<ToolStripStatusLabel>();
+			this.terminalStatusLabels = new List<ToolStripStatusLabel>();
 
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator1);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_RFR);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_CTS);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DTR);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DSR);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DCD);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator2);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator3);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
-			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator1);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_RFR);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_CTS);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DTR);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DSR);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DCD);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator2);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator3);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 
-			this.statusLabels_ioControlSerialPort_DefaultText = new Dictionary<ToolStripStatusLabel, string>();
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DCD,           toolStripStatusLabel_TerminalStatus_DCD.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff,  toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.Text);
-			this.statusLabels_ioControlSerialPort_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.Text);
+			this.terminalStatusLabels_DefaultText = new Dictionary<ToolStripStatusLabel, string>();
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DCD,           toolStripStatusLabel_TerminalStatus_DCD.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff,  toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.Text);
+			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.Text);
 
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText = new Dictionary<ToolStripStatusLabel, string>();
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DCD,           toolStripStatusLabel_TerminalStatus_DCD.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff,  toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText);
-			this.statusLabels_ioControlSerialPort_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText = new Dictionary<ToolStripStatusLabel, string>();
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DSR,           toolStripStatusLabel_TerminalStatus_DSR.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DCD,           toolStripStatusLabel_TerminalStatus_DCD.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff,  toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff, toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.ToolTipText);
+			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText);
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_IOStatus_Click(object sender, EventArgs e)
@@ -3542,22 +3543,26 @@ namespace YAT.Gui.Forms
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void SetIOControlControls()
 		{
-			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+			Image on  = Properties.Resources.Image_Status_Green_12x12;
+			Image off = Properties.Resources.Image_Status_Red_12x12;
 
-			foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
-				sl.Visible = isSerialPort;
+			bool isOpen = this.terminal.IsOpen;
+
+			bool isSerialPort   = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isUsbSerialHid = (this.settingsRoot.IOType == Domain.IOType.UsbSerialHid);
 
 			if (isSerialPort)
 			{
-				bool isOpen = this.terminal.IsOpen;
-
-				foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
+				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+				{
+					sl.Visible = true;
 					sl.Enabled = isOpen;
+				}
 
-				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.statusLabels_ioControlSerialPort_DefaultText)
+				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
 					kvp.Key.Text = kvp.Value;
 
-				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.statusLabels_ioControlSerialPort_DefaultToolTipText)
+				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultToolTipText)
 					kvp.Key.ToolTipText = kvp.Value;
 
 				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
@@ -3592,9 +3597,6 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ToolTipText += (" | Output Break Count");
 				}
 
-				Image on  = Properties.Resources.Image_Status_Green_12x12;
-				Image off = Properties.Resources.Image_Status_Red_12x12;
-
 				if (isOpen)
 				{
 					var pins = new MKY.IO.Ports.SerialPortControlPins();
@@ -3620,12 +3622,12 @@ namespace YAT.Gui.Forms
 						throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
 					}
 
-					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
 					bool indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
 					bool outputIsXOn     = false;
 					bool inputIsXOn      = false;
 
-					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
+					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 					if (x != null)
 					{
 						try // Fail-safe implementation, especially catching exceptions while closing.
@@ -3695,17 +3697,17 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					// By default, all are visible and disabled:
+					// By default, all are disabled:
 
-					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
+					foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+					{
 						sl.Image = off;
-
-					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
-						sl.ForeColor = SystemColors.ControlText;
+						sl.ForeColor = SystemColors.GrayText;
+					}
 
 					// Exceptions:
 
-					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
 					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
@@ -3715,6 +3717,83 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 				}
+			}
+			else if (isUsbSerialHid)
+			{
+				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+					sl.Visible = false;
+
+				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
+					kvp.Key.Text = kvp.Value;
+
+				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultToolTipText)
+					kvp.Key.ToolTipText = kvp.Value;
+
+				if (this.settingsRoot.Terminal.Status.ShowFlowControlCount)
+				{
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text  += (" | " + this.terminal.SentXOnCount.ToString(CultureInfo.CurrentCulture)     + " | " + this.terminal.SentXOffCount.ToString(CultureInfo.CurrentCulture));
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text += (" | " + this.terminal.ReceivedXOnCount.ToString(CultureInfo.CurrentCulture) + " | " + this.terminal.ReceivedXOffCount.ToString(CultureInfo.CurrentCulture));
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText  += (" | XOn Count | XOff Count");
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText += (" | XOn Count | XOff Count");
+				}
+
+				if (isOpen)
+				{
+					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
+					bool outputIsXOn     = false;
+					bool inputIsXOn      = false;
+
+					var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+					if (x != null)
+					{
+						try // Fail-safe implementation, especially catching exceptions while closing.
+						{
+							indicateXOnXOff = x.XOnXOffIsInUse;
+							outputIsXOn     = x.OutputIsXOn;
+							inputIsXOn      = x.InputIsXOn;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
+						}
+					}
+
+					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+
+					// \attention
+					// Do not modify the 'Enabled' property. Labels must always be enabled,
+					// otherwise picture get's greyed out, but it must either be green or red.
+					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
+					// checks whether an operation is allowed.
+				}
+				else
+				{
+					bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
+					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = off;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = off;
+
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+				}
+			}
+			else
+			{
+				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+					sl.Visible = false;
 			}
 		}
 

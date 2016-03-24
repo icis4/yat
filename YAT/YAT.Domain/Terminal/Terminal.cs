@@ -1288,7 +1288,6 @@ namespace YAT.Domain
 			get { return ((this.terminalSettings != null) && (this.terminalSettings.IO.IOType == IOType.SerialPort)); }
 		}
 
-
 		/// <summary>
 		/// Serial port control pins.
 		/// </summary>
@@ -1336,12 +1335,9 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				if (IsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.SentXOnCount);
-				}
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
+					return (x.SentXOnCount);
 
 				return (0);
 			}
@@ -1354,12 +1350,9 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				if (IsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.SentXOffCount);
-				}
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
+					return (x.SentXOffCount);
 
 				return (0);
 			}
@@ -1372,12 +1365,9 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				if (IsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.ReceivedXOnCount);
-				}
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
+					return (x.ReceivedXOnCount);
 
 				return (0);
 			}
@@ -1390,12 +1380,9 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				if (IsSerialPort)
-				{
-					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-					if (port != null)
-						return (port.ReceivedXOffCount);
-				}
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
+					return (x.ReceivedXOffCount);
 
 				return (0);
 			}
@@ -1411,6 +1398,12 @@ namespace YAT.Domain
 				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
 					port.ResetFlowControlCount();
+			}
+			else
+			{
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
+					x.ResetXOnXOffCount();
 			}
 		}
 
@@ -1543,26 +1536,23 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			if (IsSerialPort)
+			if (this.terminalSettings.IO.FlowControlManagesXOnXOffManually)
 			{
-				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
 				{
-					var x = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
-					if (x != null)
-					{
-						// Since the underlying I/O provider's 'DataSent' events are no longer used to
-						// feed the outgoing data into the repositories, outgoing XOn/XOff characters
-						// must manually be fed into the repositories. Do so before actually sending the
-						// character to ensure that it is placed before eventual data.
-						if (x.InputIsXOn)
-							ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOffByte });
-						else
-							ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
+					// Since the underlying I/O provider's 'DataSent' events are no longer used to
+					// feed the outgoing data into the repositories, outgoing XOn/XOff characters
+					// must manually be fed into the repositories. Do so before actually sending the
+					// character to ensure that it is placed before eventual data.
+					if (x.InputIsXOn)
+						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.XOnXOff.XOffByte });
+					else
+						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.XOnXOff.XOnByte });
 
-						x.ToggleInputXOnXOff();
+					x.ToggleInputXOnXOff();
 
-						return (true);
-					}
+					return (true);
 				}
 			}
 
@@ -1577,23 +1567,20 @@ namespace YAT.Domain
 		/// </returns>
 		public virtual bool RequestSignalInputXOn()
 		{
-			if (IsSerialPort)
+			if (this.terminalSettings.IO.FlowControlUsesXOnXOff)
 			{
-				if (this.terminalSettings.IO.SerialPort.Communication.FlowControlUsesXOnXOff)
+				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
+				if (x != null)
 				{
-					var x = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.IXOnXOffHandler);
-					if (x != null)
-					{
-						// Since the underlying I/O provider's 'DataSent' events are no longer used to
-						// feed the outgoing data into the repositories, outgoing XOn/XOff characters
-						// must manually be fed into the repositories. Do so before actually sending the
-						// character to ensure that it is placed before eventual data.
-						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.SerialPort.SerialPortSettings.XOnByte });
+					// Since the underlying I/O provider's 'DataSent' events are no longer used to
+					// feed the outgoing data into the repositories, outgoing XOn/XOff characters
+					// must manually be fed into the repositories. Do so before actually sending the
+					// character to ensure that it is placed before eventual data.
+					ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.XOnXOff.XOnByte });
 
-						x.SignalInputXOn();
+					x.SignalInputXOn();
 
-						return (true);
-					}
+					return (true);
 				}
 			}
 
@@ -1724,8 +1711,8 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
 		{
-			bool isXOnXOffByte = MKY.IO.Ports.SerialPortSettings.IsXOnXOffByte(b);
-			bool hideXOnXOff   = (TerminalSettings.IO.SerialPort.Communication.FlowControlUsesXOnXOff && TerminalSettings.CharReplace.HideXOnXOff);
+			bool isXOnXOffByte = MKY.IO.Serial.XOnXOff.IsXOnXOffByte(b);
+			bool hideXOnXOff   = (TerminalSettings.IO.FlowControlUsesXOnXOff && TerminalSettings.CharReplace.HideXOnXOff);
 			bool isByteToHide  = (isXOnXOffByte && hideXOnXOff);
 
 			bool isControlByte = MKY.Text.Ascii.IsControlByte(b);

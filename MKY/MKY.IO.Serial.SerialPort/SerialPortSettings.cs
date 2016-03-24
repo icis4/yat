@@ -49,18 +49,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public const int AutoReopenMinimumInterval = 100;
 
-		/// <summary></summary>
-		public const byte XOnByte = Ports.SerialPortSettings.XOnByte;
-
-		/// <summary></summary>
-		public const byte XOffByte = Ports.SerialPortSettings.XOffByte;
-
-		/// <summary></summary>
-		public const string XOnDescription = Ports.SerialPortSettings.XOnDescription;
-
-		/// <summary></summary>
-		public const string XOffDescription = Ports.SerialPortSettings.XOffDescription;
-
 		/// <remarks>
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.

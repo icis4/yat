@@ -85,8 +85,8 @@
 			this.Controls.Add(this.checkBox_TcpClientAutoReconnect);
 			this.Name = "SocketSettings";
 			this.Size = new System.Drawing.Size(260, 42);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSettings_Paint);
 			this.EnabledChanged += new System.EventHandler(this.SocketSettings_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSettings_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
