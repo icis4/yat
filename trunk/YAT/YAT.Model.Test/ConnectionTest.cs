@@ -47,6 +47,15 @@ namespace YAT.Model.Test
 	[TestFixture]
 	public class ConnectionTest
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string CommandToEcho = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwyxyz0123456789";
+
+		#endregion
+
 		#region TestFixture
 		//==========================================================================================
 		// TestFixture
@@ -167,7 +176,9 @@ namespace YAT.Model.Test
 				// --- Test: Close/Reopen while continuous receiving. ----------------------------------
 
 				// Request continuous data:
-				terminal.SendText(new Types.Command("SIR")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+				terminal.SendText(new Types.Command("ECHO 2")); // Activate continuous echo mode.
+				Thread.Sleep(WaitForOperation);
+				terminal.SendText(new Types.Command(CommandToEcho)); // Request continuous echo.
 				Thread.Sleep(WaitForOperation);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
@@ -182,7 +193,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(terminal.IsReadyToSend);
 
 				// Stop continuous data:
-				terminal.SendText(new Types.Command("SI")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+				terminal.SendText(new Types.Command("<ESC>")); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 
 				// Close terminal. Expected: No exceptions, terminal can be closed.
@@ -364,7 +375,9 @@ namespace YAT.Model.Test
 				if (testWithContinuousReceiving) // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
 				{
 					// Request continuous data:
-					terminal.SendText(new Types.Command("SIR")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+					terminal.SendText(new Types.Command("ECHO 2")); // Activate continuous echo mode.
+					Thread.Sleep(WaitForOperation);
+					terminal.SendText(new Types.Command(CommandToEcho)); // Request continuous echo.
 					Thread.Sleep(WaitForOperation);
 
 					// Disconnect USB/RS-232 converter. Expected: No exceptions, terminal is closed:
@@ -386,7 +399,7 @@ namespace YAT.Model.Test
 					Assert.IsTrue(terminal.IsReadyToSend);
 
 					// Stop continuous data:
-					terminal.SendText(new Types.Command("SI")); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+					terminal.SendText(new Types.Command("<ESC>")); // <ESC> to quit ECHO mode.
 					Thread.Sleep(WaitForOperation);
 				}
 

@@ -97,24 +97,21 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	}
 
 	/// <remarks>
-	/// \ToDo 'PerformContinuousReceivingOfSIR' should be upgraded to '...OfECHO' as soon as mode
-	/// 2 becomes available for the ECHO command.
-	/// </remarks>
-	/// <remarks>
-	/// Measurements of 'TestContinuousReceivingOfSIR' (now 'PerformContinuousReceivingOfSIR')
-	/// on 2008-06-15..18 have resulted in the following figures:
+	/// Currently, neither device/driver loses any data. However, measurements of
+	/// 'TestContinuousReceivingOfSIR' (now 'PerformContinuousReceivingOfECHO')
+	/// on 2008-06-15..18 resulted in the following figures:
 	/// 
-	/// Laptop @ Home with MCT U232:
+	/// Laptop @ Home (WinXP) with MCT U232:
 	/// - 2008-06-15 @ 1613 :  ~20 missing chars out of   ~600'000 chars total
 	/// - 2008-06-15 @ 1649 :  ~10 missing chars out of   ~360'000 chars total
 	/// - 2008-06-15 @ 1813 :  ~10 missing chars out of   ~360'000 chars total
 	/// - 2008-06-16 @ 1032 : ~130 missing chars out of ~9'000'000 chars total
 	/// - 2008-06-16 @ 2245 :   ~6 missing chars out of   ~360'000 chars total
 	/// 
-	/// Desktop @ Work with Prolific PL-2303:
+	/// Desktop @ Work (WinXP) with Prolific PL-2303:
 	/// - 2008-06-18 @ 1111 :    0 missing chars out of   ~360'000 chars total :-)
 	/// 
-	/// => MCT repetingly loses 1 char/byte per approx. 70'000 chars/bytes !!!
+	/// => MCT reproducibly lost 1 char/byte per approx. 70'000 chars/bytes !!!
 	/// </remarks>
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
 	public class ReliabilityAnalysis
@@ -127,6 +124,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		private const int WaitForOperation = 200;
 		private const int AdditionalThreads = 10;
 
+		private const string CommandToEcho = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwyxyz0123456789";
+
 		#endregion
 
 		#region Fields
@@ -138,6 +137,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		private StreamWriter file;
 
 		private int receivedBytes = 0;
+		private int receivedBytesOfCurrentLine = 0;
 		private int receivedLines = 0;
 		private ReaderWriterLock receivedDataLock = new ReaderWriterLock();
 
@@ -190,11 +190,24 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		[TearDown]
 		public virtual void TearDown()
 		{
+			this.isOngoing = false;
+
 			// Join the additional threads:
 			foreach (Thread t in this.threads)
 			{
 				Debug.Assert(t.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 				t.Join();
+			}
+
+			// Ensure that echoing has stopped (e.g. in case of an exception):
+			if ((this.port != null) && (this.port.IsOpen))
+			{
+				this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
+				Thread.Sleep(WaitForOperation);
+
+				this.port.Close();
+				this.port.Dispose();
+				this.port = null;
 			}
 		}
 
@@ -220,6 +233,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 			// Open port:
 			this.port = new System.IO.Ports.SerialPort();
+			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 			this.port.NewLine = "\r\n"; // <CR><LF>
 			this.port.PortName = portName;
 			this.port.Open();
@@ -230,35 +244,23 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.port.WriteLine(""); // Sync before requesting ECHO.
 			Thread.Sleep(WaitForOperation);
 			this.port.ReadExisting(); // Clear sync data.
-			this.port.WriteLine("ECHO 1");
+			Trace.WriteLine(">> ECHO 1");
+			this.port.WriteLine("ECHO 1"); // Activate single echo mode.
 			Thread.Sleep(WaitForOperation);
 			Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 1!");
 
 			this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 
 			// Perform ECHO:
-			string command = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwyxyz0123456789";
 			for (int i = 0; i < linesToTransmit; i++)
 			{
 				Trace.WriteLine(">> line #" + i);
-				this.port.WriteLine(command);
+				this.port.WriteLine(CommandToEcho); // Request single echo.
 			}
-
 			Thread.Sleep(WaitForOperation);
 
-			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
-			int receivedBytes = this.receivedBytes;
-			int receivedLines = this.receivedLines;
-			this.receivedDataLock.ReleaseReaderLock();
-
-			this.receivedErrorLock.AcquireReaderLock(Timeout.Infinite);
-			int receivedErrors = this.receivedErrors;
-			this.receivedErrorLock.ReleaseReaderLock();
-
-			// Termintate transmission:
+			// Terminate transmission:
 			this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-			this.port.ErrorReceived -= new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 
 			this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 			Thread.Sleep(WaitForOperation);
@@ -275,7 +277,16 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.file.Close();
 
 			// Process results:
-			int sentBytes = (linesToTransmit * (command.Length + 2)); // + 2 = <CR><LF>
+			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
+			int receivedBytes = this.receivedBytes;
+			int receivedLines = this.receivedLines;
+			this.receivedDataLock.ReleaseReaderLock();
+
+			this.receivedErrorLock.AcquireReaderLock(Timeout.Infinite);
+			int receivedErrors = this.receivedErrors;
+			this.receivedErrorLock.ReleaseReaderLock();
+
+			int sentBytes = (linesToTransmit * (CommandToEcho.Length + 2)); // + 2 = <CR><LF>
 			bool exact = (receivedBytes == sentBytes);
 
 			// Output summary:
@@ -308,31 +319,35 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(AnalysisTestData), "TestCases")]
-		public virtual void PerformContinuousReceivingOfSIR(string portName, int linesToReceive)
+		public virtual void PerformContinuousReceivingOfECHO(string portName, int linesToReceive)
 		{
 			// Create file for logging:
-			string filePath = Temp.MakeTempFilePath(GetType(), "ContinuousSIR-" + portName + "-" + linesToReceive.ToString(CultureInfo.InvariantCulture), ".txt");
+			string filePath = Temp.MakeTempFilePath(GetType(), "ContinuousECHO-" + portName + "-" + linesToReceive.ToString(CultureInfo.InvariantCulture), ".txt");
 			this.file = new StreamWriter(filePath);
 
 			// Open port:
 			this.port = new System.IO.Ports.SerialPort();
+			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 			this.port.NewLine = "\r\n"; // <CR><LF>
 			this.port.PortName = portName;
 			this.port.Open();
 			Assert.IsTrue(port.IsOpen);
 
+			// Prepare transmission:
 			Thread.Sleep(WaitForOperation);
-			this.port.WriteLine(""); // Sync before requesting continuous values.
+			this.port.WriteLine(""); // Sync before requesting continuous ECHO.
+			Thread.Sleep(WaitForOperation);
+			this.port.ReadExisting(); // Clear sync data.
+			Trace.WriteLine(">> ECHO 2");
+			this.port.WriteLine("ECHO 2"); // Activate continuous echo mode.
+			Thread.Sleep(WaitForOperation);
+			Assert.AreEqual("ECHO C", this.port.ReadLine(), "Failed to initiate ECHO mode 2!");
 
-			Thread.Sleep(WaitForOperation);
-			this.port.ReadExisting(); // Clear preparation data.
 			this.port.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
-			this.port.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 
-			// Perform transmission:
-			Trace.WriteLine(">> SIR");
-			this.port.WriteLine("SIR"); // Request continuous values.
-
+			// Perform ECHO:
+			Trace.WriteLine(">> " + CommandToEcho);
+			this.port.WriteLine(CommandToEcho); // Request continuous echo.
 			int receivedLines = 0;
 			do
 			{
@@ -343,20 +358,15 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				this.receivedDataLock.ReleaseReaderLock();
 			}
 			while (receivedLines < linesToReceive);
+			Thread.Sleep(WaitForOperation);
 
-			this.port.WriteLine("SI"); // Stop continuous values.
+			// Terminate transmission:
+			this.port.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived);
+
+			this.port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 			Thread.Sleep(WaitForOperation);
 
 			this.isOngoing = false;
-
-			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
-			int receivedBytes = this.receivedBytes;
-			receivedLines     = this.receivedLines;
-			this.receivedDataLock.ReleaseReaderLock();
-
-			this.receivedErrorLock.AcquireReaderLock(Timeout.Infinite);
-			int receivedErrors = this.receivedErrors;
-			this.receivedErrorLock.ReleaseReaderLock();
 
 			this.port.Close();
 			this.port.Dispose();
@@ -366,6 +376,16 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.file.Close();
 
 			// Process results:
+			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
+			int receivedBytes = this.receivedBytes;
+			receivedBytes    -= this.receivedBytesOfCurrentLine; // Account for incomplete lines.
+			receivedLines     = this.receivedLines;
+			this.receivedDataLock.ReleaseReaderLock();
+
+			this.receivedErrorLock.AcquireReaderLock(Timeout.Infinite);
+			int receivedErrors = this.receivedErrors;
+			this.receivedErrorLock.ReleaseReaderLock();
+
 			float bytesPerLine = (float)receivedBytes / receivedLines;
 			int bplA = (int)Math.Round(bytesPerLine);
 			int bplB = (int)Math.Round(bytesPerLine * 1000) / 1000;
@@ -376,8 +396,8 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			sb.AppendLine();
 			sb.AppendLine(@"Summary for """ + portName + @""":");
 			sb.AppendLine("Received...");
-			sb.AppendLine("..." + receivedBytes.ToString(CultureInfo.InvariantCulture) + " bytes, resulting in...");
-			sb.AppendLine("..." + receivedLines.ToString(CultureInfo.InvariantCulture) + " lines, resulting in...");
+			sb.Append    ("..." + receivedBytes.ToString(CultureInfo.InvariantCulture) + " bytes in ");
+			sb.AppendLine(        receivedLines.ToString(CultureInfo.InvariantCulture) + " lines, resulting in...");
 			sb.AppendLine("..." + (exact ? "exactly " : "an average of ") + bytesPerLine.ToString((exact ? "F1" : "F3"), CultureInfo.InvariantCulture) + " bytes per line, while...");
 			sb.AppendLine("..." + receivedErrors.ToString(CultureInfo.InvariantCulture) + " errors occured.");
 			sb.AppendLine();
@@ -417,10 +437,17 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				if (b == 0x0A) // <LF>
 				{
 					this.receivedDataLock.AcquireWriterLock(Timeout.Infinite);
+					this.receivedBytesOfCurrentLine = 0; // Line is complete.
 					int receivedLines = this.receivedLines++;
 					this.receivedDataLock.ReleaseWriterLock();
 
 					Trace.WriteLine("<< line #" + receivedLines);
+				}
+				else
+				{
+					this.receivedDataLock.AcquireWriterLock(Timeout.Infinite);
+					this.receivedBytesOfCurrentLine++; // Line is incomplete.
+					this.receivedDataLock.ReleaseWriterLock();
 				}
 			}
 		}
