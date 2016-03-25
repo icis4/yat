@@ -40,6 +40,15 @@ namespace MKY.IO.Ports.Test.SerialPort
 	[TestFixture]
 	public class ConnectionTest
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string CommandToEcho = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwyxyz0123456789";
+
+		#endregion
+
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -112,9 +121,10 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// --- Test: Close/Reopen while continuous receiving. ----------------------------------
 
 			// Request continuous data:
-			port.WriteLine("SIR"); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+			port.WriteLine("ECHO 2"); // Activate continuous echo mode.
 			Thread.Sleep(WaitForOperation);
-			port.ReadExisting();
+			Assert.AreEqual("ECHO C", port.ReadLine(), "Failed to initiate ECHO mode 2!");
+			port.WriteLine(CommandToEcho); // Request continuous echo.
 
 			// Close and reopen port. Expected: No exceptions, port can be closed and reopened.
 			Thread.Sleep(WaitForOperation);
@@ -125,7 +135,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			Assert.IsTrue(port.IsOpen);
 
 			// Stop continuous data:
-			port.WriteLine("SI"); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+			port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 			Thread.Sleep(WaitForOperation);
 			port.ReadExisting();
 
@@ -134,6 +144,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			port.Close();
 			Assert.IsFalse(port.IsOpen);
 			port.Dispose();
+			Thread.Sleep(WaitForOperation); // Wait to prevent issues in subsequent test cases.
 		}
 
 		#endregion
@@ -249,9 +260,10 @@ namespace MKY.IO.Ports.Test.SerialPort
 			if (testWithContinuousReceiving) // See block of comments further below.
 			{
 				// Request continuous data:
-				port.WriteLine("SIR"); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+				port.WriteLine("ECHO 2"); // Activate continuous echo mode.
 				Thread.Sleep(WaitForOperation);
-				port.ReadExisting();
+				Assert.AreEqual("ECHO C", port.ReadLine(), "Failed to initiate ECHO mode 2!");
+				port.WriteLine(CommandToEcho); // Request continuous echo.
 				Thread.Sleep(WaitForOperation);
 
 				// Disconnect USB/RS-232 converter. Expected: No exceptions, port is closed:
@@ -280,7 +292,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				Assert.IsTrue(port.IsOpen);
 
 				// Stop continuous data:
-				port.WriteLine("SI"); // \ToDo: Should be upgraded to ECHO as soon as mode 2 is available.
+				port.Write(new byte[]{ 0x1B }, 0, 1); // <ESC> to quit ECHO mode.
 				Thread.Sleep(WaitForOperation);
 				port.ReadExisting();
 			}
@@ -290,6 +302,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			port.Close();
 			Assert.IsFalse(port.IsOpen);
 			port.Dispose();
+			Thread.Sleep(WaitForOperation); // Wait to prevent issues in subsequent test cases.
 
 			// --- Postcondition: USB hub is set to its defaults, i.e. all outputs are enabled. ----
 			Assert.IsTrue(UsbHubControl.Set(UsbHubSetting.All), "Failed to set USB hub!");
