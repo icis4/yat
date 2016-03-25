@@ -181,9 +181,6 @@
   <data name="Image_Tool_page_white_delete_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_page_white_delete_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Tool_page_white_gear_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Tool_page_white_gear_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Image_Tool_preferences_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_preferences_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -238,9 +235,6 @@
   <data name="Image_YAT_64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\YAT\Image_YAT_64x64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Tool_interface_preferences_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Tool_interface_preferences_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Image_Tool_setting_tools_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_setting_tools_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -294,5 +288,14 @@
   </data>
   <data name="Image_Tool_new_window_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Tool_new_window_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Tool_page_white_edit_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Tool_page_white_edit_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Tool_application_edit_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Tool_application_edit_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Image_Tool_information_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Tool_information_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

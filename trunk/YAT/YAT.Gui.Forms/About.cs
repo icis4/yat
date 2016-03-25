@@ -94,7 +94,7 @@ namespace YAT.Gui.Forms
 
 			textBefore = "HSR and ";
 			textLink   =         "Mettler-Toledo";
-			textAfter  =                       ". YAT was initially developed as XTerm232 due to the lack of a good RS-232 terminal.";
+			textAfter  =                       ". YAT was initially developed as XTerm232, a response to the lack of a good RS-232 terminal.";
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
@@ -148,114 +148,154 @@ namespace YAT.Gui.Forms
 			linkLabel_VirtualPorts.Text += textAfter;
 
 			// Environment:
-			linkLabel_Environment.Text = "";
-			textBefore = "YAT is developed with" + Environment.NewLine +
-						 "  > Microsoft Visual Studio 2015 Community Edition" + Environment.NewLine +
+			linkLabel_Environment.Text = "YAT is developed with..." + Environment.NewLine;
 
-			             "  > ";
-			textLink   =     "NUnit";
+			textBefore = "...Microsoft ";
+			textLink   =              "Visual Studio 2015 Community Edition";
+			textAfter  =                                                  "...";
+			linkLabel_Environment.Text += textBefore;
+			linkStart = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx");
+			linkLabel_Environment.Text += textAfter;
+			linkLabel_Environment.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "NUnit";
+			textAfter  =         "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.nunit.org/");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > ";
-			textLink   =     "AnkhSVN";
+			textBefore = "...";
+			textLink   =    "AnkhSVN";
+			textAfter  =           "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://ankhsvn.open.collab.net/");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > ";
-			textLink   =     "GhostDoc";
+			textBefore = "...";
+			textLink   =    "GhostDoc";
+			textAfter  =            "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://submain.com/products/ghostdoc.aspx");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > System.IO.Ports serial port extension by Matthias Kläy" + Environment.NewLine +
+			textBefore = "...System.IO.Ports serial port extension by Matthias Kläy..." + Environment.NewLine +
 
-			             "  > System.Net.Sockets socket extension ";
-			textLink   =                                         "ALAZ";
-			textAfter  =                                             " by Andre Luis Azevedo";
+			             "...System.Net.Sockets socket extension ";
+			textLink   =                                        "ALAZ";
+			textAfter  =                                            " by Andre Luis Azevedo...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp");
-			linkLabel_Environment.Text += textAfter + Environment.NewLine;
+			linkLabel_Environment.Text += textAfter;
+			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > USB Ser/HID library by Matthias Kläy based on ";
-			textLink   =                                                   "GenericHid";
+			textBefore = "...USB Ser/HID library by Matthias Kläy based on ";
+			textLink   =                                                  "GenericHid";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.lvr.com/hidpage.htm");
-
-			textBefore =                                                             "/";
-			textLink   =                                                              "UsbLibrary";
+			textBefore =                                                            "/";
+			textLink   =                                                             "UsbLibrary";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
-
 			textBefore =                                                                       "/";
 			textLink   =                                                                        "UsbHid";
+			textAfter  =                                                                              "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.florian-leitner.de/index.php/category/usb-hid-library/");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > YAT icons based on ";
-			textLink   =                        "Nuvola";
-			textAfter  =                              " by David Vignoni";
+			textBefore = "...YAT icons based on ";
+			textLink   =                       "Nuvola";
+			textAfter  =                             " by David Vignoni";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://icon-king.com/?p=15");
 			linkLabel_Environment.Text += textAfter;
-
 			textBefore =                                               " edited in ";
 			textLink   =                                                          "GIMP";
+			textAfter  =                                                              "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > Toolbar icons from ";
-			textLink   =                        "FatCow";
+			textBefore = "...Toolbar icons from ";
+			textLink   =                       "FatCow";
+			textAfter  =                             "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.fatcow.com/free-icons/");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > Terminal font ";
-			textLink =                     "DejaVu";
+			textBefore = "...Terminal font ";
+			textLink   =                  "DejaVu";
+			textAfter  =                        "...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://dejavu.sourceforge.net/");
+			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "  > ";
-			textLink   =     "RTF writer";
-			textAfter  =               " by Matt Buckley and Thomson Reuters";
+			textBefore = "...";
+			textLink   =    "RTF writer";
+			textAfter  =              " by Matt Buckley and Thomson Reuters...";
 			linkLabel_Environment.Text += textBefore;
 			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/netrtfwriter/");
 			linkLabel_Environment.Text += textAfter;
+			linkLabel_Environment.Text += Environment.NewLine;
+
+			textBefore = "...Hosting and change managment on ";
+			textLink   =                                    "SourceForge.net";
+			textAfter  =                                                   "...";
+			linkLabel_Environment.Text += textBefore;
+			linkStart = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/");
+			linkLabel_Environment.Text += textAfter;
+			linkLabel_Environment.Text += Environment.NewLine;
+
+			textBefore = "...Documentation, test and release management using ";
+			textLink   =                                                     "LibreOffice";
+			textAfter  =                                                                ".";
+			linkLabel_Environment.Text += textBefore;
+			linkStart = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
+			linkLabel_Environment.Text += textAfter;
 
 			// Home:
 			linkLabel_Home.Text = "";
-			textBefore = "Visit YAT on ";
+			textBefore = "Visit YAT at ";
 			textLink   =              "SourceForge.net";
-			textAfter  =                             ". Feedback is welcome!";
+			textAfter  =                             ". Feedback is welcome.";
 			linkLabel_Home.Text += textBefore;
 			linkStart = linkLabel_Home.Text.Length;
 			linkLabel_Home.Text += textLink;
