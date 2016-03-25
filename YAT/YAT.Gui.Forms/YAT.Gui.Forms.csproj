@@ -397,11 +397,9 @@
     <None Include="Resources\Tool\Image_Tool_application_tile_horizontal_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_application_tile_vertical_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_arrow_refresh_small_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_broom_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_delete_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_folder_add_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_page_white_delete_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_page_white_gear_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_preferences_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_printer_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_save_16x16.png" />
@@ -417,7 +415,6 @@
     <None Include="Resources\Tool\Image_Tool_table_save_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_text_exports_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_help_16x16.png" />
-    <None Include="Resources\Tool\Image_Tool_interface_preferences_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_setting_tools_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_font_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_application_add_32x32.png" />
@@ -435,6 +432,9 @@
     <None Include="Resources\Tool\Image_Tool_page_white_lightning_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_application_lightning_16x16.png" />
     <None Include="Resources\Tool\Image_Tool_new_window_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_page_white_edit_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_application_edit_16x16.png" />
+    <None Include="Resources\Tool\Image_Tool_information_16x16.png" />
     <Content Include="Resources\YAT\Icon_YAT.ico" />
     <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />

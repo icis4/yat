@@ -233,6 +233,16 @@ namespace YAT.Gui.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Image_Tool_application_edit_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Tool_application_edit_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_Tool_application_get_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_Tool_application_get_16x16", resourceCulture);
@@ -353,9 +363,9 @@ namespace YAT.Gui.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Tool_information_32x32 {
+        internal static System.Drawing.Bitmap Image_Tool_information_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Tool_information_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Tool_information_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -363,9 +373,9 @@ namespace YAT.Gui.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Tool_interface_preferences_16x16 {
+        internal static System.Drawing.Bitmap Image_Tool_information_32x32 {
             get {
-                object obj = ResourceManager.GetObject("Image_Tool_interface_preferences_16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Tool_information_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -413,9 +423,9 @@ namespace YAT.Gui.Forms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Image_Tool_page_white_gear_16x16 {
+        internal static System.Drawing.Bitmap Image_Tool_page_white_edit_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Tool_page_white_gear_16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Tool_page_white_edit_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -135,12 +135,11 @@
 			this.toolStripButton_MainTool_Terminal_Print = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Log_Settings = new System.Windows.Forms.ToolStripButton();
-			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Log_On = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Log_Off = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Log_OpenFile = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Format = new System.Windows.Forms.ToolStripButton();
 			this.toolStripPanel_Top = new System.Windows.Forms.ToolStripPanel();
 			this.toolStripPanel_Right = new System.Windows.Forms.ToolStripPanel();
@@ -857,12 +856,11 @@
             this.toolStripButton_MainTool_Terminal_Print,
             this.toolStripMenuItem_MainTool_Separator_5,
             this.toolStripButton_MainTool_Terminal_Log_Settings,
-            this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Terminal_Log_On,
             this.toolStripButton_MainTool_Terminal_Log_Off,
             this.toolStripButton_MainTool_Terminal_Log_OpenFile,
             this.toolStripButton_MainTool_Terminal_Log_OpenDirectory,
-            this.toolStripSeparator1,
+            this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Terminal_Format});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip_Main.Name = "toolStrip_Main";
@@ -916,7 +914,7 @@
 			// toolStripButton_MainTool_Terminal_Settings
 			// 
 			this.toolStripButton_MainTool_Terminal_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_interface_preferences_16x16;
+			this.toolStripButton_MainTool_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_application_edit_16x16;
 			this.toolStripButton_MainTool_Terminal_Settings.Name = "toolStripButton_MainTool_Terminal_Settings";
 			this.toolStripButton_MainTool_Terminal_Settings.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Settings.Text = "Terminal Settings...";
@@ -1071,16 +1069,11 @@
 			// toolStripButton_MainTool_Terminal_Log_Settings
 			// 
 			this.toolStripButton_MainTool_Terminal_Log_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Log_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_gear_16x16;
+			this.toolStripButton_MainTool_Terminal_Log_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_page_white_edit_16x16;
 			this.toolStripButton_MainTool_Terminal_Log_Settings.Name = "toolStripButton_MainTool_Terminal_Log_Settings";
 			this.toolStripButton_MainTool_Terminal_Log_Settings.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton_MainTool_Terminal_Log_Settings.Text = "Log Settings...";
 			this.toolStripButton_MainTool_Terminal_Log_Settings.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_Settings_Click);
-			// 
-			// toolStripMenuItem_MainTool_Separator_6
-			// 
-			this.toolStripMenuItem_MainTool_Separator_6.Name = "toolStripMenuItem_MainTool_Separator_6";
-			this.toolStripMenuItem_MainTool_Separator_6.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton_MainTool_Terminal_Log_On
 			// 
@@ -1118,10 +1111,10 @@
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Text = "Open Log Folder In Explorer...";
 			this.toolStripButton_MainTool_Terminal_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Log_OpenDirectory_Click);
 			// 
-			// toolStripSeparator1
+			// toolStripMenuItem_MainTool_Separator_6
 			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			this.toolStripMenuItem_MainTool_Separator_6.Name = "toolStripMenuItem_MainTool_Separator_6";
+			this.toolStripMenuItem_MainTool_Separator_6.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton_MainTool_Terminal_Format
 			// 
@@ -1310,9 +1303,8 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Off;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Settings;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_5;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Format;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_6;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Format;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Refresh;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Log;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Log_AllOn;

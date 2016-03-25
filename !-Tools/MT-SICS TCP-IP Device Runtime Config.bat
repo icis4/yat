@@ -20,7 +20,7 @@
 ::  See http://www.gnu.org/licenses/lgpl.html for license details.
 :: =================================================================================================
 
-SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_B_LPC1769_B.exe
+SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_LPC1769.exe
 SET MT_SICS_EXE_PATH="D:\MKY\Projekte\Software\YAT\Test Environment\MT RB ExampleBalance"
 
 :: Verify that executable is available
