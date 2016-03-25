@@ -58,8 +58,8 @@
         <UsbSerialHidDevice>
           <DeviceInfo>
             <VendorId>3768</VendorId>
-            <ProductId>8704</ProductId>
-            <SerialNumber>MK.8</SerialNumber>
+            <ProductId>8960</ProductId>
+            <SerialNumber>YAT.8</SerialNumber>
           </DeviceInfo>
           <ReportFormat>
             <UseId>true</UseId>

@@ -87,7 +87,7 @@ namespace YAT.Settings.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "HID", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "VID", Justification = "As always, there are exceptions to the rules...")]
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "PID", Justification = "As always, there are exceptions to the rules...")]
-		T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed,
+		T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed,
 	}
 
 	/// <summary></summary>
@@ -366,7 +366,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 
 			// V1.99.26
 			FilePaths_V1_99_26 = new SettingsFilePaths("2011-04-25 - YAT 2.0 Beta 3 Candidate 4 Version 1.99.26");
@@ -377,7 +377,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// V1.99.28
@@ -391,7 +391,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_28.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_V1_99_28.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// V1.99.30
@@ -405,7 +405,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_30.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_V1_99_30.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// V1.99.32
@@ -419,7 +419,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_32.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_V1_99_32.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// V1.99.33
@@ -433,7 +433,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_33.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_V1_99_33.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// V1.99.34
@@ -447,7 +447,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_34.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_V1_99_34.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 
 			// Current
@@ -461,7 +461,7 @@ namespace YAT.Settings.Test
 			FilePaths_Current.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_04_Matthias, "04 - Matthias.yaw");
 			FilePaths_Current.AddTerminalFileName(TerminalSettingsTestCase.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_Current.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_06_Matthias, "06 - Matthias.yaw");
-			FilePaths_Current.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_Current.AddTerminalFileName(TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed, "07 - USB SerHID (VID0EB8) (PID2300) YAT.8 - Closed.yat");
 			FilePaths_Current.AddWorkspaceFileName(WorkspaceSettingsTestCase.W_08_Matthias, "08 - Matthias.yaw");
 		}
 
