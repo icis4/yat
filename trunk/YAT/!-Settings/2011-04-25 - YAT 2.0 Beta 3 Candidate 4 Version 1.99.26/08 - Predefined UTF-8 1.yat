@@ -52,8 +52,8 @@
         <UsbSerialHidDevice>
           <DeviceInfo>
             <VendorId>3768</VendorId>
-            <ProductId>8704</ProductId>
-            <SerialNumber>MK.9</SerialNumber>
+            <ProductId>8960</ProductId>
+            <SerialNumber>YAT.8</SerialNumber>
           </DeviceInfo>
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>

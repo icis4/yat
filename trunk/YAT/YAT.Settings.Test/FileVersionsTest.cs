@@ -452,7 +452,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_25_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		#endregion
@@ -515,7 +515,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_26_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -586,7 +586,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_28_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_28.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -657,7 +657,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_30_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_30.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -728,7 +728,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_32_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_32.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -799,7 +799,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_33_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_33.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -870,7 +870,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void Test_V1_99_34_TerminalSettingsCase07()
 		{
-			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]);
+			ExecuteSettingsCase07(SettingsFilesProvider.FilePaths_V1_99_34.TerminalFilePaths[TerminalSettingsTestCase.T_07_USB_SerHID_VID0EB8_PID2300_YAT8_Closed]);
 		}
 
 		/// <summary></summary>
@@ -1051,9 +1051,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		#region Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2300) YAT.8 / Closed
 		//------------------------------------------------------------------------------------------
-		// Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		// Settings Cases > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2300) YAT.8 / Closed
 		//------------------------------------------------------------------------------------------
 
 		private static void ExecuteSettingsCase07(string filePath)
@@ -1256,9 +1256,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		#region Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2300) YAT.8 / Closed
 		//------------------------------------------------------------------------------------------
-		// Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		// Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2300) YAT.8 / Closed
 		//------------------------------------------------------------------------------------------
 
 		private static void VerifySettingsCase07(Model.Terminal terminal)
