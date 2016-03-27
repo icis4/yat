@@ -104,10 +104,12 @@ New:
 - Selectable background color added to format settings (feature request #250).
 - Window can be configured to always stay on top (feature request #241).
 - USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
+- Automatic response feature, YAT can automatically respond to a request (feature request #252).
 
 Important changes:
 - Active terminal is highlighted/emphasized (feature request #247).
 - Automatic terminal layout added. Use 'Window > ...' for dedicated layout (feature request #247).
+- 'Send Command' renamed to 'Send Text' (related to feature request #252).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).

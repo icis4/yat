@@ -103,6 +103,8 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="Trigger.cs" />
+    <Compile Include="AutoResponse.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="BackFormat.cs" />
     <Compile Include="WorkspaceLayout.cs" />

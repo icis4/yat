@@ -146,22 +146,33 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Workspace(WorkspaceStartArgs startArgs, DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
-			WriteDebugMessageLine("Creating...");
+			try
+			{
+				WriteDebugMessageLine("Creating...");
 
-			this.startArgs = startArgs;
+				this.startArgs = startArgs;
 
-			if (guid != Guid.Empty)
-				this.guid = guid;
-			else
-				this.guid = Guid.NewGuid();
+				if (guid != Guid.Empty)
+					this.guid = guid;
+				else
+					this.guid = Guid.NewGuid();
 
-			// Link and attach to settings:
-			this.settingsHandler = settingsHandler;
-			this.settingsRoot = this.settingsHandler.Settings;
-			this.settingsRoot.ClearChanged();
-			AttachSettingsEventHandlers();
+				// Link and attach to settings:
+				this.settingsHandler = settingsHandler;
+				this.settingsRoot = this.settingsHandler.Settings;
+				this.settingsRoot.ClearChanged();
+				AttachSettingsEventHandlers();
 
-			WriteDebugMessageLine("...successfully created.");
+				WriteDebugMessageLine("...successfully created.");
+			}
+			catch (Exception ex)
+			{
+				WriteDebugMessageLine("...failed!");
+				DebugEx.WriteException(this.GetType(), ex);
+
+				Dispose(); // Immediately call Dispose() to ensure no zombies remain!
+				throw; // Re-throw!
+			}
 		}
 
 		#region Disposal
@@ -814,6 +825,8 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
+				DebugEx.WriteException(this.GetType(), ex, "Error saving terminal!");
+
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
@@ -828,9 +841,15 @@ namespace YAT.Model
 					);
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
+				else // AutoSave
+				{
+					success = true; // Signal that exception has intentionally been ignored.
+				}
 			}
 			catch (Exception ex)
 			{
+				DebugEx.WriteException(this.GetType(), ex, "Error saving terminal!");
+
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
@@ -843,6 +862,10 @@ namespace YAT.Model
 						MessageBoxIcon.Error
 					);
 					OnTimedStatusTextRequest("Workspace not saved!");
+				}
+				else // AutoSave
+				{
+					success = true; // Signal that exception has intentionally been ignored.
 				}
 			}
 
@@ -1297,53 +1320,72 @@ namespace YAT.Model
 				// the item and remove it if not defined.
 				if (item.IsDefined)
 				{
+					bool success = false;
+					string errorMessage = null;
+
 					// Replace the desired terminal settings if requested.
 					if ((dynamicTerminalIndexToReplace != Indices.InvalidDynamicIndex) &&
 						(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
 					{
-						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window))
+						Exception exception;
+						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, out exception))
 						{
 							openedTerminalCount++;
+							success = true;
 						}
 						else
 						{
-							this.settingsRoot.TerminalSettings.Remove(item);
-							this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+							StringBuilder sb = new StringBuilder();
+							sb.AppendLine("Unable to open terminal");
+							sb.AppendLine(item.FilePath);
+
+							if (exception != null)
+							{
+								sb.AppendLine();
+								sb.AppendLine("System error message:");
+								sb.AppendLine(exception.Message);
+							}
+
+							errorMessage = sb.ToString();
 						}
 					}
 					else // In all other cases, 'normally' open the terminal from the given file.
 					{
-						string errorMessage;
 						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, out errorMessage))
 						{                                   // Error must be handled here because of looping over terminals.
 							openedTerminalCount++;
+							success = true;
 						}
-						else
+					}
+
+					if (!success)
+					{
+						this.settingsRoot.TerminalSettings.Remove(item);
+						this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
+
+						if (string.IsNullOrEmpty(errorMessage))
+							errorMessage = "Unable to open terminal" + Environment.NewLine + item.FilePath;
+
+						OnFixedStatusTextRequest("Error opening terminal!");
+						DialogResult result = OnMessageInputRequest
+						(
+							errorMessage + Environment.NewLine + "Continue loading workspace?",
+							"Terminal File Error",
+							MessageBoxButtons.YesNo,
+							MessageBoxIcon.Exclamation
+						);
+						OnTimedStatusTextRequest("Terminal not opened!");
+
+						if (result == DialogResult.No)
 						{
-							this.settingsRoot.TerminalSettings.Remove(item);
+							// Remove all remaining items:
+							int remainingCount = (clone.Count - (i + 1));
+							int remainingStartIndex = (this.settingsRoot.TerminalSettings.Count - remainingCount);
+							this.settingsRoot.TerminalSettings.RemoveRange(remainingStartIndex, remainingCount);
 							this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
-							OnFixedStatusTextRequest("Error opening terminal!");
-							DialogResult result = OnMessageInputRequest
-							(
-								errorMessage + Environment.NewLine + "Continue loading workspace?",
-								"Terminal File Error",
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Exclamation
-							);
-							OnTimedStatusTextRequest("Terminal not opened!");
-
-							if (result == DialogResult.No)
-							{
-								// Remove all remaining items:
-								int remainingCount = (clone.Count - (i + 1));
-								int remainingStartIndex = (this.settingsRoot.TerminalSettings.Count - remainingCount);
-								this.settingsRoot.TerminalSettings.RemoveRange(remainingStartIndex, remainingCount);
-								this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
-
-								// Break looping over terminals:
-								break;
-							}
+							// Break looping over terminals:
+							break;
 						}
 					}
 				}
@@ -1394,31 +1436,24 @@ namespace YAT.Model
 			System.Xml.XmlException xmlEx;
 			if (OpenTerminalFile(filePath, out settings, out xmlEx))
 			{
-				try
+				Exception ex;
+				if (OpenTerminalFromSettings(settings, guid, fixedIndex, windowSettings, out ex))
 				{
-					if (OpenTerminalFromSettings(settings, guid, fixedIndex, windowSettings))
-					{
-						errorMessage = null;
-						return (true);
-					}
-					else
-					{
-						StringBuilder sb = new StringBuilder();
-						sb.AppendLine("Unable to open terminal");
-						sb.AppendLine(filePath);
-
-						errorMessage = sb.ToString();
-						return (false);
-					}
+					errorMessage = null;
+					return (true);
 				}
-				catch (Exception ex)
+				else
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.AppendLine("Unable to open terminal");
 					sb.AppendLine(filePath);
-					sb.AppendLine();
-					sb.AppendLine("System error message:");
-					sb.AppendLine(ex.Message);
+
+					if (ex != null)
+					{
+						sb.AppendLine();
+						sb.AppendLine("System error message:");
+						sb.AppendLine(ex.Message);
+					}
 
 					errorMessage = sb.ToString();
 					return (false);
@@ -1452,16 +1487,20 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings)
 		{
-			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null));
+			Exception exception;
+			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
 		}
 
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings)
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out Exception exception)
 		{
 			AssertNotDisposed();
 
 			// Ensure that the terminal file is not already open:
 			if (!CheckTerminalFiles(settings.SettingsFilePath))
+			{
+				exception = null;
 				return (false);
+			}
 
 			OnFixedStatusTextRequest("Opening terminal...");
 
@@ -1470,7 +1509,19 @@ namespace YAT.Model
 				settings.Settings.Window = windowSettings;
 
 			// Create terminal:
-			Terminal terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settings, guid);
+			Terminal terminal;
+			try
+			{
+				terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settings, guid);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(this.GetType(), ex, "Failed to open terminal from settings!");
+				exception = ex;
+				return (false);
+			}
+
+			// Add to workspace:
 			AddToWorkspace(terminal, fixedIndex);
 
 			if (!settings.Settings.AutoSaved)
@@ -1478,6 +1529,7 @@ namespace YAT.Model
 
 			OnTimedStatusTextRequest("Terminal opened.");
 
+			exception = null;
 			return (true);
 		}
 

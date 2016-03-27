@@ -44,6 +44,7 @@ using MKY.Settings;
 using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
+using YAT.Gui.Utilities;
 using YAT.Model.Types;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -115,6 +116,9 @@ namespace YAT.Gui.Forms
 
 		// Settings:
 		private LocalUserSettingsRoot localUserSettingsRoot;
+
+		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
+		private bool mainToolValidationWorkaround_UpdateIsSuspended;
 
 		#endregion
 
@@ -439,8 +443,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time MDI child status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetChildMenuItems()
 		{
@@ -454,8 +458,8 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <remarks>
-		/// Must be called each time recent status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetRecentMenuItems()
 		{
@@ -571,8 +575,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time MDI child status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Log_SetMenuItems()
 		{
@@ -614,8 +618,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time MDI child status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems()
 		{
@@ -814,6 +818,83 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_Terminal_Radix_Dec.Checked    = (radix == Domain.Radix.Dec);
 			toolStripButton_MainTool_Terminal_Radix_Hex.Checked    = (radix == Domain.Radix.Hex);
 
+			bool arVisible = false;
+
+			TriggerEx[] arTriggerItems = TriggerEx.GetItems(true, false);
+			Trigger arTriggerSelection = Trigger.None;
+			Command arDedicatedTrigger = null;
+
+			AutoResponseEx[] arResponseItems = AutoResponseEx.GetItems(true, false);
+			AutoResponse arResponseSelection = AutoResponse.None;
+			Command arDedicatedResponse = null;
+
+			if (childIsReady)
+			{
+				Model.Terminal terminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if ((terminal != null) && (!terminal.IsDisposed))
+				{
+					arVisible           = terminal.SettingsRoot.AutoResponse.Visible;
+
+					arTriggerItems      = terminal.SettingsRoot.ValidAutoResponseTriggerItems;
+					arTriggerSelection  = terminal.SettingsRoot.AutoResponse.TriggerSelection;
+					arDedicatedTrigger  = terminal.SettingsRoot.AutoResponse.DedicatedTrigger;
+
+					arResponseItems     = terminal.SettingsRoot.ValidAutoResponseResponseItems;
+					arResponseSelection = terminal.SettingsRoot.AutoResponse.ResponseSelection;
+					arDedicatedResponse = terminal.SettingsRoot.AutoResponse.DedicatedResponse;
+				}
+			}
+
+			toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Enabled = childIsReady;
+
+			if (arVisible)
+			{
+				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide AutoResponse command";
+
+				// Attention, similar code exists in the following locations:
+				//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
+				// Changes here may have to be applied there too.
+
+				if (!this.mainToolValidationWorkaround_UpdateIsSuspended)
+				{
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = true;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = childIsReady;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.AddRange(arTriggerItems);
+
+					if (arTriggerSelection != Trigger.DedicatedCommand)
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem = (TriggerEx)arTriggerSelection;
+					else if (arDedicatedTrigger != null)
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = arDedicatedTrigger.SingleLineText;
+					else
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text = Command.DefineCommandText;
+
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = true;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = childIsReady;
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.AddRange(arResponseItems);
+
+					if (arResponseSelection != AutoResponse.DedicatedCommand)
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem = (AutoResponseEx)arResponseSelection;
+					else if (arDedicatedResponse != null)
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = arDedicatedResponse.SingleLineText;
+					else
+						toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text = Command.DefineCommandText;
+				}
+			}
+			else
+			{
+				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Show AutoResponse command";
+
+				toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Visible = false;
+				toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Enabled = false;
+				toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Items.Clear();
+
+				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Visible = false;
+				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Enabled = false;
+				toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Items.Clear();
+			}
+
 			toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
 			toolStripButton_MainTool_Terminal_Refresh.Enabled         = childIsReady;
 			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
@@ -892,6 +973,79 @@ namespace YAT.Gui.Forms
 		private void toolStripButton_MainTool_Terminal_Radix_Hex_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex);
+		}
+
+		private void toolStripButton_MainTool_Terminal_AutoResponse_ShowHide_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestToggleAutoResponseVisible();
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				var trigger = (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedItem as TriggerEx);
+				if (trigger != null)
+					((Terminal)ActiveMdiChild).RequestAutoResponseFromTrigger(trigger);
+			}
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
+		{
+			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string triggerText = toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text;
+				int invalidTextStart;
+				if (Validation.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						((Terminal)ActiveMdiChild).RequestAutoResponseFromDedicatedTriggerText(triggerText);
+						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+					}
+				}
+				else
+				{
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Text.Remove(invalidTextStart);
+				}
+			}
+		}
+
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				var response = (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedItem as AutoResponseEx);
+				if (response != null)
+					((Terminal)ActiveMdiChild).RequestAutoResponseFromResponse(response);
+			}
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
+		/// only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_MainTool_Terminal_AutoResponse_Response_TextChanged(object sender, EventArgs e)
+		{
+			if (toolStripComboBox_MainTool_Terminal_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string responseText = toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text;
+				int invalidTextStart;
+				if (Validation.ValidateText(this, "automatic response", responseText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.mainToolValidationWorkaround_UpdateIsSuspended = true;
+						((Terminal)ActiveMdiChild).RequestAutoResponseFromDedicatedResponseText(responseText);
+						this.mainToolValidationWorkaround_UpdateIsSuspended = false;
+					}
+				}
+				else
+				{
+					toolStripComboBox_MainTool_Terminal_AutoResponse_Response.Text.Remove(invalidTextStart);
+				}
+			}
 		}
 
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)
@@ -1016,8 +1170,8 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <remarks>
-		/// Must be called each time recent status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void contextMenuStrip_FileRecent_SetRecentMenuItems()
 		{

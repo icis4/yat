@@ -28,6 +28,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -37,6 +38,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Net;
 using MKY.Recent;
@@ -138,6 +140,10 @@ namespace YAT.Model
 
 		// Logs:
 		private Log.Provider log;
+
+		// AutoResponse:
+		private AutoResponseHelper autoResponseHelper;
+		private object autoResponseHelperSyncObj = new object();
 
 		// Time status:
 		private Chronometer connectChrono;
@@ -254,42 +260,56 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
-			WriteDebugMessageLine("Creating...");
+			try
+			{
+				WriteDebugMessageLine("Creating...");
 
-			this.startArgs = startArgs;
+				this.startArgs = startArgs;
 
-			if (guid != Guid.Empty)
-				this.guid = guid;
-			else
-				this.guid = Guid.NewGuid();
+				if (guid != Guid.Empty)
+					this.guid = guid;
+				else
+					this.guid = Guid.NewGuid();
 
-			// Link and attach to settings:
-			this.settingsHandler = settingsHandler;
-			this.settingsRoot = this.settingsHandler.Settings;
-			this.settingsRoot.ClearChanged();
-			AttachSettingsEventHandlers();
+				// Link and attach to settings:
+				this.settingsHandler = settingsHandler;
+				this.settingsRoot = this.settingsHandler.Settings;
+				this.settingsRoot.ClearChanged();
+				AttachSettingsEventHandlers();
 
-			// Set ID and user name:
-			this.sequentialIndex = ++staticSequentialIndexCounter;
-			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
-			else
-				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
+				// Set ID and user name:
+				this.sequentialIndex = ++staticSequentialIndexCounter;
+				if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
+					this.autoName = TerminalText + this.sequentialIndex.ToString(CultureInfo.CurrentCulture);
+				else
+					AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
-			// Create underlying terminal:
-			this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
-			AttachTerminalEventHandlers();
+				// Create underlying terminal:
+				this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
+				AttachTerminalEventHandlers();
 
-			// Create log:
-			this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
+				// Create log:
+				this.log = new Log.Provider(this.settingsRoot.Log, (EncodingEx)this.settingsRoot.TextTerminal.Encoding, this.settingsRoot.Format);
 
-			// Create chronos:
-			CreateChronos();
+				// Create AutoResponse:
+				CreateAutoResponse();
 
-			// Create rates:
-			CreateRates();
+				// Create chronos:
+				CreateChronos();
 
-			WriteDebugMessageLine("...successfully created.");
+				// Create rates:
+				CreateRates();
+
+				WriteDebugMessageLine("...successfully created.");
+			}
+			catch (Exception ex)
+			{
+				WriteDebugMessageLine("...failed!");
+				DebugEx.WriteException(this.GetType(), ex);
+
+				Dispose(); // Immediately call Dispose() to ensure no zombies remain!
+				throw; // Re-throw!
+			}
 		}
 
 		#region Disposal
@@ -323,6 +343,7 @@ namespace YAT.Model
 					// ...then, dispose of objects.
 					DisposeRates();
 					DisposeChronos();
+					DisposeAutoResponse();
 
 					if (this.log != null)
 						this.log.Dispose();
@@ -1074,6 +1095,14 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'terminalTypeOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private Domain.TerminalType settingsRoot_Changed_terminalTypeOld = Domain.Settings.TerminalSettings.TerminalTypeDefault;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'endianessOld' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private Domain.Endianness settingsRoot_Changed_endianessOld = Domain.Settings.IOSettings.EndiannessDefault;
+
 		/// <remarks>
 		/// Required to solve the issue described in bug #223 "Settings events should state the exact settings diff".
 		/// </remarks>
@@ -1086,46 +1115,102 @@ namespace YAT.Model
 			// Note that GUI settings are handled in Gui.Forms.Terminal::settingsRoot_Changed().
 			// Below, only those settings that need to be managed by the model are handled.
 
-			if ((e.Inner != null) && ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
+			if (e.Inner == null)
 			{
-				// Explicit settings have changed.
-				SettingsEventArgs explicitEventArgs = e.Inner;
-				if (explicitEventArgs.Inner != null)
-				{
-					if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Terminal))
-					{
-						// Terminal settings have changed.
-						SettingsEventArgs terminalEventArgs = explicitEventArgs.Inner;
-						if (terminalEventArgs.Inner != null)
-						{
-							if (ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.Send))
-							{
-								// Send settings have changed.
-								if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {
-									settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Send.SendImmediately;
+				// Nothing to do, no need to care about 'ProductVersion' and such.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
+			{
+				HandleExplicitSettings(e.Inner);
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
+			{
+				HandleImplicitSettings(e.Inner);
+			}
+		}
 
-									// Send immediately has changed, reset the last command:
-									this.settingsRoot.SendCommand.Command.Clear();
-								}
-							}
-							else if (ReferenceEquals(terminalEventArgs.Inner.Source, this.settingsRoot.TextTerminal))
-							{
-								// Text settings have changed.
-								this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.TextTerminal.Encoding;
-							}
-						}
-					}
-					else if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Format))
-					{
-						// Format settings have changed.
-						this.log.NeatFormat = this.settingsRoot.Format;
-					}
-					else if (ReferenceEquals(explicitEventArgs.Inner.Source, this.settingsRoot.Log))
-					{
-						// Log settings have changed.
-						this.log.Settings = this.settingsRoot.Log;
-					}
+		private void HandleExplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// Nothing to do.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal))
+			{
+				HandleTerminalSettings(e.Inner);
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
+			{
+				this.log.NeatFormat = this.settingsRoot.Format;
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
+			{
+				this.log.NeatFormat = this.settingsRoot.Format;
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Log))
+			{
+				this.log.Settings = this.settingsRoot.Log;
+			}
+		}
+
+		private void HandleTerminalSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				if (settingsRoot_Changed_terminalTypeOld != this.settingsRoot.TerminalType) {
+					settingsRoot_Changed_terminalTypeOld = this.settingsRoot.TerminalType;
+
+					// Terminal type has changed, recreate the auto response:
+					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.IO))
+			{
+				if (settingsRoot_Changed_endianessOld != this.settingsRoot.IO.Endianness) {
+					settingsRoot_Changed_endianessOld = this.settingsRoot.IO.Endianness;
+
+					// Endianess has changed, recreate the auto response:
+					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+				}
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
+			{
+				if (settingsRoot_Changed_sendImmediatelyOld != this.settingsRoot.Send.SendImmediately) {
+					settingsRoot_Changed_sendImmediatelyOld = this.settingsRoot.Send.SendImmediately;
+
+					// Send immediately has changed, reset the last command:
+					this.settingsRoot.SendText.Command.Clear();
+				}
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.TextTerminal))
+			{
+				this.log.TextTerminalEncoding = (EncodingEx)this.settingsRoot.TextTerminal.Encoding;
+
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+		}
+
+		private void HandleImplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// Nothing to do.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
+			{
+				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 		}
 
@@ -1462,6 +1547,8 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
+				DebugEx.WriteException(this.GetType(), ex, "Error saving terminal!");
+
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving terminal!");
@@ -1481,9 +1568,15 @@ namespace YAT.Model
 
 					OnTimedStatusTextRequest("Terminal not saved!");
 				}
+				else // AutoSave
+				{
+					success = true; // Signal that exception has intentionally been ignored.
+				}
 			}
 			catch (Exception ex)
 			{
+				DebugEx.WriteException(this.GetType(), ex, "Error saving terminal!");
+
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving terminal!");
@@ -1501,6 +1594,10 @@ namespace YAT.Model
 					);
 
 					OnTimedStatusTextRequest("Terminal not saved!");
+				}
+				else // AutoSave
+				{
+					success = true; // Signal that exception has intentionally been ignored.
 				}
 			}
 
@@ -1891,6 +1988,37 @@ namespace YAT.Model
 				this.log.Write(e.Element, Log.LogChannel.RawBidir);
 				this.log.Write(e.Element, Log.LogChannel.RawRx);
 			}
+
+			// AutoRespose:
+			if (this.settingsRoot.AutoResponse.Enabled)
+			{
+				bool isMatch = false;
+
+				foreach (byte b in e.Element.Data)
+				{
+					lock (this.autoResponseHelperSyncObj)
+					{
+						if (this.autoResponseHelper != null)
+						{
+							if (this.autoResponseHelper.EnqueueAndMatch(b))
+								isMatch = true;
+						}
+						else
+							break; // Break the for-loop if AutoResponse got disposed in the meantime.
+					}
+				}
+
+				if (isMatch) // Invoke sending on different thread than this (typically the receive thread).
+				{
+					VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(terminal_RawElementReceived_SendAutoResponseAsync);
+					asyncInvoker.BeginInvoke(null, null);
+				}
+			}
+		}
+
+		private void terminal_RawElementReceived_SendAutoResponseAsync()
+		{
+			SendAutoResponse();
 		}
 
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
@@ -1951,6 +2079,10 @@ namespace YAT.Model
 					this.log.WriteLine(de, Log.LogChannel.NeatRx);
 				}
 			}
+
+			// AutoRespose:
+			if (this.settingsRoot.AutoResponse.Enabled && (this.settingsRoot.AutoResponse.TriggerSelection == Trigger.AnyLine))
+				SendAutoResponse();
 		}
 
 		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
@@ -2245,6 +2377,24 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Terminal > Send Command
+		//------------------------------------------------------------------------------------------
+		// Terminal > Send Command
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Sends given command.
+		/// </summary>
+		public virtual void SendCommand(Command command)
+		{
+			if (command.IsText)
+				SendText(command);
+			else if (command.IsFilePath)
+				SendFile(command);
+		}
+
+		#endregion
+
 		#region Terminal > Send Text
 		//------------------------------------------------------------------------------------------
 		// Terminal > Send Text
@@ -2255,11 +2405,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
-			DoSendText(this.settingsRoot.SendCommand.Command);
+			DoSendText(this.settingsRoot.SendText.Command);
 
 			// Clear command if desired:
 			if (!this.settingsRoot.Send.KeepCommand)
-				this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
+				this.settingsRoot.SendText.Command = new Command(); // Set command to "".
 		}
 
 		/// <summary>
@@ -2292,8 +2442,8 @@ namespace YAT.Model
 			{
 				if (c.IsSingleLineText)
 				{
-					if (SendCommandSettings.IsEasterEggCommand(c.SingleLineText))
-						SendLine(SendCommandSettings.EasterEggCommandText);
+					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
+						SendLine(SendTextSettings.EasterEggCommandText);
 					else
 						SendLine(c.SingleLineText);
 				}
@@ -2335,8 +2485,8 @@ namespace YAT.Model
 						clone = new Command(this.partialCommandLine);
 
 					// Put clone into recent history:
-					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
-					this.settingsRoot.SendCommand.SetChanged(); // Manual change required because underlying collection is modified.
+					this.settingsRoot.SendText.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(new RecentItem<Command>(clone));
+					this.settingsRoot.SendText.SetChanged(); // Manual change required because underlying collection is modified.
 
 					// Reset the partial command line:
 					this.partialCommandLine = null;
@@ -2477,17 +2627,17 @@ namespace YAT.Model
 		public virtual bool SendPredefined(int page, int command)
 		{
 			// Verify arguments:
-			if (!VerifyPredefinedArguments(page, command))
+			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(page - 1, command - 1))
 				return (false);
 
-			// Verify and process command:
-			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			// Process command:
+			Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidText)
 			{
 				SendText(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendCommand.Command = new Command(c); // Copy command if desired.
+					this.settingsRoot.SendText.Command = new Command(c); // Copy command if desired.
 
 				return (true);
 			}
@@ -2515,14 +2665,14 @@ namespace YAT.Model
 		public virtual bool CopyPredefined(int page, int command)
 		{
 			// Verify arguments:
-			if (!VerifyPredefinedArguments(page, command))
+			if (!this.settingsRoot.PredefinedCommand.ValidateWhetherCommandIsDefined(page - 1, command - 1))
 				return (false);
 
-			// Verify and process command:
-			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			// Process command:
+			Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidText)
 			{
-				this.settingsRoot.SendCommand.Command = new Command(c);
+				this.settingsRoot.SendText.Command = new Command(c);
 				return (true);
 			}
 			else if (c.IsValidFilePath)
@@ -2534,35 +2684,6 @@ namespace YAT.Model
 			{
 				return (false);
 			}
-		}
-
-		/// <summary>
-		/// Verifies the requested predefined arguments.
-		/// </summary>
-		/// <param name="page">Page 1..max.</param>
-		/// <param name="command">Command 1..max.</param>
-		private bool VerifyPredefinedArguments(int page, int command)
-		{
-			// Verify page index:
-			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
-			if ((page < 1) || (page > pages.Count))
-				return (false);
-
-			// Verify command index:
-			List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
-			bool isDefined =
-			(
-				(commands != null) &&
-				(commands.Count >= command) &&
-				(commands[command - 1] != null) &&
-				(commands[command - 1].IsDefined)
-			);
-
-			if (!isDefined)
-				return (false);
-
-			// Success!
-			return (true);
 		}
 
 		#endregion
@@ -3303,6 +3424,147 @@ namespace YAT.Model
 				);
 
 				return (true);
+			}
+		}
+
+		#endregion
+
+		#region Auto Response
+		//==========================================================================================
+		// Auto Response
+		//==========================================================================================
+
+		private void CreateAutoResponse()
+		{
+			UpdateAutoResponse(); // Simply forward to general Update() method.
+		}
+
+		private void DisposeAutoResponse()
+		{
+			lock (this.autoResponseHelperSyncObj)
+				this.autoResponseHelper = null; // Simply delete the reference to the object.
+		}
+
+		/// <summary>
+		/// Updates the automatic response helper.
+		/// </summary>
+		protected virtual void UpdateAutoResponse()
+		{
+			if (this.settingsRoot.AutoResponse.Enabled)
+			{
+				if (((TriggerEx)(this.settingsRoot.AutoResponse.TriggerSelection)).CommandIsRequired) // = sequence required = helper required.
+				{
+					ReadOnlyCollection<byte> sequence;
+					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out sequence))
+					{
+						lock (this.autoResponseHelperSyncObj)
+						{
+							if (this.autoResponseHelper == null)
+								this.autoResponseHelper = new AutoResponseHelper(sequence);
+							else
+								this.autoResponseHelper.Sequence = sequence;
+						}
+					}
+					else
+					{
+						lock (this.autoResponseHelperSyncObj)
+							this.autoResponseHelper = null;
+
+						this.settingsRoot.AutoResponse.Enabled = false;
+
+						OnMessageInputRequest
+						(
+							"Failed to parse the automatic response trigger! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
+							"To enable again, re-configure the automatic response.",
+							"Automatic Response Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Exclamation
+						);
+					}
+				}
+				else // No command required = no sequence required = no helper required.
+				{
+					lock (this.autoResponseHelperSyncObj)
+						this.autoResponseHelper = null;
+				}
+			}
+			else // Disabled.
+			{
+				lock (this.autoResponseHelperSyncObj)
+					this.autoResponseHelper = null;
+			}
+		}
+
+		/// <summary>
+		/// Tries to parse the given command into the corresponding byte sequence, taking the current settings into account.
+		/// </summary>
+		private bool TryParseCommandToSequence(Command c, out ReadOnlyCollection<byte> sequence)
+		{
+			if ((c != null) && (this.terminal != null))
+			{
+				if (c.IsSingleLineText)
+				{
+					byte[] lineResult;
+					if (this.terminal.TryParse(c.SingleLineText, out lineResult))
+					{
+						sequence = new ReadOnlyCollection<byte>(lineResult);
+						return (true);
+					}
+				}
+				else if (c.IsMultiLineText)
+				{
+					List<byte> commandResult = new List<byte>();
+
+					foreach (string line in c.MultiLineText)
+					{
+						byte[] lineResult;
+						if (this.terminal.TryParse(line, out lineResult))
+							commandResult.AddRange(lineResult);
+					}
+
+					if (commandResult.Count > 0)
+					{
+						sequence = new ReadOnlyCollection<byte>(commandResult);
+						return (true);
+					}
+				}
+			}
+
+			sequence = null;
+			return (false);
+		}
+
+		/// <summary>
+		/// Sends the automatic response.
+		/// </summary>
+		protected virtual void SendAutoResponse()
+		{
+			int page = this.settingsRoot.Predefined.SelectedPage;
+
+			switch (this.settingsRoot.AutoResponse.ResponseSelection)
+			{
+				case AutoResponse.PredefinedCommand1:  SendPredefined(page, 1);  break;
+				case AutoResponse.PredefinedCommand2:  SendPredefined(page, 2);  break;
+				case AutoResponse.PredefinedCommand3:  SendPredefined(page, 3);  break;
+				case AutoResponse.PredefinedCommand4:  SendPredefined(page, 4);  break;
+				case AutoResponse.PredefinedCommand5:  SendPredefined(page, 5);  break;
+				case AutoResponse.PredefinedCommand6:  SendPredefined(page, 6);  break;
+				case AutoResponse.PredefinedCommand7:  SendPredefined(page, 7);  break;
+				case AutoResponse.PredefinedCommand8:  SendPredefined(page, 8);  break;
+				case AutoResponse.PredefinedCommand9:  SendPredefined(page, 9);  break;
+				case AutoResponse.PredefinedCommand10: SendPredefined(page, 10); break;
+				case AutoResponse.PredefinedCommand11: SendPredefined(page, 11); break;
+				case AutoResponse.PredefinedCommand12: SendPredefined(page, 12); break;
+				case AutoResponse.SendText:            SendText();               break;
+				case AutoResponse.SendFile:            SendFile();               break;
+
+				case AutoResponse.DedicatedCommand:
+					SendCommand(this.settingsRoot.AutoResponse.DedicatedResponse);
+					break;
+
+				case AutoResponse.None:
+				default:
+					break;
 			}
 		}
 
