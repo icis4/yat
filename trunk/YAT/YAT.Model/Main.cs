@@ -1275,7 +1275,19 @@ namespace YAT.Model
 
 			// Create new workspace.
 			OnFixedStatusTextRequest("Opening workspace...");
-			this.workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs(), settings, guid);
+
+			Workspace workspace;
+			try
+			{
+				workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs(), settings, guid);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(this.GetType(), ex, "Failed to open workspace from settings!");
+				return (false);
+			}
+
+			this.workspace = workspace;
 			AttachWorkspaceEventHandlers();
 
 			// Save auto workspace.

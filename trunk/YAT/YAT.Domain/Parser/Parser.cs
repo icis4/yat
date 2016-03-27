@@ -361,50 +361,11 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s)
 		{
-			// AssertNotDisposed() is called by 'Parse()' below.
-
-			string parsed;
-			return (Parse(s, out parsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual byte[] Parse(string s, out string parsed)
-		{
-			// AssertNotDisposed() is called by 'Parse()' below.
-
-			Result[] typedResult = Parse(s, Modes.AllByteArrayResults, out parsed);
-			MemoryStream byteResult = new MemoryStream();
-			foreach (Result r in typedResult)
-			{
-				var bar = (r as ByteArrayResult);
-				if (bar != null)
-				{
-					byte[] a = bar.ByteArray;
-					byteResult.Write(a, 0, a.Length);
-				}
-			}
-			return (byteResult.ToArray());
-		}
-
-		/// <summary></summary>
-		public virtual Result[] Parse(string s, Modes modes)
-		{
-			// AssertNotDisposed() is called by 'Parse()' below.
-
-			string parsed;
-			return (Parse(s, modes, out parsed));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual Result[] Parse(string s, Modes modes, out string parsed)
-		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			Result[] result;
+			byte[] result;
 			FormatException formatException = new FormatException("");
-			if (!TryParse(s, modes, out result, out parsed, ref formatException))
+			if (!TryParse(s, out result, ref formatException))
 				throw (formatException);
 
 			return (result);
@@ -416,49 +377,81 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			string parsed;
-			return (TryParse(s, out result, out parsed));
+			string successfullyParsed;
+			return (TryParse(s, out result, out successfullyParsed));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, out byte[] result, out string parsed)
+		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
-			return (TryParse(s, out result, out parsed, ref formatException));
+			return (TryParse(s, out result, out successfullyParsed, ref formatException));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, out byte[] result, ref FormatException formatException)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			string successfullyParsed;
+			return (TryParse(s, Modes.AllByteArrayResults, out result, out successfullyParsed, ref formatException));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
+		public virtual bool TryParse(string s, out string successfullyParsed, ref FormatException formatException)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			Result[] result;
+			return (TryParse(s, Modes.AllByteArrayResults, out result, out successfullyParsed, ref formatException));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, out byte[] result, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			return (TryParse(s, Modes.AllByteArrayResults, out result, out parsed, ref formatException));
+			return (TryParse(s, Modes.AllByteArrayResults, out result, out successfullyParsed, ref formatException));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string parsed)
+		public virtual bool TryParse(string s, Modes modes, out byte[] result)
+		{
+			// AssertNotDisposed() is called by 'TryParse()' below.
+
+			string successfullyParsed;
+			return (TryParse(s, modes, out result, out successfullyParsed));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string successfullyParsed)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
-			return (TryParse(s, modes, out result, out parsed, ref formatException));
+			return (TryParse(s, modes, out result, out successfullyParsed, ref formatException));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, Modes modes, out byte[] result, out string successfullyParsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] typedResult;
-			if (TryParse(s, modes, out typedResult, out parsed, ref formatException))
+			if (TryParse(s, modes, out typedResult, out successfullyParsed, ref formatException))
 			{
 
 				MemoryStream bytes = new MemoryStream();
@@ -504,58 +497,58 @@ namespace YAT.Domain.Parser
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			string parsed;
-			return (TryParse(s, modes, out result, out parsed));
+			string successfullyParsed;
+			return (TryParse(s, modes, out result, out successfullyParsed));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out string parsed)
+		public virtual bool TryParse(string s, Modes modes, out string successfullyParsed)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
-			return (TryParse(s, modes, out result, out parsed));
+			return (TryParse(s, modes, out result, out successfullyParsed));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, Modes modes, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, Modes modes, out string successfullyParsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			Result[] result;
-			return (TryParse(s, modes, out result, out parsed, ref formatException));
+			return (TryParse(s, modes, out result, out successfullyParsed, ref formatException));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed)
+		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string successfullyParsed)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
-			return (TryParse(s, modes, out result, out parsed, ref formatException));
+			return (TryParse(s, modes, out result, out successfullyParsed, ref formatException));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, out Result[] result, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, out Result[] result, out string successfullyParsed, ref FormatException formatException)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 
-			return (TryParse(s, Modes.All, out result, out parsed, ref formatException));
+			return (TryParse(s, Modes.All, out result, out successfullyParsed, ref formatException));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
-		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, Modes modes, out Result[] result, out string successfullyParsed, ref FormatException formatException)
 		{
 			AssertNotDisposed();
 
@@ -590,7 +583,7 @@ namespace YAT.Domain.Parser
 					if (remaining == null)
 					{
 						// Signal that parsing resulted in a severe stream error:
-						parsed = null;
+						successfullyParsed = null;
 						result = null;
 						return (false);
 					}
@@ -598,7 +591,7 @@ namespace YAT.Domain.Parser
 					{
 						// Signal that parsing resulted in a parse error and
 						//   return the part of the string that could be parsed:
-						parsed = StringEx.Left(s, s.Length - remaining.Length - 1);
+						successfullyParsed = StringEx.Left(s, s.Length - remaining.Length - 1);
 						result = this.result.ToArray();
 						return (false);
 					}
@@ -607,7 +600,7 @@ namespace YAT.Domain.Parser
 
 			CommitPendingBytes();
 
-			parsed = s;
+			successfullyParsed = s;
 			result = this.result.ToArray();
 			return (true);
 		}

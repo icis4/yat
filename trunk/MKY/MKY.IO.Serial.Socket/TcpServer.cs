@@ -724,8 +724,8 @@ namespace MKY.IO.Serial.Socket
 			// This receive callback is always asychronous, thus the event handler can
 			// be called directly. It is also ensured that the event handler is called
 			// sequential because the 'BeginReceive()' method is only called after
-			// the eevent handler has returned.
-			OnDataReceived(new DataReceivedEventArgs(e.Buffer));
+			// the event handler has returned.
+			OnDataReceived(new DataReceivedEventArgs((byte[])e.Buffer.Clone()));
 
 			// Continue receiving data.
 			e.Connection.BeginReceive();
@@ -744,7 +744,7 @@ namespace MKY.IO.Serial.Socket
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			// No clue why the 'Sent' event fires once before actual data is being sent...
-			if (e.Buffer != null)
+			if ((e.Buffer != null) && (e.Buffer.Length > 0))
 			{
 				lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
 				{

@@ -405,7 +405,8 @@ namespace MKY.IO.Usb
 		/// \todo: Don't know the GUID for any USB device class. So only HID devices are detected.
 		/// 
 		/// \attention:
-		/// This function also exists in the other USB classes. Changes here must also be applied there.
+		/// This function also exists in the other USB classes.
+		/// Changes here must be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
 		public static bool RegisterStaticDeviceNotificationHandler(Guid classGuid)
@@ -438,7 +439,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function also exists in the other USB classes. Changes here must also be applied there.
+		/// This function also exists in the other USB classes.
+		/// Changes here must be applied there too.
 		/// </remarks>
 		public static void UnregisterStaticDeviceNotificationHandler()
 		{
@@ -465,7 +467,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function also exists in the other USB classes. Changes here must also be applied there.
+		/// This function also exists in the other USB classes.
+		/// Changes here must be applied there too.
 		/// </remarks>
 		private static void StaticMessageCallback(ref Message m)
 		{
@@ -839,7 +842,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -854,7 +858,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

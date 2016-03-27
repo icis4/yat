@@ -629,7 +629,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (IsStarted)
 			{
 				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
-				// Changes here must most likely be applied there too!
+				// Changes here must most likely be applied there too.
 				bool signalXOnXOff = false;
 				bool signalXOnXOffCount = false;
 
@@ -1036,7 +1036,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
-		// Changes here must most likely be applied there too!
+		// Changes here must most likely be applied there too.
 
 		/// <summary></summary>
 		protected virtual void AssumeOutputXOn()

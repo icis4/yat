@@ -281,6 +281,23 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Methods > Parse
+		//------------------------------------------------------------------------------------------
+		// Methods > Parse
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
+		/// </summary>
+		public override bool TryParse(string s, out byte[] result)
+		{
+			using (Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianness, (EncodingEx)TextTerminalSettings.Encoding))
+				return (p.TryParse(s, TextTerminalSettings.CharSubstitution, TerminalSettings.Send.ToParseMode(), out result));
+		}
+
+		#endregion
+
+
 		#region Methods > Send
 		//------------------------------------------------------------------------------------------
 		// Methods > Send

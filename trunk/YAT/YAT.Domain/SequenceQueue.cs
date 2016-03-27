@@ -26,7 +26,6 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -82,8 +81,14 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public SequenceQueue(byte[] sequence)
+			: this(new ReadOnlyCollection<byte>(sequence))
 		{
-			this.sequence = new ReadOnlyCollection<byte>(sequence);
+		}
+
+		/// <summary></summary>
+		public SequenceQueue(ReadOnlyCollection<byte> sequence)
+		{
+			this.sequence = sequence;
 			this.queue = new Queue<byte>(this.sequence.Count);
 			Evaluate();
 		}

@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
@@ -112,24 +113,67 @@ namespace YAT.Model.Settings
 			SetChanged();
 		}
 
-		/// <summary></summary>
-		/// <param name="selectedPage">Page index 0..max-1.</param>
-		/// <param name="selectedCommand">Command index 0..max-1.</param>
+		/// <summary>
+		/// Sets the given predefined command.
+		/// </summary>
+		/// <param name="pageIndex">Page index 0..max-1.</param>
+		/// <param name="commandIndex">Command index 0..max-1.</param>
 		/// <param name="command">Command to be set.</param>
-		public virtual void SetCommand(int selectedPage, int selectedCommand, Command command)
+		public virtual void SetCommand(int pageIndex, int commandIndex, Command command)
 		{
-			if ((selectedPage == 0) && (this.pages.Count == 0))
+			if ((pageIndex == 0) && (this.pages.Count == 0))
 				CreateDefaultPage();
 
-			if ((selectedPage >= 0) && (selectedPage < this.pages.Count))
+			if ((pageIndex >= 0) && (pageIndex < this.pages.Count))
 			{
-				PredefinedCommandPage page = this.pages[selectedPage];
-				if ((selectedCommand >= 0) && (selectedCommand < MaxCommandsPerPage))
+				PredefinedCommandPage page = this.pages[pageIndex];
+				if ((commandIndex >= 0) && (commandIndex < MaxCommandsPerPage))
 				{
-					page.SetCommand(selectedCommand, command);
+					page.SetCommand(commandIndex, command);
 					SetChanged();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the given predefined command.
+		/// </summary>
+		/// <param name="pageIndex">Page index 0..max-1.</param>
+		/// <param name="commandIndex">Command index 0..max-1.</param>
+		public virtual Command GetCommand(int pageIndex, int commandIndex)
+		{
+			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
+				return (this.pages[pageIndex].Commands[commandIndex]);
+			else
+				return (null);
+		}
+
+		/// <summary>
+		/// Validates the given predefined arguments.
+		/// </summary>
+		/// <param name="pageIndex">Page index 0..max-1.</param>
+		/// <param name="commandIndex">Command index 0..max-1.</param>
+		public bool ValidateWhetherCommandIsDefined(int pageIndex, int commandIndex)
+		{
+			// Validate page index:
+			if ((pageIndex < 0) || (pageIndex > (this.pages.Count - 1)))
+				return (false);
+
+			// Validate page:
+			List<Command> commands = this.pages[pageIndex].Commands;
+			if (commands == null)
+				return (false);
+
+			// Validate command index:
+			if ((commandIndex < 0) || (commandIndex > (commands.Count - 1)))
+				return (false);
+
+			// Validate command:
+			Command command = commands[commandIndex];
+			if (command == null)
+				return (false);
+
+			return (command.IsDefined);
 		}
 
 		#endregion

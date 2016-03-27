@@ -182,7 +182,7 @@ namespace YAT.Gui.Controls
 				{
 					int invalidTextStart;
 					int invalidTextLength;
-					if (!Validation.ValidateSequence(this, "Command", s, this.parseMode, out invalidTextStart, out invalidTextLength))
+					if (!Validation.ValidateText(this, "Command", s, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 					{
 						invalidTextStart += textLength;
 						invalidTextLength = textBox_Command.Text.Length - invalidTextStart;
