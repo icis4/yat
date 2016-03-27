@@ -46,6 +46,7 @@ using MKY.Settings;
 using MKY.Windows.Forms;
 
 using YAT.Application.Utilities;
+using YAT.Gui.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 
@@ -133,6 +134,9 @@ namespace YAT.Gui.Forms
 		// Status
 		private bool ioStatusIndicatorFlashingIsOn; // = false;
 
+		// Toolstrip-combobox-validation-workaround (too late invocation of 'Validate' event):
+		private bool terminalMenuValidationWorkaround_UpdateIsSuspended;
+
 		#endregion
 
 		#region Events
@@ -212,7 +216,7 @@ namespace YAT.Gui.Forms
 				return (true);
 
 			// In addition to predefined shortcuts in the menus, the shortcut Alt+Shift+F1..F12
-			// shall copy the according 'Predefined Command' to 'Send Command':
+			// shall copy the according 'Predefined Command' to 'Send Text':
 			if ((keyData & Keys.Modifiers) == (Keys.Alt | Keys.Shift))
 			{
 				int functionKey;
@@ -262,8 +266,8 @@ namespace YAT.Gui.Forms
 			monitor_Bidir.Activate();
 			monitor_Rx   .Activate();
 
-			// Select send command control to enable immediate user input.
-			SelectSendCommandInput();
+			// Select send text control to enable immediate user input.
+			SelectSendTextInput();
 		}
 
 		private void Terminal_Deactivate(object sender, EventArgs e)
@@ -336,8 +340,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time terminal status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_File_SetMenuItems()
 		{
@@ -379,8 +383,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time terminal status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems()
 		{
@@ -480,8 +484,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time send status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 		{
@@ -489,19 +493,21 @@ namespace YAT.Gui.Forms
 
 			// Prepare the menu item properties based on state and settings.
 			//
-			// Attention: Similar code exists in the following locations:
+			// Attention, similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
-			//  > YAT.Gui.Controls.SendCommand.SetControls()
-			// Changes here may have to be applied there.
+			//  > YAT.Gui.Controls.SendText.SetControls()
+			// Changes here may have to be applied there too.
+			//
+			// Main and context menu are separated as there are subtle differences between them.
 
-			string sendCommandText = "Command";
-			bool sendCommandEnabled = this.settingsRoot.SendCommand.Command.IsValidText;
+			string sendTextText = "Text";
+			bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
 			if (this.settingsRoot.Send.SendImmediately)
 			{
 				switch (this.settingsRoot.TerminalType)
 				{
-					case Domain.TerminalType.Text: sendCommandText = "EOL";    break;
-					default: /* Binary or <New> */ sendCommandEnabled = false; break;
+					case Domain.TerminalType.Text: sendTextText = "EOL";    break;
+					default: /* Binary or <New> */ sendTextEnabled = false; break;
 				}
 			}
 
@@ -509,13 +515,44 @@ namespace YAT.Gui.Forms
 
 			// Set the menu item properties:
 
-			toolStripMenuItem_TerminalMenu_Send_Command.Text    = sendCommandText;
-			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = sendCommandEnabled && this.terminal.IsReadyToSend;
-			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = sendFileEnabled    && this.terminal.IsReadyToSend;
+			toolStripMenuItem_TerminalMenu_Send_Text.Text    = sendTextText;
+			toolStripMenuItem_TerminalMenu_Send_Text.Enabled = sendTextEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_TerminalMenu_Send_File.Enabled = sendFileEnabled && this.terminal.IsReadyToSend;
 
 			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
+
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse.Checked          =  this.settingsRoot.AutoResponse.Enabled;
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.TriggerSelection  != Model.Types.Trigger.None);
+			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.None);
+
+				// Attention, similar code exists in the following locations:
+				//  > YAT.Gui.Forms.Main.toolStripButton_MainTool_SetControls()
+				// Changes here may have to be applied there too.
+
+			if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
+			{
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.ValidAutoResponseTriggerItems);
+
+				if (this.settingsRoot.AutoResponse.TriggerSelection != Model.Types.Trigger.DedicatedCommand)
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem = (Model.Types.TriggerEx)this.settingsRoot.AutoResponse.TriggerSelection;
+				else if (this.settingsRoot.AutoResponse.DedicatedTrigger != null)
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = this.settingsRoot.AutoResponse.DedicatedTrigger.SingleLineText;
+				else
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = Model.Types.Command.DefineCommandText;
+
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.ValidAutoResponseResponseItems);
+
+				if (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.DedicatedCommand)
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem = (Model.Types.AutoResponseEx)this.settingsRoot.AutoResponse.ResponseSelection;
+				else if (this.settingsRoot.AutoResponse.DedicatedResponse != null)
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = this.settingsRoot.AutoResponse.DedicatedResponse.SingleLineText;
+				else
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = Model.Types.Command.DefineCommandText;
+			}
 
 			this.isSettingControls.Leave();
 		}
@@ -525,7 +562,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_SetMenuItems();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Send_Command_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Send_Text_Click(object sender, EventArgs e)
 		{
 			if (!this.settingsRoot.Send.SendImmediately)
 				this.terminal.SendText();
@@ -553,6 +590,78 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
 		}
 
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				var trigger = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem as Model.Types.TriggerEx);
+				if (trigger != null)
+					this.settingsRoot.AutoResponse.FromTrigger(trigger);
+			}
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
+		/// only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged(object sender, EventArgs e)
+		{
+			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
+				int invalidTextStart;
+				if (Validation.ValidateText(this, "automatic response trigger", triggerText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
+						this.settingsRoot.AutoResponse.FromDedicatedTriggerText(triggerText);
+						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+					}
+				}
+				else
+				{
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text.Remove(invalidTextStart);
+				}
+			}
+		}
+
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				var response = (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem as Model.Types.AutoResponseEx);
+				if (response != null)
+					this.settingsRoot.AutoResponse.FromResponse(response);
+			}
+		}
+
+		/// <remarks>
+		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke that event way too late,
+		/// only when the hosting control (i.e. the whole tool bar) is being validated.
+		/// </remarks>
+		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_TextChanged(object sender, EventArgs e)
+		{
+			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			{
+				string responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
+				int invalidTextStart;
+				if (Validation.ValidateText(this, "automatic response", responseText, out invalidTextStart))
+				{
+					if (!this.isSettingControls)
+					{
+						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
+						this.settingsRoot.AutoResponse.FromDedicatedResponseText(responseText);
+						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
+					}
+				}
+				else
+				{
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text.Remove(invalidTextStart);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > Terminal Menu > Log
@@ -561,8 +670,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time terminal status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Log_SetMenuItems()
 		{
@@ -636,8 +745,8 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <remarks>
-		/// Must be called each time terminal status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_View_SetMenuItems()
 		{
@@ -658,7 +767,7 @@ namespace YAT.Gui.Forms
 
 			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
 
-			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
@@ -735,9 +844,9 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Panels_SendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_SendText_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Layout.SendCommandPanelIsVisible = !this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			this.settingsRoot.Layout.SendTextPanelIsVisible = !this.settingsRoot.Layout.SendTextPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_SendFile_Click(object sender, EventArgs e)
@@ -854,8 +963,8 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <remarks>
-		/// Must be called each time preset status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void contextMenuStrip_Preset_SetMenuItems()
 		{
@@ -901,8 +1010,8 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <remarks>
-		/// Must be called each time monitor status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void contextMenuStrip_Monitor_SetMenuItems()
 		{
@@ -1112,8 +1221,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time send status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void contextMenuStrip_Radix_SetMenuItems()
 		{
@@ -1315,14 +1424,14 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <remarks>
-		/// Must be called each time send status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void contextMenuStrip_Predefined_SetMenuItems()
 		{
 			this.isSettingControls.Enter();
 
-			// Pages.
+			// Pages:
 			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
 
 			int pageCount = 0;
@@ -1353,7 +1462,7 @@ namespace YAT.Gui.Forms
 				this.menuItems_Predefined_Pages[i].Enabled   = false;
 			}
 
-			// Commands.
+			// Commands:
 			List<Model.Types.Command> commands = null;
 			if (pageCount > 0)
 				commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
@@ -1400,7 +1509,7 @@ namespace YAT.Gui.Forms
 		private int contextMenuStrip_Predefined_SelectedCommand; // = 0;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendCommand; // = null;
+		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendText; // = null;
 
 		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
 		{
@@ -1410,17 +1519,17 @@ namespace YAT.Gui.Forms
 				Model.Types.Command c = predefined.GetCommandFromId(id);
 
 				contextMenuStrip_Predefined_SelectedCommand = id;
-				contextMenuStrip_Predefined_CopyToSendCommand = c;
+				contextMenuStrip_Predefined_CopyToSendText = c;
 
 				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = true;
 
-				ToolStripMenuItem mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand;
+				ToolStripMenuItem mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendText;
 				mi.Visible = true;
 				if (c != null)
 				{
 					mi.Enabled = (c.IsText || c.IsFilePath);
 					if (c.IsText)
-						mi.Text = "Copy to Send Command";
+						mi.Text = "Copy to Send Text";
 					else if (c.IsFilePath)
 						mi.Text = "Copy to Send File";
 					else
@@ -1432,8 +1541,8 @@ namespace YAT.Gui.Forms
 					mi.Text = "Copy";
 				}
 
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Enabled = ((id != 0) && (this.settingsRoot.SendCommand.Command.IsText));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command.IsText));
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command.IsFilePath));
 			}
@@ -1441,8 +1550,8 @@ namespace YAT.Gui.Forms
 			{
 				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = false;
 
-				toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyToSendText.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = false;
 			}
 
@@ -1477,21 +1586,21 @@ namespace YAT.Gui.Forms
 				ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendText_Click(object sender, EventArgs e)
 		{
-			Model.Types.Command c = contextMenuStrip_Predefined_CopyToSendCommand;
+			Model.Types.Command c = contextMenuStrip_Predefined_CopyToSendText;
 			if (c != null)
 			{
 				if (c.IsText)
-					this.settingsRoot.SendCommand.Command = c;
+					this.settingsRoot.SendText.Command = c;
 				else if (c.IsFilePath)
 					this.settingsRoot.SendFile.Command = c;
 			}
 		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendText_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendCommand.Command);
+			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendText.Command);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
@@ -1512,8 +1621,8 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Must be called each time send status changes.
-		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// Must be called each time the corresponding context state changes, because shortcuts
+		/// associated to menu items are only active when items are visible and enabled.
 		/// </remarks>
 		private void contextMenuStrip_Send_SetMenuItems()
 		{
@@ -1521,19 +1630,21 @@ namespace YAT.Gui.Forms
 
 			// Prepare the menu item properties based on state and settings.
 			//
-			// Attention: Similar code exists in the following locations:
+			// Attention, similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-			//  > YAT.Gui.Controls.SendCommand.SetControls()
-			// Changes here may have to be applied there.
+			//  > YAT.Gui.Controls.SendText.SetControls()
+			// Changes here may have to be applied there too.
+			//
+			// Context and main menu are separated as there are subtle differences between them.
 
-			string sendCommandText = "Send Command";
-			bool sendCommandEnabled = this.settingsRoot.SendCommand.Command.IsValidText;
+			string sendTextText = "Send Text";
+			bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText;
 			if (this.settingsRoot.Send.SendImmediately)
 			{
 				switch (this.settingsRoot.TerminalType)
 				{
-					case Domain.TerminalType.Text: sendCommandText = "Send EOL"; break;
-					default: /* Binary or <New> */ sendCommandEnabled = false;   break;
+					case Domain.TerminalType.Text: sendTextText = "Send EOL"; break;
+					default: /* Binary or <New> */ sendTextEnabled = false;   break;
 				}
 			}
 
@@ -1541,12 +1652,12 @@ namespace YAT.Gui.Forms
 
 			// Set the menu item properties:
 
-			toolStripMenuItem_SendContextMenu_SendCommand.Text    = sendCommandText;
-			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = sendCommandEnabled && this.terminal.IsReadyToSend;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled    = sendFileEnabled    && this.terminal.IsReadyToSend;
+			toolStripMenuItem_SendContextMenu_SendText.Text    = sendTextText;
+			toolStripMenuItem_SendContextMenu_SendText.Enabled = sendTextEnabled && this.terminal.IsReadyToSend;
+			toolStripMenuItem_SendContextMenu_SendFile.Enabled = sendFileEnabled && this.terminal.IsReadyToSend;
 
-			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 			toolStripMenuItem_SendContextMenu_KeepCommand.Checked     = this.settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked  = this.settingsRoot.Send.CopyPredefined;
@@ -1560,7 +1671,7 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Send_SetMenuItems();
 		}
 
-		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_SendText_Click(object sender, EventArgs e)
 		{
 			if (!this.settingsRoot.Send.SendImmediately)
 				this.terminal.SendText();
@@ -1573,9 +1684,9 @@ namespace YAT.Gui.Forms
 			this.terminal.SendFile();
 		}
 
-		private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_Panels_SendText_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Layout.SendCommandPanelIsVisible = !this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			this.settingsRoot.Layout.SendTextPanelIsVisible = !this.settingsRoot.Layout.SendTextPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
@@ -1743,9 +1854,9 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Send
 		//------------------------------------------------------------------------------------------
 
-		private void send_CommandChanged(object sender, EventArgs e)
+		private void send_TextCommandChanged(object sender, EventArgs e)
 		{
-			this.settingsRoot.Implicit.SendCommand.Command = send.Command;
+			this.settingsRoot.Implicit.SendText.Command = send.TextCommand;
 		}
 
 		/// <remarks>
@@ -1757,7 +1868,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
-		private void send_SendCommandRequest(object sender, EventArgs e)
+		private void send_TextCommandRequest(object sender, EventArgs e)
 		{
 			this.terminal.SendText();
 		}
@@ -2030,6 +2141,36 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestToggleAutoResponseVisible()
+		{
+			this.settingsRoot.AutoResponse.Visible = !this.settingsRoot.AutoResponse.Visible;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseFromTrigger(Model.Types.TriggerEx trigger)
+		{
+			this.settingsRoot.AutoResponse.FromTrigger(trigger);
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseFromDedicatedTriggerText(string triggerText)
+		{
+			this.settingsRoot.AutoResponse.FromDedicatedTriggerText(triggerText);
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseFromResponse(Model.Types.AutoResponseEx response)
+		{
+			this.settingsRoot.AutoResponse.FromResponse(response);
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoResponseFromDedicatedResponseText(string responseText)
+		{
+			this.settingsRoot.AutoResponse.FromDedicatedResponseText(responseText);
+		}
+
+		/// <summary></summary>
 		public virtual void RequestClear()
 		{
 			this.terminal.ClearRepositories();
@@ -2239,8 +2380,8 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 
-			// splitContainer_Terminal and splitContainer_SendCommand:
-			if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
+			// splitContainer_Terminal and splitContainer_Send:
+			if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				splitContainer_Terminal.Panel2Collapsed = false;
 				panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
@@ -2254,20 +2395,20 @@ namespace YAT.Gui.Forms
 			}
 
 			// Set send panel size depending on one or two sub-panels:
-			if (this.settingsRoot.Layout.SendCommandPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
+			if (this.settingsRoot.Layout.SendTextPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 97;
 				splitContainer_Terminal.Panel2MinSize = height;
 				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
-			else if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
+			else if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 48;
 				splitContainer_Terminal.Panel2MinSize = height;
 				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
 
-			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
 			send.FilePanelIsVisible    = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 			LayoutSend();
@@ -2319,11 +2460,11 @@ namespace YAT.Gui.Forms
 
 			this.isSettingControls.Enter();
 			send.TerminalType           = this.settingsRoot.TerminalType;
-			send.Command                = this.settingsRoot.SendCommand.Command;
-			send.RecentCommands         = this.settingsRoot.SendCommand.RecentCommands;
+			send.TextCommand            = this.settingsRoot.SendText.Command;
+			send.RecentCommands         = this.settingsRoot.SendText.RecentCommands;
 			send.FileCommand            = this.settingsRoot.SendFile.Command;
 			send.RecentFileCommands     = this.settingsRoot.SendFile.RecentCommands;
-			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
+			send.SendTextImmediately    = this.settingsRoot.Send.SendImmediately;
 			send.TerminalIsReadyToSend  = this.terminal.IsReadyToSend;
 			this.isSettingControls.Leave();
 		}
@@ -2883,9 +3024,9 @@ namespace YAT.Gui.Forms
 		// Send Panel
 		//==========================================================================================
 
-		private void SelectSendCommandInput()
+		private void SelectSendTextInput()
 		{
-			send.SelectSendCommandInput();
+			send.SelectSendTextInput();
 		}
 
 		#endregion
@@ -2925,17 +3066,14 @@ namespace YAT.Gui.Forms
 
 			if (e.Inner == null)
 			{
-				// Settings root has changed.
 				// Nothing to do, no need to care about 'ProductVersion' and such.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
 			{
-				// Explicit settings have changed.
 				HandleExplicitSettings(e.Inner);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
 			{
-				// Implicit settings have changed.
 				HandleImplicitSettings(e.Inner);
 			}
 
@@ -2946,17 +3084,14 @@ namespace YAT.Gui.Forms
 		{
 			if (e.Inner == null)
 			{
-				// ExplicitSettings changed.
-				// Nothing to do
+				// Nothing to do.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal))
 			{
-				// TerminalSettings changed.
 				HandleTerminalSettings(e.Inner);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
-				// PredefinedCommandSettings changed.
 				this.isSettingControls.Enter();
 				predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
 				this.isSettingControls.Leave();
@@ -2965,51 +3100,11 @@ namespace YAT.Gui.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
-				// FormatSettings changed.
 				ReformatMonitors();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Log))
 			{
-				// LogSettings changed.
 				SetLogControls();
-			}
-		}
-
-		private void HandleImplicitSettings(SettingsEventArgs e)
-		{
-			if (e.Inner == null)
-			{
-				// ImplicitSettings changed.
-				SetTerminalControls();
-				SetLogControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendCommand))
-			{
-				// SendCommandSettings changed.
-				SetSendControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
-			{
-				// SendFileSettings changed.
-				SetSendControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
-			{
-				// PredefinedSettings changed.
-				this.isSettingControls.Enter();
-				predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
-				this.isSettingControls.Leave();
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
-			{
-				// WindowSettings changed.
-				// Nothing to do, windows settings are only saved.
-			}
-			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Layout))
-			{
-				// LayoutSettings changed.
-				LayoutTerminal();
-				SetLayoutControls();
 			}
 		}
 
@@ -3020,38 +3115,65 @@ namespace YAT.Gui.Forms
 
 			if (e.Inner == null)
 			{
-				// TerminalSettings changed.
 				SetIOStatus();
 				SetIOControlControls();
 				SetMonitorIOStatus();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.IO))
 			{
-				// IOSettings changed.
 				SetIOStatus();
 				SetIOControlControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Status))
 			{
-				// StatusSettings changed.
 				SetMonitorCountAndRateStatus();
 				SetIOControlControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Display))
 			{
-				// DisplaySettings changed.
 				SetMonitorLineCount();
 				SetMonitorLineNumbers();
 				SetDisplayControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
 			{
-				// SendSettings changed.
 				SetSendControls();
 			}
 		}
 
-#endregion
+		private void HandleImplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				SetTerminalControls();
+				SetLogControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
+			{
+				SetSendControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
+			{
+				SetSendControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
+			{
+				this.isSettingControls.Enter();
+				predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
+				this.isSettingControls.Leave();
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
+			{
+				// Nothing to do, windows settings are only saved.
+			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Layout))
+			{
+				LayoutTerminal();
+				SetLayoutControls();
+			}
+		}
+
+		#endregion
 
 		#region Settings > Suspend
 		//------------------------------------------------------------------------------------------
@@ -3335,7 +3457,7 @@ namespace YAT.Gui.Forms
 		private void terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
 			SetTerminalControls();
-			SelectSendCommandInput();
+			SelectSendTextInput();
 		}
 
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
@@ -3388,7 +3510,7 @@ namespace YAT.Gui.Forms
 			{
 				ResetStatusText();
 			}
-			SelectSendCommandInput();
+			SelectSendTextInput();
 			return (dr);
 		}
 
@@ -3428,7 +3550,7 @@ namespace YAT.Gui.Forms
 				ResetStatusText();
 			}
 
-			SelectSendCommandInput();
+			SelectSendTextInput();
 		}
 
 		#endregion
@@ -3859,7 +3981,7 @@ namespace YAT.Gui.Forms
 				this.settingsRoot.Log = f.SettingsResult;
 			}
 
-			SelectSendCommandInput();
+			SelectSendTextInput();
 		}
 
 		#endregion

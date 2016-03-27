@@ -21,11 +21,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using MKY.Text;
+
 using YAT.Application.Utilities;
+
+#endregion
 
 namespace YAT.Settings.Terminal
 {
@@ -335,10 +345,10 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual Model.Settings.SendCommandSettings SendCommand
+		public virtual Model.Settings.SendTextSettings SendText
 		{
-			get { return (this.implicit_.SendCommand); }
-			set { this.implicit_.SendCommand = value;  }
+			get { return (this.implicit_.SendText); }
+			set { this.implicit_.SendText = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
@@ -355,6 +365,14 @@ namespace YAT.Settings.Terminal
 		{
 			get { return (this.implicit_.Predefined); }
 			set { this.implicit_.Predefined = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual Model.Settings.AutoResponseSettings AutoResponse
+		{
+			get { return (this.implicit_.AutoResponse); }
+			set { this.implicit_.AutoResponse = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
@@ -399,6 +417,215 @@ namespace YAT.Settings.Terminal
 
 		#endregion
 
+		#region Property Combinations
+		//------------------------------------------------------------------------------------------
+		// Property Combinations
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// The currently valid response items usable for automatic response.
+		/// </summary>
+		[XmlIgnore]
+		public Model.Types.TriggerEx[] ValidAutoResponseTriggerItems
+		{
+			get
+			{
+				List<Model.Types.TriggerEx> a = new List<Model.Types.TriggerEx>();
+
+				foreach (Model.Types.TriggerEx trigger in Model.Types.TriggerEx.GetItems())
+				{
+					switch ((Model.Types.Trigger)trigger)
+					{
+						case Model.Types.Trigger.PredefinedCommand1:
+						case Model.Types.Trigger.PredefinedCommand2:
+						case Model.Types.Trigger.PredefinedCommand3:
+						case Model.Types.Trigger.PredefinedCommand4:
+						case Model.Types.Trigger.PredefinedCommand5:
+						case Model.Types.Trigger.PredefinedCommand6:
+						case Model.Types.Trigger.PredefinedCommand7:
+						case Model.Types.Trigger.PredefinedCommand8:
+						case Model.Types.Trigger.PredefinedCommand9:
+						case Model.Types.Trigger.PredefinedCommand10:
+						case Model.Types.Trigger.PredefinedCommand11:
+						case Model.Types.Trigger.PredefinedCommand12:
+						{
+							int pageId = this.implicit_.Predefined.SelectedPage;
+							int commandId = trigger.ToPredefinedCommandId();
+							if (commandId != Model.Types.TriggerEx.InvalidPredefinedCommandId)
+							{
+								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+								if ((c != null) && (c.IsValid))
+									a.Add(trigger);
+							}
+
+							break;
+						}
+
+						case Model.Types.Trigger.DedicatedCommand:
+						{
+							Model.Types.Command c = this.implicit_.AutoResponse.DedicatedTrigger;
+							if ((c != null) && (c.IsValid))
+								a.Add(trigger);
+
+							break;
+						}
+
+						case Model.Types.Trigger.AnyLine:
+						case Model.Types.Trigger.None:
+						default:
+						{
+							a.Add(trigger); // Always add these fixed responses.
+							break;
+						}
+					}
+				}
+
+				return (a.ToArray());
+			}
+		}
+
+		/// <summary>
+		/// The currently valid response items usable for automatic response.
+		/// </summary>
+		[XmlIgnore]
+		public Model.Types.AutoResponseEx[] ValidAutoResponseResponseItems
+		{
+			get
+			{
+				List<Model.Types.AutoResponseEx> a = new List<Model.Types.AutoResponseEx>();
+
+				foreach (Model.Types.AutoResponseEx response in Model.Types.AutoResponseEx.GetItems())
+				{
+					switch ((Model.Types.AutoResponse)response)
+					{
+						case Model.Types.AutoResponse.PredefinedCommand1:
+						case Model.Types.AutoResponse.PredefinedCommand2:
+						case Model.Types.AutoResponse.PredefinedCommand3:
+						case Model.Types.AutoResponse.PredefinedCommand4:
+						case Model.Types.AutoResponse.PredefinedCommand5:
+						case Model.Types.AutoResponse.PredefinedCommand6:
+						case Model.Types.AutoResponse.PredefinedCommand7:
+						case Model.Types.AutoResponse.PredefinedCommand8:
+						case Model.Types.AutoResponse.PredefinedCommand9:
+						case Model.Types.AutoResponse.PredefinedCommand10:
+						case Model.Types.AutoResponse.PredefinedCommand11:
+						case Model.Types.AutoResponse.PredefinedCommand12:
+						{
+							int pageId = this.implicit_.Predefined.SelectedPage;
+							int commandId = response.ToPredefinedCommandId();
+							if (commandId != Model.Types.AutoResponseEx.InvalidPredefinedCommandId)
+							{
+								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+								if ((c != null) && (c.IsValid))
+									a.Add(response);
+							}
+
+							break;
+						}
+
+						case Model.Types.AutoResponse.SendText:
+						{
+							Model.Types.Command c = this.implicit_.SendText.Command;
+							if ((c != null) && (c.IsValid))
+								a.Add(response);
+
+							break;
+						}
+
+						case Model.Types.AutoResponse.SendFile:
+						{
+							Model.Types.Command c = this.implicit_.SendFile.Command;
+							if ((c != null) && (c.IsValid))
+								a.Add(response);
+
+							break;
+						}
+
+						case Model.Types.AutoResponse.DedicatedCommand:
+						{
+							Model.Types.Command c = this.implicit_.AutoResponse.DedicatedResponse;
+							if ((c != null) && (c.IsValid))
+								a.Add(response);
+
+							break;
+						}
+
+						case Model.Types.AutoResponse.None:
+						default:
+						{
+							a.Add(response); // Always add these fixed responses.
+							break;
+						}
+					}
+				}
+
+				return (a.ToArray());
+			}
+		}
+
+		/// <summary>
+		/// The currently active response used for automatic response.
+		/// </summary>
+		[XmlIgnore]
+		public virtual Model.Types.Command ActiveAutoResponseTrigger
+		{
+			get
+			{
+				Model.Types.Command response = null;
+
+				if (this.implicit_.AutoResponse.Enabled)
+				{
+					switch (this.implicit_.AutoResponse.TriggerSelection)
+					{
+						case Model.Types.Trigger.PredefinedCommand1:
+						case Model.Types.Trigger.PredefinedCommand2:
+						case Model.Types.Trigger.PredefinedCommand3:
+						case Model.Types.Trigger.PredefinedCommand4:
+						case Model.Types.Trigger.PredefinedCommand5:
+						case Model.Types.Trigger.PredefinedCommand6:
+						case Model.Types.Trigger.PredefinedCommand7:
+						case Model.Types.Trigger.PredefinedCommand8:
+						case Model.Types.Trigger.PredefinedCommand9:
+						case Model.Types.Trigger.PredefinedCommand10:
+						case Model.Types.Trigger.PredefinedCommand11:
+						case Model.Types.Trigger.PredefinedCommand12:
+						{
+							int pageId = this.implicit_.Predefined.SelectedPage;
+							int commandId = ((Model.Types.TriggerEx)(this.implicit_.AutoResponse.TriggerSelection)).ToPredefinedCommandId();
+							if (commandId != Model.Types.TriggerEx.InvalidPredefinedCommandId)
+							{
+								Model.Types.Command c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+								if ((c != null) && (c.IsValid))
+									response = c;
+							}
+
+							break;
+						}
+
+						case Model.Types.Trigger.DedicatedCommand:
+						{
+							Model.Types.Command c = this.implicit_.AutoResponse.DedicatedTrigger;
+							if ((c != null) && (c.IsValid))
+								response = c;
+
+							break;
+						}
+
+						case Model.Types.Trigger.AnyLine:
+						case Model.Types.Trigger.None:
+						default:
+						{
+							break;
+						}
+					}
+				}
+
+				return (response);
+			}
+		}
+
+		#endregion
+
 		#region Alternate Elements
 		//==========================================================================================
 		// Alternate Elements
@@ -438,6 +665,8 @@ namespace YAT.Settings.Terminal
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "TerminalIsStarted",                                      new string[] { "TerminalIsOpen" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                                new string[] { "LogIsOpen" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "LogIsOn",                                                new string[] { "LogIsStarted" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                       }, "SendText",                                               new string[] { "SendCommand" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit", "Layout"                                             }, "SendTextPanelIsVisible",                                 new string[] { "SendCommandPanelIsVisible" } )
 		};
 
 		/// <summary></summary>

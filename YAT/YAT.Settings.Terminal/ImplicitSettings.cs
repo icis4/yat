@@ -39,9 +39,10 @@ namespace YAT.Settings.Terminal
 		private bool terminalIsStarted;
 		private bool logIsOn;
 
-		private Model.Settings.SendCommandSettings sendCommand;
+		private Model.Settings.SendTextSettings sendText;
 		private Model.Settings.SendFileSettings sendFile;
 		private Model.Settings.PredefinedSettings predefined;
+		private Model.Settings.AutoResponseSettings autoResponse;
 		private Model.Settings.WindowSettings window;
 		private Model.Settings.LayoutSettings layout;
 
@@ -51,11 +52,12 @@ namespace YAT.Settings.Terminal
 		{
 			SetMyDefaults();
 
-			SendCommand = new Model.Settings.SendCommandSettings(SettingsType);
-			SendFile    = new Model.Settings.SendFileSettings(SettingsType);
-			Predefined  = new Model.Settings.PredefinedSettings(SettingsType);
-			Window      = new Model.Settings.WindowSettings(SettingsType);
-			Layout      = new Model.Settings.LayoutSettings(SettingsType);
+			SendText     = new Model.Settings.SendTextSettings(SettingsType);
+			SendFile     = new Model.Settings.SendFileSettings(SettingsType);
+			Predefined   = new Model.Settings.PredefinedSettings(SettingsType);
+			AutoResponse = new Model.Settings.AutoResponseSettings(SettingsType);
+			Window       = new Model.Settings.WindowSettings(SettingsType);
+			Layout       = new Model.Settings.LayoutSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -68,13 +70,14 @@ namespace YAT.Settings.Terminal
 			: base(rhs)
 		{
 			TerminalIsStarted = rhs.TerminalIsStarted;
-			LogIsOn      = rhs.LogIsOn;
+			LogIsOn           = rhs.LogIsOn;
 
-			SendCommand = new Model.Settings.SendCommandSettings(rhs.SendCommand);
-			SendFile    = new Model.Settings.SendFileSettings(rhs.SendFile);
-			Predefined  = new Model.Settings.PredefinedSettings(rhs.Predefined);
-			Window      = new Model.Settings.WindowSettings(rhs.Window);
-			Layout      = new Model.Settings.LayoutSettings(rhs.Layout);
+			SendText     = new Model.Settings.SendTextSettings(rhs.SendText);
+			SendFile     = new Model.Settings.SendFileSettings(rhs.SendFile);
+			Predefined   = new Model.Settings.PredefinedSettings(rhs.Predefined);
+			AutoResponse = new Model.Settings.AutoResponseSettings(rhs.AutoResponse);
+			Window       = new Model.Settings.WindowSettings(rhs.Window);
+			Layout       = new Model.Settings.LayoutSettings(rhs.Layout);
 
 			ClearChanged();
 		}
@@ -126,27 +129,27 @@ namespace YAT.Settings.Terminal
 		}
 
 		/// <summary></summary>
-		[XmlElement("SendCommand")]
-		public virtual Model.Settings.SendCommandSettings SendCommand
+		[XmlElement("SendText")]
+		public virtual Model.Settings.SendTextSettings SendText
 		{
-			get { return (this.sendCommand); }
+			get { return (this.sendText); }
 			set
 			{
 				if (value == null)
 				{
-					DetachNode(this.sendCommand);
-					this.sendCommand = null;
+					DetachNode(this.sendText);
+					this.sendText = null;
 				}
-				else if (this.sendCommand == null)
+				else if (this.sendText == null)
 				{
-					this.sendCommand = value;
-					AttachNode(this.sendCommand);
+					this.sendText = value;
+					AttachNode(this.sendText);
 				}
-				else if (this.sendCommand != value)
+				else if (this.sendText != value)
 				{
-					Model.Settings.SendCommandSettings old = this.sendCommand;
-					this.sendCommand = value;
-					ReplaceNode(old, this.sendCommand);
+					Model.Settings.SendTextSettings old = this.sendText;
+					this.sendText = value;
+					ReplaceNode(old, this.sendText);
 				}
 			}
 		}
@@ -199,6 +202,32 @@ namespace YAT.Settings.Terminal
 					Model.Settings.PredefinedSettings old = this.predefined;
 					this.predefined = value;
 					ReplaceNode(old, this.predefined);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoResponse")]
+		public virtual Model.Settings.AutoResponseSettings AutoResponse
+		{
+			get { return (this.autoResponse); }
+			set
+			{
+				if (value == null)
+				{
+					DetachNode(this.autoResponse);
+					this.autoResponse = null;
+				}
+				else if (this.autoResponse == null)
+				{
+					this.autoResponse = value;
+					AttachNode(this.autoResponse);
+				}
+				else if (this.autoResponse != value)
+				{
+					Model.Settings.AutoResponseSettings old = this.autoResponse;
+					this.autoResponse = value;
+					ReplaceNode(old, this.autoResponse);
 				}
 			}
 		}

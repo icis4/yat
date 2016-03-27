@@ -355,7 +355,7 @@ namespace YAT.Gui.Forms
 
 		/// <remarks>
 		/// This functionality is partly duplicated in <see cref="NewTerminal.SetControls"/>.
-		/// Changes here must also be applied there.
+		/// Changes here must be applied there too!
 		/// </remarks>
 		private void SetControls()
 		{
