@@ -1,6 +1,6 @@
 ﻿namespace YAT.Gui.Controls
 {
-	partial class SendCommand
+	partial class SendText
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -60,8 +60,8 @@
 			this.button_Send.Name = "button_Send";
 			this.button_Send.Size = new System.Drawing.Size(177, 21);
 			this.button_Send.TabIndex = 4;
-			this.button_Send.Text = "Send Command (F3)";
-			this.toolTip.SetToolTip(this.button_Send, "Send command");
+			this.button_Send.Text = "Send Text (F3)";
+			this.toolTip.SetToolTip(this.button_Send, "Send text");
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
 			// comboBox_Command
@@ -101,16 +101,16 @@
 			this.splitContainer.SplitterWidth = 1;
 			this.splitContainer.TabIndex = 3;
 			// 
-			// SendCommand
+			// SendText
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainer);
-			this.Name = "SendCommand";
+			this.Name = "SendText";
 			this.Size = new System.Drawing.Size(540, 27);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SendCommand_Paint);
-			this.Enter += new System.EventHandler(this.SendCommand_Enter);
-			this.Leave += new System.EventHandler(this.SendCommand_Leave);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SendText_Paint);
+			this.Enter += new System.EventHandler(this.SendText_Enter);
+			this.Leave += new System.EventHandler(this.SendText_Leave);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			this.splitContainer.ResumeLayout(false);

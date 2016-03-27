@@ -41,7 +41,7 @@ namespace YAT.Model.Settings
 		private bool predefinedPanelIsVisible;
 		private float predefinedSplitterRatio;
 
-		private bool sendCommandPanelIsVisible;
+		private bool sendTextPanelIsVisible;
 		private bool sendFilePanelIsVisible;
 
 		/// <summary></summary>
@@ -76,7 +76,7 @@ namespace YAT.Model.Settings
 			PredefinedPanelIsVisible   = rhs.PredefinedPanelIsVisible;
 			PredefinedSplitterRatio    = rhs.PredefinedSplitterRatio;
 
-			SendCommandPanelIsVisible  = rhs.SendCommandPanelIsVisible;
+			SendTextPanelIsVisible     = rhs.SendTextPanelIsVisible;
 			SendFilePanelIsVisible     = rhs.SendFilePanelIsVisible;
 
 			ClearChanged();
@@ -99,7 +99,7 @@ namespace YAT.Model.Settings
 			PredefinedPanelIsVisible   = true;
 			PredefinedSplitterRatio    = (float) 3 / 4;
 
-			SendCommandPanelIsVisible  = true;
+			SendTextPanelIsVisible     = true;
 			SendFilePanelIsVisible     = true;
 		}
 
@@ -229,15 +229,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SendCommandPanelIsVisible")]
-		public virtual bool SendCommandPanelIsVisible
+		[XmlElement("SendTextPanelIsVisible")]
+		public virtual bool SendTextPanelIsVisible
 		{
-			get { return (this.sendCommandPanelIsVisible); }
+			get { return (this.sendTextPanelIsVisible); }
 			set
 			{
-				if (this.sendCommandPanelIsVisible != value)
+				if (this.sendTextPanelIsVisible != value)
 				{
-					this.sendCommandPanelIsVisible = value;
+					this.sendTextPanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -292,7 +292,7 @@ namespace YAT.Model.Settings
 				(PredefinedPanelIsVisible   == other.PredefinedPanelIsVisible) &&
 				(PredefinedSplitterRatio    == other.PredefinedSplitterRatio) &&
 
-				(SendCommandPanelIsVisible  == other.SendCommandPanelIsVisible) &&
+				(SendTextPanelIsVisible     == other.SendTextPanelIsVisible) &&
 				(SendFilePanelIsVisible     == other.SendFilePanelIsVisible)
 			);
 		}
@@ -320,7 +320,7 @@ namespace YAT.Model.Settings
 				PredefinedPanelIsVisible  .GetHashCode() ^
 				PredefinedSplitterRatio   .GetHashCode() ^
 
-				SendCommandPanelIsVisible .GetHashCode() ^
+				SendTextPanelIsVisible    .GetHashCode() ^
 				SendFilePanelIsVisible    .GetHashCode()
 			);
 		}

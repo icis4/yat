@@ -70,7 +70,7 @@ namespace YAT.Gui.Controls
 	/// On focus leave, edit state is kept depending on how focus is leaving.
 	/// </remarks>
 	[DefaultEvent("SendCommandRequest")]
-	public partial class SendCommand : UserControl
+	public partial class SendText : UserControl
 	{
 		#region Types
 		//==========================================================================================
@@ -161,7 +161,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public SendCommand()
+		public SendText()
 		{
 			InitializeComponent();
 
@@ -387,7 +387,7 @@ namespace YAT.Gui.Controls
 		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
 		/// are shown on top of a properly painted control or form.
 		/// </remarks>
-		private void SendCommand_Paint(object sender, PaintEventArgs e)
+		private void SendText_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
 			{
@@ -401,7 +401,7 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Do not modify <see cref="isValidated"/>. Command may already have been validated.
 		/// </remarks>
-		private void SendCommand_Enter(object sender, EventArgs e)
+		private void SendText_Enter(object sender, EventArgs e)
 		{
 			SetEditFocusState(EditFocusState.EditIsInactive);
 		}
@@ -414,7 +414,7 @@ namespace YAT.Gui.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void SendCommand_Leave(object sender, EventArgs e)
+		private void SendText_Leave(object sender, EventArgs e)
 		{
 			if (this.isValidated)
 				SetEditFocusState(EditFocusState.EditIsInactive);
@@ -530,7 +530,7 @@ namespace YAT.Gui.Controls
 					if (this.editFocusState != EditFocusState.IsLeavingParent)
 					{
 						// Easter egg ;-)
-						if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
+						if (SendTextSettings.IsEasterEggCommand(comboBox_Command.Text))
 						{
 							this.isValidated = true;
 
@@ -546,7 +546,7 @@ namespace YAT.Gui.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text, this.parseMode, out invalidTextStart, out invalidTextLength))
+						if (Validation.ValidateText(this, "Command", comboBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 						{
 							this.isValidated = true;
 
@@ -709,7 +709,7 @@ namespace YAT.Gui.Controls
 			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 			// Changes here may have to be applied there.
 
-			string text = "Send Command (F3)";
+			string text = "Send Text (F3)";
 			bool enabled = this.terminalIsReadyToSend;
 			if (this.sendImmediately)
 			{

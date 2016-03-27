@@ -35,7 +35,7 @@ namespace YAT.Model.Settings
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
 	[Serializable]
-	public class SendCommandSettings : MKY.Settings.SettingsItem
+	public class SendTextSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const int MaxRecentCommands = 24;
@@ -44,14 +44,14 @@ namespace YAT.Model.Settings
 		private RecentItemCollection<Command> recentCommands;
 
 		/// <summary></summary>
-		public SendCommandSettings()
+		public SendTextSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public SendCommandSettings(MKY.Settings.SettingsType settingsType)
+		public SendTextSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -62,7 +62,7 @@ namespace YAT.Model.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public SendCommandSettings(SendCommandSettings rhs)
+		public SendTextSettings(SendTextSettings rhs)
 			: base(rhs)
 		{
 			Command = new Command(rhs.Command);
@@ -137,7 +137,7 @@ namespace YAT.Model.Settings
 			if (GetType() != obj.GetType())
 				return (false);
 
-			SendCommandSettings other = (SendCommandSettings)obj;
+			SendTextSettings other = (SendTextSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.

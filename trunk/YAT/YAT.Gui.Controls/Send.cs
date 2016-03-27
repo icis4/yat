@@ -75,7 +75,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the Command property is changed.")]
-		public event EventHandler CommandChanged;
+		public event EventHandler TextCommandChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -85,7 +85,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler SendCommandRequest;
+		public event EventHandler SendTextCommandRequest;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -119,10 +119,10 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void SelectSendCommandInput()
+		public virtual void SelectSendTextInput()
 		{
-			sendCommand.Select();
-			sendCommand.SelectInput();
+			sendText.Select();
+			sendText.SelectInput();
 		}
 
 		#endregion
@@ -137,10 +137,10 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual Command Command
+		public virtual Command TextCommand
 		{
-			get { return (sendCommand.Command); }
-			set { sendCommand.Command = value;  }
+			get { return (sendText.Command); }
+			set { sendText.Command = value;  }
 		}
 
 		/// <summary></summary>
@@ -150,7 +150,7 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands
 		{
-			set { sendCommand.Recent = value; }
+			set { sendText.Recent = value; }
 		}
 
 		/// <summary>
@@ -187,11 +187,11 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		[DefaultValue(SendCommand.SendImmediatelyDefault)]
-		public virtual bool SendCommandImmediately
+		[DefaultValue(SendText.SendImmediatelyDefault)]
+		public virtual bool SendTextImmediately
 		{
-			get { return (sendCommand.SendImmediately); }
-			set { sendCommand.SendImmediately = value; }
+			get { return (sendText.SendImmediately); }
+			set { sendText.SendImmediately = value; }
 		}
 
 		/// <summary></summary>
@@ -241,7 +241,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual bool EditIsActive
 		{
-			get { return (sendCommand.EditIsActive); }
+			get { return (sendText.EditIsActive); }
 		}
 
 		#endregion
@@ -251,24 +251,24 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		#region Controls Event Handlers > Send Command
+		#region Controls Event Handlers > Send Text
 		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Send Command
+		// Controls Event Handlers > Send Text
 		//------------------------------------------------------------------------------------------
 
-		private void sendCommand_CommandChanged(object sender, EventArgs e)
+		private void sendText_CommandChanged(object sender, EventArgs e)
 		{
-			OnCommandChanged(e);
+			OnTextCommandChanged(e);
 		}
 
-		private void sendCommand_EditFocusStateChanged(object sender, EventArgs e)
+		private void sendText_EditFocusStateChanged(object sender, EventArgs e)
 		{
 			OnEditFocusStateChanged(e);
 		}
 
-		private void sendCommand_SendCommandRequest(object sender, EventArgs e)
+		private void sendText_SendCommandRequest(object sender, EventArgs e)
 		{
-			OnSendCommandRequest(e);
+			OnSendTextCommandRequest(e);
 		}
 
 		#endregion
@@ -305,8 +305,8 @@ namespace YAT.Gui.Controls
 
 		private void SetTerminalControls()
 		{
-			sendCommand.TerminalType          = this.terminalType;
-			sendCommand.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+			sendText.TerminalType          = this.terminalType;
+			sendText.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 
 			sendFile.TerminalType          = this.terminalType;
 			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
@@ -314,7 +314,7 @@ namespace YAT.Gui.Controls
 
 		private void SetSplitterControls()
 		{
-			sendCommand.SplitterDistance = this.splitterDistance - sendCommand.Left;
+			sendText.SplitterDistance = this.splitterDistance - sendText.Left;
 			sendFile.SplitterDistance    = this.splitterDistance - sendFile.Left;
 		}
 
@@ -326,9 +326,9 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnCommandChanged(EventArgs e)
+		protected virtual void OnTextCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(CommandChanged, this, e);
+			EventHelper.FireSync(TextCommandChanged, this, e);
 		}
 
 		/// <summary></summary>
@@ -338,9 +338,9 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendCommandRequest(EventArgs e)
+		protected virtual void OnSendTextCommandRequest(EventArgs e)
 		{
-			EventHelper.FireSync(SendCommandRequest, this, e);
+			EventHelper.FireSync(SendTextCommandRequest, this, e);
 		}
 
 		/// <summary></summary>
