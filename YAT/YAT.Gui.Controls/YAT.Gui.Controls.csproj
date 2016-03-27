@@ -176,11 +176,11 @@
     <Compile Include="PredefinedCommandPageButtons.Designer.cs">
       <DependentUpon>PredefinedCommandPageButtons.cs</DependentUpon>
     </Compile>
-    <Compile Include="SendCommand.cs">
+    <Compile Include="SendText.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SendCommand.Designer.cs">
-      <DependentUpon>SendCommand.cs</DependentUpon>
+    <Compile Include="SendText.Designer.cs">
+      <DependentUpon>SendText.cs</DependentUpon>
     </Compile>
     <Compile Include="SendFile.cs">
       <SubType>UserControl</SubType>
@@ -272,8 +272,8 @@
       <DependentUpon>PredefinedCommandPageButtons.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SendCommand.resx">
-      <DependentUpon>SendCommand.cs</DependentUpon>
+    <EmbeddedResource Include="SendText.resx">
+      <DependentUpon>SendText.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SendFile.resx">

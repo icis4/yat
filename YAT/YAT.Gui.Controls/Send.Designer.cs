@@ -29,14 +29,14 @@
 		private void InitializeComponent()
 		{
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
-			this.groupBox_SendCommand = new System.Windows.Forms.GroupBox();
-			this.sendCommand = new YAT.Gui.Controls.SendCommand();
+			this.groupBox_SendText = new System.Windows.Forms.GroupBox();
+			this.sendText = new YAT.Gui.Controls.SendText();
 			this.groupBox_SendFile = new System.Windows.Forms.GroupBox();
 			this.sendFile = new YAT.Gui.Controls.SendFile();
 			this.splitContainer_Send.Panel1.SuspendLayout();
 			this.splitContainer_Send.Panel2.SuspendLayout();
 			this.splitContainer_Send.SuspendLayout();
-			this.groupBox_SendCommand.SuspendLayout();
+			this.groupBox_SendText.SuspendLayout();
 			this.groupBox_SendFile.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -50,7 +50,7 @@
 			// 
 			// splitContainer_Send.Panel1
 			// 
-			this.splitContainer_Send.Panel1.Controls.Add(this.groupBox_SendCommand);
+			this.splitContainer_Send.Panel1.Controls.Add(this.groupBox_SendText);
 			this.splitContainer_Send.Panel1MinSize = 46;
 			// 
 			// splitContainer_Send.Panel2
@@ -62,28 +62,28 @@
 			this.splitContainer_Send.SplitterWidth = 1;
 			this.splitContainer_Send.TabIndex = 1;
 			// 
-			// groupBox_SendCommand
+			// groupBox_SendText
 			// 
-			this.groupBox_SendCommand.Controls.Add(this.sendCommand);
-			this.groupBox_SendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox_SendCommand.Location = new System.Drawing.Point(0, 0);
-			this.groupBox_SendCommand.Name = "groupBox_SendCommand";
-			this.groupBox_SendCommand.Padding = new System.Windows.Forms.Padding(3, 0, 3, 6);
-			this.groupBox_SendCommand.Size = new System.Drawing.Size(712, 46);
-			this.groupBox_SendCommand.TabIndex = 0;
-			this.groupBox_SendCommand.TabStop = false;
-			this.groupBox_SendCommand.Text = "Send &Command";
+			this.groupBox_SendText.Controls.Add(this.sendText);
+			this.groupBox_SendText.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox_SendText.Location = new System.Drawing.Point(0, 0);
+			this.groupBox_SendText.Name = "groupBox_SendText";
+			this.groupBox_SendText.Padding = new System.Windows.Forms.Padding(3, 0, 3, 6);
+			this.groupBox_SendText.Size = new System.Drawing.Size(712, 46);
+			this.groupBox_SendText.TabIndex = 0;
+			this.groupBox_SendText.TabStop = false;
+			this.groupBox_SendText.Text = "Send &Text";
 			// 
-			// sendCommand
+			// sendText
 			// 
-			this.sendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.sendCommand.Location = new System.Drawing.Point(3, 13);
-			this.sendCommand.Name = "sendCommand";
-			this.sendCommand.Size = new System.Drawing.Size(706, 27);
-			this.sendCommand.TabIndex = 0;
-			this.sendCommand.EditFocusStateChanged += new System.EventHandler(this.sendCommand_EditFocusStateChanged);
-			this.sendCommand.SendCommandRequest += new System.EventHandler(this.sendCommand_SendCommandRequest);
-			this.sendCommand.CommandChanged += new System.EventHandler(this.sendCommand_CommandChanged);
+			this.sendText.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.sendText.Location = new System.Drawing.Point(3, 13);
+			this.sendText.Name = "sendText";
+			this.sendText.Size = new System.Drawing.Size(706, 27);
+			this.sendText.TabIndex = 0;
+			this.sendText.EditFocusStateChanged += new System.EventHandler(this.sendText_EditFocusStateChanged);
+			this.sendText.SendCommandRequest += new System.EventHandler(this.sendText_SendCommandRequest);
+			this.sendText.CommandChanged += new System.EventHandler(this.sendText_CommandChanged);
 			// 
 			// groupBox_SendFile
 			// 
@@ -117,7 +117,7 @@
 			this.splitContainer_Send.Panel1.ResumeLayout(false);
 			this.splitContainer_Send.Panel2.ResumeLayout(false);
 			this.splitContainer_Send.ResumeLayout(false);
-			this.groupBox_SendCommand.ResumeLayout(false);
+			this.groupBox_SendText.ResumeLayout(false);
 			this.groupBox_SendFile.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -126,9 +126,9 @@
 		#endregion
 
 		private System.Windows.Forms.SplitContainer splitContainer_Send;
-		private System.Windows.Forms.GroupBox groupBox_SendCommand;
+		private System.Windows.Forms.GroupBox groupBox_SendText;
 		private System.Windows.Forms.GroupBox groupBox_SendFile;
-		private SendCommand sendCommand;
+		private SendText sendText;
 		private SendFile sendFile;
 	}
 }

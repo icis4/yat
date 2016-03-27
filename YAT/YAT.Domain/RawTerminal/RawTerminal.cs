@@ -427,7 +427,7 @@ namespace YAT.Domain
 		/// \todo:
 		/// Currently, all repositories are cleared in any case. That is because repositories are
 		/// always reloaded from bidir. Without clearing all, contents reappear after a change to
-		/// the settings, e.g. switching radix. Issue is described in bug #3111508.
+		/// the settings, e.g. switching radix.
 		/// </remarks>
 		public virtual void ClearRepository(RepositoryType repositoryType)
 		{

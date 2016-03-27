@@ -600,7 +600,7 @@
 			this.checkBox_CopyPredefined.Name = "checkBox_CopyPredefined";
 			this.checkBox_CopyPredefined.Size = new System.Drawing.Size(240, 17);
 			this.checkBox_CopyPredefined.TabIndex = 1;
-			this.checkBox_CopyPredefined.Text = "Cop&y predefined to send command after send";
+			this.checkBox_CopyPredefined.Text = "Cop&y predefined to Send Text after send";
 			this.checkBox_CopyPredefined.UseVisualStyleBackColor = true;
 			this.checkBox_CopyPredefined.CheckedChanged += new System.EventHandler(this.checkBox_CopyPredefined_CheckedChanged);
 			// 
@@ -611,7 +611,7 @@
 			this.checkBox_KeepCommand.Name = "checkBox_KeepCommand";
 			this.checkBox_KeepCommand.Size = new System.Drawing.Size(201, 17);
 			this.checkBox_KeepCommand.TabIndex = 0;
-			this.checkBox_KeepCommand.Text = "&Keep command in text box after send";
+			this.checkBox_KeepCommand.Text = "&Keep command in Send Text after send";
 			this.checkBox_KeepCommand.UseVisualStyleBackColor = true;
 			this.checkBox_KeepCommand.CheckedChanged += new System.EventHandler(this.checkBox_KeepCommand_CheckedChanged);
 			// 

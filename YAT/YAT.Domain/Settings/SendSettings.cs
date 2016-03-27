@@ -69,9 +69,9 @@ namespace YAT.Domain.Settings
 		private bool keepCommand;
 		private bool copyPredefined;
 		private bool sendImmediately;
-		private int defaultDelay;
-		private int defaultLineDelay;
-		private int defaultLineRepeat;
+		private int  defaultDelay;
+		private int  defaultLineDelay;
+		private int  defaultLineRepeat;
 		private bool disableKeywords;
 
 		// Serial port specific send settings. Located here (and not in 'SerialPortSettings) as they are endemic to YAT.
