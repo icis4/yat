@@ -292,7 +292,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				if (Model.Settings.SendCommandSettings.IsEasterEggCommand(textBox_Command.Text))
+				if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_Command.Text))
 				{
 					this.isValidated = true;
 
@@ -307,7 +307,7 @@ namespace YAT.Gui.Controls
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, "Command", textBox_Command.Text, this.parseMode, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateText(this, "Command", textBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 				{
 					this.isValidated = true;
 
@@ -484,7 +484,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <remarks>
-		/// Almost duplicated code in <see cref="YAT.Gui.Controls.SendCommand.ShowMultiLineCommandBox"/>.
+		/// Almost duplicated code in <see cref="YAT.Gui.Controls.SendText.ShowMultiLineCommandBox"/>.
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowMultiLineCommandBox(Control requestingControl)

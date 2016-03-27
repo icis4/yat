@@ -326,10 +326,10 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
-			using (Domain.Parser.Parser parser = new Domain.Parser.Parser())
+			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
 			{
 				byte[] actualBytes;
-				Assert.IsTrue(parser.TryParse(s, out actualBytes));
+				Assert.IsTrue(p.TryParse(s, out actualBytes));
 				Assert.AreEqual(expectedBytes, actualBytes);
 			}
 		}
@@ -339,10 +339,10 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesEncoding")]
 		public virtual void TestParserEncoding(Encoding encoding, string s, byte[] expectedBytes)
 		{
-			using (Domain.Parser.Parser parser = new Domain.Parser.Parser(encoding))
+			using (Domain.Parser.Parser p = new Domain.Parser.Parser(encoding))
 			{
 				byte[] actualBytes;
-				Assert.IsTrue(parser.TryParse(s, out actualBytes));
+				Assert.IsTrue(p.TryParse(s, out actualBytes));
 				Assert.AreEqual(expectedBytes, actualBytes);
 			}
 		}
@@ -352,13 +352,13 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesError")]
 		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
 		{
-			using (Domain.Parser.Parser parser = new Domain.Parser.Parser())
+			using (Domain.Parser.Parser p = new Domain.Parser.Parser())
 			{
 				byte[] actualBytes;
 				string actualParsed;
 
 				Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
-				Assert.IsFalse(parser.TryParse(s, out actualBytes, out actualParsed, ref formatException));
+				Assert.IsFalse(p.TryParse(s, out actualBytes, out actualParsed, ref formatException));
 
 				string actualMessage;
 				if (formatException.Message.Contains(Environment.NewLine))

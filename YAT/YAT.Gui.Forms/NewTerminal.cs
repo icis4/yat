@@ -128,7 +128,7 @@ namespace YAT.Gui.Forms
 		/// <remarks>
 		/// Attention:
 		/// Same code exists in YAT.Gui.Forms.TerminalSettings.terminalSelection_TerminalTypeChanged().
-		/// Changes here may have to be applied there.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Gui' like this...")]
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
@@ -376,7 +376,7 @@ namespace YAT.Gui.Forms
 
 		/// <remarks>
 		/// This functionality is partly duplicated in <see cref="TerminalSettings.SetControls"/>.
-		/// Changes here must also be applied there.
+		/// Changes here must be applied there too!
 		/// </remarks>
 		private void SetControls()
 		{

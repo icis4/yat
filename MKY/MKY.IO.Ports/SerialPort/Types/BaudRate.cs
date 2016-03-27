@@ -202,7 +202,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given baud rate.
 		/// </summary>
 		public static bool TryFrom(int baudRate, out BaudRateEx result)
 		{
@@ -219,7 +219,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Tries to create an item from the given port number.
+		/// Tries to create an item from the given baud rate.
 		/// </summary>
 		public static bool TryFrom(int baudRate, out BaudRate result)
 		{

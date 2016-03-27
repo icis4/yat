@@ -756,6 +756,22 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Methods > Parse
+		//------------------------------------------------------------------------------------------
+		// Methods > Parse
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
+		/// </summary>
+		public virtual bool TryParse(string s, out byte[] result)
+		{
+			using (Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianness))
+				return (p.TryParse(s, TerminalSettings.Send.ToParseMode(), out result));
+		}
+
+		#endregion
+
 		#region Methods > Send
 		//------------------------------------------------------------------------------------------
 		// Methods > Send
@@ -920,7 +936,7 @@ namespace YAT.Domain
 		{
 			string textToParse = item.Data;
 
-			// Parse the item string:
+			// Parse the item text:
 			bool hasSucceeded;
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
@@ -1128,24 +1144,24 @@ namespace YAT.Domain
 		/// Creates a parser error message which can be displayed in the terminal.
 		/// </summary>
 		/// <param name="textToParse">The string to be parsed.</param>
-		/// <param name="parsedText">The substring that could successfully be parsed.</param>
+		/// <param name="successfullyParsed">The substring that could successfully be parsed.</param>
 		/// <returns>The error message to display.</returns>
-		protected static string CreateParserErrorMessage(string textToParse, string parsedText)
+		protected static string CreateParserErrorMessage(string textToParse, string successfullyParsed)
 		{
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(@"""");
 			sb.Append(    textToParse);
 			sb.Append(             @"""");
-			if (parsedText != null)
+			if (successfullyParsed != null)
 			{
 				sb.Append(            " is invalid at position ");
-				sb.Append(                                    (parsedText.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
-				if (parsedText.Length > 0)
+				sb.Append(                                    (successfullyParsed.Length + 1).ToString(CultureInfo.InvariantCulture) + ".");
+				if (successfullyParsed.Length > 0)
 				{
 					sb.Append(                                           @" Only """);
-					sb.Append(                                                     parsedText);
-					sb.Append(                                                             @""" is valid.");
+					sb.Append(                                                     successfullyParsed);
+					sb.Append(                                                                     @""" is valid.");
 				}
 			}
 			else

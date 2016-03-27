@@ -133,7 +133,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// This property always returns a <see cref="Command"/> object, it never returns <c>null</c>.
+		/// This property always returns a <see cref="Model.Types.Command"/> object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -154,7 +154,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary>
-		/// Command always returns a Command object, it never returns <c>null</c>.
+		/// Command always returns a <see cref="Model.Types.Command"/> object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

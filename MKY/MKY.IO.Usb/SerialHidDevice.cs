@@ -165,7 +165,8 @@ namespace MKY.IO.Usb
 		/// </summary>
 		/// <remarks>
 		/// \attention:
-		/// This function also exists in the other USB classes. Changes here must also be applied there.
+		/// This function also exists in the other USB classes.
+		/// Changes here must be applied there too.
 		/// </remarks>
 		public static new bool RegisterStaticDeviceNotificationHandler()
 		{
@@ -197,7 +198,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function also exists in the other USB classes. Changes here must also be applied there.
+		/// This function also exists in the other USB classes.
+		/// Changes here must be applied there too.
 		/// </remarks>
 		public static new void UnregisterStaticDeviceNotificationHandler()
 		{
@@ -224,7 +226,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function also exists in the other USB classes. Changes here must also be applied there.
+		/// This function also exists in the other USB classes.
+		/// Changes here must be applied there too.
 		/// </remarks>
 		private static void StaticMessageCallback(ref Message m)
 		{
@@ -1059,7 +1062,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -1077,7 +1081,8 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// \attention:
-		/// This function similarly exists in the other USB classes. Changes here may also be applied there.
+		/// This function similarly exists in the other USB classes.
+		/// Changes here may have to be applied there too.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

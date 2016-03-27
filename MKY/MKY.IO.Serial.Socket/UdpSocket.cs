@@ -694,7 +694,7 @@ namespace MKY.IO.Serial.Socket
 					// This receive callback is always asychronous, thus the event handler can
 					// be called directly. It is also ensured that the event handler is called
 					// sequential because the 'BeginReceive()' method is only called after
-					// the eevent handler has returned.
+					// the event handler has returned.
 					OnDataReceived(new DataReceivedEventArgs(data));
 
 					// Continue receiving data.

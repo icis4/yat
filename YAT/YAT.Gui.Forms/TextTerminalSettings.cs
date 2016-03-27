@@ -191,7 +191,7 @@ namespace YAT.Gui.Forms
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, description, eolString, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 					{
@@ -235,7 +235,7 @@ namespace YAT.Gui.Forms
 				string description = "Rx EOL";
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, description, eolString, Domain.Parser.Modes.AllByteArrayResults, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateText(this, description, eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 						this.settingsInEdit.RxEol = eolString;
@@ -458,33 +458,36 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			// Encoding.
+			// Encoding:
 			comboBox_Encoding.SelectedItem = (EncodingEx)this.settingsInEdit.Encoding;
 
-			// EOL.
+			// EOL:
 			bool separateEol = this.settingsInEdit.SeparateTxRxEol;
 			if (!separateEol)
 				label_TxEol.Text = "E&OL sequence:";
 			else
 				label_TxEol.Text = "&Tx EOL sequence:";
+
 			checkBox_SeparateTxRxEol.Checked = separateEol;
-			label_RxEol.Enabled = separateEol;
-			comboBox_RxEol.Enabled = separateEol;
+			label_RxEol.Enabled              = separateEol;
+			comboBox_RxEol.Enabled           = separateEol;
 
 			Domain.EolEx eol;
+
 			if (Domain.EolEx.TryParse(this.settingsInEdit.TxEol, out eol))
 				comboBox_TxEol.SelectedItem = eol;
 			else
 				comboBox_TxEol.Text = this.settingsInEdit.TxEol;
+
 			if (Domain.EolEx.TryParse(this.settingsInEdit.RxEol, out eol))
 				comboBox_RxEol.SelectedItem = eol;
 			else
 				comboBox_RxEol.Text = this.settingsInEdit.RxEol;
 
-			// Display.
+			// Display:
 			checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
 
-			// Send.
+			// Send:
 			bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
 			checkBox_Delay.Checked        = delayEnabled;
 			textBox_Delay.Enabled         = delayEnabled;
