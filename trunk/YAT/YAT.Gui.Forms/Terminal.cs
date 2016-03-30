@@ -527,9 +527,9 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.TriggerSelection  != Model.Types.Trigger.None);
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.None);
 
-				// Attention, similar code exists in the following locations:
-				//  > YAT.Gui.Forms.Main.toolStripButton_MainTool_SetControls()
-				// Changes here may have to be applied there too.
+			// Attention, similar code exists in the following location:
+			//  > YAT.Gui.Forms.Main.toolStripButton_MainTool_SetControls()
+			// Changes here may have to be applied there too.
 
 			if (!this.terminalMenuValidationWorkaround_UpdateIsSuspended)
 			{

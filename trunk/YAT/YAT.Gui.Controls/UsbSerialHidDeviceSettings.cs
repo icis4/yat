@@ -133,6 +133,13 @@ namespace YAT.Gui.Controls
 					SetControls();
 					OnReportFormatChanged(EventArgs.Empty);
 				}
+				else
+				{
+					// Set controls even if format did not change. This ensures that the preset
+					// selection is updated with the current format, i.e. "<No preset selected>"
+					// is changed to the preset in use (if applicable).
+					SetControls();
+				}
 			}
 		}
 
