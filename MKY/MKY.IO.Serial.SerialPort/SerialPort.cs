@@ -1626,7 +1626,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							this.receiveQueue.Enqueue(b);
 
-							// Handle output XOn/XOff.
+							// Handle XOn/XOff state:
 							if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 							{
 								if (b == XOnXOff.XOnByte)
@@ -1651,10 +1651,10 @@ namespace MKY.IO.Serial.SerialPort
 					if (signalXOnXOff)
 						SignalSendThreadSafely();
 
-					// Signal data acknowledge to receive thread:
+					// Signal data notification to receive thread:
 					SignalReceiveThreadSafely();
 
-					// Immediately invoke the event, but invoke it asynchronously!
+					// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 					if (signalXOnXOff || signalXOnXOffCount)
 						OnIOControlChangedAsync(EventArgs.Empty);
 				}
@@ -2011,24 +2011,28 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChangedAsync(EventArgs e)
 		{
 			EventHelper.FireAsync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
 			EventHelper.FireAsync(IOControlChanged, this, e);

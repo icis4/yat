@@ -73,9 +73,9 @@
 			this.label_IdRemarks.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_IdRemarks.Location = new System.Drawing.Point(5, 72);
 			this.label_IdRemarks.Name = "label_IdRemarks";
-			this.label_IdRemarks.Size = new System.Drawing.Size(98, 13);
+			this.label_IdRemarks.Size = new System.Drawing.Size(53, 13);
 			this.label_IdRemarks.TabIndex = 9;
-			this.label_IdRemarks.Text = "# = ID of this report";
+			this.label_IdRemarks.Text = "Report ID";
 			// 
 			// label_Id1
 			// 

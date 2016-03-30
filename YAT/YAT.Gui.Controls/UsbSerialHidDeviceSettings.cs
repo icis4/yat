@@ -454,14 +454,15 @@ namespace YAT.Gui.Controls
 
 				checkBox_UseId.Checked        =  Enabled;
 				checkBox_SeparateRxId.Checked = (Enabled ? this.rxIdUsage.SeparateRxId : false);
+				textBox_Id.Enabled            =  Enabled;
 				textBox_RxId.Enabled          = (Enabled ? this.rxIdUsage.SeparateRxId : false);
 
 				textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
-				if (!this.rxIdUsage.SeparateRxId) // Common case = Same ID for Tx and Rx.
+				if (!this.rxIdUsage.SeparateRxId) // Typical case = same ID for Tx and Rx.
 				{
 					textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
 				}
-				else // Special case = Separate ID for Rx.
+				else // Special case = separate ID for Rx.
 				{
 					if (this.rxIdUsage.AnyRxId)
 						textBox_RxId.Text = AnyIdIndication;
