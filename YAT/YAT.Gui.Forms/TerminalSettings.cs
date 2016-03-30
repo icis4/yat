@@ -233,6 +233,10 @@ namespace YAT.Gui.Forms
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
+			// Attention, same code exists in in the following location:
+			//  > NewTerminal.usbSerialHidDeviceSelection_DeviceInfoChanged
+			// Changes here must be applied there too.
+
 			MKY.IO.Usb.DeviceInfo deviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = deviceInfo;
 

@@ -851,7 +851,7 @@ namespace YAT.Gui.Forms
 			{
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide AutoResponse command";
 
-				// Attention, similar code exists in the following locations:
+				// Attention, similar code exists in the following location:
 				//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 				// Changes here may have to be applied there too.
 
