@@ -176,6 +176,10 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
+
 		#endregion
 
 		#region Object Lifetime
@@ -432,7 +436,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.InputIsXOn);
 				else
 					return (true);
@@ -448,8 +452,8 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
-						return (this.iXOnXOffHelper.OutputIsXOn);
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+					return (this.iXOnXOffHelper.OutputIsXOn);
 				else
 					return (true);
 			}
@@ -464,7 +468,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.SentXOnCount);
 				else
 					return (0);
@@ -480,7 +484,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.SentXOffCount);
 				else
 					return (0);
@@ -496,7 +500,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.ReceivedXOnCount);
 				else
 					return (0);
@@ -512,7 +516,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.ReceivedXOffCount);
 				else
 					return (0);
@@ -639,22 +643,24 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						this.sendQueue.Enqueue(b);
 
-						// Handle input XOn/XOff.
-						if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+						// Handle XOn/XOff state:
+						if (this.settings.Communication.FlowControlUsesXOnXOff)
 						{
 							if (b == XOnXOff.XOnByte)
 							{
 								if (this.iXOnXOffHelper.NotifyXOnSent())
 									signalXOnXOff = true;
 
-								signalXOnXOffCount = true;
+								if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+									signalXOnXOffCount = true;
 							}
 							else if (b == XOnXOff.XOffByte)
 							{
 								if (this.iXOnXOffHelper.NotifyXOffSent())
 									signalXOnXOff = true;
 
-								signalXOnXOffCount = true;
+								if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+									signalXOnXOffCount = true;
 							}
 						}
 					} // foreach (byte b in data)
@@ -1057,6 +1063,17 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOn state.
+		/// </summary>
+		protected virtual void SignalInputXOnAndNotifyAutonomously()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOnByte);
+			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOnByte));
+		}
+
+		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
 		public virtual void SignalInputXOff()
@@ -1064,6 +1081,17 @@ namespace MKY.IO.Serial.SerialPort
 			AssertNotDisposed();
 
 			Send(XOnXOff.XOffByte);
+		}
+
+		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOff state.
+		/// </summary>
+		protected virtual void SignalInputXOffAndNotifyAutonomously()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOffByte);
+			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOffByte));
 		}
 
 		/// <summary>
@@ -1298,7 +1326,7 @@ namespace MKY.IO.Serial.SerialPort
 			StartAliveTimer();
 			SetStateSynchronizedAndNotify(State.Opened); // Notify outside lock!
 
-			// Handle XOn/XOff:
+			// Handle initial XOn/XOff state:
 			if (this.settings.Communication.FlowControlUsesXOnXOff)
 			{
 				AssumeOutputXOn();
@@ -1311,14 +1339,14 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialFlowControl.ManualCombined:
 					{
 						if (this.iXOnXOffHelper.ManualInputWasXOn)
-							SignalInputXOn();
+							SignalInputXOnAndNotifyAutonomously();
 
 						break;
 					}
 
 					default:
 					{
-						SignalInputXOn();
+						SignalInputXOnAndNotifyAutonomously();
 						break;
 					}
 				}
@@ -1599,7 +1627,7 @@ namespace MKY.IO.Serial.SerialPort
 							this.receiveQueue.Enqueue(b);
 
 							// Handle output XOn/XOff.
-							if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+							if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 							{
 								if (b == XOnXOff.XOnByte)
 								{
@@ -2025,6 +2053,13 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
+		}
+
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		protected virtual void OnDataSentAutonomously(DataSentEventArgs e)
+		{
+			EventHelper.FireSync<DataSentEventArgs>(DataSentAutonomously, this, e);
 		}
 
 		#endregion

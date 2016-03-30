@@ -731,7 +731,7 @@ namespace YAT.Log.Settings
 		///  - Serialization must be done with reduced string (e.g. "_").
 		///  - But ToString() must return the user friendly string!
 		/// 
-		/// Work-around:
+		/// Workaround:
 		///  - This property is used for all operations.
 		///  - The property below is used for serialization.
 		/// 

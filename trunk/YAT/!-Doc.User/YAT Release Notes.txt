@@ -426,7 +426,7 @@ New:
    > Applies to 'Software', 'Combined', 'Manual Software' and 'Manual Combined' flow control
    > XOn/XOff can be manually toggled in case of 'Manual Software' and 'Manual Combined'
 - Serial ports: Auto-reopen implemented (feature request #1960299)
-   > Work-around for .NET deadlock issue in System.IO.SerialPort applied, limitation removed
+   > Workaround for .NET deadlock issue in System.IO.SerialPort applied, limitation removed
    > Also fixes exceptions in case of disconnect (bugs #2981793, #3093159 and #3372435)
    > Useful for USB Ser/CDC connections such as USB to serial converters or other Ser/CDC devices
 - Byte and line data rate per second added to monitors (feature requests #2846784 and #3274066)

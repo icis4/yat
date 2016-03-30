@@ -157,6 +157,10 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
+
 		#endregion
 
 		#region Object Lifetime

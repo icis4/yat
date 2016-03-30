@@ -21,12 +21,12 @@
 :: =================================================================================================
 
 :: ------------------------------------------------------------------------------------------------
-:: This batch is a work-around to start .vspe settings 'As Admin'. Setup and procedure:
+:: This batch is a workaround to start .vspe settings 'As Admin'. Setup and procedure:
 :: 1) A shortcut with 'As Admin' enabled refers to this batch
 :: 2) This batch is started via that shortcut with 'As Admin' enabled
 :: 3) This batch starts the according .vspe settings
 ::
-:: This work-around is necessary because Windows doesn't allow to enable 'As Admin' on a shortcut
+:: This workaround is necessary because Windows doesn't allow to enable 'As Admin' on a shortcut
 :: pointing to a .exe/.com/.bin/.bat file.
 :: ------------------------------------------------------------------------------------------------
 

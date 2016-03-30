@@ -2390,11 +2390,11 @@ namespace YAT.Domain
 					default:                                   OnIOError(e); break;
 				}
 			}
-			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx))
+			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
 			{
 				OnDisplayElementProcessed(IODirection.Rx, new DisplayElement.ErrorInfo(Direction.Rx, e.Message, true));
 			}
-			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx))
+			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
 			{
 				OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, e.Message, true));
 			}

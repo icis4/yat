@@ -144,6 +144,10 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
+
 		#endregion
 
 		#region Object Lifetime
@@ -335,7 +339,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				AssertNotDisposed();
 
-				if (this.settings.FlowControlManagesXOnXOffManually)
+				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.InputIsXOn);
 				else
 					return (true);
@@ -351,7 +355,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				AssertNotDisposed();
 
-				if (this.settings.FlowControlManagesXOnXOffManually)
+				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.OutputIsXOn);
 				else
 					return (true);
@@ -367,7 +371,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				AssertNotDisposed();
 
-				if (this.settings.FlowControlManagesXOnXOffManually)
+				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.SentXOnCount);
 				else
 					return (0);
@@ -383,7 +387,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				AssertNotDisposed();
 
-				if (this.settings.FlowControlManagesXOnXOffManually)
+				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.SentXOffCount);
 				else
 					return (0);
@@ -399,7 +403,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				AssertNotDisposed();
 
-				if (this.settings.FlowControlManagesXOnXOffManually)
+				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.ReceivedXOnCount);
 				else
 					return (0);
@@ -415,7 +419,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				AssertNotDisposed();
 
-				if (this.settings.FlowControlManagesXOnXOffManually)
+				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.ReceivedXOffCount);
 				else
 					return (0);
@@ -487,8 +491,8 @@ namespace MKY.IO.Serial.Usb
 					{
 						this.sendQueue.Enqueue(b);
 
-						// Handle input XOn/XOff.
-						if (this.settings.FlowControlManagesXOnXOffManually)
+						// Handle XOn/XOff state:
+						if (this.settings.FlowControlUsesXOnXOff)
 						{
 							if (b == XOnXOff.XOnByte)
 							{
@@ -642,6 +646,17 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOn state.
+		/// </summary>
+		protected virtual void SignalInputXOnAndNotifyAutonomously()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOnByte);
+			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOnByte));
+		}
+
+		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
 		public virtual void SignalInputXOff()
@@ -652,11 +667,22 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
+		/// Signals the other communication endpoint that this device is in XOff state.
+		/// </summary>
+		protected virtual void SignalInputXOffAndNotifyAutonomously()
+		{
+			AssertNotDisposed();
+
+			Send(XOnXOff.XOffByte);
+			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOffByte));
+		}
+
+		/// <summary>
 		/// Toggles the input XOn/XOff state.
 		/// </summary>
 		public virtual void ToggleInputXOnXOff()
 		{
-			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
+			// AssertNotDisposed() and FlowControlUsesXOnXOff { get; } are called by the
 			// 'InputIsXOn' property.
 
 			if (InputIsXOn)
@@ -742,31 +768,6 @@ namespace MKY.IO.Serial.Usb
 					this.device.IOError        += new EventHandler<IO.Usb.ErrorEventArgs>(device_IOError);
 				}
 
-				// Handle XOn/XOff:
-				if (this.settings.FlowControlUsesXOnXOff)
-				{
-					AssumeOutputXOn();
-
-					// Immediately send XOn if software flow control is enabled to ensure that
-					//   device gets put into XOn if it was XOff before.
-					switch (this.settings.FlowControl)
-					{
-						case SerialHidFlowControl.ManualSoftware:
-						{
-							if (this.iXOnXOffHelper.ManualInputWasXOn)
-								SignalInputXOn();
-
-							break;
-						}
-
-						default:
-						{
-							SignalInputXOn();
-							break;
-						}
-					}
-				}
-
 				return (true);
 			}
 			else
@@ -780,7 +781,37 @@ namespace MKY.IO.Serial.Usb
 			if (this.device != null)
 			{
 				bool success = this.device.Start();
+
 				OnIOChanged(EventArgs.Empty);
+
+				if (success)
+				{
+					// Handle initial XOn/XOff state:
+					if (this.settings.FlowControlUsesXOnXOff)
+					{
+						AssumeOutputXOn();
+
+						// Immediately send XOn if software flow control is enabled to ensure that
+						//   device gets put into XOn if it was XOff before.
+						switch (this.settings.FlowControl)
+						{
+							case SerialHidFlowControl.ManualSoftware:
+							{
+								if (this.iXOnXOffHelper.ManualInputWasXOn)
+									SignalInputXOnAndNotifyAutonomously();
+
+								break;
+							}
+
+							default:
+							{
+								SignalInputXOnAndNotifyAutonomously();
+								break;
+							}
+						}
+					}
+				}
+
 				return (success);
 			}
 			else
@@ -1136,6 +1167,13 @@ namespace MKY.IO.Serial.Usb
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
+		}
+
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		protected virtual void OnDataSentAutonomously(DataSentEventArgs e)
+		{
+			EventHelper.FireSync<DataSentEventArgs>(DataSentAutonomously, this, e);
 		}
 
 		#endregion

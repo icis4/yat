@@ -366,8 +366,10 @@ namespace YAT.Domain
 			{
 				// Enqueue and signal the send operation BEFORE actually sending the data. This
 				// ensures that an outgoing request is shown above the corresponding incoming
-				// response in ther terminal monitor. // See comments in AttachIO() for more
-				// information.
+				// response in ther terminal monitor.
+				//
+				// See comments in AttachIO() for more information.
+				//
 				RawElement re = new RawElement(data, IODirection.Tx);
 				lock (this.repositorySyncObj)
 				{
@@ -381,9 +383,9 @@ namespace YAT.Domain
 				{
 					string message;
 					if (data.Length <= 1)
-						message = data.Length + " byte could not sent!";
+						message = data.Length + " byte could not be sent!";
 					else
-						message = data.Length + " bytes could not sent!";
+						message = data.Length + " bytes could not be sent!";
 
 					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, IODirection.Tx, message));
 				}
@@ -450,7 +452,6 @@ namespace YAT.Domain
 				this.rxRepository.Clear();
 			} // lock (this.repositorySyncObj)
 
-			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
@@ -582,35 +583,43 @@ namespace YAT.Domain
 				DetachIO();
 
 			this.io = io;
-			this.io.IOChanged        += new EventHandler(io_IOChanged);
-			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
-			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
-			this.io.DataReceived     += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+
+			this.io.IOChanged            += new EventHandler(io_IOChanged);
+			this.io.IOControlChanged     += new EventHandler(io_IOControlChanged);
+			this.io.IOError              += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
+			this.io.DataReceived         += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+		////this.io.DataSent             => see below
+			this.io.DataSentAutonomously += new EventHandler<DataSentEventArgs>(io_DataSentAutonomously);
 
 			// The 'DataSent' event is not used because it would not allow to properly synchronize
 			// outgoing with incoming data. In most applications that isn't needed, but in case of
 			// YAT it is a major feature that outgoing requests and incoming responses are properly
-			// displayed line-after-line. Using the 'DataSent' event could lead to data races between
-			// the threads which process the outgoing and incoming data events, and thus lead to mixed
-			// up displaying of the lines.
+			// displayed line-after-line. Using the 'DataSent' event could lead to data races among
+			// the threads which process the outgoing and incoming data events, and thus lead to
+			// mixed up displaying of the lines.
 			// Instead of the 'DataSent' event, this raw terminal fills outgoing data directly into
-			// the Tx and Bidir repositories, before that the data is actually being sent, relying
-			// on the underlying I/O provider to eventually send the data.
+			// the Tx and Bidir repositories, before that data is actually being sent, relying on
+			// the on the underlying I/O provider to eventually send the data.
 			// 
 			// Additional advantage of this approach:
-			//  > Tx data is shown even if XOn/XOff or some other flow control mechanism is active
+			//  > Tx data is shown even if XOn/XOff or some other flow control mechanism is active.
 			//
 			// Disadvantage of this approach:
 			//  > Time stamp information of the outgoing data is more related to the time when the
-			//    user triggered the send operation than to the time when the data actually left
+			//    user triggered the send operation than to the time when the data actually left.
+			//  > Additional control data that is sent by the underlying I/O instance (e.g. inital
+			//    XOn) is not shown => DataSentAutonomously() workaround.
 		}
 
 		private void DetachIO()
 		{
-			this.io.IOChanged        -= new EventHandler(io_IOChanged);
-			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
-			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
-			this.io.DataReceived     -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+			this.io.IOChanged            -= new EventHandler(io_IOChanged);
+			this.io.IOControlChanged     -= new EventHandler(io_IOControlChanged);
+			this.io.IOError              -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
+			this.io.DataReceived         -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+		////this.io.DataSent             => see above
+			this.io.DataSentAutonomously -= new EventHandler<DataSentEventArgs>(io_DataSentAutonomously);
+
 			this.io = null;
 		}
 
@@ -648,15 +657,28 @@ namespace YAT.Domain
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
 			RawElement re = new RawElement(e.Data, IODirection.Rx, e.TimeStamp);
-
 			lock (this.repositorySyncObj)
 			{
 				this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
 				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
 			}
-
-			// Do not fire event within lock to prevent deadlocks between Terminal and RawTerminal.
 			OnRawElementReceived(new RawElementEventArgs(re));
+		}
+
+		/// <remarks>
+		/// Note that this I/O event has a calling contract of:
+		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		/// Therefore, no additional synchronization or locking is required here.
+		/// </remarks>
+		private void io_DataSentAutonomously(object sender, DataSentEventArgs e)
+		{
+			RawElement re = new RawElement(e.Data, IODirection.Tx, e.TimeStamp);
+			lock (this.repositorySyncObj)
+			{
+				this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+			}
+			OnRawElementSent(new RawElementEventArgs(re));
 		}
 
 		#endregion

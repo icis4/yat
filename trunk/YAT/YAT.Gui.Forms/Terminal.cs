@@ -3843,7 +3843,10 @@ namespace YAT.Gui.Forms
 			else if (isUsbSerialHid)
 			{
 				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
+				{
 					sl.Visible = false;
+					sl.Enabled = isOpen;
+				}
 
 				foreach (KeyValuePair<ToolStripStatusLabel, string> kvp in this.terminalStatusLabels_DefaultText)
 					kvp.Key.Text = kvp.Value;

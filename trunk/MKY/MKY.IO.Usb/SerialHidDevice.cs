@@ -887,13 +887,20 @@ namespace MKY.IO.Usb
 				}
 				catch (IOException ex) // Includes Close().
 				{
-					string message = "Disconnect detected while reading from device.";
+					string message = "Disconnect detected while reading from the USB Ser/HID device.";
 					DebugEx.WriteException(GetType(), ex, message);
 					OnDisconnected(EventArgs.Empty);
 				}
 				catch (Exception ex)
 				{
-					string message = "Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString();
+					StringBuilder sb = new StringBuilder();
+					sb.Append    (@"Error while reading an input report from the USB Ser/HID device """);
+					sb.Append    (ToString());
+					sb.AppendLine(@""".");
+					sb.AppendLine();
+					sb.AppendLine("You may close and reopen and then try again.");
+
+					string message = sb.ToString();
 					DebugEx.WriteException(GetType(), ex, message);
 					OnIOError(new ErrorEventArgs(message));
 				}
@@ -968,8 +975,15 @@ namespace MKY.IO.Usb
 			}
 			catch (Exception ex)
 			{
-				string message = "Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString();
-				DebugEx.WriteException(GetType(), ex);
+				StringBuilder sb = new StringBuilder();
+				sb.Append    (@"Error while writing an output report to the USB Ser/HID device """);
+				sb.Append    (ToString());
+				sb.AppendLine(@""".");
+				sb.AppendLine();
+				sb.AppendLine("You may close and reopen and then try again.");
+
+				string message = sb.ToString();
+				DebugEx.WriteException(GetType(), ex, message);
 				OnIOError(new ErrorEventArgs(message));
 			}
 		}

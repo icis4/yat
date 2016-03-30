@@ -36,12 +36,6 @@ namespace MKY.IO.Serial
 		private DateTime timeStamp;
 
 		/// <summary></summary>
-		protected DataEventArgs(byte[] data)
-			: this (new ReadOnlyCollection<byte>(data))
-		{
-		}
-
-		/// <summary></summary>
 		protected DataEventArgs(ReadOnlyCollection<byte> data)
 		{
 			this.data = data;
@@ -84,6 +78,12 @@ namespace MKY.IO.Serial
 	public class DataReceivedEventArgs : DataEventArgs
 	{
 		/// <summary></summary>
+		public DataReceivedEventArgs(byte data)
+			: this(new byte[] { data })
+		{
+		}
+
+		/// <summary></summary>
 		public DataReceivedEventArgs(byte[] data)
 			: this (new ReadOnlyCollection<byte>(data))
 		{
@@ -102,6 +102,12 @@ namespace MKY.IO.Serial
 	/// </summary>
 	public class DataSentEventArgs : DataEventArgs
 	{
+		/// <summary></summary>
+		public DataSentEventArgs(byte data)
+			: this(new byte[] { data })
+		{
+		}
+
 		/// <summary></summary>
 		public DataSentEventArgs(byte[] data)
 			: this (new ReadOnlyCollection<byte>(data))
