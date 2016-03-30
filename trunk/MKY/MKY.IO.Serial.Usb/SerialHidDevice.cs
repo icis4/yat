@@ -1057,12 +1057,47 @@ namespace MKY.IO.Serial.Usb
 				byte[] data;
 				this.device.Receive(out data);
 
-				foreach (byte b in data)
-					this.receiveQueue.Enqueue(b);
-			}
+				bool signalXOnXOff = false;
+				bool signalXOnXOffCount = false;
 
-			// Signal receive thread:
-			SignalReceiveThreadSafely();
+				lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+				{
+					foreach (byte b in data)
+					{
+						this.receiveQueue.Enqueue(b);
+
+						// Handle XOn/XOff state:
+						if (this.settings.FlowControlUsesXOnXOff)
+						{
+							if (b == XOnXOff.XOnByte)
+							{
+								if (this.iXOnXOffHelper.NotifyXOnReceived())
+									signalXOnXOff = true;
+
+								signalXOnXOffCount = true;
+							}
+							else if (b == XOnXOff.XOffByte)
+							{
+								if (this.iXOnXOffHelper.NotifyXOffReceived())
+									signalXOnXOff = true;
+
+								signalXOnXOffCount = true;
+							}
+						}
+					} // foreach (byte b in data)
+				} // lock (this.receiveQueue)
+
+				// Signal XOn/XOff change to send thread:
+				if (signalXOnXOff)
+					SignalSendThreadSafely();
+
+				// Signal data notification to receive thread:
+				SignalReceiveThreadSafely();
+
+				// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
+				if (signalXOnXOff || signalXOnXOffCount)
+					OnIOControlChangedAsync(EventArgs.Empty);
+			}
 		}
 
 		/// <summary>
@@ -1138,18 +1173,28 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true)]
+		protected virtual void OnIOControlChangedAsync(EventArgs e)
+		{
+			EventHelper.FireAsync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
