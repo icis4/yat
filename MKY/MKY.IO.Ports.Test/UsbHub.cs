@@ -44,7 +44,7 @@ namespace MKY.IO.Ports.Test
 	////All  = 0x3F, \If1To6
 
 		/// <remarks>
-		/// Needed to work-around limitations of some device or windows drivers. Must be sequenced
+		/// Needed to workaround limitations of some device or windows drivers. Must be sequenced
 		/// in reversed order, enumeration/configuration of higher devices otherwise may fail.
 		/// </remarks>
 		/// <summary>Upper pair of outputs, i.e. "Out 3+4".</summary>

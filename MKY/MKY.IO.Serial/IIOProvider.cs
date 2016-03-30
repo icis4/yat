@@ -85,11 +85,22 @@ namespace MKY.IO.Serial
 		/// Fired after the I/O provider has sent data.
 		/// </summary>
 		/// <remarks>
-		/// Receive related code is located before send related code since I/O is a common term
+		/// Send related code is located after receive related code since I/O is a common term
 		/// where I comes before O.
 		/// </remarks>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		event EventHandler<DataSentEventArgs> DataSent;
+
+		/// <summary>
+		/// Fired after the I/O provider has sent data autonomously, i.e. data not requested via
+		/// the <see cref="Send(byte[])"/>> method.
+		/// </summary>
+		/// <remarks>
+		/// This is an additional event indicating data that gets sent autonomously by the I/O
+		/// provider, i.e. XOn/XOff control data.
+		/// </remarks>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		event EventHandler<DataSentEventArgs> DataSentAutonomously;
 
 		#endregion
 

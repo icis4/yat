@@ -151,6 +151,10 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
+
 		#endregion
 
 		#region Object Lifetime
@@ -686,7 +690,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					data = null;
 					SocketError();
-					OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, ex.Message));
+					OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
 				}
 
 				if (data != null)

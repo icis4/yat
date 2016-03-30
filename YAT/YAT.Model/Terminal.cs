@@ -775,9 +775,16 @@ namespace YAT.Model
 								if (IsStarted)
 								{
 									if (IsConnected)
-										sb.Append("Connected - Open");
+									{
+										if (IsOpen)
+											sb.Append("Connected - Open");
+										else
+											sb.Append("Connected - Closed");
+									}
 									else
+									{
 										sb.Append("Disconnected - Waiting for reconnect");
+									}
 								}
 								else
 								{
@@ -961,9 +968,16 @@ namespace YAT.Model
 								if (IsStarted)
 								{
 									if (IsConnected)
-										sb.Append("connected and open");
+									{
+										if (IsOpen)
+											sb.Append("connected and open");
+										else
+											sb.Append("connected and closed");
+									}
 									else
+									{
 										sb.Append("disconnected and waiting for reconnect");
+									}
 								}
 								else
 								{
