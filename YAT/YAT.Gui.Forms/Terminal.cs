@@ -1724,15 +1724,21 @@ namespace YAT.Gui.Forms
 			bool isUsbSerialHid = (this.settingsRoot.IOType == Domain.IOType.UsbSerialHid);
 
 			// Flow control count:
+			bool showFlowControlOptions = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
 			bool showFlowControlCount = this.settingsRoot.Status.ShowFlowControlCount;
-			contextMenuStrip_Status_FlowControlCount.Enabled            = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
+			contextMenuStrip_Status_FlowControlCount.Enabled            = showFlowControlOptions;
+			contextMenuStrip_Status_FlowControlCount_ShowCount.Visible  = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
 			contextMenuStrip_Status_FlowControlCount_ShowCount.Checked  = showFlowControlCount;
+			contextMenuStrip_Status_FlowControlCount_ResetCount.Visible = showFlowControlOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
 			contextMenuStrip_Status_FlowControlCount_ResetCount.Enabled = showFlowControlCount;
 
 			// Break count:
+			bool showBreakOptions = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
 			bool showBreakCount = this.settingsRoot.Status.ShowBreakCount;
-			contextMenuStrip_Status_BreakCount.Enabled            = (isSerialPort && this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates);
+			contextMenuStrip_Status_BreakCount.Enabled            = showBreakOptions;
+			contextMenuStrip_Status_BreakCount_ShowCount.Visible  = showBreakOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
 			contextMenuStrip_Status_BreakCount_ShowCount.Checked  = showBreakCount;
+			contextMenuStrip_Status_BreakCount_ResetCount.Visible = showBreakOptions; // Workaround to .NET Windows.Forms bug (child items visible even when parent item is disabled).
 			contextMenuStrip_Status_BreakCount_ResetCount.Enabled = showBreakCount;
 
 			this.isSettingControls.Leave();
@@ -3665,6 +3671,8 @@ namespace YAT.Gui.Forms
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void SetIOControlControls()
 		{
+			SuspendLayout(); // Prevent flickering when visibility of status labels temporarily changes.
+
 			Image on  = Properties.Resources.Image_Status_Green_12x12;
 			Image off = Properties.Resources.Image_Status_Red_12x12;
 
@@ -3920,6 +3928,8 @@ namespace YAT.Gui.Forms
 				foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
 					sl.Visible = false;
 			}
+
+			ResumeLayout();
 		}
 
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "The timer just invokes a single-shot callback to show the RFR state for a longer period that it is actually active.")]
