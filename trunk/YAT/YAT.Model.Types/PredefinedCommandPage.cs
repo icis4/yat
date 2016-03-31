@@ -107,28 +107,23 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		/// <param name="selectedCommand">Index 0..max-1.</param>
+		/// <param name="index">Index 0..max-1.</param>
 		/// <param name="command">Command to be set.</param>
-		public virtual void SetCommand(int selectedCommand, Command command)
+		public virtual void SetCommand(int index, Command command)
 		{
-			if (selectedCommand >= 0)
+			if (index >= 0)
 			{
-				Command value;
-				if (command.IsDefined)
-					value = new Command(command);
-				else
-					value = new Command();
-
-				if (selectedCommand < this.commands.Count)
+				if (index < this.commands.Count)
 				{
-					this.commands[selectedCommand] = value;
+					this.commands[index] = new Command(command);
 				}
 				else
 				{
-					while (this.commands.Count < (selectedCommand))
-						this.commands.Add(value);
+					// Fill-in empty commands:
+					while (this.commands.Count < (index))
+						this.commands.Add(new Command());
 
-					this.commands.Add(value);
+					this.commands.Add(new Command(command));
 				}
 			}
 		}
