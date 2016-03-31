@@ -1727,12 +1727,24 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual DisplayElement ByteToElement(byte b, IODirection d, Radix r)
 		{
-			bool isXOnXOffByte = MKY.IO.Serial.XOnXOff.IsXOnXOffByte(b);
-			bool hideXOnXOff   = (TerminalSettings.IO.FlowControlUsesXOnXOff && TerminalSettings.CharReplace.HideXOnXOff);
-			bool isByteToHide  = (isXOnXOffByte && hideXOnXOff);
+			bool isByteToHide = false;
+			if (b == 0x00)
+			{
+				if (TerminalSettings.CharHide.Hide0x00)
+					isByteToHide = true;
+			}
+			else if (b == 0xFF)
+			{
+				if (TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+					isByteToHide = true;
+			}
+			else if (MKY.IO.Serial.XOnXOff.IsXOnXOffByte(b))
+			{
+				if (TerminalSettings.IO.FlowControlUsesXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
+					isByteToHide = true;
+			}
 
 			bool isControlByte = MKY.Text.Ascii.IsControlByte(b);
-
 			bool error = false;
 			string text = "";
 

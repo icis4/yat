@@ -22,7 +22,10 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Xml.Serialization;
+
+using MKY.Text;
 
 namespace YAT.Domain.Settings
 {
@@ -41,6 +44,7 @@ namespace YAT.Domain.Settings
 		private BufferSettings buffer;
 		private DisplaySettings display;
 		private CharReplaceSettings charReplace;
+		private CharHideSettings charHide;
 		private SendSettings send;
 
 		// Type dependent settings.
@@ -71,6 +75,7 @@ namespace YAT.Domain.Settings
 			Buffer      = new BufferSettings(SettingsType);
 			Display     = new DisplaySettings(SettingsType);
 			CharReplace = new CharReplaceSettings(SettingsType);
+			CharHide    = new CharHideSettings(SettingsType);
 			Send        = new SendSettings(SettingsType);
 
 			TextTerminal   = new TextTerminalSettings(SettingsType);
@@ -91,6 +96,7 @@ namespace YAT.Domain.Settings
 			Buffer         = new BufferSettings(rhs.Buffer);
 			Display        = new DisplaySettings(rhs.Display);
 			CharReplace    = new CharReplaceSettings(rhs.CharReplace);
+			CharHide       = new CharHideSettings(rhs.CharHide);
 			Send           = new SendSettings(rhs.Send);
 
 			TextTerminal   = new TextTerminalSettings(rhs.TextTerminal);
@@ -272,6 +278,32 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("CharHide")]
+		public CharHideSettings CharHide
+		{
+			get { return (this.charHide); }
+			set
+			{
+				if (value == null)
+				{
+					DetachNode(this.charHide);
+					this.charHide = null;
+				}
+				else if (this.charHide == null)
+				{
+					this.charHide = value;
+					AttachNode(this.charHide);
+				}
+				else if (this.charHide != value)
+				{
+					CharHideSettings old = this.charHide;
+					this.charHide = value;
+					ReplaceNode(old, this.charHide);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("Send")]
 		public SendSettings Send
 		{
@@ -351,15 +383,43 @@ namespace YAT.Domain.Settings
 
 		#endregion
 
-		#region Object Members
+		#region Property Combinations
+		//------------------------------------------------------------------------------------------
+		// Property Combinations
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
+		/// For text terminals, hide 0xFF is only supported if encoding is single byte.
+		/// For binary terminals, hide 0xFF is always supported.
 		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
+		[XmlIgnore]
+		public bool SupportsHide0xFF
+		{
+			get
+			{
+				if (TerminalType == TerminalType.Text)
+				{
+					Encoding e = (EncodingEx)TextTerminal.Encoding;
+					return (e.IsSingleByte);
+				}
+				else
+				{
+					return (true);
+				}
+			}
+		}
+
+		#endregion
+
+				#region Object Members
+
+				/// <summary>
+				/// Determines whether this instance and the specified object have value equality.
+				/// </summary>
+				/// <remarks>
+				/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+				/// properties, i.e. properties with some logic, are also properly handled.
+				/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(obj, null))

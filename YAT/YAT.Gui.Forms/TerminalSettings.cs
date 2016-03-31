@@ -489,7 +489,7 @@ namespace YAT.Gui.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowAdvancedSettings()
 		{
-			Gui.Forms.AdvancedTerminalSettings f = new Gui.Forms.AdvancedTerminalSettings(this.settingsInEdit);
+			AdvancedTerminalSettings f = new AdvancedTerminalSettings(this.settingsInEdit);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -518,8 +518,11 @@ namespace YAT.Gui.Forms
 				// Char replace:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
 				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = f.SettingsResult.Terminal.CharReplace.ReplaceTab;
+				this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = f.SettingsResult.Terminal.CharHide.HideXOnXOff;
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
-				this.settingsInEdit.Terminal.CharReplace.HideXOnXOff         = f.SettingsResult.Terminal.CharReplace.HideXOnXOff;
+				this.settingsInEdit.Terminal.CharHide.Hide0x00               = f.SettingsResult.Terminal.CharHide.Hide0x00;
+				this.settingsInEdit.Terminal.CharHide.Hide0xFF               = f.SettingsResult.Terminal.CharHide.Hide0xFF;
 
 				// Communication:
 				this.settingsInEdit.Terminal.IO.Endianness                        = f.SettingsResult.Terminal.IO.Endianness;

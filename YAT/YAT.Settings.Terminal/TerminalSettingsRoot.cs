@@ -321,6 +321,14 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
+		public virtual Domain.Settings.CharHideSettings CharHide
+		{
+			get { return (this.explicit_.Terminal.CharHide); }
+			set { this.explicit_.Terminal.CharHide = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
 		public virtual Domain.Settings.SendSettings Send
 		{
 			get { return (this.explicit_.Terminal.Send); }

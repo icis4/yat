@@ -117,6 +117,7 @@
     <Compile Include="Parser\States.cs" />
     <Compile Include="Parser\Result.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="Settings\CharHideSettings.cs" />
     <Compile Include="Settings\CharReplaceSettings.cs" />
     <Compile Include="Settings\StatusSettings.cs" />
     <Compile Include="Settings\IOSettings.cs" />
