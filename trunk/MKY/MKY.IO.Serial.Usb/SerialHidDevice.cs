@@ -482,6 +482,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
 				// Changes here must most likely be applied there too.
+
 				bool signalXOnXOff = false;
 				bool signalXOnXOffCount = false;
 
@@ -577,6 +578,9 @@ namespace MKY.IO.Serial.Usb
 					// Handle XOff state:
 					if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
 					{
+						// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+						// Changes here must most likely be applied there too.
+
 						byte b = this.sendQueue.Peek(); // No lock required, not modifying anything.
 						if ((b != XOnXOff.XOnByte) && (b != XOnXOff.XOffByte))
 						{
@@ -1056,6 +1060,9 @@ namespace MKY.IO.Serial.Usb
 			{                        // same time this lock prevents race-conditions of 'DataReceived'.
 				byte[] data;
 				this.device.Receive(out data);
+
+				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
+				// Changes here must most likely be applied there too.
 
 				bool signalXOnXOff = false;
 				bool signalXOnXOffCount = false;
