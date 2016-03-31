@@ -139,10 +139,10 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		private int receivedBytes = 0;
 		private int receivedBytesOfCurrentLine = 0;
 		private int receivedLines = 0;
-		private ReaderWriterLock receivedDataLock = new ReaderWriterLock();
+		private ReaderWriterLockSlim receivedDataLock = new ReaderWriterLockSlim();
 
 		private int receivedErrors = 0;
-		private ReaderWriterLock receivedErrorLock = new ReaderWriterLock();
+		private ReaderWriterLockSlim receivedErrorLock = new ReaderWriterLockSlim();
 
 		Thread[] threads = null;
 		private bool isOngoing = false;

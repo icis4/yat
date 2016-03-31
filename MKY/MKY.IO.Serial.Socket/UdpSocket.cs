@@ -112,7 +112,8 @@ namespace MKY.IO.Serial.Socket
 		private SocketState state = SocketState.Closed;
 		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
 
-		private System.Net.IPEndPoint endPoint;
+		private System.Net.IPEndPoint localEndPoint;  // Created for symmetricity.
+		private System.Net.IPEndPoint remoteEndPoint; // Required for async receiving.
 		private System.Net.Sockets.UdpClient socket;
 		private object socketSyncObj = new object();
 
@@ -567,9 +568,14 @@ namespace MKY.IO.Serial.Socket
 			// Create socket:
 			lock (this.socketSyncObj)
 			{
-				this.endPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
-				this.socket = new System.Net.Sockets.UdpClient(this.localPort);
-				this.socket.Connect(this.endPoint);
+				this.localEndPoint  = new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort);
+				this.remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+
+				this.socket = new System.Net.Sockets.UdpClient(this.localEndPoint);
+				this.socket.ExclusiveAddressUse = false;
+				this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
+				this.socket.Client.Bind(this.localEndPoint); // This binds the server/listener port.
+				this.socket.Connect(this.remoteEndPoint);    // This configures the client port.
 			}
 		}
 
@@ -667,7 +673,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			lock (this.socketSyncObj)
 			{
-				AsyncReceiveState state = new AsyncReceiveState(this.endPoint, this.socket);
+				AsyncReceiveState state = new AsyncReceiveState(this.remoteEndPoint, this.socket);
 				this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
 			}
 		}
@@ -675,7 +681,7 @@ namespace MKY.IO.Serial.Socket
 		private void ReceiveCallback(IAsyncResult ar)
 		{
 			AsyncReceiveState state = (AsyncReceiveState)(ar.AsyncState);
-			System.Net.IPEndPoint endPoint = state.EndPoint;
+			System.Net.IPEndPoint remoteEndPoint = state.EndPoint;
 			System.Net.Sockets.UdpClient socket = state.Socket;
 
 			// Ensure that async receive is discarded after close/dispose.
@@ -684,7 +690,7 @@ namespace MKY.IO.Serial.Socket
 				byte[] data;
 				try
 				{
-					data = socket.EndReceive(ar, ref endPoint);
+					data = socket.EndReceive(ar, ref remoteEndPoint);
 				}
 				catch (System.Net.Sockets.SocketException ex)
 				{
