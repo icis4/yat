@@ -34,8 +34,6 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Windows.Forms;
 
-using YAT.Gui.Utilities;
-
 #endregion
 
 namespace YAT.Gui.Forms
@@ -323,16 +321,28 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
 		}
 
+		private void checkBox_HideXOnXOff_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.CharHide.HideXOnXOff = checkBox_HideXOnXOff.Checked;
+		}
+
 		private void checkBox_ReplaceSpace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
 		}
 
-		private void checkBox_HideXOnXOff_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_Hide0x00_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.CharReplace.HideXOnXOff = checkBox_HideXOnXOff.Checked;
+				this.settingsInEdit.Terminal.CharHide.Hide0x00 = checkBox_Hide0x00.Checked;
+		}
+
+		private void checkBox_Hide0xFF_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.CharHide.Hide0xFF = checkBox_Hide0xFF.Checked;
 		}
 
 		private void comboBox_Endianness_SelectedIndexChanged(object sender, EventArgs e)
@@ -750,9 +760,12 @@ namespace YAT.Gui.Forms
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
 			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
-			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
 			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
-			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharReplace.HideXOnXOff;
+			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
+			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
+			checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
+			checkBox_Hide0xFF.Enabled                   = this.settingsInEdit.Terminal.SupportsHide0xFF;
+			checkBox_Hide0xFF.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0xFF;
 
 			// Communication:
 			comboBox_Endianness.SelectedItem = (Domain.EndiannessEx)this.settingsInEdit.Terminal.IO.Endianness;
@@ -841,8 +854,10 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
 			this.settingsInEdit.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
 			this.settingsInEdit.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
+			this.settingsInEdit.Terminal.CharHide.HideXOnXOff            = Domain.Settings.CharHideSettings.HideXOnXOffDefault;
 			this.settingsInEdit.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
-			this.settingsInEdit.Terminal.CharReplace.HideXOnXOff         = Domain.Settings.CharReplaceSettings.HideXOnXOffDefault;
+			this.settingsInEdit.Terminal.CharHide.Hide0x00               = Domain.Settings.CharHideSettings.Hide0x00Default;
+			this.settingsInEdit.Terminal.CharHide.Hide0xFF               = Domain.Settings.CharHideSettings.Hide0xFFDefault;
 
 			// Communication:
 			this.settingsInEdit.Terminal.IO.Endianness                        = Domain.Settings.IOSettings.EndiannessDefault;

@@ -29,7 +29,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
+using System.Globalization;
 using System.Text;
 using System.Threading;
 
@@ -71,7 +71,7 @@ namespace YAT.Domain
 		// Element State
 		//==========================================================================================
 
-		private List<byte> rxDecodingStream;
+		private List<byte> rxMultiByteDecodingStream;
 
 		#endregion
 
@@ -192,7 +192,7 @@ namespace YAT.Domain
 			var casted = (terminal as TextTerminal);
 			if (casted != null)
 			{
-				this.rxDecodingStream = casted.rxDecodingStream;
+				this.rxMultiByteDecodingStream = casted.rxMultiByteDecodingStream;
 				this.txLineState      = casted.txLineState;
 				this.rxLineState      = casted.rxLineState;
 
@@ -398,7 +398,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			this.rxDecodingStream = new List<byte>();
+			this.rxMultiByteDecodingStream = new List<byte>();
 
 			byte[] txEol;
 			byte[] rxEol;
@@ -447,62 +447,97 @@ namespace YAT.Domain
 				case Radix.Char:
 				case Radix.String:
 				{
-					// Add byte to ElementState.
-					this.rxDecodingStream.Add(b);
-					byte[] decodingArray = this.rxDecodingStream.ToArray();
-
-					// Get encoding and retrieve char count.
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
-					int charCount = e.GetCharCount(decodingArray, 0, decodingArray.Length);
-
-					// If decoding array can be decoded into something useful, decode it.
-					if (charCount == 1)
+					if (e.IsSingleByte)
 					{
-						// Char count must be 1, otherwise something went wrong.
-						char[] chars = new char[charCount];
-						if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
+						if ((b < 0x20) || (b == 0x7F)) // Control chars.
 						{
-							// Ensure that 'unknown' character 0xFFFD is not decoded yet.
-							int code = chars[0];
-							if (code != 0xFFFD)
+							return (base.ByteToElement(b, d, r));
+						}
+						else if (b == 0x20) // Space.
+						{
+							return (base.ByteToElement(b, d, r));
+						}
+						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+						{
+							return (new DisplayElement.NoData()); // Return nothing, ignore the character, this results in hiding.
+						}
+						else
+						{
+							char[] chars = new char[1];
+							if (e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true) == 1)
 							{
-								this.rxDecodingStream.Clear();
+								StringBuilder sb = new StringBuilder();
+								sb.Append(chars, 0, 1);
 
-								if ((code < 0x20) || (code == 0x7F)) // Control chars.
+								switch (d)
 								{
-									return (base.ByteToElement(b, d, r));
-								}
-								else if (b == 0x20) // Space.
-								{
-									return (base.ByteToElement(b, d, r));
-								}
-								else
-								{
-									StringBuilder sb = new StringBuilder();
-									sb.Append(chars, 0, charCount);
-
-									switch (d)
-									{
-										case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
-										case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
-										default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
-									}
+									case IODirection.Tx: return (new DisplayElement.TxData(b, sb.ToString()));
+									case IODirection.Rx: return (new DisplayElement.RxData(b, sb.ToString()));
+									default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 								}
 							}
-							else
+							else // Something went seriously wrong...
 							{
-								// 'unknown' character 0xFFFD, do not reset stream.
+								throw (new NotSupportedException("Program execution should never get here, byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 							}
 						}
 					}
-					else
+					else // MultiByte
 					{
-						// Nothing useful to decode into, reset stream.
-						this.rxDecodingStream.Clear();
-					}
+						this.rxMultiByteDecodingStream.Add(b);
+						byte[] decodingArray = this.rxMultiByteDecodingStream.ToArray();
+						int charCount = e.GetCharCount(decodingArray, 0, decodingArray.Length);
 
-					// Nothing to decode (yet).
-					return (new DisplayElement.NoData());
+						// If decoding array can be decoded into something useful, decode it.
+						if (charCount == 1)
+						{
+							// Char count must be 1, otherwise something went wrong.
+							char[] chars = new char[charCount];
+							if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
+							{
+								// Ensure that 'unknown' character 0xFFFD is not decoded yet.
+								int code = chars[0];
+								if (code != 0xFFFD)
+								{
+									this.rxMultiByteDecodingStream.Clear();
+
+									if ((code < 0x20) || (code == 0x7F)) // Control chars.
+									{
+										return (base.ByteToElement(b, d, r));
+									}
+									else if (code == 0x20) // Space.
+									{
+										return (base.ByteToElement(b, d, r));
+									}
+									else
+									{
+										StringBuilder sb = new StringBuilder();
+										sb.Append(chars, 0, charCount);
+
+										switch (d)
+										{
+											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
+											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
+											default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+										}
+									}
+								}
+								else
+								{
+									// 'unknown' character 0xFFFD, do not reset stream.
+								}
+							}
+						}
+						else
+						{
+							// Nothing useful to decode into, reset stream.
+							this.rxMultiByteDecodingStream.Clear();
+						}
+
+						// Nothing to decode (yet).
+						return (new DisplayElement.NoData());
+					} // MultiByte
 				}
 
 				default:

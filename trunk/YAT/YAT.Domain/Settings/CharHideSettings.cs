@@ -28,37 +28,30 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class CharReplaceSettings : MKY.Settings.SettingsItem
+	public class CharHideSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
-		public const bool ReplaceControlCharsDefault = true;
+		public const bool HideXOnXOffDefault = false;
 
 		/// <summary></summary>
-		public const ControlCharRadix ControlCharRadixDefault = ControlCharRadix.AsciiMnemonic;
+		public const bool Hide0x00Default = false;
 
 		/// <summary></summary>
-		public const bool ReplaceTabDefault = false;
+		public const bool Hide0xFFDefault = false;
+
+		private bool hideXOnXOff;
+		private bool hide0x00;
+		private bool hide0xFF;
 
 		/// <summary></summary>
-		public const bool ReplaceSpaceDefault = false;
-
-		/// <summary></summary>
-		public const string SpaceReplaceChar = "␣";
-
-		private bool replaceControlChars;
-		private ControlCharRadix controlCharRadix;
-		private bool replaceTab;
-		private bool replaceSpace;
-
-		/// <summary></summary>
-		public CharReplaceSettings()
+		public CharHideSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public CharReplaceSettings(MKY.Settings.SettingsType settingsType)
+		public CharHideSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -69,13 +62,12 @@ namespace YAT.Domain.Settings
 		/// Set fields through properties even though changed flag will be cleared anyway.
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
-		public CharReplaceSettings(CharReplaceSettings rhs)
+		public CharHideSettings(CharHideSettings rhs)
 			: base(rhs)
 		{
-			ReplaceControlChars = rhs.ReplaceControlChars;
-			ControlCharRadix    = rhs.ControlCharRadix;
-			ReplaceTab          = rhs.ReplaceTab;
-			ReplaceSpace        = rhs.ReplaceSpace;
+			HideXOnXOff = rhs.HideXOnXOff;
+			Hide0x00    = rhs.Hide0x00;
+			Hide0xFF    = rhs.Hide0xFF;
 
 			ClearChanged();
 		}
@@ -87,10 +79,9 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			ReplaceControlChars = ReplaceControlCharsDefault;
-			ControlCharRadix    = ControlCharRadixDefault;
-			ReplaceTab          = ReplaceTabDefault;
-			ReplaceSpace        = ReplaceSpaceDefault;
+			HideXOnXOff = HideXOnXOffDefault;
+			Hide0x00    = Hide0x00Default;
+			Hide0xFF    = Hide0xFFDefault;
 		}
 
 		#region Properties
@@ -99,60 +90,45 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("ReplaceControlChars")]
-		public virtual bool ReplaceControlChars
+		[XmlElement("HideXOnXOff")]
+		public virtual bool HideXOnXOff
 		{
-			get { return (this.replaceControlChars); }
+			get { return (this.hideXOnXOff); }
 			set
 			{
-				if (this.replaceControlChars != value)
+				if (this.hideXOnXOff != value)
 				{
-					this.replaceControlChars = value;
+					this.hideXOnXOff = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("ControlCharRadix")]
-		public virtual ControlCharRadix ControlCharRadix
+		[XmlElement("Hide0x00")]
+		public virtual bool Hide0x00
 		{
-			get { return (this.controlCharRadix); }
+			get { return (this.hide0x00); }
 			set
 			{
-				if (this.controlCharRadix != value)
+				if (this.hide0x00 != value)
 				{
-					this.controlCharRadix = value;
+					this.hide0x00 = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("ReplaceTab")]
-		public virtual bool ReplaceTab
+		[XmlElement("Hide0xFF")]
+		public virtual bool Hide0xFF
 		{
-			get { return (this.replaceTab); }
+			get { return (this.hide0xFF); }
 			set
 			{
-				if (this.replaceTab != value)
+				if (this.hide0xFF != value)
 				{
-					this.replaceTab = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ReplaceSpace")]
-		public virtual bool ReplaceSpace
-		{
-			get { return (this.replaceSpace); }
-			set
-			{
-				if (this.replaceSpace != value)
-				{
-					this.replaceSpace = value;
+					this.hide0xFF = value;
 					SetChanged();
 				}
 			}
@@ -177,15 +153,14 @@ namespace YAT.Domain.Settings
 			if (GetType() != obj.GetType())
 				return (false);
 
-			CharReplaceSettings other = (CharReplaceSettings)obj;
+			CharHideSettings other = (CharHideSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(ReplaceControlChars == other.ReplaceControlChars) &&
-				(ControlCharRadix    == other.ControlCharRadix) &&
-				(ReplaceTab          == other.ReplaceTab) &&
-				(ReplaceSpace        == other.ReplaceSpace)
+				(HideXOnXOff == other.HideXOnXOff) &&
+				(Hide0x00    == other.Hide0x00) &&
+				(Hide0xFF    == other.Hide0xFF)
 			);
 		}
 
@@ -202,10 +177,9 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				ReplaceControlChars.GetHashCode() ^
-				ControlCharRadix   .GetHashCode() ^
-				ReplaceTab         .GetHashCode() ^
-				ReplaceSpace       .GetHashCode()
+				HideXOnXOff.GetHashCode() ^
+				Hide0x00   .GetHashCode() ^
+				Hide0xFF   .GetHashCode()
 			);
 		}
 

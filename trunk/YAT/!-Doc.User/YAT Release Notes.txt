@@ -94,6 +94,7 @@ New:
 - Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to display the date in addition to the time (related to feature request #14).
+- Options to hide 0x00 and/or 0xFF (feature req. #243).
 - Option to encode neat logs in terminal encoding instead of UTF-8 (related to feature request #69).
 - Logging in RTF format implemented (feature request #233). Note that the log file's RTF structure
   is incomplete while logging is ongoing. The file can only be opened by an RTF reader (e.g. Word)
