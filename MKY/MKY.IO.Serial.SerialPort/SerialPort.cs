@@ -634,6 +634,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
 				// Changes here must most likely be applied there too.
+
 				bool signalXOnXOff = false;
 				bool signalXOnXOffCount = false;
 
@@ -769,6 +770,9 @@ namespace MKY.IO.Serial.SerialPort
 						// Handle XOff state:
 						if (this.settings.Communication.FlowControlUsesXOnXOff && !OutputIsXOn)
 						{
+							// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+							// Changes here must most likely be applied there too.
+
 							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
 							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 							{
@@ -1616,6 +1620,9 @@ namespace MKY.IO.Serial.SerialPort
 						data = new byte[bytesToRead];
 						this.port.Read(data, 0, bytesToRead);
 					}
+
+					// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
+					// Changes here must most likely be applied there too.
 
 					bool signalXOnXOff = false;
 					bool signalXOnXOffCount = false;
