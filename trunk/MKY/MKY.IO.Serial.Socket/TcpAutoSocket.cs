@@ -1051,6 +1051,13 @@ namespace MKY.IO.Serial.Socket
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
+		/// <summary></summary>
+		protected virtual void OnDataSentAutonomously(EventArgs e)
+		{
+			UnusedEvent.PreventCompilerWarning(DataSentAutonomously);
+			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for TCP AutoSockets." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+		}
+
 		#endregion
 
 		#region Object Members

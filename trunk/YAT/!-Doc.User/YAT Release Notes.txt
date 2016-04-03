@@ -150,8 +150,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issues with window list (bugs #31, #119, #180 and #213).
-- Long monitor contents are not displayed properly when horizontally scrolling using the scroll bar
-  (bug #125).
+- Long monitor content is not displayed properly when horizontally scrolling (bug #125).
 - Serial COM port limitations of .NET:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while sleep or undock without closing the port will
@@ -171,6 +170,7 @@ Limitations and known issues:
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
+- Automatic response may lead to distorted monitor content and exceptions (bugs #334 and #333).
 - Direct mode does not yet support special formats and commands (feature request #10).
 
 
@@ -274,8 +274,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #29 and #30)
    > Issues with window list (bugs #31, #119, #180 and #213)
-- Long monitor contents are not displayed properly when horizontally scrolling using the scroll bar
-  (bug #125)
+- Long monitor content is not displayed properly when horizontally scrolling (bug #125)
 - Serial COM port limitations of .NET
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101)
 - Serial COM port limitations of certain hardware, e.g. certain USB/RS-232 converters (USB CDC)
@@ -391,8 +390,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492>#29 and #1808493>#30)
    > Issues with window list (bugs #1808494>#31, #2846917>#119, #3160095>#180 and #3454550>#213)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684>#152)
-- Long monitor contents are not displayed properly when horizontally scrolling using the scroll bar
-  (bug #2865562>#125)
+- Long monitor content is not displayed properly when horizontally scrolling (bug #2865562>#125)
 - Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228>#101)
 - Serial COM port RFR/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported
@@ -484,7 +482,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494, #2846917 and #3160095)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
-- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Long monitor content is not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Support for serial ports which are named other than "COM..." isn't supported by .NET
   (feature request #2848228)
@@ -542,7 +540,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494 and #2846917)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
-- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Long monitor content is not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
@@ -588,7 +586,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494 and #2846917)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
-- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Long monitor content is not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
@@ -685,7 +683,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494 and #2846917)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
-- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Long monitor content is not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
