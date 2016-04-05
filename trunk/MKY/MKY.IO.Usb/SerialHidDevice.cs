@@ -633,8 +633,14 @@ namespace MKY.IO.Usb
 				OnOpened(EventArgs.Empty);
 				return (true);
 			}
+			else if (AutoOpen)
+			{
+				SetStateSynchronized(State.DisconnectedAndWaitingForReopen);
+				return (true);
+			}
 			else
 			{
+				SetStateSynchronized(State.DisconnectedAndClosed);
 				return (false);
 			}
 		}
