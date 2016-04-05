@@ -72,18 +72,18 @@ namespace MKY.IO.Serial.Socket.Test
 			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>();
 			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>();
 
-			// Create a large number of auto sockets.
+			// Create a large number of AutoSockets.
 			for (int i = 0; i < numberOfServers; i++)
 			{
 				int p;
 				TcpAutoSocket s;
 				Utilities.StartTcpAutoSocketAsServer(out s, out p);
-				Utilities.WaitForTcpAutoSocketToBeStartedAsServer(s, "TCP auto socket " + i + " could not be started as server!");
+				Utilities.WaitForTcpAutoSocketToBeStartedAsServer(s, "TCP/IP AutoSocket " + i + " could not be started as server!");
 				serverSockets.Add(s);
 				serverPorts.Add(p);
 			}
 
-			// Randomly connect another large numer of auto sockets to the existing sockets.
+			// Randomly connect another large numer of AutoSockets to the existing sockets.
 			Random r = new Random(RandomEx.NextPseudoRandomSeed());
 			for (int i = 0; i < numberOfClients; i++)
 			{
@@ -92,8 +92,8 @@ namespace MKY.IO.Serial.Socket.Test
 				TcpAutoSocket s = serverSockets[j];
 				TcpAutoSocket c;
 				Utilities.StartTcpAutoSocketAsClient(out c, p);
-				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started!");
-				Utilities.WaitForConnect(c, s, "TCP auto socket " + i + " could not be connected to auto socket " + s);
+				Utilities.WaitForStart(c, "TCP/IP AutoSocket " + i + " could not be started!");
+				Utilities.WaitForConnect(c, s, "TCP/IP AutoSocket " + i + " could not be connected to AutoSocket " + s);
 				clientSockets.Add(c);
 			}
 
@@ -101,14 +101,14 @@ namespace MKY.IO.Serial.Socket.Test
 			foreach (TcpAutoSocket c in clientSockets)
 			{
 				Utilities.StopTcpAutoSocket(c);
-				Utilities.WaitForStop(c, "TCP auto socket as client could not be stopped!");
+				Utilities.WaitForStop(c, "TCP/IP AutoSocket as client could not be stopped!");
 			}
 
 			// Shutdown all server sockets.
 			foreach (TcpAutoSocket s in serverSockets)
 			{
 				Utilities.StopTcpAutoSocket(s);
-				Utilities.WaitForStop(s, "TCP auto socket as client could not be stopped!");
+				Utilities.WaitForStop(s, "TCP/IP AutoSocket as client could not be stopped!");
 			}
 		}
 

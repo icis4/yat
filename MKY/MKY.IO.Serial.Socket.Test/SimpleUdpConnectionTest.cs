@@ -52,14 +52,14 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket socketB;
 
 			Utilities.StartUdpSocket(out socketA, portB, portA);
-			Utilities.WaitForStart(socketA, "UDP socket A could not be started!");
+			Utilities.WaitForStart(socketA, "UDP/IP Socket A could not be started!");
 			Utilities.StartUdpSocket(out socketB, portA, portB);
-			Utilities.WaitForStart(socketB, "UDP socket B could not be started!");
+			Utilities.WaitForStart(socketB, "UDP/IP Socket B could not be started!");
 
 			Utilities.StopUdpSocket(socketB);
-			Utilities.WaitForStop(socketB, "UDP socket B could not be stopped!");
+			Utilities.WaitForStop(socketB, "UDP/IP Socket B could not be stopped!");
 			Utilities.StopUdpSocket(socketA);
-			Utilities.WaitForStop(socketA, "UDP socket A could not be stopped!");
+			Utilities.WaitForStop(socketA, "UDP/IP Socket A could not be stopped!");
 		}
 
 		#endregion

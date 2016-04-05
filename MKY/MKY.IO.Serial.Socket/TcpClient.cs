@@ -56,7 +56,7 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <remarks>
-	/// In case of YAT with the original ALAZ implementation, TCP/IP Clients and servers created a
+	/// In case of YAT with the original ALAZ implementation, TCP/IP clients and servers created a
 	/// deadlock on shutdown. The situation:
 	/// 
 	/// 1. <see cref="Stop()"/> is called from a GUI/main thread.
@@ -562,7 +562,7 @@ namespace MKY.IO.Serial.Socket
 					Timeout.Infinite
 				);
 
-				this.socket.AddConnector("MKY TCP/IP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
 				this.socket.Start(); // The ALAZ socket will be started asynchronously
 			}
 		}
@@ -597,7 +597,7 @@ namespace MKY.IO.Serial.Socket
 					}
 					catch (Exception ex)
 					{
-						DebugEx.WriteException(GetType(), ex, "Stopping socket of TCP/IP Client failed!");
+						DebugEx.WriteException(GetType(), ex, "Stopping socket of TCP/IP client failed!");
 					}
 
 					try
@@ -608,7 +608,7 @@ namespace MKY.IO.Serial.Socket
 					}
 					catch (Exception ex)
 					{
-						DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP Client failed!");
+						DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP client failed!");
 					}
 
 					this.socket = null;
@@ -936,12 +936,12 @@ namespace MKY.IO.Serial.Socket
 
 						if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
 						{
-							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP Server " + this.remoteIPAddress + ":" + this.remotePort));
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP server " + this.remoteIPAddress + ":" + this.remotePort));
 						}
 						else
 						{
 							StringBuilder sb = new StringBuilder();
-							sb.AppendLine("The socket of this TCP/IP Client has fired an exception!");
+							sb.AppendLine("The socket of this TCP/IP client has fired an exception!");
 							sb.AppendLine();
 							sb.AppendLine("Exception type:");
 							sb.AppendLine(e.Exception.GetType().Name);
@@ -1023,7 +1023,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for TCP/IP Clients." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for TCP/IP clients." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		/// <summary></summary>
@@ -1050,7 +1050,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSentAutonomously(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(DataSentAutonomously);
-			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for TCP/IP Clients." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for TCP/IP clients." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
