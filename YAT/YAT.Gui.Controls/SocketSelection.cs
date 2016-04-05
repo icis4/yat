@@ -52,7 +52,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType DefaultHostType                     = SocketHostType.TcpAutoSocket;
+		private const SocketType DefaultSocketType                     = SocketType.TcpAutoSocket;
 
 		private static readonly IPHost DefaultRemoteHost                 = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
 		private const int DefaultRemoteTcpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
@@ -77,7 +77,7 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private SocketHostType hostType = DefaultHostType;
+		private SocketType socketType = DefaultSocketType;
 
 		private IPHost remoteHost                 = DefaultRemoteHost;
 		private int remoteTcpPort                 = DefaultRemoteTcpPort;
@@ -149,13 +149,13 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual SocketHostType HostType
+		public virtual SocketType SocketType
 		{
 			set
 			{
-				if (this.hostType != value)
+				if (this.socketType != value)
 				{
-					this.hostType = value;
+					this.socketType = value;
 					SetControls();
 				}
 			}
@@ -372,7 +372,7 @@ namespace YAT.Gui.Controls
 				if (int.TryParse(textBox_RemotePort.Text, out port) &&
 					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
 				{
-					if ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket))
+					if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
 					{
 						RemoteTcpPort = port;
 
@@ -381,7 +381,7 @@ namespace YAT.Gui.Controls
 						//  > For AutoSocket: Typically same port for client and server.
 						LocalTcpPort = port;
 					}
-					else if (this.hostType == SocketHostType.Udp)
+					else if (this.socketType == SocketType.Udp)
 					{
 						RemoteUdpPort = port;
 
@@ -433,16 +433,16 @@ namespace YAT.Gui.Controls
 				if (int.TryParse(textBox_LocalPort.Text, out port) &&
 					(port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
 				{
-					if ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket))
+					if ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket))
 					{
 						LocalTcpPort = port;
 
 						// Also set the remote port to same number:
 						//  > For Server: Makes it easier setting the client settings for a same connection.
-						if (this.hostType == SocketHostType.TcpServer)
+						if (this.socketType == SocketType.TcpServer)
 							RemoteTcpPort = port;
 					}
-					else if (this.hostType == SocketHostType.Udp)
+					else if (this.socketType == SocketType.Udp)
 					{
 						LocalUdpPort = port;
 					}
@@ -584,7 +584,7 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Enter();
 
 			// Remote host address.
-			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
+			if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) || (this.socketType == SocketType.Udp)))
 			{
 				comboBox_RemoteHost.Enabled = true;
 				if (comboBox_RemoteHost.Items.Count > 0)
@@ -623,18 +623,18 @@ namespace YAT.Gui.Controls
 			}
 
 			// Remote port label.
-			if (Enabled && (this.hostType == SocketHostType.Udp))
+			if (Enabled && (this.socketType == SocketType.Udp))
 				label_RemotePort.Text = "Remote UDP port:";
 			else
 				label_RemotePort.Text = "Remote TCP port:";
 
 			// Remote port.
-			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket)))
+			if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket)))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
-			else if (!DesignMode && Enabled && (this.hostType == SocketHostType.Udp))
+			else if (!DesignMode && Enabled && (this.socketType == SocketType.Udp))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
@@ -646,7 +646,7 @@ namespace YAT.Gui.Controls
 			}
 
 			// Local interface.
-			if (!DesignMode && Enabled && (this.hostType != SocketHostType.Unknown) && (comboBox_LocalInterface.Items.Count > 0))
+			if (!DesignMode && Enabled && (this.socketType != SocketType.Unknown) && (comboBox_LocalInterface.Items.Count > 0))
 			{
 				if (this.localInterface != null)
 					comboBox_LocalInterface.SelectedItem = this.localInterface;
@@ -659,18 +659,18 @@ namespace YAT.Gui.Controls
 			}
 
 			// Local port label.
-			if (Enabled && (this.hostType == SocketHostType.Udp))
+			if (Enabled && (this.socketType == SocketType.Udp))
 				label_LocalPort.Text = "Local UDP port:";
 			else
 				label_LocalPort.Text = "Local TCP port:";
 
 			// Local port.
-			if (Enabled && ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket)))
+			if (Enabled && ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket)))
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
-			else if (Enabled && (this.hostType == SocketHostType.Udp))
+			else if (Enabled && (this.socketType == SocketType.Udp))
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!

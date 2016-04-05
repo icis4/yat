@@ -410,7 +410,7 @@ namespace YAT.Gui.Forms
 			// Set socket and USB control before serial port control since that might need to refresh
 			// the serial port list first (which takes time, which looks ulgy).
 
-			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
+			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;
 			socketSelection.RemoteTcpPort  = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
 			socketSelection.RemoteUdpPort  = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
@@ -418,7 +418,7 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
 
-			socketSettings.HostType                 = (Domain.IOTypeEx)ioType;
+			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect   = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
 
 			usbSerialHidDeviceSelection.DeviceInfo  = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;

@@ -261,27 +261,27 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator MKY.IO.Serial.Socket.SocketHostType(IOTypeEx type)
+		public static implicit operator MKY.IO.Serial.Socket.SocketType(IOTypeEx type)
 		{
 			switch ((IOType)type)
 			{
-				case IOType.TcpClient:     return (MKY.IO.Serial.Socket.SocketHostType.TcpClient);
-				case IOType.TcpServer:     return (MKY.IO.Serial.Socket.SocketHostType.TcpServer);
-				case IOType.TcpAutoSocket: return (MKY.IO.Serial.Socket.SocketHostType.TcpAutoSocket);
-				case IOType.Udp:           return (MKY.IO.Serial.Socket.SocketHostType.Udp);
-				default:                   return (MKY.IO.Serial.Socket.SocketHostType.Unknown);
+				case IOType.TcpClient:     return (MKY.IO.Serial.Socket.SocketType.TcpClient);
+				case IOType.TcpServer:     return (MKY.IO.Serial.Socket.SocketType.TcpServer);
+				case IOType.TcpAutoSocket: return (MKY.IO.Serial.Socket.SocketType.TcpAutoSocket);
+				case IOType.Udp:           return (MKY.IO.Serial.Socket.SocketType.Udp);
+				default:                   return (MKY.IO.Serial.Socket.SocketType.Unknown);
 			}
 		}
 
 		/// <summary></summary>
-		public static implicit operator IOTypeEx(MKY.IO.Serial.Socket.SocketHostType type)
+		public static implicit operator IOTypeEx(MKY.IO.Serial.Socket.SocketType type)
 		{
 			switch (type)
 			{
-				case MKY.IO.Serial.Socket.SocketHostType.TcpClient:     return (IOType.TcpClient);
-				case MKY.IO.Serial.Socket.SocketHostType.TcpServer:     return (IOType.TcpServer);
-				case MKY.IO.Serial.Socket.SocketHostType.TcpAutoSocket: return (IOType.TcpAutoSocket);
-				case MKY.IO.Serial.Socket.SocketHostType.Udp:           return (IOType.Udp);
+				case MKY.IO.Serial.Socket.SocketType.TcpClient:     return (IOType.TcpClient);
+				case MKY.IO.Serial.Socket.SocketType.TcpServer:     return (IOType.TcpServer);
+				case MKY.IO.Serial.Socket.SocketType.TcpAutoSocket: return (IOType.TcpAutoSocket);
+				case MKY.IO.Serial.Socket.SocketType.Udp:           return (IOType.Udp);
 				default:                                                return (IOType.Unknown);
 			}
 		}
