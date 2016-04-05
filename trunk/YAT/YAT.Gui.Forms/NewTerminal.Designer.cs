@@ -37,17 +37,17 @@ namespace YAT.Gui.Forms
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal = new System.Windows.Forms.GroupBox();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.checkBox_StartTerminal = new System.Windows.Forms.CheckBox();
-			this.pictureBox_New = new System.Windows.Forms.PictureBox();
-			this.button_Help = new System.Windows.Forms.Button();
-			this.button_Defaults = new System.Windows.Forms.Button();
-			this.usbSerialHidDeviceSettings = new YAT.Gui.Controls.UsbSerialHidDeviceSettings();
-			this.usbSerialHidDeviceSelection = new YAT.Gui.Controls.UsbSerialHidDeviceSelection();
 			this.socketSettings = new YAT.Gui.Controls.SocketSettings();
 			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
 			this.serialPortSettings = new YAT.Gui.Controls.SerialPortSettings();
 			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
+			this.usbSerialHidDeviceSettings = new YAT.Gui.Controls.UsbSerialHidDeviceSettings();
+			this.usbSerialHidDeviceSelection = new YAT.Gui.Controls.UsbSerialHidDeviceSelection();
 			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
+			this.checkBox_StartTerminal = new System.Windows.Forms.CheckBox();
+			this.pictureBox_New = new System.Windows.Forms.PictureBox();
+			this.button_Help = new System.Windows.Forms.Button();
+			this.button_Defaults = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal.SuspendLayout();
 			this.groupBox_PortSettings.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_New)).BeginInit();
@@ -96,8 +96,8 @@ namespace YAT.Gui.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
 			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
 			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
+			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
 			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
@@ -106,6 +106,98 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings.TabIndex = 1;
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port Settings";
+			// 
+			// socketSettings
+			// 
+			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.socketSettings.Location = new System.Drawing.Point(6, 154);
+			this.socketSettings.Name = "socketSettings";
+			this.socketSettings.Size = new System.Drawing.Size(260, 169);
+			this.socketSettings.TabIndex = 3;
+			this.socketSettings.TcpClientAutoReconnect = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("socketSettings.TcpClientAutoReconnect")));
+			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
+			// 
+			// socketSelection
+			// 
+			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.socketSelection.Location = new System.Drawing.Point(6, 19);
+			this.socketSelection.Name = "socketSelection";
+			this.socketSelection.Size = new System.Drawing.Size(282, 133);
+			this.socketSelection.TabIndex = 1;
+			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
+			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
+			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
+			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
+			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
+			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
+			// 
+			// serialPortSettings
+			// 
+			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.serialPortSettings.AutoReopen = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("serialPortSettings.AutoReopen")));
+			this.serialPortSettings.Location = new System.Drawing.Point(6, 64);
+			this.serialPortSettings.Name = "serialPortSettings";
+			this.serialPortSettings.Size = new System.Drawing.Size(260, 259);
+			this.serialPortSettings.TabIndex = 2;
+			this.serialPortSettings.BaudRateChanged += new System.EventHandler(this.serialPortSettings_BaudRateChanged);
+			this.serialPortSettings.DataBitsChanged += new System.EventHandler(this.serialPortSettings_DataBitsChanged);
+			this.serialPortSettings.ParityChanged += new System.EventHandler(this.serialPortSettings_ParityChanged);
+			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
+			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
+			this.serialPortSettings.AutoReopenChanged += new System.EventHandler(this.serialPortSettings_AutoReopenChanged);
+			// 
+			// serialPortSelection
+			// 
+			this.serialPortSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.serialPortSelection.Location = new System.Drawing.Point(6, 19);
+			this.serialPortSelection.Name = "serialPortSelection";
+			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
+			this.serialPortSelection.Size = new System.Drawing.Size(285, 46);
+			this.serialPortSelection.TabIndex = 0;
+			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
+			// 
+			// usbSerialHidDeviceSettings
+			// 
+			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 65);
+			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
+			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 258);
+			this.usbSerialHidDeviceSettings.TabIndex = 4;
+			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
+			this.usbSerialHidDeviceSettings.RxIdUsageChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_RxIdUsageChanged);
+			this.usbSerialHidDeviceSettings.FlowControlChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_FlowControlChanged);
+			this.usbSerialHidDeviceSettings.AutoOpenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoOpenChanged);
+			// 
+			// usbSerialHidDeviceSelection
+			// 
+			this.usbSerialHidDeviceSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.usbSerialHidDeviceSelection.DeviceInfo = null;
+			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 19);
+			this.usbSerialHidDeviceSelection.Name = "usbSerialHidDeviceSelection";
+			this.usbSerialHidDeviceSelection.Size = new System.Drawing.Size(285, 46);
+			this.usbSerialHidDeviceSelection.TabIndex = 0;
+			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
+			// 
+			// terminalSelection
+			// 
+			this.terminalSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.terminalSelection.Location = new System.Drawing.Point(9, 19);
+			this.terminalSelection.Name = "terminalSelection";
+			this.terminalSelection.Size = new System.Drawing.Size(263, 54);
+			this.terminalSelection.TabIndex = 0;
+			this.terminalSelection.TerminalTypeChanged += new System.EventHandler(this.terminalSelection_TerminalTypeChanged);
+			this.terminalSelection.IOTypeChanged += new System.EventHandler(this.terminalSelection_IOTypeChanged);
 			// 
 			// checkBox_StartTerminal
 			// 
@@ -150,97 +242,6 @@ namespace YAT.Gui.Forms
 			this.button_Defaults.TabIndex = 41;
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
-			// 
-			// usbSerialHidDeviceSettings
-			// 
-			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 65);
-			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
-			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 258);
-			this.usbSerialHidDeviceSettings.TabIndex = 4;
-			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
-			this.usbSerialHidDeviceSettings.RxIdUsageChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_RxIdUsageChanged);
-			this.usbSerialHidDeviceSettings.FlowControlChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_FlowControlChanged);
-			this.usbSerialHidDeviceSettings.AutoOpenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoOpenChanged);
-			// 
-			// usbSerialHidDeviceSelection
-			// 
-			this.usbSerialHidDeviceSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.usbSerialHidDeviceSelection.DeviceInfo = null;
-			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 19);
-			this.usbSerialHidDeviceSelection.Name = "usbSerialHidDeviceSelection";
-			this.usbSerialHidDeviceSelection.Size = new System.Drawing.Size(285, 46);
-			this.usbSerialHidDeviceSelection.TabIndex = 0;
-			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
-			// 
-			// socketSettings
-			// 
-			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSettings.Location = new System.Drawing.Point(6, 146);
-			this.socketSettings.Name = "socketSettings";
-			this.socketSettings.Size = new System.Drawing.Size(260, 177);
-			this.socketSettings.TabIndex = 3;
-			this.socketSettings.TcpClientAutoReconnect = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("socketSettings.TcpClientAutoReconnect")));
-			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
-			// 
-			// socketSelection
-			// 
-			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSelection.Location = new System.Drawing.Point(6, 19);
-			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(282, 125);
-			this.socketSelection.TabIndex = 1;
-			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
-			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
-			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
-			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
-			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
-			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
-			// 
-			// serialPortSettings
-			// 
-			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.serialPortSettings.AutoReopen = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("serialPortSettings.AutoReopen")));
-			this.serialPortSettings.Location = new System.Drawing.Point(6, 64);
-			this.serialPortSettings.Name = "serialPortSettings";
-			this.serialPortSettings.Size = new System.Drawing.Size(260, 259);
-			this.serialPortSettings.TabIndex = 2;
-			this.serialPortSettings.BaudRateChanged += new System.EventHandler(this.serialPortSettings_BaudRateChanged);
-			this.serialPortSettings.DataBitsChanged += new System.EventHandler(this.serialPortSettings_DataBitsChanged);
-			this.serialPortSettings.ParityChanged += new System.EventHandler(this.serialPortSettings_ParityChanged);
-			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
-			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
-			this.serialPortSettings.AutoReopenChanged += new System.EventHandler(this.serialPortSettings_AutoReopenChanged);
-			// 
-			// serialPortSelection
-			// 
-			this.serialPortSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.serialPortSelection.Location = new System.Drawing.Point(6, 19);
-			this.serialPortSelection.Name = "serialPortSelection";
-			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
-			this.serialPortSelection.Size = new System.Drawing.Size(285, 46);
-			this.serialPortSelection.TabIndex = 0;
-			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
-			// 
-			// terminalSelection
-			// 
-			this.terminalSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.terminalSelection.Location = new System.Drawing.Point(9, 19);
-			this.terminalSelection.Name = "terminalSelection";
-			this.terminalSelection.Size = new System.Drawing.Size(263, 54);
-			this.terminalSelection.TabIndex = 0;
-			this.terminalSelection.TerminalTypeChanged += new System.EventHandler(this.terminalSelection_TerminalTypeChanged);
-			this.terminalSelection.IOTypeChanged += new System.EventHandler(this.terminalSelection_IOTypeChanged);
 			// 
 			// NewTerminal
 			// 

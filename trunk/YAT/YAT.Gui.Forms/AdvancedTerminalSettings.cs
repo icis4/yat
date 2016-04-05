@@ -715,7 +715,7 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
-			bool isSerialPort = (this.settingsInEdit.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = ((Domain.IOTypeEx)this.settingsInEdit.Terminal.IO.IOType).IsSerialPort;
 
 			this.isSettingControls.Enter();
 

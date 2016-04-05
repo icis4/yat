@@ -749,7 +749,30 @@ namespace YAT.Model
 							break;
 						}
 
-						case Domain.IOType.Udp:
+						case Domain.IOType.UdpClient:
+						{
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append(" - ");
+							sb.Append(IPHost.ToUrlString(s.ResolvedRemoteIPAddress));
+							sb.Append(":");
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(" - ");
+							sb.Append(IsOpen ? "Open" : "Closed");
+							break;
+						}
+
+						case Domain.IOType.UdpServer:
+						{
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append(" - ");
+							sb.Append("Receive:");
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(" - ");
+							sb.Append(IsOpen ? "Open" : "Closed");
+							break;
+						}
+
+						case Domain.IOType.UdpSocket:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
@@ -841,7 +864,7 @@ namespace YAT.Model
 						case Domain.IOType.TcpClient:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP Client is ");
+							sb.Append("TCP/IP client is ");
 
 							if (IsConnected)
 								sb.Append("connected to ");
@@ -859,7 +882,7 @@ namespace YAT.Model
 						case Domain.IOType.TcpServer:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP Server is ");
+							sb.Append("TCP/IP server is ");
 							if (IsStarted)
 							{
 								if (IsConnected)
@@ -897,7 +920,7 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpAutoSocket:
 						{
-							sb.Append("TCP auto socket is ");
+							sb.Append("TCP/IP AutoSocket is ");
 
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							if (IsStarted)
@@ -943,10 +966,32 @@ namespace YAT.Model
 							break;
 						}
 
-						case Domain.IOType.Udp:
+						case Domain.IOType.UdpClient:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("UDP socket is ");
+							sb.Append("UDP/IP client is ");
+							sb.Append(IsOpen ? "open" : "closed");
+							sb.Append(" for sending to ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(" on remote port ");
+							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							break;
+						}
+
+						case Domain.IOType.UdpServer:
+						{
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("UDP/IP server is ");
+							sb.Append(IsOpen ? "open" : "closed");
+							sb.Append(" for receiving on local port ");
+							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							break;
+						}
+
+						case Domain.IOType.UdpSocket:
+						{
+							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("UDP/IP socket is ");
 							sb.Append(IsOpen ? "open" : "closed");
 							sb.Append(" for sending to ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
@@ -2168,7 +2213,9 @@ namespace YAT.Model
 					case Domain.IOType.TcpClient:
 					case Domain.IOType.TcpServer:
 					case Domain.IOType.TcpAutoSocket:
-					case Domain.IOType.Udp:
+					case Domain.IOType.UdpClient:
+					case Domain.IOType.UdpServer:
+					case Domain.IOType.UdpSocket:
 					{
 						yatTitle = ApplicationEx.ProductName + " hint:";
 						yatText  = "Make sure the selected socket is not already in use.";
@@ -2369,7 +2416,9 @@ namespace YAT.Model
 				case Domain.IOType.TcpClient:
 				case Domain.IOType.TcpServer:
 				case Domain.IOType.TcpAutoSocket:
-				case Domain.IOType.Udp:
+				case Domain.IOType.UdpClient:
+				case Domain.IOType.UdpServer:
+				case Domain.IOType.UdpSocket:
 					textBuilder.Append("socket");
 					titleBuilder.Append("Socket");
 					break;

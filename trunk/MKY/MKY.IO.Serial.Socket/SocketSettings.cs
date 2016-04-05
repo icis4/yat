@@ -63,6 +63,12 @@ namespace MKY.IO.Serial.Socket
 		public static readonly IPAddress DefaultResolvedLocalIPAddress = IPAddress.Any;
 
 		/// <summary></summary>
+		public static readonly IPAddressFilter DefaultLocalFilter = new IPAddressFilter(IPAddressFilterType.Any);
+
+		/// <summary></summary>
+		public static readonly IPAddress DefaultResolvedLocalIPAddressFilter = IPAddress.Any;
+
+		/// <summary></summary>
 		public const int DefaultPort = 10000;
 
 		/// <summary></summary>
@@ -107,6 +113,8 @@ namespace MKY.IO.Serial.Socket
 
 		private string localInterface;
 		private IPAddress resolvedLocalIPAddress;
+		private string localFilter;
+		private IPAddress resolvedLocalIPAddressFilter;
 		private int localTcpPort;
 		private int localUdpPort;
 
@@ -131,17 +139,18 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, string localInterface, int localTcpPort, int localUdpPort, AutoRetry tcpClientAutoReconnect)
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, string localInterface, string localIPAddressFilter, int localTcpPort, int localUdpPort, AutoRetry tcpClientAutoReconnect)
 		{
-			Type                   = type;
+			Type           = type;
 
-			RemoteHost             = remoteHost;
-			RemoteTcpPort          = remoteTcpPort;
-			RemoteUdpPort          = remoteUdpPort;
+			RemoteHost     = remoteHost;
+			RemoteTcpPort  = remoteTcpPort;
+			RemoteUdpPort  = remoteUdpPort;
 
-			LocalInterface         = localInterface;
-			LocalTcpPort           = localTcpPort;
-			LocalUdpPort           = localUdpPort;
+			LocalInterface = localInterface;
+			LocalFilter    = localFilter;
+			LocalTcpPort   = localTcpPort;
+			LocalUdpPort   = localUdpPort;
 
 			TcpClientAutoReconnect = tcpClientAutoReconnect;
 
@@ -166,15 +175,16 @@ namespace MKY.IO.Serial.Socket
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			Type                   = rhs.Type;
+			Type           = rhs.Type;
 
-			RemoteHost             = rhs.RemoteHost;
-			RemoteTcpPort          = rhs.RemoteTcpPort;
-			RemoteUdpPort          = rhs.RemoteUdpPort;
+			RemoteHost     = rhs.RemoteHost;
+			RemoteTcpPort  = rhs.RemoteTcpPort;
+			RemoteUdpPort  = rhs.RemoteUdpPort;
 
-			LocalInterface         = rhs.LocalInterface;
-			LocalTcpPort           = rhs.LocalTcpPort;
-			LocalUdpPort           = rhs.LocalUdpPort;
+			LocalInterface = rhs.LocalInterface;
+			LocalFilter    = rhs.LocalFilter;
+			LocalTcpPort   = rhs.LocalTcpPort;
+			LocalUdpPort   = rhs.LocalUdpPort;
 
 			TcpClientAutoReconnect = rhs.TcpClientAutoReconnect;
 
@@ -188,15 +198,16 @@ namespace MKY.IO.Serial.Socket
 		{
 			base.SetMyDefaults();
 
-			Type                   = SocketType.TcpAutoSocket;
+			Type           = SocketType.TcpAutoSocket;
 
-			RemoteHost             = DefaultRemoteHost;
-			RemoteTcpPort          = DefaultRemoteTcpPort;
-			RemoteUdpPort          = DefaultRemoteUdpPort;
+			RemoteHost     = DefaultRemoteHost;
+			RemoteTcpPort  = DefaultRemoteTcpPort;
+			RemoteUdpPort  = DefaultRemoteUdpPort;
 
-			LocalInterface         = DefaultLocalInterface;
-			LocalTcpPort           = DefaultLocalTcpPort;
-			LocalUdpPort           = DefaultLocalUdpPort;
+			LocalInterface = DefaultLocalInterface;
+			LocalFilter    = DefaultLocalFilter;
+			LocalTcpPort   = DefaultLocalTcpPort;
+			LocalUdpPort   = DefaultLocalUdpPort;
 
 			TcpClientAutoReconnect = new AutoRetry(false, 500);
 		}
@@ -268,7 +279,9 @@ namespace MKY.IO.Serial.Socket
 					case SocketType.TcpAutoSocket:
 						return (RemoteTcpPort);
 
-					case SocketType.Udp:
+					case SocketType.UdpClient:
+					case SocketType.UdpServer:
+					case SocketType.UdpSocket:
 						return (RemoteUdpPort);
 
 					default:
@@ -285,9 +298,14 @@ namespace MKY.IO.Serial.Socket
 						RemoteTcpPort = value;
 						break;
 
-					case SocketType.Udp:
+					case SocketType.UdpClient:
+					case SocketType.UdpServer:
+					case SocketType.UdpSocket:
 						RemoteUdpPort = value;
 						break;
+
+					default:
+						break; // Do nothing.
 				}
 			}
 		}
@@ -354,6 +372,38 @@ namespace MKY.IO.Serial.Socket
 			get { return (this.resolvedLocalIPAddress); }
 		}
 
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		[XmlElement("LocalFilter")]
+		public virtual string LocalFilter
+		{
+			get { return (this.localFilter); }
+			set
+			{
+				if (this.localFilter != value)
+				{
+					this.localFilter = value;
+					SetChanged();
+
+					// Immediately try to resolve the corresponding remote IP address.
+					IPAddress ipAddress;
+					if (IPResolver.TryResolveRemoteHost(this.localFilter, out ipAddress))
+						this.resolvedLocalIPAddressFilter = ipAddress;
+					else
+						this.resolvedLocalIPAddressFilter = DefaultResolvedLocalIPAddressFilter;
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual IPAddress ResolvedLocalIPAddressFilter
+		{
+			get { return (this.resolvedLocalIPAddressFilter); }
+		}
+
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual int LocalPort
@@ -367,7 +417,9 @@ namespace MKY.IO.Serial.Socket
 					case SocketType.TcpAutoSocket:
 						return (LocalTcpPort);
 
-					case SocketType.Udp:
+					case SocketType.UdpClient:
+					case SocketType.UdpServer:
+					case SocketType.UdpSocket:
 						return (LocalUdpPort);
 
 					default:
@@ -384,9 +436,14 @@ namespace MKY.IO.Serial.Socket
 						LocalTcpPort = value;
 						break;
 
-					case SocketType.Udp:
+					case SocketType.UdpClient:
+					case SocketType.UdpServer:
+					case SocketType.UdpSocket:
 						LocalUdpPort = value;
 						break;
+
+					default:
+						break; // Do nothing.
 				}
 			}
 		}
@@ -468,6 +525,7 @@ namespace MKY.IO.Serial.Socket
 				(RemoteTcpPort                                == other.RemoteTcpPort) &&
 				(RemoteUdpPort                                == other.RemoteUdpPort) &&
 				StringEx.EqualsOrdinalIgnoreCase(LocalInterface, other.LocalInterface) &&
+				StringEx.EqualsOrdinalIgnoreCase(LocalFilter,    other.LocalFilter) &&
 				(LocalTcpPort                                 == other.LocalTcpPort) &&
 				(LocalUdpPort                                 == other.LocalUdpPort) &&
 				(TcpClientAutoReconnect                       == other.TcpClientAutoReconnect)
@@ -492,6 +550,7 @@ namespace MKY.IO.Serial.Socket
 				this.remoteTcpPort         .GetHashCode() ^
 				this.remoteUdpPort         .GetHashCode() ^
 				this.localInterface        .GetHashCode() ^
+				this.localFilter           .GetHashCode() ^
 				this.localTcpPort          .GetHashCode() ^
 				this.localUdpPort          .GetHashCode() ^
 				this.tcpClientAutoReconnect.GetHashCode()
@@ -508,6 +567,7 @@ namespace MKY.IO.Serial.Socket
 				this.remoteTcpPort          + ", " +
 				this.remoteUdpPort          + ", " +
 				this.localInterface         + ", " +
+				this.localFilter            + ", " +
 				this.localTcpPort           + ", " +
 				this.localUdpPort           + ", " +
 				this.tcpClientAutoReconnect
@@ -539,7 +599,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			string delimiters = "/,;";
 			string[] sa = s.Trim().Split(delimiters.ToCharArray());
-			if (sa.Length == 5)
+			if (sa.Length == 10)
 			{
 				SocketType socketType;
 				if (SocketTypeEx.TryParse(sa[0], out socketType))
@@ -553,21 +613,22 @@ namespace MKY.IO.Serial.Socket
 						if (int.TryParse(sa[3], out remoteUdpPort))
 						{
 							string localInterface = sa[4].Trim();
+							string localIPAddressFilter = sa[5].Trim();
 
 							int localTcpPort;
-							if (int.TryParse(sa[5], out localTcpPort))
+							if (int.TryParse(sa[6], out localTcpPort))
 							{
 								int localUdpPort;
-								if (int.TryParse(sa[6], out localUdpPort))
+								if (int.TryParse(sa[7], out localUdpPort))
 								{
 									bool arEnabled;
-									if (bool.TryParse(sa[7], out arEnabled))
+									if (bool.TryParse(sa[8], out arEnabled))
 									{
 										int arInterval;
-										if (int.TryParse(sa[8], out arInterval))
+										if (int.TryParse(sa[9], out arInterval))
 										{
 											AutoRetry ar = new AutoRetry(arEnabled, arInterval);
-											settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localTcpPort, localUdpPort, ar);
+											settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localIPAddressFilter, localTcpPort, localUdpPort, ar);
 											return (true);
 										}
 									}
@@ -594,9 +655,11 @@ namespace MKY.IO.Serial.Socket
 			switch (type)
 			{
 				case SocketType.TcpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort.ToString(CultureInfo.InvariantCulture)                                  );
+				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
 				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketType.Udp:           return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
+				case SocketType.UdpSocket:     return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}

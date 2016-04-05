@@ -70,8 +70,10 @@ namespace YAT
 		{
 			ProductNameLong + ".",
 			"Engineering, testing and debugging of serial communications.",
-			"Supports RS-232/422/423/485...",
-			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
+			"Supports RS-232/422/423/485 as well as...",
+			"...TCP/IP Client/Server/AutoSocket,...",
+			"...UDP/IP Client/Server/Socket and...",
+			"...USB Ser/HID.",
 			"",
 			"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",
 			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",

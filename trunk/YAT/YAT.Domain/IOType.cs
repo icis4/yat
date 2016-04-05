@@ -45,7 +45,9 @@ namespace YAT.Domain
 		TcpClient,
 		TcpServer,
 		TcpAutoSocket,
-		Udp,
+		UdpClient,
+		UdpServer,
+		UdpSocket,
 		UsbSerialHid,
 	}
 
@@ -80,8 +82,14 @@ namespace YAT.Domain
 		private const string TcpAutoSocket_string      = "TCP/IP AutoSocket";
 		private const string TcpAutoSocket_stringShort = "TCPAutoSocket";
 
-		private const string Udp_string                = "UDP/IP Socket";
-		private const string Udp_stringShort           = "UDP";
+		private const string UdpClient_string          = "UDP/IP Client";
+		private const string UdpClient_stringShort     = "UDPClient";
+
+		private const string UdpServer_string          = "UDP/IP Server";
+		private const string UdpServer_stringShort     = "UDPServer";
+
+		private const string UdpSocket_string          = "UDP/IP Socket";
+		private const string UdpSocket_stringShort     = "UDPSocket";
 
 		private const string UsbSerialHid_string       = "USB Ser/HID";
 		private const string UsbSerialHid_stringShort  = "USBSerHID";
@@ -100,6 +108,58 @@ namespace YAT.Domain
 		{
 		}
 
+		#region Properties
+
+		/// <summary></summary>
+		public virtual bool IsSerialPort
+		{
+			get { return ((IOType)UnderlyingEnum == IOType.SerialPort); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsSocket
+		{
+			get { return (IsTcpSocket || IsUdpSocket); }
+		}
+
+		/// <summary></summary>
+		public virtual bool IsTcpSocket
+		{
+			get
+			{
+				switch ((IOType)UnderlyingEnum)
+				{
+					case IOType.TcpClient:     return (true);
+					case IOType.TcpServer:     return (true);
+					case IOType.TcpAutoSocket: return (true);
+					default:                   return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsUdpSocket
+		{
+			get
+			{
+				switch ((IOType)UnderlyingEnum)
+				{
+					case IOType.UdpClient: return (true);
+					case IOType.UdpServer: return (true);
+					case IOType.UdpSocket: return (true);
+					default:               return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsUsbSerialHid
+		{
+			get { return ((IOType)UnderlyingEnum == IOType.UsbSerialHid); }
+		}
+
+		#endregion
+
 		#region ToString
 
 		/// <summary></summary>
@@ -111,7 +171,9 @@ namespace YAT.Domain
 				case IOType.TcpClient:     return (TcpClient_string);
 				case IOType.TcpServer:     return (TcpServer_string);
 				case IOType.TcpAutoSocket: return (TcpAutoSocket_string);
-				case IOType.Udp:           return (Udp_string);
+				case IOType.UdpClient:     return (UdpClient_string);
+				case IOType.UdpServer:     return (UdpServer_string);
+				case IOType.UdpSocket:     return (UdpSocket_string);
 				case IOType.UsbSerialHid:  return (UsbSerialHid_string);
 				default:                   return (Unknown_string);
 			}
@@ -131,7 +193,9 @@ namespace YAT.Domain
 			a.Add(new IOTypeEx(IOType.TcpClient));
 			a.Add(new IOTypeEx(IOType.TcpServer));
 			a.Add(new IOTypeEx(IOType.TcpAutoSocket));
-			a.Add(new IOTypeEx(IOType.Udp));
+			a.Add(new IOTypeEx(IOType.UdpClient));
+			a.Add(new IOTypeEx(IOType.UdpServer));
+			a.Add(new IOTypeEx(IOType.UdpSocket));
 			a.Add(new IOTypeEx(IOType.UsbSerialHid));
 			return (a.ToArray());
 		}
@@ -201,10 +265,22 @@ namespace YAT.Domain
 				result = IOType.TcpAutoSocket;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Udp_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpClient_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, UdpClient_stringShort))
 			{
-				result = IOType.Udp;
+				result = IOType.UdpClient;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpServer_string) ||
+					 StringEx.EqualsOrdinalIgnoreCase(s, UdpServer_stringShort))
+			{
+				result = IOType.UdpServer;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpSocket_string) ||
+					 StringEx.EqualsOrdinalIgnoreCase(s, UdpSocket_stringShort))
+			{
+				result = IOType.UdpSocket;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, UsbSerialHid_string) ||
@@ -268,7 +344,9 @@ namespace YAT.Domain
 				case IOType.TcpClient:     return (MKY.IO.Serial.Socket.SocketType.TcpClient);
 				case IOType.TcpServer:     return (MKY.IO.Serial.Socket.SocketType.TcpServer);
 				case IOType.TcpAutoSocket: return (MKY.IO.Serial.Socket.SocketType.TcpAutoSocket);
-				case IOType.Udp:           return (MKY.IO.Serial.Socket.SocketType.Udp);
+				case IOType.UdpClient:     return (MKY.IO.Serial.Socket.SocketType.UdpClient);
+				case IOType.UdpServer:     return (MKY.IO.Serial.Socket.SocketType.UdpServer);
+				case IOType.UdpSocket:     return (MKY.IO.Serial.Socket.SocketType.UdpSocket);
 				default:                   return (MKY.IO.Serial.Socket.SocketType.Unknown);
 			}
 		}
@@ -281,8 +359,10 @@ namespace YAT.Domain
 				case MKY.IO.Serial.Socket.SocketType.TcpClient:     return (IOType.TcpClient);
 				case MKY.IO.Serial.Socket.SocketType.TcpServer:     return (IOType.TcpServer);
 				case MKY.IO.Serial.Socket.SocketType.TcpAutoSocket: return (IOType.TcpAutoSocket);
-				case MKY.IO.Serial.Socket.SocketType.Udp:           return (IOType.Udp);
-				default:                                                return (IOType.Unknown);
+				case MKY.IO.Serial.Socket.SocketType.UdpClient:     return (IOType.UdpClient);
+				case MKY.IO.Serial.Socket.SocketType.UdpServer:     return (IOType.UdpServer);
+				case MKY.IO.Serial.Socket.SocketType.UdpSocket:     return (IOType.UdpSocket);
+				default:                                            return (IOType.Unknown);
 			}
 		}
 

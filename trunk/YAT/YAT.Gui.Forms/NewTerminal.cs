@@ -224,6 +224,11 @@ namespace YAT.Gui.Forms
 			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
 
+		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.SocketLocalFilter = socketSelection.LocalFilter;
+		}
+
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
 			this.newTerminalSettingsInEdit.SocketLocalTcpPort = socketSelection.LocalTcpPort;
@@ -314,6 +319,7 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.Socket.RemoteTcpPort                 = this.newTerminalSettings.SocketRemoteTcpPort;
 			this.terminalSettings.Terminal.IO.Socket.RemoteUdpPort                 = this.newTerminalSettings.SocketRemoteUdpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalInterface                = this.newTerminalSettings.SocketLocalInterface;
+			this.terminalSettings.Terminal.IO.Socket.LocalFilter                   = this.newTerminalSettings.SocketLocalFilter;
 			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort                  = this.newTerminalSettings.SocketLocalTcpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort                  = this.newTerminalSettings.SocketLocalUdpPort;
 			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect        = this.newTerminalSettings.TcpClientAutoReconnect;
@@ -394,12 +400,13 @@ namespace YAT.Gui.Forms
 			// Set visible/invisible before accessing the other settings, to ensure that the correct
 			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
 
-			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
-			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
-			bool isSocket       = (!isSerialPort && !isUsbSerialHid);
+			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort ;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+			bool isTcpSocket    = ((Domain.IOTypeEx)ioType).IsTcpSocket;
 
 			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isSocket;
+			socketSettings.Visible  = isTcpSocket;
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
 			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
@@ -415,6 +422,7 @@ namespace YAT.Gui.Forms
 			socketSelection.RemoteTcpPort  = this.newTerminalSettingsInEdit.SocketRemoteTcpPort;
 			socketSelection.RemoteUdpPort  = this.newTerminalSettingsInEdit.SocketRemoteUdpPort;
 			socketSelection.LocalInterface = this.newTerminalSettingsInEdit.SocketLocalInterface;
+			socketSelection.LocalFilter    = this.newTerminalSettingsInEdit.SocketLocalFilter;
 			socketSelection.LocalTcpPort   = this.newTerminalSettingsInEdit.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = this.newTerminalSettingsInEdit.SocketLocalUdpPort;
 
@@ -439,15 +447,18 @@ namespace YAT.Gui.Forms
 
 			checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
 
-			// Trigger refresh of ports/devices if selection of I/O type has changed.
-			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
+			// Trigger refresh of ports/devices if selection of I/O type has changed:
+			bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
+			bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
+
+			if      (isSerialPort   && !wasSerialPort)
 				serialPortSelection.RefreshSerialPortList();
-			else if ((ioType == Domain.IOType.UsbSerialHid) && (this.SetControls_ioTypeOld != Domain.IOType.UsbSerialHid))
+			else if (isUsbSerialHid && !wasUsbSerialHid)
 				usbSerialHidDeviceSelection.RefreshDeviceList();
 
 			this.SetControls_ioTypeOld = ioType;
 
-			// Finally, enable OK button if port/device is valid.
+			// Finally, enable OK button if port/device is valid:
 			bool isValid = true;
 			switch (ioType)
 			{

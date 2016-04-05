@@ -716,7 +716,9 @@ namespace YAT.Model
 			else if ((finalIOType == Domain.IOType.TcpClient) ||
 					 (finalIOType == Domain.IOType.TcpServer) ||
 					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-					 (finalIOType == Domain.IOType.Udp))
+					 (finalIOType == Domain.IOType.UdpClient) ||
+					 (finalIOType == Domain.IOType.UdpServer) ||
+					 (finalIOType == Domain.IOType.UdpSocket))
 			{
 				if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
 				{
@@ -728,7 +730,8 @@ namespace YAT.Model
 				}
 				if (((finalIOType == Domain.IOType.TcpClient) ||
 					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-					 (finalIOType == Domain.IOType.Udp)) &&
+					 (finalIOType == Domain.IOType.UdpClient) ||
+					 (finalIOType == Domain.IOType.UdpSocket)) &&
 					this.commandLineArgs.OptionIsGiven("RemotePort"))
 				{
 					if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
@@ -736,7 +739,10 @@ namespace YAT.Model
 					else
 						return (false);
 				}
-				if (this.commandLineArgs.OptionIsGiven("LocalInterface"))
+				if (((finalIOType == Domain.IOType.TcpClient) || 
+					 (finalIOType == Domain.IOType.TcpServer) ||
+					 (finalIOType == Domain.IOType.TcpAutoSocket)) &&
+					this.commandLineArgs.OptionIsGiven("LocalInterface"))
 				{
 					MKY.Net.IPNetworkInterface localInterface;
 					if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
@@ -744,9 +750,20 @@ namespace YAT.Model
 					else
 						return (false);
 				}
+				if (((finalIOType == Domain.IOType.UdpServer) ||
+					 (finalIOType == Domain.IOType.UdpSocket)) &&
+					this.commandLineArgs.OptionIsGiven("LocalFilter"))
+				{
+					MKY.Net.IPAddressFilter localFilter;
+					if (MKY.Net.IPAddressFilter.TryParse(this.commandLineArgs.LocalFilter, out localFilter))
+						terminalSettings.IO.Socket.LocalFilter = localFilter;
+					else
+						return (false);
+				}
 				if (((finalIOType == Domain.IOType.TcpServer) ||
 					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
-					 (finalIOType == Domain.IOType.Udp)) &&
+					 (finalIOType == Domain.IOType.UdpServer) ||
+					 (finalIOType == Domain.IOType.UdpSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalPort"))
 				{
 					if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
@@ -856,6 +873,7 @@ namespace YAT.Model
 			terminalSettings.IO.Socket.RemoteTcpPort            = newTerminalSettings.SocketRemoteTcpPort;
 			terminalSettings.IO.Socket.RemoteUdpPort            = newTerminalSettings.SocketRemoteUdpPort;
 			terminalSettings.IO.Socket.LocalInterface           = newTerminalSettings.SocketLocalInterface;
+			terminalSettings.IO.Socket.LocalFilter              = newTerminalSettings.SocketLocalFilter;
 			terminalSettings.IO.Socket.LocalTcpPort             = newTerminalSettings.SocketLocalTcpPort;
 			terminalSettings.IO.Socket.LocalUdpPort             = newTerminalSettings.SocketLocalUdpPort;
 			terminalSettings.IO.Socket.TcpClientAutoReconnect   = newTerminalSettings.TcpClientAutoReconnect;
@@ -882,6 +900,7 @@ namespace YAT.Model
 				newTerminalSettings.SocketRemoteTcpPort      = terminalSettings.IO.Socket.RemoteTcpPort;
 				newTerminalSettings.SocketRemoteUdpPort      = terminalSettings.IO.Socket.RemoteUdpPort;
 				newTerminalSettings.SocketLocalInterface     = terminalSettings.IO.Socket.LocalInterface;
+				newTerminalSettings.SocketLocalFilter        = terminalSettings.IO.Socket.LocalFilter;
 				newTerminalSettings.SocketLocalTcpPort       = terminalSettings.IO.Socket.LocalTcpPort;
 				newTerminalSettings.SocketLocalUdpPort       = terminalSettings.IO.Socket.LocalUdpPort;
 				newTerminalSettings.TcpClientAutoReconnect   = terminalSettings.IO.Socket.TcpClientAutoReconnect;

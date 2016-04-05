@@ -52,13 +52,14 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketType DefaultSocketType                     = SocketType.TcpAutoSocket;
+		private const SocketType DefaultSocketType                       = SocketType.TcpAutoSocket;
 
 		private static readonly IPHost DefaultRemoteHost                 = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
 		private const int DefaultRemoteTcpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
 		private const int DefaultRemoteUdpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
 
 		private static readonly IPNetworkInterface DefaultLocalInterface = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+		private static readonly IPAddressFilter DefaultLocalFilter       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
 		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
 		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
 
@@ -84,6 +85,7 @@ namespace YAT.Gui.Controls
 		private int remoteUdpPort                 = DefaultRemoteUdpPort;
 
 		private IPNetworkInterface localInterface = DefaultLocalInterface;
+		private IPAddressFilter localFilter       = DefaultLocalFilter;
 		private int localTcpPort                  = DefaultLocalTcpPort;
 		private int localUdpPort                  = DefaultLocalUdpPort;
 
@@ -113,6 +115,11 @@ namespace YAT.Gui.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the LocalInterface property is changed.")]
 		public event EventHandler LocalInterfaceChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the LocalFilter property is changed.")]
+		public event EventHandler LocalFilterChanged;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -234,6 +241,24 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual IPAddressFilter LocalFilter
+		{
+			get { return (this.localFilter); }
+			set
+			{
+				if ((this.localFilter != value) ||
+					(value.IPAddress == IPAddress.Any)) // Always SetControls() to be able to
+				{                                       //   deal with the different types of
+					this.localFilter = value;           //   any.
+					SetControls();
+					OnLocalFilterChanged(EventArgs.Empty);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local TCP port.")]
 		[DefaultValue(DefaultLocalTcpPort)]
@@ -322,8 +347,6 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
@@ -334,7 +357,8 @@ namespace YAT.Gui.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHost);
-				if ((remoteHost != null) && (remoteHost.IPAddress != IPAddress.None) && StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
+				if ((remoteHost != null) && (remoteHost.IPAddress != IPAddress.None) &&
+					StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = remoteHost;
 				}
@@ -362,6 +386,45 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void comboBox_LocalFilter_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				// \attention:
+				// Do not assume that the selected item maches the actual text in the box
+				//   because SelectedItem is also set if text has changed in the meantime.
+
+				var localFilter = (comboBox_LocalFilter.SelectedItem as IPAddressFilter);
+				if ((localFilter != null) && (localFilter.IPAddress != IPAddress.None) &&
+					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
+				{
+					LocalFilter = localFilter;
+				}
+				else
+				{
+					IPAddress ipAddress;
+					if (IPResolver.TryResolveRemoteHost(comboBox_LocalFilter.Text, out ipAddress))
+					{
+						LocalFilter = new IPAddressFilter(ipAddress);
+					}
+					else
+					{
+						MessageBoxEx.Show
+						(
+							this,
+							"Address filter is invalid!",
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+						);
+
+						e.Cancel = true;
+					}
+				}
+			}
+		}
+
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
@@ -370,33 +433,52 @@ namespace YAT.Gui.Controls
 			{
 				int port;
 				if (int.TryParse(textBox_RemotePort.Text, out port) &&
-					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
+					(port >= IPEndPoint.MinPort) && (port <= IPEndPoint.MaxPort))
 				{
 					if ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket))
 					{
 						RemoteTcpPort = port;
 
-						// Also set the local port to same number:
-						//  > For Client: Makes it easier setting the server settings for a same connection.
-						//  > For AutoSocket: Typically same port for client and server.
+						// Also set the local port:
+						//  > For client:     Same port, makes it easier setting the server settings for a same connection.
+						//  > For AutoSocket: Typically using same port for client and server.
 						LocalTcpPort = port;
 					}
-					else if (this.socketType == SocketType.Udp)
+					else if ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpSocket))
 					{
 						RemoteUdpPort = port;
 
-						if (port < System.Net.IPEndPoint.MaxPort)
-							LocalUdpPort = port + 1;
+						// Also set the local port:
+						//  > For client: Same port, makes it easier setting the server settings for a same connection.
+						//  > For socket:
+						//     > On local host, typically using adjecent ports for client and server.
+						//     > On remote host, typically using same port for client and server.
+						if (this.socketType == SocketType.UdpClient)
+						{
+							LocalUdpPort = port;
+						}
 						else
-							LocalUdpPort = System.Net.IPEndPoint.MaxPort - 1;
+						{
+							if (RemoteHost.IsLocalHost)
+							{
+								if (port < IPEndPoint.MaxPort)
+									LocalUdpPort = port + 1;
+								else
+									LocalUdpPort = IPEndPoint.MaxPort - 1;
+							}
+							else
+							{
+								LocalUdpPort = port;
+							}
+						}
 					}
 				}
 				else
 				{
 					string message =
 						"Remote port is invalid, valid values are numbers from " +
-						System.Net.IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
-						System.Net.IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
+						IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture) + " to " +
+						IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture) + "."; // 'InvariantCulture' for TCP and UDP ports!
 
 					MessageBoxEx.Show
 					(
@@ -437,14 +519,33 @@ namespace YAT.Gui.Controls
 					{
 						LocalTcpPort = port;
 
-						// Also set the remote port to same number:
-						//  > For Server: Makes it easier setting the client settings for a same connection.
+						// Also set the remote port:
+						//  > For server: Same port, makes it easier setting the client settings for a same connection.
 						if (this.socketType == SocketType.TcpServer)
 							RemoteTcpPort = port;
 					}
-					else if (this.socketType == SocketType.Udp)
+					else if ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpSocket))
 					{
 						LocalUdpPort = port;
+
+						// Also set the remote port:
+						//  > For server:
+						//     > On local host, typically using adjecent ports for client and server.
+						//     > On remote host, typically using same port for client and server.
+						if (this.socketType == SocketType.UdpServer)
+						{
+							if (RemoteHost.IsLocalHost)
+							{
+								if (port > IPEndPoint.MinPort)
+									RemoteUdpPort = port - 1;
+								else
+									RemoteUdpPort = IPEndPoint.MinPort + 1;
+							}
+							else
+							{
+								RemoteUdpPort = port;
+							}
+						}
 					}
 				}
 				else
@@ -479,9 +580,13 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			// Remote host.
+			// Remote host:
 			comboBox_RemoteHost.Items.Clear();
 			comboBox_RemoteHost.Items.AddRange(IPHost.GetItems());
+
+			// Local filter:
+			comboBox_LocalFilter.Items.Clear();
+			comboBox_LocalFilter.Items.AddRange(IPAddressFilter.GetItems());
 
 			this.isSettingControls.Leave();
 		}
@@ -583,8 +688,10 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			// Remote host address.
-			if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) || (this.socketType == SocketType.Udp)))
+			// Remote host address:
+			if (!DesignMode && Enabled &&
+				((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket) ||
+				 (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpSocket)))
 			{
 				comboBox_RemoteHost.Enabled = true;
 				if (comboBox_RemoteHost.Items.Count > 0)
@@ -622,19 +729,19 @@ namespace YAT.Gui.Controls
 				comboBox_RemoteHost.Text = "";
 			}
 
-			// Remote port label.
-			if (Enabled && (this.socketType == SocketType.Udp))
+			// Remote port label:
+			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
 				label_RemotePort.Text = "Remote UDP port:";
 			else
 				label_RemotePort.Text = "Remote TCP port:";
 
-			// Remote port.
+			// Remote port:
 			if (!DesignMode && Enabled && ((this.socketType == SocketType.TcpClient) || (this.socketType == SocketType.TcpAutoSocket)))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
-			else if (!DesignMode && Enabled && (this.socketType == SocketType.Udp))
+			else if (!DesignMode && Enabled && (this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpSocket))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
@@ -645,32 +752,90 @@ namespace YAT.Gui.Controls
 				textBox_RemotePort.Text = "";
 			}
 
-			// Local interface.
-			if (!DesignMode && Enabled && (this.socketType != SocketType.Unknown) && (comboBox_LocalInterface.Items.Count > 0))
+			// Local interface/filter label:
+			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
+				label_LocalAddress.Text = "Local &Filter:";
+			else
+				label_LocalAddress.Text = "Local &Interface:";
+
+			// Local interface:
+			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsTcp)
 			{
-				if (this.localInterface != null)
-					comboBox_LocalInterface.SelectedItem = this.localInterface;
+				comboBox_LocalInterface.Enabled = true;
+				if (comboBox_LocalInterface.Items.Count > 0)
+				{
+					if (this.localInterface != null)
+						comboBox_LocalInterface.SelectedItem = this.localInterface;
+					else
+						comboBox_LocalInterface.SelectedItem = (IPNetworkInterface)IPNetworkInterfaceType.Any;
+				}
 				else
-					comboBox_LocalInterface.SelectedItem = (IPNetworkInterface)IPNetworkInterfaceType.Any;
+				{
+					comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
+				}
+
+				button_RefreshLocalInterfaces.Enabled = true;
 			}
 			else
 			{
+				comboBox_LocalInterface.Enabled = false;
 				comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
+
+				button_RefreshLocalInterfaces.Enabled = false;
 			}
 
-			// Local port label.
-			if (Enabled && (this.socketType == SocketType.Udp))
+			// Local filter:
+			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
+			{
+				comboBox_LocalFilter.Enabled = true;
+				if (comboBox_LocalFilter.Items.Count > 0)
+				{
+					if (this.localFilter != null)
+					{
+						if (comboBox_LocalFilter.Items.Contains(this.localFilter))
+						{	// Applies if an item of the combo box is selected.
+							comboBox_LocalFilter.SelectedItem = this.localFilter;
+						}
+						else
+						{	// Applies if an item that is not in the combo box is selected.
+							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+							comboBox_LocalFilter.Text = this.localFilter;
+						}
+					}
+					else
+					{	// Item doesn't exist, use default = first item in the combo box.
+						comboBox_LocalFilter.SelectedIndex = 0;
+					}
+				}
+				else
+				{
+					comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+					if (this.localFilter != null)
+						comboBox_LocalFilter.Text = this.localFilter;
+					else
+						comboBox_LocalFilter.Text = "";
+				}
+			}
+			else
+			{
+				comboBox_LocalFilter.Enabled = false;
+				comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+				comboBox_LocalFilter.Text = "";
+			}
+
+			// Local port label:
+			if (Enabled && ((SocketTypeEx)this.socketType).IsUdp)
 				label_LocalPort.Text = "Local UDP port:";
 			else
 				label_LocalPort.Text = "Local TCP port:";
 
-			// Local port.
+			// Local port:
 			if (Enabled && ((this.socketType == SocketType.TcpServer) || (this.socketType == SocketType.TcpAutoSocket)))
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
 			}
-			else if (Enabled && (this.socketType == SocketType.Udp))
+			else if (Enabled && (this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpSocket))
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
@@ -713,6 +878,12 @@ namespace YAT.Gui.Controls
 		protected virtual void OnLocalInterfaceChanged(EventArgs e)
 		{
 			EventHelper.FireSync(LocalInterfaceChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnLocalFilterChanged(EventArgs e)
+		{
+			EventHelper.FireSync(LocalFilterChanged, this, e);
 		}
 
 		/// <summary></summary>

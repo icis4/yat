@@ -29,7 +29,7 @@ using System.Net.Sockets;
 
 namespace MKY.Net
 {
-	#region Enum CommonIPHost
+	#region Enum IPHostType
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -44,10 +44,10 @@ namespace MKY.Net
 
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv4 is a common term, and even used by the .NET framework itself.")]
 		IPv4Localhost,
-		
+
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Localhost,
-		
+
 		Other,
 	}
 
@@ -120,6 +120,22 @@ namespace MKY.Net
 			}
 		}
 
+		/// <summary></summary>
+		public bool IsLocalHost
+		{
+			get
+			{
+				switch ((IPHostType)UnderlyingEnum)
+				{
+					case IPHostType.Localhost:     return (true);
+					case IPHostType.IPv4Localhost: return (true);
+					case IPHostType.IPv6Localhost: return (true);
+					case IPHostType.Other:         return (false);
+				}
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -176,8 +192,8 @@ namespace MKY.Net
 			switch ((IPHostType)UnderlyingEnum)
 			{
 				case IPHostType.Localhost:     return (Localhost_stringNice);
-				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
-				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
+				case IPHostType.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
+				case IPHostType.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
 				case IPHostType.Other:         return (this.otherAddress.ToString());
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
@@ -303,7 +319,7 @@ namespace MKY.Net
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
 			        (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice)))
-			{	// Note that similar code is found in IPNetworkInterface.TryParse()!
+			{
 				result = new IPHost(IPHostType.Localhost);
 				return (true);
 			}

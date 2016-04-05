@@ -102,13 +102,15 @@ namespace MKY.IO.Serial.Socket
 		// Fields
 		//==========================================================================================
 
-		private int instanceId;
 		private bool isDisposed;
+
+		private int instanceId;
+		private UdpSocketType socketType;
 
 		private System.Net.IPAddress remoteIPAddress;
 		private int remotePort;
-		private System.Net.IPAddress localIPAddressFilter;
 		private int localPort;
+		private System.Net.IPAddress localIPAddressFilter;
 
 		private SocketState state = SocketState.Closed;
 		private ReaderWriterLockSlim stateLock = new ReaderWriterLockSlim();
@@ -162,33 +164,100 @@ namespace MKY.IO.Serial.Socket
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary>Creates a new UDP socket that can </summary>
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Client"/>.</summary>
+		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort)
+			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Client"/>.</summary>
+		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort)
+			: this(instanceId, UdpSocketType.Client, remoteIPAddress, remotePort, 0, System.Net.IPAddress.Any)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		public UdpSocket(int localPort)
+			: this(SocketBase.NextInstanceId, localPort, System.Net.IPAddress.Any)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		public UdpSocket(int instanceId, int localPort)
+			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localPort, System.Net.IPAddress.Any)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		public UdpSocket(int localPort, System.Net.IPAddress localIPAddressFilter)
+			: this(SocketBase.NextInstanceId, localPort, localIPAddressFilter)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Server"/>.</summary>
+		public UdpSocket(int instanceId, int localPort, System.Net.IPAddress localIPAddressFilter)
+			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localPort, localIPAddressFilter)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
 		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
-			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort)
+			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
 		{
 		}
 
-		/// <summary></summary>
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
 		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
-			: this(instanceId, remoteIPAddress, remotePort, System.Net.IPAddress.Any, localPort)
+			: this(instanceId, UdpSocketType.Socket, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
 		{
 		}
 
-		/// <summary></summary>
-		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddressFilter, int localPort)
-			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localIPAddressFilter, localPort)
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
+			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort, localIPAddressFilter)
 		{
 		}
 
-		/// <summary></summary>
-		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddressFilter, int localPort)
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
+			: this(instanceId, UdpSocketType.Socket, remoteIPAddress, remotePort, localPort, localIPAddressFilter)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of the given type.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		public UdpSocket(UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
+			: this(SocketBase.NextInstanceId, socketType, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of the given type.</summary>
+		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
+		public UdpSocket(int instanceId, UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
+			: this(instanceId, socketType, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of the given type.</summary>
+		public UdpSocket(UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
+			: this(SocketBase.NextInstanceId, socketType, remoteIPAddress, remotePort, localPort, localIPAddressFilter)
+		{
+		}
+
+		/// <summary>Creates a new UDP socket of the given type.</summary>
+		public UdpSocket(int instanceId, UdpSocketType socketType, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
 		{
 			this.instanceId = instanceId;
+			this.socketType = socketType;
 
-			this.remoteIPAddress = remoteIPAddress;
-			this.remotePort = remotePort;
+			this.remoteIPAddress      = remoteIPAddress;
+			this.remotePort           = remotePort;
+			this.localPort            = localPort;
 			this.localIPAddressFilter = localIPAddressFilter;
-			this.localPort = localPort;
 		}
 
 		#region Disposal
@@ -290,17 +359,6 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual System.Net.IPAddress LocalIPAddressFilter
-		{
-			get
-			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
-				return (this.localIPAddressFilter);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual int LocalPort
 		{
 			get
@@ -308,6 +366,17 @@ namespace MKY.IO.Serial.Socket
 				// Do not call AssertNotDisposed() in a simple get-property.
 
 				return (this.localPort);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual System.Net.IPAddress LocalIPAddressFilter
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				return (this.localIPAddressFilter);
 			}
 		}
 
@@ -387,11 +456,12 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				if (UdpClient or UdpSocket) // Remote endpoint has been defaulted on Create().
+				if ((this.socketType == UdpSocketType.Client) ||
+					(this.socketType == UdpSocketType.Socket)) // Remote endpoint has been defaulted on Create().
 				{
 					return (IsOpen);
 				}
-				else // UdpServer => Remote endpoint is the sender of the last received data.
+				else // Server => Remote endpoint is the sender of the last received data.
 				{
 					return (IsOpen && RemoteIPAddressIsDefined);
 				}
@@ -540,11 +610,12 @@ namespace MKY.IO.Serial.Socket
 						this.sendQueue.Clear();
 					}
 
-					if (UdpClient or UdpSocket) // Remote endpoint has been defaulted on Create().
+					if ((this.socketType == UdpSocketType.Client) ||
+						(this.socketType == UdpSocketType.Socket)) // Remote endpoint has been defaulted on Create().
 					{
 						this.socket.Send(data, data.Length);
 					}
-					else // UdpServer => Remote endpoint is the sender of the last received data.
+					else // Server => Remote endpoint is the sender of the last received data.
 					{
 						System.Net.IPEndPoint remoteEndPoint;
 						lock (this.socketSyncObj)
@@ -628,23 +699,24 @@ namespace MKY.IO.Serial.Socket
 				// Otherwise, options cannot be changed below!
 				this.socket = new System.Net.Sockets.UdpClient();
 
-				if (UdpServer or UdpSocket) // Configure and bind the server/listener port:
+				if ((this.socketType == UdpSocketType.Server) ||
+					(this.socketType == UdpSocketType.Socket)) // Configure and bind the server/listener port:
 				{
-					this.localIPAddressFilterEndPoint  = new System.Net.IPEndPoint(this.localIPAddressFilter, this.localPort);
 					this.socket.ExclusiveAddressUse = false;
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
-					this.socket.Client.Bind(this.localIPAddressFilterEndPoint);
+					this.socket.Client.Bind(new System.Net.IPEndPoint(this.localIPAddressFilter, this.localPort));
 				}
-				else // UdpClient
+				else // Client
 				{
 					// The socket is not bound to a local port.
 				}
 
-				if (UdpClient or UdpSocket) // Connect the client port:
+				if ((this.socketType == UdpSocketType.Client) ||
+					(this.socketType == UdpSocketType.Socket)) // Connect the client port:
 				{
 					this.socket.Connect(this.remoteIPAddress, this.remotePort);
 				}
-				else // UdpServer
+				else // Server
 				{
 					// The remote address will be set to the sender of the last received data.
 				}
@@ -756,20 +828,16 @@ namespace MKY.IO.Serial.Socket
 		{
 			AsyncReceiveState state = (AsyncReceiveState)(ar.AsyncState);
 
+			System.Net.IPEndPoint        stateLocalFilterEndPoint = state.LocalFilterEndPoint;
+			System.Net.Sockets.UdpClient stateSocket              = state.Socket;
+
 			// Ensure that async receive is discarded after close/dispose.
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
 				byte[] data;
 				try
 				{
-					data = state.Socket.EndReceive(ar, ref state.LocalFilterEndPoint);
-
-					if (this.socketType == UdpSocketType.Server)
-					{
-						// Set the remote address to the sender of the last received data:
-						lock (this.socketSyncObj)
-							this.remoteIPAddress = state.LocalFilterEndPoint.Address;
-					}
+					data = stateSocket.EndReceive(ar, ref stateLocalFilterEndPoint);
 				}
 				catch (System.Net.Sockets.SocketException ex)
 				{
@@ -786,7 +854,19 @@ namespace MKY.IO.Serial.Socket
 					// the event handler has returned.
 					OnDataReceived(new DataReceivedEventArgs(data));
 
-					// Continue receiving data.
+					if (this.socketType == UdpSocketType.Server)
+					{
+						// Set the remote end point to the sender of the last received data:
+						lock (this.socketSyncObj)
+						{
+							this.remoteIPAddress = stateLocalFilterEndPoint.Address;
+							this.remotePort      = stateLocalFilterEndPoint.Port;
+						}
+
+						OnIOChanged(EventArgs.Empty);
+					}
+
+					// Continue receiving data:
 					BeginReceiveIfEnabled();
 				}
 			}

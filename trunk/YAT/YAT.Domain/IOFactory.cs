@@ -36,12 +36,12 @@ namespace YAT.Domain
 		{
 			switch (settings.IOType)
 			{
-				case Domain.IOType.SerialPort:
+				case IOType.SerialPort:
 				{
 					return (new SerialPort(settings.SerialPort));
 				}
 
-				case Domain.IOType.TcpClient:
+				case IOType.TcpClient:
 				{
 					return (new TcpClient
 						(
@@ -51,7 +51,7 @@ namespace YAT.Domain
 						));
 				}
 
-				case Domain.IOType.TcpServer:
+				case IOType.TcpServer:
 				{
 					return (new TcpServer
 						(
@@ -60,7 +60,7 @@ namespace YAT.Domain
 						));
 				}
 
-				case Domain.IOType.TcpAutoSocket:
+				case IOType.TcpAutoSocket:
 				{
 					return (new TcpAutoSocket
 						(
@@ -71,17 +71,36 @@ namespace YAT.Domain
 						));
 				}
 
-				case Domain.IOType.Udp:
+				case IOType.UdpClient:
+				{
+					return (new UdpSocket
+						(
+						settings.Socket.ResolvedRemoteIPAddress,
+						settings.Socket.RemoteUdpPort
+						));
+				}
+
+				case IOType.UdpServer:
+				{
+					return (new UdpSocket
+						(
+						settings.Socket.LocalUdpPort,
+						settings.Socket.ResolvedLocalIPAddressFilter
+						));
+				}
+
+				case IOType.UdpSocket:
 				{
 					return (new UdpSocket
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
 						settings.Socket.RemoteUdpPort,
-						settings.Socket.LocalUdpPort
+						settings.Socket.LocalUdpPort,
+						settings.Socket.ResolvedLocalIPAddressFilter
 						));
 				}
 
-				case Domain.IOType.UsbSerialHid:
+				case IOType.UsbSerialHid:
 				{
 					return (new SerialHidDevice(settings.UsbSerialHidDevice));
 				}
