@@ -666,7 +666,7 @@ namespace MKY.IO.Serial.Socket
 				catch (SocketException)
 				{
 					// A 'SocketException' can occur in the call stack shown below, in case another
-					// AutoSocket or Server tries to bind the given end point at the same time. In
+					// AutoSocket or server tries to bind the given end point at the same time. In
 					// such case, ignore the exception and try again later. This procedure ensures
 					// that multiple AutoSockets eventually get connected to each other.
 					//

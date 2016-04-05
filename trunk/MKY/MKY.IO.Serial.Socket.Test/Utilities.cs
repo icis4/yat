@@ -128,7 +128,7 @@ namespace MKY.IO.Serial.Socket.Test
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPAddress.Loopback, localPort);
 			if (!server.Start())
-				Assert.Fail("TCP/IP Server could not be started!");
+				Assert.Fail("TCP/IP server could not be started!");
 		}
 
 		internal static void StartTcpClient(out TcpClient client, int remotePort)
@@ -136,24 +136,24 @@ namespace MKY.IO.Serial.Socket.Test
 			// Create client and initiate asych start.
 			client = new TcpClient(IPAddress.Loopback, remotePort);
 			if (!client.Start())
-				Assert.Fail("TCP/IP Client could not be started!");
+				Assert.Fail("TCP/IP client could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
 		{
-			// Create auto socket and initiate asych start.
+			// Create AutoSocket and initiate asych start.
 			localPort = AvailableLocalTcpPort;
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, localPort, IPAddress.Any, localPort);
 			if (!autoSocket.Start())
-				Assert.Fail("TCP auto socket could not be started!");
+				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
-			// Create auto socket and initiate asych start.
+			// Create AutoSocket and initiate asych start.
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, remotePort, IPAddress.Any, remotePort);
 			if (!autoSocket.Start())
-				Assert.Fail("TCP auto socket could not be started!");
+				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
 		internal static void StartUdpSocket(out UdpSocket socket, int remotePort, int localPort)
@@ -161,7 +161,7 @@ namespace MKY.IO.Serial.Socket.Test
 			// Create socket and initiate asych start.
 			socket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
 			if (!socket.Start())
-				Assert.Fail("UDP socket could not be started!");
+				Assert.Fail("UDP/IP Socket could not be started!");
 		}
 
 		internal static void StopTcpServer(TcpServer server)
