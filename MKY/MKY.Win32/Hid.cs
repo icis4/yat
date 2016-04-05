@@ -34,8 +34,6 @@ using System.Text;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.Diagnostics;
-
 #endregion
 
 #region Module-level StyleCop suppressions
@@ -841,27 +839,35 @@ namespace MKY.Win32
 		{
 			if (!deviceHandle.IsInvalid)
 			{
-				// Retrieve language IDs at index 0.
+				// Retrieve language IDs at index 0:
 				string languageString;
 				if (NativeMethods.HidD_GetIndexedString(deviceHandle, (int)StringDescriptorIndex.LanguageIds, out languageString))
 				{
-					// Retrieve content string.
+					// Retrieve content string:
 					string contentString;
 					if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialString().
 					{
-						if (contentString != languageString) // Looks like a proper invariant string.
+						if (!string.IsNullOrEmpty(contentString) &&
+							(contentString != languageString)) // Looks like a proper invariant string.
 						{
+						////System.Diagnostics.Debug.WriteLine(@"USB device string """ + contentString + @""" successfully retrieved");
+
 							hidString = contentString;
 							return (true);
 						}
 						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
 						{
+						////System.Diagnostics.Debug.WriteLine(@"USB device string is not available on this device");
+
 							hidString = "";
 							return (true);
 						}
 					}
 				}
 			}
+
+		////System.Diagnostics.Debug.WriteLine(@"USB device string could not be retrieved!");
+
 			hidString = "";
 			return (false);
 		}

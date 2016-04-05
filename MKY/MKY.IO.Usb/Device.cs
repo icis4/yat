@@ -210,10 +210,19 @@ namespace MKY.IO.Usb
 
 		private static bool GetStringsFromHandle(SafeFileHandle deviceHandle, out string manufacturer, out string product, out string serial)
 		{
-			Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer);
-			Win32.Hid.GetProductString(deviceHandle, out product);
-			Win32.Hid.GetSerialString(deviceHandle, out serial);
-			return (true);
+			if (Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer))
+			{
+				if (Win32.Hid.GetProductString(deviceHandle, out product))
+				{
+					if (Win32.Hid.GetSerialString(deviceHandle, out serial))
+						return (true);
+				}
+			}
+
+			manufacturer = "";
+			product      = "";
+			serial       = "";
+			return (false);
 		}
 
 		/// <summary>
