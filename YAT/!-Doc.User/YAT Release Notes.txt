@@ -3,8 +3,8 @@
                                          YAT Release Notes.
  --------------------------------------------------------------------------------------------------
                                     YAT - Yet Another Terminal.
-                    Engineering, testing and debugging of serial communications.
-     Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID.
+     Engineering, testing and debugging of serial communications. Supports RS-232/422/423/485...
+     ...as well as TCP/IP Client/Server/AutoSocket, UDP/IP Client/Server/Socket and USB Ser/HID.
  --------------------------------------------------------------------------------------------------
                     Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
                      Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -104,13 +104,16 @@ New:
   after logging has finished, i.e. logging has been switched off or the terminal is closed.
 - Selectable background color added to format settings (feature request #250).
 - Window can be configured to always stay on top (feature request #241).
+- UDP/IP functionality improved:
+   > Possibility to receive from multiple sources when using 'UDP/IP Server' (feature request #248).
+   > Dedicated settings for server, client and socket (related to feature request #248).
 - USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
 - Automatic response feature, YAT can automatically respond to a request (feature request #252).
 
 Important changes:
+- 'Send Command' renamed to 'Send Text' (related to feature request #252).
 - Active terminal is highlighted/emphasized (feature request #247).
 - Automatic terminal layout added. Use 'Window > ...' for dedicated layout (feature request #247).
-- 'Send Command' renamed to 'Send Text' (related to feature request #252).
 - Icons migrated from glyfx to FatCow (much larger variety) as preparation for the items below.
 - Additional log menu items and toolbar icons added, including indication whether logging is
   switched on or off, as well as opening/viewing of log file (feature requests #69, #103, #245).
@@ -135,6 +138,9 @@ Fixed bugs:
   or restart the computer. In addition, it may be required to disconnect or reset any device sending
   continuous data. Otherwise, related serial COM ports may no longer be opened by an application.
   Issue is being reported by many users of .NET, but Microsoft seems to have no plans on fixing it.
+- UDP/IP functionality fixed:
+   > Can now properly receive from a remote host (bug #327).
+   > Dedicated settings for server, client and socket (related to bug #248).
 - Subsequent log files are now properly named according to the configured settings. File names that
   include the time stamp now properly use the time stamp of the open operation (related to feature
   requests #69, #103, #233, #245).
@@ -523,8 +529,8 @@ Fixed bugs:
 - Predefined commands are also put into list of recent commands (bug #3146622)
 - Local interface again is properly set when switching from COM port to TCP/IP socket (bug #3176815)
 - Exception when switching terminal type to USB Ser/HID fixed (bug #3290317)
-- TCP/IP Client auto-reconnect fixed (bug #3285780)
-- TCP/IP Servers can be closed and reopened again (bugs #3137057 and #3137122)
+- TCP/IP client auto-reconnect fixed (bug #3285780)
+- TCP/IP servers can be closed and reopened again (bugs #3137057 and #3137122)
 - Exception when closing/reopening terminals quickly (e.g. out of a script) fixed (bug #3137047)
 - Exception on clearing monitors fixed by improving thread-safety on raw and display repositories
 - Exception on receiving fixed by improving thread-safety on raw and display repositories

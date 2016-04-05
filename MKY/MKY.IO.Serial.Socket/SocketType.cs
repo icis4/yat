@@ -41,7 +41,9 @@ namespace MKY.IO.Serial.Socket
 		TcpClient,
 		TcpServer,
 		TcpAutoSocket,
-		Udp,
+		UdpClient,
+		UdpServer,
+		UdpSocket,
 	}
 
 	#pragma warning restore 1591
@@ -65,7 +67,9 @@ namespace MKY.IO.Serial.Socket
 		private const string TcpClient_string     = "TCP/IP Client";
 		private const string TcpServer_string     = "TCP/IP Server";
 		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
-		private const string Udp_string           = "UDP/IP Socket";
+		private const string UdpClient_string     = "UDP/IP Client";
+		private const string UdpServer_string     = "UDP/IP Server";
+		private const string UdpSocket_string     = "UDP/IP Socket";
 
 		#endregion
 
@@ -81,6 +85,46 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
+		#region Properties
+
+		/// <summary></summary>
+		public virtual bool IsTcp
+		{
+			get
+			{
+				switch ((SocketType)UnderlyingEnum)
+				{
+					case SocketType.TcpClient:     return (true);
+					case SocketType.TcpServer:     return (true);
+					case SocketType.TcpAutoSocket: return (true);
+					case SocketType.UdpClient:     return (false);
+					case SocketType.UdpServer:     return (false);
+					case SocketType.UdpSocket:     return (false);
+					default:                       return (false);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsUdp
+		{
+			get
+			{
+				switch ((SocketType)UnderlyingEnum)
+				{
+					case SocketType.TcpClient:     return (false);
+					case SocketType.TcpServer:     return (false);
+					case SocketType.TcpAutoSocket: return (false);
+					case SocketType.UdpClient:     return (true);
+					case SocketType.UdpServer:     return (true);
+					case SocketType.UdpSocket:     return (true);
+					default:                       return (false);
+				}
+			}
+		}
+
+		#endregion
+
 		#region ToString
 
 		/// <summary></summary>
@@ -91,8 +135,10 @@ namespace MKY.IO.Serial.Socket
 				case SocketType.TcpClient:     return (TcpClient_string);
 				case SocketType.TcpServer:     return (TcpServer_string);
 				case SocketType.TcpAutoSocket: return (TcpAutoSocket_string);
-				case SocketType.Udp:           return (Udp_string);
-				default:                     return (Unknown_string);
+				case SocketType.UdpClient:     return (UdpClient_string);
+				case SocketType.UdpServer:     return (UdpServer_string);
+				case SocketType.UdpSocket:     return (UdpSocket_string);
+				default:                       return (Unknown_string);
 			}
 		}
 
@@ -109,7 +155,9 @@ namespace MKY.IO.Serial.Socket
 			a.Add(new SocketTypeEx(SocketType.TcpClient));
 			a.Add(new SocketTypeEx(SocketType.TcpServer));
 			a.Add(new SocketTypeEx(SocketType.TcpAutoSocket));
-			a.Add(new SocketTypeEx(SocketType.Udp));
+			a.Add(new SocketTypeEx(SocketType.UdpClient));
+			a.Add(new SocketTypeEx(SocketType.UdpServer));
+			a.Add(new SocketTypeEx(SocketType.UdpSocket));
 			return (a.ToArray());
 		}
 
@@ -169,9 +217,19 @@ namespace MKY.IO.Serial.Socket
 				result = SocketType.TcpAutoSocket;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpClient_string))
 			{
-				result = SocketType.Udp;
+				result = SocketType.UdpClient;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpServer_string))
+			{
+				result = SocketType.UdpServer;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpSocket_string))
+			{
+				result = SocketType.UdpSocket;
 				return (true);
 			}
 			else
@@ -219,6 +277,30 @@ namespace MKY.IO.Serial.Socket
 		public static implicit operator SocketTypeEx(string type)
 		{
 			return (Parse(type));
+		}
+
+		/// <summary></summary>
+		public static implicit operator UdpSocketType(SocketTypeEx type)
+		{
+			switch ((SocketType)type)
+			{
+				case SocketType.UdpClient: return (UdpSocketType.Client);
+				case SocketType.UdpServer: return (UdpSocketType.Server);
+				case SocketType.UdpSocket: return (UdpSocketType.Socket);
+				default:                   return (UdpSocketType.Unknown);
+			}
+		}
+
+		/// <summary></summary>
+		public static implicit operator SocketTypeEx(UdpSocketType type)
+		{
+			switch (type)
+			{
+				case UdpSocketType.Client: return (SocketType.UdpClient);
+				case UdpSocketType.Server: return (SocketType.UdpServer);
+				case UdpSocketType.Socket: return (SocketType.UdpSocket);
+				default:                   return (SocketType.Unknown);
+			}
 		}
 
 		#endregion

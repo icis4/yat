@@ -356,7 +356,9 @@ namespace YAT.Domain.Settings
 				case IOType.TcpClient:
 				case IOType.TcpServer:
 				case IOType.TcpAutoSocket:
-				case IOType.Udp:
+				case IOType.UdpClient:
+				case IOType.UdpServer:
+				case IOType.UdpSocket:
 					return (this.socket.ToShortEndPointString());
 
 				case IOType.UsbSerialHid:

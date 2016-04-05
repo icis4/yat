@@ -8,16 +8,15 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Gamma 2 Development Version 1.99.35
+// MKY Development Version 1.0.14
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2016 Matthias Kläy.
+// Copyright © 2007-2016 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
@@ -25,26 +24,31 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY;
-
-namespace YAT.Domain
+namespace MKY.IO.Serial.Socket
 {
-	#region Enum TerminalType
+	#region Enum UdpSocketType
+
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum TerminalType
+	public enum UdpSocketType
 	{
-		/// <summary></summary>
-		Text,
-
-		/// <summary></summary>
-		Binary
+		Unknown,
+		Client,
+		Server,
+		Socket,
 	}
+
+#pragma warning restore 1591
 
 	#endregion
 
 	/// <summary>
-	/// Extended enum TerminalTypeEx.
+	/// Extended enum UdpSocketTypeEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -52,60 +56,41 @@ namespace YAT.Domain
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class TerminalTypeEx : EnumEx
+	public class UdpSocketTypeEx : EnumEx
 	{
 		#region String Definitions
 
-		private const string Text_string      = "Text";
-		private const string Text_stringShort = "T";
-		private const string Text_stringStart = "Tex";
-
-		private const string Binary_string      = "Binary";
-		private const string Binary_stringShort = "B";
-		private const string Binary_stringStart = "Bin";
+		private const string Unknown_string = "Unknown";
+		private const string Client_string =  "UDP/IP Client";
+		private const string Server_string =  "UDP/IP Server";
+		private const string Socket_string =  "UDP/IP Socket";
 
 		#endregion
 
-		/// <summary>Default is <see cref="TerminalType.Text"/>.</summary>
-		public TerminalTypeEx()
-			: base(TerminalType.Text)
+		/// <summary>Default is <see cref="UdpSocketType.Socket"/>.</summary>
+		public UdpSocketTypeEx()
+			: base(UdpSocketType.Socket)
 		{
 		}
 
 		/// <summary></summary>
-		protected TerminalTypeEx(TerminalType type)
+		protected UdpSocketTypeEx(UdpSocketType type)
 			: base(type)
 		{
 		}
 
-		#region Properties
-
-		/// <summary></summary>
-		public virtual bool IsText
-		{
-			get { return ((TerminalType)UnderlyingEnum == TerminalType.Text); }
-		}
-
-		/// <summary></summary>
-		public virtual bool IsBinary
-		{
-			get { return ((TerminalType)UnderlyingEnum == TerminalType.Binary); }
-		}
-
-		#endregion
-
 		#region ToString
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
-			switch ((TerminalType)UnderlyingEnum)
+			switch ((UdpSocketType)UnderlyingEnum)
 			{
-				case TerminalType.Text:   return (Text_string);
-				case TerminalType.Binary: return (Binary_string);
+				case UdpSocketType.Client: return (Client_string);
+				case UdpSocketType.Server: return (Server_string);
+				case UdpSocketType.Socket: return (Socket_string);
+				default:                   return (Unknown_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
@@ -115,11 +100,12 @@ namespace YAT.Domain
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static TerminalTypeEx[] GetItems()
+		public static UdpSocketTypeEx[] GetItems()
 		{
-			List<TerminalTypeEx> a = new List<TerminalTypeEx>();
-			a.Add(new TerminalTypeEx(TerminalType.Text));
-			a.Add(new TerminalTypeEx(TerminalType.Binary));
+			List<UdpSocketTypeEx> a = new List<UdpSocketTypeEx>();
+			a.Add(new UdpSocketTypeEx(UdpSocketType.Client));
+			a.Add(new UdpSocketTypeEx(UdpSocketType.Server));
+			a.Add(new UdpSocketTypeEx(UdpSocketType.Socket));
 			return (a.ToArray());
 		}
 
@@ -130,21 +116,21 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static TerminalTypeEx Parse(string s)
+		public static UdpSocketTypeEx Parse(string s)
 		{
-			TerminalTypeEx result;
+			UdpSocketTypeEx result;
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
-				throw (new FormatException(@"""" + s + @""" is no valid terminal type string."));
+				throw (new FormatException(@"""" + s + @""" is no valid socket host type string."));
 		}
 
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out TerminalTypeEx result)
+		public static bool TryParse(string s, out UdpSocketTypeEx result)
 		{
-			TerminalType enumResult;
+			UdpSocketType enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
 				result = enumResult;
@@ -160,27 +146,28 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out TerminalType result)
+		public static bool TryParse(string s, out UdpSocketType result)
 		{
 			s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Text_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Text_stringShort) ||
-			         s.StartsWith(Text_stringStart, StringComparison.OrdinalIgnoreCase))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Client_string))
 			{
-				result = TerminalType.Text;
+				result = UdpSocketType.Client;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Binary_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Binary_stringShort) ||
-			         s.StartsWith(Binary_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Server_string))
 			{
-				result = TerminalType.Binary;
+				result = UdpSocketType.Server;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Socket_string))
+			{
+				result = UdpSocketType.Socket;
 				return (true);
 			}
 			else
 			{
-				result = new TerminalTypeEx(); // Default!
+				result = new UdpSocketTypeEx(); // Default!
 				return (false);
 			}
 		}
@@ -190,37 +177,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator TerminalType(TerminalTypeEx type)
+		public static implicit operator UdpSocketType(UdpSocketTypeEx type)
 		{
-			return ((TerminalType)type.UnderlyingEnum);
+			return ((UdpSocketType)type.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator TerminalTypeEx(TerminalType type)
+		public static implicit operator UdpSocketTypeEx(UdpSocketType type)
 		{
-			return (new TerminalTypeEx(type));
+			return (new UdpSocketTypeEx(type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(TerminalTypeEx type)
+		public static implicit operator int(UdpSocketTypeEx type)
 		{
 			return (type.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator TerminalTypeEx(int type)
+		public static implicit operator UdpSocketTypeEx(int type)
 		{
-			return (new TerminalTypeEx((TerminalType)type));
+			return (new UdpSocketTypeEx((UdpSocketType)type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(TerminalTypeEx type)
+		public static implicit operator string(UdpSocketTypeEx type)
 		{
 			return (type.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator TerminalTypeEx(string type)
+		public static implicit operator UdpSocketTypeEx(string type)
 		{
 			return (Parse(type));
 		}

@@ -39,17 +39,17 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
 			this.button_AdvancedSettings = new System.Windows.Forms.Button();
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
-			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.button_Defaults = new System.Windows.Forms.Button();
-			this.button_Help = new System.Windows.Forms.Button();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
+			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
 			this.usbSerialHidDeviceSettings = new YAT.Gui.Controls.UsbSerialHidDeviceSettings();
 			this.usbSerialHidDeviceSelection = new YAT.Gui.Controls.UsbSerialHidDeviceSelection();
 			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
 			this.socketSettings = new YAT.Gui.Controls.SocketSettings();
 			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
 			this.serialPortSettings = new YAT.Gui.Controls.SerialPortSettings();
+			this.button_Defaults = new System.Windows.Forms.Button();
+			this.button_Help = new System.Windows.Forms.Button();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_PortSettings.SuspendLayout();
 			this.SuspendLayout();
@@ -87,14 +87,14 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_PortSettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(450, 419);
+			this.groupBox_Settings.Size = new System.Drawing.Size(450, 414);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
 			// button_AdvancedSettings
 			// 
 			this.button_AdvancedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_AdvancedSettings.Location = new System.Drawing.Point(320, 382);
+			this.button_AdvancedSettings.Location = new System.Drawing.Point(320, 377);
 			this.button_AdvancedSettings.Name = "button_AdvancedSettings";
 			this.button_AdvancedSettings.Size = new System.Drawing.Size(114, 23);
 			this.button_AdvancedSettings.TabIndex = 5;
@@ -113,45 +113,6 @@ namespace YAT.Gui.Forms
 			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, end-of-line and comments.");
 			this.button_TextOrBinarySettings.Click += new System.EventHandler(this.button_TextOrBinarySettings_Click);
 			// 
-			// groupBox_PortSettings
-			// 
-			this.groupBox_PortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
-			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
-			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
-			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
-			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
-			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
-			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
-			this.groupBox_PortSettings.Size = new System.Drawing.Size(297, 334);
-			this.groupBox_PortSettings.TabIndex = 1;
-			this.groupBox_PortSettings.TabStop = false;
-			this.groupBox_PortSettings.Text = "Port &Settings";
-			// 
-			// button_Defaults
-			// 
-			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(477, 111);
-			this.button_Defaults.Name = "button_Defaults";
-			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
-			this.button_Defaults.TabIndex = 3;
-			this.button_Defaults.Text = "&Defaults...";
-			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
-			// 
-			// button_Help
-			// 
-			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(477, 161);
-			this.button_Help.Name = "button_Help";
-			this.button_Help.Size = new System.Drawing.Size(75, 23);
-			this.button_Help.TabIndex = 4;
-			this.button_Help.Text = "Help";
-			this.button_Help.UseVisualStyleBackColor = true;
-			this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
-			// 
 			// terminalSelection
 			// 
 			this.terminalSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -163,12 +124,30 @@ namespace YAT.Gui.Forms
 			this.terminalSelection.TerminalTypeChanged += new System.EventHandler(this.terminalSelection_TerminalTypeChanged);
 			this.terminalSelection.IOTypeChanged += new System.EventHandler(this.terminalSelection_IOTypeChanged);
 			// 
+			// groupBox_PortSettings
+			// 
+			this.groupBox_PortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
+			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
+			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
+			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
+			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
+			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
+			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
+			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
+			this.groupBox_PortSettings.Size = new System.Drawing.Size(297, 329);
+			this.groupBox_PortSettings.TabIndex = 1;
+			this.groupBox_PortSettings.TabStop = false;
+			this.groupBox_PortSettings.Text = "Port &Settings";
+			// 
 			// usbSerialHidDeviceSettings
 			// 
 			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 70);
+			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 65);
 			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
 			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 258);
 			this.usbSerialHidDeviceSettings.TabIndex = 3;
@@ -194,12 +173,13 @@ namespace YAT.Gui.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.socketSelection.Location = new System.Drawing.Point(6, 19);
 			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(285, 125);
+			this.socketSelection.Size = new System.Drawing.Size(285, 133);
 			this.socketSelection.TabIndex = 2;
 			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
 			this.socketSelection.RemoteTcpPortChanged += new System.EventHandler(this.socketSelection_RemoteTcpPortChanged);
 			this.socketSelection.RemoteUdpPortChanged += new System.EventHandler(this.socketSelection_RemoteUdpPortChanged);
 			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
+			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
 			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
 			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			// 
@@ -208,9 +188,9 @@ namespace YAT.Gui.Forms
 			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSettings.Location = new System.Drawing.Point(6, 146);
+			this.socketSettings.Location = new System.Drawing.Point(6, 159);
 			this.socketSettings.Name = "socketSettings";
-			this.socketSettings.Size = new System.Drawing.Size(260, 182);
+			this.socketSettings.Size = new System.Drawing.Size(260, 164);
 			this.socketSettings.TabIndex = 3;
 			this.socketSettings.TcpClientAutoReconnect = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("socketSettings.TcpClientAutoReconnect")));
 			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
@@ -228,7 +208,8 @@ namespace YAT.Gui.Forms
 			// 
 			// serialPortSettings
 			// 
-			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.serialPortSettings.AutoReopen = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("serialPortSettings.AutoReopen")));
 			this.serialPortSettings.Location = new System.Drawing.Point(6, 64);
@@ -242,22 +223,43 @@ namespace YAT.Gui.Forms
 			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
 			this.serialPortSettings.AutoReopenChanged += new System.EventHandler(this.serialPortSettings_AutoReopenChanged);
 			// 
+			// button_Defaults
+			// 
+			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Defaults.Location = new System.Drawing.Point(477, 111);
+			this.button_Defaults.Name = "button_Defaults";
+			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
+			this.button_Defaults.TabIndex = 3;
+			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
+			// 
+			// button_Help
+			// 
+			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Help.Location = new System.Drawing.Point(477, 161);
+			this.button_Help.Name = "button_Help";
+			this.button_Help.Size = new System.Drawing.Size(75, 23);
+			this.button_Help.TabIndex = 4;
+			this.button_Help.Text = "Help";
+			this.button_Help.UseVisualStyleBackColor = true;
+			this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
+			// 
 			// TerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(564, 442);
+			this.ClientSize = new System.Drawing.Size(564, 437);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(1024, 480);
+			this.MaximumSize = new System.Drawing.Size(1024, 475);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(580, 480);
+			this.MinimumSize = new System.Drawing.Size(580, 475);
 			this.Name = "TerminalSettings";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

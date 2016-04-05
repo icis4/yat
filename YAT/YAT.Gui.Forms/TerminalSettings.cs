@@ -209,6 +209,11 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
 		}
 
+		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
+		{
+			this.settingsInEdit.Terminal.IO.Socket.LocalFilter = socketSelection.LocalFilter;
+		}
+
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
 			this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
@@ -395,12 +400,13 @@ namespace YAT.Gui.Forms
 			// Set visible/invisible before accessing the other settings, to ensure that the correct
 			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
 
-			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
-			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
-			bool isSocket       = (!isSerialPort && !isUsbSerialHid);
+			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort ;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+			bool isTcpSocket    = ((Domain.IOTypeEx)ioType).IsTcpSocket;
 
 			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isSocket;
+			socketSettings.Visible  = isTcpSocket;
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
 			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
@@ -416,6 +422,7 @@ namespace YAT.Gui.Forms
 			socketSelection.RemoteTcpPort  = this.settingsInEdit.Terminal.IO.Socket.RemoteTcpPort;
 			socketSelection.RemoteUdpPort  = this.settingsInEdit.Terminal.IO.Socket.RemoteUdpPort;
 			socketSelection.LocalInterface = this.settingsInEdit.Terminal.IO.Socket.LocalInterface;
+			socketSelection.LocalFilter    = this.settingsInEdit.Terminal.IO.Socket.LocalFilter;
 			socketSelection.LocalTcpPort   = this.settingsInEdit.Terminal.IO.Socket.LocalTcpPort;
 			socketSelection.LocalUdpPort   = this.settingsInEdit.Terminal.IO.Socket.LocalUdpPort;
 
@@ -438,10 +445,13 @@ namespace YAT.Gui.Forms
 			serialPortSettings.FlowControl = this.settingsInEdit.Terminal.IO.SerialPort.Communication.FlowControl;
 			serialPortSettings.AutoReopen  = this.settingsInEdit.Terminal.IO.SerialPort.AutoReopen;
 
-			// Trigger refresh of ports/devices if selection of I/O type has changed.
-			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
+			// Trigger refresh of ports/devices if selection of I/O type has changed:
+			bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
+			bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
+
+			if      (isSerialPort   && !wasSerialPort)
 				serialPortSelection.RefreshSerialPortList();
-			else if ((ioType == Domain.IOType.UsbSerialHid) && (this.SetControls_ioTypeOld != Domain.IOType.UsbSerialHid))
+			else if (isUsbSerialHid && !wasUsbSerialHid)
 				usbSerialHidDeviceSelection.RefreshDeviceList();
 
 			this.SetControls_ioTypeOld = ioType;

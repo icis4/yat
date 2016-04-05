@@ -43,6 +43,7 @@ namespace YAT.Model.Settings
 		private int socketRemoteTcpPort;
 		private int socketRemoteUdpPort;
 		private string socketLocalInterface;
+		private string socketLocalFilter;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
@@ -95,6 +96,7 @@ namespace YAT.Model.Settings
 			SocketRemoteTcpPort      = rhs.SocketRemoteTcpPort;
 			SocketRemoteUdpPort      = rhs.SocketRemoteUdpPort;
 			SocketLocalInterface     = rhs.SocketLocalInterface;
+			SocketLocalFilter        = rhs.SocketLocalFilter;
 			SocketLocalTcpPort       = rhs.SocketLocalTcpPort;
 			SocketLocalUdpPort       = rhs.SocketLocalUdpPort;
 			TcpClientAutoReconnect   = rhs.TcpClientAutoReconnect;
@@ -132,6 +134,7 @@ namespace YAT.Model.Settings
 			SocketRemoteTcpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
 			SocketRemoteUdpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
 			SocketLocalInterface     = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+			SocketLocalFilter        = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
 			SocketLocalTcpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
 			SocketLocalUdpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
 			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
@@ -300,6 +303,23 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <remarks>
+		/// Must be string because an 'EnumEx' cannot be serialized.
+		/// </remarks>
+		[XmlElement("SocketLocalFilter")]
+		public virtual string SocketLocalFilter
+		{
+			get { return (this.socketLocalFilter); }
+			set
+			{
+				if (this.socketLocalFilter != value)
+				{
+					this.socketLocalFilter = value;
+					SetChanged();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual int SocketLocalPort
@@ -313,7 +333,9 @@ namespace YAT.Model.Settings
 					case Domain.IOType.TcpAutoSocket:
 						return (SocketLocalTcpPort);
 
-					case Domain.IOType.Udp:
+					case Domain.IOType.UdpClient:
+					case Domain.IOType.UdpServer:
+					case Domain.IOType.UdpSocket:
 						return (SocketLocalUdpPort);
 
 					default:
@@ -330,11 +352,14 @@ namespace YAT.Model.Settings
 						SocketLocalTcpPort = value;
 						break;
 
-					case Domain.IOType.Udp:
+					case Domain.IOType.UdpClient:
+					case Domain.IOType.UdpServer:
+					case Domain.IOType.UdpSocket:
 						SocketLocalUdpPort = value;
 						break;
 
-					// Ignore any other case.
+					default:
+						break; // Ignore any other case.
 				}
 			}
 		}
@@ -509,6 +534,7 @@ namespace YAT.Model.Settings
 				(SocketRemoteTcpPort      == other.SocketRemoteTcpPort) &&
 				(SocketRemoteUdpPort      == other.SocketRemoteUdpPort) &&
 				(SocketLocalInterface     == other.SocketLocalInterface) &&
+				(SocketLocalFilter        == other.SocketLocalFilter) &&
 				(SocketLocalTcpPort       == other.SocketLocalTcpPort) &&
 				(SocketLocalUdpPort       == other.SocketLocalUdpPort) &&
 				(TcpClientAutoReconnect   == other.TcpClientAutoReconnect) &&
@@ -555,6 +581,7 @@ namespace YAT.Model.Settings
 				SocketRemoteTcpPort     .GetHashCode() ^
 				SocketRemoteUdpPort     .GetHashCode() ^
 				SocketLocalInterface    .GetHashCode() ^
+				SocketLocalFilter       .GetHashCode() ^
 				SocketLocalTcpPort      .GetHashCode() ^
 				SocketLocalUdpPort      .GetHashCode() ^
 				TcpClientAutoReconnect  .GetHashCode() ^

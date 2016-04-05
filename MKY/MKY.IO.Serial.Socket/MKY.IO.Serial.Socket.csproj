@@ -99,6 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketBase.cs" />
     <Compile Include="SocketDefaults.cs" />
+    <Compile Include="UdpSocketType.cs" />
     <Compile Include="SocketType.cs" />
     <Compile Include="SocketSettings.cs" />
     <Compile Include="TcpAutoSocket.cs" />

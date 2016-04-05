@@ -119,14 +119,14 @@
   </resheader>
   <data name="socketSettings.TcpClientAutoReconnect" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4yMTEwOCwg
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4xOTY4Niwg
         Q3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAXTUtZLklP
         LlNlcmlhbC5BdXRvUmV0cnkCAAAAB0VuYWJsZWQISW50ZXJ2YWwAAAEIAgAAAAD0AQAACw==
 </value>
   </data>
   <data name="serialPortSettings.AutoReopen" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4yMTEwOCwg
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4xOTY4Niwg
         Q3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAXTUtZLklP
         LlNlcmlhbC5BdXRvUmV0cnkCAAAAB0VuYWJsZWQISW50ZXJ2YWwAAAEIAgAAAAHQBwAACw==
 </value>

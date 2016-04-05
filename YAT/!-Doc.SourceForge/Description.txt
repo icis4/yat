@@ -6,7 +6,7 @@ Descriptive name:
 YAT
 
 Public description:
-YAT :: Yet Another Terminal :: Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID
+YAT :: Yet Another Terminal :: Supports RS-232/422/423/485 as well as TCP/IP Client/Server/AutoSocket, UDP/IP Client/Server/Socket and USB Ser/HID
 
 License:
 LGPL

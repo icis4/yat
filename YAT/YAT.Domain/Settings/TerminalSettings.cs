@@ -133,13 +133,15 @@ namespace YAT.Domain.Settings
 
 					// Set terminal type dependent settings:
 
+					bool isBinary = ((TerminalTypeEx)value).IsBinary;
+
 					if (Display != null) {
-						Display.TxRadix = (value == TerminalType.Binary ? Radix.Hex : Radix.String);
-						Display.RxRadix = (value == TerminalType.Binary ? Radix.Hex : Radix.String);
+						Display.TxRadix = (isBinary ? Radix.Hex : Radix.String);
+						Display.RxRadix = (isBinary ? Radix.Hex : Radix.String);
 					}
 
 					if (CharReplace != null) {
-						CharReplace.ReplaceControlChars = (value != TerminalType.Binary);
+						CharReplace.ReplaceControlChars = (!isBinary);
 					}
 
 					SetChanged();
@@ -397,7 +399,7 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				if (TerminalType == TerminalType.Text)
+				if (((TerminalTypeEx)TerminalType).IsText)
 				{
 					Encoding e = (EncodingEx)TextTerminal.Encoding;
 					return (e.IsSingleByte);

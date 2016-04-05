@@ -752,9 +752,10 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isText         = (this.settingsRoot.TerminalType == Domain.TerminalType.Text);
-			bool isSerialPort   = (this.settingsRoot.IOType       == Domain.IOType.SerialPort);
-			bool isUsbSerialHid = (this.settingsRoot.IOType       == Domain.IOType.UsbSerialHid);
+			bool isText         = ((Domain.TerminalTypeEx)this.settingsRoot.TerminalType).IsText;
+
+			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
 
 			// Layout, disable monitor item if the other monitors are hidden:
 			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
@@ -970,7 +971,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
 
 			foreach (ToolStripMenuItem item in this.menuItems_preset)
 				item.Enabled = isSerialPort;
@@ -1053,7 +1054,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
 			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
-			bool isText = (terminalType == Domain.TerminalType.Text);
+			bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
@@ -1720,8 +1721,8 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls.Enter();
 
-			bool isSerialPort   = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
-			bool isUsbSerialHid = (this.settingsRoot.IOType == Domain.IOType.UsbSerialHid);
+			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
 
 			// Flow control count:
 			bool showFlowControlOptions = (isSerialPort || (isUsbSerialHid && this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff));
@@ -3603,23 +3604,32 @@ namespace YAT.Gui.Forms
 			{
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled =  this.terminal.IsStarted;
 
-				if (this.terminal.IsTransmissive)
+				if (this.terminal.IsOpen)
 				{
-					if (this.terminal.IsReadyToSend)
+					if (this.terminal.IsTransmissive)
+					{
+						if (this.terminal.IsReadyToSend)
+						{
+							ResetIOStatusFlashing();
+							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
+							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
+						}
+						else // = sending is ongoing
+						{
+							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
+							//// Do not directly access the image, it will be flashed by the timer below.
+							//// Directly accessing the image could result in irregular flashing.
+							StartIOStatusFlashing();
+						}
+					}
+					else // = can only receive (so far)
 					{
 						ResetIOStatusFlashing();
 						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
 					}
-					else // = SendingIsOngoing
-					{
-						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
-						//// Do not directly access the image, it will be flashed by the timer below.
-						//// Directly accessing the image could result in irregular flashing.
-						StartIOStatusFlashing();
-					}
 				}
-				else
+				else // = is closed
 				{
 					ResetIOStatusFlashing();
 					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
@@ -3678,8 +3688,8 @@ namespace YAT.Gui.Forms
 
 			bool isOpen = this.terminal.IsOpen;
 
-			bool isSerialPort   = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
-			bool isUsbSerialHid = (this.settingsRoot.IOType == Domain.IOType.UsbSerialHid);
+			bool isSerialPort   = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsSerialPort;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)this.settingsRoot.IOType).IsUsbSerialHid;
 
 			if (isSerialPort)
 			{

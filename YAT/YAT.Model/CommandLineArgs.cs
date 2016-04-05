@@ -89,7 +89,7 @@ namespace YAT.Model
 			"The desired port type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'COM' (Serial Port)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
-			"- 'UDP' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'UDPClient', 'UDPServer', 'UDPSocket' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
 			"The default value is 'COM'.")]
 		public string IOType;
@@ -151,8 +151,10 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "RemoteHost", ShortName = "rh", Description =
-			"The desired remote IP host. Must be a valid IPv4 or IPv6 address or an alias like 'localhost'. The default value is 'localhost'." + EnvironmentEx.NewLineConstWorkaround +
-			"Only applies to TCP/IP and UDP/IP.")]
+			"The desired remote IP host. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
+			"- '<Localhost>' (IPv4 or IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '127.0.0.1' (IPv4 localhost) or '::1' (IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
+			"The default value is '<Localhost>'. Only applies to TCP/IP and UDP/IP.")]
 		public string RemoteHost;
 
 		/// <remarks>
@@ -163,7 +165,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
 			"The desired remote TCP or UDP port. Valid values are 0 through 65535. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
-			"Only applies to TCP/IP Clients, TCP/IP AutoSockets and UDP/IP.")]
+			"Only applies to TCP/IP clients, TCP/IP AutoSockets, UDP/IP clients and UDP/IP sockets.")]
 		public int RemotePort;
 
 		/// <summary></summary>
@@ -171,10 +173,22 @@ namespace YAT.Model
 		[OptionArg(Name = "LocalInterface", ShortName = "li", Description =
 			"The desired local IP interface. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
 			"- '<Any>' (any IPv4 or IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '<Loopback>' (IPv4 or IPv6 loopback)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '127.0.0.1' (IPv4 loopback) or '::1' (IPv6 loopback)" + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is '<Any>'. Only applies to TCP/IP and UDP/IP.")]
+			"The default value is '<Any>'. Only applies to TCP/IP.")]
 		public string LocalInterface;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "LocalFilter", ShortName = "lf", Description =
+			"The desired local IP address filter. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
+			"- '<Any>' (any IPv4 or IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '<Localhost>' (IPv4 or IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '127.0.0.1' (IPv4 localhost) or '::1' (IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
+			"The default value is '<Any>'. Only applies to UDP/IP servers and UDP/IP sockets.")]
+		public string LocalFilter;
 
 		/// <remarks>
 		/// The values in the description must be provided directly instead of referencing their respective code items
@@ -184,7 +198,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "LocalPort", ShortName = "lp", Description =
 			"The desired local TCP or UDP port. Valid values are 0 through 65535. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
-			"Only applies to TCP/IP Servers, TCP/IP AutoSockets and UDP/IP.")]
+			"Only applies to TCP/IP servers, TCP/IP AutoSockets, UDP/IP servers and UDP/IP sockets.")]
 		public int LocalPort;
 
 		/// <remarks>
@@ -194,7 +208,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TCPAutoReconnect", ShortName = "tar", Description =
 			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is disabled. Only applies to TCP/IP Clients.")]
+			"By default, this feature is disabled. Only applies to TCP/IP clients.")]
 		public int TcpAutoReconnect;
 
 		/// <remarks>
