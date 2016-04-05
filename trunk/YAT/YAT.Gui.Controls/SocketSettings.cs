@@ -47,7 +47,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const MKY.IO.Serial.Socket.SocketHostType HostTypeDefault = MKY.IO.Serial.Socket.SocketHostType.TcpAutoSocket;
+		private const MKY.IO.Serial.Socket.SocketType SocketTypeDefault = MKY.IO.Serial.Socket.SocketType.TcpAutoSocket;
 
 		#endregion
 
@@ -58,7 +58,7 @@ namespace YAT.Gui.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private MKY.IO.Serial.Socket.SocketHostType hostType = HostTypeDefault;
+		private MKY.IO.Serial.Socket.SocketType socketType = SocketTypeDefault;
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
 
 		#endregion
@@ -98,13 +98,13 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public MKY.IO.Serial.Socket.SocketHostType HostType
+		public MKY.IO.Serial.Socket.SocketType SocketType
 		{
 			set
 			{
-				if (this.hostType != value)
+				if (this.socketType != value)
 				{
-					this.hostType = value;
+					this.socketType = value;
 					SetControls();
 				}
 			}
@@ -220,7 +220,7 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			bool enabledTcpClient = (Enabled && (this.hostType == MKY.IO.Serial.Socket.SocketHostType.TcpClient));
+			bool enabledTcpClient = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.TcpClient));
 
 			bool autoReconnectEnabled;
 			if (enabledTcpClient)

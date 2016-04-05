@@ -26,7 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Serial.Socket
 {
-	#region Enum SocketHostType
+	#region Enum SocketType
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -35,7 +35,7 @@ namespace MKY.IO.Serial.Socket
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum SocketHostType
+	public enum SocketType
 	{
 		Unknown,
 		TcpClient,
@@ -49,7 +49,7 @@ namespace MKY.IO.Serial.Socket
 	#endregion
 
 	/// <summary>
-	/// Extended enum SocketHostTypeEx.
+	/// Extended enum SocketTypeEx.
 	/// </summary>
 	/// <remarks>
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
@@ -57,7 +57,7 @@ namespace MKY.IO.Serial.Socket
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
-	public class SocketHostTypeEx : EnumEx
+	public class SocketTypeEx : EnumEx
 	{
 		#region String Definitions
 
@@ -69,14 +69,14 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		/// <summary>Default is <see cref="SocketHostType.TcpAutoSocket"/>.</summary>
-		public SocketHostTypeEx()
-			: base(SocketHostType.TcpAutoSocket)
+		/// <summary>Default is <see cref="SocketType.TcpAutoSocket"/>.</summary>
+		public SocketTypeEx()
+			: base(SocketType.TcpAutoSocket)
 		{
 		}
 
 		/// <summary></summary>
-		protected SocketHostTypeEx(SocketHostType type)
+		protected SocketTypeEx(SocketType type)
 			: base(type)
 		{
 		}
@@ -86,12 +86,12 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public override string ToString()
 		{
-			switch ((SocketHostType)UnderlyingEnum)
+			switch ((SocketType)UnderlyingEnum)
 			{
-				case SocketHostType.TcpClient:     return (TcpClient_string);
-				case SocketHostType.TcpServer:     return (TcpServer_string);
-				case SocketHostType.TcpAutoSocket: return (TcpAutoSocket_string);
-				case SocketHostType.Udp:           return (Udp_string);
+				case SocketType.TcpClient:     return (TcpClient_string);
+				case SocketType.TcpServer:     return (TcpServer_string);
+				case SocketType.TcpAutoSocket: return (TcpAutoSocket_string);
+				case SocketType.Udp:           return (Udp_string);
 				default:                     return (Unknown_string);
 			}
 		}
@@ -103,13 +103,13 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static SocketHostTypeEx[] GetItems()
+		public static SocketTypeEx[] GetItems()
 		{
-			List<SocketHostTypeEx> a = new List<SocketHostTypeEx>();
-			a.Add(new SocketHostTypeEx(SocketHostType.TcpClient));
-			a.Add(new SocketHostTypeEx(SocketHostType.TcpServer));
-			a.Add(new SocketHostTypeEx(SocketHostType.TcpAutoSocket));
-			a.Add(new SocketHostTypeEx(SocketHostType.Udp));
+			List<SocketTypeEx> a = new List<SocketTypeEx>();
+			a.Add(new SocketTypeEx(SocketType.TcpClient));
+			a.Add(new SocketTypeEx(SocketType.TcpServer));
+			a.Add(new SocketTypeEx(SocketType.TcpAutoSocket));
+			a.Add(new SocketTypeEx(SocketType.Udp));
 			return (a.ToArray());
 		}
 
@@ -120,9 +120,9 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static SocketHostTypeEx Parse(string s)
+		public static SocketTypeEx Parse(string s)
 		{
-			SocketHostTypeEx result;
+			SocketTypeEx result;
 			if (TryParse(s, out result)) // TryParse() trims whitespace.
 				return (result);
 			else
@@ -132,9 +132,9 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out SocketHostTypeEx result)
+		public static bool TryParse(string s, out SocketTypeEx result)
 		{
-			SocketHostType enumResult;
+			SocketType enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
 				result = enumResult;
@@ -150,33 +150,33 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out SocketHostType result)
+		public static bool TryParse(string s, out SocketType result)
 		{
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string))
 			{
-				result = SocketHostType.TcpClient;
+				result = SocketType.TcpClient;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpServer_string))
 			{
-				result = SocketHostType.TcpServer;
+				result = SocketType.TcpServer;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string))
 			{
-				result = SocketHostType.TcpAutoSocket;
+				result = SocketType.TcpAutoSocket;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Udp_string))
 			{
-				result = SocketHostType.Udp;
+				result = SocketType.Udp;
 				return (true);
 			}
 			else
 			{
-				result = new SocketHostTypeEx(); // Default!
+				result = new SocketTypeEx(); // Default!
 				return (false);
 			}
 		}
@@ -186,37 +186,37 @@ namespace MKY.IO.Serial.Socket
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator SocketHostType(SocketHostTypeEx type)
+		public static implicit operator SocketType(SocketTypeEx type)
 		{
-			return ((SocketHostType)type.UnderlyingEnum);
+			return ((SocketType)type.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator SocketHostTypeEx(SocketHostType type)
+		public static implicit operator SocketTypeEx(SocketType type)
 		{
-			return (new SocketHostTypeEx(type));
+			return (new SocketTypeEx(type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(SocketHostTypeEx type)
+		public static implicit operator int(SocketTypeEx type)
 		{
 			return (type.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SocketHostTypeEx(int type)
+		public static implicit operator SocketTypeEx(int type)
 		{
-			return (new SocketHostTypeEx((SocketHostType)type));
+			return (new SocketTypeEx((SocketType)type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(SocketHostTypeEx type)
+		public static implicit operator string(SocketTypeEx type)
 		{
 			return (type.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator SocketHostTypeEx(string type)
+		public static implicit operator SocketTypeEx(string type)
 		{
 			return (Parse(type));
 		}

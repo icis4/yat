@@ -655,6 +655,10 @@ namespace YAT.Settings.Terminal
 		/// Attention, the solution above is OK for the give use case, however, it wouldn't allow to
 		/// alternate the depth of the path as well. Such alternate is required for the commented
 		/// case with 'EolComment' below.
+		/// \remind (2016-04-05 / mky)
+		/// Ideally, simple alternate elements should be definable right at the element. Example:
+		/// "SocketSettings.HostType" got simplified to "SocketSettings.Type"
+		/// The alternate name (i.e. the old name) should be definable in 'SocketSettings'.
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] StaticAlternateXmlElements =
 		{
@@ -662,6 +666,7 @@ namespace YAT.Settings.Terminal
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, new string[] { "SerialPort", "IndicateBreakStates" },     new string[] { "IndicateSerialPortBreakStates" } ),     => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO"                                     }, new string[] { "SerialPort", "OutputBreakIsModifiable" }, new string[] { "SerialPortOutputBreakIsModifiable" } ), => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication"      }, "FlowControl",                                            new string[] { "Handshake" } ),
+			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                           }, "Type",                                                   new string[] { "HostType" } ),
 			new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "Socket"                           }, "RemoteTcpPort",                                          new string[] { "RemotePort" } ),
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "UsbSerialHidDevice", "DeviceInfo" }, "SerialString",                                           new string[] { "SerialNumber" } ), => Should be renamed, but doesn't work because it is part of a serializable object. Should be solved using XML transformation. */
 		/*	new MKY.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "TextTerminal"                           }, new string[] { "EolComment", "Indicators" },              new string[] { "EolCommentIndicators" } ), => Should be moved, but doesn't work because new name is at a deeper level. Should be solved using XML transformation. */

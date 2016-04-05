@@ -131,7 +131,7 @@ namespace YAT.Domain.Settings
 
 					// Set socket host type as well:
 					if (Socket != null)
-						Socket.HostType = (IOTypeEx)value;
+						Socket.Type = (IOTypeEx)value;
 
 					SetChanged();
 				}
