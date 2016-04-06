@@ -92,6 +92,8 @@ YAT 2.0 Gamma 2 Version 1.99.36 :: 2016-??-??
 
 New:
 - Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
+- Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay), useful together
+  with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to display the date in addition to the time (related to feature request #14).
 - Options to hide 0x00 and/or 0xFF (feature req. #243).

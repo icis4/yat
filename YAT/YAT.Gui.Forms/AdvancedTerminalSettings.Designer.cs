@@ -57,6 +57,9 @@
 			this.checkBox_NoSendOnOutputBreak = new System.Windows.Forms.CheckBox();
 			this.textBox_SignalXOnPeriodicallyInterval = new System.Windows.Forms.TextBox();
 			this.groupBox_Send_Keywords = new System.Windows.Forms.GroupBox();
+			this.label_DefaultLineIntervalUnit = new System.Windows.Forms.Label();
+			this.textBox_DefaultLineInterval = new System.Windows.Forms.TextBox();
+			this.label_DefaultLineInterval = new System.Windows.Forms.Label();
 			this.label_DefaultLineRepeatUnit = new System.Windows.Forms.Label();
 			this.textBox_DefaultLineRepeat = new System.Windows.Forms.TextBox();
 			this.label_DefaultLineRepeat = new System.Windows.Forms.Label();
@@ -68,7 +71,6 @@
 			this.label_DefaultDelay = new System.Windows.Forms.Label();
 			this.checkBox_DisableKeywords = new System.Windows.Forms.CheckBox();
 			this.checkBox_SignalXOnPeriodicallyEnable = new System.Windows.Forms.CheckBox();
-			this.label_SendImmediately = new System.Windows.Forms.Label();
 			this.checkBox_SignalXOnBeforeEachTransmission = new System.Windows.Forms.CheckBox();
 			this.checkBox_SendImmediately = new System.Windows.Forms.CheckBox();
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
@@ -274,7 +276,6 @@
 			this.groupBox_Send.Controls.Add(this.textBox_SignalXOnPeriodicallyInterval);
 			this.groupBox_Send.Controls.Add(this.groupBox_Send_Keywords);
 			this.groupBox_Send.Controls.Add(this.checkBox_SignalXOnPeriodicallyEnable);
-			this.groupBox_Send.Controls.Add(this.label_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_SignalXOnBeforeEachTransmission);
 			this.groupBox_Send.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_Send.Controls.Add(this.checkBox_CopyPredefined);
@@ -292,7 +293,7 @@
 			this.label_SignalXOnPeriodicallyIntervalUnit.Location = new System.Drawing.Point(232, 112);
 			this.label_SignalXOnPeriodicallyIntervalUnit.Name = "label_SignalXOnPeriodicallyIntervalUnit";
 			this.label_SignalXOnPeriodicallyIntervalUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 7;
+			this.label_SignalXOnPeriodicallyIntervalUnit.TabIndex = 6;
 			this.label_SignalXOnPeriodicallyIntervalUnit.Text = "ms";
 			this.label_SignalXOnPeriodicallyIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -313,7 +314,7 @@
 			this.groupBox_Send_SerialPorts.Location = new System.Drawing.Point(6, 140);
 			this.groupBox_Send_SerialPorts.Name = "groupBox_Send_SerialPorts";
 			this.groupBox_Send_SerialPorts.Size = new System.Drawing.Size(251, 112);
-			this.groupBox_Send_SerialPorts.TabIndex = 4;
+			this.groupBox_Send_SerialPorts.TabIndex = 7;
 			this.groupBox_Send_SerialPorts.TabStop = false;
 			this.groupBox_Send_SerialPorts.Text = "Serial COM ports";
 			// 
@@ -428,7 +429,7 @@
 			this.textBox_SignalXOnPeriodicallyInterval.Location = new System.Drawing.Point(184, 109);
 			this.textBox_SignalXOnPeriodicallyInterval.Name = "textBox_SignalXOnPeriodicallyInterval";
 			this.textBox_SignalXOnPeriodicallyInterval.Size = new System.Drawing.Size(48, 20);
-			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 6;
+			this.textBox_SignalXOnPeriodicallyInterval.TabIndex = 5;
 			this.textBox_SignalXOnPeriodicallyInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_SignalXOnPeriodicallyInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_SignalXOnPeriodicallyInterval_Validating);
 			// 
@@ -436,6 +437,9 @@
 			// 
 			this.groupBox_Send_Keywords.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineIntervalUnit);
+			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultLineInterval);
+			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineInterval);
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineRepeatUnit);
 			this.groupBox_Send_Keywords.Controls.Add(this.textBox_DefaultLineRepeat);
 			this.groupBox_Send_Keywords.Controls.Add(this.label_DefaultLineRepeat);
@@ -448,27 +452,56 @@
 			this.groupBox_Send_Keywords.Controls.Add(this.checkBox_DisableKeywords);
 			this.groupBox_Send_Keywords.Location = new System.Drawing.Point(6, 258);
 			this.groupBox_Send_Keywords.Name = "groupBox_Send_Keywords";
-			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 108);
-			this.groupBox_Send_Keywords.TabIndex = 5;
+			this.groupBox_Send_Keywords.Size = new System.Drawing.Size(251, 145);
+			this.groupBox_Send_Keywords.TabIndex = 8;
 			this.groupBox_Send_Keywords.TabStop = false;
 			this.groupBox_Send_Keywords.Text = "Keywords";
+			// 
+			// label_DefaultLineIntervalUnit
+			// 
+			this.label_DefaultLineIntervalUnit.AutoSize = true;
+			this.label_DefaultLineIntervalUnit.Location = new System.Drawing.Point(199, 62);
+			this.label_DefaultLineIntervalUnit.Name = "label_DefaultLineIntervalUnit";
+			this.label_DefaultLineIntervalUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_DefaultLineIntervalUnit.TabIndex = 8;
+			this.label_DefaultLineIntervalUnit.Text = "ms";
+			this.label_DefaultLineIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_DefaultLineInterval
+			// 
+			this.textBox_DefaultLineInterval.Location = new System.Drawing.Point(147, 59);
+			this.textBox_DefaultLineInterval.Name = "textBox_DefaultLineInterval";
+			this.textBox_DefaultLineInterval.Size = new System.Drawing.Size(48, 20);
+			this.textBox_DefaultLineInterval.TabIndex = 7;
+			this.textBox_DefaultLineInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_DefaultLineInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DefaultLineInterval_Validating);
+			// 
+			// label_DefaultLineInterval
+			// 
+			this.label_DefaultLineInterval.AutoSize = true;
+			this.label_DefaultLineInterval.Location = new System.Drawing.Point(6, 62);
+			this.label_DefaultLineInterval.Name = "label_DefaultLineInterval";
+			this.label_DefaultLineInterval.Size = new System.Drawing.Size(135, 13);
+			this.label_DefaultLineInterval.TabIndex = 6;
+			this.label_DefaultLineInterval.Text = "Default of \\!(&LineInterval) is\r\n";
+			this.label_DefaultLineInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_DefaultLineRepeatUnit
 			// 
 			this.label_DefaultLineRepeatUnit.AutoSize = true;
-			this.label_DefaultLineRepeatUnit.Location = new System.Drawing.Point(199, 62);
+			this.label_DefaultLineRepeatUnit.Location = new System.Drawing.Point(199, 83);
 			this.label_DefaultLineRepeatUnit.Name = "label_DefaultLineRepeatUnit";
 			this.label_DefaultLineRepeatUnit.Size = new System.Drawing.Size(31, 13);
-			this.label_DefaultLineRepeatUnit.TabIndex = 8;
+			this.label_DefaultLineRepeatUnit.TabIndex = 11;
 			this.label_DefaultLineRepeatUnit.Text = "times";
 			this.label_DefaultLineRepeatUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBox_DefaultLineRepeat
 			// 
-			this.textBox_DefaultLineRepeat.Location = new System.Drawing.Point(147, 59);
+			this.textBox_DefaultLineRepeat.Location = new System.Drawing.Point(147, 80);
 			this.textBox_DefaultLineRepeat.Name = "textBox_DefaultLineRepeat";
 			this.textBox_DefaultLineRepeat.Size = new System.Drawing.Size(48, 20);
-			this.textBox_DefaultLineRepeat.TabIndex = 7;
+			this.textBox_DefaultLineRepeat.TabIndex = 10;
 			this.textBox_DefaultLineRepeat.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_DefaultLineRepeat, "Set to -1 for infinite repeating");
 			this.textBox_DefaultLineRepeat.TextChanged += new System.EventHandler(this.textBox_DefaultLineRepeat_TextChanged);
@@ -477,10 +510,10 @@
 			// label_DefaultLineRepeat
 			// 
 			this.label_DefaultLineRepeat.AutoSize = true;
-			this.label_DefaultLineRepeat.Location = new System.Drawing.Point(6, 62);
+			this.label_DefaultLineRepeat.Location = new System.Drawing.Point(6, 83);
 			this.label_DefaultLineRepeat.Name = "label_DefaultLineRepeat";
 			this.label_DefaultLineRepeat.Size = new System.Drawing.Size(135, 13);
-			this.label_DefaultLineRepeat.TabIndex = 6;
+			this.label_DefaultLineRepeat.TabIndex = 9;
 			this.label_DefaultLineRepeat.Text = "Default of \\!(Line&Repeat) is\r\n";
 			this.label_DefaultLineRepeat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -544,11 +577,12 @@
 			// 
 			// checkBox_DisableKeywords
 			// 
+			this.checkBox_DisableKeywords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_DisableKeywords.AutoSize = true;
-			this.checkBox_DisableKeywords.Location = new System.Drawing.Point(6, 86);
+			this.checkBox_DisableKeywords.Location = new System.Drawing.Point(6, 122);
 			this.checkBox_DisableKeywords.Name = "checkBox_DisableKeywords";
 			this.checkBox_DisableKeywords.Size = new System.Drawing.Size(148, 17);
-			this.checkBox_DisableKeywords.TabIndex = 10;
+			this.checkBox_DisableKeywords.TabIndex = 12;
 			this.checkBox_DisableKeywords.Text = "&Disable all \\!(...) keywords";
 			this.checkBox_DisableKeywords.UseVisualStyleBackColor = true;
 			this.checkBox_DisableKeywords.CheckedChanged += new System.EventHandler(this.checkBox_DisableKeywords_CheckedChanged);
@@ -559,18 +593,10 @@
 			this.checkBox_SignalXOnPeriodicallyEnable.Location = new System.Drawing.Point(12, 111);
 			this.checkBox_SignalXOnPeriodicallyEnable.Name = "checkBox_SignalXOnPeriodicallyEnable";
 			this.checkBox_SignalXOnPeriodicallyEnable.Size = new System.Drawing.Size(159, 17);
-			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 11;
+			this.checkBox_SignalXOnPeriodicallyEnable.TabIndex = 4;
 			this.checkBox_SignalXOnPeriodicallyEnable.Text = "Send XOn &periodically every";
 			this.checkBox_SignalXOnPeriodicallyEnable.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnPeriodicallyEnable.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnPeriodicallyEnable_CheckedChanged);
-			// 
-			// label_SendImmediately
-			// 
-			this.label_SendImmediately.AutoSize = true;
-			this.label_SendImmediately.Location = new System.Drawing.Point(28, 82);
-			this.label_SendImmediately.Name = "label_SendImmediately";
-			this.label_SendImmediately.Size = new System.Drawing.Size(0, 13);
-			this.label_SendImmediately.TabIndex = 3;
 			// 
 			// checkBox_SignalXOnBeforeEachTransmission
 			// 
@@ -578,7 +604,7 @@
 			this.checkBox_SignalXOnBeforeEachTransmission.Location = new System.Drawing.Point(12, 88);
 			this.checkBox_SignalXOnBeforeEachTransmission.Name = "checkBox_SignalXOnBeforeEachTransmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.Size = new System.Drawing.Size(195, 17);
-			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 10;
+			this.checkBox_SignalXOnBeforeEachTransmission.TabIndex = 3;
 			this.checkBox_SignalXOnBeforeEachTransmission.Text = "Send XOn before each &transmission";
 			this.checkBox_SignalXOnBeforeEachTransmission.UseVisualStyleBackColor = true;
 			this.checkBox_SignalXOnBeforeEachTransmission.CheckedChanged += new System.EventHandler(this.checkBox_SignalXOnBeforeEachTransmission_CheckedChanged);
@@ -1086,7 +1112,6 @@
 		private System.Windows.Forms.CheckBox checkBox_CopyPredefined;
 		private System.Windows.Forms.CheckBox checkBox_ShowRadix;
 		private System.Windows.Forms.CheckBox checkBox_SendImmediately;
-		private System.Windows.Forms.Label label_SendImmediately;
 		private System.Windows.Forms.GroupBox groupBox_User;
 		private System.Windows.Forms.TextBox textBox_UserName;
 		private System.Windows.Forms.Label label_UserName;
@@ -1131,5 +1156,8 @@
 		private System.Windows.Forms.GroupBox groupBox_Display_Special;
 		private System.Windows.Forms.CheckBox checkBox_Hide0x00;
 		private System.Windows.Forms.CheckBox checkBox_Hide0xFF;
+		private System.Windows.Forms.Label label_DefaultLineIntervalUnit;
+		private System.Windows.Forms.TextBox textBox_DefaultLineInterval;
+		private System.Windows.Forms.Label label_DefaultLineInterval;
 	}
 }
