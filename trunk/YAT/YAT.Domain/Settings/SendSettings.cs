@@ -49,6 +49,9 @@ namespace YAT.Domain.Settings
 		public const int DefaultLineDelayDefault = 100;
 
 		/// <summary></summary>
+		public const int DefaultLineIntervalDefault = 100;
+
+		/// <summary></summary>
 		public const int DefaultLineRepeatDefault = LineRepeatInfinite;
 
 		/// <summary></summary>
@@ -71,6 +74,7 @@ namespace YAT.Domain.Settings
 		private bool sendImmediately;
 		private int  defaultDelay;
 		private int  defaultLineDelay;
+		private int  defaultLineInterval;
 		private int  defaultLineRepeat;
 		private bool disableKeywords;
 
@@ -100,13 +104,14 @@ namespace YAT.Domain.Settings
 		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
-			KeepCommand       = rhs.keepCommand;
-			CopyPredefined    = rhs.copyPredefined;
-			SendImmediately   = rhs.sendImmediately;
-			DefaultDelay      = rhs.DefaultDelay;
-			DefaultLineDelay  = rhs.DefaultLineDelay;
-			DefaultLineRepeat = rhs.DefaultLineRepeat;
-			DisableKeywords   = rhs.DisableKeywords;
+			KeepCommand         = rhs.keepCommand;
+			CopyPredefined      = rhs.copyPredefined;
+			SendImmediately     = rhs.sendImmediately;
+			DefaultDelay        = rhs.DefaultDelay;
+			DefaultLineDelay    = rhs.DefaultLineDelay;
+			DefaultLineInterval = rhs.DefaultLineInterval;
+			DefaultLineRepeat   = rhs.DefaultLineRepeat;
+			DisableKeywords     = rhs.DisableKeywords;
 
 			SignalXOnBeforeEachTransmission = rhs.SignalXOnBeforeEachTransmission;
 			SignalXOnPeriodically           = rhs.SignalXOnPeriodically;
@@ -121,13 +126,14 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			KeepCommand       = KeepCommandDefault;
-			CopyPredefined    = CopyPredefinedDefault;
-			SendImmediately   = SendImmediatelyDefault;
-			DefaultDelay      = DefaultDelayDefault;
-			DefaultLineDelay  = DefaultLineDelayDefault;
-			DefaultLineRepeat = DefaultLineRepeatDefault;
-			DisableKeywords   = DisableKeywordsDefault;
+			KeepCommand         = KeepCommandDefault;
+			CopyPredefined      = CopyPredefinedDefault;
+			SendImmediately     = SendImmediatelyDefault;
+			DefaultDelay        = DefaultDelayDefault;
+			DefaultLineDelay    = DefaultLineDelayDefault;
+			DefaultLineInterval = DefaultLineIntervalDefault;
+			DefaultLineRepeat   = DefaultLineRepeatDefault;
+			DisableKeywords     = DisableKeywordsDefault;
 
 			SignalXOnBeforeEachTransmission = SignalXOnBeforeEachTransmissionDefault;
 			SignalXOnPeriodically           = SignalXOnPeriodicallyDefault;
@@ -208,6 +214,21 @@ namespace YAT.Domain.Settings
 				if (this.defaultLineDelay != value)
 				{
 					this.defaultLineDelay = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("DefaultLineInterval")]
+		public virtual int DefaultLineInterval
+		{
+			get { return (this.defaultLineInterval); }
+			set
+			{
+				if (this.defaultLineInterval != value)
+				{
+					this.defaultLineInterval = value;
 					SetChanged();
 				}
 			}
@@ -313,13 +334,14 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(KeepCommand       == other.KeepCommand) &&
-				(CopyPredefined    == other.CopyPredefined) &&
-				(SendImmediately   == other.SendImmediately) &&
-				(DefaultDelay      == other.DefaultDelay) &&
-				(DefaultLineDelay  == other.DefaultLineDelay) &&
-				(DefaultLineRepeat == other.DefaultLineRepeat) &&
-				(DisableKeywords   == other.DisableKeywords) &&
+				(KeepCommand         == other.KeepCommand) &&
+				(CopyPredefined      == other.CopyPredefined) &&
+				(SendImmediately     == other.SendImmediately) &&
+				(DefaultDelay        == other.DefaultDelay) &&
+				(DefaultLineDelay    == other.DefaultLineDelay) &&
+				(DefaultLineInterval == other.DefaultLineInterval) &&
+				(DefaultLineRepeat   == other.DefaultLineRepeat) &&
+				(DisableKeywords     == other.DisableKeywords) &&
 
 				(SignalXOnBeforeEachTransmission == other.SignalXOnBeforeEachTransmission) &&
 				(SignalXOnPeriodically           == other.SignalXOnPeriodically)
@@ -339,13 +361,14 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				KeepCommand      .GetHashCode() ^
-				CopyPredefined   .GetHashCode() ^
-				SendImmediately  .GetHashCode() ^
-				DefaultDelay     .GetHashCode() ^
-				DefaultLineDelay .GetHashCode() ^
-				DefaultLineRepeat.GetHashCode() ^
-				DisableKeywords  .GetHashCode() ^
+				KeepCommand        .GetHashCode() ^
+				CopyPredefined     .GetHashCode() ^
+				SendImmediately    .GetHashCode() ^
+				DefaultDelay       .GetHashCode() ^
+				DefaultLineDelay   .GetHashCode() ^
+				DefaultLineInterval.GetHashCode() ^
+				DefaultLineRepeat  .GetHashCode() ^
+				DisableKeywords    .GetHashCode() ^
 
 				SignalXOnBeforeEachTransmission.GetHashCode() ^
 				SignalXOnPeriodically          .GetHashCode()

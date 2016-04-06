@@ -954,13 +954,20 @@ namespace YAT.Domain
 		protected virtual void ProcessParsedSendItem(ParsableSendItem item, Parser.Result[] parseResult)
 		{
 			bool sendEol = item.IsLine;
-			bool performLineDelay = false;
-			bool performLineRepeat = false;
+			bool performLineDelay = false;    // \remind For binary terminals, this is rather a 'PacketDelay'.
+			bool performLineInterval = false; // \remind For binary terminals, this is rather a 'PacketInterval'.
+			bool performLineRepeat = false;   // \remind For binary terminals, this is rather a 'PacketRepeat'.
 			bool lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
 			int lineRepeatRemaining = TerminalSettings.Send.DefaultLineRepeat;
 
 			do // Process at least once, potentially repeat.
 			{
+				// --- Initialize the line/packet ---
+
+				DateTime lineBeginTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetBegin'.
+
+				// --- Process the line/packet ---
+
 				foreach (Parser.Result ri in parseResult)
 				{
 					var bar = (ri as Parser.ByteArrayResult);
@@ -980,19 +987,25 @@ namespace YAT.Domain
 							switch (kr.Keyword)
 							{
 								// Process line related keywords:
-								case Parser.Keyword.NoEol:
-								{
+								case Parser.Keyword.NoEol: // \remind On needed for text terminals.
+									{
 									sendEol = false;
 									break;
 								}
 
-								case Parser.Keyword.LineDelay:
+								case Parser.Keyword.LineDelay: // \remind For binary terminals, this is rather a 'PacketDelay'.
 								{
 									performLineDelay = true;
 									break;
 								}
 
-								case Parser.Keyword.LineRepeat:
+								case Parser.Keyword.LineInterval: // \remind For binary terminals, this is rather a 'PacketInterval'.
+								{
+									performLineInterval = true;
+									break;
+								}
+
+								case Parser.Keyword.LineRepeat: // \remind For binary terminals, this is rather a 'PacketRepeat'.
 								{
 									performLineRepeat = true;
 									break;
@@ -1013,9 +1026,13 @@ namespace YAT.Domain
 						OnIOChanged(EventArgs.Empty);
 				}
 
-				// --- Finalize the line ---
+				// --- Finalize the line/packet ---
 
 				ProcessLineEnd(sendEol);
+
+				DateTime lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEnd'.
+
+				// --- Perform line/packet related post-processing ---
 
 				// Break if requested or terminal has stopped or closed! Note that breaking is
 				// done prior to a potential Sleep() or repeat.
@@ -1028,7 +1045,7 @@ namespace YAT.Domain
 					}
 				}
 
-				ProcessLineDelay(performLineDelay);
+				ProcessLineDelayOrInterval(performLineDelay, performLineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
 				// Process repeat:
 				if (!lineRepeatIsInfinite)
@@ -1116,28 +1133,42 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>For binary terminals, this is rather a 'ProcessPacketEnd'.</remarks>
 		protected virtual void ProcessLineEnd(bool sendEol)
 		{
 			// Nothing to do (yet).
 		}
 
-		/// <summary></summary>
-		protected virtual int ProcessLineDelay(bool performLineDelay)
+		/// <remarks>For binary terminals, this is rather a 'ProcessPacketDelayOrInterval'.</remarks>
+		protected virtual int ProcessLineDelayOrInterval(bool performLineDelay, bool performLineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
-			if (performLineDelay)
-			{
-				int delay = this.terminalSettings.Send.DefaultLineDelay;
+			int delay = 0;
 
-				// Raise the 'IOChanged' event if sending is about to be delayed:
+			if (performLineInterval) // 'Interval' has precendence over 'Delay' as it requires more accuracy.
+			{
+				int interval = this.terminalSettings.Send.DefaultLineInterval;
+				TimeSpan elapsed = (lineEndTimeStamp - lineBeginTimeStamp);
+				delay = interval - (int)elapsed.TotalMilliseconds;
+
+			}
+			else if (performLineDelay)
+			{
+				delay = this.terminalSettings.Send.DefaultLineDelay;
+			}
+
+			if (delay > 0)
+			{
+				// Raise the 'IOChanged' event if sending is about to be delayed for too long:
 				if (this.ioChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
 					OnIOChanged(EventArgs.Empty);
 
 				Thread.Sleep(delay);
 				return (delay);
 			}
-
-			return (0);
+			else
+			{
+				return (0);
+			}
 		}
 
 		/// <summary>

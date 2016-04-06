@@ -609,6 +609,32 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_DefaultLineInterval_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int interval;
+				if (int.TryParse(textBox_DefaultLineInterval.Text, out interval) && (interval >= 1))
+				{
+					this.settingsInEdit.Terminal.Send.DefaultLineInterval = interval;
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"Interval must be at least 1 ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					e.Cancel = true;
+				}
+			}
+		}
+
 		private void textBox_DefaultLineRepeat_TextChanged(object sender, EventArgs e)
 		{
 			int repeat;
@@ -801,19 +827,23 @@ namespace YAT.Gui.Forms
 
 			bool disableKeywords = this.settingsInEdit.Terminal.Send.DisableKeywords;
 			//// Attention: Do not disable the whole groupbox! Keywords could not be enabled anymore!
-			label_DefaultDelay.Enabled          = !disableKeywords;
-			label_DefaultDelayUnit.Enabled      = !disableKeywords;
-			textBox_DefaultDelay.Enabled        = !disableKeywords;
-			textBox_DefaultDelay.Text           = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
-			label_DefaultLineDelay.Enabled      = !disableKeywords;
-			label_DefaultLineDelayUnit.Enabled  = !disableKeywords;
-			textBox_DefaultLineDelay.Enabled    = !disableKeywords;
-			textBox_DefaultLineDelay.Text       = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
-			label_DefaultLineRepeat.Enabled     = !disableKeywords;
-			label_DefaultLineRepeatUnit.Enabled = !disableKeywords;
-			textBox_DefaultLineRepeat.Enabled   = !disableKeywords;
-			textBox_DefaultLineRepeat.Text      = this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
-			checkBox_DisableKeywords.Checked    = disableKeywords;
+			label_DefaultDelay.Enabled            = !disableKeywords;
+			label_DefaultDelayUnit.Enabled        = !disableKeywords;
+			textBox_DefaultDelay.Enabled          = !disableKeywords;
+			textBox_DefaultDelay.Text             = this.settingsInEdit.Terminal.Send.DefaultDelay.ToString(CultureInfo.CurrentCulture);
+			label_DefaultLineDelay.Enabled        = !disableKeywords;
+			label_DefaultLineDelayUnit.Enabled    = !disableKeywords;
+			textBox_DefaultLineDelay.Enabled      = !disableKeywords;
+			textBox_DefaultLineDelay.Text         = this.settingsInEdit.Terminal.Send.DefaultLineDelay.ToString(CultureInfo.CurrentCulture);
+			label_DefaultLineInterval.Enabled     = !disableKeywords;
+			label_DefaultLineIntervalUnit.Enabled = !disableKeywords;
+			textBox_DefaultLineInterval.Enabled   = !disableKeywords;
+			textBox_DefaultLineInterval.Text      = this.settingsInEdit.Terminal.Send.DefaultLineInterval.ToString(CultureInfo.CurrentCulture);
+			label_DefaultLineRepeat.Enabled       = !disableKeywords;
+			label_DefaultLineRepeatUnit.Enabled   = !disableKeywords;
+			textBox_DefaultLineRepeat.Enabled     = !disableKeywords;
+			textBox_DefaultLineRepeat.Text        = this.settingsInEdit.Terminal.Send.DefaultLineRepeat.ToString(CultureInfo.CurrentCulture);
+			checkBox_DisableKeywords.Checked      = disableKeywords;
 
 			// User:
 			textBox_UserName.Text = this.settingsInEdit.UserName;
@@ -876,6 +906,7 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
 			this.settingsInEdit.Terminal.Send.DefaultDelay                    = Domain.Settings.SendSettings.DefaultDelayDefault;
 			this.settingsInEdit.Terminal.Send.DefaultLineDelay                = Domain.Settings.SendSettings.DefaultLineDelayDefault;
+			this.settingsInEdit.Terminal.Send.DefaultLineInterval             = Domain.Settings.SendSettings.DefaultLineIntervalDefault;
 			this.settingsInEdit.Terminal.Send.DisableKeywords                 = Domain.Settings.SendSettings.DisableKeywordsDefault;
 
 			// User:
