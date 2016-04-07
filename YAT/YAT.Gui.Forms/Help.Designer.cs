@@ -190,7 +190,7 @@ namespace YAT.Gui.Forms
 			this.textBox_SerialPort.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox_SerialPort.Size = new System.Drawing.Size(443, 60);
 			this.textBox_SerialPort.TabIndex = 0;
-			this.textBox_SerialPort.Text = "<SERIAL PORT HELP>";
+			this.textBox_SerialPort.Text = "<SERIAL COM PORT HELP>";
 			// 
 			// label_ParserExplanations
 			// 

@@ -461,14 +461,25 @@ namespace MKY
 
 		#endregion
 
-		#region StartsWith
+		#region Starts/EndsWith
 		//------------------------------------------------------------------------------------------
-		// StartsWith
+		// Starts/EndsWith
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified
-		/// search strings when compared using the specified culture.
+		/// Determines whether the beginning of <paramref name="str"/> matches the specified <paramref name="value"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="value">The string to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of the comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
+		{
+			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
 		/// </summary>
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
@@ -480,8 +491,8 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified
-		/// search strings when compared using the specified culture.
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
+		/// when compared using the specified comparison type.
 		/// </summary>
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
@@ -500,8 +511,8 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified
-		/// search strings when compared using the specified culture.
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>
+		/// when compared using the specified culture.
 		/// </summary>
 		/// <param name="str">The string.</param>
 		/// <param name="values">The strings to compare with.</param>
@@ -517,6 +528,30 @@ namespace MKY
 					return (true); // Match.
 			}
 			return (false); // No match.
+		}
+
+		/// <summary>
+		/// Determines whether the beginning of <paramref name="str"/> matches one of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="values">The strings to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool StartsWithAnyOrdinalIgnoreCase(string str, string[] values)
+		{
+			return (StartsWithAny(str, values, StringComparison.OrdinalIgnoreCase));
+		}
+
+		/// <summary>
+		/// Determines whether the end of <paramref name="str"/> matches the specified <paramref name="value"/>.
+		/// </summary>
+		/// <param name="str">The string.</param>
+		/// <param name="value">The string to compare with.</param>
+		/// <returns>true if <paramref name="str"/> matches the end of the comparing string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">value is null.</exception>
+		public static bool EndsWithOrdinalIgnoreCase(string str, string value)
+		{
+			return (str.EndsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
 
 		#endregion

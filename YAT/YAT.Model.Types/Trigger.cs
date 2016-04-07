@@ -274,8 +274,8 @@ namespace YAT.Model.Types
 				result = Trigger.None;
 				return (true);
 			}
-			else if (s       .StartsWith(      PredefinedCommand_string) ||
-			         StringEx.StartsWithAny(s, PredefinedCommand_stringAlternatives))
+			else if (StringEx.StartsWithOrdinalIgnoreCase   (s, PredefinedCommand_string) ||
+			         StringEx.StartsWithAnyOrdinalIgnoreCase(s, PredefinedCommand_stringAlternatives))
 			{
 				string[] values = Regex.Split(s, @"\d+");
 				if (values.Length > 0)

@@ -177,12 +177,12 @@ namespace MKY.IO
 				case PlatformID.Win32NT:
 				case PlatformID.WinCE:
 				case PlatformID.Xbox:
-					return (string.Compare(pathA, pathB, StringComparison.OrdinalIgnoreCase) == 0);
+					return (StringEx.EqualsOrdinalIgnoreCase(pathA, pathB));
 
 				case PlatformID.Unix:
 				case PlatformID.MacOSX:
 				default:
-					return (string.Compare(pathA, pathB, StringComparison.Ordinal) == 0);
+					return (StringEx.EqualsOrdinalIgnoreCase(pathA, pathB));
 			}
 		}
 

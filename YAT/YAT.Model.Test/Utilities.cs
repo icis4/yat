@@ -866,7 +866,7 @@ namespace YAT.Model.Test
 			e.Result = DialogResult.OK;
 
 			// ...and signal exclusion via a flag:
-			if (e.Text.StartsWith("Unable to start terminal!"))
+			if (e.Text.StartsWith("Unable to start terminal"))
 			{
 				staticTerminalMessageInputRequestResultsInExclude = true;
 				staticTerminalMessageInputRequestResultsInExcludeText = e.Text;
