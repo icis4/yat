@@ -72,7 +72,7 @@ namespace YAT
 			"Engineering, testing and debugging of serial communications.",
 			"Supports RS-232/422/423/485 as well as...",
 			"...TCP/IP Client/Server/AutoSocket,...",
-			"...UDP/IP Client/Server/Socket and...",
+			"...UDP/IP Client/Server/PairSocket and...",
 			"...USB Ser/HID.",
 			"",
 			"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",

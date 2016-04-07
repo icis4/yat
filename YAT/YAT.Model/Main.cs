@@ -718,7 +718,7 @@ namespace YAT.Model
 					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
 					 (finalIOType == Domain.IOType.UdpClient) ||
 					 (finalIOType == Domain.IOType.UdpServer) ||
-					 (finalIOType == Domain.IOType.UdpSocket))
+					 (finalIOType == Domain.IOType.UdpPairSocket))
 			{
 				if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
 				{
@@ -731,7 +731,7 @@ namespace YAT.Model
 				if (((finalIOType == Domain.IOType.TcpClient) ||
 					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
 					 (finalIOType == Domain.IOType.UdpClient) ||
-					 (finalIOType == Domain.IOType.UdpSocket)) &&
+					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("RemotePort"))
 				{
 					if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
@@ -751,7 +751,7 @@ namespace YAT.Model
 						return (false);
 				}
 				if (((finalIOType == Domain.IOType.UdpServer) ||
-					 (finalIOType == Domain.IOType.UdpSocket)) &&
+					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalFilter"))
 				{
 					MKY.Net.IPAddressFilter localFilter;
@@ -763,7 +763,7 @@ namespace YAT.Model
 				if (((finalIOType == Domain.IOType.TcpServer) ||
 					 (finalIOType == Domain.IOType.TcpAutoSocket) ||
 					 (finalIOType == Domain.IOType.UdpServer) ||
-					 (finalIOType == Domain.IOType.UdpSocket)) &&
+					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalPort"))
 				{
 					if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))

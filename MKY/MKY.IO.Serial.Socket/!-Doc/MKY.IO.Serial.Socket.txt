@@ -8,7 +8,7 @@ This socket library implements the MKY.IO.Serial.IIOProvider interface for:
  > TCP/IP AutoSocket
  > UDP/IP Client
  > UDP/IP Server
- > UDP/IP Socket
+ > UDP/IP PairSocket
 
 
 ALAZ

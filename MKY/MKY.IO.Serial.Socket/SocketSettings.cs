@@ -281,7 +281,7 @@ namespace MKY.IO.Serial.Socket
 
 					case SocketType.UdpClient:
 					case SocketType.UdpServer:
-					case SocketType.UdpSocket:
+					case SocketType.UdpPairSocket:
 						return (RemoteUdpPort);
 
 					default:
@@ -300,7 +300,7 @@ namespace MKY.IO.Serial.Socket
 
 					case SocketType.UdpClient:
 					case SocketType.UdpServer:
-					case SocketType.UdpSocket:
+					case SocketType.UdpPairSocket:
 						RemoteUdpPort = value;
 						break;
 
@@ -419,7 +419,7 @@ namespace MKY.IO.Serial.Socket
 
 					case SocketType.UdpClient:
 					case SocketType.UdpServer:
-					case SocketType.UdpSocket:
+					case SocketType.UdpPairSocket:
 						return (LocalUdpPort);
 
 					default:
@@ -438,7 +438,7 @@ namespace MKY.IO.Serial.Socket
 
 					case SocketType.UdpClient:
 					case SocketType.UdpServer:
-					case SocketType.UdpSocket:
+					case SocketType.UdpPairSocket:
 						LocalUdpPort = value;
 						break;
 
@@ -659,7 +659,7 @@ namespace MKY.IO.Serial.Socket
 				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
 				case SocketType.UdpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpSocket:     return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpPairSocket:     return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}

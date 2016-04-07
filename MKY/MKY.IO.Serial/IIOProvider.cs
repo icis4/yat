@@ -55,7 +55,7 @@ namespace MKY.IO.Serial
 		/// Fired after the I/O provider's control state has changed.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, this event indicates a change of the serial control pins.
+		/// For serial COM ports, this event indicates a change of the serial control pins.
 		/// </remarks>
 		event EventHandler IOControlChanged;
 
@@ -119,11 +119,14 @@ namespace MKY.IO.Serial
 		/// connected to a remote resource.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, this property indicates that the port is open and no break
+		/// For serial COM ports, this property indicates that the port is open and no break
 		/// state is detected (if supported by the I/O instance).
 		/// </remarks>
 		/// <remarks>
 		/// For UDP sockets, this property indicates that the socket is open.
+		/// </remarks>
+		/// <remarks>
+		/// For USB Ser/HID devices, this property indicates that the device is physically connected.
 		/// </remarks>
 		/// <returns>
 		/// <c>true</c> if the underlying I/O instance is open and/or connected to a remote
@@ -181,10 +184,10 @@ namespace MKY.IO.Serial
 		/// Starts the I/O provider.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, the port gets opened.
+		/// For serial COM ports, the port gets opened.
 		/// For TCP/IP sockets, the socket gets created and starts connecting/listening.
 		/// For UDP/IP sockets, the socket gets opened.
-		/// For Ser/HID devices, the device gets created.
+		/// For USB Ser/HID devices, the device gets created.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 		bool Start();
@@ -193,10 +196,10 @@ namespace MKY.IO.Serial
 		/// Stops the I/O provider.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, the port gets closed.
+		/// For serial COM ports, the port gets closed.
 		/// For TCP/IP sockets, the socket gets closed.
 		/// For UDP/IP sockets, the socket gets closed.
-		/// For Ser/HID devices, the device gets closed.
+		/// For USB Ser/HID devices, the device gets closed.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]

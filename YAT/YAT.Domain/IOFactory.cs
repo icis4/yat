@@ -89,7 +89,7 @@ namespace YAT.Domain
 						));
 				}
 
-				case IOType.UdpSocket:
+				case IOType.UdpPairSocket:
 				{
 					return (new UdpSocket
 						(

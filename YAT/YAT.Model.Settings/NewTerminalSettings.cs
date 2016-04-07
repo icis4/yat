@@ -335,7 +335,7 @@ namespace YAT.Model.Settings
 
 					case Domain.IOType.UdpClient:
 					case Domain.IOType.UdpServer:
-					case Domain.IOType.UdpSocket:
+					case Domain.IOType.UdpPairSocket:
 						return (SocketLocalUdpPort);
 
 					default:
@@ -354,7 +354,7 @@ namespace YAT.Model.Settings
 
 					case Domain.IOType.UdpClient:
 					case Domain.IOType.UdpServer:
-					case Domain.IOType.UdpSocket:
+					case Domain.IOType.UdpPairSocket:
 						SocketLocalUdpPort = value;
 						break;
 
