@@ -543,7 +543,7 @@ namespace MKY.CommandLine
 						valueStr = valueStr.Trim();
 						valueStr = StringEx.TrimSymmetrical(valueStr, '"');
 
-						if (valueStr.Length <= 0)
+						if (string.IsNullOrEmpty(valueStr))
 							return (false);
 
 						if (field.FieldType.IsEnum)

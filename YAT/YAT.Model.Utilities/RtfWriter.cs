@@ -228,7 +228,7 @@ namespace YAT.Model.Utilities
 				var segments = new List<Pair<DisplayElement, Pair<int, int>>>();
 				foreach (DisplayElement element in line)
 				{
-					if (element.Text.Length > 0)
+					if (!string.IsNullOrEmpty(element.Text))
 					{
 						string segment = element.Text;
 						text.Append(segment);     // segment begin            segment end

@@ -644,7 +644,7 @@ namespace MKY.IO
 
 			DoPrepareDirectoryPath(pathA, out pathInfoA, out dirPathA, out dirInfoA);
 
-			if ((pathInfoA != null) && (pathB.Length > 0))
+			if ((pathInfoA != null) && (!string.IsNullOrEmpty(pathB)))
 			{
 				DirectoryInfo pathInfoResult = null;
 

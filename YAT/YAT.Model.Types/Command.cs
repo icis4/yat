@@ -269,9 +269,8 @@ namespace YAT.Model.Types
 				}
 				else if ((value != null) &&
 						 (value.Length >= 1) &&
-						 (value[0] != null) &&
-						 (value[0].Length > 0)) // Ensure that only non-empty strings define
-				{                               // the command during XML deserialization!
+						 (!string.IsNullOrEmpty(value[0]))) // Ensure that only non-empty strings define
+				{                                           // the command during XML deserialization!
 					this.isDefined = true;
 					this.commandLines = value;
 				}
@@ -348,7 +347,7 @@ namespace YAT.Model.Types
 		{
 			get
 			{
-				return (IsDefined && this.isFilePath && !string.IsNullOrEmpty(this.filePath));
+				return (IsDefined && this.isFilePath && (!string.IsNullOrEmpty(this.filePath)));
 			}
 			set
 			{

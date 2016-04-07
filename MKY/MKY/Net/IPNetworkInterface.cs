@@ -202,7 +202,7 @@ namespace MKY.Net
 				case IPNetworkInterfaceType.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
 				case IPNetworkInterfaceType.Other:
 				{
-					if (this.otherDescription.Length > 0)
+					if (!string.IsNullOrEmpty(this.otherDescription))
 					{
 						if (this.otherAddress != IPAddress.None)
 							return (this.otherDescription + " (" + this.otherAddress + ")");

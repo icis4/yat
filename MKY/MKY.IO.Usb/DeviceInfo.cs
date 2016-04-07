@@ -318,13 +318,13 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool TryValidate()
 		{
-			if (this.path.Length > 0)
+			if (!string.IsNullOrEmpty(this.path))
 			{
 				return (Device.GetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serial));
 			}
 			else if ((this.vendorId != 0) && (this.productId != 0))
 			{
-				if (this.serial.Length > 0)
+				if (!string.IsNullOrEmpty(this.serial))
 					return (Device.GetDeviceInfoFromVidAndPidAndSerial(this.vendorId, this.productId, this.serial, out this.path, out this.manufacturer, out this.product));
 				else
 					return (Device.GetDeviceInfoFromVidAndPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serial));
