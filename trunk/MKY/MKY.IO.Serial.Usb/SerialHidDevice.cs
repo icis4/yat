@@ -144,10 +144,6 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
-
 		#endregion
 
 		#region Object Lifetime
@@ -606,7 +602,7 @@ namespace MKY.IO.Serial.Usb
 					}
 
 					this.device.Send(data);
-					OnDataSent(new DataSentEventArgs(data));
+					OnDataSent(new SerialDataSentEventArgs(data, DeviceInfo));
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataSent' events are fired consecutively.
@@ -650,17 +646,6 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
-		/// Signals the other communication endpoint that this device is in XOn state.
-		/// </summary>
-		protected virtual void SignalInputXOnAndNotifyAutonomously()
-		{
-			AssertNotDisposed();
-
-			Send(XOnXOff.XOnByte);
-			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOnByte));
-		}
-
-		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
 		public virtual void SignalInputXOff()
@@ -668,17 +653,6 @@ namespace MKY.IO.Serial.Usb
 			AssertNotDisposed();
 
 			Send(XOnXOff.XOffByte);
-		}
-
-		/// <summary>
-		/// Signals the other communication endpoint that this device is in XOff state.
-		/// </summary>
-		protected virtual void SignalInputXOffAndNotifyAutonomously()
-		{
-			AssertNotDisposed();
-
-			Send(XOnXOff.XOffByte);
-			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOffByte));
 		}
 
 		/// <summary>
@@ -802,14 +776,14 @@ namespace MKY.IO.Serial.Usb
 							case SerialHidFlowControl.ManualSoftware:
 							{
 								if (this.iXOnXOffHelper.ManualInputWasXOn)
-									SignalInputXOnAndNotifyAutonomously();
+									SignalInputXOn();
 
 								break;
 							}
 
 							default:
 							{
-								SignalInputXOnAndNotifyAutonomously();
+								SignalInputXOn();
 								break;
 							}
 						}
@@ -1156,7 +1130,7 @@ namespace MKY.IO.Serial.Usb
 						this.receiveQueue.Clear();
 					}
 
-					OnDataReceived(new DataReceivedEventArgs(data));
+					OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo));
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataReceived' events are fired consecutively.
@@ -1221,13 +1195,6 @@ namespace MKY.IO.Serial.Usb
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		protected virtual void OnDataSentAutonomously(DataSentEventArgs e)
-		{
-			EventHelper.FireSync<DataSentEventArgs>(DataSentAutonomously, this, e);
-		}
-
 		#endregion
 
 		#region Object Members
@@ -1259,7 +1226,7 @@ namespace MKY.IO.Serial.Usb
 			if (di != null)
 				return (di.ToString());
 			else
-				return (base.ToString());
+				return (Undefined);
 		}
 
 		/// <summary></summary>
@@ -1269,7 +1236,7 @@ namespace MKY.IO.Serial.Usb
 			if (di != null)
 				return (di.ToShortString());
 			else
-				return (base.ToString());
+				return (Undefined);
 		}
 
 		#endregion

@@ -153,10 +153,6 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
-
 		#endregion
 
 		#region Object Lifetime
@@ -577,6 +573,10 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
+			System.Net.IPEndPoint remoteEndPoint;
+			lock (this.socketSyncObj)
+				remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
@@ -617,14 +617,13 @@ namespace MKY.IO.Serial.Socket
 					}
 					else // Server => Remote endpoint is the sender of the last received data.
 					{
-						System.Net.IPEndPoint remoteEndPoint;
 						lock (this.socketSyncObj)
 							remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
 
 						this.socket.Send(data, data.Length, remoteEndPoint);
 					}
 
-					OnDataSent(new DataSentEventArgs(new ReadOnlyCollection<byte>(data)));
+					OnDataSent(new SocketDataSentEventArgs(new ReadOnlyCollection<byte>(data), remoteEndPoint));
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataSent' events are fired consecutively.
@@ -828,16 +827,14 @@ namespace MKY.IO.Serial.Socket
 		{
 			AsyncReceiveState state = (AsyncReceiveState)(ar.AsyncState);
 
-			System.Net.IPEndPoint        stateLocalFilterEndPoint = state.LocalFilterEndPoint;
-			System.Net.Sockets.UdpClient stateSocket              = state.Socket;
-
 			// Ensure that async receive is discarded after close/dispose.
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
+				System.Net.IPEndPoint remoteEndPoint = state.LocalFilterEndPoint;
 				byte[] data;
 				try
 				{
-					data = stateSocket.EndReceive(ar, ref stateLocalFilterEndPoint);
+					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
 				}
 				catch (System.Net.Sockets.SocketException ex)
 				{
@@ -852,18 +849,28 @@ namespace MKY.IO.Serial.Socket
 					// be called directly. It is also ensured that the event handler is called
 					// sequential because the 'BeginReceive()' method is only called after
 					// the event handler has returned.
-					OnDataReceived(new DataReceivedEventArgs(data));
+					OnDataReceived(new SocketDataReceivedEventArgs(data, remoteEndPoint));
 
 					if (this.socketType == UdpSocketType.Server)
 					{
+						bool hasChanged = false;
+
 						// Set the remote end point to the sender of the last received data:
 						lock (this.socketSyncObj)
 						{
-							this.remoteIPAddress = stateLocalFilterEndPoint.Address;
-							this.remotePort      = stateLocalFilterEndPoint.Port;
+							if (this.remoteIPAddress != remoteEndPoint.Address) {
+								this.remoteIPAddress = remoteEndPoint.Address;
+								hasChanged = true;
+							}
+
+							if (this.remotePort != remoteEndPoint.Port) {
+								this.remotePort = remoteEndPoint.Port;
+								hasChanged = true;
+							}
 						}
 
-						OnIOChanged(EventArgs.Empty);
+						if (hasChanged)
+							OnIOChanged(EventArgs.Empty);
 					}
 
 					// Continue receiving data:
@@ -916,13 +923,6 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDataSentAutonomously(EventArgs e)
-		{
-			UnusedEvent.PreventCompilerWarning(DataSentAutonomously);
-			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for UDP sockets." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion

@@ -51,6 +51,7 @@ namespace YAT.Model.Utilities
 		private static Font rxControlFont;
 		private static Font dateFont;
 		private static Font timeFont;
+		private static Font portFont;
 		private static Font directionFont;
 		private static Font lengthFont;
 		private static Font whiteSpacesFont;
@@ -158,6 +159,12 @@ namespace YAT.Model.Utilities
 				fontStyle = settings.TimeFormat.FontStyle;
 				color     = settings.TimeFormat.Color;
 				font      = SetFont(ref timeFont, fontName, fontSize, fontStyle);
+			}
+			else if (element is DisplayElement.PortInfo)
+			{
+				fontStyle = settings.PortFormat.FontStyle;
+				color     = settings.PortFormat.Color;
+				font      = SetFont(ref portFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.DirectionInfo)
 			{

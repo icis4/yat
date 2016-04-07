@@ -180,10 +180,6 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
-
 		#endregion
 
 		#region Object Lifetime
@@ -215,8 +211,8 @@ namespace MKY.IO.Serial.Socket
 			this.instanceId = instanceId;
 
 			this.remoteIPAddress = remoteIPAddress;
-			this.remotePort = remotePort;
-			this.autoReconnect = autoReconnect;
+			this.remotePort      = remotePort;
+			this.autoReconnect   = autoReconnect;
 		}
 
 		#region Disposal
@@ -751,7 +747,7 @@ namespace MKY.IO.Serial.Socket
 			// be called directly. It is also ensured that the event handler is called
 			// sequential because the 'BeginReceive()' method is only called after
 			// the event handler has returned.
-			OnDataReceived(new DataReceivedEventArgs((byte[])e.Buffer.Clone()));
+			OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
 
 			// Continue receiving data.
 			e.Connection.BeginReceive();
@@ -797,6 +793,10 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void DataSentThread()
 		{
+			System.Net.IPEndPoint remoteEndPoint;
+			lock (this.socketSyncObj) // Remote end point is fixed for a TCP/IP client object.
+				remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
 			// Outer loop, requires another signal.
@@ -833,7 +833,7 @@ namespace MKY.IO.Serial.Socket
 						this.dataSentQueue.Clear();
 					}
 
-					OnDataSent(new DataSentEventArgs(data));
+					OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataSent' events are fired consecutively.
@@ -1044,13 +1044,6 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDataSentAutonomously(EventArgs e)
-		{
-			UnusedEvent.PreventCompilerWarning(DataSentAutonomously);
-			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for TCP/IP clients." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion

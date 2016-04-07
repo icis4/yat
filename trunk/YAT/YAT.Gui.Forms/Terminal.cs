@@ -792,6 +792,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
 			toolStripMenuItem_TerminalMenu_View_ShowDate.Checked        = this.settingsRoot.Display.ShowDate;
 			toolStripMenuItem_TerminalMenu_View_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
+			toolStripMenuItem_TerminalMenu_View_ShowPort.Checked        = this.settingsRoot.Display.ShowPort;
 			toolStripMenuItem_TerminalMenu_View_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = (isText);
@@ -898,6 +899,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowTime_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowPort_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowPort = !this.settingsRoot.Display.ShowPort;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowDirection_Click(object sender, EventArgs e)
@@ -1052,6 +1058,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
 			toolStripMenuItem_MonitorContextMenu_ShowDate.Checked        = this.settingsRoot.Display.ShowDate;
 			toolStripMenuItem_MonitorContextMenu_ShowTime.Checked        = this.settingsRoot.Display.ShowTime;
+			toolStripMenuItem_MonitorContextMenu_ShowPort.Checked        = this.settingsRoot.Display.ShowPort;
 			toolStripMenuItem_MonitorContextMenu_ShowDirection.Checked   = this.settingsRoot.Display.ShowDirection;
 
 			bool isText = ((Domain.TerminalTypeEx)terminalType).IsText;
@@ -1134,6 +1141,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_MonitorContextMenu_ShowTime_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowTime = !this.settingsRoot.Display.ShowTime;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowPort_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Display.ShowPort = !this.settingsRoot.Display.ShowPort;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowDirection_Click(object sender, EventArgs e)

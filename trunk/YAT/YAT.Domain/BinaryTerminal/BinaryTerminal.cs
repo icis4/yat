@@ -508,9 +508,10 @@ namespace YAT.Domain
 			this.bidirLineState = new BidirLineState(true, IODirection.Tx);
 		}
 
-		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, IODirection d, DateTime ts, DisplayElementCollection elements)
+		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
 		{
-			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
+				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart lp = new DisplayLinePart();
 
@@ -519,6 +520,9 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowTime)
 					lp.Add(new DisplayElement.TimeInfo(ts));
+
+				if (TerminalSettings.Display.ShowPort)
+					lp.Add(new DisplayElement.PortInfo((Direction)d, ps));
 
 				if (TerminalSettings.Display.ShowDirection)
 					lp.Add(new DisplayElement.DirectionInfo((Direction)d));
@@ -690,12 +694,12 @@ namespace YAT.Domain
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.Direction, re.TimeStamp, elements, lines);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.TimeStamp, re.Direction, elements, lines);
 
 				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
 				{
-					ExecuteLineBegin(displaySettings, lineState, re.Direction, re.TimeStamp, elements);
+					ExecuteLineBegin(displaySettings, lineState, re.TimeStamp, re.PortStamp, re.Direction, elements);
 
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.LineBreakTimer.Start();
@@ -721,7 +725,7 @@ namespace YAT.Domain
 					// In case of a pending immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
-						ExecuteLineBegin(displaySettings, lineState, re.Direction, re.TimeStamp, elements);
+						ExecuteLineBegin(displaySettings, lineState, re.TimeStamp, re.PortStamp, re.Direction, elements);
 
 						foreach (DisplayElement de in elementsForNextLine)
 						{
@@ -744,7 +748,7 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
-		                                           IODirection d, DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
+		                                           DateTime ts, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			if (lineState.LineElements.Count > 0)
 			{

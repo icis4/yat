@@ -423,6 +423,8 @@ namespace YAT.Model.Utilities
 			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 			sb.Append(@"T");
 			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture));
+			sb.Append(@""" Port=""");
+			sb.Append(transferLine.Port);
 			sb.Append(@""" Direction=""");
 			sb.Append(transferLine.Direction.ToString()); // Default is "G".
 			sb.Append(@""" Text=""");

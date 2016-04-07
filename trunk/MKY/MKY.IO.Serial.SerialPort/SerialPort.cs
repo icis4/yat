@@ -176,10 +176,6 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
-
 		#endregion
 
 		#region Object Lifetime
@@ -262,6 +258,22 @@ namespace MKY.IO.Serial.SerialPort
 				AssertNotDisposed();
 
 				return (this.settings);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual Ports.SerialPortId PortId
+		{
+			get
+			{
+				// Do not call AssertNotDisposed() in a simple get-property.
+
+				if (this.port != null)
+					return (this.port.PortId);
+				else if (this.settings != null)
+					return (this.settings.PortId);
+				else
+					return (null);
 			}
 		}
 
@@ -814,7 +826,7 @@ namespace MKY.IO.Serial.SerialPort
 							if (this.settings.MaxSendRate.Enabled)
 								sendRate.Update(effectiveChunkData.Count);
 
-							OnDataSent(new DataSentEventArgs(effectiveChunkData.ToArray()));
+							OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), this.settings.PortId));
 
 							// Wait for the minimal time possible to allow other threads to execute and
 							// to prevent that 'DataSent' events are fired consecutively.
@@ -1067,17 +1079,6 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Signals the other communication endpoint that this device is in XOn state.
-		/// </summary>
-		protected virtual void SignalInputXOnAndNotifyAutonomously()
-		{
-			AssertNotDisposed();
-
-			Send(XOnXOff.XOnByte);
-			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOnByte));
-		}
-
-		/// <summary>
 		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
 		public virtual void SignalInputXOff()
@@ -1085,17 +1086,6 @@ namespace MKY.IO.Serial.SerialPort
 			AssertNotDisposed();
 
 			Send(XOnXOff.XOffByte);
-		}
-
-		/// <summary>
-		/// Signals the other communication endpoint that this device is in XOff state.
-		/// </summary>
-		protected virtual void SignalInputXOffAndNotifyAutonomously()
-		{
-			AssertNotDisposed();
-
-			Send(XOnXOff.XOffByte);
-			OnDataSentAutonomously(new DataSentEventArgs(XOnXOff.XOffByte));
 		}
 
 		/// <summary>
@@ -1343,14 +1333,14 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialFlowControl.ManualCombined:
 					{
 						if (this.iXOnXOffHelper.ManualInputWasXOn)
-							SignalInputXOnAndNotifyAutonomously();
+							SignalInputXOn();
 
 						break;
 					}
 
 					default:
 					{
-						SignalInputXOnAndNotifyAutonomously();
+						SignalInputXOn();
 						break;
 					}
 				}
@@ -1725,7 +1715,7 @@ namespace MKY.IO.Serial.SerialPort
 							this.receiveQueue.Clear();
 						}
 
-						OnDataReceived(new DataReceivedEventArgs(data));
+						OnDataReceived(new SerialDataReceivedEventArgs(data, this.settings.PortId));
 
 						// Wait for the minimal time possible to allow other threads to execute and
 						// to prevent that 'DataReceived' events are fired consecutively.
@@ -2066,13 +2056,6 @@ namespace MKY.IO.Serial.SerialPort
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		protected virtual void OnDataSentAutonomously(DataSentEventArgs e)
-		{
-			EventHelper.FireSync<DataSentEventArgs>(DataSentAutonomously, this, e);
-		}
-
 		#endregion
 
 		#region Object Members
@@ -2094,15 +2077,11 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
-			lock (this.portSyncObj)
-			{
-				if      (this.port != null)
-					return (this.port.PortId);
-				else if (this.settings != null)
-					return (this.settings.PortId);
-				else
-					return (Undefined);
-			}
+			Ports.SerialPortId id = PortId;
+			if (id != null)
+				return (id.ToShortString());
+			else
+				return (Undefined);
 		}
 
 		#endregion

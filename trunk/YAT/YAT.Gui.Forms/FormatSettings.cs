@@ -190,6 +190,7 @@ namespace YAT.Gui.Forms
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DateInfo(now)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeInfo(now)));
+			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Length(2)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
@@ -198,6 +199,7 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
@@ -209,6 +211,7 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
@@ -231,13 +234,15 @@ namespace YAT.Gui.Forms
 			this.monitors = new Controls.Monitor[]
 			{
 				monitor_TxData, monitor_TxControl, monitor_RxData, monitor_RxControl,
-				monitor_Date, monitor_Time, monitor_Direction, monitor_Length, monitor_Error,
+				monitor_Date, monitor_Time, monitor_Port, monitor_Direction, monitor_Length,
+				monitor_Error,
 			};
 
 			this.textFormats = new Controls.TextFormat[]
 			{
 				textFormat_TxData, textFormat_TxControl, textFormat_RxData, textFormat_RxControl,
-				textFormat_Date, textFormat_Time, textFormat_Direction, textFormat_Length, textFormat_Error,
+				textFormat_Date, textFormat_Time, textFormat_Port, textFormat_Direction, textFormat_Length,
+				textFormat_Error,
 			};
 
 			for (int i = 0; i < this.monitors.Length; i++)
@@ -256,9 +261,10 @@ namespace YAT.Gui.Forms
 				case 3: return (this.formatSettingsInEdit.RxControlFormat);
 				case 4: return (this.formatSettingsInEdit.DateFormat);
 				case 5: return (this.formatSettingsInEdit.TimeFormat);
-				case 6: return (this.formatSettingsInEdit.DirectionFormat);
-				case 7: return (this.formatSettingsInEdit.LengthFormat);
-				case 8: return (this.formatSettingsInEdit.ErrorFormat);
+				case 6: return (this.formatSettingsInEdit.PortFormat);
+				case 7: return (this.formatSettingsInEdit.DirectionFormat);
+				case 8: return (this.formatSettingsInEdit.LengthFormat);
+				case 9: return (this.formatSettingsInEdit.ErrorFormat);
 			}
 			throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index!"));
 		}

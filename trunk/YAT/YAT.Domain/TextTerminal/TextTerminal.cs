@@ -547,9 +547,10 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteLineBegin(LineState lineState, IODirection d, DateTime ts, DisplayElementCollection elements)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
 		{
-			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
+				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				DisplayLinePart lp = new DisplayLinePart();
 
@@ -558,6 +559,9 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowTime)
 					lp.Add(new DisplayElement.TimeInfo(ts));
+
+				if (TerminalSettings.Display.ShowPort)
+					lp.Add(new DisplayElement.PortInfo((Direction)d, ps));
 
 				if (TerminalSettings.Display.ShowDirection)
 					lp.Add(new DisplayElement.DirectionInfo((Direction)d));
@@ -756,7 +760,7 @@ namespace YAT.Domain
 			{
 				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
-					ExecuteLineBegin(lineState, re.Direction, re.TimeStamp, elements);
+					ExecuteLineBegin(lineState, re.TimeStamp, re.PortStamp, re.Direction, elements);
 
 				// Data:
 				ExecuteData(lineState, re.Direction, b, elements);

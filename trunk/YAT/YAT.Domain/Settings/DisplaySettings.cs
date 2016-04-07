@@ -49,6 +49,9 @@ namespace YAT.Domain.Settings
 		public const bool ShowTimeDefault = false;
 
 		/// <summary></summary>
+		public const bool ShowPortDefault = false;
+
+		/// <summary></summary>
 		public const bool ShowDirectionDefault = false;
 
 		/// <summary></summary>
@@ -67,6 +70,7 @@ namespace YAT.Domain.Settings
 		private bool showLineNumbers;
 		private bool showDate;
 		private bool showTime;
+		private bool showPort;
 		private bool showDirection;
 		private bool showLength;
 		private int txMaxLineCount;
@@ -102,6 +106,7 @@ namespace YAT.Domain.Settings
 			ShowLineNumbers   = rhs.ShowLineNumbers;
 			ShowDate          = rhs.ShowDate;
 			ShowTime          = rhs.ShowTime;
+			ShowPort          = rhs.ShowPort;
 			ShowDirection     = rhs.ShowDirection;
 			ShowLength        = rhs.ShowLength;
 			TxMaxLineCount    = rhs.TxMaxLineCount;
@@ -125,6 +130,7 @@ namespace YAT.Domain.Settings
 			ShowLineNumbers   = ShowLineNumbersDefault;
 			ShowDate          = ShowDateDefault;
 			ShowTime          = ShowTimeDefault;
+			ShowPort          = ShowPortDefault;
 			ShowDirection     = ShowDirectionDefault;
 			ShowLength        = ShowLengthDefault;
 			TxMaxLineCount    = MaxLineCountDefault;
@@ -249,6 +255,21 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("ShowPort")]
+		public virtual bool ShowPort
+		{
+			get { return (this.showPort); }
+			set
+			{
+				if (this.showPort != value)
+				{
+					this.showPort = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("ShowDirection")]
 		public virtual bool ShowDirection
 		{
@@ -367,6 +388,7 @@ namespace YAT.Domain.Settings
 				(ShowLineNumbers           == other.ShowLineNumbers) &&
 				(ShowDate                  == other.ShowDate) &&
 				(ShowTime                  == other.ShowTime) &&
+				(ShowPort                  == other.ShowPort) &&
 				(ShowDirection             == other.ShowDirection) &&
 				(ShowLength                == other.ShowLength) &&
 				(TxMaxLineCount            == other.TxMaxLineCount) &&
@@ -395,6 +417,7 @@ namespace YAT.Domain.Settings
 				ShowLineNumbers          .GetHashCode() ^
 				ShowDate                 .GetHashCode() ^
 				ShowTime                 .GetHashCode() ^
+				ShowPort                 .GetHashCode() ^
 				ShowDirection            .GetHashCode() ^
 				ShowLength               .GetHashCode() ^
 				TxMaxLineCount           .GetHashCode() ^

@@ -59,6 +59,7 @@ namespace YAT.Model.Settings
 		private TextFormat rxControlFormat;
 		private TextFormat dateFormat;
 		private TextFormat timeFormat;
+		private TextFormat portFormat;
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
 		private TextFormat whiteSpacesFormat;
@@ -96,6 +97,7 @@ namespace YAT.Model.Settings
 			RxControlFormat   = new TextFormat(rhs.RxControlFormat);
 			DateFormat        = new TextFormat(rhs.DateFormat);
 			TimeFormat        = new TextFormat(rhs.TimeFormat);
+			PortFormat        = new TextFormat(rhs.PortFormat);
 			DirectionFormat   = new TextFormat(rhs.DirectionFormat);
 			LengthFormat      = new TextFormat(rhs.LengthFormat);
 			WhiteSpacesFormat = new TextFormat(rhs.WhiteSpacesFormat);
@@ -121,6 +123,7 @@ namespace YAT.Model.Settings
 			RxControlFormat   = new TextFormat(DefaultRxColor,          false, false, false, false);
 			DateFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			TimeFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
+			PortFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			DirectionFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			LengthFormat      = new TextFormat(DefaultInfoColor,        false, false, false, false);
 			WhiteSpacesFormat = new TextFormat(DefaultWhiteSpacesColor, false, false, false, false);
@@ -255,6 +258,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("PortFormat")]
+		public TextFormat PortFormat
+		{
+			get { return (this.portFormat); }
+			set
+			{
+				if (this.portFormat != value)
+				{
+					this.portFormat = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("DirectionFormat")]
 		public TextFormat DirectionFormat
 		{
@@ -376,6 +394,7 @@ namespace YAT.Model.Settings
 				(RxControlFormat   == other.RxControlFormat) &&
 				(DateFormat        == other.DateFormat) &&
 				(TimeFormat        == other.TimeFormat) &&
+				(PortFormat        == other.PortFormat) &&
 				(DirectionFormat   == other.DirectionFormat) &&
 				(LengthFormat      == other.LengthFormat) &&
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
@@ -406,6 +425,7 @@ namespace YAT.Model.Settings
 				RxControlFormat  .GetHashCode() ^
 				DateFormat       .GetHashCode() ^
 				TimeFormat       .GetHashCode() ^
+				PortFormat       .GetHashCode() ^
 				DirectionFormat  .GetHashCode() ^
 				LengthFormat     .GetHashCode() ^
 				WhiteSpacesFormat.GetHashCode() ^

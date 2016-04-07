@@ -76,6 +76,7 @@ namespace YAT.Model.Utilities
 		private FormatDescriptor rxControlFormat;
 		private FormatDescriptor dateFormat;
 		private FormatDescriptor timeFormat;
+		private FormatDescriptor portFormat;
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
 		private FormatDescriptor whiteSpacesFormat;
@@ -118,6 +119,7 @@ namespace YAT.Model.Utilities
 			this.rxControlFormat   = new FormatDescriptor(settings.RxControlFormat.FontStyle,   this.document.createColor(settings.RxControlFormat.Color),   this.document.createColor(settings.BackColor));
 			this.dateFormat        = new FormatDescriptor(settings.DateFormat.FontStyle,        this.document.createColor(settings.DateFormat.Color),        this.document.createColor(settings.BackColor));
 			this.timeFormat        = new FormatDescriptor(settings.TimeFormat.FontStyle,        this.document.createColor(settings.TimeFormat.Color),        this.document.createColor(settings.BackColor));
+			this.portFormat        = new FormatDescriptor(settings.PortFormat.FontStyle,        this.document.createColor(settings.PortFormat.Color),        this.document.createColor(settings.BackColor));
 			this.directionFormat   = new FormatDescriptor(settings.DirectionFormat.FontStyle,   this.document.createColor(settings.DirectionFormat.Color),   this.document.createColor(settings.BackColor));
 			this.lengthFormat      = new FormatDescriptor(settings.LengthFormat.FontStyle,      this.document.createColor(settings.LengthFormat.Color),      this.document.createColor(settings.BackColor));
 			this.whiteSpacesFormat = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle, this.document.createColor(settings.WhiteSpacesFormat.Color), this.document.createColor(settings.BackColor));
@@ -151,6 +153,7 @@ namespace YAT.Model.Utilities
 			else if ( element is DisplayElement.RxControl)		{ format = this.rxControlFormat; }
 			else if ( element is DisplayElement.DateInfo)		{ format = this.dateFormat; }
 			else if ( element is DisplayElement.TimeInfo)		{ format = this.timeFormat; }
+			else if ( element is DisplayElement.PortInfo)		{ format = this.portFormat; }
 			else if ( element is DisplayElement.DirectionInfo)	{ format = this.directionFormat; }
 			else if ( element is DisplayElement.Length)			{ format = this.lengthFormat; }
 			else if ((element is DisplayElement.NoData) ||

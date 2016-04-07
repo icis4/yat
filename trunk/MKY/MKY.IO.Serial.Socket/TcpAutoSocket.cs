@@ -157,10 +157,6 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
 
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
-
 		#endregion
 
 		#region Object Lifetime
@@ -1049,13 +1045,6 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDataSentAutonomously(EventArgs e)
-		{
-			UnusedEvent.PreventCompilerWarning(DataSentAutonomously);
-			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for TCP AutoSockets." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion
