@@ -449,7 +449,7 @@ namespace YAT.Gui.Controls
 			ofd.DefaultExt = PathEx.DenormalizeExtension(initialExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFiles;
 
-			bool success = ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0));
+			bool success = ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)));
 			if (success)
 			{
 				Refresh();

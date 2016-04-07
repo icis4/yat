@@ -2806,7 +2806,9 @@ namespace YAT.Gui.Forms
 			sfd.FilterIndex = ExtensionHelper.TextFilesFilterHelper(initialExtension);
 			sfd.DefaultExt  = PathEx.DenormalizeExtension(initialExtension);
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MonitorFiles;
-			if (sfd.ShowDialog(this) == DialogResult.OK && sfd.FileName.Length > 0)
+
+			DialogResult dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				Refresh();
 
@@ -3516,7 +3518,7 @@ namespace YAT.Gui.Forms
 				// Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			DialogResult dr = sfd.ShowDialog(this);
-			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				Refresh();
 

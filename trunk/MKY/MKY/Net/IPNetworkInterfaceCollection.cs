@@ -74,7 +74,7 @@ namespace MKY.Net
 							}
 						}
 
-						if (description.Length > 0)
+						if (!string.IsNullOrEmpty(description))
 							break;
 					}
 				}

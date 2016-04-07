@@ -458,7 +458,7 @@ namespace MKY.IO.Ports
 
 			sb.Append(Name);                     // "COM10"
 
-			if (appendCaption && !string.IsNullOrEmpty(Caption))
+			if (appendCaption && (!string.IsNullOrEmpty(Caption)))
 			{
 				sb.Append(Separator);            // "COM10 - "
 				sb.Append(Caption);              // "COM10 - Serial On USB Port"

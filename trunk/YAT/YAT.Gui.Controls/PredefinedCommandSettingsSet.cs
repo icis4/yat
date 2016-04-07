@@ -307,7 +307,7 @@ namespace YAT.Gui.Controls
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateText(this, "Command", textBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateText(this, "text", textBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 				{
 					this.isValidated = true;
 
@@ -456,7 +456,7 @@ namespace YAT.Gui.Controls
 
 		private void SetDescription(string description)
 		{
-			if (description.Length > 0)
+			if (!string.IsNullOrEmpty(description))
 				this.command.Description = description;
 			else
 				this.command.ClearDescription();
@@ -554,7 +554,7 @@ namespace YAT.Gui.Controls
 			ofd.DefaultExt = PathEx.DenormalizeExtension(initialExtension);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.SendFiles;
 
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
 				Refresh();
 

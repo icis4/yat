@@ -277,14 +277,14 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.file.Close();
 
 			// Process results:
-			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
+			this.receivedDataLock.EnterReadLock();
 			int receivedBytes = this.receivedBytes;
 			int receivedLines = this.receivedLines;
-			this.receivedDataLock.ReleaseReaderLock();
+			this.receivedDataLock.ExitReadLock();
 
-			this.receivedErrorLock.AcquireReaderLock(Timeout.Infinite);
+			this.receivedErrorLock.EnterReadLock();
 			int receivedErrors = this.receivedErrors;
-			this.receivedErrorLock.ReleaseReaderLock();
+			this.receivedErrorLock.ExitReadLock();
 
 			int sentBytes = (linesToTransmit * (CommandToEcho.Length + 2)); // + 2 = <CR><LF>
 			bool exact = (receivedBytes == sentBytes);
@@ -353,9 +353,9 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			{
 				Thread.Sleep(1); // Wait just a little => improves accuracy in terms of number of received lines.
 
-				this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
+				this.receivedDataLock.EnterReadLock();
 				receivedLines = this.receivedLines;
-				this.receivedDataLock.ReleaseReaderLock();
+				this.receivedDataLock.ExitReadLock();
 			}
 			while (receivedLines < linesToReceive);
 			Thread.Sleep(WaitForOperation);
@@ -376,15 +376,15 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			this.file.Close();
 
 			// Process results:
-			this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
+			this.receivedDataLock.EnterReadLock();
 			int receivedBytes = this.receivedBytes;
 			receivedBytes    -= this.receivedBytesOfCurrentLine; // Account for incomplete lines.
 			receivedLines     = this.receivedLines;
-			this.receivedDataLock.ReleaseReaderLock();
+			this.receivedDataLock.ExitReadLock();
 
-			this.receivedErrorLock.AcquireReaderLock(Timeout.Infinite);
+			this.receivedErrorLock.EnterReadLock();
 			int receivedErrors = this.receivedErrors;
-			this.receivedErrorLock.ReleaseReaderLock();
+			this.receivedErrorLock.ExitReadLock();
 
 			float bytesPerLine = (float)receivedBytes / receivedLines;
 			int bplA = (int)Math.Round(bytesPerLine);
@@ -427,36 +427,36 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 			byte[] buffer = new byte[bytesToRead];
 			this.port.Read(buffer, 0, bytesToRead);
 
-			this.receivedDataLock.AcquireWriterLock(Timeout.Infinite);
+			this.receivedDataLock.EnterWriteLock();
 			this.receivedBytes += buffer.Length;
-			this.receivedDataLock.ReleaseWriterLock();
+			this.receivedDataLock.ExitWriteLock();
 
 			foreach (byte b in buffer)
 			{
 				this.file.Write(Convert.ToChar(b));
 				if (b == 0x0A) // <LF>
 				{
-					this.receivedDataLock.AcquireWriterLock(Timeout.Infinite);
+					this.receivedDataLock.EnterWriteLock();
 					this.receivedBytesOfCurrentLine = 0; // Line is complete.
 					int receivedLines = this.receivedLines++;
-					this.receivedDataLock.ReleaseWriterLock();
+					this.receivedDataLock.ExitWriteLock();
 
 					Trace.WriteLine("<< line #" + receivedLines);
 				}
 				else
 				{
-					this.receivedDataLock.AcquireWriterLock(Timeout.Infinite);
+					this.receivedDataLock.EnterWriteLock();
 					this.receivedBytesOfCurrentLine++; // Line is incomplete.
-					this.receivedDataLock.ReleaseWriterLock();
+					this.receivedDataLock.ExitWriteLock();
 				}
 			}
 		}
 
 		private void port_ErrorReceived(object sender, System.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			this.receivedErrorLock.AcquireWriterLock(Timeout.Infinite);
+			this.receivedErrorLock.EnterWriteLock();
 			this.receivedErrors++;
-			this.receivedErrorLock.ReleaseWriterLock();
+			this.receivedErrorLock.ExitWriteLock();
 		}
 
 		#endregion
@@ -478,9 +478,9 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 				Thread.Sleep(r.Next(10, 100));
 
-				this.receivedDataLock.AcquireReaderLock(Timeout.Infinite);
+				this.receivedDataLock.EnterReadLock();
 				isOngoing = this.isOngoing;
-				this.receivedDataLock.ReleaseReaderLock();
+				this.receivedDataLock.ExitReadLock();
 			}
 			while (isOngoing);
 		}

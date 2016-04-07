@@ -546,7 +546,7 @@ namespace YAT.Gui.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Validation.ValidateText(this, "Command", comboBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+						if (Validation.ValidateText(this, "text", comboBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 						{
 							this.isValidated = true;
 
