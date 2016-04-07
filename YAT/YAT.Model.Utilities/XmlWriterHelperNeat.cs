@@ -96,6 +96,7 @@ namespace YAT.Model.Utilities
 
 			string dateStr      = "";
 			string timeStr      = "";
+			string portStr      = "";
 			string directionStr = "";
 			string lengthStr    = "";
 
@@ -163,6 +164,14 @@ namespace YAT.Model.Utilities
 					if (casted != null)
 					{
 						timeStr = casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types!
+					}
+				}
+				{
+					var casted = (e as DisplayElement.PortInfo);
+					if (casted != null)
+					{
+						portStr = casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types!
 					}
 				}
@@ -251,7 +260,7 @@ namespace YAT.Model.Utilities
 					success = false;
 			}
 
-			transferLine = new XmlTransferNeatLine(timeStamp, direction, textStr, errorStr, length);
+			transferLine = new XmlTransferNeatLine(timeStamp, portStr, direction, textStr, errorStr, length);
 
 			return (success);
 		}

@@ -35,6 +35,8 @@ namespace YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+			this.label_FontRemark2 = new System.Windows.Forms.Label();
+			this.label_FontRemark1 = new System.Windows.Forms.Label();
 			this.button_Background = new System.Windows.Forms.Button();
 			this.textFormat_Date = new YAT.Gui.Controls.TextFormat();
 			this.monitor_Date = new YAT.Gui.Controls.Monitor();
@@ -67,8 +69,9 @@ namespace YAT.Gui.Forms
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.label_Example = new System.Windows.Forms.Label();
 			this.monitor_Example = new YAT.Gui.Controls.Monitor();
-			this.label_FontRemark1 = new System.Windows.Forms.Label();
-			this.label_FontRemark2 = new System.Windows.Forms.Label();
+			this.label_Port = new System.Windows.Forms.Label();
+			this.monitor_Port = new YAT.Gui.Controls.Monitor();
+			this.textFormat_Port = new YAT.Gui.Controls.TextFormat();
 			this.groupBox_Settings.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -99,6 +102,9 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.textFormat_Port);
+			this.groupBox_Settings.Controls.Add(this.monitor_Port);
+			this.groupBox_Settings.Controls.Add(this.label_Port);
 			this.groupBox_Settings.Controls.Add(this.label_FontRemark2);
 			this.groupBox_Settings.Controls.Add(this.label_FontRemark1);
 			this.groupBox_Settings.Controls.Add(this.button_Background);
@@ -132,13 +138,37 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.button_Font);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(556, 312);
+			this.groupBox_Settings.Size = new System.Drawing.Size(556, 341);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
+			// label_FontRemark2
+			// 
+			this.label_FontRemark2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label_FontRemark2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_FontRemark2.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_FontRemark2.Location = new System.Drawing.Point(454, 231);
+			this.label_FontRemark2.Name = "label_FontRemark2";
+			this.label_FontRemark2.Size = new System.Drawing.Size(96, 63);
+			this.label_FontRemark2.TabIndex = 33;
+			this.label_FontRemark2.Text = "Style and color separately for each format.";
+			this.label_FontRemark2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// label_FontRemark1
+			// 
+			this.label_FontRemark1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_FontRemark1.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label_FontRemark1.Location = new System.Drawing.Point(454, 176);
+			this.label_FontRemark1.Name = "label_FontRemark1";
+			this.label_FontRemark1.Size = new System.Drawing.Size(96, 26);
+			this.label_FontRemark1.TabIndex = 32;
+			this.label_FontRemark1.Text = "Font and size\r\nfor all formats.";
+			this.label_FontRemark1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
 			// button_Background
 			// 
-			this.button_Background.Location = new System.Drawing.Point(88, 280);
+			this.button_Background.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_Background.Location = new System.Drawing.Point(88, 309);
 			this.button_Background.Name = "button_Background";
 			this.button_Background.Size = new System.Drawing.Size(127, 23);
 			this.button_Background.TabIndex = 30;
@@ -178,51 +208,56 @@ namespace YAT.Gui.Forms
 			// 
 			// textFormat_Direction
 			// 
+			this.textFormat_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textFormat_Direction.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Direction.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Direction.Location = new System.Drawing.Point(216, 193);
+			this.textFormat_Direction.Location = new System.Drawing.Point(216, 222);
 			this.textFormat_Direction.Name = "textFormat_Direction";
 			this.textFormat_Direction.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Direction.TabIndex = 20;
-			this.textFormat_Direction.Tag = "6";
+			this.textFormat_Direction.TabIndex = 23;
+			this.textFormat_Direction.Tag = "7";
 			this.textFormat_Direction.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// monitor_Direction
 			// 
+			this.monitor_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_Direction.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Direction.Location = new System.Drawing.Point(88, 193);
+			this.monitor_Direction.Location = new System.Drawing.Point(88, 222);
 			this.monitor_Direction.Name = "monitor_Direction";
 			this.monitor_Direction.Size = new System.Drawing.Size(127, 23);
-			this.monitor_Direction.TabIndex = 19;
+			this.monitor_Direction.TabIndex = 22;
 			this.monitor_Direction.TabStop = false;
 			this.monitor_Direction.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// label_Direction
 			// 
+			this.label_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Direction.AutoSize = true;
-			this.label_Direction.Location = new System.Drawing.Point(12, 198);
+			this.label_Direction.Location = new System.Drawing.Point(12, 227);
 			this.label_Direction.Name = "label_Direction";
 			this.label_Direction.Size = new System.Drawing.Size(52, 13);
-			this.label_Direction.TabIndex = 18;
+			this.label_Direction.TabIndex = 21;
 			this.label_Direction.Text = "&Direction:";
 			// 
 			// monitor_Error
 			// 
+			this.monitor_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_Error.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Error.Location = new System.Drawing.Point(88, 251);
+			this.monitor_Error.Location = new System.Drawing.Point(88, 280);
 			this.monitor_Error.Name = "monitor_Error";
 			this.monitor_Error.Size = new System.Drawing.Size(127, 23);
-			this.monitor_Error.TabIndex = 25;
+			this.monitor_Error.TabIndex = 28;
 			this.monitor_Error.TabStop = false;
 			this.monitor_Error.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// monitor_Length
 			// 
+			this.monitor_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.monitor_Length.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Length.Location = new System.Drawing.Point(88, 222);
+			this.monitor_Length.Location = new System.Drawing.Point(88, 251);
 			this.monitor_Length.Name = "monitor_Length";
 			this.monitor_Length.Size = new System.Drawing.Size(127, 23);
-			this.monitor_Length.TabIndex = 22;
+			this.monitor_Length.TabIndex = 25;
 			this.monitor_Length.TabStop = false;
 			this.monitor_Length.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
@@ -278,20 +313,22 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Error
 			// 
+			this.label_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Error.AutoSize = true;
-			this.label_Error.Location = new System.Drawing.Point(12, 256);
+			this.label_Error.Location = new System.Drawing.Point(12, 285);
 			this.label_Error.Name = "label_Error";
 			this.label_Error.Size = new System.Drawing.Size(32, 13);
-			this.label_Error.TabIndex = 24;
+			this.label_Error.TabIndex = 27;
 			this.label_Error.Text = "&Error:";
 			// 
 			// label_Length
 			// 
+			this.label_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Length.AutoSize = true;
-			this.label_Length.Location = new System.Drawing.Point(12, 227);
+			this.label_Length.Location = new System.Drawing.Point(12, 256);
 			this.label_Length.Name = "label_Length";
 			this.label_Length.Size = new System.Drawing.Size(43, 13);
-			this.label_Length.TabIndex = 21;
+			this.label_Length.TabIndex = 24;
 			this.label_Length.Text = "&Length:";
 			// 
 			// label_Time
@@ -341,24 +378,26 @@ namespace YAT.Gui.Forms
 			// 
 			// textFormat_Error
 			// 
+			this.textFormat_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textFormat_Error.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Error.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Error.Location = new System.Drawing.Point(216, 251);
+			this.textFormat_Error.Location = new System.Drawing.Point(216, 280);
 			this.textFormat_Error.Name = "textFormat_Error";
 			this.textFormat_Error.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Error.TabIndex = 26;
-			this.textFormat_Error.Tag = "8";
+			this.textFormat_Error.TabIndex = 29;
+			this.textFormat_Error.Tag = "9";
 			this.textFormat_Error.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// textFormat_Length
 			// 
+			this.textFormat_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textFormat_Length.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Length.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Length.Location = new System.Drawing.Point(216, 222);
+			this.textFormat_Length.Location = new System.Drawing.Point(216, 251);
 			this.textFormat_Length.Name = "textFormat_Length";
 			this.textFormat_Length.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Length.TabIndex = 23;
-			this.textFormat_Length.Tag = "7";
+			this.textFormat_Length.TabIndex = 26;
+			this.textFormat_Length.Tag = "8";
 			this.textFormat_Length.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// textFormat_Time
@@ -418,17 +457,17 @@ namespace YAT.Gui.Forms
 			// 
 			// button_Font
 			// 
-			this.button_Font.Location = new System.Drawing.Point(463, 135);
+			this.button_Font.Location = new System.Drawing.Point(463, 150);
 			this.button_Font.Name = "button_Font";
 			this.button_Font.Size = new System.Drawing.Size(75, 23);
-			this.button_Font.TabIndex = 27;
+			this.button_Font.TabIndex = 31;
 			this.button_Font.Text = "Font...";
 			this.button_Font.Click += new System.EventHandler(this.button_Font_Click);
 			// 
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(585, 147);
+			this.button_Defaults.Location = new System.Drawing.Point(585, 162);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 5;
@@ -439,7 +478,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
-			this.label_Example.Location = new System.Drawing.Point(24, 340);
+			this.label_Example.Location = new System.Drawing.Point(24, 369);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(50, 13);
 			this.label_Example.TabIndex = 1;
@@ -450,34 +489,45 @@ namespace YAT.Gui.Forms
 			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.monitor_Example.ConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Example.Location = new System.Drawing.Point(100, 340);
+			this.monitor_Example.Location = new System.Drawing.Point(100, 369);
 			this.monitor_Example.Name = "monitor_Example";
 			this.monitor_Example.Size = new System.Drawing.Size(360, 58);
 			this.monitor_Example.TabIndex = 2;
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
-			// label_FontRemark1
+			// label_Port
 			// 
-			this.label_FontRemark1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_FontRemark1.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_FontRemark1.Location = new System.Drawing.Point(454, 161);
-			this.label_FontRemark1.Name = "label_FontRemark1";
-			this.label_FontRemark1.Size = new System.Drawing.Size(96, 26);
-			this.label_FontRemark1.TabIndex = 28;
-			this.label_FontRemark1.Text = "Font and size\r\nfor all formats.";
-			this.label_FontRemark1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.label_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label_Port.AutoSize = true;
+			this.label_Port.Location = new System.Drawing.Point(12, 198);
+			this.label_Port.Name = "label_Port";
+			this.label_Port.Size = new System.Drawing.Size(29, 13);
+			this.label_Port.TabIndex = 18;
+			this.label_Port.Text = "&Port:";
 			// 
-			// label_FontRemark2
+			// monitor_Port
 			// 
-			this.label_FontRemark2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_FontRemark2.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_FontRemark2.Location = new System.Drawing.Point(454, 202);
-			this.label_FontRemark2.Name = "label_FontRemark2";
-			this.label_FontRemark2.Size = new System.Drawing.Size(96, 63);
-			this.label_FontRemark2.TabIndex = 29;
-			this.label_FontRemark2.Text = "Style and color separately for each format.";
-			this.label_FontRemark2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.monitor_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.monitor_Port.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Port.Location = new System.Drawing.Point(88, 193);
+			this.monitor_Port.Name = "monitor_Port";
+			this.monitor_Port.Size = new System.Drawing.Size(127, 23);
+			this.monitor_Port.TabIndex = 19;
+			this.monitor_Port.TabStop = false;
+			this.monitor_Port.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
+			// textFormat_Port
+			// 
+			this.textFormat_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textFormat_Port.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_Port.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_Port.Location = new System.Drawing.Point(216, 193);
+			this.textFormat_Port.Name = "textFormat_Port";
+			this.textFormat_Port.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_Port.TabIndex = 20;
+			this.textFormat_Port.Tag = "6";
+			this.textFormat_Port.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			// 
 			// FormatSettings
 			// 
@@ -485,7 +535,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(675, 413);
+			this.ClientSize = new System.Drawing.Size(675, 442);
 			this.Controls.Add(this.monitor_Example);
 			this.Controls.Add(this.label_Example);
 			this.Controls.Add(this.button_Defaults);
@@ -546,5 +596,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Background;
 		private System.Windows.Forms.Label label_FontRemark2;
 		private System.Windows.Forms.Label label_FontRemark1;
+		private Controls.TextFormat textFormat_Port;
+		private Controls.Monitor monitor_Port;
+		private System.Windows.Forms.Label label_Port;
 	}
 }

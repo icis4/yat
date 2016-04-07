@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 using MKY;
 
@@ -47,14 +48,24 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawElement
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string Undefined = "<Undefined>";
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
 		private ReadOnlyCollection<byte> data;
+		private DateTime    timeStamp;
+		private string      portStamp;
 		private IODirection direction;
-		private DateTime timeStamp;
 
 		#endregion
 
@@ -65,20 +76,27 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public RawElement(IEnumerable<byte> data, IODirection direction)
-			: this(data, direction, DateTime.Now)
+			: this(data, Undefined, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(IEnumerable<byte> data, IODirection direction, DateTime timeStamp)
+		public RawElement(IEnumerable<byte> data, string portStamp, IODirection direction)
+			: this(data, DateTime.Now, portStamp, direction)
+		{
+		}
+
+		/// <summary></summary>
+		public RawElement(IEnumerable<byte> data, DateTime timeStamp, string portStamp, IODirection direction)
 		{
 			List<byte> l = new List<byte>();
 			foreach (byte b in data)
 				l.Add(b);
 
 			this.data      = new ReadOnlyCollection<byte>(l);
-			this.direction = direction;
 			this.timeStamp = timeStamp;
+			this.portStamp = portStamp;
+			this.direction = direction;
 		}
 
 		#endregion
@@ -95,15 +113,21 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual IODirection Direction
-		{
-			get { return (this.direction); }
-		}
-
-		/// <summary></summary>
 		public virtual DateTime TimeStamp
 		{
 			get { return (this.timeStamp); }
+		}
+
+		/// <summary></summary>
+		public virtual string PortStamp
+		{
+			get { return (this.portStamp); }
+		}
+
+		/// <summary></summary>
+		public virtual IODirection Direction
+		{
+			get { return (this.direction); }
 		}
 
 		#endregion
@@ -118,7 +142,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual RawElement Clone()
 		{
-			return (new RawElement(this.data, this.direction, this.timeStamp));
+			return (new RawElement(this.data, this.timeStamp, this.portStamp, this.direction));
 		}
 
 		#endregion
@@ -169,9 +193,12 @@ namespace YAT.Domain
 				data.Write(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 			}
 
-			return (indent + "> Data: " + data + Environment.NewLine +
-					indent + "> Direction: " + this.direction + Environment.NewLine +
-					indent + "> TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2) + Environment.NewLine);
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine(indent + "> Data: " + data);
+			sb.AppendLine(indent + "> TimeStamp: " + this.timeStamp.ToLongTimeString() + "." + StringEx.Left(this.timeStamp.Millisecond.ToString("D3", CultureInfo.InvariantCulture), 2));
+			sb.AppendLine(indent + "> PortStamp: " + this.portStamp);
+			sb.AppendLine(indent + "> Direction: " + this.direction);
+			return (sb.ToString());
 		}
 
 		#endregion

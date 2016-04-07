@@ -91,17 +91,6 @@ namespace MKY.IO.Serial
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		event EventHandler<DataSentEventArgs> DataSent;
 
-		/// <summary>
-		/// Fired after the I/O provider has sent data autonomously, i.e. data not requested via
-		/// the <see cref="Send(byte[])"/>> method.
-		/// </summary>
-		/// <remarks>
-		/// This is an additional event indicating data that gets sent autonomously by the I/O
-		/// provider, i.e. XOn/XOff control data.
-		/// </remarks>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		event EventHandler<DataSentEventArgs> DataSentAutonomously;
-
 		#endregion
 
 		#region Properties

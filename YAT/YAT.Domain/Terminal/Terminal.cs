@@ -2009,13 +2009,17 @@ namespace YAT.Domain
 			DisplayLine dl = new DisplayLine();
 
 			// Line begin and time stamp:
-			if (TerminalSettings.Display.ShowDate|| TerminalSettings.Display.ShowTime || TerminalSettings.Display.ShowDirection)
+			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
+				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				if (TerminalSettings.Display.ShowDate)
 					dl.Add(new DisplayElement.DateInfo(re.TimeStamp));
 
 				if (TerminalSettings.Display.ShowTime)
 					dl.Add(new DisplayElement.TimeInfo(re.TimeStamp));
+
+				if (TerminalSettings.Display.ShowPort)
+					dl.Add(new DisplayElement.PortInfo((Direction)re.Direction, re.PortStamp));
 
 				if (TerminalSettings.Display.ShowDirection)
 					dl.Add(new DisplayElement.DirectionInfo((Direction)re.Direction));

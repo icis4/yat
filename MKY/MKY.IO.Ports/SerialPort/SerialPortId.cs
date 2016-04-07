@@ -473,6 +473,14 @@ namespace MKY.IO.Ports
 			return (sb.ToString());
 		}
 
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public virtual string ToShortString()
+		{
+			return (ToString(false, false));
+		}
+
 		#endregion
 
 		#region Parse/From

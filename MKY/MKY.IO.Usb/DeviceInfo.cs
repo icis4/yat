@@ -473,15 +473,16 @@ namespace MKY.IO.Usb
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if (!string.IsNullOrEmpty(Product))
+			sb.Append("VID:");
+			sb.Append(ProductIdString);          // "VID:1234"
+
+			sb.Append(" PID:");
+			sb.Append(ProductIdString);          // "VID:1234 PID:1234"
+
+			if (!string.IsNullOrEmpty(Serial))
 			{
-				sb.Append(Product);              // "Product"
-			}
-			else
-			{
-				sb.Append("(PID:");
-				sb.Append(ProductIdString);      // "(PID:1234)"
-				sb.Append(")");
+				sb.Append(" SNR:");
+				sb.Append(Serial);               // "VID:1234 PID:1234 SNR:000123A"
 			}
 
 			return (sb.ToString());

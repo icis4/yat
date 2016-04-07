@@ -51,6 +51,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(RxControl))]
 	[XmlInclude(typeof(DateInfo))]
 	[XmlInclude(typeof(TimeInfo))]
+	[XmlInclude(typeof(PortInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(Length))]
 	[XmlInclude(typeof(LeftMargin))]
@@ -230,6 +231,23 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TimeInfo(Direction direction, string timeStamp)
 				: base(direction, timeStamp)
+			{
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class PortInfo : DisplayElement
+		{
+			/// <summary></summary>
+			public PortInfo()
+				: base(Direction.None, "")
+			{
+			}
+
+			/// <summary></summary>
+			public PortInfo(Direction direction, string info)
+				: base(direction, "(" + info + ")")
 			{
 			}
 		}
@@ -557,6 +575,7 @@ namespace YAT.Domain
 			else if (this is RxControl)     clone = new RxControl();
 			else if (this is DateInfo)      clone = new DateInfo();
 			else if (this is TimeInfo)      clone = new TimeInfo();
+			else if (this is PortInfo)      clone = new PortInfo();
 			else if (this is DirectionInfo) clone = new DirectionInfo();
 			else if (this is Length)        clone = new Length();
 			else if (this is LeftMargin)    clone = new LeftMargin();

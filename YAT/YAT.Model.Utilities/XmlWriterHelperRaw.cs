@@ -174,6 +174,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				// All white-space elements do not need to be processed.
+				// 'PortInfo' is not used with 'XmlTransferRawLine'.
 				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
 				// 'Length' is not used with 'XmlTransferRawLine'.
 			}

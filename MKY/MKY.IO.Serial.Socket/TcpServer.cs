@@ -50,6 +50,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 
+using MKY.Collections.Generic;
 using MKY.Contracts;
 using MKY.Diagnostics;
 
@@ -144,7 +145,7 @@ namespace MKY.IO.Serial.Socket
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
 		/// </remarks>
-		private Queue<byte> dataSentQueue = new Queue<byte>(DataSentQueueInitialCapacity);
+		private Queue<Pair<byte, System.Net.IPEndPoint>> dataSentQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(DataSentQueueInitialCapacity);
 
 		private bool dataSentThreadRunFlag;
 		private AutoResetEvent dataSentThreadEvent;
@@ -174,10 +175,6 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		public event EventHandler<DataSentEventArgs> DataSent;
-
-		/// <summary></summary>
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		public event EventHandler<DataSentEventArgs> DataSentAutonomously;
 
 		#endregion
 
@@ -729,7 +726,7 @@ namespace MKY.IO.Serial.Socket
 			// be called directly. It is also ensured that the event handler is called
 			// sequential because the 'BeginReceive()' method is only called after
 			// the event handler has returned.
-			OnDataReceived(new DataReceivedEventArgs((byte[])e.Buffer.Clone()));
+			OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
 
 			// Continue receiving data.
 			e.Connection.BeginReceive();
@@ -753,7 +750,7 @@ namespace MKY.IO.Serial.Socket
 				lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					foreach (byte b in e.Buffer)
-						this.dataSentQueue.Enqueue(b);
+						this.dataSentQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, e.Connection.RemoteEndPoint));
 				}
 
 				SignalDataSentThreadSafely();
@@ -804,14 +801,24 @@ namespace MKY.IO.Serial.Socket
 					if (this.dataSentQueue.Count <= 0) // No lock required, just checking for empty.
 						break; // Let other threads do their job and wait until signaled again.
 
-					byte[] data;
+					List<byte> data = new List<byte>();
+					System.Net.IPEndPoint remoteEndPoint = null;
 					lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						data = this.dataSentQueue.ToArray();
-						this.dataSentQueue.Clear();
+						while (this.dataSentQueue.Count > 0)
+						{
+							Pair<byte, System.Net.IPEndPoint> item = this.dataSentQueue.Dequeue();
+
+							data.Add(item.Value1);
+
+							if (remoteEndPoint == null)
+								remoteEndPoint = item.Value2;
+							else if (remoteEndPoint != item.Value2)
+								break; // Break as soon as data of a different end point is available.
+						}
 					}
 
-					OnDataSent(new DataSentEventArgs(data));
+					OnDataSent(new SocketDataSentEventArgs(data.ToArray(), remoteEndPoint));
 
 					// Wait for the minimal time possible to allow other threads to execute and
 					// to prevent that 'DataSent' events are fired consecutively.
@@ -921,13 +928,6 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
 			EventHelper.FireSync<DataSentEventArgs>(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDataSentAutonomously(EventArgs e)
-		{
-			UnusedEvent.PreventCompilerWarning(DataSentAutonomously);
-			throw (new NotImplementedException("Program execution should never get here, the event 'DataSentAutonomously' is not in use for TCP/IP servers." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
 		}
 
 		#endregion

@@ -61,6 +61,7 @@ namespace YAT.Gui.Utilities
 		private static DrawingObjects rxControlObjects;
 		private static DrawingObjects dateObjects;
 		private static DrawingObjects timeObjects;
+		private static DrawingObjects portObjects;
 		private static DrawingObjects directionObjects;
 		private static DrawingObjects lengthObjects;
 		private static DrawingObjects whiteSpacesObjects;
@@ -240,6 +241,13 @@ namespace YAT.Gui.Utilities
 				fontColor = settings.TimeFormat.Color;
 				font  = SetFont (ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = SetBrush(ref timeObjects.Brush, fontColor);
+			}
+			else if (element is Domain.DisplayElement.PortInfo)
+			{
+				fontStyle = settings.PortFormat.FontStyle;
+				fontColor = settings.PortFormat.Color;
+				font  = SetFont (ref portObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref portObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{

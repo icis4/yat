@@ -28,7 +28,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary>
 	/// Defines event data of an I/O data transfer. In addition to the serial data itself,
-	/// it also contains time information.
+	/// it also contains meta information such as a time stamp.
 	/// </summary>
 	public abstract class DataEventArgs : EventArgs
 	{
@@ -55,6 +55,12 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		public abstract string PortStamp
+		{
+			get;
+		}
+
+		/// <summary></summary>
 		public override string ToString()
 		{
 			return (ToString(""));
@@ -71,24 +77,9 @@ namespace MKY.IO.Serial
 		}
 	}
 
-	/// <summary>
-	/// Defines event data of a receive transfer. In addition to the serial data itself it also
-	/// contains time information.
-	/// </summary>
-	public class DataReceivedEventArgs : DataEventArgs
+	/// <summary></summary>
+	public abstract class DataReceivedEventArgs : DataEventArgs
 	{
-		/// <summary></summary>
-		public DataReceivedEventArgs(byte data)
-			: this(new byte[] { data })
-		{
-		}
-
-		/// <summary></summary>
-		public DataReceivedEventArgs(byte[] data)
-			: this (new ReadOnlyCollection<byte>(data))
-		{
-		}
-
 		/// <summary></summary>
 		public DataReceivedEventArgs(ReadOnlyCollection<byte> data)
 			: base(data)
@@ -96,24 +87,9 @@ namespace MKY.IO.Serial
 		}
 	}
 
-	/// <summary>
-	/// Defines event data of a send transfer. In addition to the serial data itself it also
-	/// contains time information.
-	/// </summary>
-	public class DataSentEventArgs : DataEventArgs
+	/// <summary></summary>
+	public abstract class DataSentEventArgs : DataEventArgs
 	{
-		/// <summary></summary>
-		public DataSentEventArgs(byte data)
-			: this(new byte[] { data })
-		{
-		}
-
-		/// <summary></summary>
-		public DataSentEventArgs(byte[] data)
-			: this (new ReadOnlyCollection<byte>(data))
-		{
-		}
-
 		/// <summary></summary>
 		public DataSentEventArgs(ReadOnlyCollection<byte> data)
 			: base(data)

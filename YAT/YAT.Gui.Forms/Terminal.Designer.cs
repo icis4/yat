@@ -78,6 +78,7 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,7 +99,6 @@
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -189,6 +189,8 @@
 			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
@@ -283,8 +285,8 @@
 			this.timer_RfrLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ShowPort = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -337,6 +339,7 @@
             this.toolStripMenuItem_MonitorContextMenu_ShowLineNumbers,
             this.toolStripMenuItem_MonitorContextMenu_ShowDate,
             this.toolStripMenuItem_MonitorContextMenu_ShowTime,
+            this.toolStripMenuItem_MonitorContextMenu_ShowPort,
             this.toolStripMenuItem_MonitorContextMenu_ShowDirection,
             this.toolStripMenuItem_MonitorContextMenu_ShowEol,
             this.toolStripMenuItem_MonitorContextMenu_ShowLength,
@@ -353,7 +356,7 @@
             this.toolStripMenuItem_MonitorContextMenu_SaveToFile,
             this.toolStripMenuItem_MonitorContextMenu_Print});
 			this.contextMenuStrip_Monitor.Name = "contextMenuStrip_Monitor";
-			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(222, 536);
+			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(222, 558);
 			this.contextMenuStrip_Monitor.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Monitor_Opening);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels
@@ -476,8 +479,8 @@
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
-			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(151, 220);
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
+			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(152, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
 			// toolStripMenuItem_RadixContextMenu_String
@@ -485,66 +488,66 @@
 			this.toolStripMenuItem_RadixContextMenu_String.Checked = true;
 			this.toolStripMenuItem_RadixContextMenu_String.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_RadixContextMenu_String.Name = "toolStripMenuItem_RadixContextMenu_String";
-			this.toolStripMenuItem_RadixContextMenu_String.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_String.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_String.Text = "&String";
 			this.toolStripMenuItem_RadixContextMenu_String.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_String_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Char
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Char.Name = "toolStripMenuItem_RadixContextMenu_Char";
-			this.toolStripMenuItem_RadixContextMenu_Char.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_Char.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_Char.Text = "&Character";
 			this.toolStripMenuItem_RadixContextMenu_Char.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Char_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Separator_1
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Separator_1.Name = "toolStripMenuItem_RadixContextMenu_Separator_1";
-			this.toolStripMenuItem_RadixContextMenu_Separator_1.Size = new System.Drawing.Size(147, 6);
+			this.toolStripMenuItem_RadixContextMenu_Separator_1.Size = new System.Drawing.Size(148, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Bin
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Bin.Name = "toolStripMenuItem_RadixContextMenu_Bin";
-			this.toolStripMenuItem_RadixContextMenu_Bin.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_Bin.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_Bin.Text = "&Binary";
 			this.toolStripMenuItem_RadixContextMenu_Bin.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Bin_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Oct
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Oct.Name = "toolStripMenuItem_RadixContextMenu_Oct";
-			this.toolStripMenuItem_RadixContextMenu_Oct.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_Oct.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_Oct.Text = "&Octal";
 			this.toolStripMenuItem_RadixContextMenu_Oct.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Oct_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Dec
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Dec.Name = "toolStripMenuItem_RadixContextMenu_Dec";
-			this.toolStripMenuItem_RadixContextMenu_Dec.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_Dec.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_Dec.Text = "&Decimal";
 			this.toolStripMenuItem_RadixContextMenu_Dec.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Dec_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Hex
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Hex.Name = "toolStripMenuItem_RadixContextMenu_Hex";
-			this.toolStripMenuItem_RadixContextMenu_Hex.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_Hex.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Hex_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Separator_2
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Separator_2.Name = "toolStripMenuItem_RadixContextMenu_Separator_2";
-			this.toolStripMenuItem_RadixContextMenu_Separator_2.Size = new System.Drawing.Size(147, 6);
+			this.toolStripMenuItem_RadixContextMenu_Separator_2.Size = new System.Drawing.Size(148, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_SeparateTxRx
 			// 
 			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Name = "toolStripMenuItem_RadixContextMenu_SeparateTxRx";
-			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Text = "Separate Tx/Rx";
 			this.toolStripMenuItem_RadixContextMenu_SeparateTxRx.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click);
 			// 
 			// toolStripMenuItem_RadixContextMenu_Separator_3
 			// 
 			this.toolStripMenuItem_RadixContextMenu_Separator_3.Name = "toolStripMenuItem_RadixContextMenu_Separator_3";
-			this.toolStripMenuItem_RadixContextMenu_Separator_3.Size = new System.Drawing.Size(147, 6);
+			this.toolStripMenuItem_RadixContextMenu_Separator_3.Size = new System.Drawing.Size(148, 6);
 			// 
 			// toolStripMenuItem_RadixContextMenu_TxRadix
 			// 
@@ -557,7 +560,7 @@
             this.toolStripMenuItem_RadixContextMenu_Tx_Dec,
             this.toolStripMenuItem_RadixContextMenu_Tx_Hex});
 			this.toolStripMenuItem_RadixContextMenu_TxRadix.Name = "toolStripMenuItem_RadixContextMenu_TxRadix";
-			this.toolStripMenuItem_RadixContextMenu_TxRadix.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_TxRadix.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_TxRadix.Text = "&Tx Radix";
 			// 
 			// toolStripMenuItem_RadixContextMenu_Tx_String
@@ -620,7 +623,7 @@
             this.toolStripMenuItem_RadixContextMenu_Rx_Dec,
             this.toolStripMenuItem_RadixContextMenu_Rx_Hex});
 			this.toolStripMenuItem_RadixContextMenu_RxRadix.Name = "toolStripMenuItem_RadixContextMenu_RxRadix";
-			this.toolStripMenuItem_RadixContextMenu_RxRadix.Size = new System.Drawing.Size(150, 22);
+			this.toolStripMenuItem_RadixContextMenu_RxRadix.Size = new System.Drawing.Size(151, 22);
 			this.toolStripMenuItem_RadixContextMenu_RxRadix.Text = "&Rx Radix";
 			// 
 			// toolStripMenuItem_RadixContextMenu_Rx_String
@@ -671,6 +674,13 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Size = new System.Drawing.Size(142, 22);
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_4
 			// 
@@ -807,13 +817,6 @@
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// contextMenuStrip_Predefined
 			// 
@@ -1255,7 +1258,7 @@
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = true;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Name = "toolStripMenuItem_SendContextMenu_Panels_SendText";
-			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Text = "Send Text Panel";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendText_Click);
 			// 
@@ -1264,7 +1267,7 @@
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = true;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Name = "toolStripMenuItem_SendContextMenu_Panels_SendFile";
-			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Text = "Send File Panel";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendFile_Click);
 			// 
@@ -1381,7 +1384,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Terminal.MergeIndex = 1;
 			this.toolStripMenuItem_TerminalMenu_Terminal.Name = "toolStripMenuItem_TerminalMenu_Terminal";
-			this.toolStripMenuItem_TerminalMenu_Terminal.Size = new System.Drawing.Size(65, 20);
+			this.toolStripMenuItem_TerminalMenu_Terminal.Size = new System.Drawing.Size(66, 20);
 			this.toolStripMenuItem_TerminalMenu_Terminal.Text = "&Terminal";
 			this.toolStripMenuItem_TerminalMenu_Terminal.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening);
 			// 
@@ -1391,7 +1394,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Name = "toolStripMenuItem_TerminalMenu_Terminal_Start";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Text = "&Open Port";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Start_Click);
 			// 
@@ -1401,34 +1404,34 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.C)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "C&lose Port";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Stop_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_1
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Size = new System.Drawing.Size(212, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Size = new System.Drawing.Size(213, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Break
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Name = "toolStripMenuItem_TerminalMenu_Terminal_Break";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Text = "&Break Operation";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Break_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_2
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Size = new System.Drawing.Size(212, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Size = new System.Drawing.Size(213, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.Delete)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Text = "Cl&ear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Clear_Click);
 			// 
@@ -1437,20 +1440,20 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Name = "toolStripMenuItem_TerminalMenu_Terminal_Refresh";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Refresh_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_3
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_3";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3.Size = new System.Drawing.Size(212, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_3.Size = new System.Drawing.Size(213, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_SelectAll
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Name = "toolStripMenuItem_TerminalMenu_Terminal_SelectAll";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Text = "Select &All";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SelectAll_Click);
 			// 
@@ -1459,21 +1462,21 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Name = "toolStripMenuItem_TerminalMenu_Terminal_SelectNone";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.N)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Text = "Select &None";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SelectNone_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_4
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_4.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_4.Size = new System.Drawing.Size(212, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_4.Size = new System.Drawing.Size(213, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_text_exports_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Name = "toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard";
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Text = "&Copy To Clipboard";
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_Click);
 			// 
@@ -1482,7 +1485,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_table_save_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Name = "toolStripMenuItem_TerminalMenu_Terminal_SaveToFile";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Text = "Save To &File...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click);
 			// 
@@ -1491,14 +1494,14 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Tool_printer_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Name = "toolStripMenuItem_TerminalMenu_Terminal_Print";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Text = "&Print...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Print_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_5
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_5.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_5";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_5.Size = new System.Drawing.Size(212, 6);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_5.Size = new System.Drawing.Size(213, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Settings
 			// 
@@ -1506,7 +1509,7 @@
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Name = "toolStripMenuItem_TerminalMenu_Terminal_Settings";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Text = "&Settings...";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Settings_Click);
 			// 
@@ -1514,7 +1517,7 @@
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.DropDown = this.contextMenuStrip_Preset;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Name = "toolStripMenuItem_TerminalMenu_Terminal_Presets";
-			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Size = new System.Drawing.Size(215, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Size = new System.Drawing.Size(216, 22);
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets.Text = "Settings P&resets";
 			// 
 			// contextMenuStrip_Preset
@@ -1666,12 +1669,30 @@
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Size = new System.Drawing.Size(320, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse.Text = "&Automatic Response";
 			// 
+			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger});
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(124, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Text = "&Trigger";
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "The trigger that initiates an automatic response";
+			// 
+			// toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger
+			// 
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger";
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 23);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "Enable or disable an automatic response trigger,\r\neither refer to one of the comm" +
+    "ands,\r\nor fill-in any command text";
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged);
+			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged);
+			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Response});
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Size = new System.Drawing.Size(124, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Text = "&Response";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.ToolTipText = "The response that is automatically sent";
 			// 
@@ -1815,6 +1836,7 @@
             this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers,
             this.toolStripMenuItem_TerminalMenu_View_ShowDate,
             this.toolStripMenuItem_TerminalMenu_View_ShowTime,
+            this.toolStripMenuItem_TerminalMenu_View_ShowPort,
             this.toolStripMenuItem_TerminalMenu_View_ShowDirection,
             this.toolStripMenuItem_TerminalMenu_View_ShowEol,
             this.toolStripMenuItem_TerminalMenu_View_ShowLength,
@@ -2174,7 +2196,7 @@
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(204, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(203, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2257,7 +2279,7 @@
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DTR.Name = "toolStripStatusLabel_TerminalStatus_DTR";
-			this.toolStripStatusLabel_TerminalStatus_DTR.Size = new System.Drawing.Size(44, 20);
+			this.toolStripStatusLabel_TerminalStatus_DTR.Size = new System.Drawing.Size(45, 20);
 			this.toolStripStatusLabel_TerminalStatus_DTR.Text = "DTR";
 			this.toolStripStatusLabel_TerminalStatus_DTR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -2630,23 +2652,19 @@
 			// 
 			this.timer_IOStatusIndicator.Tick += new System.EventHandler(this.timer_IOStatusIndicator_Tick);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger
+			// toolStripMenuItem_MonitorContextMenu_ShowPort
 			// 
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger});
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(152, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Text = "&Trigger";
-			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "The trigger that initiates an automatic response";
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Name = "toolStripMenuItem_MonitorContextMenu_ShowPort";
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Text = "Show Port";
+			this.toolStripMenuItem_MonitorContextMenu_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowPort_Click);
 			// 
-			// toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger
+			// toolStripMenuItem_TerminalMenu_View_ShowPort
 			// 
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Name = "toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger";
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Size = new System.Drawing.Size(180, 23);
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText = "Enable or disable an automatic response trigger,\r\neither refer to one of the comm" +
-    "ands,\r\nor fill-in any command text";
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged);
-			this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.TextChanged += new System.EventHandler(this.toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_TextChanged);
+			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Name = "toolStripMenuItem_TerminalMenu_View_ShowPort";
+			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Text = "Show &Port";
+			this.toolStripMenuItem_TerminalMenu_View_ShowPort.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowPort_Click);
 			// 
 			// Terminal
 			// 
@@ -2954,5 +2972,7 @@
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Send_AutoResponse_Response;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowPort;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowPort;
 	}
 }

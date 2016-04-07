@@ -181,6 +181,12 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.Display.ShowTime = checkBox_ShowTime.Checked;
 		}
 
+		private void checkBox_ShowPort_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settingsInEdit.Terminal.Display.ShowPort = checkBox_ShowPort.Checked;
+		}
+
 		private void checkBox_ShowDirection_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -767,6 +773,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowLineNumbers.Checked  = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
 			checkBox_ShowDate.Checked         = this.settingsInEdit.Terminal.Display.ShowDate;
 			checkBox_ShowTime.Checked         = this.settingsInEdit.Terminal.Display.ShowTime;
+			checkBox_ShowPort.Checked         = this.settingsInEdit.Terminal.Display.ShowPort;
 			checkBox_ShowDirection.Checked    = this.settingsInEdit.Terminal.Display.ShowDirection;
 			checkBox_ShowLength.Checked       = this.settingsInEdit.Terminal.Display.ShowLength;
 			checkBox_ShowConnectTime.Checked  = this.settingsInEdit.Terminal.Status.ShowConnectTime;
@@ -867,9 +874,10 @@ namespace YAT.Gui.Forms
 			// Display:
 			this.settingsInEdit.Terminal.Display.ShowRadix           = Domain.Settings.DisplaySettings.ShowRadixDefault;
 			this.settingsInEdit.Terminal.Display.ShowLineNumbers     = Domain.Settings.DisplaySettings.ShowLineNumbersDefault;
-			this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 			this.settingsInEdit.Terminal.Display.ShowDate            = Domain.Settings.DisplaySettings.ShowDateDefault;
 			this.settingsInEdit.Terminal.Display.ShowTime            = Domain.Settings.DisplaySettings.ShowTimeDefault;
+			this.settingsInEdit.Terminal.Display.ShowPort            = Domain.Settings.DisplaySettings.ShowPortDefault;
+			this.settingsInEdit.Terminal.Display.ShowDirection       = Domain.Settings.DisplaySettings.ShowDirectionDefault;
 			this.settingsInEdit.Terminal.Display.ShowLength          = Domain.Settings.DisplaySettings.ShowLengthDefault;
 			this.settingsInEdit.Terminal.Status.ShowConnectTime      = Domain.Settings.StatusSettings.ShowConnectTimeDefault;
 			this.settingsInEdit.Terminal.Status.ShowCountAndRate     = Domain.Settings.StatusSettings.ShowCountAndRateDefault;

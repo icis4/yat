@@ -364,21 +364,6 @@ namespace YAT.Domain
 
 			if (IsTransmissive)
 			{
-				// Enqueue and signal the send operation BEFORE actually sending the data. This
-				// ensures that an outgoing request is shown above the corresponding incoming
-				// response in ther terminal monitor.
-				//
-				// See comments in AttachIO() for more information.
-				//
-				RawElement re = new RawElement(data, IODirection.Tx);
-				lock (this.repositorySyncObj)
-				{
-					this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-					this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
-				}
-				OnRawElementSent(new RawElementEventArgs(re));
-
-				// Then send the data using the active I/O provider:
 				if (!this.io.Send(data))
 				{
 					string message;
@@ -584,41 +569,20 @@ namespace YAT.Domain
 
 			this.io = io;
 
-			this.io.IOChanged            += new EventHandler(io_IOChanged);
-			this.io.IOControlChanged     += new EventHandler(io_IOControlChanged);
-			this.io.IOError              += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
-			this.io.DataReceived         += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
-		////this.io.DataSent             => see below
-			this.io.DataSentAutonomously += new EventHandler<DataSentEventArgs>(io_DataSentAutonomously);
-
-			// The 'DataSent' event is not used because it would not allow to properly synchronize
-			// outgoing with incoming data. In most applications that isn't needed, but in case of
-			// YAT it is a major feature that outgoing requests and incoming responses are properly
-			// displayed line-after-line. Using the 'DataSent' event could lead to data races among
-			// the threads which process the outgoing and incoming data events, and thus lead to
-			// mixed up displaying of the lines.
-			// Instead of the 'DataSent' event, this raw terminal fills outgoing data directly into
-			// the Tx and Bidir repositories, before that data is actually being sent, relying on
-			// the on the underlying I/O provider to eventually send the data.
-			// 
-			// Additional advantage of this approach:
-			//  > Tx data is shown even if XOn/XOff or some other flow control mechanism is active.
-			//
-			// Disadvantage of this approach:
-			//  > Time stamp information of the outgoing data is more related to the time when the
-			//    user triggered the send operation than to the time when the data actually left.
-			//  > Additional control data that is sent by the underlying I/O instance (e.g. inital
-			//    XOn) is not shown => DataSentAutonomously() workaround.
+			this.io.IOChanged        += new EventHandler(io_IOChanged);
+			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
+			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
+			this.io.DataReceived     += new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+			this.io.DataSent         += new EventHandler<DataSentEventArgs>(io_DataSent);
 		}
 
 		private void DetachIO()
 		{
-			this.io.IOChanged            -= new EventHandler(io_IOChanged);
-			this.io.IOControlChanged     -= new EventHandler(io_IOControlChanged);
-			this.io.IOError              -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
-			this.io.DataReceived         -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
-		////this.io.DataSent             => see above
-			this.io.DataSentAutonomously -= new EventHandler<DataSentEventArgs>(io_DataSentAutonomously);
+			this.io.IOChanged        -= new EventHandler(io_IOChanged);
+			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
+			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
+			this.io.DataReceived     -= new EventHandler<DataReceivedEventArgs>(io_DataReceived);
+			this.io.DataSent         -= new EventHandler<DataSentEventArgs>(io_DataSent);
 
 			this.io = null;
 		}
@@ -656,7 +620,7 @@ namespace YAT.Domain
 		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			RawElement re = new RawElement(e.Data, IODirection.Rx, e.TimeStamp);
+			RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 			lock (this.repositorySyncObj)
 			{
 				this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
@@ -670,9 +634,9 @@ namespace YAT.Domain
 		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		/// Therefore, no additional synchronization or locking is required here.
 		/// </remarks>
-		private void io_DataSentAutonomously(object sender, DataSentEventArgs e)
+		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
-			RawElement re = new RawElement(e.Data, IODirection.Tx, e.TimeStamp);
+			RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 			lock (this.repositorySyncObj)
 			{
 				this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.

@@ -119,6 +119,7 @@ namespace YAT.Model.Utilities
 	[Serializable]
 	public class XmlTransferNeatLine : XmlTransferLine
 	{
+		private string port;
 		private string text;
 		private string errorText;
 		private int length;
@@ -129,12 +130,21 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferNeatLine(DateTime timeStamp, Direction direction, string text, string errorText, int length)
+		public XmlTransferNeatLine(DateTime timeStamp, string port, Direction direction, string text, string errorText, int length)
 			: base(timeStamp, direction)
 		{
+			this.port      = port;
 			this.text      = text;
 			this.errorText = errorText;
 			this.length    = length;
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("Port")]
+		public virtual string Port
+		{
+			get { return (this.port); }
+			set { this.port = value; }
 		}
 
 		/// <summary></summary>
