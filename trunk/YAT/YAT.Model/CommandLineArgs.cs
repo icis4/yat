@@ -89,7 +89,7 @@ namespace YAT.Model
 			"The desired port type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'COM' (Serial Port)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
-			"- 'UDPClient', 'UDPServer', 'UDPSocket' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'UDPClient', 'UDPServer', 'UDPPairSocket' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
 			"The default value is 'COM'.")]
 		public string IOType;
@@ -165,7 +165,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
 			"The desired remote TCP or UDP port. Valid values are 0 through 65535. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
-			"Only applies to TCP/IP clients, TCP/IP AutoSockets, UDP/IP clients and UDP/IP sockets.")]
+			"Only applies to TCP/IP clients, TCP/IP AutoSockets, UDP/IP clients and UDP/IP PairSockets.")]
 		public int RemotePort;
 
 		/// <summary></summary>
@@ -187,7 +187,7 @@ namespace YAT.Model
 			"- '<Localhost>' (IPv4 or IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '127.0.0.1' (IPv4 localhost) or '::1' (IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is '<Any>'. Only applies to UDP/IP servers and UDP/IP sockets.")]
+			"The default value is '<Any>'. Only applies to UDP/IP servers and UDP/IP PairSockets.")]
 		public string LocalFilter;
 
 		/// <remarks>
@@ -198,7 +198,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "LocalPort", ShortName = "lp", Description =
 			"The desired local TCP or UDP port. Valid values are 0 through 65535. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
-			"Only applies to TCP/IP servers, TCP/IP AutoSockets, UDP/IP servers and UDP/IP sockets.")]
+			"Only applies to TCP/IP servers, TCP/IP AutoSockets, UDP/IP servers and UDP/IP PairSockets.")]
 		public int LocalPort;
 
 		/// <remarks>

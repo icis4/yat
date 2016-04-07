@@ -20,8 +20,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Threading;
-
 using NUnit.Framework;
 
 namespace MKY.IO.Serial.Socket.Test
@@ -48,18 +46,18 @@ namespace MKY.IO.Serial.Socket.Test
 			int portB;
 			Utilities.GetAvailableLocalUdpPorts(out portA, out portB);
 
-			UdpSocket socketA;
-			UdpSocket socketB;
+			UdpSocket pairSocketA;
+			UdpSocket pairSocketB;
 
-			Utilities.StartUdpSocket(out socketA, portB, portA);
-			Utilities.WaitForStart(socketA, "UDP/IP Socket A could not be started!");
-			Utilities.StartUdpSocket(out socketB, portA, portB);
-			Utilities.WaitForStart(socketB, "UDP/IP Socket B could not be started!");
+			Utilities.StartUdpPairSocket(out pairSocketA, portB, portA);
+			Utilities.WaitForStart(pairSocketA, "UDP/IP PairSocket A could not be started!");
+			Utilities.StartUdpPairSocket(out pairSocketB, portA, portB);
+			Utilities.WaitForStart(pairSocketB, "UDP/IP PairSocket B could not be started!");
 
-			Utilities.StopUdpSocket(socketB);
-			Utilities.WaitForStop(socketB, "UDP/IP Socket B could not be stopped!");
-			Utilities.StopUdpSocket(socketA);
-			Utilities.WaitForStop(socketA, "UDP/IP Socket A could not be stopped!");
+			Utilities.StopUdpSocket(pairSocketB);
+			Utilities.WaitForStop(pairSocketB, "UDP/IP PairSocket B could not be stopped!");
+			Utilities.StopUdpSocket(pairSocketA);
+			Utilities.WaitForStop(pairSocketA, "UDP/IP PairSocket A could not be stopped!");
 		}
 
 		#endregion

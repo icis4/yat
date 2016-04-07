@@ -198,29 +198,29 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
 		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
 			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
 		{
 		}
 
-		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		/// <remarks>The local IP address filter is defaulted to <see cref="System.Net.IPAddress.Any"/>.</remarks>
 		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
-			: this(instanceId, UdpSocketType.Socket, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
+			: this(instanceId, UdpSocketType.PairSocket, remoteIPAddress, remotePort, localPort, System.Net.IPAddress.Any)
 		{
 		}
 
-		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
 			: this(SocketBase.NextInstanceId, remoteIPAddress, remotePort, localPort, localIPAddressFilter)
 		{
 		}
 
-		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <summary>Creates a new UDP socket of type <see cref="UdpSocketType.PairSocket"/>.</summary>
 		public UdpSocket(int instanceId, System.Net.IPAddress remoteIPAddress, int remotePort, int localPort, System.Net.IPAddress localIPAddressFilter)
-			: this(instanceId, UdpSocketType.Socket, remoteIPAddress, remotePort, localPort, localIPAddressFilter)
+			: this(instanceId, UdpSocketType.PairSocket, remoteIPAddress, remotePort, localPort, localIPAddressFilter)
 		{
 		}
 
@@ -453,7 +453,7 @@ namespace MKY.IO.Serial.Socket
 			get
 			{
 				if ((this.socketType == UdpSocketType.Client) ||
-					(this.socketType == UdpSocketType.Socket)) // Remote endpoint has been defaulted on Create().
+					(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
 				{
 					return (IsOpen);
 				}
@@ -611,7 +611,7 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					if ((this.socketType == UdpSocketType.Client) ||
-						(this.socketType == UdpSocketType.Socket)) // Remote endpoint has been defaulted on Create().
+						(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
 					{
 						this.socket.Send(data, data.Length);
 					}
@@ -699,7 +699,7 @@ namespace MKY.IO.Serial.Socket
 				this.socket = new System.Net.Sockets.UdpClient();
 
 				if ((this.socketType == UdpSocketType.Server) ||
-					(this.socketType == UdpSocketType.Socket)) // Configure and bind the server/listener port:
+					(this.socketType == UdpSocketType.PairSocket)) // Configure and bind the server/listener port:
 				{
 					this.socket.ExclusiveAddressUse = false;
 					this.socket.Client.SetSocketOption(System.Net.Sockets.SocketOptionLevel.Socket, System.Net.Sockets.SocketOptionName.ReuseAddress, true);
@@ -711,7 +711,7 @@ namespace MKY.IO.Serial.Socket
 				}
 
 				if ((this.socketType == UdpSocketType.Client) ||
-					(this.socketType == UdpSocketType.Socket)) // Connect the client port:
+					(this.socketType == UdpSocketType.PairSocket)) // Connect the client port:
 				{
 					this.socket.Connect(this.remoteIPAddress, this.remotePort);
 				}

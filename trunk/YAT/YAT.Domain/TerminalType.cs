@@ -164,16 +164,16 @@ namespace YAT.Domain
 		{
 			s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Text_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Text_stringShort) ||
-			         s.StartsWith(Text_stringStart, StringComparison.OrdinalIgnoreCase))
+			if      (StringEx.EqualsOrdinalIgnoreCase    (s, Text_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase    (s, Text_stringShort) ||
+			         StringEx.StartsWithOrdinalIgnoreCase(s, Text_stringStart))
 			{
 				result = TerminalType.Text;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Binary_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Binary_stringShort) ||
-			         s.StartsWith(Binary_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.EqualsOrdinalIgnoreCase    (s, Binary_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase    (s, Binary_stringShort) ||
+			         StringEx.StartsWithOrdinalIgnoreCase(s, Binary_stringStart))
 			{
 				result = TerminalType.Binary;
 				return (true);

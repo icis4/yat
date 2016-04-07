@@ -43,7 +43,7 @@ namespace MKY.IO.Serial.Socket
 		TcpAutoSocket,
 		UdpClient,
 		UdpServer,
-		UdpSocket,
+		UdpPairSocket,
 	}
 
 	#pragma warning restore 1591
@@ -64,12 +64,16 @@ namespace MKY.IO.Serial.Socket
 		#region String Definitions
 
 		private const string Unknown_string       = "Unknown";
+
 		private const string TcpClient_string     = "TCP/IP Client";
 		private const string TcpServer_string     = "TCP/IP Server";
 		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
+		private const string Tcp_stringDefault    = "TCP";
+
 		private const string UdpClient_string     = "UDP/IP Client";
 		private const string UdpServer_string     = "UDP/IP Server";
-		private const string UdpSocket_string     = "UDP/IP Socket";
+		private const string UdpPairSocket_string = "UDP/IP PairSocket";
+		private const string Udp_stringDefault    = "UDP";
 
 		#endregion
 
@@ -99,7 +103,7 @@ namespace MKY.IO.Serial.Socket
 					case SocketType.TcpAutoSocket: return (true);
 					case SocketType.UdpClient:     return (false);
 					case SocketType.UdpServer:     return (false);
-					case SocketType.UdpSocket:     return (false);
+					case SocketType.UdpPairSocket:     return (false);
 					default:                       return (false);
 				}
 			}
@@ -117,7 +121,7 @@ namespace MKY.IO.Serial.Socket
 					case SocketType.TcpAutoSocket: return (false);
 					case SocketType.UdpClient:     return (true);
 					case SocketType.UdpServer:     return (true);
-					case SocketType.UdpSocket:     return (true);
+					case SocketType.UdpPairSocket:     return (true);
 					default:                       return (false);
 				}
 			}
@@ -137,7 +141,7 @@ namespace MKY.IO.Serial.Socket
 				case SocketType.TcpAutoSocket: return (TcpAutoSocket_string);
 				case SocketType.UdpClient:     return (UdpClient_string);
 				case SocketType.UdpServer:     return (UdpServer_string);
-				case SocketType.UdpSocket:     return (UdpSocket_string);
+				case SocketType.UdpPairSocket: return (UdpPairSocket_string);
 				default:                       return (Unknown_string);
 			}
 		}
@@ -157,7 +161,7 @@ namespace MKY.IO.Serial.Socket
 			a.Add(new SocketTypeEx(SocketType.TcpAutoSocket));
 			a.Add(new SocketTypeEx(SocketType.UdpClient));
 			a.Add(new SocketTypeEx(SocketType.UdpServer));
-			a.Add(new SocketTypeEx(SocketType.UdpSocket));
+			a.Add(new SocketTypeEx(SocketType.UdpPairSocket));
 			return (a.ToArray());
 		}
 
@@ -212,7 +216,8 @@ namespace MKY.IO.Serial.Socket
 				result = SocketType.TcpServer;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpAutoSocket_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase    (s, TcpAutoSocket_string) ||
+			         StringEx.StartsWithOrdinalIgnoreCase(s, Tcp_stringDefault))
 			{
 				result = SocketType.TcpAutoSocket;
 				return (true);
@@ -227,9 +232,10 @@ namespace MKY.IO.Serial.Socket
 				result = SocketType.UdpServer;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, UdpSocket_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase    (s, UdpPairSocket_string) ||
+			         StringEx.StartsWithOrdinalIgnoreCase(s, Udp_stringDefault))
 			{
-				result = SocketType.UdpSocket;
+				result = SocketType.UdpPairSocket;
 				return (true);
 			}
 			else
@@ -284,10 +290,10 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch ((SocketType)type)
 			{
-				case SocketType.UdpClient: return (UdpSocketType.Client);
-				case SocketType.UdpServer: return (UdpSocketType.Server);
-				case SocketType.UdpSocket: return (UdpSocketType.Socket);
-				default:                   return (UdpSocketType.Unknown);
+				case SocketType.UdpClient:     return (UdpSocketType.Client);
+				case SocketType.UdpServer:     return (UdpSocketType.Server);
+				case SocketType.UdpPairSocket: return (UdpSocketType.PairSocket);
+				default:                       return (UdpSocketType.Unknown);
 			}
 		}
 
@@ -296,10 +302,10 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (type)
 			{
-				case UdpSocketType.Client: return (SocketType.UdpClient);
-				case UdpSocketType.Server: return (SocketType.UdpServer);
-				case UdpSocketType.Socket: return (SocketType.UdpSocket);
-				default:                   return (SocketType.Unknown);
+				case UdpSocketType.Client:     return (SocketType.UdpClient);
+				case UdpSocketType.Server:     return (SocketType.UdpServer);
+				case UdpSocketType.PairSocket: return (SocketType.UdpPairSocket);
+				default:                       return (SocketType.Unknown);
 			}
 		}
 

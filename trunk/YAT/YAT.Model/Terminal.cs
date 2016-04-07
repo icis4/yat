@@ -772,7 +772,7 @@ namespace YAT.Model
 							break;
 						}
 
-						case Domain.IOType.UdpSocket:
+						case Domain.IOType.UdpPairSocket:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
@@ -988,10 +988,10 @@ namespace YAT.Model
 							break;
 						}
 
-						case Domain.IOType.UdpSocket:
+						case Domain.IOType.UdpPairSocket:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("UDP/IP socket is ");
+							sb.Append("UDP/IP PairSocket is ");
 							sb.Append(IsOpen ? "open" : "closed");
 							sb.Append(" for sending to ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
@@ -2206,7 +2206,7 @@ namespace YAT.Model
 					case Domain.IOType.SerialPort:
 					{
 						yatTitle = ApplicationEx.ProductName + " hints:";
-						yatText  = "Make sure the selected serial port is available and not already in use. " +
+						yatText  = "Make sure the selected serial COM port is available and not already in use. " +
 						           "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed communication settings.";
 						break;
 					}
@@ -2215,7 +2215,7 @@ namespace YAT.Model
 					case Domain.IOType.TcpAutoSocket:
 					case Domain.IOType.UdpClient:
 					case Domain.IOType.UdpServer:
-					case Domain.IOType.UdpSocket:
+					case Domain.IOType.UdpPairSocket:
 					{
 						yatTitle = ApplicationEx.ProductName + " hint:";
 						yatText  = "Make sure the selected socket is not already in use.";
@@ -2410,7 +2410,7 @@ namespace YAT.Model
 			{
 				case Domain.IOType.SerialPort:
 					textBuilder.Append("port");
-					titleBuilder.Append("Serial Port");
+					titleBuilder.Append("Serial COM Port");
 					break;
 
 				case Domain.IOType.TcpClient:
@@ -2418,7 +2418,7 @@ namespace YAT.Model
 				case Domain.IOType.TcpAutoSocket:
 				case Domain.IOType.UdpClient:
 				case Domain.IOType.UdpServer:
-				case Domain.IOType.UdpSocket:
+				case Domain.IOType.UdpPairSocket:
 					textBuilder.Append("socket");
 					titleBuilder.Append("Socket");
 					break;

@@ -156,12 +156,12 @@ namespace MKY.IO.Serial.Socket.Test
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
-		internal static void StartUdpSocket(out UdpSocket socket, int remotePort, int localPort)
+		internal static void StartUdpPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
 			// Create socket and initiate asych start.
-			socket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
-			if (!socket.Start())
-				Assert.Fail("UDP/IP Socket could not be started!");
+			pairSocket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
+			if (!pairSocket.Start())
+				Assert.Fail("UDP/IP PairSocket could not be started!");
 		}
 
 		internal static void StopTcpServer(TcpServer server)

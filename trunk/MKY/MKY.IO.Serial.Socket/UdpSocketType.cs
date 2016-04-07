@@ -40,7 +40,7 @@ namespace MKY.IO.Serial.Socket
 		Unknown,
 		Client,
 		Server,
-		Socket,
+		PairSocket,
 	}
 
 #pragma warning restore 1591
@@ -60,16 +60,16 @@ namespace MKY.IO.Serial.Socket
 	{
 		#region String Definitions
 
-		private const string Unknown_string = "Unknown";
-		private const string Client_string =  "UDP/IP Client";
-		private const string Server_string =  "UDP/IP Server";
-		private const string Socket_string =  "UDP/IP Socket";
+		private const string Unknown_string    = "Unknown";
+		private const string Client_string     = "UDP/IP Client";
+		private const string Server_string     = "UDP/IP Server";
+		private const string PairSocket_string = "UDP/IP PairSocket";
 
 		#endregion
 
-		/// <summary>Default is <see cref="UdpSocketType.Socket"/>.</summary>
+		/// <summary>Default is <see cref="UdpSocketType.PairSocket"/>.</summary>
 		public UdpSocketTypeEx()
-			: base(UdpSocketType.Socket)
+			: base(UdpSocketType.PairSocket)
 		{
 		}
 
@@ -86,10 +86,10 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch ((UdpSocketType)UnderlyingEnum)
 			{
-				case UdpSocketType.Client: return (Client_string);
-				case UdpSocketType.Server: return (Server_string);
-				case UdpSocketType.Socket: return (Socket_string);
-				default:                   return (Unknown_string);
+				case UdpSocketType.Client:     return (Client_string);
+				case UdpSocketType.Server:     return (Server_string);
+				case UdpSocketType.PairSocket: return (PairSocket_string);
+				default:                       return (Unknown_string);
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace MKY.IO.Serial.Socket
 			List<UdpSocketTypeEx> a = new List<UdpSocketTypeEx>();
 			a.Add(new UdpSocketTypeEx(UdpSocketType.Client));
 			a.Add(new UdpSocketTypeEx(UdpSocketType.Server));
-			a.Add(new UdpSocketTypeEx(UdpSocketType.Socket));
+			a.Add(new UdpSocketTypeEx(UdpSocketType.PairSocket));
 			return (a.ToArray());
 		}
 
@@ -160,9 +160,9 @@ namespace MKY.IO.Serial.Socket
 				result = UdpSocketType.Server;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Socket_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, PairSocket_string))
 			{
-				result = UdpSocketType.Socket;
+				result = UdpSocketType.PairSocket;
 				return (true);
 			}
 			else
