@@ -208,32 +208,32 @@ namespace MKY.IO.Usb
 		{
 			s = s.Trim();
 
-			if      (StringEx.StartsWithAny(s, None_stringStart, StringComparison.OrdinalIgnoreCase))
+			if      (StringEx.StartsWithAnyOrdinalIgnoreCase(s, None_stringStart))
 			{
 				result = SerialHidReportFormatPreset.None;
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, Plain_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, Plain_stringStart))
 			{
 				result = SerialHidReportFormatPreset.Plain;
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, Common_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, Common_stringStart))
 			{
 				result = SerialHidReportFormatPreset.Common;
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, MT_SerHid_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, MT_SerHid_stringStart))
 			{
 				result = SerialHidReportFormatPreset.MT_SerHid;
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, TI_HidApi_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, TI_HidApi_stringStart))
 			{
 				result = SerialHidReportFormatPreset.TI_HidApi;
 				return (true);
 			}
-			else if (StringEx.StartsWithAny(s, YAT_stringStart, StringComparison.OrdinalIgnoreCase))
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, YAT_stringStart))
 			{
 				result = SerialHidReportFormatPreset.YAT;
 				return (true);

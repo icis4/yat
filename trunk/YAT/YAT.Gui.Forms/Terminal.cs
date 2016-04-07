@@ -3509,7 +3509,7 @@ namespace YAT.Gui.Forms
 			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 
 			// Check wether the terminal has already been saved as a .yat file.
-			if (AutoName.EndsWith(ExtensionHelper.TerminalFile, StringComparison.OrdinalIgnoreCase))
+			if (StringEx.EndsWithOrdinalIgnoreCase(AutoName, ExtensionHelper.TerminalFile))
 				sfd.FileName = AutoName;
 			else
 				sfd.FileName = AutoName + PathEx.NormalizeExtension(sfd.DefaultExt);
@@ -3771,7 +3771,7 @@ namespace YAT.Gui.Forms
 					}
 					else
 					{
-						throw (new InvalidOperationException("The underlying I/O instance is no serial port!"));
+						throw (new InvalidOperationException("The underlying I/O instance is no serial COM port!"));
 					}
 
 					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;

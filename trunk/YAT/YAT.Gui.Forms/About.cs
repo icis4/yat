@@ -190,7 +190,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Environment.Text += textAfter;
 			linkLabel_Environment.Text += Environment.NewLine;
 
-			textBefore = "...System.IO.Ports serial port extension by Matthias Kläy..." + Environment.NewLine +
+			textBefore = "...System.IO.Ports serial COM port extension by Matthias Kläy..." + Environment.NewLine +
 
 			             "...System.Net.Sockets socket extension ";
 			textLink   =                                        "ALAZ";

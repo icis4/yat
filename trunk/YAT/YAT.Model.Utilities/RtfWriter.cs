@@ -34,6 +34,7 @@ using System.Text;
 
 using DW.RtfWriter;
 
+using MKY;
 using MKY.Collections.Generic;
 
 using YAT.Domain;
@@ -92,19 +93,19 @@ namespace YAT.Model.Utilities
 			// Do not use the UICulture as people are likely to use English on non-US computers too.
 
 			PaperSize paper;
-			if (ci.Name.EndsWith("-US"))			paper = PaperSize.Letter;
-			else									paper = PaperSize.A4;
+			if      (StringEx.EndsWithOrdinalIgnoreCase  (ci.Name, "-US"))		paper = PaperSize.Letter;
+			else																paper = PaperSize.A4;
 
 			Lcid lcid;
-			if      (ci.Name.StartsWith("de"))		lcid = Lcid.German;
-			else if (ci.Name.StartsWith("fr"))		lcid = Lcid.French;
-			else if (ci.Name.StartsWith("it"))		lcid = Lcid.Italian;
-			else if (ci.Name.StartsWith("es"))		lcid = Lcid.Spanish;
-			else if (ci.Name.StartsWith("ja"))		lcid = Lcid.Japanese;
-			else if (ci.Name.StartsWith("ko"))		lcid = Lcid.Korean;
-			else if (ci.Name.StartsWith("zh-Hans"))	lcid = Lcid.SimplifiedChinese;
-			else if (ci.Name.StartsWith("zh-Hant"))	lcid = Lcid.TraditionalChinese;
-			else									lcid = Lcid.English;
+			if      (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "de"		))	lcid = Lcid.German;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "fr"		))	lcid = Lcid.French;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "it"		))	lcid = Lcid.Italian;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "es"		))	lcid = Lcid.Spanish;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "ja"		))	lcid = Lcid.Japanese;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "ko"		))	lcid = Lcid.Korean;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "zh-Hans"))	lcid = Lcid.SimplifiedChinese;
+			else if (StringEx.StartsWithOrdinalIgnoreCase(ci.Name, "zh-Hant"))	lcid = Lcid.TraditionalChinese;
+			else																lcid = Lcid.English;
 
 			// Document base:
 			this.document = new RtfDocument(paper, PaperOrientation.Landscape, lcid); // Same orientation as maximized terminal monitor.

@@ -144,8 +144,8 @@
 			this.groupBox_SerialPorts.Size = new System.Drawing.Size(246, 88);
 			this.groupBox_SerialPorts.TabIndex = 2;
 			this.groupBox_SerialPorts.TabStop = false;
-			this.groupBox_SerialPorts.Text = "Serial Ports";
-			this.toolTip.SetToolTip(this.groupBox_SerialPorts, "On certain computers, discovery of serial ports takes several seconds.\r\nIn such c" +
+			this.groupBox_SerialPorts.Text = "Serial COM Ports";
+			this.toolTip.SetToolTip(this.groupBox_SerialPorts, "On certain computers, discovery of serial COM ports takes several seconds.\r\nIn such c" +
         "ases it can be useful to disable one or both of these options.");
 			// 
 			// checkBox_RetrieveSerialPortCaptions
@@ -166,7 +166,7 @@
 			this.label_SerialPortDiscovery.Name = "label_SerialPortDiscovery";
 			this.label_SerialPortDiscovery.Size = new System.Drawing.Size(158, 13);
 			this.label_SerialPortDiscovery.TabIndex = 0;
-			this.label_SerialPortDiscovery.Text = "When discovering serial ports,...";
+			this.label_SerialPortDiscovery.Text = "When discovering serial COM ports,...";
 			// 
 			// checkBox_DetectSerialPortsInUse
 			// 
