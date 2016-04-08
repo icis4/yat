@@ -103,9 +103,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestEmptyCommandLine()
 		{
-			using (Controller.Main main = new Controller.Main(EmptyArgs))
+			using (Main main = new Main(EmptyArgs))
 			{
-				PrepareMainAndVerifyResult(main, Controller.Main.Result.Success);
+				PrepareMainAndVerifyResult(main, MainResult.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -123,9 +123,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArg()
 		{
-			using (Controller.Main main = new Controller.Main(TerminalArgs))
+			using (Main main = new Main(TerminalArgs))
 			{
-				PrepareMainAndVerifyResult(main, Controller.Main.Result.Success);
+				PrepareMainAndVerifyResult(main, MainResult.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -143,9 +143,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestWorkspaceCommandLineArg()
 		{
-			using (Controller.Main main = new Controller.Main(WorkspaceArgs))
+			using (Main main = new Main(WorkspaceArgs))
 			{
-				PrepareMainAndVerifyResult(main, Controller.Main.Result.Success);
+				PrepareMainAndVerifyResult(main, MainResult.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -163,7 +163,7 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestEmptyCommandLineRun()
 		{
-			using (Controller.Main main = new Main(EmptyArgs))
+			using (Main main = new Main(EmptyArgs))
 			{
 				RunAndVerifyApplicationWithoutView(main);
 			}
@@ -180,7 +180,7 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestTerminalCommandLineArgRun()
 		{
-			using (Controller.Main main = new Main(TerminalArgs))
+			using (Main main = new Main(TerminalArgs))
 			{
 				RunAndVerifyApplicationWithoutView(main);
 			}
@@ -199,7 +199,7 @@ namespace YAT.Controller.Test
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory]
 		public virtual void TestWorkspaceCommandLineArgRun()
 		{
-			using (Controller.Main main = new Main(WorkspaceArgs))
+			using (Main main = new Main(WorkspaceArgs))
 			{
 				RunAndVerifyApplicationWithoutView(main);
 			}
@@ -216,7 +216,7 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestSerialPortCommandLineArgRun()
 		{
-			using (Controller.Main main = new Main(SerialPortArgs))
+			using (Main main = new Main(SerialPortArgs))
 			{
 				RunAndVerifyApplicationWithoutView(main);
 			}
@@ -233,7 +233,7 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestEmptyCommandLineRunInteractive()
 		{
-			using (Controller.Main main = new Main(EmptyArgs))
+			using (Main main = new Main(EmptyArgs))
 			{
 				RunAndVerifyApplicationWithView(main);
 			}
@@ -250,7 +250,7 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestTerminalCommandLineArgRunInteractive()
 		{
-			using (Controller.Main main = new Main(TerminalArgs))
+			using (Main main = new Main(TerminalArgs))
 			{
 				RunAndVerifyApplicationWithView(main);
 			}
@@ -269,7 +269,7 @@ namespace YAT.Controller.Test
 		[Test, MKY.IO.Ports.Test.PortAIsAvailableCategory, MKY.IO.Ports.Test.PortBIsAvailableCategory, InteractiveCategory]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
-			using (Controller.Main main = new Main(WorkspaceArgs))
+			using (Main main = new Main(WorkspaceArgs))
 			{
 				RunAndVerifyApplicationWithView(main);
 			}
@@ -286,7 +286,7 @@ namespace YAT.Controller.Test
 		[Test, InteractiveCategory]
 		public virtual void TestSerialPortCommandLineArgRunInteractive()
 		{
-			using (Controller.Main main = new Main(SerialPortArgs))
+			using (Main main = new Main(SerialPortArgs))
 			{
 				RunAndVerifyApplicationWithView(main);
 			}
@@ -303,9 +303,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestClearedOptions()
 		{
-			using (Controller.Main main = new Main(null))
+			using (Main main = new Main(null))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.Success);
+				PrepareMainAndVerifyResult(main, MainResult.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
@@ -324,9 +324,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public virtual void TestSetOptions()
 		{
-			using (Controller.Main main = new Main(new string[] { "--NoLogo" }))
+			using (Main main = new Main(new string[] { "--NoLogo" }))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.Success);
+				PrepareMainAndVerifyResult(main, MainResult.Success);
 
 				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineLogoIsRequested);
@@ -342,31 +342,31 @@ namespace YAT.Controller.Test
 		// Private Methods
 		//==========================================================================================
 
-		private static void PrepareMainAndVerifyResult(Controller.Main main, Controller.Main.Result expectedMainResult)
+		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
-			Controller.Main.Result mainResult = main.PrepareRun();
+			MainResult mainResult = main.PrepareRun();
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
-		private static void RunAndVerifyApplicationWithView(Controller.Main main)
+		private static void RunAndVerifyApplicationWithView(Main main)
 		{
-			RunAndVerifyApplicationWithView(main, Main.Result.Success);
+			RunAndVerifyApplicationWithView(main, MainResult.Success);
 		}
 
-		private static void RunAndVerifyApplicationWithView(Controller.Main main, Controller.Main.Result expectedMainResult)
+		private static void RunAndVerifyApplicationWithView(Main main, MainResult expectedMainResult)
 		{
-			Controller.Main.Result mainResult = main.Run(false, true);
+			MainResult mainResult = main.Run(false, true);
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
-		private static void RunAndVerifyApplicationWithoutView(Controller.Main main)
+		private static void RunAndVerifyApplicationWithoutView(Main main)
 		{
-			RunAndVerifyApplicationWithoutView(main, Controller.Main.Result.Success);
+			RunAndVerifyApplicationWithoutView(main, MainResult.Success);
 		}
 
-		private static void RunAndVerifyApplicationWithoutView(Controller.Main main, Controller.Main.Result expectedMainResult)
+		private static void RunAndVerifyApplicationWithoutView(Main main, MainResult expectedMainResult)
 		{
-			Controller.Main.Result mainResult = main.Run(false, false);
+			MainResult mainResult = main.Run(false, false);
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 

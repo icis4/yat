@@ -3713,12 +3713,14 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
+			WriteDebugMessageLine(text);
 			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
+			WriteDebugMessageLine(text);
 			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
@@ -3727,6 +3729,8 @@ namespace YAT.Model
 		{
 			if (this.startArgs.Interactive)
 			{
+				WriteDebugMessageLine(text);
+
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 

@@ -42,6 +42,7 @@ using MKY.IO;
 using MKY.Settings;
 
 using YAT.Application.Utilities;
+using YAT.Model.Types;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
@@ -55,35 +56,6 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : IDisposable, IGuidProvider
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-		// warnings for each undocumented member below. Documenting each member makes little sense
-		// since they pretty much tell their purpose and documentation tags between the members
-		// makes the code less readable.
-		#pragma warning disable 1591
-
-		/// <summary>
-		/// Enumeration of all the main result return codes.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Intentionally using nested type, instead of replicating the parent's name to 'MainResult'.")]
-		public enum Result
-		{
-			Success,
-			CommandLineError,
-			ApplicationStartError,
-			ApplicationRunError,
-			ApplicationExitError,
-			UnhandledException,
-		}
-
-		#pragma warning restore 1591
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -96,6 +68,11 @@ namespace YAT.Model
 		private Guid guid;
 
 		private Workspace workspace;
+
+		private MainResult result = MainResult.Success;
+
+		private System.Timers.Timer operationTimer;
+		private System.Timers.Timer exitTimer;
 
 		#endregion
 
@@ -123,7 +100,7 @@ namespace YAT.Model
 		public event EventHandler Started;
 
 		/// <summary></summary>
-		public event EventHandler Exited;
+		public event EventHandler<ExitEventArgs> Exited;
 
 		#endregion
 
@@ -183,6 +160,12 @@ namespace YAT.Model
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
+					if (this.operationTimer != null)
+						this.operationTimer.Dispose();
+
+					if (this.exitTimer != null)
+						this.exitTimer.Dispose();
+
 					// In the 'normal' case, the workspace has already been closed, otherwise...
 
 					// ...first, detach event handlers to ensure that no more events are received...
@@ -194,6 +177,8 @@ namespace YAT.Model
 				}
 
 				// Set state to disposed:
+				this.operationTimer = null;
+				this.exitTimer = null;
 				this.workspace = null;
 				this.isDisposed = true;
 
@@ -226,9 +211,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region General Properties
+		#region Properties
 		//==========================================================================================
-		// General Properties
+		// Properties
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -283,6 +268,12 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		public MainResult Result
+		{
+			get { return (this.result); }
+		}
+
 		#endregion
 
 		#region Start
@@ -293,15 +284,15 @@ namespace YAT.Model
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		public virtual Result PrepareStart()
+		public virtual MainResult PrepareStart()
 		{
 			AssertNotDisposed();
 
 			// Process command line args into start requests:
 			if (ProcessCommandLineArgsIntoStartRequests())
-				return (Result.Success);
+				return (MainResult.Success);
 			else
-				return (Result.CommandLineError);
+				return (MainResult.CommandLineError);
 		}
 
 		/// <summary>
@@ -313,13 +304,13 @@ namespace YAT.Model
 		/// <returns>
 		/// Returns <c>true</c> if either operation succeeded, <c>false</c> otherwise.
 		/// </returns>
-		public virtual Result Start()
+		public virtual MainResult Start()
 		{
 			AssertNotDisposed();
 
 			// Process command line args into start requests:
 			if (!ProcessCommandLineArgsIntoStartRequests())
-				return (Result.CommandLineError);
+				return (MainResult.CommandLineError);
 
 			// Start YAT according to the start requests:
 			bool success = false;
@@ -377,7 +368,7 @@ namespace YAT.Model
 							// Do not yet create a new empty workspace, it will be created when
 							// needed. Not creating it now allows the user to exit YAT, restore
 							// the .yaw file, and try again.
-							return (Main.Result.ApplicationStartError);
+							return (MainResult.ApplicationStartError);
 						}
 					}
 				}
@@ -398,16 +389,29 @@ namespace YAT.Model
 
 			// Start the workspace, i.e. start all included terminals:
 			if (success)
+			{
 				success = this.workspace.Start();
+			}
+
+			// If requested, trigger Start the workspace, i.e. start all included terminals:
+			if (success)
+			{
+				// Automatically trigger operation if desired:
+				if (this.StartArgs.PerformOperationOnRequestedTerminal)
+				{
+					OnFixedStatusTextRequest("Triggering operation...");
+					CreateAndStartOperationTimer();
+				}
+			}
 
 			if (success)
 			{
 				OnStarted(EventArgs.Empty);
-				return (Result.Success);
+				return (MainResult.Success);
 			}
 			else
 			{
-				return (Result.ApplicationStartError);
+				return (MainResult.ApplicationStartError);
 			}
 		}
 
@@ -542,17 +546,23 @@ namespace YAT.Model
 				if     ((requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
 					this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
 				else if (requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
-					this.startArgs.RequestedDynamicTerminalIndex = lastDynamicIndex;
+					this.startArgs.RequestedDynamicTerminalIndex = Indices.DefaultDynamicIndex;
 				else if (requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
-					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
+					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
 				else
 					return (false);
 
 				if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
 				{
-					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					string workspaceFilePath = this.startArgs.WorkspaceSettings.SettingsFilePath;
-					string terminalFilePath = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
+
+					string terminalFilePath;
+					if (this.startArgs.RequestedDynamicTerminalIndex == Indices.DefaultDynamicIndex) // The last terminal is the default.
+						terminalFilePath = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[this.startArgs.WorkspaceSettings.Settings.TerminalSettings.Count - 1].FilePath;
+					else
+						terminalFilePath = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
+
+					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
 						this.startArgs.TerminalSettings = sh;
 					else
@@ -561,24 +571,19 @@ namespace YAT.Model
 			}
 			else if (this.startArgs.TerminalSettings != null) // Applies to a dedicated terminal.
 			{
-				switch (this.commandLineArgs.RequestedDynamicTerminalIndex)
-				{
-					case Indices.InvalidDynamicIndex:
-						this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
-						break;
-
-					case Indices.DefaultDynamicIndex:
-					case Indices.FirstDynamicIndex:
-						this.startArgs.RequestedDynamicTerminalIndex = Indices.FirstDynamicIndex;
-						break;
-
-					default:
-						return (false);
-				}
+				if (this.commandLineArgs.RequestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
+					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
 			}
-			else if (this.commandLineArgs.NewIsRequested) // Applies to new settings.
+			else if (this.commandLineArgs.NewIsRequested) // Applies to a new terminal.
 			{
+				if (this.commandLineArgs.RequestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
+					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
+
 				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			}
+			else
+			{
+				this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Disable the operation.
 			}
 
 			// Prio 8 = Override settings as desired:
@@ -599,15 +604,26 @@ namespace YAT.Model
 			}
 
 			// Prio 9 = Perform requested operation:
-			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
+			if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
 			{
-				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
-				this.startArgs.PerformOperationOnRequestedTerminal = true;
+				if (this.commandLineArgs.OptionIsGiven("TransmitText"))
+				{
+					this.startArgs.RequestedTransmitText = this.commandLineArgs.RequestedTransmitText;
+					this.startArgs.PerformOperationOnRequestedTerminal = true;
+				}
+				else if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
+				{
+					this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
+					this.startArgs.PerformOperationOnRequestedTerminal = true;
+				}
 			}
 
 			// Prio 10 = Set behavior:
 			if (this.startArgs.PerformOperationOnRequestedTerminal)
 			{
+				this.startArgs.OperationDelay = this.commandLineArgs.OperationDelay;
+				this.startArgs.ExitDelay      = this.commandLineArgs.ExitDelay;
+
 				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
 				this.startArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
 			}
@@ -1075,7 +1091,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
-		public virtual Result Exit()
+		public virtual MainResult Exit()
 		{
 			bool cancel;
 			return (Exit(out cancel));
@@ -1084,38 +1100,37 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
-		public virtual Result Exit(out bool cancel)
+		public virtual MainResult Exit(out bool cancel)
 		{
-			bool success;
+			bool workspaceSuccess;
 			if (this.workspace != null)
-				success = this.workspace.Close(true);
+				workspaceSuccess = this.workspace.Close(true);
 			else
-				success = true;
+				workspaceSuccess = true;
 
-			if (success)
+			if (workspaceSuccess)
 			{
 				OnFixedStatusTextRequest("Exiting " + ApplicationEx.ProductName + "...");
-				cancel = false;
 
 				// Close the static application settings:
-				success = ApplicationSettings.Close();
+				if (!ApplicationSettings.Close())
+					this.result = MainResult.ApplicationExitError;
 
 				// Signal the exit:
-				OnExited(EventArgs.Empty);
+				OnExited(new ExitEventArgs(this.result));
 
-				// Ensure that all resources of the workspace get disposed of:
+				// Ensure that all resources get disposed of:
 				Dispose();
 
-				if (success)
-					return (Result.Success);
-				else
-					return (Result.ApplicationExitError);
+				cancel = false;
+				return (this.result);
 			}
 			else
 			{
 				OnTimedStatusTextRequest("Exit cancelled.");
+
 				cancel = true;
-				return (Result.ApplicationExitError);
+				return (this.result);
 			}
 		}
 
@@ -1284,15 +1299,15 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Ensure that the workspace file is not already open.
+			// Ensure that the workspace file is not already open:
 			if (!CheckWorkspaceFile(settings.SettingsFilePath))
 				return (false);
 
-			// Close workspace, only one workspace can exist within the application.
+			// Close workspace, only one workspace can exist within the application:
 			if (!CloseWorkspace())
 				return (false);
 
-			// Create new workspace.
+			// Create new workspace:
 			OnFixedStatusTextRequest("Opening workspace...");
 
 			Workspace workspace;
@@ -1309,18 +1324,18 @@ namespace YAT.Model
 			this.workspace = workspace;
 			AttachWorkspaceEventHandlers();
 
-			// Save auto workspace.
+			// Save auto workspace:
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath = settings.SettingsFilePath;
 			ApplicationSettings.Save();
 
-			// Save recent.
+			// Save recent:
 			if (!settings.Settings.AutoSaved)
 				SetRecent(settings.SettingsFilePath);
 
 			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
 			OnTimedStatusTextRequest("Workspace opened.");
 
-			// Open workspace terminals.
+			// Open workspace terminals:
 			int terminalCount = this.workspace.OpenTerminals(dynamicTerminalIndexToReplace, terminalSettingsToReplace);
 			if (terminalCount == 1)
 				OnTimedStatusTextRequest("Workspace terminal opened.");
@@ -1495,6 +1510,261 @@ namespace YAT.Model
 
 		#endregion
 
+		#region PerformOperation/Exit
+		//------------------------------------------------------------------------------------------
+		// PerformOperation/Exit
+		//------------------------------------------------------------------------------------------
+
+		private void CreateAndStartOperationTimer()
+		{
+			this.operationTimer = new System.Timers.Timer(1000);
+			this.operationTimer.Elapsed += this.operationTimer_Elapsed;
+			this.operationTimer.Start();
+		}
+
+		private void StopAndDisposeOperationTimer()
+		{
+			this.operationTimer.Stop();
+			this.operationTimer.Dispose();
+			this.operationTimer = null;
+		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private object operationTimer_Elapsed_SyncObj = new object();
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void operationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			// Ensure that only one timer elapsed event thread is active at a time. Because if the
+			// execution takes longer than the timer interval, more and more timer threads will pend
+			// here, and then be executed after the previous has been executed. This will require
+			// more and more resources and lead to a drop in performance.
+			if (Monitor.TryEnter(operationTimer_Elapsed_SyncObj))
+			{
+				try
+				{
+					if (this.workspace == null)
+					{
+						StopAndDisposeOperationTimer();
+
+						OnFixedStatusTextRequest("Invalid program operation!");
+						OnMessageInputRequest
+						(
+							"Program execution should never get here, workspace is 'null' while attempting to perform the operation!" + Environment.NewLine + Environment.NewLine +
+							MKY.Windows.Forms.ApplicationEx.SubmitBugMessage,
+							"Invalid Program Operation",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Stop
+						);
+
+						CreateAndStartExitTimerIfNeeded(false);
+						return;
+					}
+
+					int id = this.startArgs.RequestedDynamicTerminalIndex;
+					Terminal requestedTerminal = this.workspace.GetTerminalByDynamicIndex(id);
+					if (requestedTerminal == null)
+					{
+						StopAndDisposeOperationTimer();
+
+						OnFixedStatusTextRequest("Invalid requested dynamic index!");
+						OnMessageInputRequest
+						(
+							"Invalid requested dynamic index " + id.ToString(CultureInfo.InvariantCulture) + " to perform the operation!" + Environment.NewLine + Environment.NewLine +
+							"Check the command line arguments. See command line help for details.",
+							"Invalid Terminal Index",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Stop
+						);
+
+						CreateAndStartExitTimerIfNeeded(false);
+						return;
+					}
+
+					// --- Preconditions fullfilled, workspace and terminal exist. ---
+
+					if (!requestedTerminal.IsStarted)
+					{
+						OnTimedStatusTextRequest("Operation triggered, pending until terminal has been started...");
+						return; // Pend!
+					}
+					if (!requestedTerminal.IsReadyToSend)
+					{
+						OnTimedStatusTextRequest("Operation triggered, pending until terminal is ready to transmit...");
+						return; // Pend!
+					}                                   // Using term 'Transmission' to indicate potential
+														// 'intelligence' to send + receive/verify the data.
+														// Preconditions fullfilled!
+					StopAndDisposeOperationTimer();
+
+					int delay = this.startArgs.OperationDelay;
+					if (delay > 0)
+					{
+						OnFixedStatusTextRequest("Operation triggered, delaying for " + delay.ToString(CultureInfo.InvariantCulture) + " ms...");
+						Thread.Sleep(delay);
+					}
+
+					OnFixedStatusTextRequest("Operation triggered, preparing...");
+
+					// Automatically transmit text if desired:
+					string text = this.startArgs.RequestedTransmitText;
+					if (!string.IsNullOrEmpty(text))
+					{
+						bool success;
+						try
+						{
+							OnFixedStatusTextRequest("Automatically transmitting text on terminal " + id);
+							requestedTerminal.SendText(new Command(text));
+							success = true;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex);
+							OnFixedStatusTextRequest("Unable to transmit text!");
+							OnMessageInputRequest
+							(
+								"Unable to transmit text" + Environment.NewLine + text + Environment.NewLine + Environment.NewLine +
+								"System error message:" + Environment.NewLine + ex.Message,
+								"Transmission Error",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Stop
+							);
+							success = false;
+						}
+						CreateAndStartExitTimerIfNeeded(success);
+					}
+
+					// Automatically transmit file if desired:
+					string filePath = this.startArgs.RequestedTransmitFilePath;
+					if (!string.IsNullOrEmpty(filePath))
+					{
+						bool success;
+						try
+						{
+							OnFixedStatusTextRequest("Automatically transmitting file on terminal " + id);
+							requestedTerminal.SendFile(new Command("", true, filePath));
+							success = true;
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex);
+							OnFixedStatusTextRequest("Unable to transmit file!");
+							OnMessageInputRequest
+							(
+								"Unable to transmit file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+								"System error message:" + Environment.NewLine + ex.Message,
+								"Transmission Error",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Stop
+							);
+							success = false;
+						}
+						CreateAndStartExitTimerIfNeeded(success);
+					}
+				}
+				finally
+				{
+					Monitor.Exit(operationTimer_Elapsed_SyncObj);
+				}
+			}
+		}
+
+		private void CreateAndStartExitTimerIfNeeded(bool operationSuccess)
+		{
+			if ((!this.startArgs.KeepOpen) &&
+				(!(this.startArgs.KeepOpenOnError && !operationSuccess)))
+			{
+				if (operationSuccess)
+					OnFixedStatusTextRequest("Operation successfully performed, triggering exit...");
+				else
+					OnFixedStatusTextRequest("No operation performed, triggering exit...");
+
+				this.exitTimer = new System.Timers.Timer(1000);
+				this.exitTimer.Elapsed += this.exitTimer_Elapsed;
+				this.exitTimer.Start();
+			}
+			else
+			{
+				if (operationSuccess)
+					OnTimedStatusTextRequest("Operation successfully performed");
+				else
+					OnTimedStatusTextRequest("No operation performed");
+			}
+		}
+
+		private void StopAndDisposeExitTimer()
+		{
+			this.exitTimer.Stop();
+			this.exitTimer.Dispose();
+			this.exitTimer = null;
+		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private object exitTimer_Elapsed_SyncObj = new object();
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void exitTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			// Ensure that only one timer elapsed event thread is active at a time. Because if the
+			// execution takes longer than the timer interval, more and more timer threads will pend
+			// here, and then be executed after the previous has been executed. This will require
+			// more and more resources and lead to a drop in performance.
+			if (Monitor.TryEnter(exitTimer_Elapsed_SyncObj))
+			{
+				try
+				{
+					if (this.workspace != null)
+					{
+						int id = this.startArgs.RequestedDynamicTerminalIndex;
+						Terminal terminal = this.workspace.GetTerminalByDynamicIndex(id);
+						if ((terminal != null) && (terminal.IsBusy))
+						{
+							OnTimedStatusTextRequest("Exit triggered, pending while terminal is busy...");
+							return; // Pend!
+						}
+					}
+
+					// --- Precondition fullfilled, terminal is no longer busy. ---
+
+					StopAndDisposeExitTimer();
+
+					int delay = this.startArgs.ExitDelay;
+					if (delay > 0)
+					{
+						OnFixedStatusTextRequest("Exit triggered, delaying for " + delay.ToString(CultureInfo.InvariantCulture) + " ms...");
+						Thread.Sleep(delay);
+					}
+
+					OnFixedStatusTextRequest("Exit triggered, preparing...");
+
+					try
+					{
+						OnFixedStatusTextRequest("Automatically exiting " + ApplicationEx.ProductName + "...");
+						Exit();
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex);
+						OnFixedStatusTextRequest("Unable to exit!");
+						OnMessageInputRequest
+						(
+							"Unable to exit!" + Environment.NewLine + Environment.NewLine +
+							"System error message:" + Environment.NewLine + ex.Message,
+							"Exit Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Stop
+						);
+					}
+				}
+				finally
+				{
+					Monitor.Exit(exitTimer_Elapsed_SyncObj);
+				}
+			}
+		}
+
+		#endregion
+
 		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
@@ -1515,26 +1785,37 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
+			WriteDebugMessageLine(text);
 			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
+			WriteDebugMessageLine(text);
 			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
-			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+			if (this.startArgs.Interactive)
+			{
+				WriteDebugMessageLine(text);
 
-			// Ensure that the request is processed!
-			if (e.Result == DialogResult.None)
-				throw (new InvalidOperationException("A 'Message Input' request by main was not processed by the application!"));
+				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
+				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
-			return (e.Result);
+				// Ensure that the request is processed!
+				if (e.Result == DialogResult.None)
+					throw (new InvalidOperationException("A 'Message Input' request by main was not processed by the application!"));
+
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
 		}
 
 		/// <summary></summary>
@@ -1544,9 +1825,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnExited(EventArgs e)
+		protected virtual void OnExited(ExitEventArgs e)
 		{
-			EventHelper.FireSync(Exited, this, e);
+			EventHelper.FireSync<ExitEventArgs>(Exited, this, e);
 		}
 
 		#endregion

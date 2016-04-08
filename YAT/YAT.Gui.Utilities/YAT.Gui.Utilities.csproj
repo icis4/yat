@@ -132,6 +132,10 @@
       <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
       <Name>YAT.Model.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Utilities\YAT.Model.Utilities.csproj">
+      <Project>{7a7d2db5-90cc-4bf0-9c80-fa7b8f6aac74}</Project>
+      <Name>YAT.Model.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

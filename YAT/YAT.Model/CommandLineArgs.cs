@@ -36,6 +36,7 @@ using MKY.CommandLine;
 using MKY.IO.Usb;
 
 using YAT.Application.Utilities;
+using YAT.Model.Utilities;
 using YAT.Settings.Application;
 
 #endregion
@@ -75,9 +76,9 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "TerminalType", ShortName = "ty", Description =
-			"The desired terminal type. Valid values are 'Text'/'T' or 'Binary'/'B'. The default value is 'Text'." + EnvironmentEx.NewLineConstWorkaround +
-			"Example: 'TerminalType=Text' or 'TerminalType=T' or 'ty=t'")]
+		[CLSCompliant(false)]
+		[OptionArg(Names = new string[] { "Type", "TerminalType" }, ShortNames = new string[] { "t", "ty" }, Description =
+			"The desired terminal type. Valid values are 'Text', 'T' or 'Binary', 'B'. The default value is 'Text'.")]
 		public string TerminalType;
 
 		/// <summary></summary>
@@ -87,7 +88,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "PortType", ShortName = "pt", Description =
 			"The desired port type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
-			"- 'COM' (Serial Port)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'COM' (Serial COM Port)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'UDPClient', 'UDPServer', 'UDPPairSocket' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
@@ -144,8 +145,11 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "npar", Description =
-			"When device is lost, e.g. a USB/Serial converter, try to reopen the port every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 2000. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is enabled and set to 2000 milliseconds. Only applies to serial COM ports.")]
+			"When device is no longer available, e.g. a USB/Serial converter, try to reopen the port every given milliseconds. " +
+			"Must be positive integral value equal or greater than 100. A common value is 2000. " +
+			"The special value 0 indicates disabled. " +
+			"By default, this feature is enabled and set to 2000 milliseconds." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to serial COM ports.")]
 		public int SerialPortAutoReopen;
 
 		/// <summary></summary>
@@ -154,7 +158,8 @@ namespace YAT.Model
 			"The desired remote IP host. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
 			"- '<Localhost>' (IPv4 or IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '127.0.0.1' (IPv4 localhost) or '::1' (IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is '<Localhost>'. Only applies to TCP/IP and UDP/IP.")]
+			"The default value is '<Localhost>'." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to TCP/IP and UDP/IP.")]
 		public string RemoteHost;
 
 		/// <remarks>
@@ -176,7 +181,8 @@ namespace YAT.Model
 			"- '<Loopback>' (IPv4 or IPv6 loopback)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '127.0.0.1' (IPv4 loopback) or '::1' (IPv6 loopback)" + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is '<Any>'. Only applies to TCP/IP.")]
+			"The default value is '<Any>'." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to TCP/IP.")]
 		public string LocalInterface;
 
 		/// <summary></summary>
@@ -187,7 +193,8 @@ namespace YAT.Model
 			"- '<Localhost>' (IPv4 or IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
 			"- '127.0.0.1' (IPv4 localhost) or '::1' (IPv6 localhost)" + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is '<Any>'. Only applies to UDP/IP servers and UDP/IP PairSockets.")]
+			"The default value is '<Any>'." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to UDP/IP servers and UDP/IP PairSockets.")]
 		public string LocalFilter;
 
 		/// <remarks>
@@ -207,8 +214,10 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TCPAutoReconnect", ShortName = "tar", Description =
-			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is disabled. Only applies to TCP/IP clients.")]
+			"When connection is lost, try to reconnect every given milliseconds. " +
+			"Must be a positive integral value equal or greater than 100. A common value is 500. " +
+			"The special value 0 indicates disabled, which also is the default setting." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to TCP/IP clients.")]
 		public int TcpAutoReconnect;
 
 		/// <remarks>
@@ -254,8 +263,8 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop, read above regarding 'Usb' ...")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "NoUSBAutoOpen", ShortName = "nuao", Description =
-			"When USB device is connected, don't automatically open it." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is enabled. Only applies to USB Ser/HID.")]
+			"When USB device is connected, don't automatically open it. By default, this feature is enabled." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies to USB Ser/HID.")]
 		public bool NoUsbAutoOpen;
 
 		/// <summary></summary>
@@ -283,19 +292,42 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Terminal", ShortName = "t", Description =
+		[CLSCompliant(false)]
+		[OptionArg(Names = new string[] { "DynamicIndex", "DynamicTerminalIndex" }, ShortName = "dti", Description =
 			"Perform any requested operation on the terminal with the given dynamic index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
-			"-1 indicates 'none', i.e. no operation is performed at all. The default value is -1." + EnvironmentEx.NewLineConstWorkaround +
-			"This option is useful to temporarily switch off any option without having to edit the command line. " +
-			"This option only has an effect when opening a workspace that contains more than one terminal.")]
-		public int RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
+			"The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies when opening a workspace that contains more than one terminal." + EnvironmentEx.NewLineConstWorkaround + EnvironmentEx.NewLineConstWorkaround +
+			"In addition, -1 may be used to indicate 'none', i.e. no operation is performed at all. " +
+			"This setting is useful to temporarily switch off the requested operation without having to completely edit the command line.")]
+		public int RequestedDynamicTerminalIndex = Indices.DefaultDynamicIndex;
 
-		/// <remarks>Using term 'Transmission' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
+		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "TransmitText", ShortName = "tt", Description = "Automatically transmit the given text using the terminal specified.")]
+		public string RequestedTransmitText;
+
+		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Automatically transmit the given file using the terminal specified.")]
 		public string RequestedTransmitFilePath;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "OperationDelay", ShortName = "od", Description =
+			"Delay operation by the given milliseconds. Useful to keep the application open until the operation has completed. "+
+			"The default value is 500." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies when performing an operation like 'TransmitText' or 'TransmitFile'.")]
+		public int OperationDelay = 500;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "ExitDelay", ShortName = "ed", Description =
+			"Delay exit by the given milliseconds. Useful to keep the application open until the operation has completed. "+
+			"The default value is 500." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies when performing an operation like 'TransmitText' or 'TransmitFile' and 'KeepOpen' is not enabled.")]
+		public int ExitDelay = 500;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -404,6 +436,18 @@ namespace YAT.Model
 							BooleanEx.ClearIfSet(ref isValid);
 						}
 					}
+				}
+			}
+
+			// TransmitText:
+			if (!string.IsNullOrEmpty(RequestedTransmitText))
+			{
+				string errorMessage;
+				if (!Validation.ValidateText("text to send", RequestedTransmitText, out errorMessage))
+				{
+					RequestedTransmitText = null;
+					Invalidate(errorMessage);
+					BooleanEx.ClearIfSet(ref isValid);
 				}
 			}
 

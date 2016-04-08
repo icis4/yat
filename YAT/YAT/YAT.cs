@@ -47,7 +47,7 @@ namespace YAT
 		/// </summary>
 		/// <param name="commandLineArgs">An array containing the command line arguments.</param>
 		/// <returns>
-		/// The application's exit code according to <see cref="Controller.Main.Result"/>.
+		/// The application's exit code according to <see cref="Controller.MainResult"/>.
 		/// </returns>
 		/// <remarks>
 		/// There must separate Windows.Forms application and console application projects to
@@ -79,7 +79,7 @@ namespace YAT
 		private static int Main(string[] commandLineArgs)
 		{
 			Controller.Main main = new Controller.Main(commandLineArgs);
-			Controller.Main.Result mainResult = main.Run();
+			Controller.MainResult mainResult = main.Run();
 			return ((int)mainResult);
 		}
 	}

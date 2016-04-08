@@ -24,7 +24,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the YAT namespace even though the file is located in
-// YAT.Application for consistency with the 'System.Windows.Forms.Application' class.
+// YAT.Application since the class name already contains 'Application'.
 namespace YAT
 {
 	/// <summary></summary>
