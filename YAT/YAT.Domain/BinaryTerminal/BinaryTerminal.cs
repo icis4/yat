@@ -679,7 +679,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: displaySettings = BinaryTerminalSettings.TxDisplay; break;
 				case IODirection.Rx: displaySettings = BinaryTerminalSettings.RxDisplay; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			LineState lineState;
@@ -687,7 +687,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			foreach (byte b in re.Data)
@@ -768,7 +768,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 				case IODirection.Rx: lineState = this.txLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
@@ -803,7 +803,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			if (lineState.LineElements.Count > 0)

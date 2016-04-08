@@ -181,7 +181,7 @@ namespace YAT.Model.Types
 				case Trigger.AnyLine:             return (AnyLine_string);
 				case Trigger.DedicatedCommand:    return (this.dedicatedCommand.SingleLineText);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

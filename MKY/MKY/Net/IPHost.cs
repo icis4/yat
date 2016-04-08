@@ -88,7 +88,7 @@ namespace MKY.Net
 			: base(hostType)
 		{
 			if (hostType == IPHostType.Other)
-				throw (new InvalidOperationException("Program execution should never get here, 'IPHostType.Other' requires an IP address." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+				throw (new InvalidOperationException("Program execution should never get here, 'IPHostType.Other' requires an IP address." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -116,7 +116,7 @@ namespace MKY.Net
 					case IPHostType.IPv6Localhost: return (IPAddress.IPv6Loopback);
 					case IPHostType.Other:         return (this.otherAddress);
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace MKY.Net
 					case IPHostType.IPv6Localhost: return (true);
 					case IPHostType.Other:         return (false);
 				}
-				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace MKY.Net
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
 				case IPHostType.Other:         return (this.otherAddress.ToString());
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>
@@ -223,7 +223,7 @@ namespace MKY.Net
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (ToUrlString(this.otherAddress.ToString()));
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#region ToString > Extensions

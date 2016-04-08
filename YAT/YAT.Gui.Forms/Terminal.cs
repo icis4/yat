@@ -2635,7 +2635,7 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.IODirection.Tx: this.settingsRoot.Display.TxRadix = radix; break;
 				case Domain.IODirection.Rx: this.settingsRoot.Display.RxRadix = radix; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2730,7 +2730,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2745,7 +2745,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2869,7 +2869,7 @@ namespace YAT.Gui.Forms
 					sb.AppendLine();
 
 					sb.Append("This issue should never happen! ");
-					sb.Append(MKY.Windows.Forms.ApplicationEx.SubmitBugMessage);
+					sb.Append(MessageHelper.SubmitBug);
 					sb.Append(" Attach a screenshot of the monitor as well as the partially saved file to the submitted bug, thanks!");
 
 					MessageBoxEx.Show

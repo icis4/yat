@@ -2230,7 +2230,7 @@ namespace YAT.Model
 					default:
 					{
 						yatTitle = ApplicationEx.ProductName + " error:";
-						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown!" + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage;
+						yatText  = "The I/O type " + this.settingsRoot.IOType  + " is unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug;
 						break;
 					}
 				}
@@ -3736,7 +3736,7 @@ namespace YAT.Model
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException(@"Program execution should never get here, a 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new InvalidOperationException(@"Program execution should never get here, a 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}

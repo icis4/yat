@@ -32,6 +32,8 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
+using MKY;
+using MKY.Diagnostics;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
@@ -409,9 +411,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyWithView()
 		{
-			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
-			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
-			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage      =      "Please report this issue as described in 'Help > Submit Bug'.";
+			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
+			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
+			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 
 		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
@@ -540,9 +542,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
-			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
-			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
-			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage      =      "Please report this issue as described in 'Help > Submit Bug'.";
+			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
+			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
+			MessageHelper.SubmitBug      =      "Please report this issue as described in 'Help > Submit Bug'.";
 
 		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
@@ -573,7 +575,7 @@ namespace YAT.Controller
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -604,7 +606,7 @@ namespace YAT.Controller
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -621,7 +623,7 @@ namespace YAT.Controller
 
 			Exception ex = e.Exception;
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 
 #if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
@@ -635,7 +637,7 @@ namespace YAT.Controller
 
 			Exception ex = (e.ExceptionObject as Exception);
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 #endif // !DEBUG
 
@@ -652,9 +654,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunFullyFromConsole()
 		{
-			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
-			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
-			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
+			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
+			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
+			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 
 		#if (!DEBUG) // Only handle exceptions in case of 'Release', otherwise let them by handled by the debugger.
 			// Assume unhandled asynchronous non-synchronized exceptions and attach the application to the respective handler.
@@ -685,7 +687,7 @@ namespace YAT.Controller
 					Console.Error.WriteLine(message);
 
 					if (ex != null)
-						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -703,7 +705,7 @@ namespace YAT.Controller
 					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					Console.Error.WriteLine(message);
 
-					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
 					return (MainResult.UnhandledException);
 				}
@@ -721,7 +723,7 @@ namespace YAT.Controller
 
 			Exception ex = (e.ExceptionObject as Exception);
 			if (ex != null)
-				MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+				ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 		}
 #endif // !DEBUG
 
@@ -738,9 +740,9 @@ namespace YAT.Controller
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private MainResult RunInvisible()
 		{
-			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
-			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
-			MKY.Windows.Forms.ApplicationEx.SubmitBugMessage =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
+			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
+			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
+			MessageHelper.SubmitBug =           "Please report this issue at <sourceforge.net/projects/y-a-terminal/bugs/>.";
 
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
@@ -763,7 +765,7 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
-					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
+					ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (MainResult.UnhandledException);
 				}
@@ -779,7 +781,7 @@ namespace YAT.Controller
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
-					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
+					ConsoleEx.Error.WriteException(GetType(), ex, message);
 
 					return (MainResult.UnhandledException);
 				}

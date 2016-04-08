@@ -1551,7 +1551,7 @@ namespace YAT.Model
 						OnMessageInputRequest
 						(
 							"Program execution should never get here, workspace is 'null' while attempting to perform the operation!" + Environment.NewLine + Environment.NewLine +
-							MKY.Windows.Forms.ApplicationEx.SubmitBugMessage,
+							MessageHelper.SubmitBug,
 							"Invalid Program Operation",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Stop
