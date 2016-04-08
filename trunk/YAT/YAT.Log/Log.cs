@@ -259,7 +259,7 @@ namespace YAT.Log
 
 				default:
 				{
-					throw (new NotSupportedException("Program execution should never get here, '" + this.writeMode + "' is an invalid write mode." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new NotSupportedException("Program execution should never get here, '" + this.writeMode + "' is an invalid write mode." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 

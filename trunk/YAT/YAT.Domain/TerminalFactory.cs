@@ -23,6 +23,8 @@
 
 using System;
 
+using MKY;
+
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -36,7 +38,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (new TextTerminal  (settings));
 				case TerminalType.Binary: return (new BinaryTerminal(settings));
 			}
-			throw (new TypeLoadException("Program execution should never get here, '" + settings.TerminalType + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new TypeLoadException("Program execution should never get here, '" + settings.TerminalType + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -47,7 +49,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (new TextTerminal  (settings, terminal));
 				case TerminalType.Binary: return (new BinaryTerminal(settings, terminal));
 			}
-			throw (new ArgumentOutOfRangeException("settings", settings, "Program execution should never get here, '" + settings.TerminalType + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new ArgumentOutOfRangeException("settings", settings, "Program execution should never get here, '" + settings.TerminalType + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 	}
 }

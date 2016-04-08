@@ -116,7 +116,7 @@ namespace YAT.Domain.Parser
 				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

@@ -32,59 +32,7 @@ namespace MKY.Windows.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class ApplicationEx
 	{
-		/// <summary>
-		/// The default support request message is <![CDATA["Support may be requested at the origin of this software."]]>.
-		/// </summary>
-		public const string RequestSupportMessageDefault = "Support may be requested at the origin of this software.";
-
-		/// <summary>
-		/// The default feature request message is <![CDATA["New features can be requested at the origin of this software."]]>.
-		/// </summary>
-		public const string RequestFeatureMessageDefault = "New features can be requested at the origin of this software.";
-
-		/// <summary>
-		/// The default bug submission message is <![CDATA["Please report this issue at the origin of this software."]]>.
-		/// </summary>
-		/// <remarks>
-		/// Note the preceeding space.
-		/// </remarks>
-		public const string SubmitBugMessageDefault = "Please report this issue at the origin of this software.";
-
-		private static string staticRequestSupportMessage = RequestSupportMessageDefault;
-		private static string staticRequestFeatureMessage = RequestFeatureMessageDefault;
-		private static string staticSubmitBugMessage      = SubmitBugMessageDefault;
-
 		private static bool staticVisualStylesAndTextRenderingIsAlreadyDoneSo;
-
-		/// <summary>
-		/// The currently active support request message.
-		/// By default <see cref="RequestSupportMessageDefault"/>.
-		/// </summary>
-		public static string RequestSupportMessage
-		{
-			get { return (staticRequestSupportMessage); }
-			set { staticRequestSupportMessage = value;  }
-		}
-
-		/// <summary>
-		/// The currently active feature request message.
-		/// By default <see cref="RequestFeatureMessageDefault"/>.
-		/// </summary>
-		public static string RequestFeatureMessage
-		{
-			get { return (staticRequestFeatureMessage); }
-			set { staticRequestFeatureMessage = value;  }
-		}
-
-		/// <summary>
-		/// The currently active bug submission message.
-		/// By default <see cref="SubmitBugMessageDefault"/>.
-		/// </summary>
-		public static string SubmitBugMessage
-		{
-			get { return (staticSubmitBugMessage); }
-			set { staticSubmitBugMessage = value;  }
-		}
 
 		/// <summary>
 		/// Helper method to deal with application startup requirements of .NET 2.0 and later.

@@ -474,12 +474,12 @@ namespace YAT.Domain
 								{
 									case IODirection.Tx: return (new DisplayElement.TxData(b, sb.ToString()));
 									case IODirection.Rx: return (new DisplayElement.RxData(b, sb.ToString()));
-									default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+									default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 								}
 							}
 							else // Something went seriously wrong...
 							{
-								throw (new NotSupportedException("Program execution should never get here, byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+								throw (new NotSupportedException("Program execution should never get here, byte " + b.ToString("X2", CultureInfo.InvariantCulture) + " is invalid for encoding " + ((EncodingEx)e).ToString() + "." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
 						}
 					}
@@ -519,7 +519,7 @@ namespace YAT.Domain
 										{
 											case IODirection.Tx: return (new DisplayElement.TxData(decodingArray, sb.ToString(), charCount));
 											case IODirection.Rx: return (new DisplayElement.RxData(decodingArray, sb.ToString(), charCount));
-											default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+											default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}
 								}
@@ -542,7 +542,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new ArgumentOutOfRangeException("r", r, "Program execution should never get here, '" + r + "' is an invalid radix." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -753,7 +753,7 @@ namespace YAT.Domain
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			foreach (byte b in re.Data)
@@ -786,7 +786,7 @@ namespace YAT.Domain
 					{
 						case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
 						case IODirection.Rx: lineState = this.txLineState; break;
-						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					if ((lineState.LineElements.Count > 0) &&

@@ -30,6 +30,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Windows.Forms;
 
 #endregion
@@ -388,7 +389,7 @@ namespace YAT.Gui.Forms
 					break;
 
 				default:
-					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			button += " Settings...";
 			button_TextOrBinarySettings.Text = button;
@@ -487,7 +488,7 @@ namespace YAT.Gui.Forms
 				}
 				default:
 				{
-					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					throw (new NotSupportedException("Program execution should never get here, '" + tt + "' is an invalid terminal type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

@@ -343,7 +343,7 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				throw (new InvalidOperationException("Invalid link, program execution should never get here." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+				throw (new InvalidOperationException("Invalid link, program execution should never get here." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

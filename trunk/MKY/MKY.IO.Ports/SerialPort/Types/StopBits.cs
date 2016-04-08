@@ -74,7 +74,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
 				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 			}
-			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -208,7 +208,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 			}
-			throw (new NotSupportedException("Program execution should never get here." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotSupportedException("Program execution should never get here." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

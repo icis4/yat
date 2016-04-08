@@ -902,7 +902,7 @@ namespace MKY.IO.Serial.Socket
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for UDP sockets." + Environment.NewLine + Environment.NewLine + Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new NotImplementedException("Program execution should never get here, the event 'IOControlChanged' is not in use for UDP sockets." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>

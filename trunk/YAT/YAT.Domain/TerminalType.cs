@@ -105,7 +105,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (Text_string);
 				case TerminalType.Binary: return (Binary_string);
 			}
-			throw (new InvalidOperationException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+			throw (new InvalidOperationException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

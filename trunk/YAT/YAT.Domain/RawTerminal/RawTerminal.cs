@@ -404,7 +404,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    l = this.txRepository   .ToElements(); break;
 					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
 					case RepositoryType.Rx:    l = this.rxRepository   .ToElements(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			return (l);
@@ -428,7 +428,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + ApplicationEx.SubmitBugMessage));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
 
@@ -455,7 +455,7 @@ namespace YAT.Domain
 					case RepositoryType.Tx:    s = this.txRepository   .ToString(indent); break;
 					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
 					case RepositoryType.Rx:    s = this.rxRepository   .ToString(indent); break;
-					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MKY.Windows.Forms.ApplicationEx.SubmitBugMessage));
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
