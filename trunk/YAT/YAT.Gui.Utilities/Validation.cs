@@ -42,6 +42,13 @@ namespace YAT.Gui.Utilities
 	public static class Validation
 	{
 		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
+		public static bool ValidateText(IWin32Window owner, string description, string textToValidate)
+		{
+			int invalidTextStart;
+			return (ValidateText(owner, description, textToValidate, out invalidTextStart));
+		}
+
+		/// <summary>Validation using <see cref="Domain.Radix.String"/> and <see cref="Domain.Parser.Modes.AllByteArrayResults"/>.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart)
 		{
@@ -71,71 +78,17 @@ namespace YAT.Gui.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, Domain.Radix defaultRadix, Domain.Parser.Modes modes, out int invalidTextStart, out int invalidTextLength)
 		{
-			string successfullyParsed;
-			if (ValidateText(owner, description, textToValidate, defaultRadix, modes, out successfullyParsed))
-			{
-				invalidTextStart = -1;
-				invalidTextLength = 0;
-				return (true);
-			}
-			else
-			{
-				invalidTextStart = successfullyParsed.Length;
-				invalidTextLength = textToValidate.Length - invalidTextStart;
-				return (false);
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, Domain.Radix defaultRadix, Domain.Parser.Modes modes, out string successfullyParsed)
-		{
-			bool hasSucceeded;
-			Domain.Parser.FormatException formatException = new Domain.Parser.FormatException("");
-
-			using (Domain.Parser.Parser p = new Domain.Parser.Parser(defaultRadix))
-				hasSucceeded = p.TryParse(textToValidate, modes, out successfullyParsed, ref formatException);
-
-			if (hasSucceeded)
+			string errorMessage;
+			if (Model.Utilities.Validation.ValidateText(description, textToValidate, defaultRadix, modes, out invalidTextStart, out invalidTextLength, out errorMessage))
 			{
 				return (true);
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.Append("The ");
-				sb.Append(     description);
-				sb.Append(              @" """);
-				sb.Append(                   textToValidate);
-				sb.Append(                               @"""");
-				if (successfullyParsed != null)
-				{
-					sb.Append(                              " is invalid at position ");
-					sb.Append(                                                      (successfullyParsed.Length + 1).ToString(CultureInfo.CurrentCulture) + ".");
-					if (successfullyParsed.Length > 0)
-					{
-						sb.Append(Environment.NewLine);
-						sb.Append(@"Only """);
-						sb.Append(         successfullyParsed);
-						sb.Append(                  @""" is valid.");
-					}
-				}
-				else
-				{
-					sb.Append(                         " is invalid.");
-				}
-
-				if (formatException.Message.Length > 0)
-				{
-					sb.Append(Environment.NewLine);
-					sb.Append(formatException.Message);
-				}
-
 				MessageBoxEx.Show
 				(
 					owner,
-					sb.ToString(),
+					errorMessage.ToString(),
 					"Invalid " + description,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation

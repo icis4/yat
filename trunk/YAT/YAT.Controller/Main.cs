@@ -50,36 +50,6 @@ namespace YAT.Controller
 	/// </remarks>
 	public class Main : IDisposable
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-		// warnings for each undocumented member below. Documenting each member makes little sense
-		// since they pretty much tell their purpose and documentation tags between the members
-		// makes the code less readable.
-		#pragma warning disable 1591
-
-		/// <summary>
-		/// Enumeration of all the result return codes.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Intentionally using nested type, instead of replicating the parent's name to 'MainResult'.")]
-		public enum Result
-		{
-			Success                  =  0,
-			CommandLineError         = -1,
-			ApplicationSettingsError = -2,
-			ApplicationStartError    = -3,
-			ApplicationRunError      = -4,
-			ApplicationExitError     = -5,
-			UnhandledException       = -6,
-		}
-
-		#pragma warning restore 1591
-
-		#endregion
-
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -216,7 +186,7 @@ namespace YAT.Controller
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		public virtual Result PrepareRun()
+		public virtual MainResult PrepareRun()
 		{
 			AssertNotDisposed();
 
@@ -229,20 +199,20 @@ namespace YAT.Controller
 			if (this.commandLineArgs != null)
 			{
 				if (this.commandLineArgs.ProcessAndValidate())
-					return (Result.Success);
+					return (MainResult.Success);
 				else
-					return (Result.CommandLineError);
+					return (MainResult.CommandLineError);
 			}
 			else
 			{
-				return (Result.Success);
+				return (MainResult.Success);
 			}
 		}
 
 		/// <summary>
 		/// This is the main run method for normal operation.
 		/// </summary>
-		public virtual Result Run()
+		public virtual MainResult Run()
 		{
 			AssertNotDisposed();
 
@@ -252,7 +222,7 @@ namespace YAT.Controller
 		/// <summary>
 		/// This is the main run method for console operation.
 		/// </summary>
-		public virtual Result RunFromConsole()
+		public virtual MainResult RunFromConsole()
 		{
 			AssertNotDisposed();
 
@@ -263,9 +233,9 @@ namespace YAT.Controller
 		/// This is the main run method.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
-		private Result Run(bool runFromConsole)
+		private MainResult Run(bool runFromConsole)
 		{
-			Result result;
+			MainResult result;
 			bool showLogo;
 			bool showView;
 			bool showHelp;
@@ -286,7 +256,7 @@ namespace YAT.Controller
 			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
 			{
-				result = Result.Success;
+				result = MainResult.Success;
 				showLogo = true;
 				showView = true; // By default, start YAT with view.
 				showHelp = false;
@@ -294,7 +264,7 @@ namespace YAT.Controller
 			// Prio 1 = Invalid:
 			else if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
 			{
-				result = Result.CommandLineError;
+				result = MainResult.CommandLineError;
 				showLogo = true;
 				showView = false; // YAT will not be started, instead the help will be shown.
 				showHelp = true;
@@ -302,7 +272,7 @@ namespace YAT.Controller
 			// Prio 2 = Valid:
 			else
 			{
-				result = Result.Success;
+				result = MainResult.Success;
 				showLogo = this.commandLineArgs.ShowLogo;
 				showView = this.commandLineArgs.ShowView;
 				showHelp = this.commandLineArgs.HelpIsRequested;
@@ -389,11 +359,11 @@ namespace YAT.Controller
 		/// instance.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop doesn't seem to be able to deal with command line terms such as 'cmd' or 'nv'...")]
-		public virtual Result Run(bool runFromConsole, bool runWithView)
+		public virtual MainResult Run(bool runFromConsole, bool runWithView)
 		{
 			AssertNotDisposed();
 
-			Result result;
+			MainResult result;
 
 			if (!runFromConsole && runWithView)
 			{
@@ -412,7 +382,7 @@ namespace YAT.Controller
 					result = RunInvisible();                        //       7
 			}
 
-			if (result == Result.CommandLineError)
+			if (result == MainResult.CommandLineError)
 			{
 				if (runWithView)
 					ShowMessageBoxHelp(true);
@@ -437,7 +407,7 @@ namespace YAT.Controller
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private Result RunFullyWithView()
+		private MainResult RunFullyWithView()
 		{
 			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
 			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
@@ -458,13 +428,13 @@ namespace YAT.Controller
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit.
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
-						return (Result.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 				
 					// ApplicationSettings are loaded while showing the welcome screen, and will
 					// be closed when exiting or disposing the main model.
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (Result.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 				}
 				catch (Exception ex)
 				{
@@ -474,7 +444,7 @@ namespace YAT.Controller
 						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart();
 					}
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 
 				try
@@ -493,8 +463,8 @@ namespace YAT.Controller
 
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
 
-						Model.Main.Result viewResult = view.Result;
-						return (ConvertToMainResult(viewResult));
+						Model.MainResult viewResult = view.Result;
+						return (Convert(viewResult));
 					}
 				}
 				catch (Exception ex)
@@ -505,7 +475,7 @@ namespace YAT.Controller
 						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart();
 					}
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
 		}
@@ -568,7 +538,7 @@ namespace YAT.Controller
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private Result RunWithViewButOutputErrorsOnConsole()
+		private MainResult RunWithViewButOutputErrorsOnConsole()
 		{
 			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested as described in 'Help > Request Support'.";
 			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested as described in 'Help > Request Feature'.";
@@ -589,13 +559,13 @@ namespace YAT.Controller
 					// Application settings must be created and closed on main thread, otherwise
 					// there will be a synchronization exception on exit.
 					if (!ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned))
-						return (Result.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 
 					// ApplicationSettings are loaded while showing the welcome screen, and will
 					// be closed when exiting or disposing the main model.
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (Result.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 				}
 				catch (Exception ex)
 				{
@@ -605,7 +575,7 @@ namespace YAT.Controller
 					if (ex != null)
 						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 
 				try
@@ -624,8 +594,8 @@ namespace YAT.Controller
 
 						System.Windows.Forms.Application.ThreadException -= new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
 
-						Model.Main.Result viewResult = view.Result;
-						return (ConvertToMainResult(viewResult));
+						Model.MainResult viewResult = view.Result;
+						return (Convert(viewResult));
 					}
 				}
 				catch (Exception ex)
@@ -636,7 +606,7 @@ namespace YAT.Controller
 					if (ex != null)
 						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
 		}
@@ -680,7 +650,7 @@ namespace YAT.Controller
 		/// Non-view application for automated test usage.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private Result RunFullyFromConsole()
+		private MainResult RunFullyFromConsole()
 		{
 			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
@@ -706,7 +676,7 @@ namespace YAT.Controller
 					}
 					else
 					{
-						return (Result.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 					}
 				}
 				catch (Exception ex)
@@ -717,16 +687,16 @@ namespace YAT.Controller
 					if (ex != null)
 						MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 
 				try
 				{
-					Model.Main.Result modelResult = model.Start();
-					if (modelResult == Model.Main.Result.Success)
+					Model.MainResult modelResult = model.Start();
+					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
-					return (ConvertToMainResult(modelResult));
+					return (Convert(modelResult));
 				}
 				catch (Exception ex)
 				{
@@ -735,7 +705,7 @@ namespace YAT.Controller
 
 					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
 		}
@@ -766,7 +736,7 @@ namespace YAT.Controller
 		/// Non-view application for automated test usage.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private Result RunInvisible()
+		private MainResult RunInvisible()
 		{
 			MKY.Windows.Forms.ApplicationEx.RequestSupportMessage =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MKY.Windows.Forms.ApplicationEx.RequestFeatureMessage = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
@@ -787,7 +757,7 @@ namespace YAT.Controller
 					}
 					else
 					{
-						return (Result.ApplicationSettingsError);
+						return (MainResult.ApplicationSettingsError);
 					}
 				}
 				catch (Exception ex)
@@ -795,23 +765,23 @@ namespace YAT.Controller
 					string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
 					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
 
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 
 				try
 				{
-					Model.Main.Result modelResult = model.Start();
-					if (modelResult == Model.Main.Result.Success)
+					Model.MainResult modelResult = model.Start();
+					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
-					return (ConvertToMainResult(modelResult));
+					return (Convert(modelResult));
 				}
 				catch (Exception ex)
 				{
 					string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
 					MKY.Diagnostics.ConsoleEx.Error.WriteException(GetType(), ex, message);
 
-					return (Result.UnhandledException);
+					return (MainResult.UnhandledException);
 				}
 			} // Dispose of model to ensure immediate release of resources.
 		}
@@ -921,16 +891,16 @@ namespace YAT.Controller
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		private static Result ConvertToMainResult(Model.Main.Result result)
+		private static MainResult Convert(Model.MainResult result)
 		{
 			switch (result)
 			{
-				case Model.Main.Result.Success:               return (Result.Success);
-				case Model.Main.Result.CommandLineError:      return (Result.CommandLineError);
-				case Model.Main.Result.ApplicationStartError: return (Result.ApplicationStartError);
-				case Model.Main.Result.ApplicationRunError:   return (Result.ApplicationRunError);
-				case Model.Main.Result.ApplicationExitError:  return (Result.ApplicationExitError);
-				default:                                      return (Result.UnhandledException); // Covers 'Model.Main.Result.UnhandledException'.
+				case Model.MainResult.Success:               return (MainResult.Success);
+				case Model.MainResult.CommandLineError:      return (MainResult.CommandLineError);
+				case Model.MainResult.ApplicationStartError: return (MainResult.ApplicationStartError);
+				case Model.MainResult.ApplicationRunError:   return (MainResult.ApplicationRunError);
+				case Model.MainResult.ApplicationExitError:  return (MainResult.ApplicationExitError);
+				default:                                     return (MainResult.UnhandledException); // Covers 'Model.MainResult.UnhandledException'.
 			}
 		}
 

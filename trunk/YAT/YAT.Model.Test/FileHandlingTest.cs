@@ -161,7 +161,7 @@ namespace YAT.Model.Test
 			{
 				bool success = false;
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be exited successfully!");
 
 				VerifyFiles(workspace, true, terminal, true);
@@ -190,7 +190,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be exited successfully!");
 
 				VerifyFiles(workspace, false, terminal, false);
@@ -219,7 +219,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be exited successfully!");
 
 				VerifyFiles(workspace, true, terminal, false);
@@ -253,7 +253,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be exited successfully!");
 
 				VerifyFiles(workspace, false, terminal, false);
@@ -286,7 +286,7 @@ namespace YAT.Model.Test
 
 			using (main)
 			{
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be exited successfully!");
 
 				VerifyFiles(workspace, true, terminal, true);
@@ -296,7 +296,7 @@ namespace YAT.Model.Test
 
 			using (main = new Main())
 			{
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be started!");
 
 				workspace = main.Workspace;
@@ -313,7 +313,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, "Main could not be exited successfully!");
 
 				VerifyFiles(workspace, false, terminal, false);
@@ -347,7 +347,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -361,7 +361,7 @@ namespace YAT.Model.Test
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, uc + "Terminal could not be created!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles(uc, workspace, true, terminal, true);
@@ -375,7 +375,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC2: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -391,7 +391,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Terminal could not be saved!");
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles(uc, workspace, true, terminal, true);
@@ -405,7 +405,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC2a: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -423,7 +423,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
 				Assert.IsFalse(File.Exists(defaultTerminal1FilePath), uc + "Auto terminal file not deleted!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles(uc, workspace, true, terminal, true, false);
@@ -437,7 +437,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC3: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -463,7 +463,7 @@ namespace YAT.Model.Test
 				Terminal terminal3 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -485,7 +485,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC3a: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -515,7 +515,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 				Assert.IsFalse(File.Exists(autoTerminal3FilePath), uc + "Auto terminal 3 file not deleted!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -537,7 +537,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC4: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -563,7 +563,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Workspace could not be saved!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -586,7 +586,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC4a: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -630,7 +630,7 @@ namespace YAT.Model.Test
 					new bool[]     { false,     false     }  // Auto.
 				);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -653,7 +653,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC5: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -686,7 +686,7 @@ namespace YAT.Model.Test
 				// Install callback handler that sets the normal file path for terminal 3:
 				terminal3.SaveAsFileDialogRequest += new EventHandler<DialogEventArgs>(terminal3_SaveAsFileDialogRequest_SaveAsOK);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -709,7 +709,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC5a: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -738,7 +738,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, uc + "Terminal 3 could not be closed!");
 				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -782,7 +782,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				uc = "UC6..9prep: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -803,7 +803,7 @@ namespace YAT.Model.Test
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.IsTrue(success, uc + "Terminal 2 could not be saved as!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -824,7 +824,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main(this.normalTerminal1FilePath))
 			{
 				uc = "UC6: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -838,7 +838,7 @@ namespace YAT.Model.Test
 				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
 				VerifyFiles(uc, workspace, false, terminal, true, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles(uc, workspace, true, terminal, true, false);
@@ -856,7 +856,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main(this.normalTerminal1FilePath))
 			{
 				uc = "UC7: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -875,7 +875,7 @@ namespace YAT.Model.Test
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, uc + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -908,7 +908,7 @@ namespace YAT.Model.Test
 
 				// Main 1 start.
 				{
-					success = (main1.Start() == Main.Result.Success);
+					success = (main1.Start() == MainResult.Success);
 					Assert.IsTrue(success, uc + "Main 1 could not be started!");
 
 					workspace1 = main1.Workspace;
@@ -923,7 +923,7 @@ namespace YAT.Model.Test
 
 				// Main 2 start.
 				{
-					success = (main2.Start() == Main.Result.Success);
+					success = (main2.Start() == MainResult.Success);
 					Assert.IsTrue(success, uc + "Main 2 could not be started!");
 
 					workspace2 = main2.Workspace;
@@ -938,7 +938,7 @@ namespace YAT.Model.Test
 
 				// Main 1 exit.
 				{
-					success = (main1.Exit() == Main.Result.Success);
+					success = (main1.Exit() == MainResult.Success);
 					Assert.IsTrue(success, uc + "Main 1 could not be exited!");
 
 					VerifyFiles(uc, workspace1, true, terminal1, true, false);
@@ -946,7 +946,7 @@ namespace YAT.Model.Test
 
 				// Main 2 exit.
 				{
-					success = (main2.Exit() == Main.Result.Success);
+					success = (main2.Exit() == MainResult.Success);
 					Assert.IsTrue(success, uc + "Main 2 could not be exited!");
 
 					VerifyFiles(uc, workspace2, true, terminal2, true, false);
@@ -967,7 +967,7 @@ namespace YAT.Model.Test
 
 				// Main 2 start.
 				{
-					success = (main2.Start() == Main.Result.Success);
+					success = (main2.Start() == MainResult.Success);
 					Assert.IsTrue(success, uc + "Main 2 could not be started!");
 
 					workspace2 = main2.Workspace;
@@ -982,7 +982,7 @@ namespace YAT.Model.Test
 
 				// Main 2 exit.
 				{
-					success = (main2.Exit() == Main.Result.Success);
+					success = (main2.Exit() == MainResult.Success);
 					Assert.IsTrue(success, uc + "Main 2 could not be exited!");
 
 					VerifyFiles(uc, workspace2, true, terminal2, true, false);
@@ -1020,7 +1020,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1034,7 +1034,7 @@ namespace YAT.Model.Test
 				Terminal terminal = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, true, terminal, true);
@@ -1073,7 +1073,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1089,7 +1089,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
@@ -1104,7 +1104,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 2: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1118,7 +1118,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, false, terminal, true, false);
@@ -1152,7 +1152,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1168,7 +1168,7 @@ namespace YAT.Model.Test
 
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, true, terminal, true, false);
@@ -1191,7 +1191,7 @@ namespace YAT.Model.Test
 				step = "Step 3: ";
 				int countBefore = this.workspace_MessageInputRequest_No_counter;
 				main.WorkspaceOpened += new EventHandler<WorkspaceEventArgs>(main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No);
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 				int countAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
@@ -1228,7 +1228,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1246,7 +1246,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, step + "Workspace could not be saved as!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
@@ -1269,7 +1269,7 @@ namespace YAT.Model.Test
 				step = "Step 3: ";
 				int countBefore = this.main_MessageInputRequest_OK_counter;
 				main.MessageInputRequest += new EventHandler<MessageInputEventArgs>(main_MessageInputRequest_OK);
-				success = (main.Start() == Main.Result.ApplicationStartError);
+				success = (main.Start() == MainResult.ApplicationStartError);
 				Assert.IsTrue(success, step + "Main could be started even though workspace file is missing!");
 				int countAfter = this.main_MessageInputRequest_OK_counter;
 				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
@@ -1304,7 +1304,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1324,7 +1324,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
@@ -1356,7 +1356,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 3: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1371,7 +1371,7 @@ namespace YAT.Model.Test
 				terminal.StopIO();
 				Assert.IsFalse(terminal.IsStarted, step + "Terminal not stopped!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
@@ -1388,7 +1388,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 4: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1414,7 +1414,7 @@ namespace YAT.Model.Test
 				// Workspace also has to be saved:
 				int countBefore = this.workspace_MessageInputRequest_No_counter;
 				workspace.MessageInputRequest += new EventHandler<MessageInputEventArgs>(workspace_MessageInputRequest_No);
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 				int countAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.AreNotEqual(countBefore, countAfter, "Workspace 'MessageInputRequest' was not called!");
@@ -1450,7 +1450,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 6: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1465,7 +1465,7 @@ namespace YAT.Model.Test
 				terminal.StopIO();
 				Assert.IsFalse(terminal.IsStarted, step + "Terminal not stopped!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles(step, workspace, true, false, terminal, true, false);
@@ -1482,7 +1482,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 7: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1505,7 +1505,7 @@ namespace YAT.Model.Test
 
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 
 				VerifyFiles
@@ -1530,14 +1530,14 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 8: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1570,7 +1570,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 1: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1588,7 +1588,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(success, step + "Workspace could not be saved as!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1604,7 +1604,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 2: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1631,7 +1631,7 @@ namespace YAT.Model.Test
 
 				success = workspace.Save();
 				Assert.IsTrue(success, step + "Workspace could not be saved!");
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1646,7 +1646,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 3: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1670,7 +1670,7 @@ namespace YAT.Model.Test
 
 				success = workspace.Save();
 				Assert.IsTrue(success, step + "Workspace could not be saved!");
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1682,7 +1682,7 @@ namespace YAT.Model.Test
 			using (Main main = new Main())
 			{
 				step = "Step 4: ";
-				success = (main.Start() == Main.Result.Success);
+				success = (main.Start() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
@@ -1699,7 +1699,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex,    step + "Dynamic index of terminal 3 isn't 2!");
 				Assert.AreEqual(2, workspace.ActiveTerminalSequentialIndex, step + "Sequential index of terminal 3 isn't 2!");
 
-				success = (main.Exit() == Main.Result.Success);
+				success = (main.Exit() == MainResult.Success);
 				Assert.IsTrue(success, step + "Main could not be exited successfully!");
 			}
 			#endregion

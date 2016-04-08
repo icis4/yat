@@ -108,7 +108,7 @@ namespace YAT.Gui.Forms
 		private bool isLayoutingMdi = false;
 		private bool invokeLayout = false;
 		private ClosingState closingState = ClosingState.None;
-		private Model.Main.Result result = Model.Main.Result.Success;
+		private Model.MainResult result = Model.MainResult.Success;
 
 		// Model:
 		private Model.Main main;
@@ -192,7 +192,7 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary></summary>
-		public Model.Main.Result Result
+		public Model.MainResult Result
 		{
 			get { return (this.result); }
 		}
@@ -231,14 +231,14 @@ namespace YAT.Gui.Forms
 			this.result = this.main.Start();
 			this.isLayoutingMdi = false;
 
-			if (this.result != Model.Main.Result.Success)
+			if (this.result != Model.MainResult.Success)
 			{
 				bool showErrorModally = this.main.StartArgs.KeepOpenOnError;
 				bool keepOpenOnError  = this.main.StartArgs.KeepOpenOnError;
 
 				switch (this.result)
 				{
-					case Model.Main.Result.CommandLineError:
+					case Model.MainResult.CommandLineError:
 					{
 						if (showErrorModally)
 						{
@@ -259,7 +259,7 @@ namespace YAT.Gui.Forms
 						break;
 					}
 
-					case Model.Main.Result.ApplicationStartError:
+					case Model.MainResult.ApplicationStartError:
 					{
 						if (showErrorModally)
 						{
@@ -275,7 +275,7 @@ namespace YAT.Gui.Forms
 						break;
 					}
 
-					case Model.Main.Result.ApplicationRunError:
+					case Model.MainResult.ApplicationRunError:
 					{
 						if (showErrorModally)
 						{
@@ -292,8 +292,8 @@ namespace YAT.Gui.Forms
 					}
 
 					// Do nothing in the following cases:
-					case Model.Main.Result.ApplicationExitError:
-					case Model.Main.Result.UnhandledException:
+					case Model.MainResult.ApplicationExitError:
+					case Model.MainResult.UnhandledException:
 					default:
 					{
 						break;
@@ -327,13 +327,6 @@ namespace YAT.Gui.Forms
 						LayoutTerminals(WorkspaceLayout.TileVertical);
 					else
 						LayoutTerminals();
-				}
-
-				// Automatically trigger start operation if desired:
-				if (this.main.StartArgs.PerformOperationOnRequestedTerminal)
-				{
-					SetFixedStatusText("Triggering start operation...");
-					timer_PerformStartOperation.Start();
 				}
 			}
 		}
@@ -390,7 +383,7 @@ namespace YAT.Gui.Forms
 				this.closingState = ClosingState.IsClosingFromForm;
 
 				bool cancel;
-				Model.Main.Result modelResult = this.main.Exit(out cancel);
+				Model.MainResult modelResult = this.main.Exit(out cancel);
 				if (cancel)
 				{
 					e.Cancel = true;
@@ -1312,91 +1305,6 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > PerformStart/ExitOperation
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > PerformStart/ExitOperation
-		//------------------------------------------------------------------------------------------
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void timer_PerformStartOperation_Tick(object sender, EventArgs e)
-		{
-			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;
-			Model.Terminal terminal = this.workspace.GetTerminalByDynamicIndex(id);
-			if (terminal == null)
-			{
-				SetTimedStatusText("Trigger received, pending until terminal has been created...");
-				return; // Pend!
-			}
-			if (!terminal.IsStarted)
-			{
-				SetTimedStatusText("Trigger received, pending until terminal has been started...");
-				return; // Pend!
-			}
-			if (!terminal.IsReadyToSend)
-			{
-				SetTimedStatusText("Trigger received, pending until terminal is ready to transmit...");
-				return; // Pend!
-			}									// Using term 'Transmission' to indicate potential
-												// 'intelligence' to send + receive/verify the data.
-			// Preconditions fullfilled.
-			timer_PerformStartOperation.Stop();
-			SetTimedStatusText("Trigger received, preparing automatic transmission...");
-
-			// Automatically transmit file if desired.
-			string filePath = this.main.StartArgs.RequestedTransmitFilePath;
-			if (!string.IsNullOrEmpty(filePath))
-			{
-				try
-				{
-					SetFixedStatusText("Automatically transmitting data on terminal " + id);
-					terminal.SendFile(new Model.Types.Command("", true, filePath));
-				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(GetType(), ex);
-					this.result = Model.Main.Result.ApplicationRunError;
-				}
-
-				if ((!this.main.StartArgs.KeepOpen) &&
-					(!(this.main.StartArgs.KeepOpenOnError && (this.result != Model.Main.Result.Success))))
-				{
-					timer_PerformExitOperation.Start();
-				}
-			}
-			else
-			{
-				this.result = Model.Main.Result.ApplicationRunError;
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void timer_PerformExitOperation_Tick(object sender, EventArgs e)
-		{
-			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;
-			Model.Terminal terminal = this.workspace.GetTerminalByDynamicIndex(id);
-			if ((terminal != null) && (terminal.IsBusy))
-			{
-				return; // Pend!
-			}
-
-			if ((!this.main.StartArgs.KeepOpen) &&
-				(!(this.main.StartArgs.KeepOpenOnError && (this.result != Model.Main.Result.Success))))
-			{
-				try
-				{
-					SetFixedStatusText("Automatically closing " + ApplicationEx.ProductName);
-					Close();
-				}
-				catch (Exception ex)
-				{
-					DebugEx.WriteException(GetType(), ex);
-					this.result = Model.Main.Result.ApplicationExitError;
-				}
-			}
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Window
@@ -1542,7 +1450,7 @@ namespace YAT.Gui.Forms
 				this.main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
 				this.main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
 
-				this.main.Exited += new EventHandler(main_Exited);
+				this.main.Exited += new EventHandler<Model.ExitEventArgs>(main_Exited);
 			}
 		}
 
@@ -1557,7 +1465,7 @@ namespace YAT.Gui.Forms
 				this.main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
 				this.main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
 
-				this.main.Exited -= new EventHandler(main_Exited);
+				this.main.Exited -= new EventHandler<Model.ExitEventArgs>(main_Exited);
 			}
 		}
 
@@ -1602,9 +1510,11 @@ namespace YAT.Gui.Forms
 			e.Result = dr;
 		}
 
-		private void main_Exited(object sender, EventArgs e)
+		private void main_Exited(object sender, Model.ExitEventArgs e)
 		{
-			// Prevent multiple calls to Close().
+			this.result = e.Result;
+
+			// Prevent multiple calls to Close():
 			if (this.closingState == ClosingState.None)
 			{
 				this.closingState = ClosingState.IsClosingFromModel;
@@ -1743,7 +1653,7 @@ namespace YAT.Gui.Forms
 			ofd.FilterIndex = ExtensionHelper.TerminalOrWorkspaceFilesFilterDefault;
 			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalFile);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
 				Refresh();
 
@@ -1791,7 +1701,7 @@ namespace YAT.Gui.Forms
 			ofd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
 			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceFile);
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
 				Refresh();
 
@@ -1823,7 +1733,7 @@ namespace YAT.Gui.Forms
 			// Note that 'DefaultExt' states "The returned string does not include the period."!
 
 			DialogResult dr = sfd.ShowDialog(this);
-			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				Refresh();
 

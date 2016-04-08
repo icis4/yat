@@ -47,7 +47,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default'.
+		/// Index 0 means 'default' = the active terminal.
 		/// </remarks>
 		public const int DefaultDynamicIndex = 0;
 
@@ -64,7 +64,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default'.
+		/// Index 0 means 'default' = the active terminal.
 		/// </remarks>
 		public const int DefaultSequentialIndex = 0;
 
@@ -81,7 +81,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Index 0 means 'default'.
+		/// Index 0 means 'default' = the active terminal.
 		/// </remarks>
 		public const int DefaultFixedIndex = Settings.TerminalSettingsItem.DefaultFixedIndex;
 

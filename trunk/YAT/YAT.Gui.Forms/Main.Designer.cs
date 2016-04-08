@@ -149,8 +149,6 @@
 			this.toolStripPanel_Left = new System.Windows.Forms.ToolStripPanel();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
-			this.timer_PerformStartOperation = new System.Windows.Forms.Timer(this.components);
-			this.timer_PerformExitOperation = new System.Windows.Forms.Timer(this.components);
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger = new System.Windows.Forms.ToolStripComboBox();
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
@@ -1189,16 +1187,6 @@
 			// 
 			this.chronometer_Main.TimeSpanChanged += new System.EventHandler<MKY.TimeSpanEventArgs>(this.chronometer_Main_TimeSpanChanged);
 			// 
-			// timer_PerformStartOperation
-			// 
-			this.timer_PerformStartOperation.Interval = 1000;
-			this.timer_PerformStartOperation.Tick += new System.EventHandler(this.timer_PerformStartOperation_Tick);
-			// 
-			// timer_PerformExitOperation
-			// 
-			this.timer_PerformExitOperation.Interval = 1000;
-			this.timer_PerformExitOperation.Tick += new System.EventHandler(this.timer_PerformExitOperation_Tick);
-			// 
 			// toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger
 			// 
 			this.toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger.Name = "toolStripComboBox_MainTool_Terminal_AutoResponse_Trigger";
@@ -1330,14 +1318,12 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_4;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Char;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_String;
-		private System.Windows.Forms.Timer timer_PerformStartOperation;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_TerminalInfo;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Status;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowTerminalInfo;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowChrono;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_StatusContextMenu_Separator_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_Preferences;
-		private System.Windows.Forms.Timer timer_PerformExitOperation;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_On;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Off;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Log_Settings;

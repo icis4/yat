@@ -189,10 +189,10 @@ namespace YAT.Gui.Test
 				@"-ke"
 			};
 
-			using (Controller.Main main = new Main(args))
+			using (Main main = new Main(args))
 			{
-				Controller.Main.Result mainResult = main.Run();
-				Assert.AreEqual(Controller.Main.Result.Success, mainResult);
+				MainResult mainResult = main.Run();
+				Assert.AreEqual(MainResult.Success, mainResult);
 			}
 		}
 

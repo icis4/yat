@@ -122,6 +122,30 @@ namespace YAT.Model
 	}
 
 	/// <summary></summary>
+	public class ExitEventArgs : EventArgs
+	{
+		private MainResult result;
+
+		/// <summary></summary>
+		public ExitEventArgs()
+			: this(MainResult.Success)
+		{
+		}
+
+		/// <summary></summary>
+		public ExitEventArgs(MainResult result)
+		{
+			this.result = result;
+		}
+
+		/// <summary></summary>
+		public MainResult Result
+		{
+			get { return (this.result); }
+		}
+	}
+
+	/// <summary></summary>
 	public class StatusTextEventArgs : EventArgs
 	{
 		private string text;

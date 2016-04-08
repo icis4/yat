@@ -103,6 +103,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="CommandLineArgs.cs" />
+    <Compile Include="MainResult.cs" />
     <Compile Include="StartArgs.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Main.cs" />

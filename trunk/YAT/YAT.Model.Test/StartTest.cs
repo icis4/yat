@@ -26,7 +26,9 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
+using MKY.IO;
 using MKY.Settings;
 
 using NUnit.Framework;
@@ -90,6 +92,8 @@ namespace YAT.Model.Test
 		{
 			// Close temporary in-memory application settings.
 			ApplicationSettings.Close();
+
+			Temp.CleanTempPath(GetType());
 		}
 
 		#endregion
@@ -117,7 +121,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(main.StartArgs.ShowNewTerminalDialog);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
-				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
+				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsTrue (main.StartArgs.KeepOpen);
@@ -176,7 +180,7 @@ namespace YAT.Model.Test
 
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettings);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings); // By default the last terminal in the workspace.
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
@@ -186,7 +190,7 @@ namespace YAT.Model.Test
 
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettings);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings); // By default the last terminal in the workspace.
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 		}
@@ -202,18 +206,18 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestOpenOptionPrepare()
 		{
-			// Workspace only.
+			// Workspace only:
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + WorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettings);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings); // By default the last terminal in the workspace.
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			// Terminal only.
+			// Terminal only:
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
@@ -224,7 +228,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			// Workspace + Terminal = Terminal. (The last argument is used.)
+			// Workspace + Terminal = Terminal (the last argument is used):
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + WorkspaceFilePath, "--Open=" + Terminal1FilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
@@ -235,18 +239,18 @@ namespace YAT.Model.Test
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			// Terminal + Workspace = Workspace. (The last argument is used.)
+			// Terminal + Workspace = Workspace (the last argument is used):
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath, "--Open=" + WorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
 
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettings);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings); // By default the last terminal in the workspace.
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			// Terminal1 + Terminal2 = Terminal2. (The last argument is used.)
+			// Terminal1 + Terminal2 = Terminal2 (the last argument is used):
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + Terminal1FilePath, "--Open=" + Terminal2FilePath })))
 			{
 				PrepareMainAndVerifyResult(main);
@@ -257,11 +261,11 @@ namespace YAT.Model.Test
 				Assert.IsFalse  (main.StartArgs.ShowNewTerminalDialog);
 			}
 
-			// Invalid file.
+			// Invalid file:
 			string invalidFilePath = "MyFile.txt";
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Open=" + invalidFilePath })))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
 				Assert.IsNull(main.StartArgs.WorkspaceSettings);
 				Assert.IsNull(main.StartArgs.TerminalSettings);
@@ -328,7 +332,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(Domain.TerminalType.Binary, main.StartArgs.TerminalSettings.Settings.TerminalType);
 				Assert.AreEqual(Domain.IOType.SerialPort,   main.StartArgs.TerminalSettings.Settings.IOType);
 
-				Assert.AreEqual(5, (int)main.StartArgs.TerminalSettings.Settings.IO.SerialPort.PortId); // COM5
+				Assert.AreEqual(5, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.PortId); // COM5
 
 				Assert.AreEqual(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault,   main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate);
 				Assert.AreEqual(MKY.IO.Ports.DataBits.Seven,                                            main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
@@ -343,7 +347,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsOn);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
-				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
+				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
@@ -385,7 +389,7 @@ namespace YAT.Model.Test
 				Assert.IsTrue(main.StartArgs.TerminalSettings.Settings.LogIsOn);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
-				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
+				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
@@ -426,7 +430,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(main.StartArgs.TerminalSettings.Settings.LogIsOn);
 
 				Assert.IsFalse(main.StartArgs.PerformOperationOnRequestedTerminal);
-				Assert.AreEqual(Indices.InvalidDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
+				Assert.AreEqual(Indices.DefaultDynamicIndex, main.StartArgs.RequestedDynamicTerminalIndex);
 				Assert.IsNullOrEmpty(main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
@@ -480,7 +484,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestReplaceTerminalSettingsInWorkspacePrepare()
 		{
-			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--Terminal=2", "--DataBits=7" })))
+			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--DynamicTerminalIndex=2", "--DataBits=7" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
@@ -502,6 +506,71 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Tests > TransmitTextOptionPrepare
+		//------------------------------------------------------------------------------------------
+		// Tests > TransmitTextOptionPrepare
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestTransmitTextOptionPrepare()
+		{
+			string text = @"Send something\!(Delay)Send delayed";
+
+			using (Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitText=" + text, "--KeepOpenOnError"})))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsNull   (main.StartArgs.WorkspaceSettings);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings);
+				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettings.SettingsFilePath);
+				Assert.AreEqual (text, main.StartArgs.RequestedTransmitText);
+
+				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
+				Assert.IsTrue (main.StartArgs.PerformOperationOnRequestedTerminal);
+
+				Assert.IsFalse(main.StartArgs.KeepOpen);
+				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
+				Assert.IsFalse(main.StartArgs.TileHorizontal);
+				Assert.IsFalse(main.StartArgs.TileVertical);
+			}
+		}
+
+		#endregion
+
+		#region Tests > TransmitTextOptionInWorkspacePrepare
+		//------------------------------------------------------------------------------------------
+		// Tests > TransmitTextOptionInWorkspacePrepare
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestTransmitTextOptionInWorkspacePrepare()
+		{
+			string text = @"Send something\!(Delay)Send delayed";
+
+			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--DynamicTerminalIndex=2", "--KeepOpenOnError"})))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
+				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings);
+				Assert.AreEqual (text, main.StartArgs.RequestedTransmitText);
+				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
+
+				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
+				Assert.IsTrue (main.StartArgs.PerformOperationOnRequestedTerminal);
+
+				Assert.IsFalse(main.StartArgs.KeepOpen);
+				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
+				Assert.IsFalse(main.StartArgs.TileHorizontal);
+				Assert.IsFalse(main.StartArgs.TileVertical);
+			}
+		}
+
+		#endregion
+
 		#region Tests > TransmitFilePathOptionPrepare
 		//------------------------------------------------------------------------------------------
 		// Tests > TransmitFilePathOptionPrepare
@@ -511,14 +580,17 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTransmitFilePathOptionPrepare()
 		{
-			using (Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + TerminalFilePath, "--KeepOpenOnError"})))
+			string filePath = Temp.MakeTempFilePath(GetType());
+			File.Create(filePath); // File must exist!
+
+			using (Main main = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + filePath, "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(main);
 
 				Assert.IsNull   (main.StartArgs.WorkspaceSettings);
 				Assert.IsNotNull(main.StartArgs.TerminalSettings);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.TerminalSettings.SettingsFilePath);
-				Assert.AreEqual (TerminalFilePath, main.StartArgs.RequestedTransmitFilePath);
+				Assert.AreEqual (filePath, main.StartArgs.RequestedTransmitFilePath);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 				Assert.IsTrue (main.StartArgs.PerformOperationOnRequestedTerminal);
@@ -541,14 +613,17 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTransmitFilePathOptionInWorkspacePrepare()
 		{
-			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + TerminalFilePath, "--Terminal=2", "--KeepOpenOnError"})))
+			string filePath = Temp.MakeTempFilePath(GetType());
+			File.Create(filePath); // File must exist!
+
+			using (Main main = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--DynamicTerminalIndex=2", "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(main);
 
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
 				Assert.IsNotNull(main.StartArgs.TerminalSettings);
-				Assert.AreEqual (TerminalFilePath, main.StartArgs.RequestedTransmitFilePath);
+				Assert.AreEqual (filePath, main.StartArgs.RequestedTransmitFilePath);
 				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
@@ -617,7 +692,7 @@ namespace YAT.Model.Test
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 
 				Assert.IsFalse(main.StartArgs.TileHorizontal);
 				Assert.IsFalse(main.StartArgs.TileVertical);
@@ -637,22 +712,22 @@ namespace YAT.Model.Test
 		{
 			using (Main main = new Main(new CommandLineArgs(new string[] { "--Blablabla" })))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 			}
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { "+r" })))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 			}
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { "-+Recent" })))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 			}
 
 			using (Main main = new Main(new CommandLineArgs(new string[] { "+-Recent" })))
 			{
-				PrepareMainAndVerifyResult(main, Main.Result.CommandLineError);
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
 			}
 		}
 
@@ -667,12 +742,12 @@ namespace YAT.Model.Test
 
 		private static void PrepareMainAndVerifyResult(Main main)
 		{
-			PrepareMainAndVerifyResult(main, Main.Result.Success);
+			PrepareMainAndVerifyResult(main, MainResult.Success);
 		}
 
-		private static void PrepareMainAndVerifyResult(Main main, Model.Main.Result expectedMainResult)
+		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
-			Model.Main.Result mainResult = main.PrepareStart();
+			MainResult mainResult = main.PrepareStart();
 			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 

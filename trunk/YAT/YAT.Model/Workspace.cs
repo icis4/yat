@@ -1313,19 +1313,31 @@ namespace YAT.Model
 				TerminalSettingsItem item = clone[i];
 
 				// \remind
-				// Check whether the item is defined. Cause by certain error conditions there were
-				// occasions when the item contained an empty file path and an empty GUID. // That
+				// Check whether the item is defined. Because under certain error conditions there 
+				// were occasions when the item contained an empty file path and an empty GUID. That
 				// has lead to an exception in an underlying System.IO call and would have lead to
 				// an error message which isn't really understandable to the user. Therefore, check
 				// the item and remove it if not defined.
+
 				if (item.IsDefined)
 				{
 					bool success = false;
 					string errorMessage = null;
 
-					// Replace the desired terminal settings if requested.
-					if ((dynamicTerminalIndexToReplace != Indices.InvalidDynamicIndex) &&
-						(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
+					// Replace the desired terminal settings if requested:
+					bool isToReplace = false;
+					if (dynamicTerminalIndexToReplace == Indices.DefaultDynamicIndex)
+					{
+						if (i == (clone.Count - 1)) // The last terminal is the default.
+							isToReplace = true;
+					}
+					else
+					{
+						if (i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace))
+							isToReplace = true;
+					}
+
+					if (isToReplace)
 					{
 						Exception exception;
 						if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, out exception))
@@ -1349,7 +1361,7 @@ namespace YAT.Model
 							errorMessage = sb.ToString();
 						}
 					}
-					else // In all other cases, 'normally' open the terminal from the given file.
+					else // In all other cases, 'normally' open the terminal from the given file:
 					{
 						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, out errorMessage))
 						{                                   // Error must be handled here because of looping over terminals.
@@ -1792,17 +1804,25 @@ namespace YAT.Model
 		/// <c>null</c> is returned.
 		/// </summary>
 		/// <remarks>
-		/// The index must be in the range of 1...NumberOfTerminals.
+		/// The index must be in the range of 1...NumberOfTerminals, or 0 to return the currently
+		/// active terminal.
 		/// </remarks>
 		public virtual Terminal GetTerminalByDynamicIndex(int dynamicIndex)
 		{
 			AssertNotDisposed();
 
-			int index = Indices.DynamicIndexToIndex(dynamicIndex);
-			if (index >= FirstValidIndex)
-				return (this.terminals[index]);
+			if (dynamicIndex == Indices.DefaultDynamicIndex)
+			{
+				return (this.activeTerminal);
+			}
 			else
-				return (null);
+			{
+				int index = Indices.DynamicIndexToIndex(dynamicIndex);
+				if ((index >= 0) && (index < this.terminals.Count))
+					return (this.terminals[index]);
+				else
+					return (null);
+			}
 		}
 
 		/// <summary>
@@ -2114,39 +2134,57 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
+			WriteDebugMessageLine(text);
 			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
+			WriteDebugMessageLine(text);
 			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
-			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
+			if (this.startArgs.Interactive)
+			{
+				WriteDebugMessageLine(text);
 
-			// Ensure that the request is processed!
-			if (e.Result == DialogResult.None)
-				throw (new InvalidOperationException("A 'Message Input' request by the workspace was not processed by the application!"));
+				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
+				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
-			return (e.Result);
+				// Ensure that the request is processed!
+				if (e.Result == DialogResult.None)
+					throw (new InvalidOperationException("A 'Message Input' request by the workspace was not processed by the application!"));
+
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			DialogEventArgs e = new DialogEventArgs();
-			EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
+			if (this.startArgs.Interactive)
+			{
+				DialogEventArgs e = new DialogEventArgs();
+				EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 
-			// Ensure that the request is processed!
-			if (e.Result == DialogResult.None)
-				throw (new InvalidOperationException("A 'Save As' request by the workspace was not processed by the application!"));
+				// Ensure that the request is processed!
+				if (e.Result == DialogResult.None)
+					throw (new InvalidOperationException("A 'Save As' request by the workspace was not processed by the application!"));
 
-			return (e.Result);
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
 		}
 
 		/// <summary></summary>
