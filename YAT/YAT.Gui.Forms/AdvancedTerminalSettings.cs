@@ -184,7 +184,29 @@ namespace YAT.Gui.Forms
 		private void checkBox_ShowPort_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.Terminal.Display.ShowPort = checkBox_ShowPort.Checked;
+			{
+				if (checkBox_ShowPort.Checked && !this.settingsInEdit.Terminal.Display.PortLineBreakEnabled)
+				{
+					DialogResult dr = MessageBoxEx.Show
+					(
+						this,
+						"To enable this setting, lines must be broken when port changes.",
+						"Incompatible Setting",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					);
+
+					if (dr == DialogResult.OK)
+					{
+						this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = true;
+						this.settingsInEdit.Terminal.Display.ShowPort = true;
+					}
+				}
+				else
+				{
+					this.settingsInEdit.Terminal.Display.ShowPort = checkBox_ShowPort.Checked;
+				}
+			}
 		}
 
 		private void checkBox_ShowDirection_CheckedChanged(object sender, EventArgs e)
@@ -243,6 +265,34 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 				this.settingsInEdit.Terminal.Status.ShowBreakCount = checkBox_ShowBreakCount.Checked;
+		}
+
+		private void checkBox_PortLineBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				if (!checkBox_PortLineBreak.Checked && this.settingsInEdit.Terminal.Display.ShowPort)
+				{
+					DialogResult dr = MessageBoxEx.Show
+					(
+						this,
+						"To disable this setting, port can no longer be shown.",
+						"Incompatible Setting",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Information
+					);
+
+					if (dr == DialogResult.OK)
+					{
+						this.settingsInEdit.Terminal.Display.ShowPort = false;
+						this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = false;
+					}
+				}
+				else
+				{
+					this.settingsInEdit.Terminal.Display.PortLineBreakEnabled = checkBox_PortLineBreak.Checked;
+				}
+			}
 		}
 
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
@@ -784,6 +834,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowBreakCount.Enabled       = isSerialPort;
 			checkBox_ShowBreakCount.Checked       = this.settingsInEdit.Terminal.Status.ShowBreakCount;
 
+			checkBox_PortLineBreak.Checked      = this.settingsInEdit.Terminal.Display.PortLineBreakEnabled;
 			checkBox_DirectionLineBreak.Checked = this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
 			textBox_MaxLineCount.Text           = this.settingsInEdit.Terminal.Display.TxMaxLineCount.ToString(CultureInfo.CurrentCulture);
 
@@ -884,6 +935,7 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.Status.ShowFlowControlCount = Domain.Settings.StatusSettings.ShowFlowControlCountDefault;
 			this.settingsInEdit.Terminal.Status.ShowBreakCount       = Domain.Settings.StatusSettings.ShowBreakCountDefault;
 
+			this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = Domain.Settings.DisplaySettings.PortLineBreakEnabledDefault;
 			this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
 			this.settingsInEdit.Terminal.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 			this.settingsInEdit.Terminal.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;

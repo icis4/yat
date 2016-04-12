@@ -116,17 +116,20 @@ namespace YAT.Domain
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
+			public string PortStamp;
 			public IODirection Direction;
 
-			public BidirLineState(bool isFirstLine, IODirection direction)
+			public BidirLineState()
 			{
-				IsFirstLine = isFirstLine;
-				Direction   = direction;
+				IsFirstLine = true;
+				PortStamp   = "";
+				Direction   = IODirection.None;
 			}
 
 			public BidirLineState(BidirLineState rhs)
 			{
 				IsFirstLine = rhs.IsFirstLine;
+				PortStamp   = rhs.PortStamp;
 				Direction   = rhs.Direction;
 			}
 		}
@@ -424,7 +427,7 @@ namespace YAT.Domain
 			this.txLineState = new LineState(new SequenceQueue(txEol));
 			this.rxLineState = new LineState(new SequenceQueue(rxEol));
 
-			this.bidirLineState = new BidirLineState(true, IODirection.Tx);
+			this.bidirLineState = new BidirLineState();
 
 			this.lineSendDelayState = new LineSendDelayState();
 		}
@@ -771,9 +774,11 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ProcessAndSignalDirectionLineBreak(IODirection d)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
+		private void ProcessAndSignalPortAndDirectionLineBreak(string ps, IODirection d)
 		{
-			if (TerminalSettings.Display.DirectionLineBreakEnabled)
+			if (TerminalSettings.Display.PortLineBreakEnabled ||
+				TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
 				if (this.bidirLineState.IsFirstLine)
 				{
@@ -789,19 +794,24 @@ namespace YAT.Domain
 						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
-					if ((lineState.LineElements.Count > 0) &&
-						(d != this.bidirLineState.Direction))
+					if (lineState.LineElements.Count > 0)
 					{
-						DisplayElementCollection elements = new DisplayElementCollection();
-						List<DisplayLine> lines = new List<DisplayLine>();
+						if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
+							(d != this.bidirLineState.Direction))
+						{
+							DisplayElementCollection elements = new DisplayElementCollection();
+							List<DisplayLine> lines = new List<DisplayLine>();
 
-						ExecuteLineEnd(lineState, d, elements, lines);
+							ExecuteLineEnd(lineState, d, elements, lines);
 
-						OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
-						OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
+							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
+							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
+						}
 					}
 				}
 			}
+
+			this.bidirLineState.PortStamp = ps;
 			this.bidirLineState.Direction = d;
 		}
 
@@ -809,7 +819,7 @@ namespace YAT.Domain
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
 			// Check whether direction has changed:
-			ProcessAndSignalDirectionLineBreak(re.Direction);
+			ProcessAndSignalPortAndDirectionLineBreak(re.PortStamp, re.Direction);
 
 			// Process the raw element:
 			base.ProcessAndSignalRawElement(re);

@@ -2058,6 +2058,7 @@ namespace YAT.Domain
 			if (elements.Count > 0)
 			{
 				OnDisplayElementsProcessed(re.Direction, elements);
+
 				if (lines.Count > 0)
 				{
 					OnDisplayLinesProcessed(re.Direction, lines);
@@ -2575,7 +2576,7 @@ namespace YAT.Domain
 			{
 				switch (d)
 				{
-					case IODirection.Tx: OnDisplayLinesSent(new DisplayLinesEventArgs(lines));     break;
+					case IODirection.Tx: OnDisplayLinesSent    (new DisplayLinesEventArgs(lines)); break;
 					case IODirection.Rx: OnDisplayLinesReceived(new DisplayLinesEventArgs(lines)); break;
 					default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
