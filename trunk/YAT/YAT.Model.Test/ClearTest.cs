@@ -92,31 +92,31 @@ namespace YAT.Model.Test
 				{
 					Utilities.TestSet testSet;
 
-					// Start and open terminals
+					// Start and open terminals:
 					Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
 					Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission
+					// Create test set to verify transmission:
 					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }, true); // EOL results in one more element
 
-					// Send test command
+					// Send test command:
 					terminalA.SendText(testSet.Command);
 					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
-					// Verify transmission
+					// Verify transmission:
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 					                      testSet);
 
-					// Create test set to verify clear
+					// Create test set to verify clear:
 					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }, true); // Empty terminals expected
 
-					// Clear data
+					// Clear data:
 					terminalA.ClearRepositories();
 					terminalB.ClearRepositories();
 
-					// Verify clear
+					// Verify clear:
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 					                      testSet);
@@ -143,40 +143,40 @@ namespace YAT.Model.Test
 				{
 					Utilities.TestSet testSet;
 
-					// Start and open terminals
+					// Start and open terminals:
 					Assert.IsTrue(terminalA.Start(), @"Failed to start """ + terminalA.Caption + @"""");
 					Assert.IsTrue(terminalB.Start(), @"Failed to start """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission
+					// Create test set to verify transmission:
 					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }, true); // EOL results in one more element
 
-					// Send test command
+					// Send test command:
 					terminalA.SendText(testSet.Command);
 					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
-					// Verify transmission
+					// Verify transmission:
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 					                      testSet);
 
-					// Send incomplete line command
+					// Send incomplete line text:
 					terminalA.SendText(new Types.Command(@"B\!(NoEOL)"));
 					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
-					// Verify incomplete line
+					// Verify incomplete line:
 					List<Domain.DisplayLine> lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
 						Assert.Fail("Incomplete line not received!");
 
-					// Create test set to verify clear
+					// Create test set to verify clear:
 					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }, true); // Empty terminals expected
 
-					// clear data
+					// Clear data:
 					terminalA.ClearRepositories();
 					terminalB.ClearRepositories();
 
-					// Verify clear
+					// Verify clear:
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 					                      testSet);

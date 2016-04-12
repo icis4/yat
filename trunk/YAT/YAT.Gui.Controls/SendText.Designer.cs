@@ -30,26 +30,26 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.button_MultiLineCommand = new System.Windows.Forms.Button();
+			this.button_MultiLine = new System.Windows.Forms.Button();
 			this.button_Send = new System.Windows.Forms.Button();
-			this.comboBox_Command = new System.Windows.Forms.ComboBox();
+			this.comboBox_SingleLineText = new System.Windows.Forms.ComboBox();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// button_MultiLineCommand
+			// button_MultiLine
 			// 
-			this.button_MultiLineCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_MultiLineCommand.Location = new System.Drawing.Point(328, 3);
-			this.button_MultiLineCommand.Name = "button_MultiLineCommand";
-			this.button_MultiLineCommand.Size = new System.Drawing.Size(25, 21);
-			this.button_MultiLineCommand.TabIndex = 3;
-			this.button_MultiLineCommand.Text = "...";
-			this.toolTip.SetToolTip(this.button_MultiLineCommand, "Multi-line command");
-			this.button_MultiLineCommand.UseVisualStyleBackColor = true;
-			this.button_MultiLineCommand.Click += new System.EventHandler(this.button_MultiLineCommand_Click);
+			this.button_MultiLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_MultiLine.Location = new System.Drawing.Point(328, 3);
+			this.button_MultiLine.Name = "button_MultiLine";
+			this.button_MultiLine.Size = new System.Drawing.Size(25, 21);
+			this.button_MultiLine.TabIndex = 3;
+			this.button_MultiLine.Text = "...";
+			this.toolTip.SetToolTip(this.button_MultiLine, "Multi-line text");
+			this.button_MultiLine.UseVisualStyleBackColor = true;
+			this.button_MultiLine.Click += new System.EventHandler(this.button_MultiLine_Click);
 			// 
 			// button_Send
 			// 
@@ -64,22 +64,22 @@
 			this.toolTip.SetToolTip(this.button_Send, "Send text");
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
-			// comboBox_Command
+			// comboBox_SingleLineText
 			// 
-			this.comboBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.comboBox_SingleLineText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Command.Location = new System.Drawing.Point(3, 3);
-			this.comboBox_Command.Name = "comboBox_Command";
-			this.comboBox_Command.Size = new System.Drawing.Size(319, 21);
-			this.comboBox_Command.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_Command, "Fill-in command, <Enter> to send,\r\ndrop down for recent commands,\r\n<...> to enter" +
-        " multi-line command");
-			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
-			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
-			this.comboBox_Command.Enter += new System.EventHandler(this.comboBox_Command_Enter);
-			this.comboBox_Command.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_Command_KeyPress);
-			this.comboBox_Command.Leave += new System.EventHandler(this.comboBox_Command_Leave);
-			this.comboBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Command_Validating);
+			this.comboBox_SingleLineText.Location = new System.Drawing.Point(3, 3);
+			this.comboBox_SingleLineText.Name = "comboBox_SingleLineText";
+			this.comboBox_SingleLineText.Size = new System.Drawing.Size(319, 21);
+			this.comboBox_SingleLineText.TabIndex = 1;
+			this.toolTip.SetToolTip(this.comboBox_SingleLineText, "Fill-in text, <Enter> to send,\r\ndrop down for recent text,\r\n<...> to enter" +
+        " multi-line text");
+			this.comboBox_SingleLineText.SelectedIndexChanged += new System.EventHandler(this.comboBox_SingleLineText_SelectedIndexChanged);
+			this.comboBox_SingleLineText.TextChanged += new System.EventHandler(this.comboBox_SingleLineText_TextChanged);
+			this.comboBox_SingleLineText.Enter += new System.EventHandler(this.comboBox_SingleLineText_Enter);
+			this.comboBox_SingleLineText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_SingleLineText_KeyPress);
+			this.comboBox_SingleLineText.Leave += new System.EventHandler(this.comboBox_SingleLineText_Leave);
+			this.comboBox_SingleLineText.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_SingleLineText_Validating);
 			// 
 			// splitContainer
 			// 
@@ -90,8 +90,8 @@
 			// 
 			// splitContainer.Panel1
 			// 
-			this.splitContainer.Panel1.Controls.Add(this.button_MultiLineCommand);
-			this.splitContainer.Panel1.Controls.Add(this.comboBox_Command);
+			this.splitContainer.Panel1.Controls.Add(this.button_MultiLine);
+			this.splitContainer.Panel1.Controls.Add(this.comboBox_SingleLineText);
 			// 
 			// splitContainer.Panel2
 			// 
@@ -122,8 +122,8 @@
 
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.SplitContainer splitContainer;
-		private System.Windows.Forms.Button button_MultiLineCommand;
+		private System.Windows.Forms.Button button_MultiLine;
 		private System.Windows.Forms.Button button_Send;
-		private System.Windows.Forms.ComboBox comboBox_Command;
+		private System.Windows.Forms.ComboBox comboBox_SingleLineText;
 	}
 }

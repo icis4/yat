@@ -145,7 +145,7 @@ namespace YAT.Gui.Controls
 			SetControls();
 
 			// Move cursor to the end.
-			textBox_Command.SelectionStart = textBox_Command.Text.Length;
+			textBox_Lines.SelectionStart = textBox_Lines.Text.Length;
 		}
 
 		#endregion
@@ -155,38 +155,38 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void textBox_Command_TextChanged(object sender, EventArgs e)
+		private void textBox_Lines_TextChanged(object sender, EventArgs e)
 		{
-			bool empty = string.IsNullOrEmpty(textBox_Command.Text);
+			bool empty = string.IsNullOrEmpty(textBox_Lines.Text);
 			label_Remarks.Visible = empty;
 			button_OK.Enabled = !empty;
 		}
 
-		private void textBox_Command_Validating(object sender, CancelEventArgs e)
+		private void textBox_Lines_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
 				// Retrieve lines from text box with Environment.NewLine:
-				StringReader reader = new StringReader(textBox_Command.Text);
-				List<string> multiLineCommand = new List<string>();
+				StringReader reader = new StringReader(textBox_Lines.Text);
+				List<string> multiLineText = new List<string>();
 				string line;
 				while ((line = reader.ReadLine()) != null)
 				{
-					multiLineCommand.Add(line);
+					multiLineText.Add(line);
 				}
 
 				// Validate each line:
 				bool isValid = true;
 				int textLength = 0;
-				foreach (string s in multiLineCommand)
+				foreach (string s in multiLineText)
 				{
 					int invalidTextStart;
 					int invalidTextLength;
 					if (!Validation.ValidateText(this, "text", s, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 					{
 						invalidTextStart += textLength;
-						invalidTextLength = textBox_Command.Text.Length - invalidTextStart;
-						textBox_Command.Select(invalidTextStart, invalidTextLength);
+						invalidTextLength = textBox_Lines.Text.Length - invalidTextStart;
+						textBox_Lines.Select(invalidTextStart, invalidTextLength);
 						isValid = false;
 						break;
 					}
@@ -195,7 +195,7 @@ namespace YAT.Gui.Controls
 
 				if (isValid)
 				{
-					this.commandInEdit.MultiLineText = multiLineCommand.ToArray();
+					this.commandInEdit.MultiLineText = multiLineText.ToArray();
 					this.commandInEdit.SetDescriptionFromSingleLineText(); // Enforce "<N lines...> [...] [...] ..." description.
 					SetControls();
 				}
@@ -206,9 +206,9 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void textBox_Command_Leave(object sender, EventArgs e)
+		private void textBox_Lines_Leave(object sender, EventArgs e)
 		{
-			bool empty = string.IsNullOrEmpty(textBox_Command.Text);
+			bool empty = string.IsNullOrEmpty(textBox_Lines.Text);
 			label_Remarks.Visible = empty;
 		}
 
@@ -235,7 +235,7 @@ namespace YAT.Gui.Controls
 
 			if (this.commandInEdit.IsSingleLineText)
 			{
-				textBox_Command.Text = this.commandInEdit.SingleLineText;
+				textBox_Lines.Text = this.commandInEdit.SingleLineText;
 			}
 			else
 			{
@@ -246,7 +246,7 @@ namespace YAT.Gui.Controls
 					if (i < (this.commandInEdit.MultiLineText.Length - 1))
 						text += Environment.NewLine;
 				}
-				textBox_Command.Text = text;
+				textBox_Lines.Text = text;
 			}
 
 			this.isSettingControls.Leave();

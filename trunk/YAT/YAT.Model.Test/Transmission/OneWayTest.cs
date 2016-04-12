@@ -51,7 +51,7 @@ namespace YAT.Model.Test.Transmission
 		// Constants
 		//==========================================================================================
 
-		private static readonly string[] TestCommandLines = new string[]
+		private static readonly string[] TestTextLines = new string[]
 			{
 				@"1a2a3a4a5a6a7a8a9a0",
 				@"1b2b3b4b5b6b7b8b9b0",
@@ -65,29 +65,29 @@ namespace YAT.Model.Test.Transmission
 				@"1j2j3j4j5j6j7j8j9j0",
 			};
 
-		private static readonly Utilities.TestSet SingleLineCommand;
-		private static readonly Utilities.TestSet DoubleLineCommand;
-		private static readonly Utilities.TestSet TripleLineCommand;
-		private static readonly Utilities.TestSet MultiLineCommand;
+		private static readonly Utilities.TestSet SingleLine;
+		private static readonly Utilities.TestSet DoubleLine;
+		private static readonly Utilities.TestSet TripleLine;
+		private static readonly Utilities.TestSet MultiLine;
 
-		private static readonly Utilities.TestSet MultiEolCommand;
-		private static readonly Utilities.TestSet MixedEolCommand;
+		private static readonly Utilities.TestSet MultiEol;
+		private static readonly Utilities.TestSet MixedEol;
 
-		private static readonly Utilities.TestSet EolPartsCommand;
-		private static readonly Utilities.TestSet EolOnlyCommand;
+		private static readonly Utilities.TestSet EolParts;
+		private static readonly Utilities.TestSet EolOnly;
 
-		private static readonly Utilities.TestSet SingleNoEolCommand;
-		private static readonly Utilities.TestSet DoubleNoEolCommand;
-		private static readonly Utilities.TestSet StillEolCommand1;
-		private static readonly Utilities.TestSet StillEolCommand2;
-		private static readonly Utilities.TestSet StillEolCommand3;
+		private static readonly Utilities.TestSet SingleNoEol;
+		private static readonly Utilities.TestSet DoubleNoEol;
+		private static readonly Utilities.TestSet StillEol1;
+		private static readonly Utilities.TestSet StillEol2;
+		private static readonly Utilities.TestSet StillEol3;
 
-		private static readonly Utilities.TestSet ControlCharCommand1;
-		private static readonly Utilities.TestSet ControlCharCommand2;
-		private static readonly Utilities.TestSet ControlCharCommand3;
+		private static readonly Utilities.TestSet ControlChar1;
+		private static readonly Utilities.TestSet ControlChar2;
+		private static readonly Utilities.TestSet ControlChar3;
 
-		private static readonly Utilities.TestSet ClearCommand1;
-		private static readonly Utilities.TestSet ClearCommand2;
+		private static readonly Utilities.TestSet Clear1;
+		private static readonly Utilities.TestSet Clear2;
 
 		#endregion
 
@@ -100,29 +100,29 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static OneWayTestData()
 		{
-			SingleLineCommand   = new Utilities.TestSet(new Types.Command(TestCommandLines[0]));
-			DoubleLineCommand   = new Utilities.TestSet(new Types.Command(new string[] { TestCommandLines[0], TestCommandLines[1] } ));
-			TripleLineCommand   = new Utilities.TestSet(new Types.Command(new string[] { TestCommandLines[0], TestCommandLines[1], TestCommandLines[2] }));
-			MultiLineCommand    = new Utilities.TestSet(new Types.Command(TestCommandLines));
+			SingleLine   = new Utilities.TestSet(new Types.Command(TestTextLines[0]));
+			DoubleLine   = new Utilities.TestSet(new Types.Command(new string[] { TestTextLines[0], TestTextLines[1] } ));
+			TripleLine   = new Utilities.TestSet(new Types.Command(new string[] { TestTextLines[0], TestTextLines[1], TestTextLines[2] }));
+			MultiLine    = new Utilities.TestSet(new Types.Command(TestTextLines));
 
-			MultiEolCommand     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 1, 1, 1 }, true); // Eol results in one element since ShowEol is switched off.
-			MixedEolCommand     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 2, 2, 2    }, new int[] { 1, 2, 1    }, true); // Eol results in one element since ShowEol is switched off.
+			MultiEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 1, 1, 1 }, true); // Eol results in one element since ShowEol is switched off.
+			MixedEol     = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 2, 2, 2    }, new int[] { 1, 2, 1    }, true); // Eol results in one element since ShowEol is switched off.
 
-			EolPartsCommand     = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 }, new int[] { 2, 1, 2, 5 }, true);
-			EolOnlyCommand      = new Utilities.TestSet(new Types.Command(new string[] { "A", "B", "", "C" }),                4, new int[] { 2, 2, 1, 2 }, new int[] { 1, 1, 0, 1 }, true);
+			EolParts     = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 }, new int[] { 2, 1, 2, 5 }, true);
+			EolOnly      = new Utilities.TestSet(new Types.Command(new string[] { "A", "B", "", "C" }),                4, new int[] { 2, 2, 1, 2 }, new int[] { 1, 1, 0, 1 }, true);
 
-			SingleNoEolCommand  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"),                                 0, new int[] { 1 },    new int[] { 1 },    true); // 1st line will not get completed.
-			DoubleNoEolCommand  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 1 },    new int[] { 2 },    true); // 1st line will not get completed.
-			StillEolCommand1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"),                          1, new int[] { 1 },    new int[] { 0 },    true);
-			StillEolCommand2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"),                         1, new int[] { 2 },    new int[] { 1 },    true);
-			StillEolCommand3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        1, new int[] { 2, 1 }, new int[] { 1, 1 }, true); // 2nd line will not get completed.
+			SingleNoEol  = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"),                                 0, new int[] { 1 },    new int[] { 1 },    true); // 1st line will not get completed.
+			DoubleNoEol  = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 1 },    new int[] { 2 },    true); // 1st line will not get completed.
+			StillEol1    = new Utilities.TestSet(new Types.Command(@"<CR><LF>\!(NoEOL)"),                          1, new int[] { 1 },    new int[] { 0 },    true);
+			StillEol2    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>\!(NoEOL)"),                         1, new int[] { 2 },    new int[] { 1 },    true);
+			StillEol3    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B\!(NoEOL)"),                        1, new int[] { 2, 1 }, new int[] { 1, 1 }, true); // 2nd line will not get completed.
 
-			ControlCharCommand1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
-			ControlCharCommand2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
-			ControlCharCommand3 = new Utilities.TestSet(new Types.Command(@"\h(FF)<CR><LF>\h(FF)A<CR><LF>A\h(FF)<CR><LF>A\h(FF)A"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 2, 2, 3 }, true); // A non-breaking space isn't a control character.
+			ControlChar1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
+			ControlChar2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 2, 3, 3, 4 }, new int[] { 1, 2, 2, 3 }, true);
+			ControlChar3 = new Utilities.TestSet(new Types.Command(@"\h(FF)<CR><LF>\h(FF)A<CR><LF>A\h(FF)<CR><LF>A\h(FF)A"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 2, 2, 3 }, true); // A non-breaking space isn't a control character.
 
-			ClearCommand1       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)"),          3, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
-			ClearCommand2       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 2, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
+			Clear1       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)"),          3, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
+			Clear2       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 2, new int[] { 1, 1, 1 }, new int[] { 0 }, false);
 		}
 
 		#endregion
@@ -136,34 +136,34 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				yield return (new TestCaseData(SingleLineCommand,   1).SetName("_SingleLineTransmission"));
-				yield return (new TestCaseData(DoubleLineCommand,   1).SetName("_DoubleLineTransmission"));
-				yield return (new TestCaseData(DoubleLineCommand,   2).SetName("_DoubleLineDoubleTransmission"));
+				yield return (new TestCaseData(SingleLine,   1).SetName("_SingleLine"));
+				yield return (new TestCaseData(DoubleLine,   1).SetName("_DoubleLine"));
+				yield return (new TestCaseData(DoubleLine,   2).SetName("_DoubleLineDouble"));
 
-				yield return (new TestCaseData(TripleLineCommand,   1).SetName("_TripleLineTransmission"));
-				yield return (new TestCaseData(TripleLineCommand,   3).SetName("_TripleLineTripleTransmission"));
+				yield return (new TestCaseData(TripleLine,   1).SetName("_TripleLine"));
+				yield return (new TestCaseData(TripleLine,   3).SetName("_TripleLineTriple"));
 
-				yield return (new TestCaseData(MultiLineCommand,    1).SetName("_MultiLineTransmission"));
-				yield return (new TestCaseData(MultiLineCommand, TestCommandLines.Length).SetName("_MultiLineMultiTransmission"));
+				yield return (new TestCaseData(MultiLine,    1).SetName("_MultiLine"));
+				yield return (new TestCaseData(MultiLine, TestTextLines.Length).SetName("_MultiLineMulti"));
 
-				yield return (new TestCaseData(MultiEolCommand,     1).SetName("_MultiEolTransmission"));
-				yield return (new TestCaseData(MixedEolCommand,     1).SetName("_MixedEolTransmission"));
+				yield return (new TestCaseData(MultiEol,     1).SetName("_MultiEol"));
+				yield return (new TestCaseData(MixedEol,     1).SetName("_MixedEol"));
 
-				yield return (new TestCaseData(EolPartsCommand,     1).SetName("_EolPartsTransmission"));
-				yield return (new TestCaseData(EolOnlyCommand,      1).SetName("_EolOnlyTransmission"));
+				yield return (new TestCaseData(EolParts,     1).SetName("_EolParts"));
+				yield return (new TestCaseData(EolOnly,      1).SetName("_EolOnly"));
 
-				yield return (new TestCaseData(SingleNoEolCommand,  1).SetName("_SingleNoEolTransmission"));
-				yield return (new TestCaseData(DoubleNoEolCommand,  1).SetName("_DoubleNoEolTransmission"));
-				yield return (new TestCaseData(StillEolCommand1,    1).SetName("_StillEolCommand1"));
-				yield return (new TestCaseData(StillEolCommand2,    1).SetName("_StillEolCommand2"));
-				yield return (new TestCaseData(StillEolCommand3,    1).SetName("_StillEolCommand3"));
+				yield return (new TestCaseData(SingleNoEol,  1).SetName("_SingleNoEol"));
+				yield return (new TestCaseData(DoubleNoEol,  1).SetName("_DoubleNoEol"));
+				yield return (new TestCaseData(StillEol1,    1).SetName("_StillEol1"));
+				yield return (new TestCaseData(StillEol2,    1).SetName("_StillEol2"));
+				yield return (new TestCaseData(StillEol3,    1).SetName("_StillEol3"));
 
-				yield return (new TestCaseData(ControlCharCommand1, 1).SetName("_ControlCharCommand1"));
-				yield return (new TestCaseData(ControlCharCommand2, 1).SetName("_ControlCharCommand2"));
-				yield return (new TestCaseData(ControlCharCommand3, 1).SetName("_ControlCharCommand3"));
+				yield return (new TestCaseData(ControlChar1, 1).SetName("_ControlChar1"));
+				yield return (new TestCaseData(ControlChar2, 1).SetName("_ControlChar2"));
+				yield return (new TestCaseData(ControlChar3, 1).SetName("_ControlChar3"));
 
-				yield return (new TestCaseData(ClearCommand1,       1).SetName("_ClearCommand1"));
-				yield return (new TestCaseData(ClearCommand2,       1).SetName("_ClearCommand2"));
+				yield return (new TestCaseData(Clear1,       1).SetName("_Clear1"));
+				yield return (new TestCaseData(Clear2,       1).SetName("_Clear2"));
 			}
 		}
 

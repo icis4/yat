@@ -470,9 +470,9 @@
 			this.label_Data.AutoSize = true;
 			this.label_Data.Location = new System.Drawing.Point(54, 16);
 			this.label_Data.Name = "label_Data";
-			this.label_Data.Size = new System.Drawing.Size(78, 13);
+			this.label_Data.Size = new System.Drawing.Size(52, 13);
 			this.label_Data.TabIndex = 1;
-			this.label_Data.Text = "Command/File:";
+			this.label_Data.Text = "Text/File:";
 			this.label_Data.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_Description
