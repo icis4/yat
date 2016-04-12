@@ -87,13 +87,16 @@ namespace MKY.IO.Serial.Socket
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoRetry TcpClientAutoReconnectDefault
+		public static AutoRetry DefaultTcpClientAutoReconnect
 		{
 			get { return (new AutoRetry(false, 500)); }
 		}
 
 		/// <summary></summary>
 		public const int TcpClientAutoReconnectMinimumInterval = 100;
+
+		/// <summary></summary>
+		public const UdpServerSendMode DefaultUdpServerSendMode = UdpServerSendMode.MostRecent;
 
 		private const string Undefined = "<Undefined>";
 
@@ -119,6 +122,7 @@ namespace MKY.IO.Serial.Socket
 		private int localUdpPort;
 
 		private AutoRetry tcpClientAutoReconnect;
+		private UdpServerSendMode udpServerSendMode;
 
 		#endregion
 
@@ -139,7 +143,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Creates new port settings with specified arguments.
 		/// </summary>
-		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, string localInterface, string localIPAddressFilter, int localTcpPort, int localUdpPort, AutoRetry tcpClientAutoReconnect)
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, string localInterface, string localIPAddressFilter, int localTcpPort, int localUdpPort, AutoRetry tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode)
 		{
 			Type           = type;
 
@@ -153,12 +157,13 @@ namespace MKY.IO.Serial.Socket
 			LocalUdpPort   = localUdpPort;
 
 			TcpClientAutoReconnect = tcpClientAutoReconnect;
+			UdpServerSendMode      = udpServerSendMode;
 
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public SocketSettings(MKY.Settings.SettingsType settingsType)
+		public SocketSettings(Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -187,6 +192,7 @@ namespace MKY.IO.Serial.Socket
 			LocalUdpPort   = rhs.LocalUdpPort;
 
 			TcpClientAutoReconnect = rhs.TcpClientAutoReconnect;
+			UdpServerSendMode      = rhs.UdpServerSendMode;
 
 			ClearChanged();
 		}
@@ -209,7 +215,8 @@ namespace MKY.IO.Serial.Socket
 			LocalTcpPort   = DefaultLocalTcpPort;
 			LocalUdpPort   = DefaultLocalUdpPort;
 
-			TcpClientAutoReconnect = new AutoRetry(false, 500);
+			TcpClientAutoReconnect = DefaultTcpClientAutoReconnect;
+			UdpServerSendMode      = DefaultUdpServerSendMode;
 		}
 
 		#endregion
@@ -338,6 +345,13 @@ namespace MKY.IO.Serial.Socket
 					SetChanged();
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual IPEndPoint RemoteEndPoint
+		{
+			get { return (new IPEndPoint(ResolvedRemoteIPAddress, RemotePort)); }
 		}
 
 		/// <remarks>
@@ -493,6 +507,21 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("UdpServerSendMode")]
+		public virtual UdpServerSendMode UdpServerSendMode
+		{
+			get { return (this.udpServerSendMode); }
+			set
+			{
+				if (this.udpServerSendMode != value)
+				{
+					this.udpServerSendMode = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -528,7 +557,8 @@ namespace MKY.IO.Serial.Socket
 				StringEx.EqualsOrdinalIgnoreCase(LocalFilter,    other.LocalFilter) &&
 				(LocalTcpPort                                 == other.LocalTcpPort) &&
 				(LocalUdpPort                                 == other.LocalUdpPort) &&
-				(TcpClientAutoReconnect                       == other.TcpClientAutoReconnect)
+				(TcpClientAutoReconnect                       == other.TcpClientAutoReconnect) &&
+				(UdpServerSendMode                            == other.UdpServerSendMode)
 			);
 		}
 
@@ -599,7 +629,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			string delimiters = "/,;";
 			string[] sa = s.Trim().Split(delimiters.ToCharArray());
-			if (sa.Length == 10)
+			if (sa.Length == 11)
 			{
 				SocketType socketType;
 				if (SocketTypeEx.TryParse(sa[0], out socketType))
@@ -627,9 +657,16 @@ namespace MKY.IO.Serial.Socket
 										int arInterval;
 										if (int.TryParse(sa[9], out arInterval))
 										{
-											AutoRetry ar = new AutoRetry(arEnabled, arInterval);
-											settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localIPAddressFilter, localTcpPort, localUdpPort, ar);
-											return (true);
+											AutoRetry autoRetry = new AutoRetry(arEnabled, arInterval);
+
+											int smValue;
+											if (int.TryParse(sa[10], out smValue))
+											{
+												UdpServerSendMode sendMode = (UdpServerSendModeEx)smValue;
+
+												settings = new SocketSettings(socketType, remoteHost, remoteTcpPort, remoteUdpPort, localInterface, localIPAddressFilter, localTcpPort, localUdpPort, autoRetry, sendMode);
+												return (true);
+											}
 										}
 									}
 								}
@@ -659,7 +696,7 @@ namespace MKY.IO.Serial.Socket
 				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
 				case SocketType.UdpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpPairSocket:     return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}

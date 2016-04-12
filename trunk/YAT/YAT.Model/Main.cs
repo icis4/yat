@@ -797,6 +797,15 @@ namespace YAT.Model
 					else
 						return (false);
 				}
+				if ((finalIOType == Domain.IOType.UdpServer) &&
+					this.commandLineArgs.OptionIsGiven("UdpServerSendMode"))
+				{
+					MKY.IO.Serial.Socket.UdpServerSendMode sendMode;
+					if (MKY.IO.Serial.Socket.UdpServerSendModeEx.TryFrom(this.commandLineArgs.UdpServerSendMode, out sendMode))
+						terminalSettings.IO.Socket.UdpServerSendMode = sendMode;
+					else
+						return (false);
+				}
 			}
 			else if (finalIOType == Domain.IOType.UsbSerialHid)
 			{
@@ -893,6 +902,7 @@ namespace YAT.Model
 			terminalSettings.IO.Socket.LocalTcpPort             = newTerminalSettings.SocketLocalTcpPort;
 			terminalSettings.IO.Socket.LocalUdpPort             = newTerminalSettings.SocketLocalUdpPort;
 			terminalSettings.IO.Socket.TcpClientAutoReconnect   = newTerminalSettings.TcpClientAutoReconnect;
+			terminalSettings.IO.Socket.UdpServerSendMode        = newTerminalSettings.UdpServerSendMode;
 
 			terminalSettings.IO.UsbSerialHidDevice.DeviceInfo   = newTerminalSettings.UsbSerialHidDeviceInfo;
 			terminalSettings.IO.UsbSerialHidDevice.ReportFormat = newTerminalSettings.UsbSerialHidReportFormat;
@@ -920,6 +930,7 @@ namespace YAT.Model
 				newTerminalSettings.SocketLocalTcpPort       = terminalSettings.IO.Socket.LocalTcpPort;
 				newTerminalSettings.SocketLocalUdpPort       = terminalSettings.IO.Socket.LocalUdpPort;
 				newTerminalSettings.TcpClientAutoReconnect   = terminalSettings.IO.Socket.TcpClientAutoReconnect;
+				newTerminalSettings.UdpServerSendMode        = terminalSettings.IO.Socket.UdpServerSendMode;
 
 				newTerminalSettings.UsbSerialHidDeviceInfo   = terminalSettings.IO.UsbSerialHidDevice.DeviceInfo;
 				newTerminalSettings.UsbSerialHidReportFormat = terminalSettings.IO.UsbSerialHidDevice.ReportFormat;

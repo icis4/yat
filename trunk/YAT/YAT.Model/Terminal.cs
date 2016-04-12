@@ -650,9 +650,13 @@ namespace YAT.Model
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected"); // Break?
 								}
-								else
+								else if (s.AutoReopen.Enabled)
 								{
 									sb.Append("Closed - Waiting for reconnect");
+								}
+								else
+								{
+									sb.Append("Closed");
 								}
 							}
 							else
@@ -667,9 +671,7 @@ namespace YAT.Model
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 
 							sb.Append(" - ");
-							sb.Append(IPHost.ToUrlString(s.ResolvedRemoteIPAddress));
-							sb.Append(":");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(s.RemoteEndPoint.ToString());
 							sb.Append(" - ");
 
 							if (IsConnected)
@@ -717,9 +719,7 @@ namespace YAT.Model
 								if (isClient)
 								{
 									sb.Append(" - ");
-									sb.Append(IPHost.ToUrlString(s.ResolvedRemoteIPAddress));
-									sb.Append(":");
-									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+									sb.Append(s.RemoteEndPoint.ToString()); // 'InvariantCulture' for TCP and UDP ports!
 									sb.Append(" - ");
 									sb.Append(IsConnected ? "Connected" : "Disconnected");
 								}
@@ -753,9 +753,7 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
-							sb.Append(IPHost.ToUrlString(s.ResolvedRemoteIPAddress));
-							sb.Append(":");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(s.RemoteEndPoint.ToString());
 							sb.Append(" - ");
 							sb.Append(IsOpen ? "Open" : "Closed");
 							break;
@@ -776,9 +774,7 @@ namespace YAT.Model
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append(" - ");
-							sb.Append(IPHost.ToUrlString(s.ResolvedRemoteIPAddress));
-							sb.Append(":");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(s.RemoteEndPoint.ToString());
 							sb.Append(" - ");
 							sb.Append("Receive:");
 							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
@@ -789,31 +785,39 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
+							MKY.IO.Serial.Usb.SerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+							sb.Append(" - ");
 							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
-							{
-								sb.Append(" - ");
 								sb.Append(device.DeviceInfoString);
-								sb.Append(" - ");
-								if (IsStarted)
+							else
+								s.DeviceInfo.ToString(true, false);
+
+							sb.Append(" - ");
+
+							if (IsStarted)
+							{
+								if (IsConnected)
 								{
-									if (IsConnected)
-									{
-										if (IsOpen)
-											sb.Append("Connected - Open");
-										else
-											sb.Append("Connected - Closed");
-									}
+									if (IsOpen)
+										sb.Append("Connected - Open");
 									else
-									{
-										sb.Append("Disconnected - Waiting for reconnect");
-									}
+										sb.Append("Connected - Closed");
+								}
+								else if (device.Settings.AutoOpen)
+								{
+									sb.Append("Disconnected - Waiting for reconnect");
 								}
 								else
 								{
-									sb.Append("Closed");
+									sb.Append("Disconnected - Closed");
 								}
 							}
+							else
+							{
+								sb.Append("Closed");
+							}
+
 							break;
 						}
 					}
@@ -841,22 +845,26 @@ namespace YAT.Model
 							MKY.IO.Serial.SerialPort.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 							sb.Append("Serial port ");
 							sb.Append(s.PortId.ToString(true, false));
-							sb.Append(" (" + s.Communication + ") is ");
+							sb.Append(" (" + s.Communication + ")");
 							if (IsStarted)
 							{
 								if (IsOpen)
 								{
-									sb.Append("open and ");
+									sb.Append(" is open and ");
 									sb.Append(IsConnected ? "connected" : "disconnected");
+								}
+								else if (s.AutoReopen.Enabled)
+								{
+									sb.Append(" is closed and waiting for reconnect");
 								}
 								else
 								{
-									sb.Append("closed and waiting for reconnect");
+									sb.Append(" is closed");
 								}
 							}
 							else
 							{
-								sb.Append("closed");
+								sb.Append(" is closed");
 							}
 							break;
 						}
@@ -864,25 +872,23 @@ namespace YAT.Model
 						case Domain.IOType.TcpClient:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP client is ");
+							sb.Append("TCP/IP client");
 
 							if (IsConnected)
-								sb.Append("connected to ");
+								sb.Append(" is connected to ");
 							else if (IsStarted && s.TcpClientAutoReconnect.Enabled)
-								sb.Append("disconnected and waiting for reconnect to ");
+								sb.Append(" is disconnected and waiting for reconnect to ");
 							else
-								sb.Append("disconnected from ");
+								sb.Append(" is disconnected from ");
 
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(s.RemoteEndPoint.ToString());
 							break;
 						}
 
 						case Domain.IOType.TcpServer:
 						{
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("TCP/IP server is ");
+							sb.Append("TCP/IP server");
 							if (IsStarted)
 							{
 								if (IsConnected)
@@ -893,25 +899,26 @@ namespace YAT.Model
 									if (server != null)
 										count = server.ConnectedClientCount;
 
-									sb.Append("connected to ");
+									sb.Append(" is connected");
 									if (count == 1)
 									{
-										sb.Append("a client");
+										sb.Append(" to a client");
 									}
 									else
 									{
+										sb.Append(" to");
 										sb.Append(count.ToString(CultureInfo.CurrentCulture));
 										sb.Append(" clients");
 									}
 								}
 								else
 								{
-									sb.Append("listening");
+									sb.Append(" is listening");
 								}
 							}
 							else
 							{
-								sb.Append("closed");
+								sb.Append(" is closed");
 							}
 							sb.Append(" on local port ");
 							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
@@ -920,9 +927,8 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpAutoSocket:
 						{
-							sb.Append("TCP/IP AutoSocket is ");
-
 							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("TCP/IP AutoSocket");
 							if (IsStarted)
 							{
 								bool isClient = false;
@@ -937,98 +943,146 @@ namespace YAT.Model
 
 								if (isClient)
 								{
-									sb.Append("connected to ");
-									sb.Append(s.ResolvedRemoteIPAddress.ToString());
-									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+									sb.Append(" is connected to ");
+									sb.Append(s.RemoteEndPoint.ToString());
 								}
 								else if (isServer)
 								{
-									sb.Append(IsConnected ? "connected" : "listening");
+									sb.Append(IsConnected ? " is connected" : " is listening");
 									sb.Append(" on local port ");
 									sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								}
 								else
 								{
-									sb.Append("starting to connect to ");
-									sb.Append(s.ResolvedRemoteIPAddress.ToString());
-									sb.Append(" on remote port ");
-									sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+									sb.Append(" is starting to connect to ");
+									sb.Append(s.RemoteEndPoint.ToString());
 								}
 							}
 							else
 							{
-								sb.Append("disconnected from ");
-								sb.Append(s.ResolvedRemoteIPAddress.ToString());
-								sb.Append(" on remote port ");
-								sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(" is disconnected from ");
+								sb.Append(s.RemoteEndPoint.ToString());
 							}
 							break;
 						}
 
 						case Domain.IOType.UdpClient:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("UDP/IP client is ");
-							sb.Append(IsOpen ? "open" : "closed");
-							sb.Append(" for sending to ");
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append("UDP/IP client");
+							if (IsOpen)
+							{
+								sb.Append(" is open");
+								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
+								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.Client))
+								{
+									sb.Append(" for sending to ");
+									sb.Append(socket.RemoteEndPoint.ToString());
+
+									int localPort = socket.LocalPort;
+									if (localPort != 0)
+									{
+										sb.Append(" and receiving on local port ");
+										sb.Append(localPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+									}
+								}
+							}
+							else
+							{
+								sb.Append(" is closed");
+							}
 							break;
 						}
 
 						case Domain.IOType.UdpServer:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("UDP/IP server is ");
-							sb.Append(IsOpen ? "open" : "closed");
-							sb.Append(" for receiving on local port ");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							if (IsOpen)
+							{
+								sb.Append(" is open");
+								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
+								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.Server))
+								{
+									sb.Append(" for");
+
+									System.Net.IPEndPoint remoteEndPoint = socket.RemoteEndPoint;
+									if (remoteEndPoint.Address != System.Net.IPAddress.None)
+									{
+										sb.Append(" sending to ");
+										sb.Append(socket.RemoteEndPoint.ToString());
+										sb.Append(" and");
+									}
+
+									sb.Append(" receiving on local port ");
+									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								}
+							}
+							else
+							{
+								sb.Append(" is closed");
+							}
+
 							break;
 						}
 
 						case Domain.IOType.UdpPairSocket:
 						{
-							MKY.IO.Serial.Socket.SocketSettings s = this.settingsRoot.IO.Socket;
-							sb.Append("UDP/IP PairSocket is ");
-							sb.Append(IsOpen ? "open" : "closed");
-							sb.Append(" for sending to ");
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(" on remote port ");
-							sb.Append(s.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-							sb.Append(" and receiving on local port ");
-							sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append("UDP/IP PairSocket");
+							if (IsOpen)
+							{
+								sb.Append(" is open");
+
+								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
+								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.PairSocket))
+								{
+									sb.Append(" for sending to ");
+									sb.Append(socket.RemoteEndPoint.ToString());
+									sb.Append(" and receiving on local port ");
+									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								}
+							}
+							else
+							{
+								sb.Append(" is closed");
+							}
 							break;
 						}
 
 						case Domain.IOType.UsbSerialHid:
 						{
+							MKY.IO.Serial.Usb.SerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+							sb.Append("USB HID device '");
+
 							var device = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 							if (device != null)
-							{
-								sb.Append("USB HID device '");
 								sb.Append(device.DeviceInfoString);
-								sb.Append("' is ");
-								if (IsStarted)
+							else
+								s.DeviceInfo.ToString(true, false);
+
+							sb.Append("'");
+
+							if (IsStarted)
+							{
+								if (IsConnected)
 								{
-									if (IsConnected)
-									{
-										if (IsOpen)
-											sb.Append("connected and open");
-										else
-											sb.Append("connected and closed");
-									}
+									if (IsOpen)
+										sb.Append(" is connected and open");
 									else
-									{
-										sb.Append("disconnected and waiting for reconnect");
-									}
+										sb.Append(" is connected and closed");
+								}
+								else if (device.Settings.AutoOpen)
+								{
+									sb.Append(" is disconnected and waiting for reconnect");
 								}
 								else
 								{
-									sb.Append("closed");
+									sb.Append(" is disconnected and closed");
 								}
 							}
+							else
+							{
+								sb.Append(" is closed");
+							}
+
 							break;
 						}
 

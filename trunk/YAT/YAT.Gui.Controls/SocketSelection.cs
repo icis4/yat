@@ -761,6 +761,7 @@ namespace YAT.Gui.Controls
 			// Local interface:
 			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsTcp)
 			{
+				comboBox_LocalInterface.Visible = true;
 				comboBox_LocalInterface.Enabled = true;
 				if (comboBox_LocalInterface.Items.Count > 0)
 				{
@@ -774,50 +775,83 @@ namespace YAT.Gui.Controls
 					comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
 				}
 
+				button_RefreshLocalInterfaces.Visible = true;
 				button_RefreshLocalInterfaces.Enabled = true;
 			}
 			else
 			{
+				comboBox_LocalInterface.Visible = false;
 				comboBox_LocalInterface.Enabled = false;
 				comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
 
+				button_RefreshLocalInterfaces.Visible = false;
 				button_RefreshLocalInterfaces.Enabled = false;
 			}
 
 			// Local filter:
 			if (!DesignMode && Enabled && ((SocketTypeEx)this.socketType).IsUdp)
 			{
-				comboBox_LocalFilter.Enabled = true;
-				if (comboBox_LocalFilter.Items.Count > 0)
+				comboBox_LocalFilter.Visible = true;
+				switch (this.socketType)
 				{
-					if (this.localFilter != null)
+					case SocketType.UdpClient:
 					{
-						if (comboBox_LocalFilter.Items.Contains(this.localFilter))
-						{	// Applies if an item of the combo box is selected.
-							comboBox_LocalFilter.SelectedItem = this.localFilter;
+						comboBox_LocalFilter.Enabled = false;
+						comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+						comboBox_LocalFilter.Text = "";
+						break;
+					}
+
+					case SocketType.UdpServer:
+					{
+						comboBox_LocalFilter.Enabled = true;
+						if (comboBox_LocalFilter.Items.Count > 0)
+						{
+							if (this.localFilter != null)
+							{
+								if (comboBox_LocalFilter.Items.Contains(this.localFilter))
+								{   // Applies if an item of the combo box is selected.
+									comboBox_LocalFilter.SelectedItem = this.localFilter;
+								}
+								else
+								{   // Applies if an item that is not in the combo box is selected.
+									comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+									comboBox_LocalFilter.Text = this.localFilter;
+								}
+							}
+							else
+							{   // Item doesn't exist, use default = first item in the combo box.
+								comboBox_LocalFilter.SelectedIndex = 0;
+							}
 						}
 						else
-						{	// Applies if an item that is not in the combo box is selected.
+						{
 							comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-							comboBox_LocalFilter.Text = this.localFilter;
+							if (this.localFilter != null)
+								comboBox_LocalFilter.Text = this.localFilter;
+							else
+								comboBox_LocalFilter.Text = "";
 						}
+						break;
 					}
-					else
-					{	// Item doesn't exist, use default = first item in the combo box.
-						comboBox_LocalFilter.SelectedIndex = 0;
+
+					case SocketType.UdpPairSocket:
+					{
+						comboBox_LocalFilter.Enabled = false;
+						comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
+						comboBox_LocalFilter.Text = this.remoteHost;
+						break;
 					}
-				}
-				else
-				{
-					comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
-					if (this.localFilter != null)
-						comboBox_LocalFilter.Text = this.localFilter;
-					else
-						comboBox_LocalFilter.Text = "";
+
+					default:
+					{
+						throw (new NotSupportedException("Program execution should never get here,'" + this.socketType + "' is invalid here." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
 				}
 			}
 			else
 			{
+				comboBox_LocalFilter.Visible = false;
 				comboBox_LocalFilter.Enabled = false;
 				comboBox_LocalFilter.SelectedIndex = ControlEx.InvalidIndex;
 				comboBox_LocalFilter.Text = "";

@@ -230,6 +230,11 @@ namespace YAT.Gui.Forms
 			this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
+		private void socketSettings_UdpServerSendModeChanged(object sender, EventArgs e)
+		{
+			this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode = socketSettings.UdpServerSendMode;
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > USB Ser/HID
@@ -404,10 +409,9 @@ namespace YAT.Gui.Forms
 			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort ;
 			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
 			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-			bool isTcpSocket    = ((Domain.IOTypeEx)ioType).IsTcpSocket;
 
 			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isTcpSocket;
+			socketSettings.Visible  = isSocket;
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
 			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
@@ -429,6 +433,7 @@ namespace YAT.Gui.Forms
 
 			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect   = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
+			socketSettings.UdpServerSendMode        = this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode;
 
 			usbSerialHidDeviceSelection.DeviceInfo  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 

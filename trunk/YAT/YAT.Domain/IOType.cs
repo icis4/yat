@@ -166,10 +166,12 @@ namespace YAT.Domain
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((IOType)UnderlyingEnum)
 			{
+				case IOType.Unknown:       return (Unknown_string);
 				case IOType.SerialPort:    return (SerialPort_string);
 				case IOType.TcpClient:     return (TcpClient_string);
 				case IOType.TcpServer:     return (TcpServer_string);
@@ -178,8 +180,8 @@ namespace YAT.Domain
 				case IOType.UdpServer:     return (UdpServer_string);
 				case IOType.UdpPairSocket: return (UdpPairSocket_string);
 				case IOType.UsbSerialHid:  return (UsbSerialHid_string);
-				default:                   return (Unknown_string);
 			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
