@@ -60,7 +60,6 @@ namespace YAT.Domain
 
 		private const string BigEndian_string    = "Big-Endian (Network, Motorola)";
 		private const string LittleEndian_string = "Little-Endian (Intel)";
-		private const string Unknown_string      = "Unknown";
 
 		#endregion
 
@@ -80,14 +79,15 @@ namespace YAT.Domain
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((Endianness)UnderlyingEnum)
 			{
 				case Endianness.BigEndian:    return (BigEndian_string);
 				case Endianness.LittleEndian: return (LittleEndian_string);
-				default:                     return (Unknown_string);
 			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
