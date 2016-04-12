@@ -56,14 +56,14 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		public const string EnterCommandText = "<Enter a command...>";
-
-		/// <summary></summary>
 		public const string DefineCommandText = "<Define...>";
 
-		/// <summary></summary>
+		/// <remarks>'TextText' as it is the text of a text command.</remarks>
+		public const string EnterTextText = "<Enter text...>";
+
+		/// <remarks>'TextText' as it is the text of a multi-line text command.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
-		public const string MultiLineCommandText = "<Multi-line...>";
+		public const string MultiLineTextText = "<Multi-line...>";
 
 		/// <summary></summary>
 		public const string UndefinedFilePathText = "<Set a file...>";

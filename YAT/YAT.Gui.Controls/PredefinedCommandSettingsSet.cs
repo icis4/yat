@@ -216,7 +216,7 @@ namespace YAT.Gui.Controls
 				SetControls();
 
 				// Move cursor to end
-				textBox_Command.SelectionStart = textBox_Command.Text.Length;
+				textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
 			}
 		}
 
@@ -250,7 +250,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void textBox_Command_Enter(object sender, EventArgs e)
+		private void textBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
 			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineText)
@@ -267,7 +267,7 @@ namespace YAT.Gui.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void textBox_Command_Leave(object sender, System.EventArgs e)
+		private void textBox_SingleLineText_Leave(object sender, System.EventArgs e)
 		{
 			if (this.isValidated)
 				this.focusState = FocusState.Inactive;
@@ -275,7 +275,7 @@ namespace YAT.Gui.Controls
 				this.focusState = FocusState.IsLeaving;
 		}
 
-		private void textBox_Command_TextChanged(object sender, System.EventArgs e)
+		private void textBox_SingleLineText_TextChanged(object sender, System.EventArgs e)
 		{
 			if (!this.isSettingControls)
 				this.isValidated = false;
@@ -288,11 +288,11 @@ namespace YAT.Gui.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void textBox_Command_Validating(object sender, CancelEventArgs e)
+		private void textBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_Command.Text))
+				if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_SingleLineText.Text))
 				{
 					this.isValidated = true;
 
@@ -301,13 +301,13 @@ namespace YAT.Gui.Controls
 					else
 						this.focusState = FocusState.HasFocus;
 
-					SetSingleLineCommand(textBox_Command.Text);
+					SetSingleLineText(textBox_SingleLineText.Text);
 					return;
 				}
 
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateText(this, "text", textBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateText(this, "text", textBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 				{
 					this.isValidated = true;
 
@@ -316,12 +316,12 @@ namespace YAT.Gui.Controls
 					else
 						this.focusState = FocusState.HasFocus;
 
-					SetSingleLineCommand(textBox_Command.Text);
+					SetSingleLineText(textBox_SingleLineText.Text);
 					return;
 				}
 
 				this.focusState = FocusState.HasFocus;
-				textBox_Command.Select(invalidTextStart, invalidTextLength);
+				textBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
 		}
@@ -331,9 +331,9 @@ namespace YAT.Gui.Controls
 			ShowOpenFileDialog();
 		}
 
-		private void button_SetMultiLineCommand_Click(object sender, EventArgs e)
+		private void button_SetMultiLineText_Click(object sender, EventArgs e)
 		{
-			ShowMultiLineCommandBox(button_SetMultiLineCommand);
+			ShowMultiLineBox(button_SetMultiLineText);
 		}
 
 		private void button_SetFile_Click(object sender, EventArgs e)
@@ -371,17 +371,17 @@ namespace YAT.Gui.Controls
 			if (this.command.IsText)
 			{
 				// Command:
-				textBox_Command.Visible = true;
+				textBox_SingleLineText.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
-					textBox_Command.Text      = this.command.SingleLineText;
-					textBox_Command.ForeColor = SystemColors.ControlText;
-					textBox_Command.Font      = SystemFonts.DefaultFont;
+					textBox_SingleLineText.Text      = this.command.SingleLineText;
+					textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+					textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 				}
 
 				// Buttons:
-				button_SetMultiLineCommand.Visible = true;
-				button_SetMultiLineCommand.Enabled = true;
+				button_SetMultiLineText.Visible = true;
+				button_SetMultiLineText.Enabled = true;
 				button_SetFile.Visible = false;
 				button_SetFile.Enabled = false;
 
@@ -396,12 +396,12 @@ namespace YAT.Gui.Controls
 			else if (this.command.IsFilePath)
 			{
 				// Command:
-				textBox_Command.Visible = false;
-				textBox_Command.Text = "";
+				textBox_SingleLineText.Visible = false;
+				textBox_SingleLineText.Text = "";
 
 				// Buttons:
-				button_SetMultiLineCommand.Visible = false;
-				button_SetMultiLineCommand.Enabled = false;
+				button_SetMultiLineText.Visible = false;
+				button_SetMultiLineText.Enabled = false;
 				button_SetFile.Visible = true;
 				button_SetFile.Enabled = true;
 
@@ -417,7 +417,7 @@ namespace YAT.Gui.Controls
 				{
 					pathLabel_FilePath.Text      = Command.UndefinedFilePathText;
 					pathLabel_FilePath.ForeColor = SystemColors.GrayText;
-					pathLabel_FilePath.Font      = Utilities.Drawing.ItalicDefaultFont;
+					pathLabel_FilePath.Font      = Drawing.ItalicDefaultFont;
 				}
 
 				checkBox_IsFile.Checked = true;
@@ -428,17 +428,17 @@ namespace YAT.Gui.Controls
 			else
 			{
 				// Command:
-				textBox_Command.Visible = true;
+				textBox_SingleLineText.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
-					textBox_Command.Text      = Command.EnterCommandText;
-					textBox_Command.ForeColor = SystemColors.GrayText;
-					textBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
+					textBox_SingleLineText.Text      = Command.EnterTextText;
+					textBox_SingleLineText.ForeColor = SystemColors.GrayText;
+					textBox_SingleLineText.Font      = Drawing.ItalicDefaultFont;
 				}
 
 				// Buttons:
-				button_SetMultiLineCommand.Visible = true;
-				button_SetMultiLineCommand.Enabled = true;
+				button_SetMultiLineText.Visible = true;
+				button_SetMultiLineText.Enabled = true;
 				button_SetFile.Visible = false;
 				button_SetFile.Enabled = false;
 
@@ -465,10 +465,10 @@ namespace YAT.Gui.Controls
 			OnCommandChanged(EventArgs.Empty);
 		}
 
-		private void SetSingleLineCommand(string commandLine)
+		private void SetSingleLineText(string text)
 		{
 			this.command.IsFilePath = false;
-			this.command.SingleLineText = commandLine;
+			this.command.SingleLineText = text;
 
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
@@ -477,23 +477,23 @@ namespace YAT.Gui.Controls
 		private void ClearCommand()
 		{
 			this.isSettingControls.Enter();
-			textBox_Command.Text      = "";
-			textBox_Command.ForeColor = SystemColors.ControlText;
-			textBox_Command.Font      = SystemFonts.DefaultFont;
+			textBox_SingleLineText.Text      = "";
+			textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+			textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 			this.isSettingControls.Leave();
 		}
 
 		/// <remarks>
-		/// Almost duplicated code in <see cref="YAT.Gui.Controls.SendText.ShowMultiLineCommandBox"/>.
+		/// Almost duplicated code in <see cref="SendText.ShowMultiLineBox"/>.
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowMultiLineCommandBox(Control requestingControl)
+		private void ShowMultiLineBox(Control requestingControl)
 		{
-			// Indicate multi-line command:
+			// Indicate multi-line text:
 			this.isSettingControls.Enter();
-			textBox_Command.Text      = Command.MultiLineCommandText;
-			textBox_Command.ForeColor = SystemColors.ControlText;
-			textBox_Command.Font      = SystemFonts.DefaultFont;
+			textBox_SingleLineText.Text      = Command.MultiLineTextText;
+			textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+			textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 			this.isSettingControls.Leave();
 
 			// Calculate startup location:
@@ -512,13 +512,13 @@ namespace YAT.Gui.Controls
 
 				SetControls();
 				textBox_Description.Select();
-
 				OnCommandChanged(EventArgs.Empty);
 			}
 			else
 			{
 				SetControls();
 				textBox_Description.Select();
+				// Do not call OnCommandChanged(), nothing has changed.
 			}
 		}
 

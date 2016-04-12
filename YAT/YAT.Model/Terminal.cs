@@ -2591,14 +2591,14 @@ namespace YAT.Model
 					throw (new NotSupportedException(@"The command """ + c + @""" has an unknown type!"));
 				}
 
-				// Copy line commands into recent commands, include compiled partial commands:
+				// Copy line text into recent commands, include compiled partial text:
 				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialTextEol)
 				{
 					// Clone the command for the recent commands collection:
 					Command clone;
 					if (!c.IsPartialTextEol)
 						clone = new Command(c); // 'Normal' case, simply clone the command.
-					else                        // Partial, create an equivalent single line command.
+					else                        // Partial, create an equivalent single line text.
 						clone = new Command(this.partialCommandLine);
 
 					// Put clone into recent history:

@@ -338,7 +338,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void SelectInput()
 		{
-			comboBox_Command.Select();
+			comboBox_SingleLineText.Select();
 		}
 
 		#endregion
@@ -429,7 +429,7 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_Command_Enter(object sender, EventArgs e)
+		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
@@ -437,9 +437,9 @@ namespace YAT.Gui.Controls
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
 			{
 				this.isSettingControls.Enter();
-				comboBox_Command.Text      = "";
-				comboBox_Command.ForeColor = SystemColors.ControlText;
-				comboBox_Command.Font      = SystemFonts.DefaultFont;
+				comboBox_SingleLineText.Text      = "";
+				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 				this.isSettingControls.Leave();
 			}
 
@@ -462,7 +462,7 @@ namespace YAT.Gui.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void comboBox_Command_Leave(object sender, EventArgs e)
+		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
@@ -474,7 +474,7 @@ namespace YAT.Gui.Controls
 			CommandDebugMessageLeave();
 		}
 
-		private void comboBox_Command_KeyPress(object sender, KeyPressEventArgs e)
+		private void comboBox_SingleLineText_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
@@ -488,14 +488,14 @@ namespace YAT.Gui.Controls
 			CommandDebugMessageLeave();
 		}
 
-		private void comboBox_Command_TextChanged(object sender, EventArgs e)
+		private void comboBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (!this.isSettingControls)
 			{
 				if (this.sendImmediately)
-					comboBox_Command.Text = ""; // Instantly reset the text.
+					comboBox_SingleLineText.Text = ""; // Instantly reset the text.
 				else
 					this.isValidated = false; // Reset the validation flag.
 
@@ -517,7 +517,7 @@ namespace YAT.Gui.Controls
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void comboBox_Command_Validating(object sender, CancelEventArgs e)
+		private void comboBox_SingleLineText_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
@@ -530,14 +530,14 @@ namespace YAT.Gui.Controls
 					if (this.editFocusState != EditFocusState.IsLeavingParent)
 					{
 						// Easter egg ;-)
-						if (SendTextSettings.IsEasterEggCommand(comboBox_Command.Text))
+						if (SendTextSettings.IsEasterEggCommand(comboBox_SingleLineText.Text))
 						{
 							this.isValidated = true;
 
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
-							CreateAndConfirmSingleLineCommand(comboBox_Command.Text);
+							CreateAndConfirmSingleLineText(comboBox_SingleLineText.Text);
 
 							CommandDebugMessageLeave();
 							return;
@@ -546,21 +546,21 @@ namespace YAT.Gui.Controls
 						// Single line => Validate!
 						int invalidTextStart;
 						int invalidTextLength;
-						if (Validation.ValidateText(this, "text", comboBox_Command.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
+						if (Validation.ValidateText(this, "text", comboBox_SingleLineText.Text, /* FR#238 add this.defaultRadix */ this.parseMode, out invalidTextStart, out invalidTextLength))
 						{
 							this.isValidated = true;
 
 							if (this.editFocusState == EditFocusState.IsLeavingEdit)
 								SetEditFocusState(EditFocusState.EditIsInactive);
 
-							CreateAndConfirmSingleLineCommand(comboBox_Command.Text);
+							CreateAndConfirmSingleLineText(comboBox_SingleLineText.Text);
 
 							CommandDebugMessageLeave();
 							return;
 						}
 
 						SetEditFocusState(EditFocusState.EditHasFocus);
-						comboBox_Command.Select(invalidTextStart, invalidTextLength);
+						comboBox_SingleLineText.Select(invalidTextStart, invalidTextLength);
 						e.Cancel = true;
 					}
 					else // EditFocusState.IsLeavingParent
@@ -573,7 +573,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void comboBox_Command_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_SingleLineText_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
@@ -581,9 +581,9 @@ namespace YAT.Gui.Controls
 
 				this.isValidated = true; // Commands in history have already been validated.
 
-				if (comboBox_Command.SelectedItem != null)
+				if (comboBox_SingleLineText.SelectedItem != null)
 				{
-					var ri = (comboBox_Command.SelectedItem as RecentItem<Command>);
+					var ri = (comboBox_SingleLineText.SelectedItem as RecentItem<Command>);
 					if (ri != null)
 					{
 						this.command = ri.Item;
@@ -597,9 +597,9 @@ namespace YAT.Gui.Controls
 			}
 		}
 		
-		private void button_MultiLineCommand_Click(object sender, EventArgs e)
+		private void button_MultiLine_Click(object sender, EventArgs e)
 		{
-			ShowMultiLineCommandBox(button_MultiLineCommand);
+			ShowMultiLineBox(button_MultiLine);
 		}
 
 		private void button_Send_Click(object sender, EventArgs e)
@@ -626,21 +626,21 @@ namespace YAT.Gui.Controls
 			this.isSettingControls.Enter();
 
 			// Keep text field because Items.Clear() will reset this:
-			string text         = comboBox_Command.Text;
-			int selectionStart  = comboBox_Command.SelectionStart;
-			int selectionLength = comboBox_Command.SelectionLength;
+			string text         = comboBox_SingleLineText.Text;
+			int selectionStart  = comboBox_SingleLineText.SelectionStart;
+			int selectionLength = comboBox_SingleLineText.SelectionLength;
 
-			comboBox_Command.Items.Clear();
+			comboBox_SingleLineText.Items.Clear();
 			if ((this.recent != null) && (this.recent.Count > 0))
-				comboBox_Command.Items.AddRange(this.recent.ToArray());
+				comboBox_SingleLineText.Items.AddRange(this.recent.ToArray());
 
 			// Immediately update the updated item list:
-			comboBox_Command.Refresh();
+			comboBox_SingleLineText.Refresh();
 
 			// Restore text field:
-			comboBox_Command.Text            = text;
-			comboBox_Command.SelectionStart  = selectionStart;
-			comboBox_Command.SelectionLength = selectionLength;
+			comboBox_SingleLineText.Text            = text;
+			comboBox_SingleLineText.SelectionStart  = selectionStart;
+			comboBox_SingleLineText.SelectionLength = selectionLength;
 
 			this.isSettingControls.Leave();
 			CommandDebugMessageLeave();
@@ -658,26 +658,26 @@ namespace YAT.Gui.Controls
 			{
 				if (this.command.IsText)
 				{
-					comboBox_Command.Text      = this.command.SingleLineText;
-					comboBox_Command.ForeColor = SystemColors.ControlText;
-					comboBox_Command.Font      = SystemFonts.DefaultFont;
+					comboBox_SingleLineText.Text      = this.command.SingleLineText;
+					comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+					comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 				}
 				else
 				{
-					comboBox_Command.Text      = Command.EnterCommandText;
-					comboBox_Command.ForeColor = SystemColors.GrayText;
-					comboBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
+					comboBox_SingleLineText.Text      = Command.EnterTextText;
+					comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
+					comboBox_SingleLineText.Font      = Utilities.Drawing.ItalicDefaultFont;
 				}
 			}
 			else
 			{
 				if (this.command.IsText && !this.command.IsPartialText)
-					comboBox_Command.Text = this.command.SingleLineText;
+					comboBox_SingleLineText.Text = this.command.SingleLineText;
 				else
-					comboBox_Command.Text = "";
+					comboBox_SingleLineText.Text = "";
 
-				comboBox_Command.ForeColor = SystemColors.ControlText;
-				comboBox_Command.Font      = SystemFonts.DefaultFont;
+				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 			}
 
 			SetCursorToEnd();
@@ -692,7 +692,7 @@ namespace YAT.Gui.Controls
 			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
-			comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
+			comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
 
 			this.isSettingControls.Leave();
 			CommandDebugMessageLeave();
@@ -721,8 +721,8 @@ namespace YAT.Gui.Controls
 			}
 
 			string commandText = "";
-			if (!string.IsNullOrEmpty(comboBox_Command.Text))
-				commandText = comboBox_Command.Text;
+			if (!string.IsNullOrEmpty(comboBox_SingleLineText.Text))
+				commandText = comboBox_SingleLineText.Text;
 
 			string toolTipText = @"Send """ + commandText + @"""";
 			if (this.sendImmediately)
@@ -744,31 +744,31 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-		#region Private Methods > Multi-Line Command
+		#region Private Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
-		// Private Methods > Multi-Line Command
+		// Private Methods > Multi-Line Text
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Almost duplicated code in <see cref="YAT.Gui.Controls.PredefinedCommandSettingsSet.ShowMultiLineCommandBox"/>.
+		/// Almost duplicated code in <see cref="PredefinedCommandSettingsSet.ShowMultiLineBox"/>.
 		/// </remarks>
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowMultiLineCommandBox(Control requestingControl)
+		private void ShowMultiLineBox(Control requestingControl)
 		{
-			// Indicate multi-line command.
+			// Indicate multi-line text:
 			this.isSettingControls.Enter();
-			comboBox_Command.Text      = Command.MultiLineCommandText;
-			comboBox_Command.ForeColor = SystemColors.ControlText;
-			comboBox_Command.Font      = SystemFonts.DefaultFont;
+			comboBox_SingleLineText.Text      = Command.MultiLineTextText;
+			comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+			comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 			this.isSettingControls.Leave();
 
-			// Calculate startup location.
+			// Calculate startup location:
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
 			Point formStartupLocation = new Point();
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
-			// Show multi-line box.
+			// Show multi-line box:
 			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation, this.parseMode);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
@@ -783,7 +783,7 @@ namespace YAT.Gui.Controls
 			else
 			{
 				SetCommandControls();
-				//// Do not call OnCommandChanged(), nothing has changed.
+				// Do not call OnCommandChanged(), nothing has changed.
 			}
 
 			button_Send.Select();
@@ -805,9 +805,9 @@ namespace YAT.Gui.Controls
 		/// <remarks>
 		/// Always create new command to ensure that not only command but also description is updated.
 		/// </remarks>
-		private void CreateAndConfirmSingleLineCommand(string singleLineCommand)
+		private void CreateAndConfirmSingleLineText(string singleLineText)
 		{
-			this.command = new Command(singleLineCommand);
+			this.command = new Command(singleLineText);
 
 			SetCommandControls();
 			OnCommandChanged(EventArgs.Empty);
@@ -858,7 +858,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					if (ValidateChildren()) // CreateAndConfirmSingleLineCommand() gets called here.
+					if (ValidateChildren()) // CreateAndConfirmSingleLineText() gets called here.
 						InvokeSendCommandRequest();
 				}
 			}
@@ -926,9 +926,9 @@ namespace YAT.Gui.Controls
 		[Conditional("DEBUG_COMMAND")]
 		protected virtual void CommandDebugMessage()
 		{
-			Debug.Write    ("Text    = "      + comboBox_Command.Text);
-			Debug.Write    (" with cursor @ " + comboBox_Command.SelectionStart);
-			Debug.WriteLine(" and sel.idx @ " + comboBox_Command.SelectedIndex);
+			Debug.Write    ("Text    = "      + comboBox_SingleLineText.Text);
+			Debug.Write    (" with cursor @ " + comboBox_SingleLineText.SelectionStart);
+			Debug.WriteLine(" and sel.idx @ " + comboBox_SingleLineText.SelectedIndex);
 
 			if (this.recent != null)
 				Debug.WriteLine("Recent = " + ArrayEx.ElementsToString(this.recent.ToArray()));

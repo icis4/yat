@@ -28,33 +28,33 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.textBox_Command = new System.Windows.Forms.TextBox();
+			this.textBox_Lines = new System.Windows.Forms.TextBox();
 			this.label_Remarks = new System.Windows.Forms.Label();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// textBox_Command
+			// textBox_Lines
 			// 
-			this.textBox_Command.AcceptsReturn = true;
-			this.textBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_Command.Location = new System.Drawing.Point(12, 12);
-			this.textBox_Command.Multiline = true;
-			this.textBox_Command.Name = "textBox_Command";
-			this.textBox_Command.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBox_Command.Size = new System.Drawing.Size(268, 152);
-			this.textBox_Command.TabIndex = 0;
-			this.textBox_Command.TextChanged += new System.EventHandler(this.textBox_Command_TextChanged);
-			this.textBox_Command.Leave += new System.EventHandler(this.textBox_Command_Leave);
-			this.textBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Command_Validating);
+			this.textBox_Lines.AcceptsReturn = true;
+			this.textBox_Lines.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_Lines.Location = new System.Drawing.Point(12, 12);
+			this.textBox_Lines.Multiline = true;
+			this.textBox_Lines.Name = "textBox_Lines";
+			this.textBox_Lines.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.textBox_Lines.Size = new System.Drawing.Size(268, 152);
+			this.textBox_Lines.TabIndex = 0;
+			this.textBox_Lines.TextChanged += new System.EventHandler(this.textBox_Lines_TextChanged);
+			this.textBox_Lines.Leave += new System.EventHandler(this.textBox_Lines_Leave);
+			this.textBox_Lines.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Lines_Validating);
 			// 
 			// label_Remarks
 			// 
-			this.label_Remarks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Remarks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remarks.BackColor = System.Drawing.SystemColors.Window;
 			this.label_Remarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remarks.ForeColor = System.Drawing.SystemColors.GrayText;
@@ -62,8 +62,8 @@
 			this.label_Remarks.Name = "label_Remarks";
 			this.label_Remarks.Size = new System.Drawing.Size(224, 109);
 			this.label_Remarks.TabIndex = 1;
-			this.label_Remarks.Text = "Press Enter to begin a new line.\r\nPress Ctrl+Enter to accept the command.\r\nPress " +
-				"Escape to cancel.";
+			this.label_Remarks.Text = "Press Enter to begin a new line.\r\nPress Ctrl+Enter to confirm.\r\nPress Escape to c" +
+    "ancel.";
 			this.label_Remarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// button_Cancel
@@ -98,13 +98,13 @@
 			this.Controls.Add(this.button_OK);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.label_Remarks);
-			this.Controls.Add(this.textBox_Command);
+			this.Controls.Add(this.textBox_Lines);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Name = "MultiLineBox";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "Multi-Line Command";
+			this.Text = "Multi-Line Text";
 			this.Shown += new System.EventHandler(this.MultiLineBox_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -113,7 +113,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.TextBox textBox_Command;
+		private System.Windows.Forms.TextBox textBox_Lines;
 		private System.Windows.Forms.Label label_Remarks;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_OK;
