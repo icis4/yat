@@ -47,6 +47,7 @@ namespace YAT.Model.Settings
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
+		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode;
 
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
 		private MKY.IO.Usb.SerialHidReportFormat usbSerialHidReportFormat;
@@ -100,6 +101,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort       = rhs.SocketLocalTcpPort;
 			SocketLocalUdpPort       = rhs.SocketLocalUdpPort;
 			TcpClientAutoReconnect   = rhs.TcpClientAutoReconnect;
+			UdpServerSendMode        = rhs.UdpServerSendMode;
 
 			UsbSerialHidDeviceInfo   = rhs.UsbSerialHidDeviceInfo;
 			UsbSerialHidReportFormat = rhs.UsbSerialHidReportFormat;
@@ -137,7 +139,8 @@ namespace YAT.Model.Settings
 			SocketLocalFilter        = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
 			SocketLocalTcpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
 			SocketLocalUdpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
-			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.DefaultTcpClientAutoReconnect;
+			UdpServerSendMode        = MKY.IO.Serial.Socket.SocketSettings.DefaultUdpServerSendMode;
 
 			UsbSerialHidDeviceInfo   = null;
 			UsbSerialHidReportFormat = new MKY.IO.Usb.SerialHidReportFormat();
@@ -394,7 +397,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Item is already named 'TcpClient', therefore no 'Socket' is prepended.</remarks>
 		[XmlElement("TcpClientAutoReconnect")]
 		public virtual MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
 		{
@@ -404,6 +407,21 @@ namespace YAT.Model.Settings
 				if (this.tcpClientAutoReconnect != value)
 				{
 					this.tcpClientAutoReconnect = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <remarks>Item is already named 'UdpServer', therefore no 'Socket' is prepended.</remarks>
+		[XmlElement("UdpServerSendMode")]
+		public virtual MKY.IO.Serial.Socket.UdpServerSendMode UdpServerSendMode
+		{
+			get { return (this.udpServerSendMode); }
+			set
+			{
+				if (this.udpServerSendMode != value)
+				{
+					this.udpServerSendMode = value;
 					SetChanged();
 				}
 			}
@@ -538,6 +556,7 @@ namespace YAT.Model.Settings
 				(SocketLocalTcpPort       == other.SocketLocalTcpPort) &&
 				(SocketLocalUdpPort       == other.SocketLocalUdpPort) &&
 				(TcpClientAutoReconnect   == other.TcpClientAutoReconnect) &&
+				(UdpServerSendMode        == other.UdpServerSendMode) &&
 
 				(UsbSerialHidDeviceInfo   == other.UsbSerialHidDeviceInfo) &&
 				(UsbSerialHidReportFormat == other.UsbSerialHidReportFormat) &&
@@ -585,6 +604,7 @@ namespace YAT.Model.Settings
 				SocketLocalTcpPort      .GetHashCode() ^
 				SocketLocalUdpPort      .GetHashCode() ^
 				TcpClientAutoReconnect  .GetHashCode() ^
+				UdpServerSendMode       .GetHashCode() ^
 
 				usbSerialHidDeviceInfoHashCode ^
 				UsbSerialHidReportFormat.GetHashCode() ^

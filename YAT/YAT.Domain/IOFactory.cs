@@ -85,7 +85,8 @@ namespace YAT.Domain
 					return (new UdpSocket
 						(
 						settings.Socket.LocalUdpPort,
-						settings.Socket.ResolvedLocalIPAddressFilter
+						settings.Socket.ResolvedLocalIPAddressFilter,
+						settings.Socket.UdpServerSendMode
 						));
 				}
 
@@ -95,8 +96,7 @@ namespace YAT.Domain
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
 						settings.Socket.RemoteUdpPort,
-						settings.Socket.LocalUdpPort,
-						settings.Socket.ResolvedLocalIPAddressFilter
+						settings.Socket.LocalUdpPort
 						));
 				}
 

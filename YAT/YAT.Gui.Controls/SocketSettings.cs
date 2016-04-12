@@ -59,7 +59,9 @@ namespace YAT.Gui.Controls
 		private SettingControlsHelper isSettingControls;
 
 		private MKY.IO.Serial.Socket.SocketType socketType = SocketTypeDefault;
-		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+
+		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect           = MKY.IO.Serial.Socket.SocketSettings.DefaultTcpClientAutoReconnect;
+		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode = MKY.IO.Serial.Socket.SocketSettings.DefaultUdpServerSendMode;
 
 		#endregion
 
@@ -72,6 +74,11 @@ namespace YAT.Gui.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the TcpClientAutoReconnect property is changed.")]
 		public event EventHandler TcpClientAutoReconnectChanged;
+
+		/// <summary></summary>
+		[Category("Property Changed")]
+		[Description("Event raised when the UdpServerSendMode property is changed.")]
+		public event EventHandler UdpServerSendModeChanged;
 
 		#endregion
 
@@ -127,6 +134,23 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
+		[Category("Socket")]
+		[Description("Sets UDP/IP server send mode.")]
+		public MKY.IO.Serial.Socket.UdpServerSendMode UdpServerSendMode
+		{
+			get { return (this.udpServerSendMode); }
+			set
+			{
+				if (this.udpServerSendMode != value)
+				{
+					this.udpServerSendMode = value;
+					SetControls();
+					OnUdpServerSendModeChanged(EventArgs.Empty);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Control Event Handlers
@@ -175,7 +199,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = this.tcpClientAutoReconnect;
+				MKY.IO.Serial.AutoRetry ar = TcpClientAutoReconnect;
 				ar.Enabled = checkBox_TcpClientAutoReconnect.Checked;
 				TcpClientAutoReconnect = ar;
 			}
@@ -189,7 +213,7 @@ namespace YAT.Gui.Controls
 				int interval;
 				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval))
 				{
-					MKY.IO.Serial.AutoRetry ar = this.tcpClientAutoReconnect;
+					MKY.IO.Serial.AutoRetry ar = TcpClientAutoReconnect;
 					ar.Interval = interval;
 					TcpClientAutoReconnect = ar;
 				}
@@ -209,6 +233,24 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		private void radioButton_UdpServerSendMode_MostRecent_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent;
+		}
+
+		private void radioButton_UdpServerSendMode_First_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.First;
+		}
+
+		private void radioButton_UdpServerSendMode_None_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.None;
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -220,28 +262,36 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls.Enter();
 
-			bool enabledTcpClient = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.TcpClient));
+			// --- TCP/IP Client ---
 
-			bool autoReconnectEnabled;
-			if (enabledTcpClient)
-				autoReconnectEnabled = this.tcpClientAutoReconnect.Enabled;
-			else
-				autoReconnectEnabled = false;
+			bool isTcp = ((MKY.IO.Serial.Socket.SocketTypeEx)this.socketType).IsTcp;
+			bool enabledAndTcpClient = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.TcpClient));
+			bool autoReconnectEnabled = TcpClientAutoReconnect.Enabled;
 
-			checkBox_TcpClientAutoReconnect.Enabled = enabledTcpClient;
+			panel_Tcp.Visible = isTcp;
+
+			checkBox_TcpClientAutoReconnect.Enabled = enabledAndTcpClient;
 			checkBox_TcpClientAutoReconnect.Checked = autoReconnectEnabled;
 
-			string autoReconnectIntervalText;
-			if (enabledTcpClient)
-				autoReconnectIntervalText = this.tcpClientAutoReconnect.Interval.ToString(CultureInfo.CurrentCulture);
-			else
-				autoReconnectIntervalText = "";
+			textBox_TcpClientAutoReconnectInterval.Enabled = (enabledAndTcpClient && autoReconnectEnabled);
+			textBox_TcpClientAutoReconnectInterval.Text    = TcpClientAutoReconnect.Interval.ToString(CultureInfo.CurrentCulture);
 
-			textBox_TcpClientAutoReconnectInterval.Enabled = autoReconnectEnabled;
-			textBox_TcpClientAutoReconnectInterval.Text    = autoReconnectIntervalText;
+			label_TcpClientAutoReconnectInterval.Enabled     = enabledAndTcpClient;
+			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledAndTcpClient;
 
-			label_TcpClientAutoReconnectInterval.Enabled     = enabledTcpClient;
-			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledTcpClient;
+			// --- UDP/IP Server ---
+
+			bool isUdp = ((MKY.IO.Serial.Socket.SocketTypeEx)this.socketType).IsUdp;
+			bool enabledAndUdpServer = (Enabled && (this.socketType == MKY.IO.Serial.Socket.SocketType.UdpServer));
+
+			panel_Udp.Visible = isUdp;
+
+			radioButton_UdpServerSendMode_MostRecent.Enabled = enabledAndUdpServer;
+			radioButton_UdpServerSendMode_MostRecent.Checked = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent);
+			radioButton_UdpServerSendMode_First.Enabled      = enabledAndUdpServer;
+			radioButton_UdpServerSendMode_First.Checked      = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.First);
+			radioButton_UdpServerSendMode_None.Enabled       = enabledAndUdpServer;
+			radioButton_UdpServerSendMode_None.Checked       = (UdpServerSendMode == MKY.IO.Serial.Socket.UdpServerSendMode.None);
 
 			this.isSettingControls.Leave();
 		}
@@ -257,6 +307,12 @@ namespace YAT.Gui.Controls
 		protected virtual void OnTcpClientAutoReconnectChanged(EventArgs e)
 		{
 			EventHelper.FireSync(TcpClientAutoReconnectChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnUdpServerSendModeChanged(EventArgs e)
+		{
+			EventHelper.FireSync(UdpServerSendModeChanged, this, e);
 		}
 
 		#endregion

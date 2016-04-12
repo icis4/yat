@@ -244,6 +244,11 @@ namespace YAT.Gui.Forms
 			this.newTerminalSettingsInEdit.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
+		private void socketSettings_UdpServerSendModeChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettingsInEdit.UdpServerSendMode = socketSettings.UdpServerSendMode;
+		}
+
 		#endregion
 
 		#region Controls Event Handlers > USB Ser/HID
@@ -323,6 +328,7 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort                  = this.newTerminalSettings.SocketLocalTcpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort                  = this.newTerminalSettings.SocketLocalUdpPort;
 			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect        = this.newTerminalSettings.TcpClientAutoReconnect;
+			this.terminalSettings.Terminal.IO.Socket.UdpServerSendMode             = this.newTerminalSettings.UdpServerSendMode;
 
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
 			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.ReportFormat      = this.newTerminalSettings.UsbSerialHidReportFormat;
@@ -403,10 +409,9 @@ namespace YAT.Gui.Forms
 			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort ;
 			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
 			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-			bool isTcpSocket    = ((Domain.IOTypeEx)ioType).IsTcpSocket;
 
 			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isTcpSocket;
+			socketSettings.Visible  = isSocket;
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
 			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
@@ -428,6 +433,7 @@ namespace YAT.Gui.Forms
 
 			socketSettings.SocketType               = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect   = this.newTerminalSettingsInEdit.TcpClientAutoReconnect;
+			socketSettings.UdpServerSendMode        = this.newTerminalSettingsInEdit.UdpServerSendMode;
 
 			usbSerialHidDeviceSelection.DeviceInfo  = this.newTerminalSettingsInEdit.UsbSerialHidDeviceInfo;
 
