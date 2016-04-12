@@ -290,17 +290,20 @@ namespace YAT.Domain
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
+			public string PortStamp;
 			public IODirection Direction;
 
-			public BidirLineState(bool isFirstLine, IODirection direction)
+			public BidirLineState()
 			{
-				IsFirstLine = isFirstLine;
-				Direction   = direction;
+				IsFirstLine = true;
+				PortStamp   = "";
+				Direction   = IODirection.None;
 			}
 
 			public BidirLineState(BidirLineState rhs)
 			{
 				IsFirstLine = rhs.IsFirstLine;
+				PortStamp   = rhs.PortStamp;
 				Direction   = rhs.Direction;
 			}
 		}
@@ -505,7 +508,7 @@ namespace YAT.Domain
 				this.rxLineState = new LineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore), DateTime.Now, t);
 			}
 
-			this.bidirLineState = new BidirLineState(true, IODirection.Tx);
+			this.bidirLineState = new BidirLineState();
 		}
 
 		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
@@ -761,17 +764,10 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		private void ProcessAndSignalDirectionLineBreak(IODirection d)
+		private void ProcessAndSignalPortAndDirectionLineBreak(string ps, IODirection d)
 		{
-			LineState lineState;
-			switch (d)
-			{
-				case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
-				case IODirection.Rx: lineState = this.txLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-
-			if (TerminalSettings.Display.DirectionLineBreakEnabled)
+			if (TerminalSettings.Display.PortLineBreakEnabled ||
+				TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
 				if (this.bidirLineState.IsFirstLine)
 				{
@@ -779,19 +775,32 @@ namespace YAT.Domain
 				}
 				else
 				{
-					if ((lineState.LineElements.Count > 0) &&
-						(d != this.bidirLineState.Direction))
+					LineState lineState; // Attention: Direction changed => Use opposite state.
+					switch (d)
 					{
-						DisplayElementCollection elements = new DisplayElementCollection();
-						List<DisplayLine> lines = new List<DisplayLine>();
+						case IODirection.Tx: lineState = this.rxLineState; break; // Reversed!
+						case IODirection.Rx: lineState = this.txLineState; break;
+						default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
 
-						ExecuteLineEnd(lineState, d, elements, lines);
+					if (lineState.LineElements.Count > 0)
+					{
+						if (!StringEx.EqualsOrdinalIgnoreCase(ps, this.bidirLineState.PortStamp) ||
+							(d != this.bidirLineState.Direction))
+						{
+							DisplayElementCollection elements = new DisplayElementCollection();
+							List<DisplayLine> lines = new List<DisplayLine>();
 
-						OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
-						OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
+							ExecuteLineEnd(lineState, d, elements, lines);
+
+							OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
+							OnDisplayLinesProcessed   (this.bidirLineState.Direction, lines);
+						}
 					}
 				}
 			}
+
+			this.bidirLineState.PortStamp = ps;
 			this.bidirLineState.Direction = d;
 		}
 
@@ -821,8 +830,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
-			// Check whether direction has changed:
-			ProcessAndSignalDirectionLineBreak(re.Direction);
+			// Check whether port or direction has changed:
+			ProcessAndSignalPortAndDirectionLineBreak(re.PortStamp, re.Direction);
 
 			// Process the raw element:
 			base.ProcessAndSignalRawElement(re);

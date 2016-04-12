@@ -61,6 +61,9 @@ namespace YAT.Domain.Settings
 		public const int MaxLineCountDefault = 1000;
 
 		/// <summary></summary>
+		public const bool PortLineBreakEnabledDefault = true;
+
+		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
 
 		private bool separateTxRxRadix;
@@ -75,6 +78,8 @@ namespace YAT.Domain.Settings
 		private bool showLength;
 		private int txMaxLineCount;
 		private int rxMaxLineCount;
+
+		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
 
 		/// <summary></summary>
@@ -111,6 +116,8 @@ namespace YAT.Domain.Settings
 			ShowLength        = rhs.ShowLength;
 			TxMaxLineCount    = rhs.TxMaxLineCount;
 			RxMaxLineCount    = rhs.RxMaxLineCount;
+
+			PortLineBreakEnabled      = rhs.PortLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
 			ClearChanged();
@@ -135,6 +142,8 @@ namespace YAT.Domain.Settings
 			ShowLength        = ShowLengthDefault;
 			TxMaxLineCount    = MaxLineCountDefault;
 			RxMaxLineCount    = MaxLineCountDefault;
+
+			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 		}
 
@@ -343,6 +352,21 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("PortLineBreakEnabled")]
+		public virtual bool PortLineBreakEnabled
+		{
+			get { return (this.portLineBreakEnabled); }
+			set
+			{
+				if (this.portLineBreakEnabled != value)
+				{
+					this.portLineBreakEnabled = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("DirectionLineBreakEnabled")]
 		public virtual bool DirectionLineBreakEnabled
 		{
@@ -381,18 +405,20 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(SeparateTxRxRadix         == other.SeparateTxRxRadix) &&
-				(TxRadix                   == other.TxRadix) &&
-				(RxRadix                   == other.RxRadix) &&
-				(ShowRadix                 == other.ShowRadix) &&
-				(ShowLineNumbers           == other.ShowLineNumbers) &&
-				(ShowDate                  == other.ShowDate) &&
-				(ShowTime                  == other.ShowTime) &&
-				(ShowPort                  == other.ShowPort) &&
-				(ShowDirection             == other.ShowDirection) &&
-				(ShowLength                == other.ShowLength) &&
-				(TxMaxLineCount            == other.TxMaxLineCount) &&
-				(RxMaxLineCount            == other.rxMaxLineCount) &&
+				(SeparateTxRxRadix == other.SeparateTxRxRadix) &&
+				(TxRadix           == other.TxRadix) &&
+				(RxRadix           == other.RxRadix) &&
+				(ShowRadix         == other.ShowRadix) &&
+				(ShowLineNumbers   == other.ShowLineNumbers) &&
+				(ShowDate          == other.ShowDate) &&
+				(ShowTime          == other.ShowTime) &&
+				(ShowPort          == other.ShowPort) &&
+				(ShowDirection     == other.ShowDirection) &&
+				(ShowLength        == other.ShowLength) &&
+				(TxMaxLineCount    == other.TxMaxLineCount) &&
+				(RxMaxLineCount    == other.rxMaxLineCount) &&
+
+				(PortLineBreakEnabled      == other.PortLineBreakEnabled) &&
 				(DirectionLineBreakEnabled == other.DirectionLineBreakEnabled)
 			);
 		}
@@ -410,18 +436,20 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				SeparateTxRxRadix        .GetHashCode() ^
-				TxRadix                  .GetHashCode() ^
-				RxRadix                  .GetHashCode() ^
-				ShowRadix                .GetHashCode() ^
-				ShowLineNumbers          .GetHashCode() ^
-				ShowDate                 .GetHashCode() ^
-				ShowTime                 .GetHashCode() ^
-				ShowPort                 .GetHashCode() ^
-				ShowDirection            .GetHashCode() ^
-				ShowLength               .GetHashCode() ^
-				TxMaxLineCount           .GetHashCode() ^
-				RxMaxLineCount           .GetHashCode() ^
+				SeparateTxRxRadix .GetHashCode() ^
+				TxRadix           .GetHashCode() ^
+				RxRadix           .GetHashCode() ^
+				ShowRadix         .GetHashCode() ^
+				ShowLineNumbers   .GetHashCode() ^
+				ShowDate          .GetHashCode() ^
+				ShowTime          .GetHashCode() ^
+				ShowPort          .GetHashCode() ^
+				ShowDirection     .GetHashCode() ^
+				ShowLength        .GetHashCode() ^
+				TxMaxLineCount    .GetHashCode() ^
+				RxMaxLineCount    .GetHashCode() ^
+
+				PortLineBreakEnabled     .GetHashCode() ^
 				DirectionLineBreakEnabled.GetHashCode()
 			);
 		}

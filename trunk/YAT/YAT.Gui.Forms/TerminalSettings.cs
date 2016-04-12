@@ -528,6 +528,7 @@ namespace YAT.Gui.Forms
 				this.settingsInEdit.Terminal.Status.ShowFlowControlCount = f.SettingsResult.Terminal.Status.ShowFlowControlCount;
 				this.settingsInEdit.Terminal.Status.ShowBreakCount       = f.SettingsResult.Terminal.Status.ShowBreakCount;
 
+				this.settingsInEdit.Terminal.Display.PortLineBreakEnabled      = f.SettingsResult.Terminal.Display.PortLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.TxMaxLineCount            = f.SettingsResult.Terminal.Display.TxMaxLineCount;
 				this.settingsInEdit.Terminal.Display.RxMaxLineCount            = f.SettingsResult.Terminal.Display.RxMaxLineCount;
