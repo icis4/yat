@@ -194,7 +194,7 @@
 			// checkBox_AutoReopen
 			// 
 			this.checkBox_AutoReopen.AutoSize = true;
-			this.checkBox_AutoReopen.Location = new System.Drawing.Point(3, 192);
+			this.checkBox_AutoReopen.Location = new System.Drawing.Point(6, 192);
 			this.checkBox_AutoReopen.Name = "checkBox_AutoReopen";
 			this.checkBox_AutoReopen.Size = new System.Drawing.Size(237, 17);
 			this.checkBox_AutoReopen.TabIndex = 12;

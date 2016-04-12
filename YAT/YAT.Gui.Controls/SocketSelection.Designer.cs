@@ -137,7 +137,7 @@
 			// 
 			this.comboBox_LocalFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_LocalFilter.Location = new System.Drawing.Point(101, 56);
+			this.comboBox_LocalFilter.Location = new System.Drawing.Point(101, 83);
 			this.comboBox_LocalFilter.Name = "comboBox_LocalFilter";
 			this.comboBox_LocalFilter.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_LocalFilter.TabIndex = 5;

@@ -82,15 +82,17 @@ namespace MKY.IO.Serial.Socket
 		#region ToString
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
 			switch ((UdpSocketType)UnderlyingEnum)
 			{
+				case UdpSocketType.Unknown:    return (Unknown_string);
 				case UdpSocketType.Client:     return (Client_string);
 				case UdpSocketType.Server:     return (Server_string);
 				case UdpSocketType.PairSocket: return (PairSocket_string);
-				default:                       return (Unknown_string);
 			}
+			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

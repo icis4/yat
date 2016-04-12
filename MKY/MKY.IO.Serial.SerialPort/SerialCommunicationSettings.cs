@@ -88,7 +88,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		public SerialCommunicationSettings(MKY.Settings.SettingsType settingsType)
+		public SerialCommunicationSettings(Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

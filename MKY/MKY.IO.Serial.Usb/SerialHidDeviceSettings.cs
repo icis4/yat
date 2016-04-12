@@ -83,7 +83,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		public SerialHidDeviceSettings(MKY.Settings.SettingsType settingsType)
+		public SerialHidDeviceSettings(Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
