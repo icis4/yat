@@ -125,6 +125,8 @@ Important changes:
 - Several other menu items and toolbar icons added (includes feature request #222).
 - Parser is now capable to handle contiguous values such as \h(01020304) (related to bug #326).
 - Parser error message improved in terms of accuracy of the error location (bug #268).
+- Synchronization among outgoing and incoming data improved, preventing data mix-ups and exceptions
+  (related to feature requests #14 and #252 as well as bugs #132, #275, #292, #331, #333 and #334).
 - Handling of serial COM port RFR and DTR state improved (feature request #236 and bugs #203, #294).
 - Handling of serial COM port XOff state fixed and improved (feature req. #216 and bugs #255, #295).
 - Serial COM port software flow control options to send XOn more frequently added (feature #206).
@@ -180,7 +182,6 @@ Limitations and known issues:
 - Keyword \!(Repeat(<Item>, <Repetitions>, <Delay>)) not yet implemented (feature request #13).
 - Text terminals: Wait for answer line not yet implemented (feature request #19).
 - Breaking while sending files not possible yet (bug #305).
-- Automatic response may lead to distorted monitor content and exceptions (bugs #334 and #333).
 - Direct mode does not yet support special formats and commands (feature request #10).
 
 

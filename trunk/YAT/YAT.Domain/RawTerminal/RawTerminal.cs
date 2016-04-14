@@ -74,6 +74,7 @@ namespace YAT.Domain
 
 		private Settings.IOSettings ioSettings;
 		private IIOProvider io;
+		private object ioDataSyncObj = new object();
 
 		#endregion
 
@@ -429,13 +430,37 @@ namespace YAT.Domain
 					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
+				} */
 
 				this.txRepository.Clear();
 				this.bidirRepository.Clear();
 				this.rxRepository.Clear();
-			} // lock (this.repositorySyncObj)
+			}
+
+			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
+			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
+			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
+		}
+
+		/// <remarks>
+		/// \todo: See <see cref="ClearRepository"/> above.
+		/// </remarks>
+		public virtual void ClearRepositories()
+		{
+			AssertNotDisposed();
+
+			/* \todo:
+			call ClearRepository(RepositoryType.Tx)
+			call ClearRepository(RepositoryType.Bidir)
+			call ClearRepository(RepositoryType.Rx)
+			*/
+
+			lock (this.repositorySyncObj)
+			{
+				this.txRepository.Clear();
+				this.bidirRepository.Clear();
+				this.rxRepository.Clear();
+			}
 
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
@@ -458,22 +483,7 @@ namespace YAT.Domain
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
-
 			return (s);
-		}
-
-		/// <summary></summary>
-		public void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
-		{
-			AssertNotDisposed();
-
-			RawElement re = new RawElement(data, IODirection.Tx);
-			lock (this.repositorySyncObj)
-			{
-				this.txRepository.Enqueue(re.Clone());    // Clone elementas it is needed again below.
-				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
-			}
-			OnRawElementSent(new RawElementEventArgs(re));
 		}
 
 		#endregion
@@ -485,7 +495,7 @@ namespace YAT.Domain
 
 		private void AttachBufferSettings(Settings.BufferSettings bufferSettings)
 		{
-			if (Settings.IOSettings.ReferenceEquals(this.bufferSettings, bufferSettings))
+			if (ReferenceEquals(this.bufferSettings, bufferSettings))
 				return;
 
 			if (this.bufferSettings != null)
@@ -513,7 +523,7 @@ namespace YAT.Domain
 
 		private void AttachIOSettings(Settings.IOSettings ioSettings)
 		{
-			if (Settings.IOSettings.ReferenceEquals(this.ioSettings, ioSettings))
+			if (ReferenceEquals(this.ioSettings, ioSettings))
 				return;
 
 			if (this.ioSettings != null)
@@ -616,33 +626,39 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Note that this I/O event has a calling contract of:
 		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization or locking is required here.
+		/// Therefore, no additional synchronization to prevent race conditiond is required here.
 		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
-			lock (this.repositorySyncObj)
+			lock (this.ioDataSyncObj) // Synchronize the underlying Tx and Rx callbacks to prevent mix-ups!
 			{
-				this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
+				lock (this.repositorySyncObj)
+				{
+					this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+					this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				}
+				OnRawElementReceived(new RawElementEventArgs(re));
 			}
-			OnRawElementReceived(new RawElementEventArgs(re));
 		}
 
 		/// <remarks>
 		/// Note that this I/O event has a calling contract of:
 		///   [CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
-		/// Therefore, no additional synchronization or locking is required here.
+		/// Therefore, no additional synchronization to prevent race conditiond is required here.
 		/// </remarks>
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
-			RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
-			lock (this.repositorySyncObj)
+			lock (this.ioDataSyncObj) // Synchronize the underlying Tx and Rx callbacks to prevent mix-ups!
 			{
-				this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-				this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
+				lock (this.repositorySyncObj)
+				{
+					this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+					this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+				}
+				OnRawElementSent(new RawElementEventArgs(re));
 			}
-			OnRawElementSent(new RawElementEventArgs(re));
 		}
 
 		#endregion

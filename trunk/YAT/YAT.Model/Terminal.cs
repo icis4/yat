@@ -2117,11 +2117,13 @@ namespace YAT.Model
 								isMatch = true;
 						}
 						else
+						{
 							break; // Break the for-loop if AutoResponse got disposed in the meantime.
+						}
 					}
 				}
 
-				if (isMatch) // Invoke sending on different thread than this (typically the receive thread).
+				if (isMatch) // Invoke sending on different thread than the receive thread.
 				{
 					VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(terminal_RawElementReceived_SendAutoResponseAsync);
 					asyncInvoker.BeginInvoke(null, null);
@@ -2136,13 +2138,11 @@ namespace YAT.Model
 
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display:
 			OnDisplayElementsSent(e);
 		}
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display:
 			OnDisplayElementsReceived(e);
 		}
 
@@ -2363,18 +2363,30 @@ namespace YAT.Model
 
 		private void Send(byte[] data)
 		{
-			OnFixedStatusTextRequest("Sending " + data.Length + " bytes...");
 			try
 			{
 				this.terminal.Send(data);
 			}
 			catch (IOException ex)
 			{
-				OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
+				// \attention:
+				// Similar code can be found in functions below!
+				// Changes here may have to be applied there too!
+
+				string dataText = "";
+				if (data != null)
+				{
+					if (data.Length == 1)
+						dataText = data.Length.ToString(CultureInfo.InvariantCulture) + " byte";
+					else
+						dataText = data.Length.ToString(CultureInfo.InvariantCulture) + " bytes";
+				}
 
 				string text;
 				string title;
-				PrepareSendMessageInputRequest(out text, out title);
+				PrepareIOErrorMessageInputRequest(out text, out title);
+
+				OnFixedStatusTextRequest("Error sending " + dataText + "!");
 				OnMessageInputRequest
 				(
 					text + Environment.NewLine + Environment.NewLine +
@@ -2383,8 +2395,7 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
-				OnTimedStatusTextRequest("Data not sent!");
+				OnTimedStatusTextRequest(dataText + " not sent!");
 			}
 		}
 
@@ -2405,17 +2416,10 @@ namespace YAT.Model
 
 		private void Send(string data, bool isLine)
 		{
-			string sendStatusText;
-			if (!string.IsNullOrEmpty(data))
-				sendStatusText = @"""" + data + @"""";
-			else if (isLine)
-				sendStatusText = "EOL";
-			else
-				sendStatusText = "<Nothing>";
-
-			OnFixedStatusTextRequest("Sending " + sendStatusText + "...");
 			try
 			{
+				WriteDebugMessageLine(@"Sending """ + (!string.IsNullOrEmpty(data) ? data : "") + @"""...");
+
 				if (isLine)
 					this.terminal.SendLine(data);
 				else
@@ -2423,11 +2427,17 @@ namespace YAT.Model
 			}
 			catch (IOException ex)
 			{
-				OnFixedStatusTextRequest("Error sending " + sendStatusText + "!");
+				// \attention:
+				// Similar code can be found in functions above and below!
+				// Changes here may have to be applied there too!
+
+				string dataText = (!string.IsNullOrEmpty(data) ? @"""" + data + @"""" : "");
 
 				string text;
 				string title;
-				PrepareSendMessageInputRequest(out text, out title);
+				PrepareIOErrorMessageInputRequest(out text, out title);
+
+				OnFixedStatusTextRequest("Error sending " + dataText + "!");
 				OnMessageInputRequest
 				(
 					text + Environment.NewLine + Environment.NewLine +
@@ -2437,11 +2447,17 @@ namespace YAT.Model
 					MessageBoxIcon.Error
 				);
 
-				OnTimedStatusTextRequest("Data not sent!");
+				OnTimedStatusTextRequest(dataText + " not sent!");
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				OnFixedStatusTextRequest("Error sending " + sendStatusText + "!");
+				// \attention:
+				// Similar code can be found in functions below!
+				// Changes here may have to be applied there too!
+
+				string dataText = (!string.IsNullOrEmpty(data) ? @"""" + data + @"""" : "");
+
+				OnFixedStatusTextRequest("Error sending " + dataText + "!");
 				OnMessageInputRequest
 				(
 					"Bad data format:" + Environment.NewLine +
@@ -2450,11 +2466,11 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-				OnTimedStatusTextRequest("Data not sent!");
+				OnTimedStatusTextRequest(dataText + " not sent!");
 			}
 		}
 
-		private void PrepareSendMessageInputRequest(out string text, out string title)
+		private void PrepareIOErrorMessageInputRequest(out string text, out string title)
 		{
 			StringBuilder textBuilder = new StringBuilder();
 			StringBuilder titleBuilder = new StringBuilder();
@@ -2490,6 +2506,67 @@ namespace YAT.Model
 
 			text = textBuilder.ToString();
 			title = titleBuilder.ToString();
+		}
+
+		/// <remarks>
+		/// Required to allow sending multi-line commands in a single operation. Otherwise, using
+		/// <see cref="SendLine"/>, sending gets mixed-up because of the following sequence:
+		///  1. First line gets sent/enqueued.
+		///  2. Second line gets sent/enqueued.
+		///  3. Response to first line is received and displayed
+		///     and so on, mix-up among sent and received lines...
+		/// </remarks>
+		private void SendMultiLine(string[] multiLineText, string singleLineText)
+		{
+			try
+			{
+				WriteDebugMessageLine(@"Sending """ + (!string.IsNullOrEmpty(singleLineText) ? singleLineText : "") + @"""...");
+
+				this.terminal.SendLines(multiLineText);
+			}
+			catch (IOException ex)
+			{
+				// \attention:
+				// Similar code can be found in functions above!
+				// Changes here may have to be applied there too!
+
+				string dataText = (!string.IsNullOrEmpty(singleLineText) ? @"""" + singleLineText + @"""" : "");
+
+				string text;
+				string title;
+				PrepareIOErrorMessageInputRequest(out text, out title);
+
+				OnFixedStatusTextRequest("Error sending " + dataText + "!");
+				OnMessageInputRequest
+				(
+					text + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine + ex.Message,
+					title,
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				OnTimedStatusTextRequest(dataText + " not sent!");
+			}
+			catch (Domain.Parser.FormatException ex)
+			{
+				// \attention:
+				// Similar code can be found in functions above!
+				// Changes here may have to be applied there too!
+
+				string dataText = (!string.IsNullOrEmpty(singleLineText) ? @"""" + singleLineText + @"""" : "");
+
+				OnFixedStatusTextRequest("Error sending " + dataText + "!");
+				OnMessageInputRequest
+				(
+					"Bad data format:" + Environment.NewLine +
+					ex.Message,
+					"Format Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+				OnTimedStatusTextRequest(dataText + " not sent!");
+			}
 		}
 
 		#endregion
@@ -2566,8 +2643,7 @@ namespace YAT.Model
 				}
 				else if (c.IsMultiLineText)
 				{
-					foreach (string line in c.MultiLineText)
-						SendLine(line);
+					SendMultiLine(c.MultiLineText, c.SingleLineText);
 				}
 				else if (c.IsPartialText)
 				{
@@ -2815,7 +2891,6 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void Break()
 		{
-			OnTimedStatusTextRequest("Breaking operation...");
 			this.terminal.Break();
 		}
 
@@ -2824,7 +2899,6 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ResumeBreak()
 		{
-			OnTimedStatusTextRequest("Resuming operation...");
 			this.terminal.ResumeBreak();
 		}
 

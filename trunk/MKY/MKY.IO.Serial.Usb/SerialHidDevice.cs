@@ -571,6 +571,11 @@ namespace MKY.IO.Serial.Usb
 				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
 				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
 				{                                                              // No lock required, just checking for empty.
+					// Initially, yield to other threads before starting to read the queue, since it is very
+					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+					// Subsequently, yield to other threads to allow processing the data.
+					Thread.Sleep(TimeSpan.Zero);
+
 					// Handle XOff state:
 					if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
 					{
@@ -604,9 +609,7 @@ namespace MKY.IO.Serial.Usb
 					this.device.Send(data);
 					OnDataSent(new SerialDataSentEventArgs(data, DeviceInfo));
 
-					// Wait for the minimal time possible to allow other threads to execute and
-					// to prevent that 'DataSent' events are fired consecutively.
-					Thread.Sleep(TimeSpan.Zero);
+					// Note the Thread.Sleep(TimeSpan.Zero) above.
 				}
 			}
 
@@ -1123,6 +1126,11 @@ namespace MKY.IO.Serial.Usb
 				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
 				while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
 				{                                               // No lock required, just checking for empty.
+					// Initially, yield to other threads before starting to read the queue, since it is very
+					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+					// Subsequently, yield to other threads to allow processing the data.
+					Thread.Sleep(TimeSpan.Zero);
+
 					byte[] data;
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
@@ -1132,9 +1140,7 @@ namespace MKY.IO.Serial.Usb
 
 					OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo));
 
-					// Wait for the minimal time possible to allow other threads to execute and
-					// to prevent that 'DataReceived' events are fired consecutively.
-					Thread.Sleep(TimeSpan.Zero);
+					// Note the Thread.Sleep(TimeSpan.Zero) above.
 				}
 			}
 

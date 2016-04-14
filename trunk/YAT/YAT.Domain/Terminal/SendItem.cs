@@ -122,12 +122,6 @@ namespace YAT.Domain
 		private bool isLine;
 
 		/// <summary></summary>
-		public ParsableSendItem(string data)
-			: this(data, false)
-		{
-		}
-
-		/// <summary></summary>
 		public ParsableSendItem(string data, bool isLine)
 		{
 			this.data = data;

@@ -21,7 +21,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Contracts
 {
@@ -36,6 +35,7 @@ namespace MKY.Contracts
 	{
 		private bool isMainThread;
 		private bool isSequential;
+		private string rationale;
 
 		/// <summary>
 		/// Indicates that the function call is always performed on the main thread of the application.
@@ -63,6 +63,15 @@ namespace MKY.Contracts
 		{
 			get { return (this.isSequential); }
 			set { this.isSequential = value;  }
+		}
+
+		/// <summary>
+		/// The rationale for the calling contract.
+		/// </summary>
+		public string Rationale
+		{
+			get { return (this.rationale); }
+			set { this.rationale = value;  }
 		}
 	}
 }
