@@ -780,26 +780,60 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			Send(new RawSendItem(data));
+			// AssertNotDisposed() is called by Send() below.
+
+			DoSend(new RawSendItem(data));
 		}
 
 		/// <summary></summary>
 		public virtual void Send(string data)
 		{
-			Send(new ParsableSendItem(data));
+			// AssertNotDisposed() is called by Send() below.
+
+			DoSend(new ParsableSendItem(data, false));
 		}
 
 		/// <summary></summary>
 		public virtual void SendLine(string data)
 		{
-			Send(new ParsableSendItem(data, true));
+			// AssertNotDisposed() is called by Send() below.
+
+			DoSend(new ParsableSendItem(data, true));
+		}
+
+		/// <remarks>
+		/// Required to allow sending multi-line commands in a single operation. Otherwise, using
+		/// <see cref="SendLine"/>, sending gets mixed-up because of the following sequence:
+		///  1. First line gets sent/enqueued.
+		///  2. Second line gets sent/enqueued.
+		///  3. Response to first line is received and displayed
+		///     and so on, mix-up among sent and received lines...
+		/// </remarks>
+		public virtual void SendLines(string[] data)
+		{
+			// AssertNotDisposed() is called by Send() below.
+
+			List<ParsableSendItem> l = new List<ParsableSendItem>(data.Length);
+			foreach (string line in data)
+				l.Add(new ParsableSendItem(line, true));
+
+			DoSend(l.ToArray());
 		}
 
 		/// <remarks>
 		/// This method shall not be overridden. All send items shall be enqueued using this
 		/// method, but inheriting terminals can override <see cref="ProcessSendItem"/> instead.
 		/// </remarks>
-		protected void Send(SendItem item)
+		protected void DoSend(SendItem item)
+		{
+			DoSend(new SendItem[] { item });
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden. All send items shall be enqueued using this
+		/// method, but inheriting terminals can override <see cref="ProcessSendItem"/> instead.
+		/// </remarks>
+		protected void DoSend(IEnumerable<SendItem> items)
 		{
 			AssertNotDisposed();
 
@@ -809,31 +843,28 @@ namespace YAT.Domain
 			if (this.terminalSettings.Send.SignalXOnBeforeEachTransmission)
 				RequestSignalInputXOn();
 
-			DoSend(item);
-		}
-
-		private void DoSend(SendItem item)
-		{
 			// Enqueue the items for sending:
 			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-				this.sendQueue.Enqueue(item);
+			{
+				foreach (SendItem item in items)
+					this.sendQueue.Enqueue(item);
+			}
 
 			// Signal send thread:
 			SignalSendThreadSafely();
 		}
 
 		/// <summary>
-		/// Asynchronously manage outgoing send requests to ensure that send events are not
-		/// invoked on the same thread that triggered the send operation.
+		/// Asynchronously manage outgoing send requests to ensure that send events are not invoked
+		/// on the same thread that triggered the send operation.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
-		/// to the main application. Small chunks of sent data would generate many events in
-		/// <see cref="Send(SendItem)"/>. However, since <see cref="OnDisplayElementProcessed"/>
-		/// synchronously invokes the event, it will take some time until the send queue is checked
-		/// again. During this time, no more new events are invoked, instead, outgoing data is
-		/// buffered.
+		/// to the main application. Small chunks of sent data would generate many events. However,
+		/// since <see cref="OnDisplayElementProcessed"/> synchronously invokes the event, it will
+		/// take some time until the send queue is checked again. During this time, no more new
+		/// events are invoked, instead, outgoing data is buffered.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by <see cref="Send(SendItem)"/> method above.
+		/// Will be signaled by the DoSend() methods above.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
@@ -864,7 +895,11 @@ namespace YAT.Domain
 				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
 				while (!IsDisposed && this.sendThreadRunFlag && IsReadyToSend && (this.sendQueue.Count > 0))
 				{                                                             // No lock required, just checking for empty.
-					// Retrieve elements from queue one-by-one
+					// Initially, yield to other threads before starting to read the queue, since it is very
+					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+					// Subsequently, yield to other threads to allow processing the data.
+					Thread.Sleep(TimeSpan.Zero);
+
 					SendItem[] pendingItems;
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
@@ -879,6 +914,8 @@ namespace YAT.Domain
 
 						foreach (SendItem si in pendingItems)
 						{
+							WriteDebugMessageLine(@"Processing item """ + si.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
+
 							ProcessSendItem(si);
 
 							if (this.ioChangedEventHelper.TotalTimeLagIsAboveThreshold())
@@ -1252,40 +1289,6 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void ManuallyEnqueueRawOutgoingDataWithoutSendingIt(byte[] data)
-		{
-			AssertNotDisposed();
-
-			try
-			{
-				this.rawTerminal.ManuallyEnqueueRawOutgoingDataWithoutSendingIt(data);
-			}
-			catch (ObjectDisposedException ex)
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("ObjectDisposedException while trying to forward data to the underlying RawTerminal.");
-				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
-				sb.AppendLine();
-				DebugEx.WriteException(GetType(), ex, sb.ToString());
-			}
-			catch (ThreadAbortException ex)
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("'ThreadAbortException' while trying to forward data to the underlying RawTerminal.");
-				sb.AppendLine("This exception is ignored as it can happen during closing of the terminal or application.");
-				sb.AppendLine();
-				DebugEx.WriteException(GetType(), ex, sb.ToString());
-			}
-			catch (Exception ex)
-			{
-				string leadMessage = "Unable to prepare data for sending:";
-				DebugEx.WriteException(GetType(), ex, leadMessage);
-				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
-			}
-		}
-
 		#endregion
 
 		#region Methods > Break/Resume
@@ -1588,15 +1591,6 @@ namespace YAT.Domain
 				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 				if (x != null)
 				{
-					// Since the underlying I/O provider's 'DataSent' events are no longer used to
-					// feed the outgoing data into the repositories, outgoing XOn/XOff characters
-					// must manually be fed into the repositories. Do so before actually sending the
-					// character to ensure that it is placed before eventual data.
-					if (x.InputIsXOn)
-						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.XOnXOff.XOffByte });
-					else
-						ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.XOnXOff.XOnByte });
-
 					x.ToggleInputXOnXOff();
 
 					return (true);
@@ -1619,12 +1613,6 @@ namespace YAT.Domain
 				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 				if (x != null)
 				{
-					// Since the underlying I/O provider's 'DataSent' events are no longer used to
-					// feed the outgoing data into the repositories, outgoing XOn/XOff characters
-					// must manually be fed into the repositories. Do so before actually sending the
-					// character to ensure that it is placed before eventual data.
-					ManuallyEnqueueRawOutgoingDataWithoutSendingIt(new byte[] { MKY.IO.Serial.XOnXOff.XOnByte });
-
 					x.SignalInputXOn();
 
 					return (true);
@@ -2086,9 +2074,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			ClearRepository(RepositoryType.Tx);
-			ClearRepository(RepositoryType.Bidir);
-			ClearRepository(RepositoryType.Rx);
+			this.rawTerminal.ClearRepositories();
 		}
 
 		/// <summary></summary>
@@ -2296,7 +2282,7 @@ namespace YAT.Domain
 
 		private void AttachTerminalSettings(Settings.TerminalSettings terminalSettings)
 		{
-			if (Settings.TerminalSettings.ReferenceEquals(this.terminalSettings, terminalSettings))
+			if (ReferenceEquals(this.terminalSettings, terminalSettings))
 				return;
 
 			if (this.terminalSettings != null)
@@ -2362,22 +2348,22 @@ namespace YAT.Domain
 			}
 			else
 			{
-				if (Settings.IOSettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.IO))
+				if (ReferenceEquals(e.Inner.Source, this.terminalSettings.IO))
 				{
 					// IOSettings changed
 					ApplyIOSettings();
 				}
-				else if (Settings.BufferSettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.Buffer))
+				else if (ReferenceEquals(e.Inner.Source, this.terminalSettings.Buffer))
 				{
 					// BufferSettings changed
 					ApplyBufferSettings();
 				}
-				else if (Settings.DisplaySettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.Display))
+				else if (ReferenceEquals(e.Inner.Source, this.terminalSettings.Display))
 				{
 					// DisplaySettings changed
 					ApplyDisplaySettings();
 				}
-				else if (Settings.SendSettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.Send))
+				else if (ReferenceEquals(e.Inner.Source, this.terminalSettings.Send))
 				{
 					// SendSettings changed
 					ApplySendSettings();

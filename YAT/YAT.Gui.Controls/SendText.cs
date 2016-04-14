@@ -704,7 +704,8 @@ namespace YAT.Gui.Controls
 
 			// Prepare the button properties based on state and settings.
 			//
-			// Attention, similar code exists in the following locations:
+			// \attention:
+			// Similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 			// Changes here may have to be applied there too.

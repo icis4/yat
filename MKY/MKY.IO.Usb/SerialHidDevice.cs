@@ -955,11 +955,14 @@ namespace MKY.IO.Usb
 				// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
 				while (!IsDisposed && this.receiveThreadRunFlag && (BytesAvailable > 0))
 				{
+					// Initially, yield to other threads before starting to read the queue, since it is very
+					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+					// Subsequently, yield to other threads to allow processing the data.
+					Thread.Sleep(TimeSpan.Zero);
+
 					OnDataReceived(EventArgs.Empty);
 
-					// Wait for the minimal time possible to allow other threads to execute and
-					// to prevent that 'DataReceived' events are fired consecutively.
-					Thread.Sleep(TimeSpan.Zero);
+					// Note the Thread.Sleep(TimeSpan.Zero) above.
 				}
 			}
 

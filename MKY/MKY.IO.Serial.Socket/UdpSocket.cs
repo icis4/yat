@@ -642,6 +642,11 @@ namespace MKY.IO.Serial.Socket
 				// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
 				while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
 				{                                                              // No lock required, just checking for empty.
+					// Initially, yield to other threads before starting to read the queue, since it is very
+					// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+					// Subsequently, yield to other threads to allow processing the data.
+					Thread.Sleep(TimeSpan.Zero);
+
 					byte[] data;
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
@@ -683,9 +688,7 @@ namespace MKY.IO.Serial.Socket
 							OnIOChanged(EventArgs.Empty);
 					} // Client
 
-					// Wait for the minimal time possible to allow other threads to execute and
-					// to prevent that 'DataSent' events are fired consecutively.
-					Thread.Sleep(TimeSpan.Zero);
+					// Note the Thread.Sleep(TimeSpan.Zero) above.
 				}
 			}
 

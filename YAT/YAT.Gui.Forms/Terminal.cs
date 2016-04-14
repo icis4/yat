@@ -40,6 +40,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Settings;
@@ -493,7 +494,8 @@ namespace YAT.Gui.Forms
 
 			// Prepare the menu item properties based on state and settings.
 			//
-			// Attention, similar code exists in the following locations:
+			// \attention:
+			// Similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 			//  > YAT.Gui.Controls.SendText.SetControls()
 			// Changes here may have to be applied there too.
@@ -527,7 +529,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.TriggerSelection  != Model.Types.Trigger.None);
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.None);
 
-			// Attention, similar code exists in the following location:
+			// \attention:
+			// Similar code exists in the following location:
 			//  > YAT.Gui.Forms.Main.toolStripButton_MainTool_SetControls()
 			// Changes here may have to be applied there too.
 
@@ -1643,7 +1646,8 @@ namespace YAT.Gui.Forms
 
 			// Prepare the menu item properties based on state and settings.
 			//
-			// Attention, similar code exists in the following locations:
+			// \attention:
+			// Similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 			//  > YAT.Gui.Controls.SendText.SetControls()
 			// Changes here may have to be applied there too.
@@ -1887,7 +1891,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
-		private void send_TextCommandRequest(object sender, EventArgs e)
+		private void send_SendTextCommandRequest(object sender, EventArgs e)
 		{
 			this.terminal.SendText();
 		}
@@ -3300,6 +3304,7 @@ namespace YAT.Gui.Forms
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
 			SetTerminalControls();
@@ -3308,11 +3313,13 @@ namespace YAT.Gui.Forms
 			OnTerminalChanged(EventArgs.Empty);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOControlChanged(object sender, EventArgs e)
 		{
 			SetIOControlControls();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
 			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
@@ -3329,6 +3336,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IOCountChanged(object sender, EventArgs e)
 		{
 			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
@@ -3352,6 +3360,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_IORateChanged(object sender, EventArgs e)
 		{
 			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
@@ -3375,6 +3384,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
@@ -3420,20 +3430,21 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display elements immediately:
-			monitor_Tx.AddElements(e.Elements.Clone());    // Clone elements to ensure decoupling from event source.
+			monitor_Tx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display elements immediately:
 			monitor_Bidir.AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
-			monitor_Rx.AddElements(e.Elements.Clone());    // Clone elements to ensure decoupling from event source.
+			monitor_Rx   .AddElements(e.Elements.Clone()); // Clone elements to ensure decoupling from event source.
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
 		{
 			switch (e.Repository)
@@ -3444,6 +3455,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
 		{
 			switch (e.Repository)
@@ -3454,33 +3466,39 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
 		{
 			SetTimedStatusText(e.Text);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
 		{
 			SetFixedStatusText(e.Text);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveTerminalAsFileDialog();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
 			SetTerminalControls();
 			SelectSendTextInput();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			// Prevent multiple calls to Close().
@@ -3843,7 +3861,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
 
-					// \attention
+					// \attention:
 					// Do not modify the 'Enabled' property. Labels must always be enabled,
 					// otherwise picture get's greyed out, but it must either be green or red.
 					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
@@ -3927,7 +3945,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 
-					// \attention
+					// \attention:
 					// Do not modify the 'Enabled' property. Labels must always be enabled,
 					// otherwise picture get's greyed out, but it must either be green or red.
 					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()

@@ -38,7 +38,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Diagnostics;
+using MKY.Contracts;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
@@ -844,7 +844,8 @@ namespace YAT.Gui.Forms
 			{
 				toolStripButton_MainTool_Terminal_AutoResponse_ShowHide.Text = "Hide AutoResponse command";
 
-				// Attention, similar code exists in the following location:
+				// \attention:
+				// Similar code exists in the following location:
 				//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 				// Changes here may have to be applied there too.
 
@@ -1923,6 +1924,7 @@ namespace YAT.Gui.Forms
 		/// <remarks>
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
 			// Create terminal form and immediately show it.
@@ -1940,32 +1942,38 @@ namespace YAT.Gui.Forms
 		/// <remarks>
 		/// Terminal is removed in <see cref="terminalMdiChild_FormClosed"/> event handler.
 		/// </remarks>
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
 		{
 			// Nothing to do, see remarks above.
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
 		{
 			SetTimedStatusText(e.Text);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
 		{
 			SetFixedStatusText(e.Text);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveWorkspaceAsFileDialog();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			DetachWorkspaceEventHandlers();
@@ -1974,6 +1982,7 @@ namespace YAT.Gui.Forms
 			SetChildControls();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspaceSettingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetWorkspaceControls();

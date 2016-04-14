@@ -31,6 +31,9 @@
 	// Enable debugging of thread state:
 ////#define DEBUG_THREAD_STATE
 
+	// Enable debugging of thread state:
+////#define DEBUG_TRANSMISSION
+
 #endif // DEBUG
 
 #endregion
@@ -652,6 +655,7 @@ namespace MKY.IO.Serial.SerialPort
 
 				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				{
+					WriteDebugTransmissionMessageLine("Enqueueing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
 					foreach (byte b in data)
 					{
 						this.sendQueue.Enqueue(b);
@@ -677,6 +681,7 @@ namespace MKY.IO.Serial.SerialPort
 							}
 						}
 					} // foreach (byte b in data)
+					WriteDebugTransmissionMessageLine("...enqueueing done");
 				} // lock (this.sendQueue)
 
 				// Signal XOn/XOff change to receive thread:
@@ -719,7 +724,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
 			bool isCtsInactiveOldAndErrorHasBeenSignaled = false;
-			bool isXOffStateOldAndErrorHasBeenSignaled   = false;
+			bool   isXOffStateOldAndErrorHasBeenSignaled = false;
 			bool isUnspecifiedOldAndErrorHasBeenSignaled = false;
 
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
@@ -751,6 +756,11 @@ namespace MKY.IO.Serial.SerialPort
 					// Note that 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
 					while (!IsDisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
 					{                                                      // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
+
 						bool isWriteTimeout = false;
 						bool isOutputBreak  = false;
 						List<byte> effectiveChunkData = null;
@@ -788,11 +798,11 @@ namespace MKY.IO.Serial.SerialPort
 							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
 							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 							{
-								TrySendByte(XOnXOff.XOnByte, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+								TryWriteByteToPort(XOnXOff.XOnByte, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
 							}
 							else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
 							{
-								TrySendByte(XOnXOff.XOffByte, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+								TryWriteByteToPort(XOnXOff.XOffByte, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
 							}
 							else
 							{
@@ -817,20 +827,20 @@ namespace MKY.IO.Serial.SerialPort
 								maxChunkSize = Int32Ex.LimitToBounds(maxChunkSize, 0, remainingSizeInInterval);
 							}
 
-							TrySendChunk(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
+							TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
 						}
 
 						if ((effectiveChunkData != null) && (effectiveChunkData.Count > 0))
 						{
+							WriteDebugTransmissionMessageLine("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
+							OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), this.settings.PortId));
+							WriteDebugTransmissionMessageLine("...signaling done");
+
 							// Update the send rate with the effective chunk size:
 							if (this.settings.MaxSendRate.Enabled)
 								sendRate.Update(effectiveChunkData.Count);
 
-							OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), this.settings.PortId));
-
-							// Wait for the minimal time possible to allow other threads to execute and
-							// to prevent that 'DataSent' events are fired consecutively.
-							Thread.Sleep(TimeSpan.Zero);
+							// Note the Thread.Sleep(TimeSpan.Zero) further above.
 						}
 
 						if (isWriteTimeout) // Timeout detected while trying to call System.IO.Ports.SerialPort.Write().
@@ -863,7 +873,7 @@ namespace MKY.IO.Serial.SerialPort
 						else
 						{
 							isCtsInactiveOldAndErrorHasBeenSignaled = false;
-							isXOffStateOldAndErrorHasBeenSignaled   = false;
+							  isXOffStateOldAndErrorHasBeenSignaled = false;
 							isUnspecifiedOldAndErrorHasBeenSignaled = false;
 						}
 
@@ -879,8 +889,8 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							isOutputBreakOldAndErrorHasBeenSignaled = false;
 						}
-					}
-				}
+					} // while (dataAvailable)
+				} // while (isRunning)
 			}
 			catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
 			{
@@ -897,32 +907,37 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <remarks>
-		/// Attention, sending a whole chunk is implemented in <see cref="TrySendChunk"/> below.
+		/// Attention, sending a whole chunk is implemented in <see cref="TryWriteChunkToPort"/> below.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		private void TrySendByte(byte b, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
+		private void TryWriteByteToPort(byte b, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
 		{
 			isWriteTimeout = false;
 			isOutputBreak = false;
+			Exception unhandled = null;
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
 				this.port.RfrEnable = true;
 			}
 
-			effectiveChunkData = new List<byte>(1);
+			// Note the remark in SerialPort.Write():
+			// "If there are too many bytes in the output buffer and 'Handshake' is set to
+			//  'XOnXOff' then the 'SerialPort' object may raise a 'TimeoutException' while
+			//  it waits for the device to be ready to accept more data."
+
 			try
 			{
 				byte[] a = { b };
 
-				// Note the remark in SerialPort.Write():
-				// "If there are too many bytes in the output buffer and 'Handshake' is set to
-				//  'XOnXOff' then the 'SerialPort' object may raise a 'TimeoutException' while
-				//  it waits for the device to be ready to accept more data."
+				WriteDebugTransmissionMessageLine("Writing 1 byte to port...");
 
 				// Try to write the byte, will raise a 'TimeoutException' if not possible:
-				this.port.Write(a, 0, a.Length); // Do not lock, may take some time!
+				this.port.Write(a, 0, 1); // Do not lock, may take some time!
 
+				WriteDebugTransmissionMessageLine("...writing done");
+
+				effectiveChunkData = new List<byte>(1);
 				effectiveChunkData.Add(b);
 
 				// Ensure not to lock the queue while potentially pending in Write(), that would
@@ -930,15 +945,18 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (TimeoutException)
 			{
+				effectiveChunkData = null;
 				isWriteTimeout = true;
 			}
 			catch (InvalidOperationException)
 			{
+				effectiveChunkData = null;
 				isOutputBreak = true;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				throw; // Re-throw!
+				effectiveChunkData = null;
+				unhandled = ex;
 			}
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
@@ -946,70 +964,89 @@ namespace MKY.IO.Serial.SerialPort
 				this.port.Flush(); // Make sure that data is sent before restoring RFR.
 				this.port.RfrEnable = false;
 			}
+
+			if (unhandled != null)
+			{
+				throw (unhandled); // Re-throw unhandled exception after restoring RFR.
+			}
 		}
 
 		/// <remarks>
-		/// Attention, sending a single byte is implemented in <see cref="TrySendByte"/> above.
+		/// Attention, sending a single byte is implemented in <see cref="TryWriteByteToPort"/> above.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		private void TrySendChunk(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
+		private void TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
 		{
 			isWriteTimeout = false;
 			isOutputBreak = false;
+			Exception unhandled = null;
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
 				this.port.RfrEnable = true;
 			}
 
-			// Retrieve the chunk from the send queue. Retrieve it byte-by-byte, by first peeking
-			// and trying to write it to the output stream. If this fails, the port is either
-			// blocked by XOff or CTS, or closed. It is not possible that the write buffer is too
-			// small, as that got checked just above.
+			// Note the remark in SerialPort.Write():
+			// "If there are too many bytes in the output buffer and 'Handshake' is set to
+			//  'XOnXOff' then the 'SerialPort' object may raise a 'TimeoutException' while
+			//  it waits for the device to be ready to accept more data."
 
-			effectiveChunkData = new List<byte>(maxChunkSize);
-			for (int i = 0; (i < maxChunkSize) && (this.sendQueue.Count > 0); i++)
+			try
 			{
-				try
+				// Retrieve chunk from the send queue. Retrieve and send as a whole to improve speed.
+				// If sending fails, the port is either blocked by XOff or CTS, or closed.
+
+				byte[] a;
+				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				{
-					byte b = this.sendQueue.Peek(); // No lock required, not modifying anything.
-					byte[] a = { b };
+					a = this.sendQueue.ToArray();
+				}
 
-					// Note the remark in SerialPort.Write():
-					// "If there are too many bytes in the output buffer and 'Handshake' is set to
-					//  'XOnXOff' then the 'SerialPort' object may raise a 'TimeoutException' while
-					//  it waits for the device to be ready to accept more data."
+				int triedChunkSize = Math.Min(maxChunkSize, a.Length);
+				effectiveChunkData = new List<byte>(triedChunkSize);
 
-					// Try to write the byte, will raise a 'TimeoutException' if not possible:
-					this.port.Write(a, 0, a.Length); // Do not lock, may take some time!
+				WriteDebugTransmissionMessageLine("Writing " + triedChunkSize + " byte(s) to port...");
 
-					// Dequeue the byte to acknowlege it's gone:
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				// Try to write the byte, will raise a 'TimeoutException' if not possible:
+				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
+
+				WriteDebugTransmissionMessageLine("...writing done");
+
+				// Dequeue the chunk to acknowlege it's gone:
+				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				{
+					for (int i = 0; i < triedChunkSize; i++)
 						effectiveChunkData.Add(this.sendQueue.Dequeue());
+				}
 
-					// Ensure not to lock the queue while potentially pending in Write(), that would
-					// result in a severe performance drop because enqueuing was no longer possible.
-				}
-				catch (TimeoutException)
-				{
-					isWriteTimeout = true;
-					break; // Break and try again in the next loop.
-				}
-				catch (InvalidOperationException)
-				{
-					isOutputBreak = true;
-					break; // Break and try again in the next loop.
-				}
-				catch (Exception)
-				{
-					throw; // Re-throw!
-				}
+				// Ensure not to lock the queue while potentially pending in Write(), that would
+				// result in a severe performance drop because enqueuing was no longer possible.
+			}
+			catch (TimeoutException)
+			{
+				effectiveChunkData = null;
+				isWriteTimeout = true;
+			}
+			catch (InvalidOperationException)
+			{
+				effectiveChunkData = null;
+				isOutputBreak = true;
+			}
+			catch (Exception ex)
+			{
+				effectiveChunkData = null;
+				unhandled = ex;
 			}
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
 				this.port.Flush(); // Make sure that data is sent before restoring RFR.
 				this.port.RfrEnable = false;
+			}
+
+			if (unhandled != null)
+			{
+				throw (unhandled); // Re-throw unhandled exception after restoring RFR.
 			}
 		}
 
@@ -1592,11 +1629,12 @@ namespace MKY.IO.Serial.SerialPort
 		// Port Events
 		//==========================================================================================
 
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.DataReceived: Only one event handler can execute at a time.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
 		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
 			// If data has been received, but access to port throws exception, port has been shut
-			// down, e.g. USB to serial converter was disconnected.
+			// down, e.g. a USB to serial converter was disconnected.
 			try
 			{
 				if (IsOpen) // Ensure not to forward events during closing anymore.
@@ -1619,6 +1657,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
+						WriteDebugTransmissionMessageLine("Enqueueing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for receiving...");
 						foreach (byte b in data)
 						{
 							this.receiveQueue.Enqueue(b);
@@ -1642,6 +1681,7 @@ namespace MKY.IO.Serial.SerialPort
 								}
 							}
 						} // foreach (byte b in data)
+						WriteDebugTransmissionMessageLine("...enqueueing done");
 					} // lock (this.receiveQueue)
 
 					// Signal XOn/XOff change to send thread:
@@ -1708,6 +1748,11 @@ namespace MKY.IO.Serial.SerialPort
 					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
 					while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
 					{                                               // No lock required, just checking for empty.
+						// Initially, yield to other threads before starting to read the queue, since it is very
+						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
+						// Subsequently, yield to other threads to allow processing the data.
+						Thread.Sleep(TimeSpan.Zero);
+
 						byte[] data;
 						lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 						{
@@ -1715,11 +1760,11 @@ namespace MKY.IO.Serial.SerialPort
 							this.receiveQueue.Clear();
 						}
 
+						WriteDebugTransmissionMessageLine("Signaling " + data.Length.ToString() + " byte(s) received...");
 						OnDataReceived(new SerialDataReceivedEventArgs(data, this.settings.PortId));
+						WriteDebugTransmissionMessageLine("...signaling done");
 
-						// Wait for the minimal time possible to allow other threads to execute and
-						// to prevent that 'DataReceived' events are fired consecutively.
-						Thread.Sleep(TimeSpan.Zero);
+						// Note the Thread.Sleep(TimeSpan.Zero) above.
 					}
 				}
 			}
@@ -1761,6 +1806,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		private delegate void port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
 
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.PinChanged: Only one event handler can execute at a time.")]
 		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
@@ -1818,6 +1864,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		private delegate void port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
 
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.ErrorReceived: Only one event handler can execute at a time.")]
 		private void port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
@@ -2114,6 +2161,12 @@ namespace MKY.IO.Serial.SerialPort
 
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void WriteDebugThreadStateMessageLine(string message)
+		{
+			WriteDebugMessageLine(message);
+		}
+
+		[Conditional("DEBUG_TRANSMISSION")]
+		private void WriteDebugTransmissionMessageLine(string message)
 		{
 			WriteDebugMessageLine(message);
 		}

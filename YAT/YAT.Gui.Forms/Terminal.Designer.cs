@@ -2639,7 +2639,7 @@
 			this.send.TabIndex = 0;
 			this.send.TextCommandChanged += new System.EventHandler(this.send_TextCommandChanged);
 			this.send.EditFocusStateChanged += new System.EventHandler(this.send_EditFocusStateChanged);
-			this.send.SendTextCommandRequest += new System.EventHandler(this.send_TextCommandRequest);
+			this.send.SendTextCommandRequest += new System.EventHandler(this.send_SendTextCommandRequest);
 			this.send.FileCommandChanged += new System.EventHandler(this.send_FileCommandChanged);
 			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
 			this.send.SizeChanged += new System.EventHandler(this.send_SizeChanged);
