@@ -74,11 +74,13 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Any_string          = "any";   // Backward compatibility.
-		private const string Any_stringNice      = "<Any>"; // Nicer readable presentation.
+		private const string Any_string          = "[Any]";
+		private const string Any_stringOld2      = "<Any>"; // Backward compatibility.
+		private const string Any_stringOld1      =  "any";  // Backward compatibility.
 
-		private const string Loopback_string     = "loopback";   // Backward compatibility.
-		private const string Loopback_stringNice = "<Loopback>"; // Nicer readable presentation.
+		private const string Loopback_string     = "[Loopback]";
+		private const string Loopback_stringOld2 = "<Loopback>"; // Backward compatibility.
+		private const string Loopback_stringOld1 =  "loopback";  // Backward compatibility.
 
 		private const string IPv4Any_string      = "IPv4 any";
 		private const string IPv4Loopback_string = "IPv4 loopback";
@@ -194,8 +196,8 @@ namespace MKY.Net
 		{
 			switch ((IPNetworkInterfaceType)UnderlyingEnum)
 			{
-				case IPNetworkInterfaceType.Any:          return (Any_stringNice);
-				case IPNetworkInterfaceType.Loopback:     return (Loopback_stringNice);
+				case IPNetworkInterfaceType.Any:          return (Any_string);
+				case IPNetworkInterfaceType.Loopback:     return (Loopback_string);
 				case IPNetworkInterfaceType.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
 				case IPNetworkInterfaceType.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
 				case IPNetworkInterfaceType.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
@@ -267,13 +269,15 @@ namespace MKY.Net
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringNice))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld2) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld1))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Loopback_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringNice))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringOld2) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringOld1))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.Loopback);
 				return (true);

@@ -74,10 +74,13 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Any_string           = "any";   // Backward compatibility.
-		private const string Any_stringNice       = "<Any>"; // Nicer readable presentation.
-		private const string Localhost_string     = "localhost";   // Backward compatibility.
-		private const string Localhost_stringNice = "<Localhost>"; // Nicer readable presentation.
+		private const string Any_string           = "[Any]";
+		private const string Any_stringOld2       = "<Any>"; // Backward compatibility.
+		private const string Any_stringOld1       =  "any";  // Backward compatibility.
+
+		private const string Localhost_string     = "[Localhost]";
+		private const string Localhost_stringOld2 = "<Localhost>"; // Backward compatibility.
+		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
 
 		private const string IPv4Any_string       = "IPv4 any";
 		private const string IPv4Localhost_string = "IPv4 localhost";
@@ -190,8 +193,8 @@ namespace MKY.Net
 		{
 			switch ((IPAddressFilterType)UnderlyingEnum)
 			{
-				case IPAddressFilterType.Any:           return (Any_stringNice);
-				case IPAddressFilterType.Localhost:     return (Localhost_stringNice);
+				case IPAddressFilterType.Any:           return (Any_string);
+				case IPAddressFilterType.Localhost:     return (Localhost_string);
 				case IPAddressFilterType.IPv4Any:       return (IPv4Any_string       + " (" + IPAddress.Any + ")");
 				case IPAddressFilterType.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
 				case IPAddressFilterType.IPv6Any:       return (IPv6Any_string       + " (" + IPAddress.IPv6Any + ")");
@@ -243,13 +246,15 @@ namespace MKY.Net
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringNice))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld1) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld2))
 			{
 				result = new IPAddressFilter(IPAddressFilterType.Any);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2))
 			{
 				result = new IPAddressFilter(IPAddressFilterType.Localhost);
 				return (true);
