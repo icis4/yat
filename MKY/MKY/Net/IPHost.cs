@@ -67,8 +67,9 @@ namespace MKY.Net
 	{
 		#region String Definitions
 
-		private const string Localhost_string     = "localhost";   // Backward compatibility.
-		private const string Localhost_stringNice = "<Localhost>"; // Nicer readable presentation.
+		private const string Localhost_string     = "[Localhost]";
+		private const string Localhost_stringOld2 = "<Localhost>"; // Backward compatibility.
+		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
 
 		private const string IPv4Localhost_string = "IPv4 localhost";
 		private const string IPv6Localhost_string = "IPv6 localhost";
@@ -191,7 +192,7 @@ namespace MKY.Net
 		{
 			switch ((IPHostType)UnderlyingEnum)
 			{
-				case IPHostType.Localhost:     return (Localhost_stringNice);
+				case IPHostType.Localhost:     return (Localhost_string);
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
 				case IPHostType.Other:         return (this.otherAddress.ToString());
@@ -218,7 +219,7 @@ namespace MKY.Net
 		{
 			switch ((IPHostType)UnderlyingEnum)
 			{
-				case IPHostType.Localhost:     return (Localhost_stringNice);
+				case IPHostType.Localhost:     return (Localhost_string);
 				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
 				case IPHostType.Other:         return (ToUrlString(this.otherAddress.ToString()));
@@ -318,7 +319,8 @@ namespace MKY.Net
 			s = s.Trim();
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
-			        (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringNice)))
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1))
 			{
 				result = new IPHost(IPHostType.Localhost);
 				return (true);

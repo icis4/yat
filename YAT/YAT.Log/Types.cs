@@ -101,21 +101,21 @@ namespace YAT.Log
 	{
 		#region String Definitions
 
-		private const string Underscore_string          = "_";
-		private const string Underscore_description     = "Underscore (_)";
+		private const string Underscore_stringSeparator       = "_";
+		private const string Underscore_stringDescription     = "Underscore (_)";
 
-		private const string Dash_string                = "-";
-		private const string Dash_description           = "Dash (-)";
-		private const string DashWithSpaces_string      = " - ";
-		private const string DashWithSpaces_description = "Dash with spaces ( - )";
+		private const string Dash_stringSeparator             = "-";
+		private const string Dash_stringDescription           = "Dash (-)";
+		private const string DashWithSpaces_stringSeparator   = " - ";
+		private const string DashWithSpaces_stringDescription = "Dash with spaces ( - )";
 
-		private const string Ball_string                = "°";
-		private const string Ball_description           = "Ball (°)";
-		private const string BallWithSpaces_string      = " ° ";
-		private const string BallWithSpaces_description = "Ball with spaces ( ° )";
+		private const string Ball_stringSeparator             = "°";
+		private const string Ball_stringDescription           = "Ball (°)";
+		private const string BallWithSpaces_stringSeparator   = " ° ";
+		private const string BallWithSpaces_stringDescription = "Ball with spaces ( ° )";
 
-		private const string None_string                = "";
-		private const string None_description           = "None";
+		private const string None_stringSeparator             = "";
+		private const string None_stringDescription           = "[None]";
 
 		#endregion
 
@@ -209,27 +209,27 @@ namespace YAT.Log
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator Underscore = new FileNameSeparator(Underscore_string, Underscore_description);
+		public static readonly FileNameSeparator Underscore = new FileNameSeparator(Underscore_stringSeparator, Underscore_stringDescription);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator Dash = new FileNameSeparator(Dash_string, Dash_description);
+		public static readonly FileNameSeparator Dash = new FileNameSeparator(Dash_stringSeparator, Dash_stringDescription);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(DashWithSpaces_string, DashWithSpaces_description);
+		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(DashWithSpaces_stringSeparator, DashWithSpaces_stringDescription);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator Ball = new FileNameSeparator(Ball_string, Ball_description);
+		public static readonly FileNameSeparator Ball = new FileNameSeparator(Ball_stringSeparator, Ball_stringDescription);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(BallWithSpaces_string, BallWithSpaces_description);
+		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(BallWithSpaces_stringSeparator, BallWithSpaces_stringDescription);
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "OK for the moment, should be replaced by an XEnum anyway.")]
-		public static readonly FileNameSeparator None = new FileNameSeparator(None_string, None_description);
+		public static readonly FileNameSeparator None = new FileNameSeparator(None_stringSeparator, None_stringDescription);
 
 		/// <summary></summary>
 		public static ReadOnlyCollection<FileNameSeparator> Items
@@ -264,13 +264,13 @@ namespace YAT.Log
 		{
 			switch (description)
 			{
-				case Underscore_description:     return (Underscore);
-				case Dash_description:           return (Dash);
-				case DashWithSpaces_description: return (DashWithSpaces);
-				case Ball_description:           return (Ball);
-				case BallWithSpaces_description: return (BallWithSpaces);
-				case None_description:           return (None);
-				default:                         return (new FileNameSeparator(description, description));
+				case     Underscore_stringDescription: return (Underscore);
+				case           Dash_stringDescription: return (Dash);
+				case DashWithSpaces_stringDescription: return (DashWithSpaces);
+				case           Ball_stringDescription: return (Ball);
+				case BallWithSpaces_stringDescription: return (BallWithSpaces);
+				case           None_stringDescription: return (None);
+				default:                               return (new FileNameSeparator(description, description));
 			}
 		}
 
@@ -299,38 +299,38 @@ namespace YAT.Log
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_description))
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringDescription))
 			{
 				result = Underscore;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_description))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Dash_stringDescription))
 			{
 				result = Dash;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_description))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, DashWithSpaces_stringDescription))
 			{
 				result = DashWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_description))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Ball_stringDescription))
 			{
 				result = Ball;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_description))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, BallWithSpaces_stringDescription))
 			{
 				result = BallWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_description) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription) ||
 			         string.IsNullOrEmpty(s)) // Default!
 			{
 				result = None;

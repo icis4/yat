@@ -77,7 +77,7 @@ namespace MKY.IO.Usb
 	{
 		#region String Definitions
 
-		private const string             None_string      =   "<No preset selected>";
+		private const string             None_string      =   "[No preset selected]";
 		private static readonly string[] None_stringStart = { "No", "<No" }; // Covers "None", "<None"
 
 		private const string             Plain_string      =   "Plain = Payload only";

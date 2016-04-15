@@ -71,7 +71,8 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string None_string = "None";
+		private const string None_stringNice = "[None]";
+		private const string None_stringOld1 =  "None";
 		private const string None_stringSequence = "";
 
 		private const string Cr_stringSequence = "<CR>";
@@ -92,7 +93,8 @@ namespace YAT.Domain
 		private const string Tab_stringSequence = "<TAB>";
 		private const string Tab_stringNative = "\t";
 		
-		private const string Space_string = "Space";
+		private const string Space_stringNice = "[Space]";
+		private const string Space_stringOld1 =  "Space";
 		private const string Space_stringSequence = " ";
 		
 		#endregion
@@ -117,14 +119,14 @@ namespace YAT.Domain
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None:  return (None_string);
+				case Eol.None:  return (None_stringNice);
 				case Eol.Cr:    return (Cr_stringSequence);
 				case Eol.Lf:    return (Lf_stringSequence);
 				case Eol.CrLf:  return (CrLf_stringSequence);
 				case Eol.LfCr:  return (LfCr_stringSequence);
 				case Eol.Nul:   return (Nul_stringSequence);
 				case Eol.Tab:   return (Tab_stringSequence);
-				case Eol.Space: return (Space_string);
+				case Eol.Space: return (Space_stringNice);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -210,7 +212,8 @@ namespace YAT.Domain
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string) ||
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_stringNice) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringOld1) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringSequence))
 			{
 				result = Eol.None;
@@ -252,7 +255,8 @@ namespace YAT.Domain
 				result = Eol.Tab;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_string) ||
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Space_stringNice) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringOld1) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringSequence))
 			{
 				result = Eol.Space;
