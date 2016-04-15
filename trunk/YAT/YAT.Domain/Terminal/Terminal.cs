@@ -50,8 +50,8 @@ using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Contracts;
 using MKY.Diagnostics;
-using MKY.Windows.Forms;
 
 #endregion
 
@@ -871,7 +871,7 @@ namespace YAT.Domain
 		{
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
-			// Outer loop, requires another signal.
+			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
@@ -936,8 +936,8 @@ namespace YAT.Domain
 						if (this.ioChangedEventHelper.EventMustBeRaised)
 							OnIOChanged(EventArgs.Empty); // Again raise the event to indicate that
 					}                                     //   sending is no longer ongoing.
-				}
-			}
+				} // Inner loop
+			} // Outer loop
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
@@ -1717,7 +1717,7 @@ namespace YAT.Domain
 				{
 					Monitor.Exit(periodicXOnTimer_Elapsed_SyncObj);
 				}
-			}
+			} // Monitor.TryEnter()
 		}
 
 		#endregion
@@ -2438,12 +2438,14 @@ namespace YAT.Domain
 			}
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawElementReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
 		{
 			OnRawElementSent(e);
 			ProcessAndSignalRawElement(e.Element);
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawElementSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
 		{
 			OnRawElementReceived(e);

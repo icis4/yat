@@ -529,7 +529,7 @@ namespace YAT.Model
 				{
 					Monitor.Exit(settingsRoot_Changed_SyncObj);
 				}
-			}
+			} // Monitor.TryEnter()
 		}
 
 		#endregion

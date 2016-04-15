@@ -377,7 +377,7 @@ namespace MKY.Time
 				{
 					Monitor.Exit(timer_Elapsed_SyncObj);
 				}
-			}
+			} // Monitor.TryEnter()
 		}
 
 		#endregion

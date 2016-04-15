@@ -1677,7 +1677,7 @@ namespace YAT.Model
 				{
 					Monitor.Exit(operationTimer_Elapsed_SyncObj);
 				}
-			}
+			} // Monitor.TryEnter()
 		}
 
 		private void CreateAndStartExitTimerIfNeeded(bool operationSuccess)
@@ -1771,7 +1771,7 @@ namespace YAT.Model
 				{
 					Monitor.Exit(exitTimer_Elapsed_SyncObj);
 				}
-			}
+			} // Monitor.TryEnter()
 		}
 
 		#endregion

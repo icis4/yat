@@ -119,6 +119,7 @@ namespace MKY.IO.Serial.Socket
 
 		private System.Net.Sockets.UdpClient socket;
 		private object socketSyncObj = new object();
+		private object dataEventSyncObj = new object();
 
 		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
@@ -618,7 +619,7 @@ namespace MKY.IO.Serial.Socket
 
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
-			// Outer loop, requires another signal.
+			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
@@ -647,27 +648,46 @@ namespace MKY.IO.Serial.Socket
 					// Subsequently, yield to other threads to allow processing the data.
 					Thread.Sleep(TimeSpan.Zero);
 
-					byte[] data;
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-					{
-						data = this.sendQueue.ToArray();
-						this.sendQueue.Clear();
-					}
+					// Synchronize the send/receive events to prevent mix-ups at the event
+					// sinks, i.e. the send/receive operations shall be synchronized with
+					// signaling of them.
+					// But attention, do not simply lock() the 'dataSyncObj'. Instead, just
+					// try to get the lock or try again later. The thread = direction that
+					// get's the lock first, shall also be the one to signal first:
 
-					if ((this.socketType == UdpSocketType.Client) ||
-						(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
+					if (Monitor.TryEnter(this.dataEventSyncObj))
 					{
-						this.socket.Send(data, data.Length);
-					}
-					else // Server => Remote endpoint is the sender of the last received data.
-					{
-						lock (this.socketSyncObj)
-							remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+						try
+						{
+							byte[] data;
+							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								data = this.sendQueue.ToArray();
+								this.sendQueue.Clear();
+							}
 
-						this.socket.Send(data, data.Length, remoteEndPoint);
-					}
+							if ((this.socketType == UdpSocketType.Client) ||
+								(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
+							{
+								this.socket.Send(data, data.Length);
+							}
+							else // Server => Remote endpoint is the sender of the last received data.
+							{
+								lock (this.socketSyncObj)
+									remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
 
-					OnDataSent(new SocketDataSentEventArgs(new ReadOnlyCollection<byte>(data), remoteEndPoint));
+								this.socket.Send(data, data.Length, remoteEndPoint);
+							}
+
+							OnDataSent(new SocketDataSentEventArgs(new ReadOnlyCollection<byte>(data), remoteEndPoint));
+
+							// Note the Thread.Sleep(TimeSpan.Zero) above.
+						}
+						finally
+						{
+							Monitor.Exit(this.dataEventSyncObj);
+						}
+					} // Monitor.TryEnter()
 
 					if (this.socketType == UdpSocketType.Client)
 					{
@@ -687,10 +707,8 @@ namespace MKY.IO.Serial.Socket
 						if (hasChanged)
 							OnIOChanged(EventArgs.Empty);
 					} // Client
-
-					// Note the Thread.Sleep(TimeSpan.Zero) above.
-				}
-			}
+				} // Inner loop
+			} // Outer loop
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
@@ -891,67 +909,77 @@ namespace MKY.IO.Serial.Socket
 			// Ensure that async receive is discarded after close/dispose.
 			if (!IsDisposed && (state.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
 			{
-				System.Net.IPEndPoint remoteEndPoint = state.LocalFilterEndPoint;
-				byte[] data;
-				try
+				if (Monitor.TryEnter(this.dataEventSyncObj))
 				{
-					data = state.Socket.EndReceive(ar, ref remoteEndPoint);
-				}
-				catch (System.Net.Sockets.SocketException ex)
-				{
-					data = null;
-					SocketError();
-					OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
-				}
-
-				if (data != null)
-				{
-					if (this.socketType == UdpSocketType.Server)
+					try
 					{
-						// Set the remote end point to the sender of the last received data, depending on send mode:
-
-						bool hasChanged = false;
-
-						lock (this.socketSyncObj)
+						System.Net.IPEndPoint remoteEndPoint = state.LocalFilterEndPoint;
+						byte[] data;
+						try
 						{
-							bool updateRemoteEndPoint = false;
-
-							switch (this.serverSendMode)
-							{
-								case UdpServerSendMode.None:                                                               /* Do nothing. */           break;
-								case UdpServerSendMode.First:      if (this.remoteIPAddress == System.Net.IPAddress.None) updateRemoteEndPoint = true; break;
-								case UdpServerSendMode.MostRecent:                                                        updateRemoteEndPoint = true; break;
-								default: throw (new InvalidOperationException("Program execution should never get here,'" + this.serverSendMode.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							}
-
-							if (updateRemoteEndPoint)
-							{
-								if (this.remoteIPAddress != remoteEndPoint.Address) {
-									this.remoteIPAddress = remoteEndPoint.Address;
-									hasChanged = true;
-								}
-
-								if (this.remotePort != remoteEndPoint.Port) {
-									this.remotePort = remoteEndPoint.Port;
-									hasChanged = true;
-								}
-							}
+							data = state.Socket.EndReceive(ar, ref remoteEndPoint);
+						}
+						catch (System.Net.Sockets.SocketException ex)
+						{
+							data = null;
+							SocketError();
+							OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, ex.Message));
 						}
 
-						if (hasChanged)
-							OnIOChanged(EventArgs.Empty);
-					} // Server
+						if (data != null)
+						{
+							if (this.socketType == UdpSocketType.Server)
+							{
+								// Set the remote end point to the sender of the last received data, depending on send mode:
 
-					// This receive callback is always asychronous, thus the event handler can
-					// be called directly. It is also ensured that the event handler is called
-					// sequential because the 'BeginReceive()' method is only called after
-					// the event handler has returned.
-					OnDataReceived(new SocketDataReceivedEventArgs(data, remoteEndPoint));
+								bool hasChanged = false;
 
-					// Continue receiving data:
-					BeginReceiveIfEnabled();
-				}
-			}
+								lock (this.socketSyncObj)
+								{
+									bool updateRemoteEndPoint = false;
+
+									switch (this.serverSendMode)
+									{
+										case UdpServerSendMode.None:                                                               /* Do nothing. */           break;
+										case UdpServerSendMode.First:      if (this.remoteIPAddress == System.Net.IPAddress.None) updateRemoteEndPoint = true; break;
+										case UdpServerSendMode.MostRecent:                                                        updateRemoteEndPoint = true; break;
+										default: throw (new InvalidOperationException("Program execution should never get here,'" + this.serverSendMode.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+									}
+
+									if (updateRemoteEndPoint)
+									{
+										if (this.remoteIPAddress != remoteEndPoint.Address) {
+											this.remoteIPAddress = remoteEndPoint.Address;
+											hasChanged = true;
+										}
+
+										if (this.remotePort != remoteEndPoint.Port) {
+											this.remotePort = remoteEndPoint.Port;
+											hasChanged = true;
+										}
+									}
+								}
+
+								if (hasChanged)
+									OnIOChanged(EventArgs.Empty);
+							} // Server
+
+							// This receive callback is always asychronous, thus the event handler can
+							// be called directly. It is also ensured that the event handler is called
+							// sequential because the 'BeginReceive()' method is only called after
+							// the event handler has returned.
+							OnDataReceived(new SocketDataReceivedEventArgs(data, remoteEndPoint));
+
+							// Continue receiving data:
+							BeginReceiveIfEnabled();
+						}
+					}
+					finally
+					{
+						Monitor.Exit(this.dataEventSyncObj);
+					}
+				} // Monitor.TryEnter()
+			} // if (!IsDisposed && ...)
 		}
 
 		private void SocketError()

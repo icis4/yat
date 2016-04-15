@@ -38,9 +38,9 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.IO;
-using MKY.Net;
 using MKY.Recent;
 using MKY.Settings;
 using MKY.Text;
@@ -2063,6 +2063,7 @@ namespace YAT.Model
 			OnIOError(e);
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawElementReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
 		{
 			OnTimedStatusTextRequest("Sending...");
@@ -2083,6 +2084,7 @@ namespace YAT.Model
 			}
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawElementSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
 		{
 			OnTimedStatusTextRequest("Receiving...");
@@ -2136,16 +2138,19 @@ namespace YAT.Model
 			SendAutoResponse();
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			OnDisplayElementsSent(e);
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			OnDisplayElementsReceived(e);
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			// Count:
@@ -2170,6 +2175,7 @@ namespace YAT.Model
 			}
 		}
 
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			// Count:
