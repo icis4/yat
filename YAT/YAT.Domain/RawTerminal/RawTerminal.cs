@@ -58,6 +58,15 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -630,16 +639,32 @@ namespace YAT.Domain
 		/// </remarks>
 		private void io_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			lock (this.ioDataSyncObj) // Synchronize the underlying Tx and Rx callbacks to prevent mix-ups!
+			// Synchronize the underlying Tx and Rx callbacks to prevent mix-ups. But attention,
+			// do not simply lock() the 'ioDataSyncObj'. Instead, try to get the lock periodically,
+			// but quit = discard the event as soon as the object got disposed of:
+
+			while (!IsDisposed)
 			{
-				RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
-				lock (this.repositorySyncObj)
+				if (Monitor.TryEnter(this.ioDataSyncObj, staticRandom.Next(50, 200)))
 				{
-					this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-					this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
-				}
-				OnRawElementReceived(new RawElementEventArgs(re));
-			}
+					try
+					{
+						RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
+						lock (this.repositorySyncObj)
+						{
+							this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+						}
+						OnRawElementReceived(new RawElementEventArgs(re));
+					}
+					finally
+					{
+						Monitor.Exit(this.ioDataSyncObj);
+					}
+
+					break; // Successfully entered the lock and processed the event => break the while-loop.
+				} // Monitor.TryEnter()
+			} // while (!IsDisposed)
 		}
 
 		/// <remarks>
@@ -649,16 +674,32 @@ namespace YAT.Domain
 		/// </remarks>
 		private void io_DataSent(object sender, DataSentEventArgs e)
 		{
-			lock (this.ioDataSyncObj) // Synchronize the underlying Tx and Rx callbacks to prevent mix-ups!
+			// Synchronize the underlying Tx and Rx callbacks to prevent mix-ups. But attention,
+			// do not simply lock() the 'ioDataSyncObj'. Instead, try to get the lock periodically,
+			// but quit = discard the event as soon as the object got disposed of:
+
+			while (!IsDisposed)
 			{
-				RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
-				lock (this.repositorySyncObj)
+				if (Monitor.TryEnter(this.ioDataSyncObj, staticRandom.Next(50, 200)))
 				{
-					this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
-					this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
-				}
-				OnRawElementSent(new RawElementEventArgs(re));
-			}
+					try
+					{
+						RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
+						lock (this.repositorySyncObj)
+						{
+							this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
+							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
+						}
+						OnRawElementSent(new RawElementEventArgs(re));
+					}
+					finally
+					{
+						Monitor.Exit(this.ioDataSyncObj);
+					}
+
+					break; // Successfully entered the lock and processed the event => break the while-loop.
+				} // Monitor.TryEnter()
+			} // while (!IsDisposed)
 		}
 
 		#endregion

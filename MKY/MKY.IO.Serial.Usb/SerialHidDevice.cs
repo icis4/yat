@@ -91,6 +91,7 @@ namespace MKY.IO.Serial.Usb
 
 		private IO.Usb.SerialHidDevice device;
 		private object deviceSyncObj = new object();
+		private object dataEventSyncObj = new object();
 
 		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
@@ -547,7 +548,7 @@ namespace MKY.IO.Serial.Usb
 
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
-			// Outer loop, requires another signal.
+			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
@@ -582,8 +583,20 @@ namespace MKY.IO.Serial.Usb
 						// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
 						// Changes here must most likely be applied there too.
 
-						byte b = this.sendQueue.Peek(); // No lock required, not modifying anything.
-						if ((b != XOnXOff.XOnByte) && (b != XOnXOff.XOffByte))
+						// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
+						if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
+						{
+							this.device.Send(XOnXOff.XOnByte);
+							OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOnByte, DeviceInfo)); // Skip I/O synchronization for simplicity.
+							break; // Let other threads do their job and wait until signaled again.
+						}
+						else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
+						{
+							this.device.Send(XOnXOff.XOffByte);
+							OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOffByte, DeviceInfo)); // Skip I/O synchronization for simplicity.
+							break; // Let other threads do their job and wait until signaled again.
+						}
+						else
 						{
 							if (!isXOffStateOldAndErrorHasBeenSignaled)
 							{
@@ -597,21 +610,38 @@ namespace MKY.IO.Serial.Usb
 						// Control bytes must be sent even in case of XOff!
 					}
 
-					// --- No XOff, ready to send: ---
+					// --- No XOff state, ready to send: ---
 
-					byte[] data;
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					// Synchronize the send/receive events to prevent mix-ups at the event
+					// sinks, i.e. the send/receive operations shall be synchronized with
+					// signaling of them.
+					// But attention, do not simply lock() the 'dataSyncObj'. Instead, just
+					// try to get the lock or try again later. The thread = direction that
+					// get's the lock first, shall also be the one to signal first:
+
+					if (Monitor.TryEnter(this.dataEventSyncObj))
 					{
-						data = this.sendQueue.ToArray();
-						this.sendQueue.Clear();
-					}
+						try
+						{
+							byte[] data;
+							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								data = this.sendQueue.ToArray();
+								this.sendQueue.Clear();
+							}
 
-					this.device.Send(data);
-					OnDataSent(new SerialDataSentEventArgs(data, DeviceInfo));
+							this.device.Send(data);
+							OnDataSent(new SerialDataSentEventArgs(data, DeviceInfo));
 
-					// Note the Thread.Sleep(TimeSpan.Zero) above.
-				}
-			}
+							// Note the Thread.Sleep(TimeSpan.Zero) above.
+						}
+						finally
+						{
+							Monitor.Exit(this.dataEventSyncObj);
+						}
+					} // Monitor.TryEnter()
+				} // Inner loop
+			} // Outer loop
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
@@ -1102,7 +1132,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
-			// Outer loop, requires another signal.
+			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
@@ -1131,17 +1161,27 @@ namespace MKY.IO.Serial.Usb
 					// Subsequently, yield to other threads to allow processing the data.
 					Thread.Sleep(TimeSpan.Zero);
 
-					byte[] data;
-					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+					if (Monitor.TryEnter(this.dataEventSyncObj))
 					{
-						data = this.receiveQueue.ToArray();
-						this.receiveQueue.Clear();
-					}
+						try
+						{
+							byte[] data;
+							lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								data = this.receiveQueue.ToArray();
+								this.receiveQueue.Clear();
+							}
 
-					OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo));
+							OnDataReceived(new SerialDataReceivedEventArgs(data, DeviceInfo));
 
-					// Note the Thread.Sleep(TimeSpan.Zero) above.
-				}
+							// Note the Thread.Sleep(TimeSpan.Zero) above.
+						}
+						finally
+						{
+							Monitor.Exit(this.dataEventSyncObj);
+						}
+					} // Monitor.TryEnter()
+				} // while (!IsDisposed && ...)
 			}
 
 			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");

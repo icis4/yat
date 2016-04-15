@@ -30,11 +30,13 @@ namespace MKY.Contracts
 	/// <remarks>
 	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
-	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Event | AttributeTargets.Delegate)]
+	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Event | AttributeTargets.Delegate, AllowMultiple = true)]
 	public sealed class CallingContractAttribute : Attribute
 	{
-		private bool isMainThread;
-		private bool isSequential;
+		private bool isAlwaysMainThread;
+		private bool isNeverMainThread;
+		private bool isAlwaysSequential;
+		private string isAlwaysSequentialIncluding;
 		private string rationale;
 
 		/// <summary>
@@ -42,8 +44,12 @@ namespace MKY.Contracts
 		/// </summary>
 		public bool IsAlwaysMainThread
 		{
-			get { return (this.isMainThread); }
-			set { this.isMainThread = value;  }
+			get { return (this.isAlwaysMainThread); }
+			set
+			{
+				this.isAlwaysMainThread =  value;
+				this.isNeverMainThread  = !value;
+			}
 		}
 
 		/// <summary>
@@ -51,8 +57,12 @@ namespace MKY.Contracts
 		/// </summary>
 		public bool IsNeverMainThread
 		{
-			get { return (!this.isMainThread); }
-			set { this.isMainThread = !value;  }
+			get { return (this.isNeverMainThread); }
+			set
+			{
+				this.isAlwaysMainThread = !value;
+				this.isNeverMainThread  =  value;
+			}
 		}
 
 		/// <summary>
@@ -61,8 +71,23 @@ namespace MKY.Contracts
 		/// </summary>
 		public bool IsAlwaysSequential
 		{
-			get { return (this.isSequential); }
-			set { this.isSequential = value;  }
+			get { return (this.isAlwaysSequential); }
+			set { this.isAlwaysSequential = value;  }
+		}
+
+		/// <summary>
+		/// Indicates that the function call is always performed sequential, that is the caller
+		/// ensures that no race condition may occur, and the call is also sequentially synchronized
+		/// with the given delegate.
+		/// </summary>
+		public string IsAlwaysSequentialIncluding
+		{
+			get { return (this.isAlwaysSequentialIncluding); }
+			set
+			{
+				this.isAlwaysSequential = true;
+				this.isAlwaysSequentialIncluding = value;
+			}
 		}
 
 		/// <summary>

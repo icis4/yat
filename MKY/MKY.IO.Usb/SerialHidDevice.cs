@@ -674,7 +674,7 @@ namespace MKY.IO.Usb
 		/// Receives data from the device into a receive buffer.
 		/// </summary>
 		/// <param name="data">
-		/// An array of type System.Byte that is the storage location for the received data.
+		/// An array of type <see cref="Byte"/> that is the storage location for the received data.
 		/// </param>
 		/// <returns>The number of bytes received.</returns>
 		public virtual int Receive(out byte[] data)
@@ -705,7 +705,18 @@ namespace MKY.IO.Usb
 		/// Sends data to the device.
 		/// </summary>
 		/// <param name="data">
-		/// An array of type System.Byte that contains the data to be sent.
+		/// An item of type <see cref="Byte"/> that contains the data to be sent.
+		/// </param>
+		public virtual void Send(byte data)
+		{
+			Send(new byte[] { data });
+		}
+
+		/// <summary>
+		/// Sends data to the device.
+		/// </summary>
+		/// <param name="data">
+		/// An array of type <see cref="Byte"/> that contains the data to be sent.
 		/// </param>
 		public virtual void Send(byte[] data)
 		{
@@ -931,7 +942,7 @@ namespace MKY.IO.Usb
 		{
 			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
 
-			// Outer loop, requires another signal.
+			// Outer loop, processes data after a signal was received:
 			while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
 			{
 				try
@@ -963,8 +974,8 @@ namespace MKY.IO.Usb
 					OnDataReceived(EventArgs.Empty);
 
 					// Note the Thread.Sleep(TimeSpan.Zero) above.
-				}
-			}
+				} // Inner loop
+			} // Outer loop
 
 			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
 		}

@@ -799,7 +799,7 @@ namespace MKY.IO.Serial.Socket
 
 			WriteDebugThreadStateMessageLine("SendThread() has started.");
 
-			// Outer loop, requires another signal.
+			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
 			{
 				try
@@ -838,8 +838,8 @@ namespace MKY.IO.Serial.Socket
 					OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
 
 					// Note the Thread.Sleep(TimeSpan.Zero) above.
-				}
-			}
+				} // Inner loop
+			} // Outer loop
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
 		}
