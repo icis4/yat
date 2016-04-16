@@ -136,7 +136,7 @@ namespace YAT.Model.Utilities
 					// Handle line break according to current system:
 					if (element is DisplayElement.LineBreak)
 						this.writer.WriteLine();
-					else
+					else if (!string.IsNullOrEmpty(element.Text))
 						this.writer.Write(element.Text);
 				}
 			}

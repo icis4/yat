@@ -176,20 +176,28 @@ namespace YAT.Gui.Utilities
 		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
 		                                      out SizeF requestedSize, out SizeF drawnSize)
 		{
-			Font font;
-			Brush brush;
-			SetDrawingObjects(element, settings, graphics, out font, out brush);
+			if (!string.IsNullOrEmpty(element.Text))
+			{
+				Font font;
+				Brush brush;
+				SetDrawingObjects(element, settings, graphics, out font, out brush);
 
-			// Select the highlight brush if the item is selected:
-			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
-				brush = SystemBrushes.HighlightText;
+				// Select the highlight brush if the item is selected:
+				if ((state & DrawItemState.Selected) == DrawItemState.Selected)
+					brush = SystemBrushes.HighlightText;
 
-			// Perform drawing of text:
-			graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
+				// Perform drawing of text:
+				graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
 
-			// Measure consumed rectangle: Requested virtual and effectively drawn:
-			requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
-			drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
+				// Measure consumed rectangle: Requested virtual and effectively drawn:
+				requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
+				drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
+			}
+			else
+			{
+				requestedSize = new SizeF();
+				drawnSize     = new SizeF();
+			}
 		}
 
 		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings,

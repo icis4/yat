@@ -49,7 +49,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		public static void WriteException(TextWriter writer, Type type, Exception ex)
 		{
-			WriteException(writer, type, ex, "");
+			WriteException(writer, type, ex, null);
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		public static void WriteStack(TextWriter writer, Type type)
 		{
-			WriteStack(writer, type, new StackTrace(), "");
+			WriteStack(writer, type, new StackTrace(), null);
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		public static void WriteStack(TextWriter writer, Type type, StackTrace st)
 		{
-			WriteStack(writer, type, st, "");
+			WriteStack(writer, type, st, null);
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace MKY.Diagnostics
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m)
 		{
-			WriteWindowsFormsMessage(writer, type, m, "");
+			WriteWindowsFormsMessage(writer, type, m, null);
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs)
 		{
-			WriteFileStream(writer, type, fs, "");
+			WriteFileStream(writer, type, fs, null);
 		}
 
 		/// <summary>

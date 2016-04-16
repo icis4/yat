@@ -37,6 +37,36 @@ using NUnit.Framework;
 namespace MKY.Test.Types
 {
 	/// <summary></summary>
+	public static class EqualsTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				yield return (new TestCaseData("abc", "abc", true,  true ));
+				yield return (new TestCaseData("abc", "aBc", false, true ));
+				yield return (new TestCaseData("aBc", "abc", false, true ));
+
+				yield return (new TestCaseData("abc", "",    false, false));
+				yield return (new TestCaseData("",    "abc", false, false));
+				yield return (new TestCaseData("",    "",    true,  true ));
+
+				yield return (new TestCaseData("abc", null,  false, false));
+				yield return (new TestCaseData(null, "abc",  false, false));
+				yield return (new TestCaseData(null, null,   true,  true ));
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
 	public static class IndexOfOutsideDoubleQuotesTestData
 	{
 		#region Test Cases
@@ -278,15 +308,36 @@ namespace MKY.Test.Types
 		// Test
 		//==========================================================================================
 
-		#region Tests > IndexOfOutsideDoubleQuotes()
+		#region Tests > Equals
 		//------------------------------------------------------------------------------------------
-		// Tests > IndexOfOutsideDoubleQuotes()
+		// Tests > Equals
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
+		[Test, TestCaseSource(typeof(EqualsTestData), "TestCases")]
+		public virtual void EqualsOrdinalIgnoreCase(string strA, string strB, bool expected, bool expectedIgnoreCase)
+		{
+			bool actual;
+
+			actual = StringEx.EqualsOrdinal(strA, strB);
+			Assert.AreEqual(expected, actual);
+
+			actual = StringEx.EqualsOrdinalIgnoreCase(strA, strB);
+			Assert.AreEqual(expectedIgnoreCase, actual);
+		}
+
+		#endregion
+
+		#region Tests > Index
+		//------------------------------------------------------------------------------------------
+		// Tests > Index
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(IndexOfOutsideDoubleQuotesTestData), "TestCases")]
-		public virtual void TestIndexOfOutsideDoubleQuotes(string str, string outString, int outIndex, string inString, int inIndex)
+		public virtual void IndexOfOutsideDoubleQuotes(string str, string outString, int outIndex, string inString, int inIndex)
 		{
 			int index = StringEx.IndexOfOutsideDoubleQuotes(str, outString, StringComparison.Ordinal);
 			Assert.AreEqual(outIndex, index);
@@ -294,9 +345,9 @@ namespace MKY.Test.Types
 
 		#endregion
 
-		#region Tests > CountLeft()
+		#region Tests > Count
 		//------------------------------------------------------------------------------------------
-		// Tests > CountLeft()
+		// Tests > Count
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -307,13 +358,6 @@ namespace MKY.Test.Types
 			int actualCount = StringEx.CountLeft(str, countChars);
 			Assert.AreEqual(expectedCount, actualCount);
 		}
-
-		#endregion
-
-		#region Tests > CountRight()
-		//------------------------------------------------------------------------------------------
-		// Tests > CountRight()
-		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
@@ -326,9 +370,9 @@ namespace MKY.Test.Types
 
 		#endregion
 
-		#region Tests > SplitLeft()
+		#region Tests > Split
 		//------------------------------------------------------------------------------------------
-		// Tests > SplitLeft()
+		// Tests > Split
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -346,13 +390,6 @@ namespace MKY.Test.Types
 			}
 		}
 
-		#endregion
-
-		#region Tests > SplitRight()
-		//------------------------------------------------------------------------------------------
-		// Tests > SplitRight()
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(SplitLeftRightTestData), "TestCasesRight")]
 		public virtual void SplitRight(string str, int desiredSplitLength, string[] expectedChunks)
@@ -368,17 +405,33 @@ namespace MKY.Test.Types
 			}
 		}
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
+		[Test, TestCaseSource(typeof(SplitLexicallyTestData), "TestCases")]
+		public virtual void SplitLexically(string testString, int desiredChunkLength, string[] expectedChunks)
+		{
+			string[] actualChunks = StringEx.SplitLexically(testString, desiredChunkLength);
+
+			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+
+			for (int i = 0; i < expectedChunks.Length; i++)
+			{
+				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
+				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+			}
+		}
+
 		#endregion
 
-		#region Tests > Trim()
+		#region Tests > Trim
 		//------------------------------------------------------------------------------------------
-		// Tests > Trim()
+		// Tests > Trim
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(TrimTestData), "QuoteTestCases")]
-		public virtual void TestTrimOfQuotes(string str, int expectedLength, char[] trimChars)
+		public virtual void TrimOfQuotes(string str, int expectedLength, char[] trimChars)
 		{
 			string trim = str.Trim(trimChars);
 
@@ -394,7 +447,7 @@ namespace MKY.Test.Types
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(TrimTestData), "EndWhiteSpaceTestCases")]
-		public virtual void TestTrimEndOfWhiteSpaces(string str, int expectedLength, char[] trimChars)
+		public virtual void TrimEndOfWhiteSpaces(string str, int expectedLength, char[] trimChars)
 		{
 			string trim = str.TrimEnd(trimChars);
 
@@ -405,29 +458,6 @@ namespace MKY.Test.Types
 			sb.AppendLine(trim);
 
 			Assert.AreEqual(expectedLength, trim.Length, sb.ToString());
-		}
-
-		#endregion
-
-		#region Tests > SplitLexically()
-		//------------------------------------------------------------------------------------------
-		// Tests > SplitLexically()
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Why not?")]
-		[Test, TestCaseSource(typeof(SplitLexicallyTestData), "TestCases")]
-		public virtual void TestSplitLexically(string testString, int desiredChunkLength, string[] expectedChunks)
-		{
-			string[] actualChunks = StringEx.SplitLexically(testString, desiredChunkLength);
-
-			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
-
-			for (int i = 0; i < expectedChunks.Length; i++)
-			{
-				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
-				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
-			}
 		}
 
 		#endregion

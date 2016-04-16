@@ -304,6 +304,7 @@ namespace MKY.Settings
 					}
 
 					// Alternatively, try to open an existing file of an older version.
+					if (FilePathIsDefined)
 					{
 						// Find all valid directories of older versions.
 						string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(FilePath));

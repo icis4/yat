@@ -122,7 +122,7 @@ namespace YAT.Domain
 			public BidirLineState()
 			{
 				IsFirstLine = true;
-				PortStamp   = "";
+				PortStamp   = null;
 				Direction   = IODirection.None;
 			}
 

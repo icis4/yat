@@ -107,7 +107,7 @@ namespace MKY.Settings
 		/// <summary></summary>
 		public virtual void ResetSettingsFilePath()
 		{
-			SettingsFilePath = "";
+			SettingsFilePath = null;
 		}
 
 		/// <summary>

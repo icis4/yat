@@ -242,7 +242,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public PortInfo()
-				: base(Direction.None, "")
+				: base(Direction.None, null)
 			{
 			}
 
@@ -344,7 +344,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public LineBreak(Direction direction)
-				: base(direction, "", true)
+				: base(direction, null, true)
 			{
 			}
 		}
@@ -407,7 +407,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement()
-			: this("")
+			: this(null)
 		{
 		}
 
@@ -420,12 +420,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, string text)
 		{
-			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false, false);
+			Initialize(direction, null, text, 0, false, false, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(bool isWhiteSpace)
-			: this("", isWhiteSpace)
+			: this(null, isWhiteSpace)
 		{
 		}
 
@@ -438,7 +438,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, string text, bool isWhiteSpace)
 		{
-			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false, isWhiteSpace);
+			Initialize(direction, null, text, 0, false, false, isWhiteSpace);
 		}
 
 		/// <summary></summary>
@@ -499,7 +499,13 @@ namespace YAT.Domain
 		[XmlIgnore]
 		public virtual int OriginCount
 		{
-			get { return (this.origin.Count); }
+			get
+			{
+				if (this.origin != null)
+					return (this.origin.Count);
+				else
+					return (0);
+			}
 		}
 
 		/// <summary></summary>
@@ -507,7 +513,7 @@ namespace YAT.Domain
 		public virtual string Text
 		{
 			get { return (this.text); }
-			set { this.text = value; }
+			set { this.text = value;  }
 		}
 
 		/// <summary></summary>
@@ -515,7 +521,7 @@ namespace YAT.Domain
 		public virtual int DataCount
 		{
 			get { return (this.dataCount); }
-			set { this.dataCount = value; }
+			set { this.dataCount = value;  }
 		}
 
 		/// <summary></summary>
@@ -523,7 +529,7 @@ namespace YAT.Domain
 		public virtual bool IsData
 		{
 			get { return (this.isData); }
-			set { this.isData = value; }
+			set { this.isData = value;  }
 		}
 
 		/// <summary></summary>
@@ -655,14 +661,18 @@ namespace YAT.Domain
 		public virtual void Append(DisplayElement de)
 		{
 			if (!AcceptsAppendOf(de))
-				throw (new NotSupportedException("Cannot append because the given element cannot be appended to this element!"));
+				throw (new InvalidOperationException(@"Program execution should never get here, the given element """ + de + @""" cannot be appended to this element """ + this + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// \fixme (2010-04-01 / MKY):
 			// Weird ArgumentException when receiving large chunks of data.
 			try
 			{
-				this.origin.AddRange(PerformDeepClone(de.origin));
-				this.text      += de.text;
+				if (this.origin != null)
+					this.origin.AddRange(PerformDeepClone(de.origin));
+
+				if (this.text != null)
+					this.text += de.text;
+
 				this.dataCount += de.dataCount;
 			}
 			catch (ArgumentException ex)
@@ -685,12 +695,19 @@ namespace YAT.Domain
 
 		private static List<Pair<byte[], string>> PerformDeepClone(List<Pair<byte[], string>> origin)
 		{
-			List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capactiy to improve memory management.
+			if (origin != null)
+			{
+				List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capactiy to improve memory management.
 
-			foreach (Pair<byte[], string> originItem in origin)
-				clone.Add(PerformDeepClone(originItem));
+				foreach (Pair<byte[], string> originItem in origin)
+					clone.Add(PerformDeepClone(originItem));
 
-			return (clone);
+				return (clone);
+			}
+			else
+			{
+				return (null);
+			}
 		}
 
 		#endregion
@@ -705,7 +722,10 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (this.text);
+			if (this.text != null)
+				return (this.text);
+			else
+				return ("");
 		}
 
 		#region Object Members > Extensions
@@ -722,8 +742,8 @@ namespace YAT.Domain
 
 			sb.Append(indent); sb.Append("> Type:         "); sb.AppendLine(GetType().Name);
 			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(this.direction.ToString());
-			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(this.origin.ToString());
-			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(this.text);
+			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(this.origin != null ? this.origin.ToString() : "'null'");
+			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(this.text   != null ? this.text              :    ""   );
 			sb.Append(indent); sb.Append("> DataCount:    "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
 			sb.Append(indent); sb.Append("> IsData:       "); sb.AppendLine(this.isData.ToString());
 			sb.Append(indent); sb.Append("> IsEol:        "); sb.AppendLine(this.isEol.ToString());

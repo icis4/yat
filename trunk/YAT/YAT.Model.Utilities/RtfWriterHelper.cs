@@ -114,7 +114,7 @@ namespace YAT.Model.Utilities
 			// Handle line break according to current system:
 			if (element is DisplayElement.LineBreak)
 				richTextProvider.AppendText(Environment.NewLine);
-			else
+			else if (!string.IsNullOrEmpty(element.Text))
 				richTextProvider.AppendText(element.Text);
 		}
 

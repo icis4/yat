@@ -67,7 +67,7 @@ namespace MKY.Settings
 
 		/// <summary></summary>
 		public SettingsFileHandler()
-			: this("", null)
+			: this(null, null)
 		{
 		}
 
@@ -79,7 +79,7 @@ namespace MKY.Settings
 
 		/// <summary></summary>
 		public SettingsFileHandler(Type parentType)
-			: this("", parentType)
+			: this(null, parentType)
 		{
 		}
 

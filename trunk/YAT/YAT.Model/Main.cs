@@ -1488,7 +1488,7 @@ namespace YAT.Model
 
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
 		{
-			// Combine absolute workspace path with terminal path if that one is relative.
+			// Combine absolute workspace path with terminal path if that one is relative:
 			terminalFilePath = PathEx.CombineFilePaths(workspaceFilePath, terminalFilePath);
 
 			try
