@@ -327,15 +327,16 @@ namespace MKY.IO.Ports.Test
 				configuration.TILaunchPadDeviceAIsConnected = availablePorts.Contains(configuration.TILaunchPadDeviceA);
 				configuration.TILaunchPadDeviceBIsConnected = availablePorts.Contains(configuration.TILaunchPadDeviceB);
 
-				List<bool> l = new List<bool>();
-				l.Clear(); // LoopbackPairs
+				List<bool> l;
+
+				l = new List<bool>(configuration.LoopbackPairs.Count); // Preset the required capactiy to improve memory management.
 				foreach (SerialPortPairConfigurationElement item in configuration.LoopbackPairs)
 				{
 					l.Add(availablePorts.Contains(item.PortA) && availablePorts.Contains(item.PortB));
 				}
 				configuration.LoopbackPairIsAvailable = l.ToArray();
 
-				l.Clear(); // LoopbackSelfs
+				l = new List<bool>(configuration.LoopbackSelfs.Count); // Preset the required capactiy to improve memory management.
 				foreach (SerialPortConfigurationElement item in configuration.LoopbackSelfs)
 				{
 					l.Add(availablePorts.Contains(item.Port));

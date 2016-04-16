@@ -39,12 +39,6 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs(byte[] data, DeviceInfo deviceInfo)
-			: this (new ReadOnlyCollection<byte>(data), deviceInfo)
-		{
-		}
-
-		/// <summary></summary>
-		public SerialDataReceivedEventArgs(ReadOnlyCollection<byte> data, DeviceInfo deviceInfo)
 			: base(data)
 		{
 			this.deviceInfo = deviceInfo;
@@ -70,12 +64,6 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		public SerialDataSentEventArgs(byte[] data, DeviceInfo deviceInfo)
-			: this (new ReadOnlyCollection<byte>(data), deviceInfo)
-		{
-		}
-
-		/// <summary></summary>
-		public SerialDataSentEventArgs(ReadOnlyCollection<byte> data, DeviceInfo deviceInfo)
 			: base(data)
 		{
 			this.deviceInfo = deviceInfo;

@@ -239,7 +239,7 @@ namespace YAT.Application.Utilities
 		{
 			get
 			{
-				List<string> l = new List<string>();
+				List<string> l = new List<string>(5); // Preset the required capactiy to improve memory management.
 				l.Add(".txt");
 				l.Add(".text");
 				l.Add(".log");
@@ -290,7 +290,7 @@ namespace YAT.Application.Utilities
 		{
 			get
 			{
-				List<string> l = new List<string>();
+				List<string> l = new List<string>(4); // Preset the required capactiy to improve memory management.
 				l.Add(".dat");
 				l.Add(".bin");
 				l.Add(".binary");

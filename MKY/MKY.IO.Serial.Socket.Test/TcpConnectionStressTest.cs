@@ -68,9 +68,8 @@ namespace MKY.IO.Serial.Socket.Test
 
 		private static void StressAutoSocketServersWithAutoSocketClients(int numberOfServers, int numberOfClients)
 		{
-			List<int> serverPorts = new List<int>();
-			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>();
-			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>();
+			List<int> serverPorts = new List<int>(numberOfServers);
+			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>(numberOfServers); // Preset the required capactiy to improve memory management.
 
 			// Create a large number of AutoSockets.
 			for (int i = 0; i < numberOfServers; i++)
@@ -85,6 +84,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 			// Randomly connect another large numer of AutoSockets to the existing sockets.
 			Random r = new Random(RandomEx.NextPseudoRandomSeed());
+			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>(numberOfClients); // Preset the required capactiy to improve memory management.
 			for (int i = 0; i < numberOfClients; i++)
 			{
 				int j = r.Next(0, (numberOfServers - 1));

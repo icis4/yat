@@ -225,7 +225,7 @@ namespace YAT.Model.Utilities
 				// Analyze the line and split it into segments:
 				int position = 0;
 				StringBuilder text = new StringBuilder();
-				var segments = new List<Pair<DisplayElement, Pair<int, int>>>();
+				var segments = new List<Pair<DisplayElement, Pair<int, int>>>(line.Count); // Preset the required capactiy to improve memory management.
 				foreach (DisplayElement element in line)
 				{
 					if (!string.IsNullOrEmpty(element.Text))

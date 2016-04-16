@@ -287,7 +287,7 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static IPHost[] GetItems()
 		{
-			List<IPHost> a = new List<IPHost>();
+			List<IPHost> a = new List<IPHost>(3); // Preset the required capactiy to improve memory management.
 			a.Add(new IPHost(IPHostType.Localhost));
 			a.Add(new IPHost(IPHostType.IPv4Localhost));
 			a.Add(new IPHost(IPHostType.IPv6Localhost));

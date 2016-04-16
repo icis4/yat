@@ -191,7 +191,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static TriggerEx[] GetItems()
+		public static TriggerEx[] GetAllItems()
 		{
 			return (GetItems(true, true));
 		}
@@ -199,9 +199,17 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static TriggerEx[] GetItems(bool addFixed, bool addVariable)
+		public static TriggerEx[] GetFixedItems()
 		{
-			List<TriggerEx> a = new List<TriggerEx>();
+			return (GetItems(true, false));
+		}
+
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
+		private static TriggerEx[] GetItems(bool addFixed, bool addVariable)
+		{
+			List<TriggerEx> a = new List<TriggerEx>(16); // Preset the initial capactiy to improve memory management, 16 is a large enough value.
 
 			if (addFixed)		a.Add(new TriggerEx(Trigger.None));
 			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand1));

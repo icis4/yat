@@ -38,12 +38,6 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		public SocketDataReceivedEventArgs(byte[] data, IPEndPoint remoteEndPoint)
-			: this (new ReadOnlyCollection<byte>(data), remoteEndPoint)
-		{
-		}
-
-		/// <summary></summary>
-		public SocketDataReceivedEventArgs(ReadOnlyCollection<byte> data, IPEndPoint remoteEndPoint)
 			: base(data)
 		{
 			this.remoteEndPoint = remoteEndPoint;
@@ -69,12 +63,6 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		public SocketDataSentEventArgs(byte[] data, IPEndPoint remoteEndPoint)
-			: this (new ReadOnlyCollection<byte>(data), remoteEndPoint)
-		{
-		}
-
-		/// <summary></summary>
-		public SocketDataSentEventArgs(ReadOnlyCollection<byte> data, IPEndPoint remoteEndPoint)
 			: base(data)
 		{
 			this.remoteEndPoint = remoteEndPoint;

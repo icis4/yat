@@ -949,7 +949,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void CleanupLocalUserDirectory()
 		{
-			// Get all file paths in default directory.
+			// Get all file paths in default directory:
 			List<string> localUserDirectoryFilePaths = new List<string>();
 			try
 			{
@@ -961,28 +961,28 @@ namespace YAT.Model
 				// Don't care about exceptions.
 			}
 
-			// Ensure to leave application settings untouched.
+			// Ensure to leave application settings untouched:
 			localUserDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
 
-			// Get all active file paths.
+			// Get all active file paths:
 			List<string> activeFilePaths = new List<string>();
 			if (this.workspace != null)
 			{
-				// Add workspace settings file.
+				// Add workspace settings file:
 				if (this.workspace.SettingsFileExists)
 					activeFilePaths.Add(this.workspace.SettingsFilePath);
 
-				// Add terminal settings files.
+				// Add terminal settings files:
 				activeFilePaths.AddRange(this.workspace.TerminalSettingsFilePaths);
 			}
 
-			// Ensure to leave all active settings untouched.
+			// Ensure to leave all active settings untouched:
 			foreach (string afp in activeFilePaths)
 			{
 				localUserDirectoryFilePaths.Remove(afp);
 			}
 
-			// Delete all obsolete file paths in default directory.
+			// Delete all obsolete file paths in default directory:
 			foreach (string ddfp in localUserDirectoryFilePaths)
 			{
 				FileEx.TryDelete(ddfp);

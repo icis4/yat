@@ -236,7 +236,7 @@ namespace YAT.Log
 		{
 			get
 			{
-				List<FileNameSeparator> items = new List<FileNameSeparator>();
+				List<FileNameSeparator> items = new List<FileNameSeparator>(6); // Preset the required capactiy to improve memory management.
 				items.Add(Underscore);
 				items.Add(Dash);
 				items.Add(DashWithSpaces);

@@ -401,7 +401,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			this.rxMultiByteDecodingStream = new List<byte>();
+			this.rxMultiByteDecodingStream = new List<byte>(4); // Preset the initial capactiy to improve memory management, 4 is the maximum value for multi-byte characters.
 
 			byte[] txEol;
 			byte[] rxEol;
@@ -596,10 +596,10 @@ namespace YAT.Domain
 						lineState.EolElements.Add(de); // No clone needed as element has just been created.
 
 					// Normal case, EOL consists of a single sequence of control characters:
-					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Count))
+					if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Sequence.Length))
 					{
 						// Unfold the elements into single elements for correct processing:
-						List<DisplayElement> l = new List<DisplayElement>();
+						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capactiy to improve memory management.
 						foreach (DisplayElement item in lineState.EolElements)
 						{
 							foreach (Pair<byte[], string> originItem in item.Origin)
@@ -619,7 +619,7 @@ namespace YAT.Domain
 						// Note that sequence might look like <CR><CR><LF>, only the last two are EOL!
 					
 						// Unfold the elements into single elements for correct processing:
-						List<DisplayElement> l = new List<DisplayElement>();
+						List<DisplayElement> l = new List<DisplayElement>(lineState.EolElements.DataCount); // Preset the required capactiy to improve memory management.
 						foreach (DisplayElement item in lineState.EolElements)
 						{
 							foreach (Pair<byte[], string> originItem in item.Origin)
@@ -632,7 +632,7 @@ namespace YAT.Domain
 							dataCount += item.DataCount;
 
 						// Mark only true EOL elements as EOL:
-						int firstEolIndex = dataCount - lineState.Eol.Sequence.Count;
+						int firstEolIndex = dataCount - lineState.Eol.Sequence.Length;
 						int currentIndex = 0;
 						foreach (DisplayElement item in l)
 						{
@@ -700,7 +700,7 @@ namespace YAT.Domain
 		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Process EOL:
-			int eolLength = lineState.Eol.Sequence.Count;
+			int eolLength = lineState.Eol.Sequence.Length;
 			DisplayLine line = new DisplayLine();
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))

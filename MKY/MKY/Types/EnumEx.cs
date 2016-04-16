@@ -74,7 +74,7 @@ namespace MKY
 	///
 	///     public static ModeEx[] GetItems()
 	///     {
-	///         List[ModeEx] a = new List[ModeEx](); // [] must be replaced be angle brackets
+	///         List[ModeEx] a = new List[ModeEx](3); // [] must be replaced be angle brackets
 	///         a.Add(new ModeEx(Mode.Fast));
 	///         a.Add(new ModeEx(Mode.Normal));
 	///         a.Add(new ModeEx(Mode.Slow));
@@ -404,14 +404,15 @@ namespace MKY
 		public static Enum[] GetItems(Type enumExType)
 		{
 			Type underlyingEnumType = EnumExTypeToUnderlyingEnumType(enumExType);
-
-			List<Enum> items = new List<Enum>();
 			FieldInfo[] fis = underlyingEnumType.GetFields(BindingFlags.Public | BindingFlags.Static);
+			List<Enum> items = new List<Enum>(fis.Length); // Preset the required capactiy to improve memory management.
+
 			foreach (FieldInfo fi in fis)
 			{
 				Enum e = (Enum)fi.GetValue(null);
 				items.Add(e);
 			}
+
 			return (items.ToArray());
 		}
 

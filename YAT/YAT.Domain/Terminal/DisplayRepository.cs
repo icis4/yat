@@ -203,7 +203,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<DisplayElement> ToElements()
 		{
-			List<DisplayElement> elements = new List<DisplayElement>();
+			List<DisplayElement> elements = new List<DisplayElement>(256); // Preset the initial capactiy to improve memory management, 256 is an arbitrary value.
 
 			foreach (DisplayLine line in ToLines())
 				elements.AddRange(line.ToArray());

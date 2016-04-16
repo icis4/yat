@@ -818,7 +818,7 @@ namespace MKY.CommandLine
 		{
 			// Only create override once needed:
 			if (this.argsOverride == null)
-				this.argsOverride = new Dictionary<string, object>();
+				this.argsOverride = new Dictionary<string, object>(1); // Preset the required capactiy to improve memory management.
 
 			// Remove key if it already exists, i.e. replace the value:
 			if (this.argsOverride.ContainsKey(fieldName))

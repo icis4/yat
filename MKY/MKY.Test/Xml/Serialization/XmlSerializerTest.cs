@@ -287,7 +287,7 @@ namespace MKY.Test.Xml.Serialization
 			string filePath = "";
 
 			filePath = Temp.MakeTempFilePath(GetType(), "List", FileExtension);
-			List<string> l = new List<string>();
+			List<string> l = new List<string>(2); // Preset the required capactiy to improve memory management.
 			l.Add("A");
 			l.Add("B");
 			TestSerializationChain(filePath, typeof(List<string>), l);
@@ -298,7 +298,7 @@ namespace MKY.Test.Xml.Serialization
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "ListOfArrays", FileExtension);
-			List<string[]> la = new List<string[]>();
+			List<string[]> la = new List<string[]>(2); // Preset the required capactiy to improve memory management.
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
 			Test_Serialization(filePath, typeof(List<string>), la);
@@ -306,7 +306,7 @@ namespace MKY.Test.Xml.Serialization
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "ListOfLists", FileExtension);
-			List<List<string>> ll = new List<List<string>>();
+			List<List<string>> ll = new List<List<string>>(2); // Preset the required capactiy to improve memory management.
 			ll.Add(l);
 			ll.Add(l);
 			Test_Serialization(filePath, typeof(List<string>), ll);
@@ -329,7 +329,7 @@ namespace MKY.Test.Xml.Serialization
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "Dictionary", FileExtension);
-			Dictionary<string, string> l = new Dictionary<string, string>();
+			Dictionary<string, string> l = new Dictionary<string, string>(2); // Preset the required capactiy to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
 			TestSerialization(filePath, typeof(Dictionary<string, string>), l);
@@ -337,13 +337,13 @@ namespace MKY.Test.Xml.Serialization
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryEmpty", FileExtension);
-			Dictionary<string, string> le = new Dictionary<string, string>();
+			Dictionary<string, string> le = new Dictionary<string, string>(2); // Preset the required capactiy to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
 			TestSerialization(filePath, typeof(Dictionary<string, string>), le);
 #endif
 			filePath = Temp.MakeTempFilePath(GetType(), "DictionaryToArrayOfArrays", FileExtension);
-			Dictionary<string, string> l = new Dictionary<string, string>();
+			Dictionary<string, string> l = new Dictionary<string, string>(2); // Preset the required capactiy to improve memory management.
 			l.Add("1", "A");
 			l.Add("2", "B");
 
@@ -407,7 +407,7 @@ namespace MKY.Test.Xml.Serialization
 			TestSerializationChain(filePath, typeof(KeyValuePair<int, string>), p);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePairList", FileExtension);
-			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>();
+			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>(2); // Preset the required capactiy to improve memory management.
 			l.Add(new KeyValuePair<int, string>(1, "eins"));
 			l.Add(new KeyValuePair<int, string>(2, "zwei"));
 			TestSerializationChain(filePath, typeof(List<KeyValuePair<int, string>>), l);
@@ -439,7 +439,7 @@ namespace MKY.Test.Xml.Serialization
 			TestSerializationChain(filePath, typeof(Pair<int[], string>), p2);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "PairList", FileExtension);
-			List<Pair<int, string>> l = new List<Pair<int, string>>();
+			List<Pair<int, string>> l = new List<Pair<int, string>>(2); // Preset the required capactiy to improve memory management.
 			l.Add(new Pair<int, string>(1, "eins"));
 			l.Add(new Pair<int, string>(2, "zwei"));
 			TestSerializationChain(filePath, typeof(List<Pair<int, string>>), l);
@@ -467,7 +467,7 @@ namespace MKY.Test.Xml.Serialization
 			TestSerializationChain(filePath, typeof(RecentItem<string>), ri);
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItemList", FileExtension);
-			List<RecentItem<string>> l = new List<RecentItem<string>>();
+			List<RecentItem<string>> l = new List<RecentItem<string>>(2); // Preset the required capactiy to improve memory management.
 			l.Add(new RecentItem<string>("RIL1"));
 			l.Add(new RecentItem<string>("RIL2"));
 			TestSerializationChain(filePath, typeof(List<RecentItem<string>>), l);

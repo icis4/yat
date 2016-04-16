@@ -582,7 +582,7 @@ namespace YAT.Domain
 
 					de = null; // Indicate that element has been consumed.
 
-					elementsForNextLine = new List<DisplayElement>();
+					elementsForNextLine = new List<DisplayElement>(lineState.PendingSequenceBeforeElements.Capacity); // Preset the required capactiy to improve memory management.
 					foreach (DisplayElement dePending in lineState.PendingSequenceBeforeElements)
 						elementsForNextLine.Add(dePending.Clone());
 
@@ -667,7 +667,7 @@ namespace YAT.Domain
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);
 
-			DisplayLine line = new DisplayLine();
+			DisplayLine line = new DisplayLine(lineState.LineElements.Capacity); // Preset the required capactiy to improve memory management.
 			line.AddRange(lineState.LineElements.Clone()); // Clone elements to ensure decoupling.
 			lineState.Reset();
 
@@ -738,7 +738,7 @@ namespace YAT.Domain
 								{
 									List<DisplayElement> elementsForNextLineDummy;
 									ExecuteData(displaySettings, lineState, re.Direction, originByte, elements, out elementsForNextLineDummy);
-									// Note that 're.Direction' abive is OK, this function is processing all in the same direction.
+									// Note that 're.Direction' above is OK, this function is processing all in the same direction.
 								}
 							}
 						}

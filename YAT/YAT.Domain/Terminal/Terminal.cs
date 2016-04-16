@@ -1241,21 +1241,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ForwardDataToRawTerminal(ReadOnlyCollection<byte> data)
-		{
-			// AssertNotDisposed() is called by 'ForwardDataToRawTerminal()' below.
-
-			byte[] a = new byte[data.Count];
-			data.CopyTo(a, 0);
-
-			ForwardDataToRawTerminal(a);
-		}
-
-		/// <summary></summary>
-		/// <remarks>
-		/// \todo
-		/// Use a 'ReadOnlyCollection' instead of a byte array in 'RawTerminal', then remove this method.
-		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		protected virtual void ForwardDataToRawTerminal(byte[] data)
 		{

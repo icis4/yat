@@ -177,7 +177,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual DisplayElementCollection Clone()
 		{
-			DisplayElementCollection c = new DisplayElementCollection();
+			DisplayElementCollection c = new DisplayElementCollection(this.Capacity); // Preset the required capactiy to improve memory management.
 
 			foreach (DisplayElement de in this) // Clone the whole collection.
 				c.Add(de.Clone());
@@ -246,7 +246,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual byte[] ElementsToOrigin()
 		{
-			List<byte> l = new List<byte>();
+			List<byte> l = new List<byte>(this.DataCount); // Preset the initial capactiy to improve memory management.
 
 			foreach (DisplayElement de in this)
 			{
@@ -314,7 +314,7 @@ namespace YAT.Domain
 		/// </summary>
 		public new DisplayLine Clone()
 		{
-			DisplayLine dl = new DisplayLine();
+			DisplayLine dl = new DisplayLine(this.Capacity); // Preset the required capactiy to improve memory management.
 
 			foreach (DisplayElement de in this) // Clone the whole collection.
 				dl.Add(de.Clone());

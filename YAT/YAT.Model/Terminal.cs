@@ -2069,11 +2069,11 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Sending...");
 
 			// Count:
-			this.txByteCount += e.Element.Data.Count;
+			this.txByteCount += e.Element.Data.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.txByteRate.Update(e.Element.Data.Count))
+			if (this.txByteRate.Update(e.Element.Data.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -2090,11 +2090,11 @@ namespace YAT.Model
 			OnTimedStatusTextRequest("Receiving...");
 
 			// Count:
-			this.rxByteCount += e.Element.Data.Count;
+			this.rxByteCount += e.Element.Data.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.rxByteRate.Update(e.Element.Data.Count))
+			if (this.rxByteRate.Update(e.Element.Data.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
@@ -3651,7 +3651,7 @@ namespace YAT.Model
 			{
 				if (((TriggerEx)(this.settingsRoot.AutoResponse.TriggerSelection)).CommandIsRequired) // = sequence required = helper required.
 				{
-					ReadOnlyCollection<byte> sequence;
+					byte[] sequence;
 					if (TryParseCommandToSequence(this.settingsRoot.ActiveAutoResponseTrigger, out sequence))
 					{
 						lock (this.autoResponseHelperSyncObj)
@@ -3695,7 +3695,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Tries to parse the given command into the corresponding byte sequence, taking the current settings into account.
 		/// </summary>
-		private bool TryParseCommandToSequence(Command c, out ReadOnlyCollection<byte> sequence)
+		private bool TryParseCommandToSequence(Command c, out byte[] sequence)
 		{
 			if ((c != null) && (this.terminal != null))
 			{
@@ -3704,13 +3704,13 @@ namespace YAT.Model
 					byte[] lineResult;
 					if (this.terminal.TryParse(c.SingleLineText, out lineResult))
 					{
-						sequence = new ReadOnlyCollection<byte>(lineResult);
+						sequence = lineResult;
 						return (true);
 					}
 				}
 				else if (c.IsMultiLineText)
 				{
-					List<byte> commandResult = new List<byte>();
+					List<byte> commandResult = new List<byte>(256); // Preset the initial capactiy to improve memory management, 256 is an arbitrary value.
 
 					foreach (string line in c.MultiLineText)
 					{
@@ -3721,7 +3721,7 @@ namespace YAT.Model
 
 					if (commandResult.Count > 0)
 					{
-						sequence = new ReadOnlyCollection<byte>(commandResult);
+						sequence = commandResult.ToArray();
 						return (true);
 					}
 				}

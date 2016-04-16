@@ -182,7 +182,7 @@ namespace YAT.Gui.Forms
 		{
 			DateTime now = DateTime.Now;
 
-			this.exampleLines = new List<Domain.DisplayLine>();
+			this.exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capactiy to improve memory management.
 
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
@@ -195,7 +195,7 @@ namespace YAT.Gui.Forms
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Length(2)));
 			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
 
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24);
+			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(26);
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));

@@ -1243,7 +1243,7 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				List<string> filePaths = new List<string>();
+				List<string> filePaths = new List<string>(this.terminals.Count); // Preset the initial capactiy to improve memory management.
 				foreach (Terminal t in this.terminals)
 				{
 					if (t.SettingsFileExists)

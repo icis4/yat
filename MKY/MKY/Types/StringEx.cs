@@ -48,6 +48,11 @@ namespace MKY
 		/// </summary>
 		public const int InvalidIndex = -1;
 
+		/// <remarks>
+		/// 16 is an arbitrary value.
+		/// </remarks>
+		private const int ListInitialCapacityDefault = 16;
+
 		/// <summary>
 		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
 		/// The method returns an integer that indicates the relationship of the two
@@ -200,7 +205,7 @@ namespace MKY
 			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
 
 			int offset = 0;
-			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>();
+			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>(ListInitialCapacityDefault); // Preset the initial capactiy to improve memory management.
 			foreach (string s in rep.Split('"')) // Split string into chunks between double quotes.
 			{
 				l.Add(new KeyValuePair<int, string>(offset, s));
@@ -364,7 +369,7 @@ namespace MKY
 			string left = Left(str, length);
 			string right = Right(str, (str.Length - left.Length));
 
-			List<string> l = new List<string>();
+			List<string> l = new List<string>(2); // Preset the required capactiy to improve memory management.
 			l.Add(left);
 			l.Add(right);
 			return (l.ToArray());
@@ -378,7 +383,7 @@ namespace MKY
 			string right = Right(str, length);
 			string left = Left(str, (str.Length - right.Length));
 
-			List<string> l = new List<string>();
+			List<string> l = new List<string>(2); // Preset the required capactiy to improve memory management.
 			l.Add(left);
 			l.Add(right);
 			return (l.ToArray());
@@ -389,7 +394,7 @@ namespace MKY
 		/// </summary>
 		public static string[] SplitFixedLength(string str, int desiredChunkLength)
 		{
-			List<string> l = new List<string>();
+			List<string> l = new List<string>(str.Length); // Preset the required capactiy to improve memory management.
 			for (int i = 0; i < str.Length; i += desiredChunkLength)
 			{
 				int effectiveChunkLength = Int32Ex.LimitToBounds(desiredChunkLength, 0, str.Length - i);
@@ -404,7 +409,7 @@ namespace MKY
 		/// </summary>
 		public static string[] SplitLexically(string str, int desiredChunkLength)
 		{
-			List<string> chunks = new List<string>();
+			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capactiy to improve memory management.
 			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
 
 			foreach (string paragraph in str.Split(newLineSeparators, StringSplitOptions.None))
@@ -415,7 +420,7 @@ namespace MKY
 
 		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
-			List<int> spaces = new List<int>();
+			List<int> spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capactiy to improve memory management.
 
 			// Retrieve all spaces within the string:
 			int i = 0;
@@ -430,7 +435,7 @@ namespace MKY
 
 			// Split the string into the desired chunk size taking word boundaries into account:
 			int startIndex = 0;
-			List<string> chunks = new List<string>();
+			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capactiy to improve memory management.
 			while (startIndex < str.Length)
 			{
 				// Find the furthermost split position:

@@ -88,12 +88,10 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferRawLine(DateTime timeStamp, Direction direction, ReadOnlyCollection<byte> data)
+		public XmlTransferRawLine(DateTime timeStamp, Direction direction, byte[] data)
 			: base (timeStamp, direction)
 		{
-			byte[] dataAsArray = new byte[data.Count];
-			data.CopyTo(dataAsArray, 0);
-			this.data = dataAsArray;
+			this.data = data;
 		}
 
 		/// <remarks>Data byte array is converted to Base64 encoded string.</remarks>
