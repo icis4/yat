@@ -62,7 +62,10 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private ReadOnlyCollection<byte> data;
+		/// <remarks>
+		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// </remarks>
+		private byte[]      data;
 		private DateTime    timeStamp;
 		private string      portStamp;
 		private IODirection direction;
@@ -75,25 +78,21 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public RawElement(IEnumerable<byte> data, IODirection direction)
+		public RawElement(byte[] data, IODirection direction)
 			: this(data, Undefined, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(IEnumerable<byte> data, string portStamp, IODirection direction)
+		public RawElement(byte[] data, string portStamp, IODirection direction)
 			: this(data, DateTime.Now, portStamp, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(IEnumerable<byte> data, DateTime timeStamp, string portStamp, IODirection direction)
+		public RawElement(byte[] data, DateTime timeStamp, string portStamp, IODirection direction)
 		{
-			List<byte> l = new List<byte>();
-			foreach (byte b in data)
-				l.Add(b);
-
-			this.data      = new ReadOnlyCollection<byte>(l);
+			this.data      = data;
 			this.timeStamp = timeStamp;
 			this.portStamp = portStamp;
 			this.direction = direction;
@@ -107,7 +106,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<byte> Data
+		public virtual byte[] Data
 		{
 			get { return (this.data); }
 		}
@@ -142,7 +141,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual RawElement Clone()
 		{
-			return (new RawElement(this.data, this.timeStamp, this.portStamp, this.direction));
+			return (new RawElement((byte[])this.data.Clone(), this.timeStamp, this.portStamp, this.direction));
 		}
 
 		#endregion

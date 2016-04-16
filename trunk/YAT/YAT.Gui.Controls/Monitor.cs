@@ -168,7 +168,7 @@ namespace YAT.Gui.Controls
 		private long updateTickStamp;
 		private long updateTickInterval;
 		private bool performImmediateUpdate;
-		private List<object> pendingElementsAndLines = new List<object>(32); // The initial capacity typically is 4, that's rather small.
+		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capactiy to improve memory management, 32 is an arbitrary value.
 
 		#endregion
 
@@ -597,7 +597,7 @@ namespace YAT.Gui.Controls
 			ListBox lb = fastListBox_Monitor;
 
 			// Retrieve lines from list box:
-			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
+			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>(lb.Items.Count); // Preset the required capactiy to improve memory management.
 			foreach (object item in lb.Items)
 			{
 				var line = (item as Domain.DisplayLine);
@@ -665,7 +665,7 @@ namespace YAT.Gui.Controls
 			{
 				ListBox lb = fastListBox_Monitor;
 
-				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>();
+				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>(32); // Preset the initial capactiy to improve memory management, 32 is an arbitrary value.
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)

@@ -99,7 +99,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static EndiannessEx[] GetItems()
 		{
-			List<EndiannessEx> a = new List<EndiannessEx>();
+			List<EndiannessEx> a = new List<EndiannessEx>(2); // Preset the required capactiy to improve memory management.
 			a.Add(new EndiannessEx(Endianness.BigEndian));
 			a.Add(new EndiannessEx(Endianness.LittleEndian));
 			return (a.ToArray());

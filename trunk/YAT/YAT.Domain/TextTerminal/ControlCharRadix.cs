@@ -113,10 +113,11 @@ namespace YAT.Domain
 		/// </remarks>
 		public static new ControlCharRadixEx[] GetItems()
 		{
-			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>();
+			RadixEx[] radices = RadixEx.GetItems();
+			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>(radices.Length - 1); // Preset the required capactiy to improve memory management.
 
 			// Re-use items from base:
-			foreach (RadixEx radix in RadixEx.GetItems())
+			foreach (RadixEx radix in radices)
 			{
 				if (radix == Radix.String) // String makes no sense for single byte/character replacement.
 					continue;              // See remark for 'ControlCharRadix.Str' for details.

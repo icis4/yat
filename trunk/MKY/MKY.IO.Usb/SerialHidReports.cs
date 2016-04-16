@@ -39,7 +39,11 @@ namespace MKY.IO.Usb
 	public class SerialHidInputReportContainer : HidReportContainer
 	{
 		private byte id;
-		private ReadOnlyCollection<byte> payload;
+
+		/// <remarks>
+		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// </remarks>
+		private byte[] payload;
 
 		/// <summary>
 		/// Creates an input report container.
@@ -68,7 +72,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the payload that was received via input reports.
 		/// </summary>
-		public ReadOnlyCollection<byte> Payload
+		public byte[] Payload
 		{
 			get { return (this.payload); }
 		}
@@ -87,7 +91,7 @@ namespace MKY.IO.Usb
 				SetId(report[0]);
 
 			// Get report data:
-			List<byte> data = new List<byte>();
+			List<byte> data = new List<byte>(report.Length); // Preset the initial capactiy to improve memory management.
 			if (format.PrependPayloadByteLength)
 			{
 				// Get the payload by the length which is located in the first or second byte of the report:
@@ -123,7 +127,7 @@ namespace MKY.IO.Usb
 					data.Add(report[i]);
 			}
 
-			this.payload = data.AsReadOnly();
+			this.payload = data.ToArray();
 		}
 	}
 
@@ -177,15 +181,16 @@ namespace MKY.IO.Usb
 				if (format.AppendTerminatingZero)
 					effectiveLength += 1;
 
-				////byte[] report;
-				////// If requested, create a full report, many systems don't work otherwise:
-				////if (format.FillLastReport)
-				////	report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
-				////else
-				////	report = new byte[effectiveLength]; // C# value-type arrays are initialized to 0.
+			////// Code if Windows HID.dll didn't require that outgoing reports are always filled:
+			////byte[] report;
+			////// If requested, create a full report, many systems don't work otherwise:
+			////if (format.FillLastReport)
+			////	report = new byte[MaxByteLength];    // C# value-type arrays are initialized to 0.
+			////else
+			////	report = new byte[effectiveLength];  // C# value-type arrays are initialized to 0.
 
 				// Windows HID.dll requires that outgoing reports are always filled!
-				byte[] report = new byte[MaxByteLength];   // C# value-type arrays are initialized to 0.
+				byte[] report = new byte[MaxByteLength]; // C# value-type arrays are initialized to 0.
 
 				// If requested, copy the ID into the first byte of the report:
 				if (format.UseId)

@@ -456,7 +456,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount, bool isEol)
 		{
-			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(1); // Preset the required capactiy to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, dataCount, true, isEol, false);
 		}
@@ -604,7 +604,7 @@ namespace YAT.Domain
 			// Keep direction, isData and isEol.
 
 			// Replace origin and dataCount.
-			List<Pair<byte[], string>> clonedOrigin = new List<Pair<byte[], string>>();
+			List<Pair<byte[], string>> clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capactiy to improve memory management.
 			clonedOrigin.Add(PerformDeepClone(originItem));
 			clone.origin = clonedOrigin;
 			clone.dataCount = 1;
@@ -685,7 +685,7 @@ namespace YAT.Domain
 
 		private static List<Pair<byte[], string>> PerformDeepClone(List<Pair<byte[], string>> origin)
 		{
-			List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>();
+			List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capactiy to improve memory management.
 
 			foreach (Pair<byte[], string> originItem in origin)
 				clone.Add(PerformDeepClone(originItem));

@@ -21,16 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.ObjectModel;
-
-using MKY.Collections.ObjectModel;
+using MKY;
 
 namespace YAT.Model.Utilities
 {
 	/// <summary></summary>
 	public class AutoResponseHelper
 	{
-		private ReadOnlyCollection<byte> sequence;
+		/// <remarks>
+		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// </remarks>
+		private byte[] sequence;
+
 		private Domain.SequenceQueue queue;
 
 		/// <summary></summary>
@@ -39,7 +41,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public AutoResponseHelper(ReadOnlyCollection<byte> sequence)
+		public AutoResponseHelper(byte[] sequence)
 		{
 			lock (this)
 			{
@@ -49,13 +51,13 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public ReadOnlyCollection<byte> Sequence
+		public byte[] Sequence
 		{
 			set
 			{
 				lock (this)
 				{
-					if (!ReadOnlyCollectionEx.ValuesEqual<byte>(this.sequence, value))
+					if (!ArrayEx.ValuesEqual(this.sequence, value))
 					{
 						this.sequence = value;
 						this.queue = new Domain.SequenceQueue(this.sequence);

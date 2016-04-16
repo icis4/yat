@@ -104,7 +104,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static UdpSocketTypeEx[] GetItems()
 		{
-			List<UdpSocketTypeEx> a = new List<UdpSocketTypeEx>();
+			List<UdpSocketTypeEx> a = new List<UdpSocketTypeEx>(3); // Preset the required capactiy to improve memory management.
 			a.Add(new UdpSocketTypeEx(UdpSocketType.Client));
 			a.Add(new UdpSocketTypeEx(UdpSocketType.Server));
 			a.Add(new UdpSocketTypeEx(UdpSocketType.PairSocket));

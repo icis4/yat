@@ -117,7 +117,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static TerminalTypeEx[] GetItems()
 		{
-			List<TerminalTypeEx> a = new List<TerminalTypeEx>();
+			List<TerminalTypeEx> a = new List<TerminalTypeEx>(2); // Preset the required capactiy to improve memory management.
 			a.Add(new TerminalTypeEx(TerminalType.Text));
 			a.Add(new TerminalTypeEx(TerminalType.Binary));
 			return (a.ToArray());

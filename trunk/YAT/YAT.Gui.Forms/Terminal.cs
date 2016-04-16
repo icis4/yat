@@ -963,7 +963,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Preset_Initialize()
 		{
-			this.menuItems_preset = new List<ToolStripMenuItem>();
+			this.menuItems_preset = new List<ToolStripMenuItem>(6); // Preset the required capactiy to improve memory management.
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
 			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
@@ -1410,7 +1410,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Predefined_Initialize()
 		{
-			this.menuItems_Predefined_Commands = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			this.menuItems_Predefined_Commands = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); // Preset the required capactiy to improve memory management.
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
@@ -1424,7 +1424,7 @@ namespace YAT.Gui.Forms
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
 			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
 
-			this.menuItems_Predefined_Pages = new List<ToolStripMenuItem>(menuItems_Predefined_MaxPages);
+			this.menuItems_Predefined_Pages = new List<ToolStripMenuItem>(menuItems_Predefined_MaxPages); // Preset the required capactiy to improve memory management.
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_1);
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_2);
 			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_3);
@@ -1928,7 +1928,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripStatusLabel_TerminalStatus_Initialize()
 		{
-			this.terminalStatusLabels = new List<ToolStripStatusLabel>();
+			this.terminalStatusLabels = new List<ToolStripStatusLabel>(12); // Preset the required capactiy to improve memory management.
 
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator1);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_RFR);
@@ -1943,7 +1943,7 @@ namespace YAT.Gui.Forms
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 
-			this.terminalStatusLabels_DefaultText = new Dictionary<ToolStripStatusLabel, string>();
+			this.terminalStatusLabels_DefaultText = new Dictionary<ToolStripStatusLabel, string>(9); // Preset the required capactiy to improve memory management.
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.Text);
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.Text);
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.Text);
@@ -1954,7 +1954,7 @@ namespace YAT.Gui.Forms
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_InputBreak,    toolStripStatusLabel_TerminalStatus_InputBreak.Text);
 			this.terminalStatusLabels_DefaultText.Add(toolStripStatusLabel_TerminalStatus_OutputBreak,   toolStripStatusLabel_TerminalStatus_OutputBreak.Text);
 
-			this.terminalStatusLabels_DefaultToolTipText = new Dictionary<ToolStripStatusLabel, string>();
+			this.terminalStatusLabels_DefaultToolTipText = new Dictionary<ToolStripStatusLabel, string>(9); // Preset the required capactiy to improve memory management.
 			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_RFR,           toolStripStatusLabel_TerminalStatus_RFR.ToolTipText);
 			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_CTS,           toolStripStatusLabel_TerminalStatus_CTS.ToolTipText);
 			this.terminalStatusLabels_DefaultToolTipText.Add(toolStripStatusLabel_TerminalStatus_DTR,           toolStripStatusLabel_TerminalStatus_DTR.ToolTipText);
@@ -2268,7 +2268,7 @@ namespace YAT.Gui.Forms
 
 		private void FixContextMenus()
 		{
-			List<ContextMenuStrip> strips = new List<ContextMenuStrip>();
+			List<ContextMenuStrip> strips = new List<ContextMenuStrip>(6); // Preset the required capactiy to improve memory management.
 			strips.Add(contextMenuStrip_Send);
 			strips.Add(contextMenuStrip_Radix);
 			strips.Add(contextMenuStrip_Monitor);

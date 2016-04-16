@@ -68,19 +68,19 @@ namespace YAT.Log
 			this.textTerminalEncoding = textTerminalEncoding;
 			this.neatFormat = neatFormat;
 
-			this.rawLogs  = new List<Log>();
+			this.rawLogs  = new List<Log>(3); // Preset the required capactiy to improve memory management.
 			this.rawLogs.Add(this.rawTxLog    = new RawLog(this.settings.RawLogTx,    new Func<string>(this.settings.MakeRawTxFilePath),    this.settings.WriteMode));
 			this.rawLogs.Add(this.rawBidirLog = new RawLog(this.settings.RawLogBidir, new Func<string>(this.settings.MakeRawBidirFilePath), this.settings.WriteMode));
 			this.rawLogs.Add(this.rawRxLog    = new RawLog(this.settings.RawLogRx,    new Func<string>(this.settings.MakeRawRxFilePath),    this.settings.WriteMode));
 
 			Encoding logEncoding = this.settings.ToTextEncoding(this.textTerminalEncoding);
 
-			this.neatLogs = new List<Log>();
+			this.neatLogs = new List<Log>(3); // Preset the required capactiy to improve memory management.
 			this.neatLogs.Add(this.neatTxLog    = new NeatLog(this.settings.NeatLogTx,    new Func<string>(this.settings.MakeNeatTxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
 			this.neatLogs.Add(this.neatBidirLog = new NeatLog(this.settings.NeatLogBidir, new Func<string>(this.settings.MakeNeatBidirFilePath), this.settings.WriteMode, logEncoding, this.neatFormat));
 			this.neatLogs.Add(this.neatRxLog    = new NeatLog(this.settings.NeatLogRx,    new Func<string>(this.settings.MakeNeatRxFilePath),    this.settings.WriteMode, logEncoding, this.neatFormat));
 
-			this.logs = new List<Log>();
+			this.logs = new List<Log>(2); // Preset the required capactiy to improve memory management.
 			this.logs.AddRange(this.rawLogs);
 			this.logs.AddRange(this.neatLogs);
 		}
@@ -310,7 +310,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual IList<string> GetFilePaths()
 		{
-			List<string> result = new List<string>();
+			List<string> result = new List<string>(this.logs.Count); // Preset the initial capactiy to improve memory management.
 
 			foreach (Log l in this.logs)
 			{

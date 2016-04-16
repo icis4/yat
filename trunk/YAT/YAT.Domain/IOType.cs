@@ -193,7 +193,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static IOTypeEx[] GetItems()
 		{
-			List<IOTypeEx> a = new List<IOTypeEx>();
+			List<IOTypeEx> a = new List<IOTypeEx>(8); // Preset the required capactiy to improve memory management.
 			a.Add(new IOTypeEx(IOType.SerialPort));
 			a.Add(new IOTypeEx(IOType.TcpClient));
 			a.Add(new IOTypeEx(IOType.TcpServer));

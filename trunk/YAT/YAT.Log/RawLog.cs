@@ -154,9 +154,7 @@ namespace YAT.Log
 						case FileType.Binary:
 						default:
 						{
-							byte[] dataAsArray = new byte[element.Data.Count];
-							element.Data.CopyTo(dataAsArray, 0);
-							this.binaryWriter.Write(dataAsArray);
+							this.binaryWriter.Write(element.Data);
 							break;
 						}
 					}

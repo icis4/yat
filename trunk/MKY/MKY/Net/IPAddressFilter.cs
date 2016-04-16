@@ -211,7 +211,7 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static IPAddressFilter[] GetItems()
 		{
-			List<IPAddressFilter> a = new List<IPAddressFilter>();
+			List<IPAddressFilter> a = new List<IPAddressFilter>(6); // Preset the required capactiy to improve memory management.
 			a.Add(new IPAddressFilter(IPAddressFilterType.Any));
 			a.Add(new IPAddressFilter(IPAddressFilterType.Localhost));
 			a.Add(new IPAddressFilter(IPAddressFilterType.IPv4Any));

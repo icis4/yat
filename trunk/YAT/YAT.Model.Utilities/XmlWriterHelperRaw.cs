@@ -69,7 +69,7 @@ namespace YAT.Model.Utilities
 		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
 		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferRawLine> transferLines)
 		{
-			transferLines = new List<XmlTransferRawLine>();
+			transferLines = new List<XmlTransferRawLine>(displayLines.Count); // Preset the required capactiy to improve memory management.
 			foreach (DisplayLine dl in displayLines)
 			{
 				XmlTransferRawLine tl;
@@ -92,7 +92,7 @@ namespace YAT.Model.Utilities
 
 			bool success = true;
 
-			List<byte> data = new List<byte>();
+			List<byte> data = new List<byte>(displayLine.DataCount); // Preset the initial capactiy to improve memory management.
 
 			string dateStr      = "";
 			string timeStr      = "";
@@ -235,7 +235,7 @@ namespace YAT.Model.Utilities
 					direction = Direction.None;
 			}
 
-			transferLine = new XmlTransferRawLine(timeStamp, direction, data.AsReadOnly());
+			transferLine = new XmlTransferRawLine(timeStamp, direction, data.ToArray());
 
 			return (success);
 		}

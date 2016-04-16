@@ -66,7 +66,7 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic in the constructor, and anyway, performance isn't an issue here.")]
 		static MTSicsDeviceTestData()
 		{
-			Commands = new List<Pair<Pair<string, string>, TimeSpan>>();
+			Commands = new List<Pair<Pair<string, string>, TimeSpan>>(4); // Preset the required capactiy to improve memory management.
 			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S S       0.00 g"), TimeSpan.FromSeconds(90.0 / 1000)));
 			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S S       0.00 g"), TimeSpan.FromSeconds(15.0 / 1000)));
 			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(50.0 / 1000)));
@@ -243,7 +243,7 @@ namespace YAT.Model.Test.Transmission
 				// Prepare stimulus and expected:
 				Types.Command stimulusCommand = new Types.Command(stimulus);
 				
-				List<byte> l = new List<byte>();
+				List<byte> l = new List<byte>(expected.Length); // Preset the required capactiy to improve memory management.
 				foreach (char c in expected.ToCharArray())
 					l.Add((byte)c); // ASCII only!
 

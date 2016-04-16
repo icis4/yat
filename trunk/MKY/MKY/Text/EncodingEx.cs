@@ -709,7 +709,7 @@ namespace MKY.Text
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "'staticInfos' must be initialized in static constructor because it uses a list object.")]
 		static EncodingEx()
 		{
-			List<EncodingInfoEx> l = new List<EncodingInfoEx>();
+			List<EncodingInfoEx> l = new List<EncodingInfoEx>(7); // Preset the required capactiy to improve memory management.
 			l.Add(new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII (ISO646-US)",         Encoding.ASCII));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
 			l.Add(new EncodingInfoEx(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
@@ -883,7 +883,7 @@ namespace MKY.Text
 		/// </remarks>
 		public static EncodingEx[] GetItems()
 		{
-			List<EncodingEx> a = new List<EncodingEx>();
+			List<EncodingEx> a = new List<EncodingEx>(256); // Preset the initial capactiy to improve memory management, 256 is a large enough value.
 
 			a.Add(new EncodingEx((SupportedEncoding)Encoding.Default.CodePage));
 

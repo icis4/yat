@@ -679,7 +679,7 @@ namespace MKY.IO.Serial.Socket
 								this.socket.Send(data, data.Length, remoteEndPoint);
 							}
 
-							OnDataSent(new SocketDataSentEventArgs(new ReadOnlyCollection<byte>(data), remoteEndPoint));
+							OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
 
 							// Note the Thread.Sleep(TimeSpan.Zero) above.
 						}

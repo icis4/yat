@@ -81,7 +81,7 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public static OrientationEx[] GetItems()
 		{
-			List<OrientationEx> a = new List<OrientationEx>();
+			List<OrientationEx> a = new List<OrientationEx>(2); // Preset the required capactiy to improve memory management.
 			a.Add(new OrientationEx(Orientation.Horizontal));
 			a.Add(new OrientationEx(Orientation.Vertical));
 			return (a.ToArray());

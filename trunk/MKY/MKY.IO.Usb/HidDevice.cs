@@ -95,9 +95,10 @@ namespace MKY.IO.Usb
 		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage)
 		{
-			List<DeviceInfo> l = new List<DeviceInfo>();
+			DeviceInfo[] dis = GetDevices();
+			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capactiy to improve memory management.
 
-			foreach (DeviceInfo di in GetDevices())
+			foreach (DeviceInfo di in dis)
 			{
 				using (HidDevice device = new HidDevice(di))
 				{
@@ -116,9 +117,10 @@ namespace MKY.IO.Usb
 		[CLSCompliant(false)]
 		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId)
 		{
-			List<DeviceInfo> l = new List<DeviceInfo>();
+			DeviceInfo[] dis = GetDevices();
+			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capactiy to improve memory management.
 
-			foreach (DeviceInfo di in GetDevices())
+			foreach (DeviceInfo di in dis)
 			{
 				using (HidDevice device = new HidDevice(di))
 				{

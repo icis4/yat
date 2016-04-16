@@ -39,12 +39,6 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs(byte[] data, SerialPortId portId)
-			: this (new ReadOnlyCollection<byte>(data), portId)
-		{
-		}
-
-		/// <summary></summary>
-		public SerialDataReceivedEventArgs(ReadOnlyCollection<byte> data, SerialPortId portId)
 			: base(data)
 		{
 			this.portId = portId;
@@ -70,12 +64,6 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		public SerialDataSentEventArgs(byte[] data, SerialPortId portId)
-			: this (new ReadOnlyCollection<byte>(data), portId)
-		{
-		}
-
-		/// <summary></summary>
-		public SerialDataSentEventArgs(ReadOnlyCollection<byte> data, SerialPortId portId)
 			: base(data)
 		{
 			this.portId = portId;

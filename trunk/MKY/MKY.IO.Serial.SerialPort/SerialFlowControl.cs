@@ -139,7 +139,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static new SerialFlowControlEx[] GetItems()
 		{
-			List<SerialFlowControlEx> a = new List<SerialFlowControlEx>();
+			List<SerialFlowControlEx> a = new List<SerialFlowControlEx>(8); // Preset the required capactiy to improve memory management.
 			a.Add(new SerialFlowControlEx(SerialFlowControl.None));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.Hardware));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.Software));

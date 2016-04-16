@@ -32,18 +32,22 @@ namespace MKY.IO.Serial
 	/// </summary>
 	public abstract class DataEventArgs : EventArgs
 	{
-		private ReadOnlyCollection<byte> data;
+		/// <remarks>
+		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// </remarks>
+		private byte[] data;
+
 		private DateTime timeStamp;
 
 		/// <summary></summary>
-		protected DataEventArgs(ReadOnlyCollection<byte> data)
+		protected DataEventArgs(byte[] data)
 		{
 			this.data = data;
 			this.timeStamp = DateTime.Now;
 		}
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<byte> Data
+		public virtual byte[] Data
 		{
 			get { return (this.data); }
 		}
@@ -81,7 +85,7 @@ namespace MKY.IO.Serial
 	public abstract class DataReceivedEventArgs : DataEventArgs
 	{
 		/// <summary></summary>
-		public DataReceivedEventArgs(ReadOnlyCollection<byte> data)
+		public DataReceivedEventArgs(byte[] data)
 			: base(data)
 		{
 		}
@@ -91,7 +95,7 @@ namespace MKY.IO.Serial
 	public abstract class DataSentEventArgs : DataEventArgs
 	{
 		/// <summary></summary>
-		public DataSentEventArgs(ReadOnlyCollection<byte> data)
+		public DataSentEventArgs(byte[] data)
 			: base(data)
 		{
 		}

@@ -803,10 +803,14 @@ namespace MKY.IO.Serial.Socket
 					// Subsequently, yield to other threads to allow processing the data.
 					Thread.Sleep(TimeSpan.Zero);
 
-					List<byte> data = new List<byte>();
-					System.Net.IPEndPoint remoteEndPoint = null;
+					List<byte> data;
+					System.Net.IPEndPoint remoteEndPoint;
+
 					lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
 					{
+						data = new List<byte>(this.dataSentQueue.Count); // Preset the initial capactiy to improve memory management.
+						remoteEndPoint = null;
+
 						while (this.dataSentQueue.Count > 0)
 						{
 							Pair<byte, System.Net.IPEndPoint> item = this.dataSentQueue.Dequeue();

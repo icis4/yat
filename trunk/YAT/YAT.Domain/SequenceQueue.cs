@@ -68,7 +68,11 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private ReadOnlyCollection<byte> sequence;
+		/// <remarks>
+		/// "Guidelines for Collections": "Do use byte arrays instead of collections of bytes."
+		/// </remarks>
+		private byte[] sequence;
+
 		private Queue<byte> queue;
 		private State state;
 
@@ -81,15 +85,9 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public SequenceQueue(byte[] sequence)
-			: this(new ReadOnlyCollection<byte>(sequence))
-		{
-		}
-
-		/// <summary></summary>
-		public SequenceQueue(ReadOnlyCollection<byte> sequence)
 		{
 			this.sequence = sequence;
-			this.queue = new Queue<byte>(this.sequence.Count);
+			this.queue = new Queue<byte>(this.sequence.Length);
 			Evaluate();
 		}
 
@@ -101,7 +99,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual ReadOnlyCollection<byte> Sequence
+		public virtual byte[] Sequence
 		{
 			get { return (this.sequence); }
 		}
@@ -177,7 +175,7 @@ namespace YAT.Domain
 
 		private void Evaluate()
 		{
-			if (this.sequence.Count <= 0) // Empty sequence => Inactive.
+			if (this.sequence.Length <= 0) // Empty sequence => Inactive.
 			{
 				this.state = State.Inactive;
 				return;
@@ -199,11 +197,11 @@ namespace YAT.Domain
 			while ((evaluatedState == State.Armed) && (this.queue.Count > 0))
 			{
 				byte[] queue = this.queue.ToArray();
-				for (int i = 0; ((i < queue.Length) &&  (i < this.sequence.Count)); i++)
+				for (int i = 0; ((i < queue.Length) &&  (i < this.sequence.Length)); i++)
 				{
 					if (queue[i] == this.sequence[i])
 					{
-						if (this.sequence.Count == 1)
+						if (this.sequence.Length == 1)
 						{
 							evaluatedState = State.CompleteMatch;
 						}
@@ -211,9 +209,9 @@ namespace YAT.Domain
 						{
 							if (i == 0)
 								evaluatedState = State.PartlyMatchBeginning;
-							else if (i < (this.sequence.Count - 1))
+							else if (i < (this.sequence.Length - 1))
 								evaluatedState = State.PartlyMatchContinued;
-							else // i == (this.sequence.Count - 1)
+							else // i == (this.sequence.Length - 1)
 								evaluatedState = State.CompleteMatch;
 						}
 					}

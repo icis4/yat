@@ -195,7 +195,7 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static AutoResponseEx[] GetItems()
+		public static AutoResponseEx[] GetAllItems()
 		{
 			return (GetItems(true, true));
 		}
@@ -203,9 +203,17 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
 		/// </remarks>
-		public static AutoResponseEx[] GetItems(bool addFixed, bool addVariable)
+		public static AutoResponseEx[] GetFixedItems()
 		{
-			List<AutoResponseEx> a = new List<AutoResponseEx>();
+			return (GetItems(true, false));
+		}
+
+		/// <remarks>
+		/// An array of extended enums is returned for more versatile use, e.g. UI controls lists.
+		/// </remarks>
+		private static AutoResponseEx[] GetItems(bool addFixed, bool addVariable)
+		{
+			List<AutoResponseEx> a = new List<AutoResponseEx>(16); // Preset the initial capactiy to improve memory management, 16 is a large enough value.
 
 			if (addFixed)		a.Add(new AutoResponseEx(AutoResponse.None));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand1));

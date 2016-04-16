@@ -813,11 +813,11 @@ namespace YAT.Gui.Forms
 
 			bool arVisible = false;
 
-			TriggerEx[] arTriggerItems = TriggerEx.GetItems(true, false);
+			TriggerEx[] arTriggerItems = TriggerEx.GetFixedItems();
 			Trigger arTriggerSelection = Trigger.None;
 			Command arDedicatedTrigger = null;
 
-			AutoResponseEx[] arResponseItems = AutoResponseEx.GetItems(true, false);
+			AutoResponseEx[] arResponseItems = AutoResponseEx.GetFixedItems();
 			AutoResponse arResponseSelection = AutoResponse.None;
 			Command arDedicatedResponse = null;
 
@@ -1152,7 +1152,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_FileRecent_InitializeControls()
 		{
-			this.menuItems_recent = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths);
+			this.menuItems_recent = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths); // Preset the required capactiy to improve memory management.
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_1);
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_2);
 			this.menuItems_recent.Add(toolStripMenuItem_FileRecentContextMenu_3);

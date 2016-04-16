@@ -132,7 +132,7 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static BaudRateEx[] GetItems()
 		{
-			List<BaudRateEx> a = new List<BaudRateEx>();
+			List<BaudRateEx> a = new List<BaudRateEx>(32); // Preset the required capactiy to improve memory management, 32 is a large enough value.
 			a.Add(new BaudRateEx(BaudRate.Baud000075));
 			a.Add(new BaudRateEx(BaudRate.Baud000110));
 			a.Add(new BaudRateEx(BaudRate.Baud000134));

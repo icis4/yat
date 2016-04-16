@@ -68,7 +68,7 @@ namespace YAT.Model.Utilities
 		/// <returns>Returns the number of lines that could succesfully be converted.</returns>
 		private static int LinesFromDisplayToTransfer(List<DisplayLine> displayLines, out List<XmlTransferNeatLine> transferLines)
 		{
-			transferLines = new List<XmlTransferNeatLine>();
+			transferLines = new List<XmlTransferNeatLine>(displayLines.Count); // Preset the required capactiy to improve memory management.
 			foreach (DisplayLine dl in displayLines)
 			{
 				XmlTransferNeatLine tl;

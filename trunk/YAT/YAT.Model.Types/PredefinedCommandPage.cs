@@ -64,7 +64,7 @@ namespace YAT.Model.Types
 			this.pageName = rhs.pageName;
 
 			// Clone all commands:
-			this.commands = new List<Command>();
+			this.commands = new List<Command>(rhs.commands.Count); // Preset the required capactiy to improve memory management.
 			foreach (Command c in rhs.commands)
 				this.commands.Add(new Command(c));
 		}
