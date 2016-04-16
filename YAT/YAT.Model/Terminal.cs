@@ -1598,7 +1598,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			if (this.settingsHandler.SettingsFileIsWritable)
-				return (SaveToFile(isAutoSave, ""));
+				return (SaveToFile(isAutoSave, null));
 			else
 				return (false); // Let save fail if file shall not be written.
 		}
@@ -1611,7 +1611,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
-			string autoSaveFilePathToDelete = "";
+			string autoSaveFilePathToDelete = null;
 			if (this.settingsRoot.AutoSaved && (!StringEx.EqualsOrdinalIgnoreCase(filePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
@@ -1654,9 +1654,13 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Terminal saved.");
 				}
 
-				// Try to delete existing auto save file, but ensure that this is not the current file:
-				if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
-					FileEx.TryDelete(autoSaveFilePathToDelete);
+				// Try to delete existing auto save file:
+				if (!string.IsNullOrEmpty(autoSaveFilePathToDelete))
+				{
+					// Ensure that this is not the current file!
+					if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
+						FileEx.TryDelete(autoSaveFilePathToDelete);
+				}
 			}
 			catch (System.Xml.XmlException ex)
 			{

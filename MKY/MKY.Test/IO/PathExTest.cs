@@ -78,7 +78,7 @@ namespace MKY.Test.IO
 			get
 			{
 				// ---- Empty ----
-				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA	\todo: See below		RelativeB
+				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA							RelativeB
 
 				// TS0: Empty relative path
 				yield return (new TestCaseDataSet(0,	0,	@"X:\MyDir",						@"X:\MyDir",						@"",								@""							));
@@ -109,10 +109,10 @@ namespace MKY.Test.IO
 				yield return (new TestCaseDataSet(0,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@".\MyFile1.abc"			));
 
 				// TS1: Local near relation
-				yield return (new TestCaseDataSet(1,	0,	@"X:\MyDir",						@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@".."						));
-				yield return (new TestCaseDataSet(1,	1,	@"X:\MyDir",						@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@".."						));
-				yield return (new TestCaseDataSet(1,	2,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@"..\MyFile1.abc"			));
-				yield return (new TestCaseDataSet(1,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(1,	0,	@"X:\MyDir",						@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",				@".."						));
+				yield return (new TestCaseDataSet(1,	1,	@"X:\MyDir",						@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",	@".."						));
+				yield return (new TestCaseDataSet(1,	2,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",				@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(1,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",	@"..\MyFile1.abc"			));
 
 				// TS2: Local far relation
 				yield return (new TestCaseDataSet(2,	0,	@"X:\MyDir\MySubDir1",				@"X:\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1"				));
@@ -133,7 +133,7 @@ namespace MKY.Test.IO
 				yield return (new TestCaseDataSet(4,	3,	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1\MyFile1.abc"	));
 
 				// ---- Network ----
-				//									TS	TC	AbsoluteA											AbsoluteB											RelativeA							RelativeB
+				//									TS	TC	AbsoluteA											AbsoluteB											RelativeA	\todo: See below		RelativeB
 
 				// TS5: Network very-near relation
 				yield return (new TestCaseDataSet(5,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir",						@".",								@"."						));
@@ -142,10 +142,10 @@ namespace MKY.Test.IO
 				yield return (new TestCaseDataSet(5,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@".\MyFile1.abc"			));
 
 				// TS6: Network near relation
-				yield return (new TestCaseDataSet(6,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@".."						));
-				yield return (new TestCaseDataSet(6,	1,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@".."						));
-				yield return (new TestCaseDataSet(6,	2,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@"..\MyFile1.abc"			));
-				yield return (new TestCaseDataSet(6,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(6,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",				@".."						));
+				yield return (new TestCaseDataSet(6,	1,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",	@".."						));
+				yield return (new TestCaseDataSet(6,	2,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",				@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(6,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",	@"..\MyFile1.abc"			));
 
 				// TS7: Network far relation
 				yield return (new TestCaseDataSet(7,	0,	@"\\MyServer\MyShare\MyDir\MySubDir1",				@"\\MyServer\MyShare\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1"				));
@@ -514,8 +514,16 @@ namespace MKY.Test.IO
 		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineAEmpty")]
 		public virtual void TestCombineAEmpty(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
-			// Same test as above, but using a different test source.
-			TestCombineA(testSet, testCase, absoluteA, absoluteB, relativeA, relativeB);
+			// Same test as above, but using a different test source, and performing it with both "" and null.
+			if (string.IsNullOrEmpty(absoluteA) && string.IsNullOrEmpty(absoluteB))
+			{
+				TestCombineA(testSet, testCase,   "", null, relativeA, relativeB);
+				TestCombineA(testSet, testCase, null, null, relativeA, relativeB);
+			}
+			else
+			{
+				TestCombineA(testSet, testCase, absoluteA, absoluteB, relativeA, relativeB);
+			}
 		}
 
 		/// <summary></summary>
@@ -542,8 +550,16 @@ namespace MKY.Test.IO
 		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineBEmpty")]
 		public virtual void TestCombineBEmpty(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
-			// Same test as above, but using a different test source.
-			TestCombineB(testSet, testCase, absoluteA, absoluteB, relativeA, relativeB);
+			// Same test as above, but using a different test source, and performing it with both "" and null.
+			if (string.IsNullOrEmpty(absoluteA) && string.IsNullOrEmpty(absoluteB))
+			{
+				TestCombineB(testSet, testCase, null,   "", relativeA, relativeB);
+				TestCombineB(testSet, testCase, null, null, relativeA, relativeB);
+			}
+			else
+			{
+				TestCombineB(testSet, testCase, absoluteA, absoluteB, relativeA, relativeB);
+			}
 		}
 
 		#endregion

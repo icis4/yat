@@ -749,7 +749,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			if (this.settingsHandler.SettingsFileIsWritable)
-				return (SaveToFile(isAutoSave, ""));
+				return (SaveToFile(isAutoSave, null));
 			else
 				return (false); // Let save fail if file shall not be written.
 		}
@@ -778,7 +778,7 @@ namespace YAT.Model
 				return (false);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
-			string autoSaveFilePathToDelete = "";
+			string autoSaveFilePathToDelete = null;
 			if (this.settingsRoot.AutoSaved && (!StringEx.EqualsOrdinalIgnoreCase(filePath, this.settingsHandler.SettingsFilePath)))
 				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
@@ -819,9 +819,13 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Workspace saved.");
 				}
 
-				// Try to delete existing auto save file, but ensure that this is not the current file:
-				if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
-					FileEx.TryDelete(autoSaveFilePathToDelete);
+				// Try to delete existing auto save file:
+				if (!string.IsNullOrEmpty(autoSaveFilePathToDelete))
+				{
+					// Ensure that this is not the current file!
+					if (!StringEx.EqualsOrdinalIgnoreCase(autoSaveFilePathToDelete, this.settingsHandler.SettingsFilePath))
+						FileEx.TryDelete(autoSaveFilePathToDelete);
+				}
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -830,15 +834,20 @@ namespace YAT.Model
 				if (!isAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
-					OnMessageInputRequest
-					(
+
+					string message =
 						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message:"  + Environment.NewLine + ex.Message                            + Environment.NewLine + Environment.NewLine +
-						"File error message:" + Environment.NewLine + ex.InnerException.Message,
+						"File error message:" + Environment.NewLine + ex.InnerException.Message;
+
+					OnMessageInputRequest
+					(
+						message,
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
+
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 				else // AutoSave
@@ -1590,15 +1599,15 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenTerminalFile(string filePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
+		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
 		{
-			// Combine absolute workspace path with terminal path if that one is relative.
-			filePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
+			// Combine absolute workspace path with terminal path if that one is relative:
+			terminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, terminalFilePath);
 
 			try
 			{
 				DocumentSettingsHandler<TerminalSettingsRoot> s = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				s.SettingsFilePath = filePath;
+				s.SettingsFilePath = terminalFilePath;
 				if (s.Load())
 				{
 					settings = s;

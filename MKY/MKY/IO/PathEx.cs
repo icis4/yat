@@ -366,9 +366,9 @@ namespace MKY.IO
 				return (directoryPath2);
 
 			if (!Path.IsPathRooted(directoryPath1))
-				return (directoryPath1);
+				return (null);
 
-			if (string.IsNullOrEmpty(directoryPath1) || string.IsNullOrEmpty(directoryPath2))
+			if (string.IsNullOrEmpty(directoryPath2))
 				return (directoryPath1);
 
 			return (DoCombineDirectoryPaths(directoryPath1, directoryPath2));
@@ -391,9 +391,9 @@ namespace MKY.IO
 				return (filePath);
 
 			if (!Path.IsPathRooted(directoryPath))
-				return (directoryPath);
+				return (null);
 
-			if (string.IsNullOrEmpty(directoryPath) || string.IsNullOrEmpty(filePath))
+			if (string.IsNullOrEmpty(filePath))
 				return (directoryPath);
 
 			string fileName = Path.GetFileName(filePath);
@@ -420,9 +420,9 @@ namespace MKY.IO
 				return (directoryPath);
 
 			if (!Path.IsPathRooted(filePath))
-				return (filePath);
+				return (null);
 
-			if (string.IsNullOrEmpty(filePath) || string.IsNullOrEmpty(directoryPath))
+			if (string.IsNullOrEmpty(directoryPath))
 				return (filePath);
 
 			return (DoCombineDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
@@ -445,9 +445,9 @@ namespace MKY.IO
 				return (filePath2);
 
 			if (!Path.IsPathRooted(filePath1))
-				return (filePath1);
+				return (null);
 
-			if (string.IsNullOrEmpty(filePath1) || string.IsNullOrEmpty(filePath2))
+			if (string.IsNullOrEmpty(filePath2))
 				return (filePath1);
 
 			string fileName2 = Path.GetFileName(filePath2);

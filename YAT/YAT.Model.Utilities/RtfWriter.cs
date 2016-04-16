@@ -231,7 +231,7 @@ namespace YAT.Model.Utilities
 					if (!string.IsNullOrEmpty(element.Text))
 					{
 						string segment = element.Text;
-						text.Append(segment);     // segment begin            segment end
+						text.Append(segment);                                                        // segment begin            segment end
 						segments.Add(new Pair<DisplayElement, Pair<int, int>>(element, new Pair<int, int>(position, (position + segment.Length - 1))));
 						position += segment.Length;
 					}

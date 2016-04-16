@@ -32,6 +32,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -239,14 +240,14 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				string text = "";
+				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < this.commandInEdit.MultiLineText.Length; i++)
 				{
-					text += this.commandInEdit.MultiLineText[i];
+					sb.Append(this.commandInEdit.MultiLineText[i]);
 					if (i < (this.commandInEdit.MultiLineText.Length - 1))
-						text += Environment.NewLine;
+						sb.AppendLine();
 				}
-				textBox_Lines.Text = text;
+				textBox_Lines.Text = sb.ToString();
 			}
 
 			this.isSettingControls.Leave();

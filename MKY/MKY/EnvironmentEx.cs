@@ -111,6 +111,12 @@ namespace MKY
 					return (true);
 				}
 			}
+
+			Debug.Write("Environment variable ");
+			Debug.Write(                      environmentVariableName);
+			Debug.WriteLine(                                        " could not be retrieved.");
+			Debug.WriteLine("If environment variable was added after Visual Studio had been started, close and reopen Visual Studio and retry.");
+
 			filePath = "";
 			return (false);
 		}

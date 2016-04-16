@@ -54,7 +54,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteTimeStamp(Type type)
 		{
-			WriteTimeStamp(type, "");
+			WriteTimeStamp(type, null);
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteTimeStamp(Type type, string callerMemberName)
 		{
-			WriteTimeStamp(type, callerMemberName, "");
+			WriteTimeStamp(type, callerMemberName, null);
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteException(Type type, Exception ex)
 		{
-			WriteException(type, ex, "");
+			WriteException(type, ex, null);
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteStack(Type type)
 		{
-			WriteStack(type, new StackTrace(), "");
+			WriteStack(type, new StackTrace(), null);
 		}
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteStack(Type type, StackTrace st)
 		{
-			WriteStack(type, st, "");
+			WriteStack(type, st, null);
 		}
 
 		/// <summary>
@@ -144,7 +144,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteWindowsFormsMessage(Type type, Message m)
 		{
-			WriteWindowsFormsMessage(type, m, "");
+			WriteWindowsFormsMessage(type, m, null);
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace MKY.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteFileStream(Type type, FileStream fs)
 		{
-			WriteFileStream(type, fs, "");
+			WriteFileStream(type, fs, null);
 		}
 
 		/// <summary>

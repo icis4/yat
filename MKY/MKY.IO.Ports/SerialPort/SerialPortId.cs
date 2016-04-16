@@ -167,7 +167,7 @@ namespace MKY.IO.Ports
 		private bool hasCaptionFromSystem;
 
 		private bool isInUse;
-		private string inUseText = "";
+		private string inUseText;
 
 		private string separator = DefaultSeparator;
 
@@ -198,13 +198,13 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialPortId(SerialPortId rhs)
 		{
-			this.name = rhs.name;
+			this.name               = rhs.name;
 			this.standardPortNumber = rhs.standardPortNumber;
 
-			this.caption = rhs.caption;
+			this.caption              = rhs.caption;
 			this.hasCaptionFromSystem = rhs.hasCaptionFromSystem;
 
-			this.isInUse = rhs.isInUse;
+			this.isInUse   = rhs.isInUse;
 			this.inUseText = rhs.inUseText;
 
 			this.separator = rhs.separator;
@@ -317,10 +317,10 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(this.inUseText))
-					return (DefaultInUseText);
-				else
+				if (!string.IsNullOrEmpty(this.inUseText))
 					return (this.inUseText);
+				else
+					return (DefaultInUseText);
 			}
 			set
 			{
