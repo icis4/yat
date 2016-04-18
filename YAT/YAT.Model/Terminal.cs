@@ -1002,18 +1002,15 @@ namespace YAT.Model
 								var socket = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.UdpSocket);
 								if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.Server))
 								{
-									sb.Append(" for");
+									sb.Append(" for receiving on local port ");
+									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 
 									System.Net.IPEndPoint remoteEndPoint = socket.RemoteEndPoint;
 									if (remoteEndPoint.Address != System.Net.IPAddress.None)
 									{
-										sb.Append(" sending to ");
+										sb.Append(" and sending to ");
 										sb.Append(socket.RemoteEndPoint.ToString());
-										sb.Append(" and");
 									}
-
-									sb.Append(" receiving on local port ");
-									sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 								}
 							}
 							else
