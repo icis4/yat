@@ -324,7 +324,7 @@ namespace YAT.Gui.Controls
 				if (this.showTimeStatus != value)
 				{
 					this.showTimeStatus = value;
-					SetTimeStatusControls();
+					SetTimeStatusVisible();
 				}
 			}
 		}
@@ -341,7 +341,7 @@ namespace YAT.Gui.Controls
 				if (this.connectTime != value)
 				{
 					this.connectTime = value;
-					SetTimeStatusControls();
+					SetTimeStatusText();
 				}
 			}
 		}
@@ -358,7 +358,7 @@ namespace YAT.Gui.Controls
 				if (this.totalConnectTime != value)
 				{
 					this.totalConnectTime = value;
-					SetTimeStatusControls();
+					SetTimeStatusText();
 				}
 			}
 		}
@@ -375,7 +375,7 @@ namespace YAT.Gui.Controls
 				if (this.showCountAndRateStatus != value)
 				{
 					this.showCountAndRateStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusVisible();
 				}
 			}
 		}
@@ -392,7 +392,7 @@ namespace YAT.Gui.Controls
 				if (this.txByteCountStatus != value)
 				{
 					this.txByteCountStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
 				}
 			}
 		}
@@ -409,7 +409,7 @@ namespace YAT.Gui.Controls
 				if (this.txLineCountStatus != value)
 				{
 					this.txLineCountStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
 				}
 			}
 		}
@@ -426,7 +426,7 @@ namespace YAT.Gui.Controls
 				if (this.rxByteCountStatus != value)
 				{
 					this.rxByteCountStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
 				}
 			}
 		}
@@ -443,7 +443,7 @@ namespace YAT.Gui.Controls
 				if (this.rxLineCountStatus != value)
 				{
 					this.rxLineCountStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
 				}
 			}
 		}
@@ -460,7 +460,8 @@ namespace YAT.Gui.Controls
 				if (this.txByteRateStatus != value)
 				{
 					this.txByteRateStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
+
 					CalculateUpdateRate();
 				}
 			}
@@ -478,7 +479,8 @@ namespace YAT.Gui.Controls
 				if (this.txLineRateStatus != value)
 				{
 					this.txLineRateStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
+
 					CalculateUpdateRate();
 				}
 			}
@@ -496,7 +498,8 @@ namespace YAT.Gui.Controls
 				if (this.rxByteRateStatus != value)
 				{
 					this.rxByteRateStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
+
 					CalculateUpdateRate();
 				}
 			}
@@ -514,7 +517,8 @@ namespace YAT.Gui.Controls
 				if (this.rxLineRateStatus != value)
 				{
 					this.rxLineRateStatus = value;
-					SetCountAndRateStatusControls();
+					SetCountAndRateStatusText();
+
 					CalculateUpdateRate();
 				}
 			}
@@ -612,10 +616,10 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void ResetTimeStatus()
 		{
-			this.connectTime = TimeSpan.Zero;
+			this.connectTime      = TimeSpan.Zero;
 			this.totalConnectTime = TimeSpan.Zero;
 
-			SetTimeStatusControls();
+			SetTimeStatusText();
 		}
 
 		/// <summary></summary>
@@ -631,7 +635,7 @@ namespace YAT.Gui.Controls
 			this.rxByteRateStatus = 0;
 			this.rxLineRateStatus = 0;
 
-			SetCountAndRateStatusControls();
+			SetCountAndRateStatusText();
 		}
 
 		/// <summary></summary>
@@ -989,11 +993,21 @@ namespace YAT.Gui.Controls
 				fastListBox_Monitor.Height = Height;
 			}
 
-			SetTimeStatusControls();
-			SetCountAndRateStatusControls();
+			SetTimeStatusVisible();
+			SetTimeStatusText();
+
+			SetCountAndRateStatusVisible();
+			SetCountAndRateStatusText();
 		}
 
-		private void SetTimeStatusControls()
+		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>
+		private void SetTimeStatusVisible()
+		{
+			label_TimeStatus.Visible      =  this.showTimeStatus;
+			label_TimeStatusEmpty.Visible = !this.showTimeStatus;
+		}
+
+		private void SetTimeStatusText()
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -1002,12 +1016,16 @@ namespace YAT.Gui.Controls
 			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.totalConnectTime));
 
 			label_TimeStatus.Text = sb.ToString();
-
-			label_TimeStatus.Visible      =  this.showTimeStatus;
-			label_TimeStatusEmpty.Visible = !this.showTimeStatus;
 		}
 
-		private void SetCountAndRateStatusControls()
+		/// <remarks>Separated from <see cref="SetCountAndRateStatusText"/> to improve performance.</remarks>
+		private void SetCountAndRateStatusVisible()
+		{
+			label_CountStatus.Visible      =  this.showCountAndRateStatus;
+			label_CountStatusEmpty.Visible = !this.showCountAndRateStatus;
+		}
+
+		private void SetCountAndRateStatusText()
 		{
 			StringBuilder sb = new StringBuilder();
 			switch (this.repositoryType)
@@ -1032,9 +1050,6 @@ namespace YAT.Gui.Controls
 			}
 
 			label_CountStatus.Text = sb.ToString();
-
-			label_CountStatus.Visible      =  this.showCountAndRateStatus;
-			label_CountStatusEmpty.Visible = !this.showCountAndRateStatus;
 		}
 
 		private void AppendTxStatus(StringBuilder sb)
