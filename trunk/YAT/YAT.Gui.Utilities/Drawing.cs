@@ -142,8 +142,8 @@ namespace YAT.Gui.Utilities
 			FontStyle fontStyle = FontStyle.Regular;
 			Color     fontColor = SystemColors.ControlText;
 
-			font  = SetFont (ref lineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
-			brush = SetBrush(ref lineNumberObjects.Brush, fontColor);
+			font  = AssignIfChanged (ref lineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
+			brush = AssignIfChanged(ref lineNumberObjects.Brush, fontColor);
 		}
 
 		/// <summary></summary>
@@ -212,64 +212,64 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				font  = SetFont (ref txDataObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref txDataObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref txDataObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref txDataObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				font  = SetFont (ref txControlObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref txControlObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref txControlObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref txControlObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				font  = SetFont (ref rxDataObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref rxDataObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref rxDataObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref rxDataObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				font  = SetFont (ref rxControlObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref rxControlObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref rxControlObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref rxControlObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DateInfo)
 			{
 				fontStyle = settings.DateFormat.FontStyle;
 				fontColor = settings.DateFormat.Color;
-				font  = SetFont (ref dateObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref dateObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref dateObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref dateObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TimeInfo)
 			{
 				fontStyle = settings.TimeFormat.FontStyle;
 				fontColor = settings.TimeFormat.Color;
-				font  = SetFont (ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref timeObjects.Brush, fontColor);
+				font  = AssignIfChanged (ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref timeObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.PortInfo)
 			{
 				fontStyle = settings.PortFormat.FontStyle;
 				fontColor = settings.PortFormat.Color;
-				font  = SetFont (ref portObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref portObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref portObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref portObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				fontColor = settings.DirectionFormat.Color;
-				font  = SetFont (ref directionObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref directionObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref directionObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref directionObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Length)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				font  = SetFont (ref lengthObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref lengthObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref lengthObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref lengthObjects.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.NoData) ||
 			         (element is Domain.DisplayElement.LeftMargin) ||
@@ -279,15 +279,15 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				font  = SetFont (ref whiteSpacesObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref whiteSpacesObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref whiteSpacesObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref whiteSpacesObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;
-				font  = SetFont (ref errorObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref errorObjects.Brush, fontColor);
+				font  = AssignIfChanged(ref errorObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				brush = AssignIfChanged(ref errorObjects.Brush, fontColor);
 			}
 			else
 			{
@@ -298,7 +298,7 @@ namespace YAT.Gui.Utilities
 			}
 		}
 
-		private static Font SetFont(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle, Graphics graphics)
+		private static Font AssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle, Graphics graphics)
 		{
 			// Create the font.
 			if (cachedFont == null)
@@ -340,7 +340,7 @@ namespace YAT.Gui.Utilities
 			monitorVirtualStringFormat.SetTabStops(0, tabStops);
 		}
 
-		private static SolidBrush SetBrush(ref SolidBrush cachedBrush, Color color)
+		private static SolidBrush AssignIfChanged(ref SolidBrush cachedBrush, Color color)
 		{
 			// Create the brush using the font color.
 			if (cachedBrush == null)
