@@ -1494,25 +1494,37 @@ namespace YAT.Gui.Forms
 
 				if (isDefined)
 				{
-					this.menuItems_Predefined_Commands[i].Text      = MenuEx.PrependIndex(i + 1, commands[i].Description);
-					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
-					this.menuItems_Predefined_Commands[i].Font      = SystemFonts.DefaultFont;
-					this.menuItems_Predefined_Commands[i].Enabled   = isValid;
+					if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+						this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
+
+					if (this.menuItems_Predefined_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+						this.menuItems_Predefined_Commands[i].Font = SystemFonts.DefaultFont;
+
+					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
+					this.menuItems_Predefined_Commands[i].Enabled = isValid;
 				}
 				else
 				{
-					this.menuItems_Predefined_Commands[i].Text      = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
-					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
-					this.menuItems_Predefined_Commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-					this.menuItems_Predefined_Commands[i].Enabled   = true;
+					if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
+
+					if (this.menuItems_Predefined_Commands[i].Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+						this.menuItems_Predefined_Commands[i].Font = Drawing.ItalicDefaultFont;
+
+					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+					this.menuItems_Predefined_Commands[i].Enabled = true;
 				}
 			}
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				this.menuItems_Predefined_Commands[i].Text      = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
-				this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
-				this.menuItems_Predefined_Commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-				this.menuItems_Predefined_Commands[i].Enabled   = true;
+				if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
+
+				if (this.menuItems_Predefined_Commands[i].Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+					this.menuItems_Predefined_Commands[i].Font = Drawing.ItalicDefaultFont;
+
+				this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+				this.menuItems_Predefined_Commands[i].Enabled = true;
 			}
 
 			this.isSettingControls.Leave();
@@ -3646,7 +3658,9 @@ namespace YAT.Gui.Forms
 						{
 							ResetIOStatusFlashing();
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
-							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
+
+							if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != on) // Improve performance by only assigning if different.
+								toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
 						}
 						else // = sending is ongoing
 						{
@@ -3660,14 +3674,18 @@ namespace YAT.Gui.Forms
 					{
 						ResetIOStatusFlashing();
 						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
-						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
+
+						if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != on) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
 					}
 				}
 				else // = is closed
 				{
 					ResetIOStatusFlashing();
 					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
-					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
+
+					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != off) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
 				}
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
@@ -3676,8 +3694,10 @@ namespace YAT.Gui.Forms
 			{
 				ResetIOStatusFlashing();
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = false;
-				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag     = IOStatusIndicatorControl.Steady;
-				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image   = off;
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
+
+				if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != off) // Improve performance by only assigning if different.
+					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = off;
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = "";
 			}
@@ -3701,7 +3721,9 @@ namespace YAT.Gui.Forms
 					Image onPhase  = Properties.Resources.Image_Status_Green_12x12;
 					Image offPhase = Properties.Resources.Image_Status_Grey_12x12;
 
-					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = (ioStatusIndicatorFlashingIsOn ? onPhase : offPhase);
+					Image phase = (ioStatusIndicatorFlashingIsOn ? onPhase : offPhase);
+					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != phase) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = phase;
 				}
 			}
 		}
@@ -3823,32 +3845,70 @@ namespace YAT.Gui.Forms
 					}
 					else
 					{
-						toolStripStatusLabel_TerminalStatus_RFR.Image = (pins.Rfr ? on : off);
+						Image rfrImage = (pins.Rfr ? on : off);
+
+						if (toolStripStatusLabel_TerminalStatus_RFR.Image != rfrImage) // Improve performance by only assigning if different.
+							toolStripStatusLabel_TerminalStatus_RFR.Image = rfrImage;
 					}
 
-					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
-					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
-					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
-					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Dcd ? on : off);
+					Image ctsImage = (pins.Cts ? on : off);
+					Image dtrImage = (pins.Dtr ? on : off);
+					Image dsrImage = (pins.Dsr ? on : off);
+					Image dcdImage = (pins.Dcd ? on : off);
+
+					if (toolStripStatusLabel_TerminalStatus_CTS.Image != ctsImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_CTS.Image = ctsImage;
+
+					if (toolStripStatusLabel_TerminalStatus_DTR.Image != dtrImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_DTR.Image = dtrImage;
+
+					if (toolStripStatusLabel_TerminalStatus_DSR.Image != dsrImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_DSR.Image = dsrImage;
+
+					if (toolStripStatusLabel_TerminalStatus_DCD.Image != dcdImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_DCD.Image = dcdImage;
 
 					bool allowRfr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRfrCtsAutomatically;
 					bool allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
 
-					toolStripStatusLabel_TerminalStatus_RFR.ForeColor = (allowRfr ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
+					Color rfrForeColor = (allowRfr ? SystemColors.ControlText : SystemColors.GrayText);
+					Color dtrForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
+
+					if (toolStripStatusLabel_TerminalStatus_RFR.ForeColor != rfrForeColor) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_RFR.ForeColor = rfrForeColor;
+
+					if (toolStripStatusLabel_TerminalStatus_CTS.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
+
+					if (toolStripStatusLabel_TerminalStatus_DTR.ForeColor != dtrForeColor) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_DTR.ForeColor = dtrForeColor;
+
+					if (toolStripStatusLabel_TerminalStatus_DSR.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
+
+					if (toolStripStatusLabel_TerminalStatus_DCD.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
 					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
+					Image inputXOnXOffImage  = (inputIsXOn  ? on : off);
+					Image outputXOnXOffImage = (outputIsXOn ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
+
+					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
+
+					Color inputXOnXOffForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+
+					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
+
+					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 
 					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
 					bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
@@ -3857,11 +3917,22 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 
-					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (inputBreak  ? off : on);
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (outputBreak ? off : on);
+					Image inputBreakImage  = (inputBreak  ? off : on);
+					Image outputBreakImage = (outputBreak ? off : on);
 
-					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
+					if (toolStripStatusLabel_TerminalStatus_InputBreak.Image != inputBreakImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputBreak.Image = inputBreakImage;
+
+					if (toolStripStatusLabel_TerminalStatus_OutputBreak.Image != outputBreakImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputBreak.Image = outputBreakImage;
+
+					if (toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
+
+					Color manualBreakColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
+
+					if (toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor != manualBreakColor) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = manualBreakColor;
 
 					// \attention:
 					// Do not modify the 'Enabled' property. Labels must always be enabled,
@@ -3875,8 +3946,11 @@ namespace YAT.Gui.Forms
 
 					foreach (ToolStripStatusLabel sl in this.terminalStatusLabels)
 					{
-						sl.Image = off;
-						sl.ForeColor = SystemColors.GrayText;
+						if (sl.Image != off) // Improve performance by only assigning if different.
+							sl.Image = off;
+
+						if (sl.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+							sl.ForeColor = SystemColors.GrayText;
 					}
 
 					// Exceptions:
@@ -3941,11 +4015,22 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
+					Image inputXOnXOffImage = (inputIsXOn ? on : off);
+					Image outputXOnXOffImage = (outputIsXOn ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
+
+					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
+
+					Color inputXOnXOffForeColor = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+
+					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
+
+					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 
 					// \attention:
 					// Do not modify the 'Enabled' property. Labels must always be enabled,
@@ -3960,11 +4045,17 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = off;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = off;
+					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != off) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = off;
 
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != off) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = off;
+
+					if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = SystemColors.GrayText;
+
+					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 				}
 			}
 			else
@@ -3980,7 +4071,11 @@ namespace YAT.Gui.Forms
 		private void TriggerRfrLuminescence()
 		{
 			timer_RfrLuminescence.Enabled = false;
-			toolStripStatusLabel_TerminalStatus_RFR.Image = Properties.Resources.Image_Status_Green_12x12;
+
+			Image on = Properties.Resources.Image_Status_Green_12x12;
+			if (toolStripStatusLabel_TerminalStatus_RFR.Image != on) // Improve performance by only assigning if different.
+				toolStripStatusLabel_TerminalStatus_RFR.Image = on;
+
 			timer_RfrLuminescence.Interval = RfrLuminescenceInterval;
 			timer_RfrLuminescence.Enabled = true;
 		}
@@ -4006,11 +4101,15 @@ namespace YAT.Gui.Forms
 				if (port != null)
 					pins = port.ControlPins;
 
-				toolStripStatusLabel_TerminalStatus_RFR.Image = (pins.Rfr ? on : off);
+				Image rfr = (pins.Rfr ? on : off);
+				if (toolStripStatusLabel_TerminalStatus_RFR.Image != rfr) // Improve performance by only assigning if different.
+					toolStripStatusLabel_TerminalStatus_RFR.Image = rfr;
 			}
 			else
 			{
-				toolStripStatusLabel_TerminalStatus_RFR.Image = off;
+				Image rfr = off;
+				if (toolStripStatusLabel_TerminalStatus_RFR.Image != off) // Improve performance by only assigning if different.
+					toolStripStatusLabel_TerminalStatus_RFR.Image = off;
 			}
 		}
 
