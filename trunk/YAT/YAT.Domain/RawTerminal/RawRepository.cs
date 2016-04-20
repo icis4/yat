@@ -45,20 +45,20 @@ namespace YAT.Domain
 	public class RawRepository
 	{
 		private int capacity;
-		private Queue<RawElement> queue;
+		private Queue<RawChunk> queue;
 
 		/// <summary></summary>
 		public RawRepository(int capacity)
 		{
 			this.capacity = capacity;
-			this.queue = new Queue<RawElement>(this.capacity);
+			this.queue = new Queue<RawChunk>(this.capacity);
 		}
 
 		/// <summary></summary>
 		public RawRepository(RawRepository rhs)
 		{
 			this.capacity = rhs.capacity;
-			this.queue = new Queue<RawElement>(rhs.queue);
+			this.queue = new Queue<RawChunk>(rhs.queue);
 		}
 
 		/// <summary></summary>
@@ -84,14 +84,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual void Enqueue(RawElement re)
+		public virtual void Enqueue(RawChunk chunk)
 		{
 			lock (this.queue)
 			{
 				while (this.queue.Count >= this.capacity)
 					this.queue.Dequeue();
 
-				this.queue.Enqueue(re);
+				this.queue.Enqueue(chunk);
 			}
 		}
 
@@ -111,19 +111,19 @@ namespace YAT.Domain
 			lock (this.queue)
 			{
 				to = new List<byte>(this.queue.Count);
-				foreach (RawElement re in this.queue.ToArray())
+				foreach (RawChunk re in this.queue.ToArray())
 					to.AddRange(re.Data);
 			}
 			return (to.ToArray());
 		}
 
 		/// <summary></summary>
-		public virtual List<RawElement> ToElements()
+		public virtual List<RawChunk> ToChunks()
 		{
-			List<RawElement> to;
+			List<RawChunk> to;
 			lock (this.queue)
 			{
-				to = new List<RawElement>(this.queue);
+				to = new List<RawChunk>(this.queue);
 			}
 			return (to);
 		}
@@ -164,7 +164,7 @@ namespace YAT.Domain
 		public virtual string QueueToString(string indent)
 		{
 			StringWriter to = new StringWriter(CultureInfo.InvariantCulture);
-			foreach (RawElement re in ToElements())
+			foreach (RawChunk re in ToChunks())
 			{
 				to.Write(re.ToString(indent));
 			}
@@ -183,9 +183,9 @@ namespace YAT.Domain
 			StringBuilder sb = new StringBuilder();
 
 			int i = 0;
-			foreach (RawElement re in ToElements())
+			foreach (RawChunk re in ToChunks())
 			{
-				sb.Append(indent + "> RawElement#" + (i++) + ":" + Environment.NewLine);
+				sb.Append(indent + "> RawChunk#" + (i++) + ":" + Environment.NewLine);
 				sb.Append(re.ToDetailedString(indent + "   "));
 			}
 

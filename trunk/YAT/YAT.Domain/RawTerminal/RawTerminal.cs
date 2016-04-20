@@ -102,10 +102,10 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<RawElementEventArgs> RawElementSent;
+		public event EventHandler<RawChunkEventArgs> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<RawElementEventArgs> RawElementReceived;
+		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
 
 		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
@@ -402,18 +402,18 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual List<RawElement> RepositoryToElements(RepositoryType repositoryType)
+		public virtual List<RawChunk> RepositoryToChunks(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 
-			List<RawElement> l = null;
+			List<RawChunk> l = null;
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    l = this.txRepository   .ToElements(); break;
-					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
-					case RepositoryType.Rx:    l = this.rxRepository   .ToElements(); break;
+					case RepositoryType.Tx:    l = this.txRepository   .ToChunks(); break;
+					case RepositoryType.Bidir: l = this.bidirRepository.ToChunks(); break;
+					case RepositoryType.Rx:    l = this.rxRepository   .ToChunks(); break;
 					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Program execution should never get here, '" + repositoryType + "' is an invalid repository type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
@@ -649,13 +649,13 @@ namespace YAT.Domain
 				{
 					try
 					{
-						RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
+						RawChunk re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
 							this.rxRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
 							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
 						}
-						OnRawElementReceived(new RawElementEventArgs(re));
+						OnRawChunkReceived(new RawChunkEventArgs(re));
 					}
 					finally
 					{
@@ -684,13 +684,13 @@ namespace YAT.Domain
 				{
 					try
 					{
-						RawElement re = new RawElement(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
+						RawChunk re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
 							this.txRepository   .Enqueue(re.Clone()); // Clone elementas it is needed again below.
 							this.bidirRepository.Enqueue(re.Clone()); // Clone elementas it is needed again below.
 						}
-						OnRawElementSent(new RawElementEventArgs(re));
+						OnRawChunkSent(new RawChunkEventArgs(re));
 					}
 					finally
 					{
@@ -728,15 +728,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawElementSent(RawElementEventArgs e)
+		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
 		{
-			EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
+			EventHelper.FireSync<RawChunkEventArgs>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawElementReceived(RawElementEventArgs e)
+		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
 		{
-			EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
+			EventHelper.FireSync<RawChunkEventArgs>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>

@@ -331,9 +331,9 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public void WriteLine(RawElement element)
+		public void WriteLine(RawChunk chunk)
 		{
-			WriteLine(new XmlTransferRawLine(element.TimeStamp, (Direction)element.Direction, element.Data));
+			WriteLine(new XmlTransferRawLine(chunk.TimeStamp, (Direction)chunk.Direction, chunk.Data));
 		}
 
 		private void WriteLine(XmlTransferRawLine transferLine)

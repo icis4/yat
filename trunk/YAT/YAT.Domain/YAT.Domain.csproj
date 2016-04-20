@@ -134,7 +134,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawTerminal\RawTerminal.cs" />
-    <Compile Include="RawTerminal\RawElement.cs" />
+    <Compile Include="RawTerminal\RawChunk.cs" />
     <Compile Include="RawTerminal\RawRepository.cs" />
     <Compile Include="BinaryTerminal\Settings\BinaryTerminalSettings.cs" />
     <Compile Include="Settings\BufferSettings.cs" />
