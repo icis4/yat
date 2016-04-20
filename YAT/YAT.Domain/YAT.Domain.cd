@@ -104,7 +104,7 @@
       <FileName>Terminal\DisplayElement.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="YAT.Domain.RawElement">
+  <Class Name="YAT.Domain.RawChunk">
     <Position X="20.5" Y="14.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
@@ -112,7 +112,7 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAAAAACAAAAAMAAEACAAAAAAAgAAABAAAAAQAAAAAAA=</HashCode>
-      <FileName>RawTerminal\RawElement.cs</FileName>
+      <FileName>RawTerminal\RawChunk.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="YAT.Domain.RawRepository">

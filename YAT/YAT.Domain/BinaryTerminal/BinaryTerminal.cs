@@ -675,34 +675,34 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawElement(RawElement re, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			Settings.BinaryDisplaySettings displaySettings;
-			switch (re.Direction)
+			switch (raw.Direction)
 			{
 				case IODirection.Tx: displaySettings = BinaryTerminalSettings.TxDisplay; break;
 				case IODirection.Rx: displaySettings = BinaryTerminalSettings.RxDisplay; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + raw.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			LineState lineState;
-			switch (re.Direction)
+			switch (raw.Direction)
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + raw.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			foreach (byte b in re.Data)
+			foreach (byte b in raw.Data)
 			{
 				// In case of reload, timed line breaks are executed here:
 				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.TimeStamp, re.Direction, elements, lines);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, raw.TimeStamp, raw.Direction, elements, lines);
 
 				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
 				{
-					ExecuteLineBegin(displaySettings, lineState, re.TimeStamp, re.PortStamp, re.Direction, elements);
+					ExecuteLineBegin(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.LineBreakTimer.Start();
@@ -715,7 +715,7 @@ namespace YAT.Domain
 
 				// Data:
 				List<DisplayElement> elementsForNextLine;
-				ExecuteData(displaySettings, lineState, re.Direction, b, elements, out elementsForNextLine);
+				ExecuteData(displaySettings, lineState, raw.Direction, b, elements, out elementsForNextLine);
 
 				// Line end and length:
 				if (lineState.LinePosition == LinePosition.End)
@@ -723,12 +723,12 @@ namespace YAT.Domain
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.LineBreakTimer.Stop();
 
-					ExecuteLineEnd(lineState, re.Direction, elements, lines);
+					ExecuteLineEnd(lineState, raw.Direction, elements, lines);
 
 					// In case of a pending immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
-						ExecuteLineBegin(displaySettings, lineState, re.TimeStamp, re.PortStamp, re.Direction, elements);
+						ExecuteLineBegin(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 						foreach (DisplayElement de in elementsForNextLine)
 						{
@@ -737,7 +737,7 @@ namespace YAT.Domain
 								foreach (byte originByte in origin.Value1)
 								{
 									List<DisplayElement> elementsForNextLineDummy;
-									ExecuteData(displaySettings, lineState, re.Direction, originByte, elements, out elementsForNextLineDummy);
+									ExecuteData(displaySettings, lineState, raw.Direction, originByte, elements, out elementsForNextLineDummy);
 									// Note that 're.Direction' above is OK, this function is processing all in the same direction.
 								}
 							}
@@ -828,13 +828,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawElement(RawElement re)
+		protected override void ProcessAndSignalRawChunk(RawChunk raw)
 		{
 			// Check whether port or direction has changed:
-			ProcessAndSignalPortAndDirectionLineBreak(re.PortStamp, re.Direction);
+			ProcessAndSignalPortAndDirectionLineBreak(raw.PortStamp, raw.Direction);
 
-			// Process the raw element:
-			base.ProcessAndSignalRawElement(re);
+			// Process the raw chunk:
+			base.ProcessAndSignalRawChunk(raw);
 		}
 
 		#endregion

@@ -749,28 +749,28 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawElement(RawElement re, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected override void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			LineState lineState;
-			switch (re.Direction)
+			switch (raw.Direction)
 			{
 				case IODirection.Tx: lineState = this.txLineState; break;
 				case IODirection.Rx: lineState = this.rxLineState; break;
-				default: throw (new NotSupportedException("Program execution should never get here, '" + re.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException("Program execution should never get here, '" + raw.Direction + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			foreach (byte b in re.Data)
+			foreach (byte b in raw.Data)
 			{
 				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
-					ExecuteLineBegin(lineState, re.TimeStamp, re.PortStamp, re.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 				// Data:
-				ExecuteData(lineState, re.Direction, b, elements);
+				ExecuteData(lineState, raw.Direction, b, elements);
 
 				// Line end and length:
 				if (lineState.LinePosition == LinePosition.End)
-					ExecuteLineEnd(lineState, re.Direction, elements, lines);
+					ExecuteLineEnd(lineState, raw.Direction, elements, lines);
 			}
 		}
 
@@ -816,13 +816,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessAndSignalRawElement(RawElement re)
+		protected override void ProcessAndSignalRawChunk(RawChunk raw)
 		{
 			// Check whether direction has changed:
-			ProcessAndSignalPortAndDirectionLineBreak(re.PortStamp, re.Direction);
+			ProcessAndSignalPortAndDirectionLineBreak(raw.PortStamp, raw.Direction);
 
-			// Process the raw element:
-			base.ProcessAndSignalRawElement(re);
+			// Process the raw chunk:
+			base.ProcessAndSignalRawChunk(raw);
 		}
 
 		#endregion

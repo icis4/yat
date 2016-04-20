@@ -92,20 +92,20 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
-	public class RawElementEventArgs : EventArgs
+	public class RawChunkEventArgs : EventArgs
 	{
-		private RawElement element;
+		private RawChunk chunk;
 
 		/// <summary></summary>
-		public RawElementEventArgs(RawElement element)
+		public RawChunkEventArgs(RawChunk chunk)
 		{
-			this.element = element;
+			this.chunk = chunk;
 		}
 
 		/// <summary></summary>
-		public RawElement Element
+		public RawChunk Chunk
 		{
-			get { return (this.element); }
+			get { return (this.chunk); }
 		}
 	}
 

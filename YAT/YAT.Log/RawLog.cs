@@ -135,7 +135,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public virtual void Write(Domain.RawElement element)
+		public virtual void Write(Domain.RawChunk chunk)
 		{
 			AssertNotDisposed();
 
@@ -147,14 +147,14 @@ namespace YAT.Log
 					{
 						case FileType.Xml:
 						{
-							this.xmlWriter.WriteLine(element);
+							this.xmlWriter.WriteLine(chunk);
 							break;
 						}
 
 						case FileType.Binary:
 						default:
 						{
-							this.binaryWriter.Write(element.Data);
+							this.binaryWriter.Write(chunk.Data);
 							break;
 						}
 					}

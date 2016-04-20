@@ -1992,8 +1992,8 @@ namespace YAT.Model
 				this.terminal.IOControlChanged += new EventHandler(terminal_IOControlChanged);
 				this.terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
-				this.terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementSent);
-				this.terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementReceived);
+				this.terminal.RawChunkSent            += new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkSent);
+				this.terminal.RawChunkReceived        += new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkReceived);
 				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
 				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
 				this.terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesSent);
@@ -2011,8 +2011,8 @@ namespace YAT.Model
 				this.terminal.IOControlChanged -= new EventHandler(terminal_IOControlChanged);
 				this.terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
-				this.terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementSent);
-				this.terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementReceived);
+				this.terminal.RawChunkSent            -= new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkSent);
+				this.terminal.RawChunkReceived        -= new EventHandler<Domain.RawChunkEventArgs>(terminal_RawChunkReceived);
 				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
 				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
 				this.terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesSent);
@@ -2064,45 +2064,45 @@ namespace YAT.Model
 			OnIOError(e);
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawElementReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_RawChunkSent(object sender, Domain.RawChunkEventArgs e)
 		{
 			OnTimedStatusTextRequest("Sending...");
 
 			// Count:
-			this.txByteCount += e.Element.Data.Length;
+			this.txByteCount += e.Chunk.Data.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.txByteRate.Update(e.Element.Data.Length))
+			if (this.txByteRate.Update(e.Chunk.Data.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
 			if (this.log.IsOn)
 			{
-				this.log.Write(e.Element, Log.LogChannel.RawTx);
-				this.log.Write(e.Element, Log.LogChannel.RawBidir);
+				this.log.Write(e.Chunk, Log.LogChannel.RawTx);
+				this.log.Write(e.Chunk, Log.LogChannel.RawBidir);
 			}
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawElementSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void terminal_RawChunkReceived(object sender, Domain.RawChunkEventArgs e)
 		{
 			OnTimedStatusTextRequest("Receiving...");
 
 			// Count:
-			this.rxByteCount += e.Element.Data.Length;
+			this.rxByteCount += e.Chunk.Data.Length;
 			OnIOCountChanged(EventArgs.Empty);
 
 			// Rate:
-			if (this.rxByteRate.Update(e.Element.Data.Length))
+			if (this.rxByteRate.Update(e.Chunk.Data.Length))
 				OnIORateChanged(EventArgs.Empty);
 
 			// Log:
 			if (this.log.IsOn)
 			{
-				this.log.Write(e.Element, Log.LogChannel.RawBidir);
-				this.log.Write(e.Element, Log.LogChannel.RawRx);
+				this.log.Write(e.Chunk, Log.LogChannel.RawBidir);
+				this.log.Write(e.Chunk, Log.LogChannel.RawRx);
 			}
 
 			// AutoRespose:
@@ -2110,7 +2110,7 @@ namespace YAT.Model
 			{
 				bool isMatch = false;
 
-				foreach (byte b in e.Element.Data)
+				foreach (byte b in e.Chunk.Data)
 				{
 					lock (this.autoResponseHelperSyncObj)
 					{
@@ -2128,13 +2128,13 @@ namespace YAT.Model
 
 				if (isMatch) // Invoke sending on different thread than the receive thread.
 				{
-					VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(terminal_RawElementReceived_SendAutoResponseAsync);
+					VoidDelegateVoid asyncInvoker = new VoidDelegateVoid(terminal_RawChunkReceived_SendAutoResponseAsync);
 					asyncInvoker.BeginInvoke(null, null);
 				}
 			}
 		}
 
-		private void terminal_RawElementReceived_SendAutoResponseAsync()
+		private void terminal_RawChunkReceived_SendAutoResponseAsync()
 		{
 			SendAutoResponse();
 		}

@@ -277,10 +277,10 @@ namespace YAT.Domain
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
-		public event EventHandler<RawElementEventArgs> RawElementSent;
+		public event EventHandler<RawChunkEventArgs> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<RawElementEventArgs> RawElementReceived;
+		public event EventHandler<RawChunkEventArgs> RawChunkReceived;
 
 		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
@@ -1977,7 +1977,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawElement(RawElement re, DisplayElementCollection elements, List<DisplayLine> lines)
+		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			DisplayLine dl = new DisplayLine();
 
@@ -1986,55 +1986,55 @@ namespace YAT.Domain
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				if (TerminalSettings.Display.ShowDate)
-					dl.Add(new DisplayElement.DateInfo(re.TimeStamp));
+					dl.Add(new DisplayElement.DateInfo(raw.TimeStamp));
 
 				if (TerminalSettings.Display.ShowTime)
-					dl.Add(new DisplayElement.TimeInfo(re.TimeStamp));
+					dl.Add(new DisplayElement.TimeInfo(raw.TimeStamp));
 
 				if (TerminalSettings.Display.ShowPort)
-					dl.Add(new DisplayElement.PortInfo((Direction)re.Direction, re.PortStamp));
+					dl.Add(new DisplayElement.PortInfo((Direction)raw.Direction, raw.PortStamp));
 
 				if (TerminalSettings.Display.ShowDirection)
-					dl.Add(new DisplayElement.DirectionInfo((Direction)re.Direction));
+					dl.Add(new DisplayElement.DirectionInfo((Direction)raw.Direction));
 
 				dl.Add(new DisplayElement.LeftMargin());
 			}
 
 			// Data:
-			foreach (byte b in re.Data)
+			foreach (byte b in raw.Data)
 			{
-				dl.Add(ByteToElement(b, re.Direction));
+				dl.Add(ByteToElement(b, raw.Direction));
 			}
 
 			// Length and end:
 			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
-				dl.Add(new DisplayElement.Length((Direction)re.Direction, 1));
+				dl.Add(new DisplayElement.Length((Direction)raw.Direction, 1));
 			}
-			dl.Add(new DisplayElement.LineBreak((Direction)re.Direction));
+			dl.Add(new DisplayElement.LineBreak((Direction)raw.Direction));
 
 			elements.AddRange(dl.Clone()); // Clone elements because they are needed again a line below.
 			lines.Add(dl);
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalRawElement(RawElement re)
+		protected virtual void ProcessAndSignalRawChunk(RawChunk raw)
 		{
 			// Collection of elements processed, extends over one or multiple lines,
-			// depending on the number of bytes in raw element.
+			// depending on the number of bytes in raw chunk.
 			DisplayElementCollection elements = new DisplayElementCollection();
 			List<DisplayLine> lines = new List<DisplayLine>();
 
-			ProcessRawElement(re, elements, lines);
+			ProcessRawChunk(raw, elements, lines);
 
 			if (elements.Count > 0)
 			{
-				OnDisplayElementsProcessed(re.Direction, elements);
+				OnDisplayElementsProcessed(raw.Direction, elements);
 
 				if (lines.Count > 0)
 				{
-					OnDisplayLinesProcessed(re.Direction, lines);
+					OnDisplayLinesProcessed(raw.Direction, lines);
 				}
 			}
 		}
@@ -2073,9 +2073,9 @@ namespace YAT.Domain
 
 			// Reload repository:
 			SuspendEventsForReload();
-			foreach (RawElement re in this.rawTerminal.RepositoryToElements(repository))
+			foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(repository))
 			{
-				ProcessAndSignalRawElement(re);
+				ProcessAndSignalRawChunk(rawChunk);
 			}
 			ResumeEventsAfterReload();
 			OnRepositoryReloaded(new RepositoryEventArgs(repository));
@@ -2096,9 +2096,9 @@ namespace YAT.Domain
 
 			// Reload repositories:
 			SuspendEventsForReload();
-			foreach (RawElement re in this.rawTerminal.RepositoryToElements(RepositoryType.Bidir))
+			foreach (RawChunk rawChunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 			{
-				ProcessAndSignalRawElement(re);
+				ProcessAndSignalRawChunk(rawChunk);
 			}
 			ResumeEventsAfterReload();
 			OnRepositoryReloaded(new RepositoryEventArgs(RepositoryType.Tx));
@@ -2249,11 +2249,11 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
+		public virtual List<RawChunk> RepositoryToRawChunks(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
-			return (this.rawTerminal.RepositoryToElements(repository));
+			return (this.rawTerminal.RepositoryToChunks(repository));
 		}
 
 		#endregion
@@ -2367,13 +2367,13 @@ namespace YAT.Domain
 		{
 			this.rawTerminal = rawTerminal;
 
-			this.rawTerminal.IOChanged          += new EventHandler(rawTerminal_IOChanged);
-			this.rawTerminal.IOControlChanged   += new EventHandler(rawTerminal_IOControlChanged);
-			this.rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(rawTerminal_IOError);
+			this.rawTerminal.IOChanged         += new EventHandler(rawTerminal_IOChanged);
+			this.rawTerminal.IOControlChanged  += new EventHandler(rawTerminal_IOControlChanged);
+			this.rawTerminal.IOError           += new EventHandler<IOErrorEventArgs>(rawTerminal_IOError);
 
-			this.rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(rawTerminal_RawElementSent);
-			this.rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(rawTerminal_RawElementReceived);
-			this.rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(rawTerminal_RepositoryCleared);
+			this.rawTerminal.RawChunkSent      += new EventHandler<RawChunkEventArgs>(rawTerminal_RawChunkSent);
+			this.rawTerminal.RawChunkReceived  += new EventHandler<RawChunkEventArgs>(rawTerminal_RawChunkReceived);
+			this.rawTerminal.RepositoryCleared += new EventHandler<RepositoryEventArgs>(rawTerminal_RepositoryCleared);
 		}
 
 		#endregion
@@ -2423,18 +2423,18 @@ namespace YAT.Domain
 			}
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawElementReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void rawTerminal_RawChunkSent(object sender, RawChunkEventArgs e)
 		{
-			OnRawElementSent(e);
-			ProcessAndSignalRawElement(e.Element);
+			OnRawChunkSent(e);
+			ProcessAndSignalRawChunk(e.Chunk);
 		}
 
-		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawElementSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
-		private void rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
+		[CallingContract(IsAlwaysSequentialIncluding = "RawTerminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
+		private void rawTerminal_RawChunkReceived(object sender, RawChunkEventArgs e)
 		{
-			OnRawElementReceived(e);
-			ProcessAndSignalRawElement(e.Element);
+			OnRawChunkReceived(e);
+			ProcessAndSignalRawChunk(e.Chunk);
 		}
 
 		private void rawTerminal_RepositoryCleared(object sender, RepositoryEventArgs e)
@@ -2469,15 +2469,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawElementSent(RawElementEventArgs e)
+		protected virtual void OnRawChunkSent(RawChunkEventArgs e)
 		{
-			EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
+			EventHelper.FireSync<RawChunkEventArgs>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRawElementReceived(RawElementEventArgs e)
+		protected virtual void OnRawChunkReceived(RawChunkEventArgs e)
 		{
-			EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
+			EventHelper.FireSync<RawChunkEventArgs>(RawChunkReceived, this, e);
 		}
 
 		/// <summary></summary>

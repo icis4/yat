@@ -46,7 +46,7 @@ namespace YAT.Domain
 	/// Defines an element received from or sent to a serial interface. In addition to the serial
 	/// data itself, it also contains interface and time information.
 	/// </summary>
-	public class RawElement
+	public class RawChunk
 	{
 		#region Constants
 		//==========================================================================================
@@ -78,19 +78,19 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public RawElement(byte[] data, IODirection direction)
+		public RawChunk(byte[] data, IODirection direction)
 			: this(data, Undefined, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(byte[] data, string portStamp, IODirection direction)
+		public RawChunk(byte[] data, string portStamp, IODirection direction)
 			: this(data, DateTime.Now, portStamp, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawElement(byte[] data, DateTime timeStamp, string portStamp, IODirection direction)
+		public RawChunk(byte[] data, DateTime timeStamp, string portStamp, IODirection direction)
 		{
 			this.data      = data;
 			this.timeStamp = timeStamp;
@@ -139,9 +139,9 @@ namespace YAT.Domain
 		/// <summary>
 		/// Creates and returns a new object that is a deep-copy of this instance.
 		/// </summary>
-		public virtual RawElement Clone()
+		public virtual RawChunk Clone()
 		{
-			return (new RawElement((byte[])this.data.Clone(), this.timeStamp, this.portStamp, this.direction));
+			return (new RawChunk((byte[])this.data.Clone(), this.timeStamp, this.portStamp, this.direction));
 		}
 
 		#endregion
