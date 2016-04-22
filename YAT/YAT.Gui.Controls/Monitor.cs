@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
 // \remind MKY 2013-05-25 (related to feature request #163)
 // No feasible way to implement horizontal auto scroll found. There are Win32 API functions to move
 // the position of the scroll bar itself, and to scroll rectangles, but it is not feasible to do the
@@ -28,6 +33,15 @@
 
 // Enable to continue working/testing with an automatic horizontally scrolling list box:
 //#define ENABLE_HORIZONTAL_AUTO_SCROLL
+
+#if (DEBUG)
+
+	// Enable debugging of update management (incl. CPU performance measurement):
+////#define DEBUG_UPDATE
+
+#endif // DEBUG
+
+#endregion
 
 #region Using
 //==================================================================================================
@@ -37,42 +51,22 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Permissions;
-using System.Text;
 using System.Windows.Forms;
 
-using MKY;
 using MKY.Windows.Forms;
 
+using YAT.Gui.Controls.ViewModel;
 using YAT.Gui.Utilities;
 
 #endregion
 
 namespace YAT.Gui.Controls
 {
-	#region MonitorActivityState Enum
-	//==================================================================================================
-	// MonitorActivityState Enum
-	//==================================================================================================
-
-	/// <summary></summary>
-	public enum MonitorActivityState
-	{
-		/// <summary></summary>
-		Inactive,
-
-		/// <summary></summary>
-		Active,
-
-		/// <summary></summary>
-		Pending,
-	}
-
-	#endregion
-
 	/// <summary>
 	/// This monitor implements a list box based terminal monitor in a speed optimized way.
 	/// </summary>
@@ -97,16 +91,10 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		// Line numbers:
-		private const int VerticalScrollBarWidth = 18;
-		private const int AdditionalMargin = 4;
-		private const bool ShowLineNumbersDefault = false;
+		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
 
 		// State:
-		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
 		private const MonitorActivityState  ActivityStateDefault  = MonitorActivityState.Inactive;
-
-		// Image:
 		private const double MinImageOpacity       =  0.00; //   0%
 		private const double MaxImageOpacity       =  1.00; // 100%
 		private const double ImageOpacityIncrement = +0.10; // +10%
@@ -115,9 +103,18 @@ namespace YAT.Gui.Controls
 		// Lines:
 		private const int MaxLineCountDefault = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
-		// Time status:
+		// Line numbers:
+		private const int VerticalScrollBarWidth = 18;
+		private const int AdditionalMargin = 4;
+		private const bool ShowLineNumbersDefault = false;
+
+		// Status:
 		private const bool ShowTimeStatusDefault = false;
-		private const bool ShowCountAndRateStatusDefault = false;
+		private const bool ShowDataStatusDefault = false;
+
+		// Update:
+		private const int DataStatusIntervalMs = 31; // Interval shall be quite short => fixed to 31 ms (a prime number) = approx. 32 updates per second.
+		private readonly long DataStatusTickInterval = TimeoutToTicks(DataStatusIntervalMs);
 
 		#endregion
 
@@ -126,17 +123,11 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		// Line numbers:
-		private int initialLineNumberWidth;
-		private int currentLineNumberWidth;
-		private bool showLineNumbers = ShowLineNumbersDefault;
+		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
 
 		// State:
-		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
 		private MonitorActivityState activityState = ActivityStateDefault;
 		private MonitorActivityState activityStateOld = ActivityStateDefault;
-
-		// Image:
 		private Image imageInactive = null;
 		private Image imageActive = null;
 		private OpacityState imageOpacityState = OpacityState.Inactive;
@@ -146,29 +137,26 @@ namespace YAT.Gui.Controls
 		private int maxLineCount = MaxLineCountDefault;
 		private Model.Settings.FormatSettings formatSettings = new Model.Settings.FormatSettings();
 
-		// Time status:
+		// Line numbers:
+		private int initialLineNumberWidth;
+		private int currentLineNumberWidth;
+		private bool showLineNumbers = ShowLineNumbersDefault;
+
+		// Status:
 		private bool showTimeStatus = ShowTimeStatusDefault;
-		private TimeSpan connectTime;
-		private TimeSpan totalConnectTime;
-
-		// Count status:
-		private bool showCountAndRateStatus = ShowCountAndRateStatusDefault;
-
-		private int txByteCountStatus;
-		private int rxByteCountStatus;
-		private int txLineCountStatus;
-		private int rxLineCountStatus;
-
-		private int txByteRateStatus;
-		private int rxByteRateStatus;
-		private int txLineRateStatus;
-		private int rxLineRateStatus;
+		private MonitorTimeStatusHelper timeStatusHelper;
+		private bool showDataStatus = ShowDataStatusDefault;
+		private MonitorDataStatusHelper dataStatusHelper;
 
 		// Update:
-		private long updateTickStamp;
-		private long updateTickInterval;
-		private bool performImmediateUpdate;
 		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capactiy to improve memory management, 32 is an arbitrary value.
+		private bool performImmediateUpdate;
+		private long monitorUpdateTickInterval;
+		private long nextMonitorUpdateTickStamp; // Ticks as defined by 'Stopwatch'.
+		private long nextDataStatusUpdateTickStamp; // Ticks as defined by 'Stopwatch'.
+
+		// Note that 'Stopwatch' is used instead of 'DateTime.Now.Ticks' or 'Environment.TickCount'
+		// as suggested in several online resources.
 
 		#endregion
 
@@ -181,6 +169,14 @@ namespace YAT.Gui.Controls
 		public Monitor()
 		{
 			InitializeComponent();
+
+			timer_DataStatusUpdateTimeout.Interval = (DataStatusIntervalMs * 2); // Normal update shall have precedence over timeout.
+
+			this.timeStatusHelper = new MonitorTimeStatusHelper();
+			this.dataStatusHelper = new MonitorDataStatusHelper();
+
+			this.timeStatusHelper.StatusTextChanged += timeStatusHelper_StatusTextChanged;
+			this.dataStatusHelper.StatusTextChanged += dataStatusHelper_StatusTextChanged;
 
 			// Attention:
 			// Since the line number list box will display the vertical scroll bar automatically,
@@ -211,6 +207,7 @@ namespace YAT.Gui.Controls
 				if (this.repositoryType != value)
 				{
 					this.repositoryType = value;
+					this.dataStatusHelper.RepositoryType = value;
 					SetControls();
 				}
 			}
@@ -332,196 +329,118 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		/// <remarks>A default value of TimeSpan.Zero is not possible because it is not constant.</remarks>
 		[Category("Monitor")]
-		[Description("The connect time.")]
-		public virtual TimeSpan ConnectTime
+		[Description("The active connection time.")]
+		public virtual TimeSpan ActiveConnectTime
 		{
-			get { return (this.connectTime); }
-			set
-			{
-				if (this.connectTime != value)
-				{
-					this.connectTime = value;
-					SetTimeStatusText();
-				}
-			}
+			get { return (this.timeStatusHelper.ActiveConnectTime); }
+			set { this.timeStatusHelper.ActiveConnectTime = value;  }
 		}
 
 		/// <summary></summary>
 		/// <remarks>A default value of TimeSpan.Zero is not possible because it is not constant.</remarks>
 		[Category("Monitor")]
-		[Description("The total connect time.")]
+		[Description("The total connection time.")]
 		public virtual TimeSpan TotalConnectTime
 		{
-			get { return (this.totalConnectTime); }
-			set
-			{
-				if (this.totalConnectTime != value)
-				{
-					this.totalConnectTime = value;
-					SetTimeStatusText();
-				}
-			}
+			get { return (this.timeStatusHelper.TotalConnectTime); }
+			set { this.timeStatusHelper.TotalConnectTime = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("Show the count and rate status.")]
-		[DefaultValue(ShowCountAndRateStatusDefault)]
-		public virtual bool ShowCountAndRateStatus
+		[Description("Show the data status.")]
+		[DefaultValue(ShowDataStatusDefault)]
+		public virtual bool ShowDataStatus
 		{
-			get { return (this.showCountAndRateStatus); }
+			get { return (this.showDataStatus); }
 			set
 			{
-				if (this.showCountAndRateStatus != value)
+				if (this.showDataStatus != value)
 				{
-					this.showCountAndRateStatus = value;
-					SetCountAndRateStatusVisible();
+					this.showDataStatus = value;
+					SetDataStatusVisible();
 				}
 			}
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Tx byte count status.")]
+		[Description("The Tx byte count.")]
 		[DefaultValue(0)]
-		public virtual int TxByteCountStatus
+		public virtual int TxByteCount
 		{
-			get { return (this.txByteCountStatus); }
-			set
-			{
-				if (this.txByteCountStatus != value)
-				{
-					this.txByteCountStatus = value;
-					SetCountAndRateStatusText();
-				}
-			}
+			get { return (this.dataStatusHelper.TxByteCount); }
+			set { this.dataStatusHelper.TxByteCount = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Tx line count status.")]
+		[Description("The Tx line count.")]
 		[DefaultValue(0)]
-		public virtual int TxLineCountStatus
+		public virtual int TxLineCount
 		{
-			get { return (this.txLineCountStatus); }
-			set
-			{
-				if (this.txLineCountStatus != value)
-				{
-					this.txLineCountStatus = value;
-					SetCountAndRateStatusText();
-				}
-			}
+			get { return (this.dataStatusHelper.TxLineCount); }
+			set { this.dataStatusHelper.TxLineCount = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Rx byte count status.")]
+		[Description("The Rx byte count.")]
 		[DefaultValue(0)]
-		public virtual int RxByteCountStatus
+		public virtual int RxByteCount
 		{
-			get { return (this.rxByteCountStatus); }
-			set
-			{
-				if (this.rxByteCountStatus != value)
-				{
-					this.rxByteCountStatus = value;
-					SetCountAndRateStatusText();
-				}
-			}
+			get { return (this.dataStatusHelper.RxByteCount); }
+			set { this.dataStatusHelper.RxByteCount = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Rx line count status.")]
+		[Description("The Rx line count.")]
 		[DefaultValue(0)]
-		public virtual int RxLineCountStatus
+		public virtual int RxLineCount
 		{
-			get { return (this.rxLineCountStatus); }
-			set
-			{
-				if (this.rxLineCountStatus != value)
-				{
-					this.rxLineCountStatus = value;
-					SetCountAndRateStatusText();
-				}
-			}
+			get { return (this.dataStatusHelper.RxLineCount); }
+			set { this.dataStatusHelper.RxLineCount = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Tx byte rate status.")]
+		[Description("The Tx byte rate.")]
 		[DefaultValue(0)]
-		public virtual int TxByteRateStatus
+		public virtual int TxByteRate
 		{
-			get { return (this.txByteRateStatus); }
-			set
-			{
-				if (this.txByteRateStatus != value)
-				{
-					this.txByteRateStatus = value;
-					SetCountAndRateStatusText();
-
-					CalculateUpdateRate();
-				}
-			}
+			get { return (this.dataStatusHelper.TxByteRate); }
+			set { this.dataStatusHelper.TxByteRate = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Tx line rate status.")]
+		[Description("The Tx line rate.")]
 		[DefaultValue(0)]
-		public virtual int TxLineRateStatus
+		public virtual int TxLineRate
 		{
-			get { return (this.txLineRateStatus); }
-			set
-			{
-				if (this.txLineRateStatus != value)
-				{
-					this.txLineRateStatus = value;
-					SetCountAndRateStatusText();
-
-					CalculateUpdateRate();
-				}
-			}
+			get { return (this.dataStatusHelper.TxLineRate); }
+			set { this.dataStatusHelper.TxLineRate = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Rx byte rate status.")]
+		[Description("The Rx byte rate.")]
 		[DefaultValue(0)]
-		public virtual int RxByteRateStatus
+		public virtual int RxByteRate
 		{
-			get { return (this.rxByteRateStatus); }
-			set
-			{
-				if (this.rxByteRateStatus != value)
-				{
-					this.rxByteRateStatus = value;
-					SetCountAndRateStatusText();
-
-					CalculateUpdateRate();
-				}
-			}
+			get { return (this.dataStatusHelper.RxByteRate); }
+			set { this.dataStatusHelper.RxByteRate = value;  }
 		}
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("The Rx line rate status.")]
+		[Description("The Rx line rate.")]
 		[DefaultValue(0)]
-		public virtual int RxLineRateStatus
+		public virtual int RxLineRate
 		{
-			get { return (this.rxLineRateStatus); }
-			set
-			{
-				if (this.rxLineRateStatus != value)
-				{
-					this.rxLineRateStatus = value;
-					SetCountAndRateStatusText();
-
-					CalculateUpdateRate();
-				}
-			}
+			get { return (this.dataStatusHelper.RxLineRate); }
+			set { this.dataStatusHelper.RxLineRate = value;  }
 		}
 
 		#endregion
@@ -537,8 +456,8 @@ namespace YAT.Gui.Controls
 			label_TimeStatus     .BackColor = SystemColors.GradientActiveCaption;
 			label_TimeStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
 
-			label_CountStatus     .BackColor = SystemColors.GradientActiveCaption;
-			label_CountStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
+			label_DataStatus     .BackColor = SystemColors.GradientActiveCaption;
+			label_DataStatusEmpty.BackColor = SystemColors.GradientActiveCaption;
 		}
 
 		/// <summary></summary>
@@ -547,8 +466,8 @@ namespace YAT.Gui.Controls
 			label_TimeStatus     .BackColor = SystemColors.Control;
 			label_TimeStatusEmpty.BackColor = SystemColors.Control;
 
-			label_CountStatus     .BackColor = SystemColors.Control;
-			label_CountStatusEmpty.BackColor = SystemColors.Control;
+			label_DataStatus     .BackColor = SystemColors.Control;
+			label_DataStatusEmpty.BackColor = SystemColors.Control;
 		}
 
 		/// <summary></summary>
@@ -614,31 +533,6 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void ResetTimeStatus()
-		{
-			this.connectTime      = TimeSpan.Zero;
-			this.totalConnectTime = TimeSpan.Zero;
-
-			SetTimeStatusText();
-		}
-
-		/// <summary></summary>
-		public virtual void ResetCountAndRateStatus()
-		{
-			this.txByteCountStatus = 0;
-			this.txLineCountStatus = 0;
-			this.rxByteCountStatus = 0;
-			this.rxLineCountStatus = 0;
-
-			this.txByteRateStatus = 0;
-			this.txLineRateStatus = 0;
-			this.rxByteRateStatus = 0;
-			this.rxLineRateStatus = 0;
-
-			SetCountAndRateStatusText();
-		}
-
-		/// <summary></summary>
 		public virtual void SelectAll()
 		{
 			ListBoxEx lb = fastListBox_Monitor;
@@ -685,6 +579,36 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
+		public virtual void SetTimeStatus(TimeSpan activeConnectTime, TimeSpan totalConnectTime)
+		{
+			this.timeStatusHelper.Set(activeConnectTime, totalConnectTime);
+		}
+
+		/// <summary></summary>
+		public virtual void ResetTimeStatus()
+		{
+			this.timeStatusHelper.Reset();
+		}
+
+		/// <summary></summary>
+		public virtual void SetDataCountStatus(int txByteCount, int txLineCount, int rxByteCount, int rxLineCount)
+		{
+			this.dataStatusHelper.SetCount(txByteCount, txLineCount, rxByteCount, rxLineCount);
+		}
+
+		/// <summary></summary>
+		public virtual void SetDataRateStatus(int txByteRate, int txLineRate, int rxByteRate, int rxLineRate)
+		{
+			this.dataStatusHelper.SetRate(txByteRate, txLineRate, rxByteRate, rxLineRate);
+		}
+
+		/// <summary></summary>
+		public virtual void ResetDataStatus()
+		{
+			this.dataStatusHelper.Reset();
+		}
+
 		#endregion
 
 		#region Control Special Keys
@@ -724,10 +648,10 @@ namespace YAT.Gui.Controls
 			label_TimeStatus     .Width  = middle - IconDistance;
 			label_TimeStatusEmpty.Width  = middle - IconDistance;
 
-			label_CountStatus     .Left  = middle + IconDistance;
-			label_CountStatusEmpty.Left  = middle + IconDistance;
-			label_CountStatus     .Width = middle - IconDistance;
-			label_CountStatusEmpty.Width = middle - IconDistance;
+			label_DataStatus     .Left  = middle + IconDistance;
+			label_DataStatusEmpty.Left  = middle + IconDistance;
+			label_DataStatus     .Width = middle - IconDistance;
+			label_DataStatusEmpty.Width = middle - IconDistance;
 		}
 
 		#endregion
@@ -821,7 +745,7 @@ namespace YAT.Gui.Controls
 		///    => Doesn't work because list box has already been cleaned to a black background
 		///       before this event is invoked, thus it increases flickering too...
 		/// 3. Temporarily suspending the adding of elements. The elements are then added upon
-		///    the next update. See <see cref="UpdateHasToBePerformed()"/> for details.
+		///    the next update. See <see cref="MonitorUpdateHasToBePerformed()"/> for details.
 		/// 
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
@@ -883,13 +807,23 @@ namespace YAT.Gui.Controls
 			fastListBox_Monitor.ClearSelected();
 		}
 
-		/// <summary>
-		/// Timeout to ensure that list box is updated even if updates were skipped to improve performance before.
-		/// </summary>
-		private void timer_UpdateTimeout_Tick(object sender, EventArgs e)
+		private void timer_MonitorUpdateTimeout_Tick(object sender, EventArgs e)
 		{
-			StopUpdateTimeout();
+			StopMonitorUpdateTimeout();
 			UpdateFastListBoxWithPendingElementsAndLines();
+		}
+
+		private void timer_DataStatusUpdateTimeout_Tick(object sender, EventArgs e)
+		{
+			StopDataStatusUpdateTimeout();
+			UpdateDataStatusText();
+		}
+
+		private void timer_TotalProcessorLoad_Tick(object sender, EventArgs e)
+		{
+			int totalProcessorLoad = (int)performanceCounter_TotalProcessorLoad.NextValue();
+			WriteUpdateDebugMessage("CPU load = " + totalProcessorLoad.ToString(CultureInfo.InvariantCulture) + "%");
+			CalculateUpdateRates(totalProcessorLoad);
 		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
@@ -928,6 +862,23 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
+		#region Utilities Event Handlers
+		//==========================================================================================
+		// Utilities Event Handlers
+		//==========================================================================================
+
+		private void timeStatusHelper_StatusTextChanged(object sender, EventArgs e)
+		{
+			SetTimeStatusText();
+		}
+
+		private void dataStatusHelper_StatusTextChanged(object sender, EventArgs e)
+		{
+			SetDataStatusText();
+		}
+
+		#endregion
+
 		#region Private Methods
 		//==========================================================================================
 		// Private Methods
@@ -945,7 +896,7 @@ namespace YAT.Gui.Controls
 				}
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
 
-				// Image blending.
+				// Image blending:
 				switch (this.activityState)
 				{
 					case MonitorActivityState.Active:   this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = this.imageActive; break;
@@ -996,86 +947,8 @@ namespace YAT.Gui.Controls
 			SetTimeStatusVisible();
 			SetTimeStatusText();
 
-			SetCountAndRateStatusVisible();
-			SetCountAndRateStatusText();
-		}
-
-		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>
-		private void SetTimeStatusVisible()
-		{
-			label_TimeStatus.Visible      =  this.showTimeStatus;
-			label_TimeStatusEmpty.Visible = !this.showTimeStatus;
-		}
-
-		private void SetTimeStatusText()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.connectTime));
-			sb.Append(Environment.NewLine);
-			sb.Append(TimeSpanEx.FormatInvariantTimeSpan(this.totalConnectTime));
-
-			label_TimeStatus.Text = sb.ToString();
-		}
-
-		/// <remarks>Separated from <see cref="SetCountAndRateStatusText"/> to improve performance.</remarks>
-		private void SetCountAndRateStatusVisible()
-		{
-			label_CountStatus.Visible      =  this.showCountAndRateStatus;
-			label_CountStatusEmpty.Visible = !this.showCountAndRateStatus;
-		}
-
-		private void SetCountAndRateStatusText()
-		{
-			StringBuilder sb = new StringBuilder();
-			switch (this.repositoryType)
-			{
-				case Domain.RepositoryType.Tx:
-				{
-					AppendTxStatus(sb);
-					break;
-				}
-				case Domain.RepositoryType.Bidir:
-				{
-					AppendTxStatus(sb);
-					sb.Append(Environment.NewLine);
-					AppendRxStatus(sb);
-					break;
-				}
-				case Domain.RepositoryType.Rx:
-				{
-					AppendRxStatus(sb);
-					break;
-				}
-			}
-
-			label_CountStatus.Text = sb.ToString();
-		}
-
-		private void AppendTxStatus(StringBuilder sb)
-		{
-			sb.Append(this.txByteCountStatus);
-			sb.Append(" | ");
-			sb.Append(this.txLineCountStatus);
-			sb.Append(" @ ");
-			sb.Append(this.txByteRateStatus);
-			sb.Append("/s");  // " B/s" is not really readable, compare 1024/s vs. 1024 B/s,
-			sb.Append(" | "); //   and consider that the values may be flickering.
-			sb.Append(this.txLineRateStatus);
-			sb.Append("/s");
-		}
-
-		private void AppendRxStatus(StringBuilder sb)
-		{
-			sb.Append(this.rxByteCountStatus);
-			sb.Append(" | ");
-			sb.Append(this.rxLineCountStatus);
-			sb.Append(" @ ");
-			sb.Append(this.rxByteRateStatus);
-			sb.Append("/s");
-			sb.Append(" | ");
-			sb.Append(this.rxLineRateStatus);
-			sb.Append("/s");
+			SetDataStatusVisible();
+			SetDataStatusText();
 		}
 
 		private void AddElementsOrLines(object elementsOrLines)
@@ -1084,10 +957,15 @@ namespace YAT.Gui.Controls
 
 			// Either perform the update...
 			// ...or arm the update timeout to ensure that update will be performed later:
-			if (UpdateHasToBePerformed())
+			if (MonitorUpdateHasToBePerformed())
+			{
+				StopMonitorUpdateTimeout();
 				UpdateFastListBoxWithPendingElementsAndLines();
+			}
 			else
-				RestartUpdateTimeout(TicksToTimeout(this.updateTickInterval));
+			{
+				StartMonitorUpdateTimeout(TicksToTimeout(this.monitorUpdateTickInterval) * 2); // Normal update shall have precedence over timeout.
+			}
 		}
 
 		private void UpdateFastListBoxWithPendingElementsAndLines()
@@ -1140,12 +1018,12 @@ namespace YAT.Gui.Controls
 					}
 				}
 				throw (new InvalidOperationException("Invalid pending element(s) or line(s)!"));
-			}
+			} // foreach (object in pending)
 
 			this.pendingElementsAndLines.Clear();
 
-			// Keep tick stamp of update.
-			this.updateTickStamp = DateTime.Now.Ticks;
+			// Calculate tick stamp of next update:
+			this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval);
 
 			if (lbmon.VerticalScrollToBottomIfNoItemButTheLastIsSelected())
 				lblin.VerticalScrollToBottom();
@@ -1166,7 +1044,7 @@ namespace YAT.Gui.Controls
 			ListBox lblin = fastListBox_LineNumbers;
 			ListBox lbmon = fastListBox_Monitor;
 
-			// If first line, add element to a new line.
+			// If first line, add element to a new line:
 			if (lbmon.Items.Count <= 0)
 			{
 				lblin.Items.Add(0);
@@ -1174,11 +1052,11 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				// Get current line.
+				// Get current line:
 				int lastLineIndex = lbmon.Items.Count - 1;
 				Domain.DisplayLine current = (lbmon.Items[lastLineIndex] as Domain.DisplayLine);
 
-				// If first element, add element to line.
+				// If first element, add element to line:
 				if (current.Count <= 0)
 				{
 					current.Add(element);
@@ -1186,18 +1064,18 @@ namespace YAT.Gui.Controls
 				else
 				{
 					// If current line has ended, add element to a new line.
-					// Otherwise, simply add element to current line.
+					// Otherwise, simply add element to current line:
 					int lastElementIndex = current.Count - 1;
 					if (current[lastElementIndex] is Domain.DisplayElement.LineBreak)
 					{
-						// Remove lines if maximum exceeded.
+						// Remove lines if maximum exceeded:
 						while (lbmon.Items.Count >= (this.maxLineCount))
 						{
 							lblin.Items.RemoveAt(0);
 							lbmon.Items.RemoveAt(0);
 						}
 
-						// Add element to a new line.
+						// Add element to a new line:
 						lblin.Items.Add(0);
 						lbmon.Items.Add(new Domain.DisplayLine(element));
 					}
@@ -1262,59 +1140,154 @@ namespace YAT.Gui.Controls
 			return (effectiveWidth - (VerticalScrollBarWidth + AdditionalMargin));
 		}
 
-		private static int TicksToTimeout(long ticks)
+		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>
+		private void SetTimeStatusVisible()
 		{
-			return ((int)(ticks / TimeSpan.TicksPerMillisecond));
+			label_TimeStatus.Visible      =  this.showTimeStatus;
+			label_TimeStatusEmpty.Visible = !this.showTimeStatus;
 		}
 
-		private static long TimeoutToTicks(int timeout)
+		private void SetTimeStatusText()
 		{
-			return (timeout * TimeSpan.TicksPerMillisecond);
+			label_TimeStatus.Text = this.timeStatusHelper.StatusText;
+		}
+
+		/// <remarks>Separated from <see cref="SetDataStatusText"/> to improve performance.</remarks>
+		private void SetDataStatusVisible()
+		{
+			label_DataStatus.Visible      =  this.showDataStatus;
+			label_DataStatusEmpty.Visible = !this.showDataStatus;
+		}
+
+		private void SetDataStatusText()
+		{
+			// Either perform the update...
+			// ...or arm the update timeout to ensure that update will be performed later:
+			if (DataStatusUpdateHasToBePerformed())
+				UpdateDataStatusText();
+			else
+				StartDataStatusUpdateTimeout();
+		}
+
+		private void UpdateDataStatusText()
+		{
+			label_DataStatus.Text = this.dataStatusHelper.StatusText;
+
+			// Calculate tick stamp of next update:
+			this.nextDataStatusUpdateTickStamp = (Stopwatch.GetTimestamp() + DataStatusTickInterval);
 		}
 
 		/// <summary>
-		/// The update rate is calculated on a non-linear basis that represents the typical speeds
-		/// of Rx/Tx data and the human eye. The function is defined as follows:
+		/// The update rate is calculated reverse-proportional to the total CPU load:
 		/// 
-		///    update interval in milliseconds
-		///                 ^                 
-		/// max = 500       | ------------ xxx
-		///                 |            x |  
-		///                 |         x    |  
-		///                 |      x       |  
-		/// min = immediate | - x          |  
-		///       (means 0) o-----------------> data rate in bytes per second
-		///                    100       1000
+		///      update interval in ms
+		///                 ^
+		///      max = 2500 |-----------xxxx|
+		///                 |           x   |
+		///                 |           x   |
+		///                 |          x    |
+		///                 |       xx      |
+		/// min = immediate |xxxxx          |
+		///       (means 0) o-----------------> total CPU load in %
+		///                 0  25  50  75  100
 		/// 
-		/// Thus, up to 100 bytes per second the update is done immediately. At 1000 bytes per second or
-		/// more, the update is done twice a second. Linear inbetween.
+		/// Up to 25%, the update is done immediately.
+		/// Above 75%, the update is done every 2500 milliseconds.
+		/// Quadratic inbetween, at y = x^2.
 		/// 
-		/// An alternative solution would be to measure the effective duration of an update and then
-		/// adjust the rate on the duration. Could be tried if the calculation applied now doesn't work
-		/// well enough. Consider to take the number of active monitors (all monitors of all terminals)
-		/// into account.
+		/// Rationale:
+		///  - For better user expericence, interval shall gradually increase.
+		///  - Even at high CPU load, there shall still be some updating.
 		/// </summary>
+		/// <param name="totalProcessorLoadInPercent">
+		/// Load in %, i.e. values from 0.0 to 100.0.
+		/// </param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "What's wrong with 'inbetween'?")]
-		private void CalculateUpdateRate()
+		private void CalculateUpdateRates(int totalProcessorLoadInPercent)
 		{
-			int lowerLimit =  100; // bytes per second
-			int upperLimit = 1000; // bytes per second
-			int currentRate = Math.Max(this.txByteRateStatus, this.rxByteRateStatus);
+			const int LowerLoad = 25; // %
+			const int UpperLoad = 75; // %
+		////const int LoadSpan  = 50; // %
 
-			if (currentRate <= lowerLimit)
+			const int LowerInterval =   41; // Interval shall be quite short => fixed to 41 ms (a prime number) = approx. 24 updates per second.
+			const int UpperInterval = 2500; // = 50*50 => eases calculation.
+
+			if (totalProcessorLoadInPercent < LowerLoad)
 			{
-				this.updateTickInterval = 0;
+				this.monitorUpdateTickInterval = LowerInterval;
 				this.performImmediateUpdate = true;
+
+				WriteUpdateDebugMessage("Update interval is minimum:");
 			}
-			else if (currentRate >= upperLimit)
+			else if (totalProcessorLoadInPercent > UpperLoad)
 			{
-				this.updateTickInterval = TimeoutToTicks(upperLimit / 2);
+				this.monitorUpdateTickInterval = TimeoutToTicks(UpperInterval);
 				this.performImmediateUpdate = false;
+
+				WriteUpdateDebugMessage("Update interval is maximum:");
 			}
 			else
 			{
-				this.updateTickInterval = TimeoutToTicks(currentRate / 2);
+				int x = (totalProcessorLoadInPercent - LowerLoad);
+				int y = x * x;
+
+				y = MKY.Int32Ex.Limit(y, LowerInterval, UpperInterval);
+
+				this.monitorUpdateTickInterval = TimeoutToTicks(y);
 				this.performImmediateUpdate = false;
+
+				WriteUpdateDebugMessage("Update interval is calculated:");
+			}
+
+			WriteUpdateDebugMessage(" > " + this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks");
+			WriteUpdateDebugMessage(" > " + TicksToTimeout(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
+		}
+
+		private static int TicksToTimeout(long ticks)
+		{
+			return ((int)(ticks * 1000 / Stopwatch.Frequency));
+		}
+
+		private static long TimeoutToTicks(int timeoutMs)
+		{
+			return (Stopwatch.Frequency * timeoutMs / 1000);
+		}
+
+		/// <summary>
+		/// Either perform the update if immediate update is active (e.g. low data traffic)
+		/// or if the tick interval has expired.
+		/// </summary>
+		private bool MonitorUpdateHasToBePerformed()
+		{
+			// Immediate update:
+			if (this.performImmediateUpdate)
+				return (true);
+
+			// Calculate whether the update interval has expired:
+			if (Stopwatch.GetTimestamp() >= this.nextMonitorUpdateTickStamp)
+				return (true);
+
+			return (false);
+		}
+
+		private void StopMonitorUpdateTimeout()
+		{
+			if (timer_MonitorUpdateTimeout.Enabled)
+				timer_MonitorUpdateTimeout.Stop();
+		}
+
+		/// <param name="timeout">
+		/// The value cannot be less than one.
+		/// </param>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// The <paramref name="timeout"/> value is less than one.
+		/// </exception>
+		private void StartMonitorUpdateTimeout(int timeout)
+		{
+			if (!timer_MonitorUpdateTimeout.Enabled && (timeout > 0))
+			{
+				timer_MonitorUpdateTimeout.Interval = timeout;
+				timer_MonitorUpdateTimeout.Start();
 			}
 		}
 
@@ -1322,29 +1295,43 @@ namespace YAT.Gui.Controls
 		/// Either perform the update if immediate update is active (e.g. low data traffic)
 		/// or if the tick interval has expired.
 		/// </summary>
-		private bool UpdateHasToBePerformed()
+		private bool DataStatusUpdateHasToBePerformed()
 		{
-			// Immediate update.
+			// Immediate update:
 			if (this.performImmediateUpdate)
 				return (true);
 
-			// Calculate whether the update has expired.
-			if (DateTime.Now.Ticks >= (this.updateTickStamp + this.updateTickInterval))
+			// Calculate whether the update interval has expired:
+			if (Stopwatch.GetTimestamp() >= this.nextDataStatusUpdateTickStamp)
 				return (true);
 
 			return (false);
 		}
 
-		private void StopUpdateTimeout()
+		private void StopDataStatusUpdateTimeout()
 		{
-			timer_UpdateTimeout.Stop();
+			if (timer_DataStatusUpdateTimeout.Enabled)
+				timer_DataStatusUpdateTimeout.Stop();
 		}
 
-		private void RestartUpdateTimeout(int timeout)
+		private void StartDataStatusUpdateTimeout()
 		{
-			timer_UpdateTimeout.Stop();
-			timer_UpdateTimeout.Interval = timeout;
-			timer_UpdateTimeout.Start();
+			if (!timer_DataStatusUpdateTimeout.Enabled)
+				timer_DataStatusUpdateTimeout.Start();
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG_UPDATE")]
+		protected virtual void WriteUpdateDebugMessage(string message)
+		{
+			Debug.WriteLine(message);
 		}
 
 		#endregion

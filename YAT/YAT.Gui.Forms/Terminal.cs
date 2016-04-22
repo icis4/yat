@@ -42,6 +42,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Drawing;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
@@ -104,7 +105,7 @@ namespace YAT.Gui.Forms
 		// Status
 		private const string DefaultStatusText = "";
 		private const int TimedStatusInterval = 2000;
-		private const int RfrLuminescenceInterval = 150;
+		private const int RfrLuminescenceInterval = 179;
 
 		#endregion
 
@@ -1508,8 +1509,8 @@ namespace YAT.Gui.Forms
 					if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
 
-					if (this.menuItems_Predefined_Commands[i].Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-						this.menuItems_Predefined_Commands[i].Font = Drawing.ItalicDefaultFont;
+					if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
 
 					this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
 					this.menuItems_Predefined_Commands[i].Enabled = true;
@@ -1520,8 +1521,8 @@ namespace YAT.Gui.Forms
 				if (this.menuItems_Predefined_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
 
-				if (this.menuItems_Predefined_Commands[i].Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-					this.menuItems_Predefined_Commands[i].Font = Drawing.ItalicDefaultFont;
+				if (this.menuItems_Predefined_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+					this.menuItems_Predefined_Commands[i].Font = DrawingEx.DefaultFontItalic;
 
 				this.menuItems_Predefined_Commands[i].Text = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
 				this.menuItems_Predefined_Commands[i].Enabled = true;
@@ -2295,11 +2296,15 @@ namespace YAT.Gui.Forms
 
 			foreach (ContextMenuStrip strip in strips)
 				strip.OwnerItem = null;
-			
+
 			ResumeLayout();
 
 			// Also fix the issue with shortcuts defined in context menus:
-			this.contextMenuStripShortcutWorkaround = new ContextMenuStripShortcutWorkaround();
+			int itemCount = 0;
+			foreach (ContextMenuStrip strip in strips)
+				itemCount += strip.Items.Count;
+
+			this.contextMenuStripShortcutWorkaround = new ContextMenuStripShortcutWorkaround(itemCount); // Preset the required capactiy to improve memory management.
 			foreach (ContextMenuStrip strip in strips)
 				this.contextMenuStripShortcutWorkaround.Add(strip);
 		}
@@ -2353,7 +2358,7 @@ namespace YAT.Gui.Forms
 			if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
 			{
 				splitContainer_Predefined.Panel2Collapsed = false;
-				splitContainer_Predefined.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width), 0, (splitContainer_Predefined.Width - 1));
+				splitContainer_Predefined.SplitterDistance = Int32Ex.Limit((int)(this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width), 0, (splitContainer_Predefined.Width - 1));
 			}
 			else
 			{
@@ -2384,7 +2389,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_TxMonitor.Height;
 
-					splitContainer_TxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight), 0, (widthOrHeight - 1));
+					splitContainer_TxMonitor.SplitterDistance = Int32Ex.Limit((int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight), 0, (widthOrHeight - 1));
 				}
 			}
 			else
@@ -2406,7 +2411,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_RxMonitor.Height;
 
-					splitContainer_RxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight), 0, (widthOrHeight - 1));
+					splitContainer_RxMonitor.SplitterDistance = Int32Ex.Limit((int)(this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight), 0, (widthOrHeight - 1));
 				}
 			}
 			else
@@ -2434,13 +2439,13 @@ namespace YAT.Gui.Forms
 			{
 				int height = 97;
 				splitContainer_Terminal.Panel2MinSize = height;
-				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
+				splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
 			else if (this.settingsRoot.Layout.SendTextPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 48;
 				splitContainer_Terminal.Panel2MinSize = height;
-				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
+				splitContainer_Terminal.SplitterDistance = Int32Ex.Limit(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, (splitContainer_Terminal.Height - 1));
 			}
 
 			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendTextPanelIsVisible;
@@ -2459,7 +2464,7 @@ namespace YAT.Gui.Forms
 			const int PredefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
 			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
 			int relativeX = absoluteX - send.Left + PredefinedOffset;
-			send.SplitterDistance = Int32Ex.LimitToBounds(relativeX, 0, (send.Width - 1));
+			send.SplitterDistance = Int32Ex.Limit(relativeX, 0, (send.Width - 1));
 		}
 
 		private void SetDisplayControls()
@@ -2682,15 +2687,15 @@ namespace YAT.Gui.Forms
 
 		private void SetMonitorIOStatus()
 		{
-			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
+			Gui.Controls.ViewModel.MonitorActivityState activityState = Gui.Controls.ViewModel.MonitorActivityState.Inactive;
 			if (TerminalIsAvailable)
 			{
 				if (this.terminal.IsStarted)
 				{
 					if (this.terminal.IsConnected)
-						activityState = Gui.Controls.MonitorActivityState.Active;
+						activityState = Gui.Controls.ViewModel.MonitorActivityState.Active;
 					else
-						activityState = Gui.Controls.MonitorActivityState.Pending;
+						activityState = Gui.Controls.ViewModel.MonitorActivityState.Pending;
 				}
 			}
 			monitor_Tx.ActivityState    = activityState;
@@ -2706,9 +2711,9 @@ namespace YAT.Gui.Forms
 			monitor_Rx.ShowTimeStatus    = showConnectTime;
 
 			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
-			monitor_Tx.ShowCountAndRateStatus    = showCountAndRate;
-			monitor_Bidir.ShowCountAndRateStatus = showCountAndRate;
-			monitor_Rx.ShowCountAndRateStatus    = showCountAndRate;
+			monitor_Tx.ShowDataStatus    = showCountAndRate;
+			monitor_Bidir.ShowDataStatus = showCountAndRate;
+			monitor_Rx.ShowDataStatus    = showCountAndRate;
 		}
 
 		private void ReloadMonitors()
@@ -3337,14 +3342,14 @@ namespace YAT.Gui.Forms
 			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			if (!IsDisposed && TerminalIsAvailable)
 			{
-				monitor_Tx.ConnectTime         = this.terminal.ConnectTime;
-				monitor_Tx.TotalConnectTime    = this.terminal.TotalConnectTime;
+				TimeSpan activeConnectTime;
+				TimeSpan totalConnectTime;
 
-				monitor_Bidir.ConnectTime      = this.terminal.ConnectTime;
-				monitor_Bidir.TotalConnectTime = this.terminal.TotalConnectTime;
+				this.terminal.GetConnectTime(out activeConnectTime, out totalConnectTime);
 
-				monitor_Rx.ConnectTime         = this.terminal.ConnectTime;
-				monitor_Rx.TotalConnectTime    = this.terminal.TotalConnectTime;
+				monitor_Tx   .SetTimeStatus(activeConnectTime, totalConnectTime);
+				monitor_Bidir.SetTimeStatus(activeConnectTime, totalConnectTime);
+				monitor_Rx   .SetTimeStatus(activeConnectTime, totalConnectTime);
 			}
 		}
 
@@ -3354,21 +3359,16 @@ namespace YAT.Gui.Forms
 			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			if (!IsDisposed && TerminalIsAvailable)
 			{
-				int txByteCount = this.terminal.TxByteCount;
-				int rxByteCount = this.terminal.RxByteCount;
+				int txByteCount = 0;
+				int txLineCount = 0;
+				int rxByteCount = 0;
+				int rxLineCount = 0;
 
-				int txLineCount = this.terminal.TxLineCount;
-				int rxLineCount = this.terminal.RxLineCount;
+				this.terminal.GetDataCount(out txByteCount, out txLineCount, out rxByteCount, out rxLineCount);
 
-				monitor_Tx.TxByteCountStatus    = txByteCount;
-				monitor_Tx.TxLineCountStatus    = txLineCount;
-				monitor_Bidir.TxByteCountStatus = txByteCount;
-				monitor_Bidir.TxLineCountStatus = txLineCount;
-
-				monitor_Bidir.RxByteCountStatus = rxByteCount;
-				monitor_Bidir.RxLineCountStatus = rxLineCount;
-				monitor_Rx.RxByteCountStatus    = rxByteCount;
-				monitor_Rx.RxLineCountStatus    = rxLineCount;
+				monitor_Tx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+				monitor_Bidir.SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
+				monitor_Rx   .SetDataCountStatus(txByteCount, txLineCount, rxByteCount, rxLineCount);
 			}
 		}
 
@@ -3378,21 +3378,16 @@ namespace YAT.Gui.Forms
 			// Ensure not to handle event during closing anymore. Check 'IsDisposed' first!
 			if (!IsDisposed && TerminalIsAvailable)
 			{
-				int txByteRate = this.terminal.TxByteRate;
-				int rxByteRate = this.terminal.RxByteRate;
+				int txByteRate = 0;
+				int txLineRate = 0;
+				int rxByteRate = 0;
+				int rxLineRate = 0;
 
-				int txLineRate = this.terminal.TxLineRate;
-				int rxLineRate = this.terminal.RxLineRate;
+				this.terminal.GetDataRate(out txByteRate, out txLineRate, out rxByteRate, out rxLineRate);
 
-				monitor_Tx.TxByteRateStatus    = txByteRate;
-				monitor_Tx.TxLineRateStatus    = txLineRate;
-				monitor_Bidir.TxByteRateStatus = txByteRate;
-				monitor_Bidir.TxLineRateStatus = txLineRate;
-
-				monitor_Bidir.RxByteRateStatus = rxByteRate;
-				monitor_Bidir.RxLineRateStatus = rxLineRate;
-				monitor_Rx.RxByteRateStatus    = rxByteRate;
-				monitor_Rx.RxLineRateStatus    = rxLineRate;
+				monitor_Tx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+				monitor_Bidir.SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
+				monitor_Rx   .SetDataRateStatus(txByteRate, txLineRate, rxByteRate, rxLineRate);
 			}
 		}
 
