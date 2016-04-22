@@ -32,18 +32,22 @@
 			this.panel_Monitor = new System.Windows.Forms.Panel();
 			this.fastListBox_Monitor = new MKY.Windows.Forms.FastListBox();
 			this.panel_Picture = new System.Windows.Forms.Panel();
+			this.label_DataStatus = new System.Windows.Forms.Label();
 			this.label_TimeStatus = new System.Windows.Forms.Label();
-			this.label_CountStatus = new System.Windows.Forms.Label();
+			this.label_DataStatusEmpty = new System.Windows.Forms.Label();
+			this.label_TimeStatusEmpty = new System.Windows.Forms.Label();
 			this.pictureBox_Monitor = new System.Windows.Forms.PictureBox();
 			this.fastListBox_LineNumbers = new MKY.Windows.Forms.FastListBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
-			this.timer_UpdateTimeout = new System.Windows.Forms.Timer(this.components);
-			this.label_CountStatusEmpty = new System.Windows.Forms.Label();
-			this.label_TimeStatusEmpty = new System.Windows.Forms.Label();
+			this.timer_MonitorUpdateTimeout = new System.Windows.Forms.Timer(this.components);
+			this.timer_DataStatusUpdateTimeout = new System.Windows.Forms.Timer(this.components);
+			this.performanceCounter_TotalProcessorLoad = new System.Diagnostics.PerformanceCounter();
+			this.timer_TotalProcessorLoad = new System.Windows.Forms.Timer(this.components);
 			this.panel_Monitor.SuspendLayout();
 			this.panel_Picture.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.performanceCounter_TotalProcessorLoad)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// panel_Monitor
@@ -77,9 +81,9 @@
 			// 
 			// panel_Picture
 			// 
-			this.panel_Picture.Controls.Add(this.label_CountStatus);
+			this.panel_Picture.Controls.Add(this.label_DataStatus);
 			this.panel_Picture.Controls.Add(this.label_TimeStatus);
-			this.panel_Picture.Controls.Add(this.label_CountStatusEmpty);
+			this.panel_Picture.Controls.Add(this.label_DataStatusEmpty);
 			this.panel_Picture.Controls.Add(this.label_TimeStatusEmpty);
 			this.panel_Picture.Controls.Add(this.pictureBox_Monitor);
 			this.panel_Picture.Dock = System.Windows.Forms.DockStyle.Top;
@@ -88,6 +92,19 @@
 			this.panel_Picture.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
 			this.panel_Picture.Size = new System.Drawing.Size(300, 34);
 			this.panel_Picture.TabIndex = 0;
+			// 
+			// label_DataStatus
+			// 
+			this.label_DataStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_DataStatus.AutoEllipsis = true;
+			this.label_DataStatus.Location = new System.Drawing.Point(166, 0);
+			this.label_DataStatus.Name = "label_DataStatus";
+			this.label_DataStatus.Size = new System.Drawing.Size(134, 30);
+			this.label_DataStatus.TabIndex = 2;
+			this.label_DataStatus.Text = "888 | 888 @ 8/s | 8/s\r\n888 | 888 @ 8/s | 8/s";
+			this.label_DataStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolTip.SetToolTip(this.label_DataStatus, "Number of bytes | lines @ bytes | lines per second");
 			// 
 			// label_TimeStatus
 			// 
@@ -102,18 +119,23 @@
 			this.label_TimeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolTip.SetToolTip(this.label_TimeStatus, "Connect time (m:ss)\r\nTotal connect time (m:ss)");
 			// 
-			// label_CountStatus
+			// label_DataStatusEmpty
 			// 
-			this.label_CountStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label_DataStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_CountStatus.AutoEllipsis = true;
-			this.label_CountStatus.Location = new System.Drawing.Point(166, 0);
-			this.label_CountStatus.Name = "label_CountStatus";
-			this.label_CountStatus.Size = new System.Drawing.Size(134, 30);
-			this.label_CountStatus.TabIndex = 2;
-			this.label_CountStatus.Text = "888 | 888 @ 8/s | 8/s\r\n888 | 888 @ 8/s | 8/s";
-			this.label_CountStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.label_CountStatus, "Number of bytes | lines @ bytes | lines per second");
+			this.label_DataStatusEmpty.Location = new System.Drawing.Point(166, 0);
+			this.label_DataStatusEmpty.Name = "label_DataStatusEmpty";
+			this.label_DataStatusEmpty.Size = new System.Drawing.Size(134, 30);
+			this.label_DataStatusEmpty.TabIndex = 3;
+			// 
+			// label_TimeStatusEmpty
+			// 
+			this.label_TimeStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_TimeStatusEmpty.Location = new System.Drawing.Point(0, 0);
+			this.label_TimeStatusEmpty.Name = "label_TimeStatusEmpty";
+			this.label_TimeStatusEmpty.Size = new System.Drawing.Size(134, 30);
+			this.label_TimeStatusEmpty.TabIndex = 1;
 			// 
 			// pictureBox_Monitor
 			// 
@@ -148,27 +170,25 @@
 			// 
 			this.timer_Opacity.Tick += new System.EventHandler(this.timer_Opacity_Tick);
 			// 
-			// timer_UpdateTimeout
+			// timer_MonitorUpdateTimeout
 			// 
-			this.timer_UpdateTimeout.Tick += new System.EventHandler(this.timer_UpdateTimeout_Tick);
+			this.timer_MonitorUpdateTimeout.Tick += new System.EventHandler(this.timer_MonitorUpdateTimeout_Tick);
 			// 
-			// label_CountStatusEmpty
+			// timer_DataStatusUpdateTimeout
 			// 
-			this.label_CountStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_CountStatusEmpty.Location = new System.Drawing.Point(166, 0);
-			this.label_CountStatusEmpty.Name = "label_CountStatusEmpty";
-			this.label_CountStatusEmpty.Size = new System.Drawing.Size(134, 30);
-			this.label_CountStatusEmpty.TabIndex = 3;
+			this.timer_DataStatusUpdateTimeout.Tick += new System.EventHandler(this.timer_DataStatusUpdateTimeout_Tick);
 			// 
-			// label_TimeStatusEmpty
+			// performanceCounter_TotalProcessorLoad
 			// 
-			this.label_TimeStatusEmpty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_TimeStatusEmpty.Location = new System.Drawing.Point(0, 0);
-			this.label_TimeStatusEmpty.Name = "label_TimeStatusEmpty";
-			this.label_TimeStatusEmpty.Size = new System.Drawing.Size(134, 30);
-			this.label_TimeStatusEmpty.TabIndex = 1;
+			this.performanceCounter_TotalProcessorLoad.CategoryName = "Processor";
+			this.performanceCounter_TotalProcessorLoad.CounterName = "% Processor Time";
+			this.performanceCounter_TotalProcessorLoad.InstanceName = "_Total";
+			// 
+			// timer_TotalProcessorLoad
+			// 
+			this.timer_TotalProcessorLoad.Enabled = true;
+			this.timer_TotalProcessorLoad.Interval = 347;
+			this.timer_TotalProcessorLoad.Tick += new System.EventHandler(this.timer_TotalProcessorLoad_Tick);
 			// 
 			// Monitor
 			// 
@@ -181,6 +201,7 @@
 			this.panel_Monitor.ResumeLayout(false);
 			this.panel_Picture.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.performanceCounter_TotalProcessorLoad)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -191,13 +212,16 @@
 		private MKY.Windows.Forms.FastListBox fastListBox_Monitor;
 		private System.Windows.Forms.Panel panel_Picture;
 		private System.Windows.Forms.PictureBox pictureBox_Monitor;
-		private System.Windows.Forms.Label label_CountStatus;
+		private System.Windows.Forms.Label label_DataStatus;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Timer timer_Opacity;
 		private System.Windows.Forms.Label label_TimeStatus;
-		private System.Windows.Forms.Timer timer_UpdateTimeout;
+		private System.Windows.Forms.Timer timer_MonitorUpdateTimeout;
+		private System.Windows.Forms.Timer timer_DataStatusUpdateTimeout;
 		private MKY.Windows.Forms.FastListBox fastListBox_LineNumbers;
-		private System.Windows.Forms.Label label_CountStatusEmpty;
+		private System.Windows.Forms.Label label_DataStatusEmpty;
 		private System.Windows.Forms.Label label_TimeStatusEmpty;
+		private System.Diagnostics.PerformanceCounter performanceCounter_TotalProcessorLoad;
+		private System.Windows.Forms.Timer timer_TotalProcessorLoad;
 	}
 }

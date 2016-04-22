@@ -189,7 +189,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_Date
 			// 
-			this.monitor_Date.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Date.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Date.Location = new System.Drawing.Point(88, 135);
 			this.monitor_Date.Name = "monitor_Date";
 			this.monitor_Date.Size = new System.Drawing.Size(127, 23);
@@ -221,7 +221,7 @@ namespace YAT.Gui.Forms
 			// monitor_Direction
 			// 
 			this.monitor_Direction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.monitor_Direction.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Direction.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Direction.Location = new System.Drawing.Point(88, 222);
 			this.monitor_Direction.Name = "monitor_Direction";
 			this.monitor_Direction.Size = new System.Drawing.Size(127, 23);
@@ -242,7 +242,7 @@ namespace YAT.Gui.Forms
 			// monitor_Error
 			// 
 			this.monitor_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.monitor_Error.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Error.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Error.Location = new System.Drawing.Point(88, 280);
 			this.monitor_Error.Name = "monitor_Error";
 			this.monitor_Error.Size = new System.Drawing.Size(127, 23);
@@ -253,7 +253,7 @@ namespace YAT.Gui.Forms
 			// monitor_Length
 			// 
 			this.monitor_Length.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.monitor_Length.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Length.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Length.Location = new System.Drawing.Point(88, 251);
 			this.monitor_Length.Name = "monitor_Length";
 			this.monitor_Length.Size = new System.Drawing.Size(127, 23);
@@ -263,7 +263,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_Time
 			// 
-			this.monitor_Time.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Time.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Time.Location = new System.Drawing.Point(88, 164);
 			this.monitor_Time.Name = "monitor_Time";
 			this.monitor_Time.Size = new System.Drawing.Size(127, 23);
@@ -273,7 +273,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_RxControl
 			// 
-			this.monitor_RxControl.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_RxControl.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_RxControl.Location = new System.Drawing.Point(88, 106);
 			this.monitor_RxControl.Name = "monitor_RxControl";
 			this.monitor_RxControl.Size = new System.Drawing.Size(127, 23);
@@ -283,7 +283,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_RxData
 			// 
-			this.monitor_RxData.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_RxData.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_RxData.Location = new System.Drawing.Point(88, 77);
 			this.monitor_RxData.Name = "monitor_RxData";
 			this.monitor_RxData.Size = new System.Drawing.Size(127, 23);
@@ -293,7 +293,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_TxControl
 			// 
-			this.monitor_TxControl.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_TxControl.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_TxControl.Location = new System.Drawing.Point(88, 48);
 			this.monitor_TxControl.Name = "monitor_TxControl";
 			this.monitor_TxControl.Size = new System.Drawing.Size(127, 23);
@@ -303,7 +303,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_TxData
 			// 
-			this.monitor_TxData.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_TxData.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_TxData.Location = new System.Drawing.Point(88, 19);
 			this.monitor_TxData.Name = "monitor_TxData";
 			this.monitor_TxData.Size = new System.Drawing.Size(127, 23);
@@ -488,7 +488,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Example.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Example.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Example.Location = new System.Drawing.Point(100, 369);
 			this.monitor_Example.Name = "monitor_Example";
 			this.monitor_Example.Size = new System.Drawing.Size(360, 58);
@@ -509,7 +509,7 @@ namespace YAT.Gui.Forms
 			// monitor_Port
 			// 
 			this.monitor_Port.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.monitor_Port.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Port.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Port.Location = new System.Drawing.Point(88, 193);
 			this.monitor_Port.Name = "monitor_Port";
 			this.monitor_Port.Size = new System.Drawing.Size(127, 23);

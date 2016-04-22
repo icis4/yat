@@ -218,6 +218,9 @@
     <Compile Include="UsbSerialHidReportFormatPreview.Designer.cs">
       <DependentUpon>UsbSerialHidReportFormatPreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\MonitorActivityState.cs" />
+    <Compile Include="ViewModel\MonitorDataStatusHelper.cs" />
+    <Compile Include="ViewModel\MonitorTimeStatusHelper.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>

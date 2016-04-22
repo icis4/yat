@@ -146,7 +146,7 @@ namespace YAT.Model
 		private object autoResponseHelperSyncObj = new object();
 
 		// Time status:
-		private Chronometer connectChrono;
+		private Chronometer activeConnectChrono;
 		private Chronometer totalConnectChrono;
 
 		// Count status:
@@ -2042,12 +2042,12 @@ namespace YAT.Model
 
 			if      ( this.terminal.IsConnected && !this.terminal_IOChanged_isConnected)
 			{
-				this.connectChrono.Restart();
+				this.activeConnectChrono.Restart();
 				this.totalConnectChrono.Start();
 			}
 			else if (!this.terminal.IsConnected &&  this.terminal_IOChanged_isConnected)
 			{
-				this.connectChrono.Stop();
+				this.activeConnectChrono.Stop();
 				this.totalConnectChrono.Stop();
 			}
 
@@ -3009,8 +3009,8 @@ namespace YAT.Model
 
 		private void CreateChronos()
 		{
-			this.connectChrono = new Chronometer();
-			this.connectChrono.Interval = 1000;
+			this.activeConnectChrono = new Chronometer();
+			this.activeConnectChrono.Interval = 1000;
 			// No elapsed event, events are fired by total connect chrono.
 
 			this.totalConnectChrono = new Chronometer();
@@ -3020,17 +3020,17 @@ namespace YAT.Model
 
 		private void StopChronos()
 		{
-			this.connectChrono.Stop();
+			this.activeConnectChrono.Stop();
 			this.totalConnectChrono.Stop();
 		}
 
 		private void DisposeChronos()
 		{
-			if (this.connectChrono != null)
+			if (this.activeConnectChrono != null)
 			{
 				// No elapsed event, events are fired by total connect chrono.
-				this.connectChrono.Dispose();
-				this.connectChrono = null;
+				this.activeConnectChrono.Dispose();
+				this.activeConnectChrono = null;
 			}
 
 			if (this.totalConnectChrono != null)
@@ -3042,12 +3042,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual TimeSpan ConnectTime
+		public virtual TimeSpan ActiveConnectTime
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.connectChrono.TimeSpan);
+				return (this.activeConnectChrono.TimeSpan);
 			}
 		}
 
@@ -3062,10 +3062,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual void GetConnectTime(out TimeSpan activeConnectTime, out TimeSpan totalConnectTime)
+		{
+			AssertNotDisposed();
+
+			activeConnectTime = this.activeConnectChrono.TimeSpan;
+			totalConnectTime  = this.totalConnectChrono.TimeSpan;
+		}
+
+		/// <summary></summary>
 		public virtual void RestartConnectTime()
 		{
 			AssertNotDisposed();
-			this.connectChrono.Restart();
+
+			this.activeConnectChrono.Restart();
 			this.totalConnectChrono.Restart();
 		}
 
@@ -3076,9 +3086,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Count and Rate Status
+		#region Terminal > Data Status
 		//------------------------------------------------------------------------------------------
-		// Terminal > Count and Rate Status
+		// Terminal > Data Status
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -3159,6 +3169,28 @@ namespace YAT.Model
 				AssertNotDisposed();
 				return (this.rxLineRate.Value);
 			}
+		}
+
+		/// <summary></summary>
+		public virtual void GetDataCount(out int txByteCount, out int txLineCount, out int rxByteCount, out int rxLineCount)
+		{
+			AssertNotDisposed();
+
+			txByteCount = this.txByteCount;
+			txLineCount = this.txLineCount;
+			rxByteCount = this.rxByteCount;
+			rxLineCount = this.rxLineCount;
+		}
+
+		/// <summary></summary>
+		public virtual void GetDataRate(out int txByteRate, out int txLineRate, out int rxByteRate, out int rxLineRate)
+		{
+			AssertNotDisposed();
+
+			txByteRate = this.txByteRate.Value;
+			txLineRate = this.txLineRate.Value;
+			rxByteRate = this.rxByteRate.Value;
+			rxLineRate = this.rxLineRate.Value;
 		}
 
 		/// <summary></summary>
