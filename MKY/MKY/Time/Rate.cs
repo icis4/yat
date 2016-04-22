@@ -313,7 +313,7 @@ namespace MKY.Time
 				foreach (TimeStampItem<int> tsi in qa)
 				{
 					TimeSpan ts = (now - tsi.TimeStamp);
-					int i = Int32Ex.LimitToBounds((int)(ts.TotalMilliseconds / this.interval), 0, numberOfIntervals - 1);
+					int i = Int32Ex.Limit((int)(ts.TotalMilliseconds / this.interval), 0, numberOfIntervals - 1);
 					valuePerInterval[i] += tsi.Item;
 				}
 

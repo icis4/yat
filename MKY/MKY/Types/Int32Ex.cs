@@ -41,25 +41,25 @@ namespace MKY
 	public static class Int32Ex
 	{
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
-		public static int LimitToBounds(int value, int lower, int upper)
+		public static int Limit(int value, int min, int max)
 		{
-			if (value < lower)
-				return (lower);
+			if (value < min)
+				return (min);
 
-			if (value > upper)
-				return (upper);
+			if (value > max)
+				return (max);
 
 			return (value);
 		}
 
 		/// <summary>
-		/// Returns whether <paramref name="value"/> is within the boundaries specified.
+		/// Returns whether <paramref name="value"/> is within the values specified (including boundaries).
 		/// </summary>
-		public static bool IsWithin(int value, int lower, int upper)
+		public static bool IsWithin(int value, int min, int max)
 		{
-			return ((value >= lower) && (value <= upper));
+			return ((value >= min) && (value <= max));
 		}
 
 		/// <summary>

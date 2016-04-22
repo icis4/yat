@@ -845,7 +845,7 @@ namespace MKY.IO.Serial.SerialPort
 									{
 										// Reduce chunk size if maximum send rate is specified:
 										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - sendRate.Value);
-										maxChunkSize = Int32Ex.LimitToBounds(maxChunkSize, 0, remainingSizeInInterval);
+										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, remainingSizeInInterval);
 									}
 
 									List<byte> effectiveChunkData = null;
