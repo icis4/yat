@@ -49,8 +49,6 @@ namespace YAT.Gui.Utilities
 			public SolidBrush Brush;
 		}
 
-		private static Font italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
-
 		/// <remarks>
 		/// For performance reasons, cache elements such as fonts and brushes used for drawing.
 		/// </remarks>
@@ -83,36 +81,20 @@ namespace YAT.Gui.Utilities
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Hmm... How can the logic below be implemented in the initializer?")]
 		static Drawing()
 		{
-			// Line numbers shall be aligned right.
+			// Line numbers shall be aligned right:
 			lineNumberStringFormat = new StringFormat(StringFormat.GenericDefault);
 			lineNumberStringFormat.Alignment = StringAlignment.Far;
 
 			// Enable trailing spaces to be able to correctly measure single spaces.
-			// Also enable drawing of text that exceeds the layout rectangle.
+			// Also enable drawing of text that exceeds the layout rectangle:
 			monitorDrawingStringFormat = new StringFormat(StringFormat.GenericTypographic);
 			monitorDrawingStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 			monitorDrawingStringFormat.Trimming = StringTrimming.EllipsisCharacter;
 
-			// Do not trim to measure the size actually requested.
+			// Do not trim to measure the size actually requested:
 			monitorVirtualStringFormat = new StringFormat(StringFormat.GenericTypographic);
 			monitorVirtualStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 			monitorVirtualStringFormat.Trimming = StringTrimming.None;
-		}
-
-		/// <summary></summary>
-		public static Font ItalicDefaultFont
-		{
-			get
-			{
-				// Recreate font if system font has changed.
-				if ((italicDefaultFont.Name != SystemFonts.DefaultFont.Name) ||
-					(italicDefaultFont.Size != SystemFonts.DefaultFont.Size))
-				{
-					italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
-				}
-
-				return (italicDefaultFont);
-			}
 		}
 
 		/// <summary></summary>

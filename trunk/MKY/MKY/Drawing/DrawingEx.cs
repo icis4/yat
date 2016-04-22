@@ -33,6 +33,26 @@ namespace MKY.Drawing
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class DrawingEx
 	{
+		private static Font defaultFontItalic = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
+
+		/// <summary></summary>
+		public static Font DefaultFontItalic
+		{
+			get
+			{
+				Font defaultFont = SystemFonts.DefaultFont; // Improve performance by only retrieving once.
+
+				// Recreate font if system font has changed:
+				if ((defaultFontItalic.Name != defaultFont.Name) ||
+					(defaultFontItalic.Size != defaultFont.Size))
+				{
+					defaultFontItalic = new Font(defaultFont, FontStyle.Italic);
+				}
+
+				return (defaultFontItalic);
+			}
+		}
+
 		/// <summary>
 		/// Converts a <see cref="ContentAlignment"/> enum to a <see cref="TextFormatFlags"/> enum.
 		/// Can be used for user drawn controls.

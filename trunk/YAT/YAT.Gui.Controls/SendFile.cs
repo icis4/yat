@@ -50,6 +50,7 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Drawing;
 using MKY.IO;
 using MKY.Recent;
 using MKY.Windows.Forms;
@@ -395,8 +396,8 @@ namespace YAT.Gui.Controls
 				if (pathComboBox_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 					pathComboBox_FilePath.ForeColor = SystemColors.GrayText;
 
-				if (pathComboBox_FilePath.Font != Utilities.Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-					pathComboBox_FilePath.Font = Utilities.Drawing.ItalicDefaultFont;
+				if (pathComboBox_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.Font = DrawingEx.DefaultFontItalic;
 
 				if (pathComboBox_FilePath.SelectedIndex != 0) // Improve performance by only assigning if different.
 					pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.

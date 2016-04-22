@@ -35,6 +35,7 @@ using System.Globalization;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Drawing;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -259,8 +260,8 @@ namespace YAT.Gui.Controls
 					if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						this.buttons_commands[i].ForeColor = SystemColors.GrayText;
 
-					if (this.buttons_commands[i].Font != Utilities.Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-						this.buttons_commands[i].Font = Utilities.Drawing.ItalicDefaultFont;
+					if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;
 
 					this.buttons_commands[i].Text = Command.DefineCommandText;
 					this.buttons_commands[i].Enabled = true;
@@ -273,8 +274,8 @@ namespace YAT.Gui.Controls
 				if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
 
-				if (this.buttons_commands[i].Font != Utilities.Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-					this.buttons_commands[i].Font = Utilities.Drawing.ItalicDefaultFont;
+				if (this.buttons_commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+					this.buttons_commands[i].Font = DrawingEx.DefaultFontItalic;
 
 				this.buttons_commands[i].Text = Command.DefineCommandText;
 				this.buttons_commands[i].Enabled = true;
