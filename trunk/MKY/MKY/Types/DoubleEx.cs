@@ -34,37 +34,37 @@ namespace MKY
 	public static class DoubleEx
 	{
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the min value specified.
 		/// </summary>
-		public static double LimitToLowerBounds(double value, double lower)
+		public static double LimitMin(double value, double min)
 		{
-			if (value < lower)
-				return (lower);
+			if (value < min)
+				return (min);
 
 			return (value);
 		}
 
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the max value specified.
 		/// </summary>
-		public static double LimitToUpperBounds(double value, double upper)
+		public static double LimitMax(double value, double max)
 		{
-			if (value > upper)
-				return (upper);
+			if (value > max)
+				return (max);
 
 			return (value);
 		}
 
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
-		public static double LimitToBounds(double value, double lower, double upper)
+		public static double Limit(double value, double min, double max)
 		{
-			if (value < lower)
-				return (lower);
+			if (value < min)
+				return (min);
 
-			if (value > upper)
-				return (upper);
+			if (value > max)
+				return (max);
 
 			return (value);
 		}

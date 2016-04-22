@@ -34,15 +34,15 @@ namespace MKY
 	public static class DecimalEx
 	{
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
-		public static decimal LimitToBounds(decimal value, decimal lower, decimal upper)
+		public static decimal Limit(decimal value, decimal min, decimal max)
 		{
-			if (value < lower)
-				return (lower);
+			if (value < min)
+				return (min);
 
-			if (value > upper)
-				return (upper);
+			if (value > max)
+				return (max);
 
 			return (value);
 		}

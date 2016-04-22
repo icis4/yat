@@ -87,16 +87,16 @@ namespace MKY.Test.Types
 		// Test
 		//==========================================================================================
 
-		#region Tests > LimitToBounds()
+		#region Tests > Limit()
 		//------------------------------------------------------------------------------------------
-		// Tests > LimitToBounds()
+		// Tests > Limit()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(Int32ExTestData), "TestCases")]
-		public virtual void TestLimitToBounds(int min, int max, int value, bool valueMinimized, bool valueMaximized)
+		public virtual void Limit(int min, int max, int value, bool valueMinimized, bool valueMaximized)
 		{
-			int limited = Int32Ex.LimitToBounds(value, min, max);
+			int limited = Int32Ex.Limit(value, min, max);
 
 			if (valueMinimized)
 				Assert.AreEqual(min, limited);

@@ -34,37 +34,37 @@ namespace MKY
 	public static class SingleEx
 	{
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the value specified.
 		/// </summary>
-		public static float LimitToLowerBounds(float value, float lower)
+		public static float LimitMin(float value, float min)
 		{
-			if (value < lower)
-				return (lower);
+			if (value < min)
+				return (min);
 
 			return (value);
 		}
 
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the value specified.
 		/// </summary>
-		public static float LimitToUpperBounds(float value, float upper)
+		public static float LimitToUpperBounds(float value, float max)
 		{
-			if (value > upper)
-				return (upper);
+			if (value > max)
+				return (max);
 
 			return (value);
 		}
 
 		/// <summary>
-		/// Limits <paramref name="value"/> to the boundaries specified.
+		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
-		public static float LimitToBounds(float value, float lower, float upper)
+		public static float Limit(float value, float min, float max)
 		{
-			if (value < lower)
-				return (lower);
+			if (value < min)
+				return (min);
 
-			if (value > upper)
-				return (upper);
+			if (value > max)
+				return (max);
 
 			return (value);
 		}
