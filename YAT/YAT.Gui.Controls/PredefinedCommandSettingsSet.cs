@@ -33,6 +33,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Drawing;
 using MKY.IO;
 using MKY.Windows.Forms;
 
@@ -426,8 +427,8 @@ namespace YAT.Gui.Controls
 					if (pathLabel_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						pathLabel_FilePath.ForeColor = SystemColors.GrayText;
 
-					if (pathLabel_FilePath.Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-						pathLabel_FilePath.Font = Drawing.ItalicDefaultFont;
+					if (pathLabel_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						pathLabel_FilePath.Font = DrawingEx.DefaultFontItalic;
 
 					pathLabel_FilePath.Text = Command.UndefinedFilePathText;
 				}
@@ -446,8 +447,8 @@ namespace YAT.Gui.Controls
 					if (textBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						textBox_SingleLineText.ForeColor = SystemColors.GrayText;
 
-					if (textBox_SingleLineText.Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-						textBox_SingleLineText.Font = Drawing.ItalicDefaultFont;
+					if (textBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						textBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
 
 					textBox_SingleLineText.Text = Command.EnterTextText;
 				}

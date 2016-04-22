@@ -50,6 +50,7 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Drawing;
 using MKY.Recent;
 using MKY.Windows.Forms;
 
@@ -671,8 +672,8 @@ namespace YAT.Gui.Controls
 					if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
 
-					if (comboBox_SingleLineText.Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
-						comboBox_SingleLineText.Font = Drawing.ItalicDefaultFont;
+					if (comboBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
+						comboBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;
 
 					comboBox_SingleLineText.Text = Command.EnterTextText;
 				}

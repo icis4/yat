@@ -22,7 +22,6 @@
 //==================================================================================================
 
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -42,6 +41,30 @@ namespace MKY.Windows.Forms
 	public class ContextMenuStripShortcutWorkaround
 	{
 		private Dictionary<Keys, ToolStripMenuItem> shortcutItems = new Dictionary<Keys, ToolStripMenuItem>();
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ContextMenuStripShortcutWorkaround"/>
+		/// class that is empty and has the default initial capacity.
+		/// </summary>
+		public ContextMenuStripShortcutWorkaround()
+		{
+			this.shortcutItems = new Dictionary<Keys, ToolStripMenuItem>();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ContextMenuStripShortcutWorkaround"/>
+		/// class that is empty and has the specified initial capacity.
+		/// </summary>
+		/// <param name="capacity">
+		/// The initial number of elements that the underlying collection can contain.
+		/// </param>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <paramref name="capacity"/>capacity is less than 0.
+		/// </exception>
+		public ContextMenuStripShortcutWorkaround(int capacity)
+		{
+			this.shortcutItems = new Dictionary<Keys, ToolStripMenuItem>(capacity);
+		}
 
 		/// <summary>
 		/// Add a tool strip to the workaround and let its shortcut items get collected.
