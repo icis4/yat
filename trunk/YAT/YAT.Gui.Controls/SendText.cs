@@ -308,7 +308,7 @@ namespace YAT.Gui.Controls
 				// No need to call SetControls(); as only the splitter will be moved, and that will
 				// not be accessed anywhere else.
 
-				splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
+				splitContainer.SplitterDistance = Int32Ex.Limit((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
 			}
 		}
 
@@ -658,26 +658,37 @@ namespace YAT.Gui.Controls
 			{
 				if (this.command.IsText)
 				{
-					comboBox_SingleLineText.Text      = this.command.SingleLineText;
-					comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-					comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+					if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+						comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+
+					if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+						comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
+
+					comboBox_SingleLineText.Text = this.command.SingleLineText;
 				}
 				else
 				{
-					comboBox_SingleLineText.Text      = Command.EnterTextText;
-					comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
-					comboBox_SingleLineText.Font      = Utilities.Drawing.ItalicDefaultFont;
+					if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						comboBox_SingleLineText.ForeColor = SystemColors.GrayText;
+
+					if (comboBox_SingleLineText.Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+						comboBox_SingleLineText.Font = Drawing.ItalicDefaultFont;
+
+					comboBox_SingleLineText.Text = Command.EnterTextText;
 				}
 			}
 			else
 			{
+				if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+					comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
+
+				if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+					comboBox_SingleLineText.Font = SystemFonts.DefaultFont;
+
 				if (this.command.IsText && !this.command.IsPartialText)
 					comboBox_SingleLineText.Text = this.command.SingleLineText;
 				else
 					comboBox_SingleLineText.Text = "";
-
-				comboBox_SingleLineText.ForeColor = SystemColors.ControlText;
-				comboBox_SingleLineText.Font      = SystemFonts.DefaultFont;
 			}
 
 			SetCursorToEnd();

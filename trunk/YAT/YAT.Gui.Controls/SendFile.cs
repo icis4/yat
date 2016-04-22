@@ -222,7 +222,7 @@ namespace YAT.Gui.Controls
 				// No need to call SetControls(); as only the splitter will be moved, and that will
 				// not be accessed anywhere else.
 
-				splitContainer.SplitterDistance = Int32Ex.LimitToBounds((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
+				splitContainer.SplitterDistance = Int32Ex.Limit((this.splitterDistance - splitContainer.Left), 0, (splitContainer.Width - 1));
 			}
 		}
 
@@ -381,15 +381,25 @@ namespace YAT.Gui.Controls
 
 			if (selectedIndex != ControlEx.InvalidIndex)
 			{
-				pathComboBox_FilePath.ForeColor     = SystemColors.ControlText;
-				pathComboBox_FilePath.Font          = SystemFonts.DefaultFont;
-				pathComboBox_FilePath.SelectedIndex = selectedIndex;
+				if (pathComboBox_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
+
+				if (pathComboBox_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.Font = SystemFonts.DefaultFont;
+
+				if (pathComboBox_FilePath.SelectedIndex != selectedIndex) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.SelectedIndex = selectedIndex;
 			}
 			else
 			{
-				pathComboBox_FilePath.ForeColor     = SystemColors.GrayText;
-				pathComboBox_FilePath.Font          = Utilities.Drawing.ItalicDefaultFont;
-				pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
+				if (pathComboBox_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.ForeColor = SystemColors.GrayText;
+
+				if (pathComboBox_FilePath.Font != Utilities.Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.Font = Utilities.Drawing.ItalicDefaultFont;
+
+				if (pathComboBox_FilePath.SelectedIndex != 0) // Improve performance by only assigning if different.
+					pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
 			}
 
 			SetSendControls();

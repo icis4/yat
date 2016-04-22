@@ -243,29 +243,41 @@ namespace YAT.Gui.Controls
 
 				if (isDefined)
 				{
-					this.buttons_commands[i].Text      = this.commands[i].Description;
-					this.buttons_commands[i].ForeColor = SystemColors.ControlText;
-					this.buttons_commands[i].Font      = SystemFonts.DefaultFont;
-					this.buttons_commands[i].Enabled   = isValid;
+					if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+						this.buttons_commands[i].ForeColor = SystemColors.ControlText;
+
+					if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+						this.buttons_commands[i].Font = SystemFonts.DefaultFont;
+
+					this.buttons_commands[i].Text = this.commands[i].Description;
+					this.buttons_commands[i].Enabled = isValid;
 
 					toolTip.SetToolTip(this.buttons_commands[i], @"Send """ + this.commands[i].SingleLineText + @"""");
 				}
 				else
 				{
-					this.buttons_commands[i].Text      = Command.DefineCommandText;
-					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
-					this.buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-					this.buttons_commands[i].Enabled   = true;
+					if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						this.buttons_commands[i].ForeColor = SystemColors.GrayText;
+
+					if (this.buttons_commands[i].Font != Utilities.Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+						this.buttons_commands[i].Font = Utilities.Drawing.ItalicDefaultFont;
+
+					this.buttons_commands[i].Text = Command.DefineCommandText;
+					this.buttons_commands[i].Enabled = true;
 
 					toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 				}
 			}
 			for (int i = commandCount; i < PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				this.buttons_commands[i].Text      = Command.DefineCommandText;
-				this.buttons_commands[i].ForeColor = SystemColors.GrayText;
-				this.buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-				this.buttons_commands[i].Enabled   = true;
+				if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
+
+				if (this.buttons_commands[i].Font != Utilities.Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+					this.buttons_commands[i].Font = Utilities.Drawing.ItalicDefaultFont;
+
+				this.buttons_commands[i].Text = Command.DefineCommandText;
+				this.buttons_commands[i].Enabled = true;
 
 				toolTip.SetToolTip(this.buttons_commands[i], Command.DefineCommandText);
 			}

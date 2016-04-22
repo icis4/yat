@@ -374,9 +374,13 @@ namespace YAT.Gui.Controls
 				textBox_SingleLineText.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
-					textBox_SingleLineText.Text      = this.command.SingleLineText;
-					textBox_SingleLineText.ForeColor = SystemColors.ControlText;
-					textBox_SingleLineText.Font      = SystemFonts.DefaultFont;
+					if (textBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+						textBox_SingleLineText.ForeColor = SystemColors.ControlText;
+
+					if (textBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+						textBox_SingleLineText.Font = SystemFonts.DefaultFont;
+
+					textBox_SingleLineText.Text = this.command.SingleLineText;
 				}
 
 				// Buttons:
@@ -409,15 +413,23 @@ namespace YAT.Gui.Controls
 				pathLabel_FilePath.Visible = true;
 				if (this.command.IsFilePath)
 				{
-					pathLabel_FilePath.Text      = this.command.FilePath;
-					pathLabel_FilePath.ForeColor = SystemColors.ControlText;
-					pathLabel_FilePath.Font      = SystemFonts.DefaultFont;
+					if (pathLabel_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
+						pathLabel_FilePath.ForeColor = SystemColors.ControlText;
+
+					if (pathLabel_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
+						pathLabel_FilePath.Font = SystemFonts.DefaultFont;
+
+					pathLabel_FilePath.Text = this.command.FilePath;
 				}
 				else
 				{
-					pathLabel_FilePath.Text      = Command.UndefinedFilePathText;
-					pathLabel_FilePath.ForeColor = SystemColors.GrayText;
-					pathLabel_FilePath.Font      = Drawing.ItalicDefaultFont;
+					if (pathLabel_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						pathLabel_FilePath.ForeColor = SystemColors.GrayText;
+
+					if (pathLabel_FilePath.Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+						pathLabel_FilePath.Font = Drawing.ItalicDefaultFont;
+
+					pathLabel_FilePath.Text = Command.UndefinedFilePathText;
 				}
 
 				checkBox_IsFile.Checked = true;
@@ -431,9 +443,13 @@ namespace YAT.Gui.Controls
 				textBox_SingleLineText.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
-					textBox_SingleLineText.Text      = Command.EnterTextText;
-					textBox_SingleLineText.ForeColor = SystemColors.GrayText;
-					textBox_SingleLineText.Font      = Drawing.ItalicDefaultFont;
+					if (textBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
+						textBox_SingleLineText.ForeColor = SystemColors.GrayText;
+
+					if (textBox_SingleLineText.Font != Drawing.ItalicDefaultFont) // Improve performance by only assigning if different.
+						textBox_SingleLineText.Font = Drawing.ItalicDefaultFont;
+
+					textBox_SingleLineText.Text = Command.EnterTextText;
 				}
 
 				// Buttons:
