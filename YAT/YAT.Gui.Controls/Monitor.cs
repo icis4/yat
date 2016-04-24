@@ -676,16 +676,15 @@ namespace YAT.Gui.Controls
 					string lineNumberString = ((e.Index + 1).ToString(CultureInfo.CurrentCulture));
 
 					ListBox lb = fastListBox_LineNumbers;
-					SizeF requestedSize;
+					int requestedWidth;
 
 				////e.DrawBackground(); is not needed and actually draws a white background.
-					Drawing.DrawAndMeasureLineNumber(lineNumberString, this.formatSettings,
-					                                 e.Graphics, e.Bounds, out requestedSize);
+					Drawing.DrawAndMeasureLineNumber(lineNumberString, this.formatSettings, RightToLeft,
+					                                 e.Graphics, e.Bounds, out requestedWidth);
 				////e.DrawFocusRectangle(); is not needed.
 
-					// Only handle the item width.
+					// The item width is handled here.
 					// The item height is set in SetFormatDependentControls().
-					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
 					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(lb.Width)))
 						ResizeAndRelocateListBoxes(requestedWidth);
 				}
@@ -759,8 +758,8 @@ namespace YAT.Gui.Controls
 				if (e.Index >= 0)
 				{
 					ListBoxEx lb = fastListBox_Monitor;
-					SizeF requestedSize;
-					SizeF drawnSize;
+					int requestedWidth;
+					int drawnWidth;
 
 					// Handle non-standard background:
 					if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
@@ -771,14 +770,13 @@ namespace YAT.Gui.Controls
 
 					e.DrawBackground();
 
-					Drawing.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
-					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
+					Drawing.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings, RightToLeft,
+					                           e.Graphics, e.Bounds, e.State, out requestedWidth, out drawnWidth);
 
 					e.DrawFocusRectangle();
 
 					// The item width and horizontal extent is handled here.
 					// The item height is set in SetFormatDependentControls().
-					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
 					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
 						lb.HorizontalExtent = requestedWidth;
 
