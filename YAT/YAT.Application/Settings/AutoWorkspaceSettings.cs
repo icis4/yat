@@ -56,7 +56,7 @@ namespace YAT.Application.Settings
 		public AutoWorkspaceSettings(AutoWorkspaceSettings rhs)
 			: base(rhs)
 		{
-			FilePath     = rhs.FilePath;
+			FilePath = rhs.FilePath;
 
 			ClearChanged();
 		}
@@ -68,7 +68,7 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			FilePath = "";
+			FilePath = null;
 		}
 
 		#region Properties
@@ -94,7 +94,7 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public virtual void ResetFilePath()
 		{
-			FilePath = "";
+			FilePath = null;
 		}
 
 		#endregion
@@ -134,11 +134,15 @@ namespace YAT.Application.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
+			int filePathHashCode = 0;
+			if (FilePath != null)
+				filePathHashCode.GetHashCode();
+
 			return
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				FilePath.GetHashCode()
+				filePathHashCode
 			);
 		}
 

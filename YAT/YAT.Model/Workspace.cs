@@ -1358,7 +1358,9 @@ namespace YAT.Model
 						{
 							StringBuilder sb = new StringBuilder();
 							sb.AppendLine("Unable to open terminal");
-							sb.AppendLine(item.FilePath);
+
+							if (!string.IsNullOrEmpty(item.FilePath))
+								sb.AppendLine(item.FilePath);
 
 							if (exception != null)
 							{
@@ -1385,7 +1387,15 @@ namespace YAT.Model
 						this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
 						if (string.IsNullOrEmpty(errorMessage))
-							errorMessage = "Unable to open terminal" + Environment.NewLine + item.FilePath;
+						{
+							StringBuilder sb = new StringBuilder();
+							sb.AppendLine("Unable to open terminal");
+
+							if (!string.IsNullOrEmpty(item.FilePath))
+								sb.AppendLine(item.FilePath);
+
+							errorMessage = sb.ToString();
+						}
 
 						OnFixedStatusTextRequest("Error opening terminal!");
 						DialogResult result = OnMessageInputRequest

@@ -88,7 +88,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestEmptyCommandSerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "EmptyArrayOfCommands", FileExtension);
 			Command[] a = new Command[] { };
@@ -110,9 +110,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestRecentSerialization()
 		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(GetType(), "RecentFileSettings", FileExtension);
+			string filePath = Temp.MakeTempFilePath(GetType(), "RecentFileSettings", FileExtension);
 
 			RecentItemCollection<string> ric = new RecentItemCollection<string>();
 			ric.Add(new RecentItem<string>("RIA"));
@@ -134,7 +132,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestPredefinedSerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandPage", FileExtension);
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
@@ -163,9 +161,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestExplicitSerialization()
 		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(GetType(), "ExplicitSettings", FileExtension);
+			string filePath = Temp.MakeTempFilePath(GetType(), "ExplicitSettings", FileExtension);
 			ExplicitSettings s = new ExplicitSettings();
 			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(ExplicitSettings), s);
 		}
@@ -181,9 +177,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestImplicitSerialization()
 		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(GetType(), "ImplicitSettings", FileExtension);
+			string filePath = Temp.MakeTempFilePath(GetType(), "ImplicitSettings", FileExtension);
 			ImplicitSettings s = new ImplicitSettings();
 			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(filePath, typeof(ImplicitSettings), s);
 		}

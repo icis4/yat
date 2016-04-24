@@ -90,7 +90,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestBooleanSerialization()
 		{
-			string filePath = "";
+			string filePath;
 			bool b;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "BooleanFalse", FileExtension);
@@ -118,7 +118,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestSimpleEnumSerialization()
 		{
-			string filePath = "";
+			string filePath;
 			Orientation e;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnum_0_Horizontal", FileExtension);
@@ -144,7 +144,7 @@ namespace MKY.Test.Xml.Serialization
 		public virtual void TestSimpleEnumExSerialization()
 		{
 #if (FALSE) // See 'summary' above.
-			string filePath = "";
+			string filePath;
 			OrientationEx x;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "SimpleEnumEx_0_Horizontal", FileExtension);
@@ -174,7 +174,7 @@ namespace MKY.Test.Xml.Serialization
 		public virtual void TestComplexEnumSerialization()
 		{
 #if (FALSE) // See 'summary' above.
-			string filePath = "";
+			string filePath;
 			SupportedEncoding e;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnum_ASCII_20127", FileExtension);
@@ -205,7 +205,7 @@ namespace MKY.Test.Xml.Serialization
 		public virtual void TestComplexEnumExSerialization()
 		{
 #if (FALSE) // See 'summary' above.
-			string filePath = "";
+			string filePath;
 			EncodingEx x;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "ComplexEnumEx_ASCII_20127", FileExtension);
@@ -233,7 +233,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestArraySerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Array", FileExtension);
 			string[] a = new string[] { "A", "B" };
@@ -284,7 +284,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestListSerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "List", FileExtension);
 			List<string> l = new List<string>(2); // Preset the required capactiy to improve memory management.
@@ -325,7 +325,7 @@ namespace MKY.Test.Xml.Serialization
 		public virtual void TestDictionarySerialization()
 		{
 			int i = 0;
-			string filePath = "";
+			string filePath;
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
 			filePath = Temp.MakeTempFilePath(GetType(), "Dictionary", FileExtension);
@@ -379,9 +379,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestNamedStringDictionarySerialization()
 		{
-			string filePath = "";
-
-			filePath = Temp.MakeTempFilePath(GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
+			string filePath = Temp.MakeTempFilePath(GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
 			NamedStringDictionary nsd = new NamedStringDictionary();
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
@@ -400,7 +398,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestKeyValuePairSerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "KeyValuePair", FileExtension);
 			KeyValuePair<int, string> p = new KeyValuePair<int, string>(0, "null");
@@ -428,7 +426,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestPairSerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Pair1", FileExtension);
 			Pair<int, string> p1 = new Pair<int, string>(0, "null");
@@ -460,7 +458,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestRecentSerialization()
 		{
-			string filePath = "";
+			string filePath;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
@@ -488,7 +486,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestGuidSerialization()
 		{
-			string filePath = "";
+			string filePath;
 			System.Guid guid;
 
 			filePath = Temp.MakeTempFilePath(GetType(), "Guid", FileExtension);
