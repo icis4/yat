@@ -32,8 +32,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.Diagnostics;
-
 #endregion
 
 namespace YAT.Gui.Utilities
@@ -48,33 +46,32 @@ namespace YAT.Gui.Utilities
 		private struct DrawingObjects
 		{
 			public Font Font;
-			public SolidBrush Brush;
 		}
 
 		/// <remarks>
 		/// For performance reasons, cache elements such as fonts and brushes used for drawing.
 		/// </remarks>
-		private static DrawingObjects lineNumberObjects;
-		private static DrawingObjects txDataObjects;
-		private static DrawingObjects txControlObjects;
-		private static DrawingObjects rxDataObjects;
-		private static DrawingObjects rxControlObjects;
-		private static DrawingObjects dateObjects;
-		private static DrawingObjects timeObjects;
-		private static DrawingObjects portObjects;
-		private static DrawingObjects directionObjects;
-		private static DrawingObjects lengthObjects;
-		private static DrawingObjects whiteSpacesObjects;
-		private static DrawingObjects errorObjects;
+		private static DrawingObjects staticLineNumberObjects;
+		private static DrawingObjects staticTxDataObjects;
+		private static DrawingObjects staticTxControlObjects;
+		private static DrawingObjects staticRxDataObjects;
+		private static DrawingObjects staticRxControlObjects;
+		private static DrawingObjects staticDateObjects;
+		private static DrawingObjects staticTimeObjects;
+		private static DrawingObjects staticPortObjects;
+		private static DrawingObjects staticDirectionObjects;
+		private static DrawingObjects staticLengthObjects;
+		private static DrawingObjects staticWhiteSpacesObjects;
+		private static DrawingObjects staticErrorObjects;
 
 		/// <summary>String format used for drawing line numbers.</summary>
-		private static StringFormat lineNumberStringFormat;
+		private static TextFormatFlags staticLineNumberFormat;
 
 		/// <summary>String format used for drawing monitor strings.</summary>
-		private static StringFormat monitorDrawingStringFormat;
+		private static TextFormatFlags staticMonitorDrawingFormat;
 
 		/// <summary>String format used for measuring monitor strings.</summary>
-		private static StringFormat monitorVirtualStringFormat;
+		private static TextFormatFlags staticMonitorMeasuringFormat;
 
 		/// <summary>
 		/// Use GenericTypographic format to be able to measure characters individually,
@@ -83,127 +80,100 @@ namespace YAT.Gui.Utilities
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Hmm... How can the logic below be implemented in the initializer?")]
 		static Drawing()
 		{
-			// Line numbers shall be aligned right:
-			lineNumberStringFormat = new StringFormat(StringFormat.GenericDefault);
-			lineNumberStringFormat.Alignment = StringAlignment.Far;
+			staticLineNumberFormat  = TextFormatFlags.Default;
+			staticLineNumberFormat |= TextFormatFlags.SingleLine;
 
-			// Enable trailing spaces to be able to correctly measure single spaces.
-			// Also enable drawing of text that exceeds the layout rectangle:
-			monitorDrawingStringFormat = new StringFormat(StringFormat.GenericTypographic);
-			monitorDrawingStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
-			monitorDrawingStringFormat.Trimming = StringTrimming.EllipsisCharacter;
+			// Enable drawing ellipses of text that exceeds the layout rectangle:
+			staticMonitorDrawingFormat  = TextFormatFlags.Default;
+			staticMonitorDrawingFormat |= TextFormatFlags.SingleLine;
+			staticMonitorDrawingFormat |= TextFormatFlags.EndEllipsis;
 
-			// Do not trim to measure the size actually requested:
-			monitorVirtualStringFormat = new StringFormat(StringFormat.GenericTypographic);
-			monitorVirtualStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
-			monitorVirtualStringFormat.Trimming = StringTrimming.None;
+			// For measuring, do not use ellipses:
+			staticMonitorMeasuringFormat  = TextFormatFlags.Default;
+			staticMonitorMeasuringFormat |= TextFormatFlags.SingleLine;
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLineNumber(string s, Model.Settings.FormatSettings settings,
-		                                            Graphics graphics, RectangleF bounds,
-		                                            out SizeF requestedSize)
+		public static void DrawAndMeasureLineNumber(string s, Model.Settings.FormatSettings settings, RightToLeft rightToLeft,
+		                                            Graphics graphics, Rectangle bounds,
+		                                            out int requestedWidth)
 		{
 			Font font;
-			Brush brush;
-			SetLineNumberDrawingObjects(settings, graphics, out font, out brush);
+			SetLineNumberDrawingObjects(settings, graphics, out font);
 
-			graphics.DrawString(s, font, brush, bounds, lineNumberStringFormat);
+			TextFormatFlags flags = staticLineNumberFormat;
+			if (rightToLeft == RightToLeft.Yes)
+				flags |= TextFormatFlags.RightToLeft;
 
-			requestedSize = graphics.MeasureString(s, font, int.MaxValue, lineNumberStringFormat);
+			TextRenderer.DrawText(graphics, s, font, bounds, SystemColors.ControlText, flags);
+
+			Size requestedSize = TextRenderer.MeasureText(graphics, s, font, bounds.Size, flags);
+			requestedWidth = requestedSize.Width;
 		}
 
-		/// <remarks>
-		/// Line numbers shall be formatted the same as 'normal' Windows.Forms control text. This format
-		/// is only used here, and it is not contained in the <see cref="Model.Settings.FormatSettings"/>.
-		/// </remarks>
 		private static void SetLineNumberDrawingObjects(Model.Settings.FormatSettings settings,
-		                                                Graphics graphics, out Font font, out Brush brush)
+		                                                Graphics graphics, out Font font)
 		{
 			string    fontName  = settings.Font.Name;
 			float     fontSize  = settings.Font.Size;
 			FontStyle fontStyle = FontStyle.Regular;
-			Color     fontColor = SystemColors.ControlText;
-
-			font  = AssignIfChanged(ref lineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
-			brush = AssignIfChanged(ref lineNumberObjects.Brush, fontColor);
+			font = AssignIfChanged(ref staticLineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLine(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
-		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
-		                                      out SizeF requestedSize, out SizeF drawnSize)
+		public static void DrawAndMeasureLine(Domain.DisplayLine line, Model.Settings.FormatSettings settings, RightToLeft rightToLeft,
+		                                      Graphics graphics, Rectangle bounds, DrawItemState state,
+		                                      out int requestedWidth, out int drawnWidth)
 		{
-			float requestedWidth = 0;
-			float drawnWidth = 0;
+			requestedWidth = 0;
+			drawnWidth = 0;
 
 			foreach (Domain.DisplayElement de in line)
 			{
-				float requestedElementWidth;
-				float drawnElementWidth;
+				int requestedElementWidth;
+				int drawnElementWidth;
 
-				DrawAndMeasureElement(de, settings, graphics,
-				                      new RectangleF(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
+				DrawAndMeasureElement(de, settings, rightToLeft, graphics,
+				                      new Rectangle(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
 				                      state, out requestedElementWidth, out drawnElementWidth);
 
 				requestedWidth += requestedElementWidth;
 				drawnWidth     += drawnElementWidth;
 			}
-
-			requestedSize = new SizeF(requestedWidth, bounds.Height);
-			drawnSize     = new SizeF(drawnWidth, bounds.Height);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                         Graphics graphics, RectangleF bounds, DrawItemState state,
-		                                         out float requestedWidth, out float drawnWidth)
+		public static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings, RightToLeft rightToLeft,
+		                                         Graphics graphics, Rectangle bounds, DrawItemState state,
+		                                         out int requestedWidth, out int drawnWidth)
 		{
 			if (!string.IsNullOrEmpty(element.Text))
 			{
 				Font font;
-				Brush brush;
-				SetDrawingObjects(element, settings, graphics, out font, out brush);
+				Color foreColor;
+				Color backColor;
+				SetDrawingObjects(element, settings, graphics, state, out font, out foreColor, out backColor);
 
-				// Select the highlight brush if the item is selected:
-				if ((state & DrawItemState.Selected) == DrawItemState.Selected)
-					brush = SystemBrushes.HighlightText;
+				TextFormatFlags flags = staticMonitorDrawingFormat;
+				if (rightToLeft == RightToLeft.Yes)
+					flags |= TextFormatFlags.RightToLeft;
 
-				// Perform drawing of text:
-				try
-				{
-					graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
-				}
-				catch (System.Runtime.InteropServices.ExternalException ex)
-				{
-					DebugEx.WriteException(typeof(Drawing), ex);
+				TextRenderer.DrawText(graphics, element.Text, font, bounds, foreColor, backColor, flags);
 
-					// Note that this exception occasionally happens and also has been reported:
-					//  > #191 "General error in GDI+ in Drawing.DrawAndMeasureItem()"
-					//  > #266 "Hitting unhandled synchronous in GDI+ in Drawing.DrawAndMeasureItem()"
-					//  > #284 "Retrieving a large block of data causes exception"
-					//  > #286 "Exception if terminal receives data with wrong baudrate"
-					//  > #325 "Extremely long line crash"
-					//
-					// The 'ExternalException' states "A generic error occurred in GDI+" and happens
-					// at Graphics.DrawString() at Graphics.CheckErrorStatus(). This error doesn't
-					// seem to make any sense and seems to happen mainly or only when sending long
-					// lines. Spent several hours trying to find the root cause, without succeess.
-					// Thus, handling the exception here. In addition, manualy stress test case
-					// "Stress-4-EnormousLine.txt" added.
-				}
+				flags = staticMonitorMeasuringFormat;
+				if (rightToLeft == RightToLeft.Yes)
+					flags |= TextFormatFlags.RightToLeft;
 
-				// Measure the consumed rectangle:
-				SizeF requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
-				SizeF drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
+				Size requestedSize = TextRenderer.MeasureText(graphics, element.Text, font, bounds.Size, flags);
+				Size drawnSize     = TextRenderer.MeasureText(graphics, element.Text, font, bounds.Size, flags);
 
-				requestedWidth = (float)Math.Ceiling(requestedSize.Width);
-				drawnWidth     = (float)Math.Ceiling(drawnSize.Width);
+				requestedWidth = requestedSize.Width;
+				drawnWidth     = drawnSize.Width;
 			}
 			else
 			{
@@ -213,75 +183,66 @@ namespace YAT.Gui.Utilities
 		}
 
 		private static void SetDrawingObjects(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                      Graphics graphics, out Font font, out Brush brush)
+		                                      Graphics graphics, DrawItemState state,
+		                                      out Font font, out Color foreColor, out Color backColor)
 		{
 			string fontName = settings.Font.Name;
 			float fontSize  = settings.Font.Size;
 			FontStyle fontStyle;
-			Color fontColor;
 
 			if      (element is Domain.DisplayElement.TxData)
 			{
+				foreColor = settings.TxDataFormat.Color;
 				fontStyle = settings.TxDataFormat.FontStyle;
-				fontColor = settings.TxDataFormat.Color;
-				font  = AssignIfChanged(ref txDataObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref txDataObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticTxDataObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
+				foreColor = settings.TxControlFormat.Color;
 				fontStyle = settings.TxControlFormat.FontStyle;
-				fontColor = settings.TxControlFormat.Color;
-				font  = AssignIfChanged(ref txControlObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref txControlObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticTxControlObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
+				foreColor = settings.RxDataFormat.Color;
 				fontStyle = settings.RxDataFormat.FontStyle;
-				fontColor = settings.RxDataFormat.Color;
-				font  = AssignIfChanged(ref rxDataObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref rxDataObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticRxDataObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
+				foreColor = settings.RxControlFormat.Color;
 				fontStyle = settings.RxControlFormat.FontStyle;
-				fontColor = settings.RxControlFormat.Color;
-				font  = AssignIfChanged(ref rxControlObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref rxControlObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticRxControlObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.DateInfo)
 			{
+				foreColor = settings.DateFormat.Color;
 				fontStyle = settings.DateFormat.FontStyle;
-				fontColor = settings.DateFormat.Color;
-				font  = AssignIfChanged(ref dateObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref dateObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticDateObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.TimeInfo)
 			{
+				foreColor = settings.TimeFormat.Color;
 				fontStyle = settings.TimeFormat.FontStyle;
-				fontColor = settings.TimeFormat.Color;
-				font  = AssignIfChanged(ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref timeObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticTimeObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.PortInfo)
 			{
+				foreColor = settings.PortFormat.Color;
 				fontStyle = settings.PortFormat.FontStyle;
-				fontColor = settings.PortFormat.Color;
-				font  = AssignIfChanged(ref portObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref portObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticPortObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{
+				foreColor = settings.DirectionFormat.Color;
 				fontStyle = settings.DirectionFormat.FontStyle;
-				fontColor = settings.DirectionFormat.Color;
-				font  = AssignIfChanged(ref directionObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref directionObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticDirectionObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.Length)
 			{
+				foreColor = settings.LengthFormat.Color;
 				fontStyle = settings.LengthFormat.FontStyle;
-				fontColor = settings.LengthFormat.Color;
-				font  = AssignIfChanged(ref lengthObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref lengthObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticLengthObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if ((element is Domain.DisplayElement.NoData) ||
 			         (element is Domain.DisplayElement.LeftMargin) ||
@@ -289,17 +250,15 @@ namespace YAT.Gui.Utilities
 			         (element is Domain.DisplayElement.RightMargin) ||
 			         (element is Domain.DisplayElement.LineBreak))
 			{
+				foreColor = settings.WhiteSpacesFormat.Color;
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
-				fontColor = settings.WhiteSpacesFormat.Color;
-				font  = AssignIfChanged(ref whiteSpacesObjects.Font, fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref whiteSpacesObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticWhiteSpacesObjects.Font, fontName, fontSize, fontStyle, graphics);
 			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
 			{
+				foreColor = settings.ErrorFormat.Color;
 				fontStyle = settings.ErrorFormat.FontStyle;
-				fontColor = settings.ErrorFormat.Color;
-				font  = AssignIfChanged(ref errorObjects.Font,  fontName, fontSize, fontStyle, graphics);
-				brush = AssignIfChanged(ref errorObjects.Brush, fontColor);
+				font      = AssignIfChanged(ref staticErrorObjects.Font,  fontName, fontSize, fontStyle, graphics);
 			}
 			else
 			{
@@ -307,6 +266,17 @@ namespace YAT.Gui.Utilities
 				sb.AppendLine("Unknown DisplayElement:");
 				sb.Append(element.ToString());
 				throw (new NotImplementedException(sb.ToString()));
+			}
+
+			// Override if the item is selected:
+			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
+			{
+				foreColor = SystemColors.HighlightText;
+				backColor = SystemColors.Highlight;
+			}
+			else
+			{
+				backColor = settings.BackColor;
 			}
 		}
 
@@ -316,9 +286,6 @@ namespace YAT.Gui.Utilities
 			if (cachedFont == null)
 			{
 				cachedFont = new Font(fontName, fontSize, fontStyle);
-
-				// Also set tab stops accordingly:
-				SetTabStops(cachedFont, graphics);
 			}
 			else if ((cachedFont.Name  != fontName) ||
 			         (cachedFont.Size  != fontSize) ||
@@ -327,46 +294,9 @@ namespace YAT.Gui.Utilities
 				// The font has changed, dispose of the cached font and create a new one:
 				cachedFont.Dispose();
 				cachedFont = new Font(fontName, fontSize, fontStyle);
-
-				// Also set tab stops accordingly:
-				SetTabStops(cachedFont, graphics);
 			}
 
 			return (cachedFont);
-		}
-
-		private static void SetTabStops(Font font, Graphics graphics)
-		{
-			// Calculate tabs, currently fixed to 8 characters:
-
-			// \remind (2009-08-29 / mky):
-			// This is a somewhat strange calculation, however, don't know to do it better.
-
-			SizeF size = graphics.MeasureString(" ", font);
-			float[] tabStops = new float[256];
-			
-			for (int i = 0; i < 256; i++)
-				tabStops[i] = size.Width * 14.5f;
-
-			monitorDrawingStringFormat.SetTabStops(0, tabStops);
-			monitorVirtualStringFormat.SetTabStops(0, tabStops);
-		}
-
-		private static SolidBrush AssignIfChanged(ref SolidBrush cachedBrush, Color color)
-		{
-			// Create the brush using the font color:
-			if (cachedBrush == null)
-			{
-				cachedBrush = new SolidBrush(color);
-			}
-			else if (cachedBrush.Color.ToArgb() != color.ToArgb())
-			{
-				// The font color has changed, dispose of the cached brush and create a new one:
-				cachedBrush.Dispose();
-				cachedBrush = new SolidBrush(color);
-			}
-
-			return (cachedBrush);
 		}
 	}
 }

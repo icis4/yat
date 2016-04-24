@@ -189,11 +189,10 @@ namespace MKY.Windows.Forms.Test
 				e.DrawBackground();
 
 				string s = (string)fastListBox.Items[e.Index];
-				Brush brush = SystemBrushes.ControlText;
 				Font font = SystemFonts.DefaultFont;
-				StringFormat sf = StringFormat.GenericTypographic;
-				e.Graphics.DrawString(s, font, brush, e.Bounds, sf);
-				e.Graphics.MeasureString(s, font, e.Bounds.Size, sf);
+				TextFormatFlags flags = TextFormatFlags.Default;
+				flags                |= TextFormatFlags.SingleLine;
+				TextRenderer.DrawText(e.Graphics, s, font, e.Bounds, SystemColors.ControlText, flags);
 
 				e.DrawFocusRectangle();
 			}
