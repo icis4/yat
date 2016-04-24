@@ -32,6 +32,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Diagnostics;
+
 #endregion
 
 namespace YAT.Gui.Utilities
@@ -99,9 +101,9 @@ namespace YAT.Gui.Utilities
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLineNumberString(string s, Model.Settings.FormatSettings settings,
-		                                                  Graphics graphics, RectangleF bounds,
-		                                                  out SizeF requestedSize)
+		public static void DrawAndMeasureLineNumber(string s, Model.Settings.FormatSettings settings,
+		                                            Graphics graphics, RectangleF bounds,
+		                                            out SizeF requestedSize)
 		{
 			Font font;
 			Brush brush;
@@ -124,29 +126,33 @@ namespace YAT.Gui.Utilities
 			FontStyle fontStyle = FontStyle.Regular;
 			Color     fontColor = SystemColors.ControlText;
 
-			font  = AssignIfChanged (ref lineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
+			font  = AssignIfChanged(ref lineNumberObjects.Font, fontName, fontSize, fontStyle, graphics);
 			brush = AssignIfChanged(ref lineNumberObjects.Brush, fontColor);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
+		public static void DrawAndMeasureLine(Domain.DisplayLine line, Model.Settings.FormatSettings settings,
 		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
 		                                      out SizeF requestedSize, out SizeF drawnSize)
 		{
 			float requestedWidth = 0;
 			float drawnWidth = 0;
+
 			foreach (Domain.DisplayElement de in line)
 			{
-				SizeF requestedElementSize;
-				SizeF drawnElementSize;
-				DrawAndMeasureItem(de, settings, graphics,
-				                   new RectangleF(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
-				                   state, out requestedElementSize, out drawnElementSize);
-				requestedWidth += requestedElementSize.Width;
-				drawnWidth     += drawnElementSize.Width;
+				float requestedElementWidth;
+				float drawnElementWidth;
+
+				DrawAndMeasureElement(de, settings, graphics,
+				                      new RectangleF(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
+				                      state, out requestedElementWidth, out drawnElementWidth);
+
+				requestedWidth += requestedElementWidth;
+				drawnWidth     += drawnElementWidth;
 			}
+
 			requestedSize = new SizeF(requestedWidth, bounds.Height);
 			drawnSize     = new SizeF(drawnWidth, bounds.Height);
 		}
@@ -154,9 +160,9 @@ namespace YAT.Gui.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
-		                                      out SizeF requestedSize, out SizeF drawnSize)
+		public static void DrawAndMeasureElement(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		                                         Graphics graphics, RectangleF bounds, DrawItemState state,
+		                                         out float requestedWidth, out float drawnWidth)
 		{
 			if (!string.IsNullOrEmpty(element.Text))
 			{
@@ -169,16 +175,40 @@ namespace YAT.Gui.Utilities
 					brush = SystemBrushes.HighlightText;
 
 				// Perform drawing of text:
-				graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
+				try
+				{
+					graphics.DrawString(element.Text, font, brush, bounds, monitorDrawingStringFormat);
+				}
+				catch (System.Runtime.InteropServices.ExternalException ex)
+				{
+					DebugEx.WriteException(typeof(Drawing), ex);
 
-				// Measure consumed rectangle: Requested virtual and effectively drawn:
-				requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
-				drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
+					// Note that this exception occasionally happens and also has been reported:
+					//  > #191 "General error in GDI+ in Drawing.DrawAndMeasureItem()"
+					//  > #266 "Hitting unhandled synchronous in GDI+ in Drawing.DrawAndMeasureItem()"
+					//  > #284 "Retrieving a large block of data causes exception"
+					//  > #286 "Exception if terminal receives data with wrong baudrate"
+					//  > #325 "Extremely long line crash"
+					//
+					// The 'ExternalException' states "A generic error occurred in GDI+" and happens
+					// at Graphics.DrawString() at Graphics.CheckErrorStatus(). This error doesn't
+					// seem to make any sense and seems to happen mainly or only when sending long
+					// lines. Spent several hours trying to find the root cause, without succeess.
+					// Thus, handling the exception here. In addition, manualy stress test case
+					// "Stress-4-EnormousLine.txt" added.
+				}
+
+				// Measure the consumed rectangle:
+				SizeF requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, monitorVirtualStringFormat);
+				SizeF drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, monitorDrawingStringFormat);
+
+				requestedWidth = (float)Math.Ceiling(requestedSize.Width);
+				drawnWidth     = (float)Math.Ceiling(drawnSize.Width);
 			}
 			else
 			{
-				requestedSize = new SizeF();
-				drawnSize     = new SizeF();
+				requestedWidth = 0;
+				drawnWidth     = 0;
 			}
 		}
 
@@ -194,63 +224,63 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				font  = AssignIfChanged(ref txDataObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref txDataObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref txDataObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				font  = AssignIfChanged(ref txControlObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref txControlObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref txControlObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				font  = AssignIfChanged(ref rxDataObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref rxDataObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref rxDataObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				font  = AssignIfChanged(ref rxControlObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref rxControlObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref rxControlObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DateInfo)
 			{
 				fontStyle = settings.DateFormat.FontStyle;
 				fontColor = settings.DateFormat.Color;
-				font  = AssignIfChanged(ref dateObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref dateObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref dateObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TimeInfo)
 			{
 				fontStyle = settings.TimeFormat.FontStyle;
 				fontColor = settings.TimeFormat.Color;
-				font  = AssignIfChanged (ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref timeObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref timeObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.PortInfo)
 			{
 				fontStyle = settings.PortFormat.FontStyle;
 				fontColor = settings.PortFormat.Color;
-				font  = AssignIfChanged(ref portObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref portObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref portObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.DirectionInfo)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				fontColor = settings.DirectionFormat.Color;
-				font  = AssignIfChanged(ref directionObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref directionObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref directionObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Length)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				font  = AssignIfChanged(ref lengthObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref lengthObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref lengthObjects.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.NoData) ||
@@ -261,7 +291,7 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				font  = AssignIfChanged(ref whiteSpacesObjects.Font,  fontName, fontSize, fontStyle, graphics);
+				font  = AssignIfChanged(ref whiteSpacesObjects.Font, fontName, fontSize, fontStyle, graphics);
 				brush = AssignIfChanged(ref whiteSpacesObjects.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
@@ -282,23 +312,23 @@ namespace YAT.Gui.Utilities
 
 		private static Font AssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle, Graphics graphics)
 		{
-			// Create the font.
+			// Create the font:
 			if (cachedFont == null)
 			{
 				cachedFont = new Font(fontName, fontSize, fontStyle);
 
-				// Also set tab stops accordingly.
+				// Also set tab stops accordingly:
 				SetTabStops(cachedFont, graphics);
 			}
 			else if ((cachedFont.Name  != fontName) ||
 			         (cachedFont.Size  != fontSize) ||
 			         (cachedFont.Style != fontStyle))
 			{
-				// The font has changed, dispose of the cached font and create a new one.
+				// The font has changed, dispose of the cached font and create a new one:
 				cachedFont.Dispose();
 				cachedFont = new Font(fontName, fontSize, fontStyle);
 
-				// Also set tab stops accordingly.
+				// Also set tab stops accordingly:
 				SetTabStops(cachedFont, graphics);
 			}
 
@@ -307,7 +337,7 @@ namespace YAT.Gui.Utilities
 
 		private static void SetTabStops(Font font, Graphics graphics)
 		{
-			// Calculate tabs, currently fixed to 8 characters.
+			// Calculate tabs, currently fixed to 8 characters:
 
 			// \remind (2009-08-29 / mky):
 			// This is a somewhat strange calculation, however, don't know to do it better.
@@ -324,14 +354,14 @@ namespace YAT.Gui.Utilities
 
 		private static SolidBrush AssignIfChanged(ref SolidBrush cachedBrush, Color color)
 		{
-			// Create the brush using the font color.
+			// Create the brush using the font color:
 			if (cachedBrush == null)
 			{
 				cachedBrush = new SolidBrush(color);
 			}
 			else if (cachedBrush.Color.ToArgb() != color.ToArgb())
 			{
-				// The font color has changed, dispose of the cached brush and create a new one.
+				// The font color has changed, dispose of the cached brush and create a new one:
 				cachedBrush.Dispose();
 				cachedBrush = new SolidBrush(color);
 			}

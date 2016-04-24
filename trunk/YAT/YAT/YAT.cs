@@ -50,7 +50,7 @@ namespace YAT
 		/// The application's exit code according to <see cref="Controller.MainResult"/>.
 		/// </returns>
 		/// <remarks>
-		/// There must separate Windows.Forms application and console application projects to
+		/// There must be separate Windows.Forms application and console application projects to
 		/// properly support running YAT from console as well as with GUI.
 		/// 
 		/// Windows.Forms application:

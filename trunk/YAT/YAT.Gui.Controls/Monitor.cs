@@ -679,8 +679,8 @@ namespace YAT.Gui.Controls
 					SizeF requestedSize;
 
 				////e.DrawBackground(); is not needed and actually draws a white background.
-					Drawing.DrawAndMeasureLineNumberString(lineNumberString, this.formatSettings,
-					                                       e.Graphics, e.Bounds, out requestedSize);
+					Drawing.DrawAndMeasureLineNumber(lineNumberString, this.formatSettings,
+					                                 e.Graphics, e.Bounds, out requestedSize);
 				////e.DrawFocusRectangle(); is not needed.
 
 					// Only handle the item width.
@@ -771,24 +771,21 @@ namespace YAT.Gui.Controls
 
 					e.DrawBackground();
 
-					Drawing.DrawAndMeasureItem((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
+					Drawing.DrawAndMeasureLine((lb.Items[e.Index] as Domain.DisplayLine), this.formatSettings,
 					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
 
 					e.DrawFocusRectangle();
 
-					// Only handle the item width and horizontal extent.
+					// The item width and horizontal extent is handled here.
 					// The item height is set in SetFormatDependentControls().
 					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
 					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
-					{
 						lb.HorizontalExtent = requestedWidth;
-					}
+
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					// Perform horizontal auto scroll, but only on the last item.
 					if (e.Index == (lb.Items.Count - 1))
-					{
 						lb.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
-					}
 #endif
 					// Check whether the top index has changed, if so, also scroll the line numbers.
 					// This especially is the case when the monitor gets cleared, the top index will

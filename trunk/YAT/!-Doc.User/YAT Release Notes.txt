@@ -130,7 +130,7 @@ Important changes:
 - Serial COM port software flow control options to send XOn more frequently added (feature #206).
 - Settings related to XOn/XOff and ASCII control character replacement improved (bug #319).
 - Synchronization among outgoing and incoming data improved, preventing data mix-ups and exceptions
-  (related to feature requests #14 and #252 as well as bugs #132, #275, #292, #331, #333 and #334).
+  (related to feature requests #14, #252 as well as bugs #132, #275, #292, #321, #331, #333, #334).
 - Performance in terms of CPU usage and RAM consumption improved (bugs #189, #243, #263, #336).
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
 - Help window is now sizeable to display more/all content (feature request #237).
@@ -151,6 +151,8 @@ Fixed bugs:
 - Subsequent log files are now properly named according to the configured settings. File names that
   include the time stamp now properly use the time stamp of the open operation (related to feature
   requests #69, #103, #233, #245).
+- Rare ExternalException "A generic error occurred in GDI+" while drawing is now being handled,
+  i.e. ignored, leading to temporary monitor distortions (bugs #191, #266, #284, #286 and #325).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).

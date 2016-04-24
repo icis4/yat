@@ -843,7 +843,7 @@ namespace MKY.IO.Ports
 			{
 				OnOpening(EventArgs.Empty);
 
-#if (DEBUG && DEBUG_OPEN_CLOSE)
+#if (DEBUG_OPEN_CLOSE)
 				try
 				{
 					DebugWrite("Trying base.Open()...", true);
@@ -961,7 +961,7 @@ namespace MKY.IO.Ports
 					DebugEx.WriteException(GetType(), ex);
 				}
 
-#if (DEBUG && DEBUG_OPEN_CLOSE)
+#if (DEBUG_OPEN_CLOSE)
 				try
 				{
 					DebugWrite("Trying base.Close()...", true);
@@ -1194,7 +1194,7 @@ namespace MKY.IO.Ports
 		// Debug
 		//==========================================================================================
 
-#if (DEBUG && DEBUG_OPEN_CLOSE)
+#if (DEBUG_OPEN_CLOSE)
 
 		private string DebugWrite_portName = "";
 
@@ -1216,7 +1216,7 @@ namespace MKY.IO.Ports
 				DebugEx.WriteLine(this, completeMessage);
 		}
 
-#endif // DEBUG && DEBUG_OPEN_CLOSE
+#endif // DEBUG_OPEN_CLOSE
 
 		#endregion
 	}
