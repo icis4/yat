@@ -468,11 +468,11 @@ namespace MKY.IO
 		{
 			// Do not check for reference equality because complete result needs to be retrieved anyway.
 
-			// Convert paths to platform if needed.
+			// Convert paths to platform if needed:
 			pathA = ConvertToPlatform(pathA);
 			pathB = ConvertToPlatform(pathB);
 
-			// Create infos.
+			// Create infos:
 			DirectoryInfo pathInfoA = null;
 			DirectoryInfo pathInfoB = null;
 
@@ -486,11 +486,11 @@ namespace MKY.IO
 
 			if ((dirInfoA != null) && (dirInfoB != null))
 			{
-				// Check whether both directories share the same root.
+				// Check whether both directories share the same root:
 				if (dirInfoA.Root.FullName != dirInfoB.Root.FullName)
 					return (new PathCompareResult(false));
 
-				// Get common directory, make sure only directory part is used.
+				// Get common directory, make sure only directory part is used:
 				List<string> dirInfosA = new List<string>();
 				List<string> dirInfosB = new List<string>();
 
@@ -508,11 +508,11 @@ namespace MKY.IO
 					tempDirInfoB = tempDirInfoB.Parent;
 				}
 
-				// Reverse lists.
+				// Reverse lists:
 				dirInfosA.Reverse();
 				dirInfosB.Reverse();
 
-				// Get common directory, make sure only directory part is used.
+				// Get common directory, make sure only directory part is used:
 				int i = 0;
 				while ((dirInfosA.Count > i) && (dirInfosB.Count > i) &&
 				       (StringEx.EqualsOrdinalIgnoreCase(dirInfosA[i], dirInfosB[i])))
@@ -528,14 +528,14 @@ namespace MKY.IO
 
 				DirectoryInfo commonDI = new DirectoryInfo(commonPath);
 
-				// Check whether both paths are equal.
-				if (PathEx.Equals(dirPathA, dirPathB))
+				// Check whether both paths are equal:
+				if (Equals(dirPathA, dirPathB))
 					return (new PathCompareResult(commonPath, commonDirectoryCount, 0, true, 0, "."));
 
-				// Check whether one of the two is the others subdirectory.
+				// Check whether one of the two is the others subdirectory:
 				DirectoryInfo di = commonDI;
 				StringBuilder relativePath = new StringBuilder();
-				if (PathEx.Equals(commonPath, dirPathA))
+				if (Equals(commonPath, dirPathA))
 				{
 					int nearRelativeDirectoryCount = 0;
 					di = dirInfoB;
@@ -543,7 +543,7 @@ namespace MKY.IO
 					{
 						nearRelativeDirectoryCount++;
 
-						if (relativePath.Length > 0)       // Actually, stepping in is done by stepping out.
+						if (relativePath.Length > 0) // Actually, stepping in is done by stepping out.
 						{
 							relativePath.Insert(0, Path.DirectorySeparatorChar);
 							relativePath.Insert(0, di.Name);
@@ -557,7 +557,7 @@ namespace MKY.IO
 					}
 					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
-				if (PathEx.Equals(commonPath, dirPathB))
+				if (Equals(commonPath, dirPathB))
 				{
 					int nearRelativeDirectoryCount = 0;
 					di = dirInfoA;
@@ -577,7 +577,7 @@ namespace MKY.IO
 					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
 
-				// In case of far relation, first step out to common path, then step into path B.
+				// In case of far relation, first step out to common path, then step into path B:
 				int farRelativeDirectoryCount = 0;
 				di = dirInfoA;
 				while ((di != null) && (di.FullName != commonPath)) // Step out to common path.

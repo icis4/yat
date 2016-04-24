@@ -117,7 +117,7 @@ namespace MKY
 			Debug.WriteLine(                                        " could not be retrieved.");
 			Debug.WriteLine("If environment variable was added after Visual Studio had been started, close and reopen Visual Studio and retry.");
 
-			filePath = "";
+			filePath = null;
 			return (false);
 		}
 	}
