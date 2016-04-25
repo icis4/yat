@@ -33,7 +33,7 @@ namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
 	[DefaultEvent("FormatChanged")]
-	public partial class TextFormat : System.Windows.Forms.UserControl
+	public partial class TextFormat : UserControl
 	{
 		#region Constants
 		//==========================================================================================
