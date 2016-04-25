@@ -843,7 +843,10 @@ namespace YAT.View.Forms
 			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
+			bool replaceTabEnabled                      = replaceControlChars && (this.settingsInEdit.Terminal.CharReplace.ControlCharRadix == Domain.ControlCharRadix.AsciiMnemonic);
+			checkBox_ReplaceTab.Enabled                 = replaceTabEnabled;
 			checkBox_ReplaceTab.Checked                 = this.settingsInEdit.Terminal.CharReplace.ReplaceTab;
+			label_ReplaceTab.Enabled                    = replaceTabEnabled;
 			checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 			checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
 			checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;

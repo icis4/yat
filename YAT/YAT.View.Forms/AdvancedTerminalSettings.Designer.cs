@@ -677,7 +677,7 @@
 			this.groupBox_Display.Location = new System.Drawing.Point(6, 13);
 			this.groupBox_Display.Name = "groupBox_Display";
 			this.groupBox_Display.Size = new System.Drawing.Size(263, 566);
-			this.groupBox_Display.TabIndex = 0;
+			this.groupBox_Display.TabIndex = 1;
 			this.groupBox_Display.TabStop = false;
 			this.groupBox_Display.Text = "Display Settings";
 			// 
@@ -859,10 +859,10 @@
 			this.label_ReplaceTab.AutoSize = true;
 			this.label_ReplaceTab.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.label_ReplaceTab.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_ReplaceTab.Location = new System.Drawing.Point(179, 67);
+			this.label_ReplaceTab.Location = new System.Drawing.Point(198, 67);
 			this.label_ReplaceTab.Name = "label_ReplaceTab";
 			this.label_ReplaceTab.Size = new System.Drawing.Size(44, 15);
-			this.label_ReplaceTab.TabIndex = 1;
+			this.label_ReplaceTab.TabIndex = 4;
 			this.label_ReplaceTab.Text = "<TAB>";
 			// 
 			// checkBox_HideXOnXOff
@@ -871,7 +871,7 @@
 			this.checkBox_HideXOnXOff.Location = new System.Drawing.Point(6, 88);
 			this.checkBox_HideXOnXOff.Name = "checkBox_HideXOnXOff";
 			this.checkBox_HideXOnXOff.Size = new System.Drawing.Size(158, 17);
-			this.checkBox_HideXOnXOff.TabIndex = 0;
+			this.checkBox_HideXOnXOff.TabIndex = 5;
 			this.checkBox_HideXOnXOff.Text = "&Hide XOn/XOff (0x11/0x13)";
 			this.checkBox_HideXOnXOff.UseVisualStyleBackColor = true;
 			this.checkBox_HideXOnXOff.CheckedChanged += new System.EventHandler(this.checkBox_HideXOnXOff_CheckedChanged);
@@ -892,9 +892,9 @@
 			this.checkBox_ReplaceTab.AutoSize = true;
 			this.checkBox_ReplaceTab.Location = new System.Drawing.Point(6, 65);
 			this.checkBox_ReplaceTab.Name = "checkBox_ReplaceTab";
-			this.checkBox_ReplaceTab.Size = new System.Drawing.Size(178, 17);
-			this.checkBox_ReplaceTab.TabIndex = 0;
-			this.checkBox_ReplaceTab.Text = "Replace horizontal &tab (0x09) by";
+			this.checkBox_ReplaceTab.Size = new System.Drawing.Size(196, 17);
+			this.checkBox_ReplaceTab.TabIndex = 3;
+			this.checkBox_ReplaceTab.Text = "Also replace horizontal &tab (0x09) by";
 			this.checkBox_ReplaceTab.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceTab.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceTab_CheckedChanged);
 			// 
