@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
 	ProjectSection(SolutionItems) = preProject
@@ -122,14 +122,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain", "YAT\YAT.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain.Test", "YAT\YAT.Domain.Test\YAT.Domain.Test.csproj", "{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Controls", "YAT\YAT.Gui.Controls\YAT.Gui.Controls.csproj", "{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Forms", "YAT\YAT.Gui.Forms\YAT.Gui.Forms.csproj", "{A1060959-580E-4493-BA51-4A3A7CDE1E88}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Test", "YAT\YAT.Gui.Test\YAT.Gui.Test.csproj", "{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Utilities", "YAT\YAT.Gui.Utilities\YAT.Gui.Utilities.csproj", "{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Log", "YAT\YAT.Log\YAT.Log.csproj", "{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model", "YAT\YAT.Model\YAT.Model.csproj", "{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}"
@@ -151,6 +143,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Workspace", "YAT\YAT.Settings.Workspace\YAT.Settings.Workspace.csproj", "{942BA759-57F9-4213-BDC8-E9A8325631B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Test", "YAT\YAT.Test\YAT.Test.csproj", "{1E91D8B1-CFE6-4914-BDCF-AA204773CECA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.View.Controls", "YAT\YAT.View.Controls\YAT.View.Controls.csproj", "{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.View.Forms", "YAT\YAT.View.Forms\YAT.View.Forms.csproj", "{A1060959-580E-4493-BA51-4A3A7CDE1E88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.View.Test", "YAT\YAT.View.Test\YAT.View.Test.csproj", "{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.View.Utilities", "YAT\YAT.View.Utilities\YAT.View.Utilities.csproj", "{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YATConsole", "YAT\YATConsole\YATConsole.csproj", "{189787C4-AE83-4A89-BC74-8F34EF1DBE57}"
 EndProject

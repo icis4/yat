@@ -24,8 +24,8 @@
 PUSHD
 
 :: -------------------------------------------------------------------------------------------------
-SET TARGET_FORM_TOOL=..\..\YAT.Gui.Forms\Resources\Tool
-SET TARGET_CTRL_TOOL=..\..\YAT.Gui.Controls\Resources\Tool
+SET TARGET_FORM_TOOL=..\..\YAT.View.Forms\Resources\Tool
+SET TARGET_CTRL_TOOL=..\..\YAT.View.Controls\Resources\Tool
 
 DEL %TARGET_FORM_TOOL%\*.* /F /Q
 DEL %TARGET_CTRL_TOOL%\*.* /F /Q

@@ -1222,7 +1222,7 @@ namespace YAT.Model
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			// Note that GUI settings are handled in Gui.Forms.Terminal::settingsRoot_Changed().
+			// Note that view settings are handled in View.Forms.Terminal::settingsRoot_Changed().
 			// Below, only those settings that need to be managed by the model are handled.
 
 			if (e.Inner == null)
