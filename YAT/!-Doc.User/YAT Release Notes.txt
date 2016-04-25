@@ -151,8 +151,8 @@ Fixed bugs:
 - Subsequent log files are now properly named according to the configured settings. File names that
   include the time stamp now properly use the time stamp of the open operation (related to feature
   requests #69, #103, #233, #245).
-- ExternalException "A generic error occurred in GDI+" while drawing has been fixed by reverting
-  from GDI+ to GDI (bugs #191, #266, #284, #286 and #325).
+- ExternalException "A generic error occurred in GDI+" while drawing is now handled, i.e. ignored,
+  only leading to temporary monitor distortions (bugs #191, #266, #284, #286 and #325).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
