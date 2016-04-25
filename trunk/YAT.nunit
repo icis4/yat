@@ -27,10 +27,6 @@
     <assembly path="YAT\YAT.Controller.Test\bin\Debug\YAT.Controller.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Debug\YAT.Domain.dll" />
     <assembly path="YAT\YAT.Domain.Test\bin\Debug\YAT.Domain.Test.dll" />
-    <assembly path="YAT\YAT.Gui.Controls\bin\Debug\YAT.Gui.Controls.dll" />
-    <assembly path="YAT\YAT.Gui.Forms\bin\Debug\YAT.Gui.Forms.dll" />
-    <assembly path="YAT\YAT.Gui.Test\bin\Debug\YAT.Gui.Test.dll" />
-    <assembly path="YAT\YAT.Gui.Utilities\bin\Debug\YAT.Gui.Utilities.dll" />
     <assembly path="YAT\YAT.Log\bin\Debug\YAT.Log.dll" />
     <assembly path="YAT\YAT.Model\bin\Debug\YAT.Model.dll" />
     <assembly path="YAT\YAT.Model.Settings\bin\Debug\YAT.Model.Settings.dll" />
@@ -43,6 +39,10 @@
     <assembly path="YAT\YAT.Settings.Test\bin\Debug\YAT.Settings.Test.dll" />
     <assembly path="YAT\YAT.Settings.Workspace\bin\Debug\YAT.Settings.Workspace.dll" />
     <assembly path="YAT\YAT.Test\bin\Debug\YAT.Test.exe" />
+    <assembly path="YAT\YAT.View.Controls\bin\Debug\YAT.View.Controls.dll" />
+    <assembly path="YAT\YAT.View.Forms\bin\Debug\YAT.View.Forms.dll" />
+    <assembly path="YAT\YAT.View.Test\bin\Debug\YAT.View.Test.dll" />
+    <assembly path="YAT\YAT.View.Utilities\bin\Debug\YAT.View.Utilities.dll" />
     <assembly path="YAT\YATConsole\bin\Debug\YATConsole.exe" />
   </Config>
   <Config name="Release" binpathtype="Auto">
@@ -72,10 +72,6 @@
     <assembly path="YAT\YAT.Controller.Test\bin\Release\YAT.Controller.Test.dll" />
     <assembly path="YAT\YAT.Domain\bin\Release\YAT.Domain.dll" />
     <assembly path="YAT\YAT.Domain.Test\bin\Release\YAT.Domain.Test.dll" />
-    <assembly path="YAT\YAT.Gui.Controls\bin\Release\YAT.Gui.Controls.dll" />
-    <assembly path="YAT\YAT.Gui.Forms\bin\Release\YAT.Gui.Forms.dll" />
-    <assembly path="YAT\YAT.Gui.Test\bin\Release\YAT.Gui.Test.dll" />
-    <assembly path="YAT\YAT.Gui.Utilities\bin\Release\YAT.Gui.Utilities.dll" />
     <assembly path="YAT\YAT.Log\bin\Release\YAT.Log.dll" />
     <assembly path="YAT\YAT.Model\bin\Release\YAT.Model.dll" />
     <assembly path="YAT\YAT.Model.Settings\bin\Release\YAT.Model.Settings.dll" />
@@ -88,6 +84,10 @@
     <assembly path="YAT\YAT.Settings.Test\bin\Release\YAT.Settings.Test.dll" />
     <assembly path="YAT\YAT.Settings.Workspace\bin\Release\YAT.Settings.Workspace.dll" />
     <assembly path="YAT\YAT.Test\bin\Release\YAT.Test.exe" />
+    <assembly path="YAT\YAT.View.Controls\bin\Release\YAT.View.Controls.dll" />
+    <assembly path="YAT\YAT.View.Forms\bin\Release\YAT.View.Forms.dll" />
+    <assembly path="YAT\YAT.View.Test\bin\Release\YAT.View.Test.dll" />
+    <assembly path="YAT\YAT.View.Utilities\bin\Release\YAT.View.Utilities.dll" />
     <assembly path="YAT\YATConsole\bin\Release\YATConsole.exe" />
   </Config>
 </NUnitProject>

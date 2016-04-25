@@ -344,7 +344,7 @@ namespace YAT.Model.Utilities
 			// <XmlTransferRawLine TimeStamp="2001-12-23T12:34:56.789" Direction="Tx" DataAsBase64="QUJDRA==" />
 
 			// To recreate this example and validate the schema implemented below:
-			//  1. Enable raw export in YAT.Gui.Forms.Terminal.SaveMonitor().
+			//  1. Enable raw export in View.Forms.Terminal.SaveMonitor().
 			//  2. Send some data
 			//  3. Select some lines in the monitor.
 			//  4. Select 'Save To File...' and select .xml as file extension.

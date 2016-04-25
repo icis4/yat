@@ -91,7 +91,7 @@ namespace YAT.Test
 
 			// YAT.Controller.Test
 			// YAT.Domain.Test
-			// YAT.Gui.Test
+			// YAT.View.Test
 			// YAT.Model.Test
 			// YAT.Settings.Test
 			// Don't provide configuration (yet).

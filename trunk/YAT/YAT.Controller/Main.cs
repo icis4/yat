@@ -434,7 +434,7 @@ namespace YAT.Controller
 				
 					// ApplicationSettings are loaded while showing the welcome screen, and will
 					// be closed when exiting or disposing the main model.
-					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
 				}
@@ -443,7 +443,7 @@ namespace YAT.Controller
 					if (this.commandLineArgs.Interactive)
 					{
 						string message = "An unhandled synchronous exception occurred while preparing " + ApplicationEx.ProductName + ".";
-						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart();
 					}
 					return (MainResult.UnhandledException);
@@ -452,7 +452,7 @@ namespace YAT.Controller
 				try
 				{
 					// If everything is fine so far, start main application including view.
-					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
 						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunFullyWithView_Application_ThreadException);
@@ -474,7 +474,7 @@ namespace YAT.Controller
 					if (this.commandLineArgs.Interactive)
 					{
 						string message = "An unhandled synchronous exception occurred while running " + ApplicationEx.ProductName + ".";
-						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.Synchronous, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart();
 					}
 					return (MainResult.UnhandledException);
@@ -490,11 +490,11 @@ namespace YAT.Controller
 			if (this.commandLineArgs.Interactive)
 			{
 				string message = "An unhandled asynchronous synchronized exception occurred while running " + ApplicationEx.ProductName + ".";
-				Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, Gui.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
+				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, View.Forms.UnhandledExceptionType.AsynchronousSynchronized, true);
 
-				if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 					System.Windows.Forms.Application.Restart();
-				else if (result == Gui.Forms.UnhandledExceptionResult.Continue)
+				else if (result == View.Forms.UnhandledExceptionResult.Continue)
 					return; // Ignore, do nothing.
 				else
 					System.Windows.Forms.Application.Exit();
@@ -515,11 +515,11 @@ namespace YAT.Controller
 			{
 				Exception ex = (e.ExceptionObject as Exception);
 				string message = "An unhandled asynchronous non-synchronized exception occurred while running " + System.Windows.Forms.Application.ProductName + ".";
-				Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, Gui.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
+				View.Forms.UnhandledExceptionResult result = View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.AsynchronousNonSynchronized, false);
 
-				if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+				if (result == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 					System.Windows.Forms.Application.Restart();
-				else if (result == Gui.Forms.UnhandledExceptionResult.Continue)
+				else if (result == View.Forms.UnhandledExceptionResult.Continue)
 					return; // Ignore, do nothing.
 				else
 					System.Windows.Forms.Application.Exit();
@@ -565,7 +565,7 @@ namespace YAT.Controller
 
 					// ApplicationSettings are loaded while showing the welcome screen, and will
 					// be closed when exiting or disposing the main model.
-					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+					View.Forms.WelcomeScreen welcomeScreen = new View.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (MainResult.ApplicationSettingsError);
 				}
@@ -583,7 +583,7 @@ namespace YAT.Controller
 				try
 				{
 					// If everything is fine so far, start main application including view.
-					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+					using (View.Forms.Main view = new View.Forms.Main(model))
 					{
 						// Assume unhandled asynchronous synchronized exceptions and attach the application to the respective handler.
 						System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(RunWithViewButOutputErrorsOnConsole_Application_ThreadException);
