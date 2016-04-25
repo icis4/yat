@@ -21,7 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -32,10 +31,10 @@ namespace YAT.Gui.Utilities
 	[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Justification = "No need to serialize/deserialize, not marking this class eliminates the requirement to implement the ISerialzable constructors.")]
 	public class AsciiTableDataSet : DataSet
 	{
-		private const string Dec = "Dec";
-		private const string Hex = "Hex";
-		private const string Mnemonic = "Mnemonic";
-		private const string Escape = "Esc";
+		private const string Dec         = "Dec";
+		private const string Hex         = "Hex";
+		private const string Mnemonic    = "Mnemonic";
+		private const string Escape      = "Esc";
 		private const string Description = "Description";
 
 		/// <summary></summary>

@@ -151,8 +151,9 @@ Fixed bugs:
 - Subsequent log files are now properly named according to the configured settings. File names that
   include the time stamp now properly use the time stamp of the open operation (related to feature
   requests #69, #103, #233, #245).
-- ExternalException "A generic error occurred in GDI+" while drawing is now handled, i.e. ignored,
-  only leading to temporary monitor distortions (bugs #191, #266, #284, #286 and #325).
+- Long monitor content is now displayed properly even when horizontally scrolling (bug #125).
+- ExternalException "A generic error occurred in GDI+" while drawing has been fixed by reverting
+  from GDI+ to GDI (bugs #191, #266, #284, #286 and #325).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -165,7 +166,6 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issues with window list (bugs #31, #119, #180 and #213).
-- Long monitor content is not displayed properly when horizontally scrolling (bug #125).
 - Serial COM port limitations of .NET:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while sleep or undock without closing the port will

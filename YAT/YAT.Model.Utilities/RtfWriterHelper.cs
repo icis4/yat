@@ -107,7 +107,7 @@ namespace YAT.Model.Utilities
 		{
 			Font font;
 			Color color;
-			SetFontAndColor(element, settings, out font, out color);
+			SetDrawingObjects(element, settings, out font, out color);
 			richTextProvider.SelectionFont  = font;
 			richTextProvider.SelectionColor = color;
 
@@ -118,7 +118,7 @@ namespace YAT.Model.Utilities
 				richTextProvider.AppendText(element.Text);
 		}
 
-		private static void SetFontAndColor(DisplayElement element, Settings.FormatSettings settings, out Font font, out Color color)
+		private static void SetDrawingObjects(DisplayElement element, Settings.FormatSettings settings, out Font font, out Color color)
 		{
 			string fontName = settings.Font.Name;
 			float fontSize = settings.Font.Size;
@@ -128,55 +128,55 @@ namespace YAT.Model.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				color     = settings.TxDataFormat.Color;
-				font      = SetFont(ref txDataFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref txDataFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				color     = settings.TxControlFormat.Color;
-				font      = SetFont(ref txControlFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref txControlFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				color     = settings.RxDataFormat.Color;
-				font      = SetFont(ref rxDataFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref rxDataFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				color     = settings.RxControlFormat.Color;
-				font      = SetFont(ref rxControlFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref rxControlFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.DateInfo)
 			{
 				fontStyle = settings.DateFormat.FontStyle;
 				color     = settings.DateFormat.Color;
-				font      = SetFont(ref dateFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref dateFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.TimeInfo)
 			{
 				fontStyle = settings.TimeFormat.FontStyle;
 				color     = settings.TimeFormat.Color;
-				font      = SetFont(ref timeFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref timeFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.PortInfo)
 			{
 				fontStyle = settings.PortFormat.FontStyle;
 				color     = settings.PortFormat.Color;
-				font      = SetFont(ref portFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref portFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.DirectionInfo)
 			{
 				fontStyle = settings.DirectionFormat.FontStyle;
 				color     = settings.DirectionFormat.Color;
-				font      = SetFont(ref directionFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref directionFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.Length)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				color     = settings.LengthFormat.Color;
-				font      = SetFont(ref lengthFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref lengthFont, fontName, fontSize, fontStyle);
 			}
 			else if ((element is DisplayElement.NoData) ||
 			         (element is DisplayElement.LeftMargin) ||
@@ -186,13 +186,13 @@ namespace YAT.Model.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				color     = settings.WhiteSpacesFormat.Color;
-				font      = SetFont(ref whiteSpacesFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref whiteSpacesFont, fontName, fontSize, fontStyle);
 			}
 			else if (element is DisplayElement.ErrorInfo)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				color     = settings.ErrorFormat.Color;
-				font      = SetFont(ref errorFont, fontName, fontSize, fontStyle);
+				font      = CacheAndAssignIfChanged(ref errorFont, fontName, fontSize, fontStyle);
 			}
 			else
 			{
@@ -200,9 +200,9 @@ namespace YAT.Model.Utilities
 			}
 		}
 
-		private static Font SetFont(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
+		private static Font CacheAndAssignIfChanged(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
 		{
-			// Create the font.
+			// Create the font:
 			if (cachedFont == null)
 			{
 				cachedFont = new Font(fontName, fontSize, fontStyle);
@@ -211,7 +211,7 @@ namespace YAT.Model.Utilities
 					 (cachedFont.Size != fontSize) ||
 					 (cachedFont.Style != fontStyle))
 			{
-				// The font has changed, dispose of the cached font and create a new one.
+				// The font has changed, dispose of the cached font and create a new one:
 				cachedFont.Dispose();
 				cachedFont = new Font(fontName, fontSize, fontStyle);
 			}

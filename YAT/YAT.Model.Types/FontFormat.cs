@@ -85,6 +85,9 @@ namespace YAT.Model.Types
 
 		private void MakeFont()
 		{
+			if (this.font != null)
+				this.font.Dispose();
+
 			this.font = new Font(this.name, this.size, this.style);
 		}
 
