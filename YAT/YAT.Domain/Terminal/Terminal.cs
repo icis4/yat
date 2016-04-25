@@ -42,7 +42,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -52,6 +51,7 @@ using System.Threading;
 using MKY;
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Text;
 
 #endregion
 
@@ -1748,7 +1748,7 @@ namespace YAT.Domain
 					isByteToHide = true;
 			}
 
-			bool isControlByte = MKY.Text.Ascii.IsControlByte(b);
+			bool isControlByte = Ascii.IsControlByte(b);
 			bool error = false;
 			string text = "";
 
@@ -1821,11 +1821,28 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.CharReplace.ReplaceControlChars)
 					{
-						switch (d) // Use dedicated control elements:
+						// \attention
+						// In order to get well aligned tab stops, tab characters must be data elements.
+						// If they were control elements (i.e. sequence of data and control elements),
+						// tabs would only get aligned within the respective control element,
+						// thus resulting in misaligned tab stops.
+						if ((b == '\t') && !TerminalSettings.CharReplace.ReplaceTab)
 						{
-							case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
-							case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
-							default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							switch (d) // Keep tab if desired:
+							{
+								case IODirection.Tx: return (new DisplayElement.TxData(b, text));
+								case IODirection.Rx: return (new DisplayElement.RxData(b, text));
+								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+						}
+						else
+						{
+							switch (d) // Use dedicated control elements:
+							{
+								case IODirection.Tx: return (new DisplayElement.TxControl(b, text));
+								case IODirection.Rx: return (new DisplayElement.RxControl(b, text));
+								default: throw (new NotSupportedException("Program execution should never get here, '" + d + "' is an invalid direction." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
 					}
 					else
@@ -1868,7 +1885,7 @@ namespace YAT.Domain
 			if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab)
 				return ("\t");
 			else
-				return ("<" + MKY.Text.Ascii.ConvertToMnemonic(b) + ">");
+				return ("<" + Ascii.ConvertToMnemonic(b) + ">");
 		}
 
 		/// <summary></summary>
