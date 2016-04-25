@@ -153,7 +153,7 @@ namespace MKY.IO.Usb
 		/// method does have any effect.
 		/// </summary>
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -186,7 +186,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -214,7 +214,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -563,7 +563,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function similarly exists in the other USB classes.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -579,7 +579,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function similarly exists in the other USB classes.
 		/// Changes here may have to be applied there too.
 		/// </remarks>

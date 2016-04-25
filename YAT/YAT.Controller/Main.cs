@@ -459,7 +459,7 @@ namespace YAT.Controller
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
-						// \attention:
+						// Attention:
 						// This call does not return until the application exits.
 						System.Windows.Forms.Application.Run(view);
 
@@ -590,7 +590,7 @@ namespace YAT.Controller
 
 						// Start the Win32 message loop on the current thread and the main form.
 						//
-						// \attention:
+						// Attention:
 						// This call does not return until the application exits.
 						System.Windows.Forms.Application.Run(view);
 

@@ -414,7 +414,7 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// \todo: Don't know the GUID for any USB device class. So only HID devices are detected.
 		/// 
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -448,7 +448,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -476,7 +476,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -851,7 +851,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function similarly exists in the other USB classes.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -867,7 +867,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function similarly exists in the other USB classes.
 		/// Changes here may have to be applied there too.
 		/// </remarks>

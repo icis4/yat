@@ -164,7 +164,7 @@ namespace MKY.IO.Usb
 		/// method does have any effect.
 		/// </summary>
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -197,7 +197,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -225,7 +225,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
@@ -501,7 +501,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// \attention:
+				// Attention:
 				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
 				// to detect devices that are just being closed or have already been closed.
 
@@ -530,11 +530,11 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// \attention:
+				// Attention:
 				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
 				// to detect devices that are just being closed or have already been closed.
 
-				// \attention:
+				// Attention:
 				// CloseStream() intentionally sets this.stream to null to ensure that this
 				// property also works during closing.
 
@@ -1015,7 +1015,7 @@ namespace MKY.IO.Usb
 			{
 				try
 				{
-					// \attention:
+					// Attention:
 					// Set this.stream to null before initiating Close() to ensure that the IsOpen
 					// property returns false during closing. AsyncReadCompleted() will be called
 					// when Close() is initiated. AsyncReadCompleted() will check IsOpen.
@@ -1095,7 +1095,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function similarly exists in the other USB classes.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -1114,7 +1114,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This function similarly exists in the other USB classes.
 		/// Changes here may have to be applied there too.
 		/// </remarks>

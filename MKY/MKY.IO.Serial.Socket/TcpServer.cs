@@ -545,7 +545,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Note that ALAZ sockets stop asynchronously, same as starting.
 		/// 
-		/// \attention:
+		/// Attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
 		/// See remarks of the header of this class for details.
 		/// </remarks>

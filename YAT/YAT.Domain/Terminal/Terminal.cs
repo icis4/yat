@@ -1821,7 +1821,7 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.CharReplace.ReplaceControlChars)
 					{
-						// \attention
+						// Attention:
 						// In order to get well aligned tab stops, tab characters must be data elements.
 						// If they were control elements (i.e. sequence of data and control elements),
 						// tabs would only get aligned within the respective control element,

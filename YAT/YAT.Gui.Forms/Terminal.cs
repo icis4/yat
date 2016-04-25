@@ -495,7 +495,7 @@ namespace YAT.Gui.Forms
 
 			// Prepare the menu item properties based on state and settings.
 			//
-			// \attention:
+			// Attention:
 			// Similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
 			//  > YAT.Gui.Controls.SendText.SetControls()
@@ -530,7 +530,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger.Checked  = (this.settingsRoot.AutoResponse.TriggerSelection  != Model.Types.Trigger.None);
 			toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response.Checked = (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.None);
 
-			// \attention:
+			// Attention:
 			// Similar code exists in the following location:
 			//  > YAT.Gui.Forms.Main.toolStripButton_MainTool_SetControls()
 			// Changes here may have to be applied there too.
@@ -1659,7 +1659,7 @@ namespace YAT.Gui.Forms
 
 			// Prepare the menu item properties based on state and settings.
 			//
-			// \attention:
+			// Attention:
 			// Similar code exists in the following locations:
 			//  > YAT.Gui.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 			//  > YAT.Gui.Controls.SendText.SetControls()
@@ -3929,7 +3929,7 @@ namespace YAT.Gui.Forms
 					if (toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor != manualBreakColor) // Improve performance by only assigning if different.
 						toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = manualBreakColor;
 
-					// \attention:
+					// Attention:
 					// Do not modify the 'Enabled' property. Labels must always be enabled,
 					// otherwise picture get's greyed out, but it must either be green or red.
 					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
@@ -4027,7 +4027,7 @@ namespace YAT.Gui.Forms
 					if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 
-					// \attention:
+					// Attention:
 					// Do not modify the 'Enabled' property. Labels must always be enabled,
 					// otherwise picture get's greyed out, but it must either be green or red.
 					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
