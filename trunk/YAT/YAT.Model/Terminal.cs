@@ -1744,7 +1744,7 @@ namespace YAT.Model
 		/// Closes the terminal and tries to auto save if desired.
 		/// </summary>
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This method is needed for MDI applications. In case of MDI parent/application closing,
 		/// Close() of the terminal is called before Close() of the workspace. Without taking care
 		/// of this, the workspace would be saved after the terminal has already been closed, i.e.
@@ -2376,7 +2376,7 @@ namespace YAT.Model
 			}
 			catch (IOException ex)
 			{
-				// \attention:
+				// Attention:
 				// Similar code can be found in functions below!
 				// Changes here may have to be applied there too!
 
@@ -2434,7 +2434,7 @@ namespace YAT.Model
 			}
 			catch (IOException ex)
 			{
-				// \attention:
+				// Attention:
 				// Similar code can be found in functions above and below!
 				// Changes here may have to be applied there too!
 
@@ -2458,7 +2458,7 @@ namespace YAT.Model
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				// \attention:
+				// Attention:
 				// Similar code can be found in functions below!
 				// Changes here may have to be applied there too!
 
@@ -2533,7 +2533,7 @@ namespace YAT.Model
 			}
 			catch (IOException ex)
 			{
-				// \attention:
+				// Attention:
 				// Similar code can be found in functions above!
 				// Changes here may have to be applied there too!
 
@@ -2557,7 +2557,7 @@ namespace YAT.Model
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				// \attention:
+				// Attention:
 				// Similar code can be found in functions above!
 				// Changes here may have to be applied there too!
 

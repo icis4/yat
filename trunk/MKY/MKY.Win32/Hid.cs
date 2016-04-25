@@ -276,8 +276,8 @@ namespace MKY.Win32
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_CAPS
 			{       // USAGE = USHORT = 16 bits
-				public UInt16 Usage;     // \attention: The Win32 HIDP_CAPS structure contains 'Usage' before 'UsagePage', even though it should be vice-versa from a USB logic point of view!
-				public UInt16 UsagePage; // \attention: The Win32 HIDP_CAPS structure contains 'UsagePage' after 'Usage', even though it should be vice-versa from a USB logic point of view!
+				public UInt16 Usage;     // Attention: The Win32 HIDP_CAPS structure contains 'Usage' before 'UsagePage', even though it should be vice-versa from a USB logic point of view!
+				public UInt16 UsagePage; // Attention: The Win32 HIDP_CAPS structure contains 'UsagePage' after 'Usage', even though it should be vice-versa from a USB logic point of view!
 				public UInt16 InputReportByteLength; // All USHORT = 16 bits
 				public UInt16 OutputReportByteLength;
 				public UInt16 FeatureReportByteLength;

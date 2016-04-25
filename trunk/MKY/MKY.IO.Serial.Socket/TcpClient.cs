@@ -566,7 +566,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Note that ALAZ sockets stop asynchronously, same as starting.
 		/// 
-		/// \attention:
+		/// Attention:
 		/// The Stop() method of the ALAZ socket must not be called on the GUI/main thread.
 		/// See remarks of the header of this class for details.
 		/// </remarks>
@@ -862,12 +862,12 @@ namespace MKY.IO.Serial.Socket
 				// Must be called asynchronously! Otherwise, a dead-lock will occur in ALAZ.
 				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
 
-				// \attention:
+				// Attention:
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
 				// this event handler must not signal any state anymore, nor does it need to try to
 				// reconnect.
 				// 
-				// \attention:
+				// Attention:
 				// Similar code is needed in 'OnException' below.
 				// Changes here may have to be applied there too.
 				if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
@@ -892,7 +892,7 @@ namespace MKY.IO.Serial.Socket
 		/// Fired when exception occurs.
 		/// </summary>
 		/// <remarks>
-		/// \attention:
+		/// Attention:
 		/// This event is also fired on reconnect attempts of auto-reconnect!
 		/// 
 		/// Saying hello to StyleCop ;-.
@@ -912,12 +912,12 @@ namespace MKY.IO.Serial.Socket
 				// Must be called asynchronously! Otherwise, a dead-lock will occur in ALAZ.
 				SuppressEventsAndThenStopAndDisposeSocketAndConnectionsAndThreadAsync();
 
-				// \attention:
+				// Attention:
 				// Ensure that exceptions are only handled if the socket is still active. Otherwise,
 				// this event handler must not signal any state anymore, nor does it need to try to
 				// reconnect.
 				// 
-				// \attention:
+				// Attention:
 				// Similar code is needed in 'OnDisconnected' above.
 				// Changes here may have to be applied there too.
 				if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
