@@ -676,7 +676,7 @@ namespace YAT.Gui.Controls
 					string lineNumberString = ((e.Index + 1).ToString(CultureInfo.CurrentCulture));
 
 					ListBox lb = fastListBox_LineNumbers;
-					int requestedWidth;
+					float requestedWidth;
 
 				////e.DrawBackground(); is not needed and actually draws a white background.
 					Drawing.DrawAndMeasureLineNumber(lineNumberString, this.formatSettings, RightToLeft,
@@ -685,8 +685,9 @@ namespace YAT.Gui.Controls
 
 					// The item width is handled here.
 					// The item height is set in SetFormatDependentControls().
-					if ((requestedWidth > 0) && (requestedWidth > EffectiveWidthToRequestedWidth(lb.Width)))
-						ResizeAndRelocateListBoxes(requestedWidth);
+					int lineNumberWidth = (int)Math.Ceiling(requestedWidth);
+					if ((lineNumberWidth > 0) && (lineNumberWidth > EffectiveWidthToRequestedWidth(lb.Width)))
+						ResizeAndRelocateListBoxes(lineNumberWidth);
 				}
 			}
 		}
@@ -758,8 +759,8 @@ namespace YAT.Gui.Controls
 				if (e.Index >= 0)
 				{
 					ListBoxEx lb = fastListBox_Monitor;
-					int requestedWidth;
-					int drawnWidth;
+					float requestedWidth;
+					float drawnWidth;
 
 					// Handle non-standard background:
 					if (this.formatSettings.BackColor != SystemColors.Window) // Equals FormatSettings.DefaultBackColor
@@ -777,8 +778,9 @@ namespace YAT.Gui.Controls
 
 					// The item width and horizontal extent is handled here.
 					// The item height is set in SetFormatDependentControls().
-					if ((requestedWidth > 0) && (requestedWidth > lb.HorizontalExtent))
-						lb.HorizontalExtent = requestedWidth;
+					int horizontalExtent = (int)Math.Ceiling(requestedWidth);
+					if ((horizontalExtent > 0) && (horizontalExtent > lb.HorizontalExtent))
+						lb.HorizontalExtent = horizontalExtent;
 
 #if (ENABLE_HORIZONTAL_AUTO_SCROLL)
 					// Perform horizontal auto scroll, but only on the last item.
