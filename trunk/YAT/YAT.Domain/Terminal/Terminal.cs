@@ -1024,8 +1024,8 @@ namespace YAT.Domain
 							switch (kr.Keyword)
 							{
 								// Process line related keywords:
-								case Parser.Keyword.NoEol: // \remind On needed for text terminals.
-									{
+								case Parser.Keyword.NoEol: // \remind Only needed for text terminals.
+								{
 									sendEol = false;
 									break;
 								}
@@ -1101,6 +1101,11 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Clear:
 				{
+					// Wait some time to allow previous data being transmitted.
+					// Wait quite long as the 'DataSent' event will take time.
+					// This even has the advantage that data is quickly shown.
+					Thread.Sleep(150);
+
 					this.ClearRepositories();
 					break;
 				}
