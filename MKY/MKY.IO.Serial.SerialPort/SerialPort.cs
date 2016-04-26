@@ -85,11 +85,11 @@ namespace MKY.IO.Serial.SerialPort
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueInitialCapacity = 4096;
-		private const int ReceiveQueueInitialCapacity = 4096;
+		private const int SendQueueFixedCapacity      = 2048; // = typical 'WriteBufferSize'
+		private const int ReceiveQueueInitialCapacity = 4096; // = typical 'ReadBufferSize'
 
 		private const int ThreadWaitTimeout = 200;
-		private const int AliveInterval = 500;
+		private const int AliveInterval     = 500;
 
 		private const string Undefined = "<Undefined>";
 
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
 		/// </remarks>
-		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
+		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
 
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
@@ -645,55 +645,30 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (IsStarted)
+			if (IsTransmissive)
 			{
-				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
-				// Changes here must most likely be applied there too.
-
-				bool signalXOnXOff = false;
-				bool signalXOnXOffCount = false;
-
-				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				WriteDebugTransmissionMessageLine("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
+				foreach (byte b in data)
 				{
-					WriteDebugTransmissionMessageLine("Enqueueing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
-					foreach (byte b in data)
+					// Wait until there is space in the send queue:
+					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
+					{
+						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
+							return (false);
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to allow dequeuing.
+					}
+
+					// There is space for at least one byte:
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
 						this.sendQueue.Enqueue(b);
-
-						// Handle XOn/XOff state:
-						if (this.settings.Communication.FlowControlUsesXOnXOff)
-						{
-							if (b == XOnXOff.XOnByte)
-							{
-								if (this.iXOnXOffHelper.NotifyXOnSent())
-									signalXOnXOff = true;
-
-								if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
-									signalXOnXOffCount = true;
-							}
-							else if (b == XOnXOff.XOffByte)
-							{
-								if (this.iXOnXOffHelper.NotifyXOffSent())
-									signalXOnXOff = true;
-
-								if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
-									signalXOnXOffCount = true;
-							}
-						}
-					} // foreach (byte b in data)
-					WriteDebugTransmissionMessageLine("...enqueueing done");
-				} // lock (this.sendQueue)
-
-				// Signal XOn/XOff change to receive thread:
-				if (signalXOnXOff)
-					SignalReceiveThreadSafely();
+					}
+				}
+				WriteDebugTransmissionMessageLine("...enqueuing done");
 
 				// Signal data notification to send thread:
 				SignalSendThreadSafely();
-
-				// Invoke the event:
-				if (signalXOnXOff || signalXOnXOffCount)
-					OnIOControlChanged(EventArgs.Empty);
 
 				return (true);
 			}
@@ -799,7 +774,14 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (TryWriteByteToPort(XOnXOff.XOnByte, out isWriteTimeout, out isOutputBreak))
 								{
+									if (this.iXOnXOffHelper.NotifyXOnSent())
+										SignalReceiveThreadSafely();
+
 									OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOnByte, this.settings.PortId)); // Skip I/O synchronization for simplicity.
+
+									if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+										OnIOControlChanged(EventArgs.Empty);
+
 									break; // Let other threads do their job and wait until signaled again.
 								}
 							}
@@ -807,7 +789,14 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (TryWriteByteToPort(XOnXOff.XOffByte, out isWriteTimeout, out isOutputBreak))
 								{
+									if (this.iXOnXOffHelper.NotifyXOffSent())
+										SignalReceiveThreadSafely();
+
 									OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOffByte, this.settings.PortId)); // Skip I/O synchronization for simplicity.
+
+									if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+										OnIOControlChanged(EventArgs.Empty);
+
 									break; // Let other threads do their job and wait until signaled again.
 								}
 							}
@@ -1027,7 +1016,7 @@ namespace MKY.IO.Serial.SerialPort
 
 				WriteDebugTransmissionMessageLine("Writing " + triedChunkSize + " byte(s) to port...");
 
-				// Try to write the byte, will raise a 'TimeoutException' if not possible:
+				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
 
 				WriteDebugTransmissionMessageLine("...writing done");
@@ -1317,7 +1306,6 @@ namespace MKY.IO.Serial.SerialPort
 				// exception per ms won't help good performance... 50 ms seems to works fine, still
 				// it's just a best guess...
 
-				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
 				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
 				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 			}
@@ -1375,6 +1363,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			StartThreads();
 			StartAliveTimer();
+			BeginAsyncRead();
 			SetStateSynchronizedAndNotify(State.Opened); // Notify outside lock!
 
 			// Handle initial XOn/XOff state:
@@ -1644,30 +1633,42 @@ namespace MKY.IO.Serial.SerialPort
 
 		#endregion
 
-		#region Port Events
+		#region Port Stream
 		//==========================================================================================
-		// Port Events
+		// Port Stream
 		//==========================================================================================
 
-		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.DataReceived: Only one event handler can execute at a time.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
-		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
+		/// <remarks>
+		/// Using async reading instead of the 'DataReceived' event as suggested by online resources
+		/// like http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport.
+		/// Note that 'DataReceived' and 'BytesToRead' indeed led to data loss as soon as YAT became
+		/// really fast. 'DataReceived' and 'BytesToRead' seem to work fine as long as small chunks
+		/// of e.g. 50 bytes some now an then are received. But as soon as YAT started to write the
+		/// maximum chunk size (in Q1/2016 ;-), data got lost for e.g. a local port loopback pair.
+		/// </remarks>
+		private void BeginAsyncRead()
+		{
+			byte[] receiveBuffer = new byte[this.port.ReadBufferSize];
+			this.port.BaseStream.BeginRead(receiveBuffer, 0, receiveBuffer.Length, new AsyncCallback(AsyncReadCompleted), receiveBuffer);
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void AsyncReadCompleted(IAsyncResult result)
 		{
 			// If data has been received, but access to port throws exception, port has been shut
 			// down, e.g. a USB to serial converter was disconnected.
 			try
 			{
-				if (IsOpen) // Ensure not to forward events during closing anymore.
+				if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
 				{
-					// Immediately read data on this thread.
-					int bytesToRead;
-					byte[] data;
-					lock (this.portSyncObj)
-					{
-						bytesToRead = this.port.BytesToRead;
-						data = new byte[bytesToRead];
-						this.port.Read(data, 0, bytesToRead);
-					}
+					// Immediately read data on this thread:
+
+					// Finalize read and retrieve the data. In case of an exception during the read,
+					// the call of EndRead() throws it. If this happens, e.g. due to disconnect,
+					// exception is caught further down and stream is closed:
+					int actualLength = this.port.BaseStream.EndRead(result);
+					byte[] data = new byte[actualLength];
+					Buffer.BlockCopy((byte[])result.AsyncState, 0, data, 0, actualLength);
 
 					// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
 					// Changes here must most likely be applied there too.
@@ -1677,7 +1678,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						WriteDebugTransmissionMessageLine("Enqueueing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for receiving...");
+						WriteDebugTransmissionMessageLine("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for receiving...");
 						foreach (byte b in data)
 						{
 							this.receiveQueue.Enqueue(b);
@@ -1701,7 +1702,7 @@ namespace MKY.IO.Serial.SerialPort
 								}
 							}
 						} // foreach (byte b in data)
-						WriteDebugTransmissionMessageLine("...enqueueing done");
+						WriteDebugTransmissionMessageLine("...enqueuing done");
 					} // lock (this.receiveQueue)
 
 					// Signal XOn/XOff change to send thread:
@@ -1714,16 +1715,19 @@ namespace MKY.IO.Serial.SerialPort
 					// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 					if (signalXOnXOff || signalXOnXOffCount)
 						OnIOControlChangedAsync(EventArgs.Empty);
-				}
+
+					// Continue receiving:
+					BeginAsyncRead();
+				} // if (active)
 			}
 			catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
 			{
-				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port.");
+				DebugEx.WriteException(GetType(), ex, "Disconnect detected while reading from port.");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "DataReceived() has detected shutdown of port.");
+				DebugEx.WriteException(GetType(), ex, "Error while reading from port.");
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 		}
@@ -1733,13 +1737,13 @@ namespace MKY.IO.Serial.SerialPort
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of received data will generate many events
-		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
+		/// handled by <see cref="AsyncReadCompleted"/>. However, since <see cref="OnDataReceived"/>
 		/// synchronously invokes the event, it will take some time until the send queue is checked
 		/// again. During this time, no more new events are invoked, instead, outgoing data is
 		/// buffered.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by <see cref="port_DataReceived"/> event above, or by XOn/XOff while
+		/// Will be signaled by <see cref="AsyncReadCompleted"/> event above, or by XOn/XOff while
 		/// sending.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
@@ -1804,8 +1808,8 @@ namespace MKY.IO.Serial.SerialPort
 			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
 		}
 
-		// Additional information to the 'DataReceived' event
-		// --------------------------------------------------
+		// Additional information on receiving
+		// -----------------------------------
 		// An improvement suggested by Marco Stroppel on 2011-02-17 doesn't work in case of YAT. Suggestion:
 		// 
 		//   The while(BytesAvailable > 0) fires endless events, because I did not call the Receive() method.
@@ -1821,6 +1825,13 @@ namespace MKY.IO.Serial.SerialPort
 		// This suggestions doesn't work because YAT shall show every single byte as soon as it get's received.
 		// If 3 bytes are received while 5 bytes are taken out of the receive queue, no more event gets fired.
 		// Thus, the 3 bytes do not get shown until new data arrives. This is not acceptable.
+
+		#endregion
+
+		#region Port Events
+		//==========================================================================================
+		// Port Events
+		//==========================================================================================
 
 		/// <summary>
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
