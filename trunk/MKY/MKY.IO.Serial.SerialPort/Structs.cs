@@ -28,7 +28,7 @@ namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct LimitOutputBuffer
+	public struct OutputBufferSize
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
@@ -41,7 +41,7 @@ namespace MKY.IO.Serial.SerialPort
 		public int Size;
 
 		/// <summary></summary>
-		public LimitOutputBuffer(bool enabled, int size)
+		public OutputBufferSize(bool enabled, int size)
 		{
 			Enabled = enabled;
 			Size = size;
@@ -64,7 +64,7 @@ namespace MKY.IO.Serial.SerialPort
 			if (GetType() != obj.GetType())
 				return (false);
 
-			LimitOutputBuffer other = (LimitOutputBuffer)obj;
+			OutputBufferSize other = (OutputBufferSize)obj;
 			return
 			(
 				(Enabled == other.Enabled) &&
@@ -111,7 +111,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(LimitOutputBuffer lhs, LimitOutputBuffer rhs)
+		public static bool operator ==(OutputBufferSize lhs, OutputBufferSize rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -126,7 +126,115 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(LimitOutputBuffer lhs, LimitOutputBuffer rhs)
+		public static bool operator !=(OutputBufferSize lhs, OutputBufferSize rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
+	[Serializable]
+	public struct ChunkSize
+	{
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("Enabled")]
+		public bool Enabled;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[XmlElement("Size")]
+		public int Size;
+
+		/// <summary></summary>
+		public ChunkSize(bool enabled, int size)
+		{
+			Enabled = enabled;
+			Size    = size;
+		}
+
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			ChunkSize other = (ChunkSize)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(Size    == other.Size)
+			);
+		}
+
+		/// <summary>
+		/// Serves as a hash function for a particular type.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			return
+			(
+				Enabled.GetHashCode() ^
+				Size   .GetHashCode()
+			);
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields. This ensures that 'intelligent' properties,
+		/// i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public override string ToString()
+		{
+			return
+			(
+				Enabled + ", " +
+				Size
+			);
+		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(ChunkSize lhs, ChunkSize rhs)
+		{
+			// Value type implementation of operator ==.
+			// See MKY.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs))  return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(ChunkSize lhs, ChunkSize rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -38,7 +38,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <remarks>
-		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// Implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static AutoRetry AutoReopenDefault
@@ -47,28 +47,37 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		public const int AutoReopenMinimumInterval = 100;
+		public const int AutoReopenMinInterval = 100;
 
 		/// <remarks>
-		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// Implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static LimitOutputBuffer LimitOutputBufferDefault
+		public static OutputBufferSize OutputBufferSizeDefault
 		{
-			get { return (new LimitOutputBuffer(false, 2048)); } // 2048 is default of 'SerialPort'.
+			get { return (new OutputBufferSize(false, 2048)); } // 2048 is default of 'SerialPort'.
 		}
 
 		/// <remarks>
-		/// Must be implemented as property that creates a new object on each call to ensure that
+		/// Implemented as property that creates a new object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same object.
+		/// </remarks>
+		public static ChunkSize MaxChunkSizeDefault
+		{
+			get { return (new ChunkSize(true, 64)); } // 64 bytes reflects the typical USB report size, i.e. USB Ser/CDC converters.
+		}
+
+		/// <remarks>
+		/// Implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
 		public static SendRate MaxSendRateDefault
 		{
-			get { return (new SendRate(false, 50, 50)); } // 50 bytes per 50 ms.
+			get { return (new SendRate(false, 50, 50)); } // 50 bytes per 50 ms, an example limitation of small embedded sytems.
 		}
 
 		/// <summary></summary>
-		public const int MaxSendRateMaxInterval = 1000; // 1 second.
+		public const int SendRateMaxInterval = 1000; // 1 second.
 
 		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
@@ -88,7 +97,8 @@ namespace MKY.IO.Serial.SerialPort
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
-		private LimitOutputBuffer limitOutputBuffer;
+		private OutputBufferSize outputBufferSize;
+		private ChunkSize maxChunkSize;
 		private SendRate maxSendRate;
 
 		private bool noSendOnOutputBreak;
@@ -162,7 +172,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			Communication       = new SerialCommunicationSettings(rhs.Communication);
 			AutoReopen          = rhs.autoReopen;
-			LimitOutputBuffer   = rhs.LimitOutputBuffer;
+			OutputBufferSize    = rhs.OutputBufferSize;
+			MaxChunkSize        = rhs.MaxChunkSize;
 			MaxSendRate         = rhs.MaxSendRate;
 
 			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
@@ -186,7 +197,8 @@ namespace MKY.IO.Serial.SerialPort
 			PortId              = SerialPortId.FirstStandardPort;
 
 			AutoReopen          = AutoReopenDefault;
-			LimitOutputBuffer   = LimitOutputBufferDefault;
+			OutputBufferSize    = OutputBufferSizeDefault;
+			MaxChunkSize        = MaxChunkSizeDefault;
 			MaxSendRate         = MaxSendRateDefault;
 
 			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
@@ -260,17 +272,45 @@ namespace MKY.IO.Serial.SerialPort
 		/// The serial ports 'WriteBufferSize' typically is 2048. However, devices may
 		/// not be able to deal with that much data.
 		/// </summary>
-		[XmlElement("LimitOutputBuffer")]
-		public virtual LimitOutputBuffer LimitOutputBuffer
+		[XmlElement("OutputBufferSize")]
+		public virtual OutputBufferSize OutputBufferSize
 		{
-			get { return (this.limitOutputBuffer); }
+			get { return (this.outputBufferSize); }
 			set
 			{
-				if (this.limitOutputBuffer != value)
+				if (this.outputBufferSize != value)
 				{
-					this.limitOutputBuffer = value;
+					this.outputBufferSize = value;
 					SetChanged();
 				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("MaxChunkSize")]
+		public virtual ChunkSize MaxChunkSize
+		{
+			get { return (this.maxChunkSize); }
+			set
+			{
+				if (this.maxChunkSize != value)
+				{
+					this.maxChunkSize = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual int MaxChunkSizeMaxSize
+		{
+			get
+			{
+				if (OutputBufferSize.Enabled)
+					return (OutputBufferSize.Size);
+				else
+					return (OutputBufferSizeDefault.Size);
 			}
 		}
 
@@ -345,7 +385,8 @@ namespace MKY.IO.Serial.SerialPort
 
 				(PortId              == other.PortId) &&
 				(AutoReopen          == other.AutoReopen) &&
-				(LimitOutputBuffer   == other.LimitOutputBuffer) &&
+				(OutputBufferSize    == other.OutputBufferSize) &&
+				(MaxChunkSize        == other.MaxChunkSize) &&
 				(MaxSendRate         == other.MaxSendRate) &&
 
 				(NoSendOnOutputBreak == other.NoSendOnOutputBreak) &&
@@ -372,7 +413,8 @@ namespace MKY.IO.Serial.SerialPort
 
 				portIdHashCode     .GetHashCode() ^
 				AutoReopen         .GetHashCode() ^
-				LimitOutputBuffer  .GetHashCode() ^
+				OutputBufferSize   .GetHashCode() ^
+				MaxChunkSize       .GetHashCode() ^
 				MaxSendRate        .GetHashCode() ^
 
 				NoSendOnOutputBreak.GetHashCode() ^
