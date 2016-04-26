@@ -368,7 +368,7 @@ namespace YAT.View.Controls
 			if (!this.isSettingControls)
 			{
 				int interval;
-				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval))
+				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval))
 				{
 					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
 					ar.Interval = interval;
@@ -379,7 +379,7 @@ namespace YAT.View.Controls
 					MessageBoxEx.Show
 					(
 						this,
-						"Reconnect interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinimumInterval + " ms!",
+						"Reconnect interval must be at least " + MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

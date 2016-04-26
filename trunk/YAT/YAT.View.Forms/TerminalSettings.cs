@@ -553,7 +553,8 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Send.SendImmediately                 = f.SettingsResult.Terminal.Send.SendImmediately;
 				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
 				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;
-				this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer      = f.SettingsResult.Terminal.IO.SerialPort.LimitOutputBuffer;
+				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize       = f.SettingsResult.Terminal.IO.SerialPort.OutputBufferSize;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = f.SettingsResult.Terminal.IO.SerialPort.MaxChunkSize;
 				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
