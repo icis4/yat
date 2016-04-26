@@ -21,8 +21,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Text;
 
 namespace MKY.IO.Ports
@@ -88,6 +90,16 @@ namespace MKY.IO.Ports
 		/// The specified port is open.
 		/// </exception>
 		string PortName { get; set; }
+
+		/// <summary>
+		/// Gets the underlying <see cref="Stream"/> object for
+		/// a <see cref="System.IO.Ports.SerialPort"/> object.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// The stream is closed. This can occur because the <see cref="Open"/> method
+		/// has not been called or the <see cref="Close"/> method has been called.
+		/// </exception>
+		Stream BaseStream { get; }
 
 		/// <summary>
 		/// Gets or sets the serial baud rate.
