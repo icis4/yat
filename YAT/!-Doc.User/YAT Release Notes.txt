@@ -155,6 +155,7 @@ Fixed bugs:
 - Long monitor content is now displayed properly even when horizontally scrolling (bug #125).
 - ExternalException "A generic error occurred in GDI+" while drawing has been fixed by reverting
   from GDI+ to GDI (bugs #191, #266, #284, #286 and #325).
+- .NET Windows.Forms MDI issues with window list worked-around (bugs #119, #180 and #213).
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
@@ -166,7 +167,7 @@ Limitations and known issues:
    > System errors are output in local language, even though YAT is all-English (bug #66).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
-   > Issues with window list (bugs #31, #119, #180 and #213).
+   > Issue with window list (bug #31).
 - Serial COM port limitations of .NET:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while sleep or undock without closing the port will
