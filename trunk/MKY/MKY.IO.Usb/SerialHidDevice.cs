@@ -838,7 +838,7 @@ namespace MKY.IO.Usb
 
 			this.stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportByteLength, true);
 
-			// Immediately start reading.
+			// Immediately start reading:
 			BeginAsyncRead();
 
 			return (true);
@@ -853,17 +853,18 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void AsyncReadCompleted(IAsyncResult result)
 		{
-			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
+			try
 			{
-				try
+				if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
 				{
-					// Immediately read data on this thread.
+					// Immediately read data on this thread:
 
-					// Retrieve the read data and finalize read. In case of an exception during
-					// the read, the call of EndRead() throws it. If this happens, e.g. due to
-					// disconnect, exception is caught further down and stream is closed:
-					byte[] inputReportBuffer = (byte[])result.AsyncState;
-					this.stream.EndRead(result);
+					// Finalize read and retrieve the data. In case of an exception during the read,
+					// the call of EndRead() throws it. If this happens, e.g. due to disconnect,
+					// exception is caught further down and stream is closed:
+					int actualLength = this.stream.EndRead(result);
+					byte[] inputReportBuffer = new byte[actualLength];
+					Buffer.BlockCopy((byte[])result.AsyncState, 0, inputReportBuffer, 0, actualLength);
 
 					// Convert the input report into usable data:
 					SerialHidInputReportContainer input = new SerialHidInputReportContainer(this);
@@ -899,28 +900,28 @@ namespace MKY.IO.Usb
 						SignalReceiveThreadSafely();
 					}
 
-					// Trigger the next async read.
+					// Continue receiving:
 					BeginAsyncRead();
-				}
-				catch (IOException ex) // Includes Close().
-				{
-					string message = "Disconnect detected while reading from the USB Ser/HID device.";
-					DebugEx.WriteException(GetType(), ex, message);
-					OnDisconnected(EventArgs.Empty);
-				}
-				catch (Exception ex)
-				{
-					StringBuilder sb = new StringBuilder();
-					sb.Append    (@"Error while reading an input report from the USB Ser/HID device """);
-					sb.Append    (ToString());
-					sb.AppendLine(@""".");
-					sb.AppendLine();
-					sb.AppendLine("You may close and reopen and then try again.");
+				} // if (active)
+			}
+			catch (IOException ex) // Includes Close().
+			{
+				string message = "Disconnect detected while reading from the USB Ser/HID device.";
+				DebugEx.WriteException(GetType(), ex, message);
+				OnDisconnected(EventArgs.Empty);
+			}
+			catch (Exception ex)
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.Append    (@"Error while reading an input report from the USB Ser/HID device """);
+				sb.Append    (ToString());
+				sb.AppendLine(@""".");
+				sb.AppendLine();
+				sb.AppendLine("You may close and reopen and then try again.");
 
-					string message = sb.ToString();
-					DebugEx.WriteException(GetType(), ex, message);
-					OnIOError(new ErrorEventArgs(message));
-				}
+				string message = sb.ToString();
+				DebugEx.WriteException(GetType(), ex, message);
+				OnIOError(new ErrorEventArgs(message));
 			}
 		}
 
@@ -935,7 +936,8 @@ namespace MKY.IO.Usb
 		/// buffered.
 		/// </summary>
 		/// <remarks>
-		/// Will be signaled by <see cref="AsyncReadCompleted"/> event above.
+		/// Will be signaled by <see cref="AsyncReadCompleted"/> event above, or by XOn/XOff while
+		/// sending.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()

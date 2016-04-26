@@ -62,7 +62,7 @@ namespace MKY.IO.Serial.Usb
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueInitialCapacity = 4096;
+		private const int SendQueueFixedCapacity      = 4096;
 		private const int ReceiveQueueInitialCapacity = 4096;
 
 		private const int ThreadWaitTimeout = 200;
@@ -97,7 +97,7 @@ namespace MKY.IO.Serial.Usb
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
 		/// </remarks>
-		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
+		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
 
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
@@ -475,51 +475,28 @@ namespace MKY.IO.Serial.Usb
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (IsStarted)
+			if (IsTransmissive)
 			{
-				// Attention, XOn/XOff handling is implemented in MKY.IO.Serial.SerialPort.SerialPort too!
-				// Changes here must most likely be applied there too.
-
-				bool signalXOnXOff = false;
-				bool signalXOnXOffCount = false;
-
-				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				foreach (byte b in data)
 				{
-					foreach (byte b in data)
+					// Wait until there is space in the send queue:
+					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
+					{
+						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
+							return (false);
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to allow dequeuing.
+					}
+
+					// There is space for at least one byte:
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
 						this.sendQueue.Enqueue(b);
-
-						// Handle XOn/XOff state:
-						if (this.settings.FlowControlUsesXOnXOff)
-						{
-							if (b == XOnXOff.XOnByte)
-							{
-								if (this.iXOnXOffHelper.NotifyXOnSent())
-									signalXOnXOff = true;
-
-								signalXOnXOffCount = true;
-							}
-							else if (b == XOnXOff.XOffByte)
-							{
-								if (this.iXOnXOffHelper.NotifyXOffSent())
-									signalXOnXOff = true;
-
-								signalXOnXOffCount = true;
-							}
-						}
-					} // foreach (byte b in data)
-				} // lock (this.sendQueue)
-
-				// Signal XOn/XOff change to receive thread:
-				if (signalXOnXOff)
-					SignalReceiveThreadSafely();
+					}
+				}
 
 				// Signal data notification to send thread:
 				SignalSendThreadSafely();
-
-				// Invoke the event:
-				if (signalXOnXOff || signalXOnXOffCount)
-					OnIOControlChanged(EventArgs.Empty);
 
 				return (true);
 			}
@@ -587,13 +564,23 @@ namespace MKY.IO.Serial.Usb
 						if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 						{
 							this.device.Send(XOnXOff.XOnByte);
+
+							if (this.iXOnXOffHelper.NotifyXOnSent())
+								SignalReceiveThreadSafely();
+
 							OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOnByte, DeviceInfo)); // Skip I/O synchronization for simplicity.
+							OnIOControlChanged(EventArgs.Empty);
 							break; // Let other threads do their job and wait until signaled again.
 						}
 						else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
 						{
 							this.device.Send(XOnXOff.XOffByte);
+
+							if (this.iXOnXOffHelper.NotifyXOffSent())
+								SignalReceiveThreadSafely();
+
 							OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOffByte, DeviceInfo)); // Skip I/O synchronization for simplicity.
+							OnIOControlChanged(EventArgs.Empty);
 							break; // Let other threads do their job and wait until signaled again.
 						}
 						else

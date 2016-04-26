@@ -91,7 +91,7 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueInitialCapacity = 4096;
+		private const int SendQueueFixedCapacity = 4096;
 
 		private const int ThreadWaitTimeout = 200;
 
@@ -125,7 +125,7 @@ namespace MKY.IO.Serial.Socket
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding elements.
 		/// </remarks>
-		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
+		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
 
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
@@ -579,12 +579,24 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
-			if (IsStarted)
+			if (IsTransmissive)
 			{
-				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				foreach (byte b in data)
 				{
-					foreach (byte b in data)
+					// Wait until there is space in the send queue:
+					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
+					{
+						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
+							return (false);
+
+						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to allow dequeuing.
+					}
+
+					// There is space for at least one byte:
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					{
 						this.sendQueue.Enqueue(b);
+					}
 				}
 
 				// Signal send thread:
