@@ -616,6 +616,11 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems()
 		{
+			toolStripMenuItem_MainMenu_Window_SetChildMenuItems(false);
+		}
+
+		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems(bool isDropDownOpening)
+		{
 			this.isSettingControls.Enter();
 
 			bool workspaceIsReady = (this.workspace != null);
@@ -634,20 +639,46 @@ namespace YAT.View.Forms
 
 			this.isSettingControls.Leave();
 
+			// This is a work-around to the following bugs:
+			//  > #119 "MDI child list isn't always updated"
+			//  > #180 "Menu update of the terminal settings"
+			//  > #213 "Wrong indication 'COM 1 - Closed'"
+			//
+			// Attention, only apply the work-around in case of the event below!
+			// Otherwise, ActivateMdiChild(f) -> SetChildControls() will recurse here!
+			if (isDropDownOpening)
+			{
+				if (childIsReady)
+				{
+					Form f = this.ActiveMdiChild;
+					ActivateMdiChild(null);
+					ActivateMdiChild(f);
+				}
 #if (FALSE)
-			// \fixme:
-			// I don't know how to fix bug #1808494 "MDI window list invisible if no MDI children".
-			// The following code doesn't fix it. Could it even be a .NET bug?
-			if (childIsReady)
-				menuStrip_Main.MdiWindowListItem = toolStripMenuItem_MainMenu_Window;
-			else
-				menuStrip_Main.MdiWindowListItem = null;
+				// \fixme:
+				// I don't know how to fix bug #31 "MDI window list invisible if no MDI children".
+				// The following code doesn't fix it. Probably a .NET bug... Added to limitations.
+				if (childIsReady)
+				{
+					menuStrip_Main.MdiWindowListItem = toolStripMenuItem_MainMenu_Window;
+				}
+				else
+				{
+					menuStrip_Main.MdiWindowListItem = null;
+					- and/or -
+					menuStrip_Main.MdiWindowListItem = toolStripMenuItem_MainMenu_Dummy;
+					- and/or -
+					toolStripMenuItem_MainMenu_Window.Invalidate();
+					- and/or -
+					ActivateMdiChild(null);
+				}
 #endif
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
 		{
-			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
+			toolStripMenuItem_MainMenu_Window_SetChildMenuItems(true);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_AlwaysOnTop_Click(object sender, EventArgs e)
@@ -1802,7 +1833,7 @@ namespace YAT.View.Forms
 				case WorkspaceLayout.Automatic:
 					int terminalCount = ((this.workspace != null) ? this.workspace.TerminalCount : 0);
 					if (terminalCount <= 1)
-						MaximizeMdi();
+						MaximizeActiveMdiChild();
 					else
 						LayoutMdi(MdiLayout.TileVertical);
 					break;
@@ -1818,11 +1849,11 @@ namespace YAT.View.Forms
 					break;
 
 				case WorkspaceLayout.Minimize:
-					MinimizeMdi();
+					MinimizeActiveMdiChild();
 					break;
 
 				case WorkspaceLayout.Maximize:
-					MaximizeMdi();
+					MaximizeActiveMdiChild();
 					break;
 
 				default:
@@ -1847,7 +1878,7 @@ namespace YAT.View.Forms
 			this.isLayoutingMdi = false;
 		}
 
-		private void MinimizeMdi()
+		private void MinimizeActiveMdiChild()
 		{
 			if (ActiveMdiChild != null)
 			{
@@ -1857,7 +1888,7 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void MaximizeMdi()
+		private void MaximizeActiveMdiChild()
 		{
 			if (ActiveMdiChild != null)
 			{
@@ -1927,12 +1958,13 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the underlying thread onto the main thread.")]
 		private void workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
-			// Create terminal form and immediately show it.
+			// Create terminal form and immediately show it:
+
 			Terminal mdiChild = new Terminal(e.Terminal);
 			AttachTerminalEventHandlersAndMdiChildToParent(mdiChild);
 
 			this.isLayoutingMdi = true;
-			mdiChild.Show();
+			mdiChild.Show(); // MDI children must be shown without reference to 'this'.
 			this.isLayoutingMdi = false;
 
 			LayoutTerminals();
