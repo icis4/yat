@@ -45,7 +45,7 @@
 			this.toolStripMenuItem_MonitorContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ResetCount = new System.Windows.Forms.ToolStripMenuItem();
@@ -221,7 +221,7 @@
 			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,7 +328,7 @@
             this.toolStripMenuItem_MonitorContextMenu_Hide,
             this.toolStripMenuItem_MonitorContextMenu_Separator_1,
             this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime,
-            this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime,
+            this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime,
             this.toolStripMenuItem_MonitorContextMenu_Separator_2,
             this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate,
             this.toolStripMenuItem_MonitorContextMenu_ResetCount,
@@ -425,12 +425,12 @@
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Text = "Show Connect Time";
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click);
 			// 
-			// toolStripMenuItem_MonitorContextMenu_RestartConnectTime
+			// toolStripMenuItem_MonitorContextMenu_ResetConnectTime
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Name = "toolStripMenuItem_MonitorContextMenu_RestartConnectTime";
-			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Text = "Restart Connect Time";
-			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Name = "toolStripMenuItem_MonitorContextMenu_ResetConnectTime";
+			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Text = "Reset Connect Time";
+			this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ResetConnectTime_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_2
 			// 
@@ -1832,7 +1832,7 @@
             this.toolStripMenuItem_TerminalMenu_View_Panels,
             this.toolStripMenuItem_TerminalMenu_View_Separator_1,
             this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime,
-            this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime,
+            this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime,
             this.toolStripMenuItem_TerminalMenu_View_Separator_2,
             this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate,
             this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount,
@@ -1973,11 +1973,11 @@
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Text = "&Show Connect Time";
 			// 
-			// toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime
+			// toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime";
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Text = "Restart C&onnect Time";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Text = "Reset C&onnect Time";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_2
 			// 
@@ -2894,7 +2894,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_CopyPredefined;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_CopyPredefined;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowConnectTime;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_RestartConnectTime;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ResetConnectTime;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_SelectAll;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_SelectNone;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard;
@@ -2958,7 +2958,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_4;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_8;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_6;

@@ -58,22 +58,22 @@ namespace MKY.IO.Serial
 		void ToggleInputXOnXOff();
 
 		/// <summary>
-		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOn bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		int SentXOnCount { get; }
 
 		/// <summary>
-		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOff bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		int SentXOffCount { get; }
 
 		/// <summary>
-		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOn bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		int ReceivedXOnCount { get; }
 
 		/// <summary>
-		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOff bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		int ReceivedXOffCount { get; }
 

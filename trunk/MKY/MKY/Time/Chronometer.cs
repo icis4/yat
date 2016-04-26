@@ -215,8 +215,9 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			this.startTimeStamp = DateTime.Now;
+			this.startTimeStamp      = DateTime.Now;
 			this.accumulatedTimeSpan = TimeSpan.Zero;
+
 			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
 		}
 

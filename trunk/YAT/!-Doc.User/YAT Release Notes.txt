@@ -132,6 +132,7 @@ Important changes:
 - Synchronization among outgoing and incoming data improved, preventing data mix-ups and exceptions
   (related to feature requests #14, #252 as well as bugs #132, #275, #292, #321, #331, #333, #334).
 - Performance in terms of CPU usage and RAM consumption improved (bugs #189, #243, #263, #336).
+- Adaptive monitor update rate significantly improved, it is now dependent on the CPU load.
 - Additional hints (tool tips) added to the settings dialogs (feature request #189).
 - Help window is now sizeable to display more/all content (feature request #237).
 - Command line options fixed, extended and slightly changed (bug #335 and feature request #260).
