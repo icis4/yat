@@ -211,7 +211,7 @@ namespace YAT.View.Controls
 			if (!this.isSettingControls)
 			{
 				int interval;
-				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval))
+				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval))
 				{
 					MKY.IO.Serial.AutoRetry ar = TcpClientAutoReconnect;
 					ar.Interval = interval;
@@ -222,7 +222,7 @@ namespace YAT.View.Controls
 					MessageBoxEx.Show
 					(
 						this,
-						"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinimumInterval + " ms!",
+						"Reconnect interval must be at least " + MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval + " ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

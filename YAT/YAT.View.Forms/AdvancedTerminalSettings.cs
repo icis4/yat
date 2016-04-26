@@ -437,27 +437,27 @@ namespace YAT.View.Forms
 				this.settingsInEdit.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
 		}
 
-		private void checkBox_LimitOutputBuffer_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_OutputBufferSize_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.SerialPort.LimitOutputBuffer lob = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer;
-				lob.Enabled = checkBox_LimitOutputBuffer.Checked;
-				this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer = lob;
+				MKY.IO.Serial.SerialPort.OutputBufferSize lob = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize;
+				lob.Enabled = checkBox_OutputBufferSize.Checked;
+				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
 			}
 		}
 
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_LimitOutputBufferSize_Validating(object sender, CancelEventArgs e)
+		private void textBox_OutputBufferSize_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
 				int size;
-				if (int.TryParse(textBox_LimitOutputBufferSize.Text, out size) && Int32Ex.IsEven(size) && (size >= 2))
+				if (int.TryParse(textBox_OutputBufferSize.Text, out size) && Int32Ex.IsEven(size) && (size >= 2))
 				{
-					MKY.IO.Serial.SerialPort.LimitOutputBuffer lob = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer;
+					MKY.IO.Serial.SerialPort.OutputBufferSize lob = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize;
 					lob.Size = size;
-					this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer = lob;
+					this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize = lob;
 				}
 				else
 				{
@@ -470,6 +470,54 @@ namespace YAT.View.Forms
 					(
 						this,
 						message,
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+
+					e.Cancel = true;
+				}
+			}
+		}
+
+		private void checkBox_MaxChunkSize_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				MKY.IO.Serial.SerialPort.ChunkSize sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
+				sr.Enabled = checkBox_MaxChunkSize.Checked;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = sr;
+			}
+		}
+
+		private void textBox_MaxChunkSize_TextChanged(object sender, EventArgs e)
+		{
+			int bytes;
+			if (int.TryParse(textBox_MaxChunkSize.Text, out bytes) && (Math.Abs(bytes) == 1))
+				label_MaxChunkSizeUnit.Text = "byte";
+			else
+				label_MaxChunkSizeUnit.Text = "bytes";
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_MaxChunkSize_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				int maxSize = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSizeMaxSize;
+				int size;
+				if (int.TryParse(textBox_MaxChunkSize.Text, out size) && (size >= 1) && (size <= maxSize))
+				{
+					MKY.IO.Serial.SerialPort.ChunkSize sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
+					sr.Size = size;
+					this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = sr;
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"Size must be between 1 and " + maxSize + " bytes!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -532,7 +580,7 @@ namespace YAT.View.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				const int MaxInterval = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateMaxInterval;
+				const int MaxInterval = MKY.IO.Serial.SerialPort.SerialPortSettings.SendRateMaxInterval;
 
 				int interval;
 				if (int.TryParse(textBox_MaxSendRateInterval.Text, out interval) &&
@@ -875,9 +923,12 @@ namespace YAT.View.Forms
 			label_SignalXOnPeriodicallyIntervalUnit.Enabled  = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 
 			groupBox_Send_SerialPorts.Enabled                = isSerialPort;
-			checkBox_LimitOutputBuffer.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
-			textBox_LimitOutputBufferSize.Enabled            = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Enabled;
-			textBox_LimitOutputBufferSize.Text               = this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer.Size.ToString(CultureInfo.CurrentCulture);
+			checkBox_OutputBufferSize.Checked                = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
+			textBox_OutputBufferSize.Enabled                 = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Enabled;
+			textBox_OutputBufferSize.Text                    = this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize.Size.ToString(CultureInfo.CurrentCulture);
+			checkBox_MaxChunkSize.Checked                    = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+			textBox_MaxChunkSize.Enabled                     = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Enabled;
+			textBox_MaxChunkSize.Text                        = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize.Size.ToString(CultureInfo.CurrentCulture);
 			checkBox_MaxSendRateEnable.Checked               = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
 			textBox_MaxSendRateSize.Enabled                  = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Enabled;
 			textBox_MaxSendRateSize.Text                     = this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate.Size.ToString(CultureInfo.CurrentCulture);
@@ -963,7 +1014,8 @@ namespace YAT.View.Forms
 			this.settingsInEdit.Terminal.Send.SendImmediately                 = Domain.Settings.SendSettings.SendImmediatelyDefault;
 			this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission = Domain.Settings.SendSettings.SignalXOnBeforeEachTransmissionDefault;
 			this.settingsInEdit.Terminal.Send.SignalXOnPeriodically           = Domain.Settings.SendSettings.SignalXOnPeriodicallyDefault;
-			this.settingsInEdit.Terminal.IO.SerialPort.LimitOutputBuffer      = MKY.IO.Serial.SerialPort.SerialPortSettings.LimitOutputBufferDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize       = MKY.IO.Serial.SerialPort.SerialPortSettings.OutputBufferSizeDefault;
+			this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize           = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxChunkSizeDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate            = MKY.IO.Serial.SerialPort.SerialPortSettings.MaxSendRateDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak    = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnOutputBreakDefault;
 			this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPort.SerialPortSettings.NoSendOnInputBreakDefault;
