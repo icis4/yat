@@ -93,7 +93,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public const int TcpClientAutoReconnectMinimumInterval = 100;
+		public const int TcpClientAutoReconnectMinInterval = 100;
 
 		/// <summary></summary>
 		public const UdpServerSendMode DefaultUdpServerSendMode = UdpServerSendMode.MostRecent;
