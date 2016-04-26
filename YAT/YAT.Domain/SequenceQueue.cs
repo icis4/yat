@@ -132,16 +132,16 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Enqueue(byte b)
 		{
-			// Reset queue if it previously matched
+			// Reset queue if it previously matched:
 			if (this.state == State.CompleteMatch)
 				Reset();
 
-			// Enqueue incoming byte according to state
+			// Enqueue incoming byte according to state:
 			switch (this.state)
 			{
-				case State.Armed:       // Sequence not started yet
+				case State.Armed: // Sequence not started yet.
 				{
-					if (b == this.sequence[0])   // Start of sequence detected
+					if (b == this.sequence[0]) // Start of sequence detected.
 					{
 						this.queue.Enqueue(b);
 						Evaluate();
@@ -149,7 +149,7 @@ namespace YAT.Domain
 					break;
 				}
 
-				case State.PartlyMatchBeginning: // Sequence already started
+				case State.PartlyMatchBeginning: // Sequence already started.
 				case State.PartlyMatchContinued:
 				{
 					this.queue.Enqueue(b);

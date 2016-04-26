@@ -475,7 +475,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOn bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		public virtual int SentXOnCount
 		{
@@ -491,7 +491,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOff bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		public virtual int SentXOffCount
 		{
@@ -507,7 +507,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOn bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		public virtual int ReceivedXOnCount
 		{
@@ -523,7 +523,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOff bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		public virtual int ReceivedXOffCount
 		{
@@ -772,33 +772,13 @@ namespace MKY.IO.Serial.SerialPort
 							// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
 							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 							{
-								if (TryWriteByteToPort(XOnXOff.XOnByte, out isWriteTimeout, out isOutputBreak))
-								{
-									if (this.iXOnXOffHelper.NotifyXOnSent())
-										SignalReceiveThreadSafely();
-
-									OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOnByte, this.settings.PortId)); // Skip I/O synchronization for simplicity.
-
-									if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
-										OnIOControlChanged(EventArgs.Empty);
-
+								if (TryWriteXOnOrXOffAndNotify(XOnXOff.XOnByte, out isWriteTimeout, out isOutputBreak))
 									break; // Let other threads do their job and wait until signaled again.
-								}
 							}
 							else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
 							{
-								if (TryWriteByteToPort(XOnXOff.XOffByte, out isWriteTimeout, out isOutputBreak))
-								{
-									if (this.iXOnXOffHelper.NotifyXOffSent())
-										SignalReceiveThreadSafely();
-
-									OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOffByte, this.settings.PortId)); // Skip I/O synchronization for simplicity.
-
-									if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
-										OnIOControlChanged(EventArgs.Empty);
-
+								if (TryWriteXOnOrXOffAndNotify(XOnXOff.XOffByte, out isWriteTimeout, out isOutputBreak))
 									break; // Let other threads do their job and wait until signaled again.
-								}
 							}
 							else
 							{
@@ -947,6 +927,24 @@ namespace MKY.IO.Serial.SerialPort
 			}
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+		}
+
+		private bool TryWriteXOnOrXOffAndNotify(byte b, out bool isWriteTimeout, out bool isOutputBreak)
+		{
+			if (TryWriteByteToPort(b, out isWriteTimeout, out isOutputBreak))
+			{
+				if (this.iXOnXOffHelper.NotifyXOnOrXOffSent(b))
+					SignalReceiveThreadSafely();
+
+				OnDataSent(new SerialDataSentEventArgs(b, this.settings.PortId)); // Skip I/O synchronization for simplicity.
+
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+					OnIOControlChanged(EventArgs.Empty);
+
+				return (true);
+			}
+
+			return (false);
 		}
 
 		/// <remarks>
@@ -1678,10 +1676,10 @@ namespace MKY.IO.Serial.SerialPort
 		/// http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport.
 		/// 
 		/// However, there seems to be no difference whether 'DataReceived' and 'BytesToRead' or
-		/// async reading is used. Both loose the equal amount of data. Also, opposed to what Ben
-		/// Voigt states, async reading actually results in smaller chunks, mostly 1 byte reads.
-		/// Whereas the obvious 'DataReceived' and 'BytesToRead' mostly result in 1..4 byte reads,
-		/// even up to 20..30 bytes.
+		/// async reading is used. Both loose the equal amount of data, this fact is also supported
+		/// be the 'DriverAnalysis'. Also, opposed to what Ben Voigt states, async reading actually
+		/// results in smaller chunks, mostly 1 byte reads. Whereas the obvious 'DataReceived' and
+		/// 'BytesToRead' mostly result in 1..4 byte reads, even up to 20..30 bytes.
 		/// 
 		/// Thus, this implementation again uses the 'normal' method. Data loss probably just has
 		/// to be expected in case of the maximum rate...

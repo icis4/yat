@@ -360,7 +360,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
-		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOn bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		public virtual int SentXOnCount
 		{
@@ -376,7 +376,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
-		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOff bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		public virtual int SentXOffCount
 		{
@@ -392,7 +392,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
-		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOn bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		public virtual int ReceivedXOnCount
 		{
@@ -408,7 +408,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
-		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOff bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		public virtual int ReceivedXOffCount
 		{
@@ -563,24 +563,12 @@ namespace MKY.IO.Serial.Usb
 						// Control bytes must be sent even in case of XOff! XOn has precedence over XOff.
 						if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 						{
-							this.device.Send(XOnXOff.XOnByte);
-
-							if (this.iXOnXOffHelper.NotifyXOnSent())
-								SignalReceiveThreadSafely();
-
-							OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOnByte, DeviceInfo)); // Skip I/O synchronization for simplicity.
-							OnIOControlChanged(EventArgs.Empty);
+							SendXOnOrXOffAndNotify(XOnXOff.XOnByte);
 							break; // Let other threads do their job and wait until signaled again.
 						}
 						else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
 						{
-							this.device.Send(XOnXOff.XOffByte);
-
-							if (this.iXOnXOffHelper.NotifyXOffSent())
-								SignalReceiveThreadSafely();
-
-							OnDataSent(new SerialDataSentEventArgs(XOnXOff.XOffByte, DeviceInfo)); // Skip I/O synchronization for simplicity.
-							OnIOControlChanged(EventArgs.Empty);
+							SendXOnOrXOffAndNotify(XOnXOff.XOffByte);
 							break; // Let other threads do their job and wait until signaled again.
 						}
 						else
@@ -631,6 +619,17 @@ namespace MKY.IO.Serial.Usb
 			} // Outer loop
 
 			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+		}
+
+		private void SendXOnOrXOffAndNotify(byte b)
+		{
+			this.device.Send(b);
+
+			if (this.iXOnXOffHelper.NotifyXOnOrXOffSent(b))
+				SignalReceiveThreadSafely();
+
+			OnDataSent(new SerialDataSentEventArgs(b, DeviceInfo)); // Skip I/O synchronization for simplicity.
+			OnIOControlChanged(EventArgs.Empty);
 		}
 
 		private void InvokeXOffErrorEvent()

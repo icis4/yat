@@ -779,8 +779,8 @@ namespace YAT.View.Forms
 
 			// Connect time:
 			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked    = showConnectTime;
-			toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Enabled = showConnectTime;
+			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked  = showConnectTime;
+			toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Enabled = showConnectTime;
 
 			// Counters:
 			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
@@ -870,9 +870,9 @@ namespace YAT.View.Forms
 			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime_Click(object sender, EventArgs e)
 		{
-			this.terminal.RestartConnectTime();
+			this.terminal.ResetConnectTime();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate_Click(object sender, EventArgs e)
@@ -1072,12 +1072,12 @@ namespace YAT.View.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = this.settingsRoot.Display.ShowLength;
 
 			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
-			toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Enabled = showConnectTime;
+			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked  = showConnectTime;
+			toolStripMenuItem_MonitorContextMenu_ResetConnectTime.Enabled = showConnectTime;
 
 			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
 			toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Checked  = showCountAndRate;
-			toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled = showCountAndRate;
+			toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled        = showCountAndRate;
 
 			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
 
@@ -1172,9 +1172,9 @@ namespace YAT.View.Forms
 			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ResetConnectTime_Click(object sender, EventArgs e)
 		{
-			this.terminal.RestartConnectTime();
+			this.terminal.ResetConnectTime();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click(object sender, EventArgs e)

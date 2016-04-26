@@ -2034,24 +2034,27 @@ namespace YAT.Model
 		/// connection state.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private bool terminal_IOChanged_isConnected;
+		private bool terminal_IOChanged_hasBeenConnected;
 
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
 			OnIOChanged(e);
 
-			if      ( this.terminal.IsConnected && !this.terminal_IOChanged_isConnected)
+			bool hasBeenConnected = this.terminal_IOChanged_hasBeenConnected;
+			bool isConnectedNow   = this.terminal.IsConnected;
+
+			if      ( isConnectedNow && !hasBeenConnected)
 			{
 				this.activeConnectChrono.Restart();
 				this.totalConnectChrono.Start();
 			}
-			else if (!this.terminal.IsConnected &&  this.terminal_IOChanged_isConnected)
+			else if (!isConnectedNow &&  hasBeenConnected)
 			{
 				this.activeConnectChrono.Stop();
 				this.totalConnectChrono.Stop();
 			}
 
-			this.terminal_IOChanged_isConnected = this.terminal.IsConnected;
+			this.terminal_IOChanged_hasBeenConnected = this.terminal.IsConnected;
 		}
 
 		private void terminal_IOControlChanged(object sender, EventArgs e)
@@ -3071,12 +3074,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void RestartConnectTime()
+		public virtual void ResetConnectTime()
 		{
 			AssertNotDisposed();
 
-			this.activeConnectChrono.Restart();
-			this.totalConnectChrono.Restart();
+			this.activeConnectChrono.Reset();
+			this.totalConnectChrono .Reset();
 		}
 
 		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)

@@ -105,7 +105,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Returns the number of sent XOn characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOn bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		public virtual int SentXOnCount
 		{
@@ -113,7 +113,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Returns the number of sent XOff characters, i.e. the count of input XOn/XOff signaling.
+		/// Returns the number of sent XOff bytes, i.e. the count of input XOn/XOff signaling.
 		/// </summary>
 		public virtual int SentXOffCount
 		{
@@ -121,7 +121,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Returns the number of received XOn characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOn bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		public virtual int ReceivedXOnCount
 		{
@@ -129,7 +129,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Returns the number of received XOff characters, i.e. the count of output XOn/XOff signaling.
+		/// Returns the number of received XOff bytes, i.e. the count of output XOn/XOff signaling.
 		/// </summary>
 		public virtual int ReceivedXOffCount
 		{
@@ -144,7 +144,24 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary>
-		/// Notify that an XOn character has been sent.
+		/// Notify that an XOn or XOff byte has been sent.
+		/// </summary>
+		/// <returns>
+		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
+		/// </returns>
+		public virtual bool NotifyXOnOrXOffSent(byte b)
+		{
+			if (b == XOnXOff.XOnByte)
+				return (NotifyXOnSent());
+
+			if (b == XOnXOff.XOffByte)
+				return (NotifyXOffSent());
+
+			return (true);
+		}
+
+		/// <summary>
+		/// Notify that an XOn byte has been sent.
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
@@ -168,7 +185,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Notify that an XOff character has been sent.
+		/// Notify that an XOff byte has been sent.
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
@@ -192,7 +209,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Notify that an XOn character has been received.
+		/// Notify that an XOn byte has been received.
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
@@ -213,7 +230,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Notify that an XOff character has been received.
+		/// Notify that an XOff byte has been received.
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
