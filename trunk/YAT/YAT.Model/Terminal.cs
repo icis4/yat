@@ -2257,7 +2257,7 @@ namespace YAT.Model
 					if (portId != null)
 					{
 						MKY.IO.Ports.SerialPortCollection ports = new MKY.IO.Ports.SerialPortCollection();
-						ports.FillWithAvailablePorts(false);
+						ports.FillWithAvailablePorts(false); // No need to get descriptions, thus faster.
 						if (ports.Contains(portId))
 						{
 							return (true);
@@ -2309,7 +2309,7 @@ namespace YAT.Model
 					if (deviceInfo != null)
 					{
 						MKY.IO.Usb.SerialHidDeviceCollection devices = new MKY.IO.Usb.SerialHidDeviceCollection();
-						devices.FillWithAvailableDevices();
+						devices.FillWithAvailableDevices(); // Retrieve strings from devices in order to get serial strings.
 						if (devices.Contains(deviceInfo))
 						{
 							return (true);

@@ -61,11 +61,11 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fills list with the available USB devices.
 		/// </summary>
-		public virtual void FillWithAvailableDevices()
+		public virtual void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
 			Clear();
 
-			foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid))
+			foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid, retrieveStringsFromDevice))
 				Add(di);
 
 			Sort();

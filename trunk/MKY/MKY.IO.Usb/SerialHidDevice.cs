@@ -134,14 +134,14 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
-		public static new DeviceInfo[] GetDevices()
+		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
 			// \remind MKY 2013-06-08:
 			// It is not possible to limit this list/array to true Ser/HID devices, as there is no
 			// standardized way to retrieve whether a device is Ser/HID capable. However, this list
 			// could be limited to vendor-specific usages. Feature request #195 "USB Ser/HID device
 			// list could be limited to vendor-specific usages" deals with this potential feature.
-			return (HidDevice.GetDevices());
+			return (HidDevice.GetDevices(retrieveStringsFromDevice));
 		}
 
 		#endregion

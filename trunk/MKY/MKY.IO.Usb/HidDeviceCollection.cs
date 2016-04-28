@@ -72,11 +72,11 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fills list with the available USB HID devices.
 		/// </summary>
-		public override void FillWithAvailableDevices()
+		public override void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
 			Clear();
 
-			foreach (DeviceInfo di in HidDevice.GetDevices(this.usagePage, this.usageId))
+			foreach (DeviceInfo di in HidDevice.GetDevices(this.usagePage, this.usageId, retrieveStringsFromDevice))
 				Add(di);
 
 			Sort();

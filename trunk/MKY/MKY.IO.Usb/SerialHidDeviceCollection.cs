@@ -48,11 +48,11 @@ namespace MKY.IO.Usb
 		/// Fills list with the available USB Ser/HID devices.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Ser/HID just happens to contain 'Ser'...")]
-		public override void FillWithAvailableDevices()
+		public override void FillWithAvailableDevices(bool retrieveStringsFromDevice = true)
 		{
 			Clear();
 
-			foreach (DeviceInfo di in SerialHidDevice.GetDevices())
+			foreach (DeviceInfo di in SerialHidDevice.GetDevices(retrieveStringsFromDevice))
 				Add(di);
 
 			Sort();
