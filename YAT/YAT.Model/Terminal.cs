@@ -2290,7 +2290,7 @@ namespace YAT.Model
 							DialogResult dr = OnMessageInputRequest
 							(
 								message,
-								"No serial COM ports",
+								"No serial COM ports available",
 								MessageBoxButtons.YesNo,
 								MessageBoxIcon.Question,
 								MessageBoxDefaultButton.Button2
@@ -2368,7 +2368,7 @@ namespace YAT.Model
 							DialogResult dr = OnMessageInputRequest
 							(
 								message,
-								"No USB HID devices",
+								"No USB HID devices available",
 								MessageBoxButtons.YesNo,
 								MessageBoxIcon.Question,
 								MessageBoxDefaultButton.Button2
