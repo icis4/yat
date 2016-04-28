@@ -75,8 +75,10 @@ namespace MKY.IO.Usb
 		public override void FillWithAvailableDevices()
 		{
 			Clear();
+
 			foreach (DeviceInfo di in HidDevice.GetDevices(this.usagePage, this.usageId))
 				Add(di);
+
 			Sort();
 		}
 	}

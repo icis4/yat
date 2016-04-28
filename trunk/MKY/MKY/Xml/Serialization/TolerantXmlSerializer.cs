@@ -223,7 +223,7 @@ namespace MKY.Xml.Serialization
 					case XPathNodeType.Attribute:
 					{
 						// Attributes are handled by TryToCopyValue().
-						throw (new InvalidOperationException("Programm execution must never get here." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException("Programm execution should never get here, 'Attribute' must be handled by TryToCopyValue()!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					case XPathNodeType.Root:

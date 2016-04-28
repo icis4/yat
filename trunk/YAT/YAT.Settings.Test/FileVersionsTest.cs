@@ -892,24 +892,24 @@ namespace YAT.Settings.Test
 
 		private static DocumentSettingsHandler<TerminalSettingsRoot> SetupTerminalSettingsFromFilePath(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
-			settingsHandler.SettingsFilePath = filePath;
-			if (!settingsHandler.Load())
+			DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			sh.SettingsFilePath = filePath;
+			if (!sh.Load())
 			{
-				Assert.Fail("Terminal settings could not be loaded from " + settingsHandler.SettingsFilePath);
+				Assert.Fail("Terminal settings could not be loaded from " + sh.SettingsFilePath);
 			}
-			return (settingsHandler);
+			return (sh);
 		}
 
 		private static DocumentSettingsHandler<WorkspaceSettingsRoot> SetupWorkspaceSettingsFromFilePath(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-			settingsHandler.SettingsFilePath = filePath;
-			if (!settingsHandler.Load())
+			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+			sh.SettingsFilePath = filePath;
+			if (!sh.Load())
 			{
-				Assert.Fail("Workspace settings could not be loaded from " + settingsHandler.SettingsFilePath);
+				Assert.Fail("Workspace settings could not be loaded from " + sh.SettingsFilePath);
 			}
-			return (settingsHandler);
+			return (sh);
 		}
 
 		#endregion
@@ -926,10 +926,10 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase01(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				// Required if COM1 is not available.
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
@@ -954,10 +954,10 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase02(string filePath, bool ignoreBaudRate)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				// Required if COM2 is not available.
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
@@ -977,10 +977,10 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase03(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
 
@@ -997,10 +997,10 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase04(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			using (Model.Workspace workspace = new Model.Workspace(sh))
 			{
 				workspace.OpenTerminals();
 				VerifySettingsCase04(workspace);
@@ -1016,10 +1016,10 @@ namespace YAT.Settings.Test
 
 		private void ExecuteSettingsCase05(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				// Required if COM1 is not available.
 				terminal.MessageInputRequest += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
@@ -1039,10 +1039,10 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase06(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			using (Model.Workspace workspace = new Model.Workspace(sh))
 			{
 				workspace.OpenTerminals();
 				VerifySettingsCase06(workspace);
@@ -1058,10 +1058,10 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase07(string filePath)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<TerminalSettingsRoot> sh = SetupTerminalSettingsFromFilePath(filePath);
 
 			// Create terminal from settings and check whether settings are correctly set.
-			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			using (Model.Terminal terminal = new Model.Terminal(sh))
 			{
 				Assert.IsTrue(terminal.Start(), @"Failed to start """ + terminal.Caption + @"""");
 
@@ -1078,10 +1078,10 @@ namespace YAT.Settings.Test
 
 		private static void ExecuteSettingsCase08(string filePath)
 		{
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath(filePath);
+			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = SetupWorkspaceSettingsFromFilePath(filePath);
 
 			// Create workspace from settings and check whether settings are correctly set.
-			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			using (Model.Workspace workspace = new Model.Workspace(sh))
 			{
 				workspace.OpenTerminals();
 				VerifySettingsCase08(workspace);

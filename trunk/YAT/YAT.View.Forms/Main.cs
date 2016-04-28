@@ -1658,8 +1658,8 @@ namespace YAT.View.Forms
 				ApplicationSettings.LocalUserSettings.NewTerminal = f.NewTerminalSettingsResult;
 				ApplicationSettings.Save();
 
-				DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
-				this.main.CreateNewTerminalFromSettings(settingsHandler);
+				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
+				this.main.CreateNewTerminalFromSettings(sh);
 			}
 			else
 			{

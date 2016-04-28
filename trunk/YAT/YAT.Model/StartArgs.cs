@@ -52,11 +52,11 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public DocumentSettingsHandler<WorkspaceSettingsRoot> WorkspaceSettings;
+		public DocumentSettingsHandler<WorkspaceSettingsRoot> WorkspaceSettingsHandler;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public DocumentSettingsHandler<TerminalSettingsRoot> TerminalSettings;
+		public DocumentSettingsHandler<TerminalSettingsRoot> TerminalSettingsHandler;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]

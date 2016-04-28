@@ -106,27 +106,27 @@ namespace YAT.View.Test
 			string terminalSettings1FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
 			string terminalSettings2FilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ExtensionHelper.TerminalFile);
 
-			DocumentSettingsHandler<WorkspaceSettingsRoot> workspaceSettings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-			DocumentSettingsHandler<TerminalSettingsRoot> terminalSettings1 = new DocumentSettingsHandler<TerminalSettingsRoot>();
-			DocumentSettingsHandler<TerminalSettingsRoot> terminalSettings2 = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			DocumentSettingsHandler<WorkspaceSettingsRoot> workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+			DocumentSettingsHandler<TerminalSettingsRoot>  terminalSettingsHandler1 = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			DocumentSettingsHandler<TerminalSettingsRoot>  terminalSettingsHandler2 = new DocumentSettingsHandler<TerminalSettingsRoot>();
 
-			workspaceSettings.SettingsFilePath = workspaceSettingsFilePath;
-			terminalSettings1.SettingsFilePath = terminalSettings1FilePath;
-			terminalSettings2.SettingsFilePath = terminalSettings2FilePath;
+			workspaceSettingsHandler.SettingsFilePath = workspaceSettingsFilePath;
+			terminalSettingsHandler1.SettingsFilePath = terminalSettings1FilePath;
+			terminalSettingsHandler2.SettingsFilePath = terminalSettings2FilePath;
 
-			terminalSettings1.Settings.IOType = IOType.TcpAutoSocket;
-			terminalSettings2.Settings.IOType = IOType.TcpAutoSocket;
+			terminalSettingsHandler1.Settings.IOType = IOType.TcpAutoSocket;
+			terminalSettingsHandler2.Settings.IOType = IOType.TcpAutoSocket;
 
-			terminalSettings1.Settings.Status.ShowConnectTime = true;
-			terminalSettings1.Settings.Status.ShowCountAndRate = true;
-			terminalSettings2.Settings.Status.ShowConnectTime = true;
-			terminalSettings2.Settings.Status.ShowCountAndRate = true;
+			terminalSettingsHandler1.Settings.Status.ShowConnectTime = true;
+			terminalSettingsHandler1.Settings.Status.ShowCountAndRate = true;
+			terminalSettingsHandler2.Settings.Status.ShowConnectTime = true;
+			terminalSettingsHandler2.Settings.Status.ShowCountAndRate = true;
 
-			terminalSettings1.Settings.TerminalIsStarted = true;
-			terminalSettings2.Settings.TerminalIsStarted = true;
+			terminalSettingsHandler1.Settings.TerminalIsStarted = true;
+			terminalSettingsHandler2.Settings.TerminalIsStarted = true;
 
-			terminalSettings1.Save();
-			terminalSettings2.Save();
+			terminalSettingsHandler1.Save();
+			terminalSettingsHandler2.Save();
 			Trace.WriteLine("Terminal files created:");
 			Trace.Indent();
 			Trace.WriteLine(terminalSettings1FilePath);
@@ -136,17 +136,17 @@ namespace YAT.View.Test
 			TerminalSettingsItem terminalSettings1Item = new TerminalSettingsItem();
 			TerminalSettingsItem terminalSettings2Item = new TerminalSettingsItem();
 
-			terminalSettings1Item.FilePath = terminalSettings1.SettingsFilePath;
+			terminalSettings1Item.FilePath = terminalSettingsHandler1.SettingsFilePath;
 			terminalSettings1Item.FixedIndex = 1;
-			terminalSettings2Item.FilePath = terminalSettings2.SettingsFilePath;
+			terminalSettings2Item.FilePath = terminalSettingsHandler2.SettingsFilePath;
 			terminalSettings2Item.FixedIndex = 2;
 
-			workspaceSettings.Settings.TerminalSettings.Add(terminalSettings1Item);
-			workspaceSettings.Settings.TerminalSettings.Add(terminalSettings2Item);
+			workspaceSettingsHandler.Settings.TerminalSettings.Add(terminalSettings1Item);
+			workspaceSettingsHandler.Settings.TerminalSettings.Add(terminalSettings2Item);
 
-			workspaceSettings.Settings.Workspace.Layout = WorkspaceLayout.TileVertical;
+			workspaceSettingsHandler.Settings.Workspace.Layout = WorkspaceLayout.TileVertical;
 
-			workspaceSettings.Save();
+			workspaceSettingsHandler.Save();
 			Trace.WriteLine("Workspace file created:");
 			Trace.Indent();
 			Trace.WriteLine(workspaceSettingsFilePath);

@@ -162,8 +162,11 @@ namespace YAT.Model.Utilities
 			         (element is DisplayElement.Space) ||
 			         (element is DisplayElement.RightMargin) ||
 			         (element is DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
-			else if (element is DisplayElement.ErrorInfo)		{ format = this.errorFormat; }
-			else { throw (new NotImplementedException("Unknown DisplayElement!")); }
+			else if ( element is DisplayElement.ErrorInfo)		{ format = this.errorFormat; }
+			else
+			{
+				throw (new NotSupportedException("Program execution should never get here, '" + element.GetType() + "' is an invalid display element!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#region Disposal

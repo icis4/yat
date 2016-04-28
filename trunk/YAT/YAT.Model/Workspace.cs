@@ -1461,14 +1461,14 @@ namespace YAT.Model
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out string errorMessage)
+		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, WindowSettings windowSettings, out string errorMessage)
 		{
-			DocumentSettingsHandler<TerminalSettingsRoot> settings;
+			DocumentSettingsHandler<TerminalSettingsRoot> sh;
 			System.Xml.XmlException xmlEx;
-			if (OpenTerminalFile(filePath, out settings, out xmlEx))
+			if (OpenTerminalFile(filePath, out sh, out xmlEx))
 			{
 				Exception ex;
-				if (OpenTerminalFromSettings(settings, guid, fixedIndex, windowSettings, out ex))
+				if (OpenTerminalFromSettings(sh, guid, fixedIndex, windowSettings, out ex))
 				{
 					errorMessage = null;
 					return (true);
@@ -1516,18 +1516,18 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings)
+		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Exception exception;
-			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
+			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, Indices.DefaultFixedIndex, null, out exception));
 		}
 
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out Exception exception)
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, out Exception exception)
 		{
 			AssertNotDisposed();
 
 			// Ensure that the terminal file is not already open:
-			if (!CheckTerminalFiles(settings.SettingsFilePath))
+			if (!CheckTerminalFiles(settingsHandler.SettingsFilePath))
 			{
 				exception = null;
 				return (false);
@@ -1537,13 +1537,13 @@ namespace YAT.Model
 
 			// Set window settings if there are:
 			if (windowSettings != null)
-				settings.Settings.Window = windowSettings;
+				settingsHandler.Settings.Window = windowSettings;
 
 			// Create terminal:
 			Terminal terminal;
 			try
 			{
-				terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settings, guid);
+				terminal = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler, guid);
 			}
 			catch (Exception ex)
 			{
@@ -1555,8 +1555,8 @@ namespace YAT.Model
 			// Add to workspace:
 			AddToWorkspace(terminal, fixedIndex);
 
-			if (!settings.Settings.AutoSaved)
-				SetRecent(settings.SettingsFilePath);
+			if (!settingsHandler.Settings.AutoSaved)
+				SetRecent(settingsHandler.SettingsFilePath);
 
 			OnTimedStatusTextRequest("Terminal opened.");
 
@@ -1609,24 +1609,24 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
+		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out System.Xml.XmlException exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
 			terminalFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, terminalFilePath);
 
 			try
 			{
-				DocumentSettingsHandler<TerminalSettingsRoot> s = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				s.SettingsFilePath = terminalFilePath;
-				if (s.Load())
+				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				sh.SettingsFilePath = terminalFilePath;
+				if (sh.Load())
 				{
-					settings = s;
+					settingsHandler = sh;
 					exception = null;
 					return (true);
 				}
 				else
 				{
-					settings = null;
+					settingsHandler = null;
 					exception = null;
 					return (false);
 				}
@@ -1634,7 +1634,7 @@ namespace YAT.Model
 			catch (System.Xml.XmlException ex)
 			{
 				DebugEx.WriteException(GetType(), ex);
-				settings = null;
+				settingsHandler = null;
 				exception = ex;
 				return (false);
 			}
@@ -2102,7 +2102,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (this.activeTerminal.Save());
+			if (this.activeTerminal != null)
+				return (this.activeTerminal.Save());
+			else
+				return (false);
 		}
 
 		/// <summary></summary>
@@ -2110,7 +2113,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (this.activeTerminal.Close());
+			if (this.activeTerminal != null)
+				return (this.activeTerminal.Close());
+			else
+				return (false);
 		}
 
 		/// <summary></summary>
@@ -2118,7 +2124,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (this.activeTerminal.StartIO());
+			if (this.activeTerminal != null)
+				return (this.activeTerminal.StartIO());
+			else
+				return (false);
 		}
 
 		/// <summary></summary>
@@ -2126,7 +2135,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (this.activeTerminal.StopIO());
+			if (this.activeTerminal != null)
+				return (this.activeTerminal.StopIO());
+			else
+				return (false);
 		}
 
 		#endregion

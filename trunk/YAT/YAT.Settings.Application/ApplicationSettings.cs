@@ -24,6 +24,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY;
 using MKY.Settings;
 
 namespace YAT.Settings.Application
@@ -75,7 +76,7 @@ namespace YAT.Settings.Application
 				if (staticSettingsHandler != null)
 					return (staticSettingsHandler.LocalUserSettings);
 				else
-					throw (new InvalidOperationException("The settings have to be created before they can be accessed, ensure to call Create() and if needed also Load() before accessing the settings."));
+					throw (new InvalidOperationException("Program execution should never get here, the settings have to be created before they can be accessed, ensure to call Create() and if needed also Load() before accessing the settings!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

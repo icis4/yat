@@ -51,8 +51,10 @@ namespace MKY.IO.Usb
 		public override void FillWithAvailableDevices()
 		{
 			Clear();
+
 			foreach (DeviceInfo di in SerialHidDevice.GetDevices())
 				Add(di);
+
 			Sort();
 		}
 	}

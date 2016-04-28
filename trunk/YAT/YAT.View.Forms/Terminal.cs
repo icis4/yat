@@ -1193,7 +1193,7 @@ namespace YAT.View.Forms
 			if (repositoryType != Domain.RepositoryType.None)
 				ClearMonitor(repositoryType);
 			else
-				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString() + "!"));
+				throw (new InvalidOperationException("Program execution should never get here, invalid context menu source control received from " + sender.ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Refresh_Click(object sender, EventArgs e)
@@ -1202,7 +1202,7 @@ namespace YAT.View.Forms
 			if (repositoryType != Domain.RepositoryType.None)
 				RefreshMonitor(repositoryType);
 			else
-				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString() + "!"));
+				throw (new InvalidOperationException("Program execution should never get here, invalid context menu source control received from " + sender.ToString() + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
@@ -3810,7 +3810,7 @@ namespace YAT.View.Forms
 					}
 					else
 					{
-						throw (new InvalidOperationException("The underlying I/O instance is no serial COM port!"));
+						throw (new InvalidOperationException("Program execution should never get here, the underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 
 					bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;

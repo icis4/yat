@@ -89,7 +89,7 @@ namespace MKY.Net
 			: base(hostType)
 		{
 			if (hostType == IPHostType.Other)
-				throw (new InvalidOperationException("Program execution should never get here, 'IPHostType.Other' requires an IP address." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException("'IPHostType.Other' requires an IP address, use IPHost(IPAddress) instead!"));
 		}
 
 		/// <summary></summary>
