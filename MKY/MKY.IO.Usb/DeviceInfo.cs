@@ -166,6 +166,12 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		public DeviceInfo(string path, int vendorId, int productId)
+		{
+			Initialize(path, vendorId, productId, "", "", "");
+		}
+
+		/// <summary></summary>
 		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			Initialize(path, vendorId, productId, manufacturer, product, serial);

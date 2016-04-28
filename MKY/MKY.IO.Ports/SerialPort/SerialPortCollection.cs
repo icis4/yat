@@ -52,10 +52,10 @@ namespace MKY.IO.Ports
 		public virtual void FillWithStandardPorts()
 		{
 			Clear();
+
 			for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
-			{
 				Add(new SerialPortId(i));
-			}
+
 			Sort();
 		}
 
@@ -64,14 +64,16 @@ namespace MKY.IO.Ports
 		/// </summary>
 		/// <param name="getPortDescriptionsFromSystem">
 		/// On request, this method queries the port descriptions from the system.
+		/// Attention, this may take quite some time, depending on the available ports.
+		/// Therefore, the default value is <c>false</c>.
 		/// </param>
-		public virtual void FillWithAvailablePorts(bool getPortDescriptionsFromSystem)
+		public virtual void FillWithAvailablePorts(bool getPortDescriptionsFromSystem = false)
 		{
 			Clear();
+
 			foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
-			{
 				Add(new SerialPortId(portName));
-			}
+
 			Sort();
 
 			if (getPortDescriptionsFromSystem)

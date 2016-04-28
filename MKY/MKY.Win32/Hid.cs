@@ -21,16 +21,35 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of string access:
+////#define DEBUG_STRING_ACCESS
+
+	// Enable debugging of string access:
+////#define DEBUG_STRING_ACCESS_MESSAGEBOXES
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
@@ -753,12 +772,12 @@ namespace MKY.Win32
 				return (true);
 			}
 
-			System.Diagnostics.Debug.WriteLine("USB HID couldn't create shared device query handle:");
-			System.Diagnostics.Debug.Indent();
-			System.Diagnostics.Debug.WriteLine("Path = " + devicePath);
-			System.Diagnostics.Debug.WriteLine("");
-			System.Diagnostics.Debug.WriteLine(WinError.GetLastError());
-			System.Diagnostics.Debug.Unindent();
+			Debug.WriteLine("USB HID couldn't create shared device query handle:");
+			Debug.Indent();
+			Debug.WriteLine("Path = " + devicePath);
+			Debug.WriteLine("");
+			Debug.WriteLine(WinError.GetLastError());
+			Debug.Unindent();
 
 			deviceHandle = null;
 			return (false);
@@ -787,12 +806,12 @@ namespace MKY.Win32
 				return (true);
 			}
 
-			System.Diagnostics.Debug.WriteLine("USB HID couldn't create shared device read/write handle.");
-			System.Diagnostics.Debug.Indent();
-			System.Diagnostics.Debug.WriteLine("Path = " + devicePath);
-			System.Diagnostics.Debug.WriteLine("");
-			System.Diagnostics.Debug.WriteLine(WinError.GetLastError());
-			System.Diagnostics.Debug.Unindent();
+			Debug.WriteLine("USB HID couldn't create shared device read/write handle.");
+			Debug.Indent();
+			Debug.WriteLine("Path = " + devicePath);
+			Debug.WriteLine("");
+			Debug.WriteLine(WinError.GetLastError());
+			Debug.Unindent();
 
 			readHandle = null;
 			return (false);
@@ -802,21 +821,45 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetManufacturerString(SafeFileHandle deviceHandle, out string manufacturer)
 		{
-			return (GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer));
+			ShowDebugStringAccessMessageBox("Retrieving manufacturer string via hid.dll::HidD_GetManufacturerString...");
+
+			bool success = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
+
+			ShowDebugStringAccessMessageBox(success,
+			                               @"...successfully retrieved """ + manufacturer + @"""",
+			                                "...failed to retrieve manufacturer string");
+
+			return (success);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetProductString(SafeFileHandle deviceHandle, out string product)
 		{
-			return (GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product));
+			ShowDebugStringAccessMessageBox("Retrieving product string via hid.dll::HidD_GetProductString...");
+
+			bool success = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
+
+			ShowDebugStringAccessMessageBox(success,
+			                               @"...successfully retrieved """ + product + @"""",
+			                                "...failed to retrieve product string");
+
+			return (success);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serial)
 		{
-			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial));
+			ShowDebugStringAccessMessageBox("Retrieving serial string via hid.dll::HidD_GetSerialString...");
+
+			bool success = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
+
+			ShowDebugStringAccessMessageBox(success,
+			                               @"...successfully retrieved """ + serial + @"""",
+			                                "...failed to retrieve serial string");
+
+			return (success);
 		}
 
 		/// <summary>
@@ -850,14 +893,14 @@ namespace MKY.Win32
 						if (!string.IsNullOrEmpty(contentString) &&
 							(contentString != languageString)) // Looks like a proper invariant string.
 						{
-						////System.Diagnostics.Debug.WriteLine(@"USB device string """ + contentString + @""" successfully retrieved");
+							WriteDebugStringAccessMessageLine(@"USB device string """ + contentString + @""" successfully retrieved");
 
 							hidString = contentString;
 							return (true);
 						}
 						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
 						{
-						////System.Diagnostics.Debug.WriteLine(@"USB device string is not available on this device");
+							WriteDebugStringAccessMessageLine(@"USB device string is not available on this device");
 
 							hidString = "";
 							return (true);
@@ -866,7 +909,7 @@ namespace MKY.Win32
 				}
 			}
 
-		////System.Diagnostics.Debug.WriteLine(@"USB device string could not be retrieved!");
+			WriteDebugStringAccessMessageLine(@"USB device string could not be retrieved!");
 
 			hidString = "";
 			return (false);
@@ -993,24 +1036,24 @@ namespace MKY.Win32
 			if ((NativeMethods.HidP_GetCaps(pPreparsedData, ref capabilities) == 0))
 				return (false);
 
-			System.Diagnostics.Debug.WriteLine("USB HID device capabilities:");
-			System.Diagnostics.Debug.Indent();
-			System.Diagnostics.Debug.WriteLine("Usage page:                    0x" + capabilities.UsagePage.ToString("X4", CultureInfo.InvariantCulture));
-			System.Diagnostics.Debug.WriteLine("Usage ID:                      0x" + capabilities.Usage    .ToString("X4", CultureInfo.InvariantCulture));
-			System.Diagnostics.Debug.WriteLine("Input report byte length:        " + capabilities.InputReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Output report byte length:       " + capabilities.OutputReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Feature report byte length:      " + capabilities.FeatureReportByteLength);
-			System.Diagnostics.Debug.WriteLine("Number of link collection nodes: " + capabilities.NumberLinkCollectionNodes);
-			System.Diagnostics.Debug.WriteLine("Number of input button caps:     " + capabilities.NumberInputButtonCaps);
-			System.Diagnostics.Debug.WriteLine("Number of input value caps:      " + capabilities.NumberInputValueCaps);
-			System.Diagnostics.Debug.WriteLine("Number of input data indices:    " + capabilities.NumberInputDataIndices);
-			System.Diagnostics.Debug.WriteLine("Number of output button caps:    " + capabilities.NumberOutputButtonCaps);
-			System.Diagnostics.Debug.WriteLine("Number of output value caps:     " + capabilities.NumberOutputValueCaps);
-			System.Diagnostics.Debug.WriteLine("Number of output data indices:   " + capabilities.NumberOutputDataIndices);
-			System.Diagnostics.Debug.WriteLine("Number of feature button caps:   " + capabilities.NumberFeatureButtonCaps);
-			System.Diagnostics.Debug.WriteLine("Number of feature value caps:    " + capabilities.NumberFeatureValueCaps);
-			System.Diagnostics.Debug.WriteLine("Number of feature data indices:  " + capabilities.NumberFeatureDataIndices);
-			System.Diagnostics.Debug.Unindent();
+			Debug.WriteLine("USB HID device capabilities:");
+			Debug.Indent();
+			Debug.WriteLine("Usage page:                    0x" + capabilities.UsagePage.ToString("X4", CultureInfo.InvariantCulture));
+			Debug.WriteLine("Usage ID:                      0x" + capabilities.Usage    .ToString("X4", CultureInfo.InvariantCulture));
+			Debug.WriteLine("Input report byte length:        " + capabilities.InputReportByteLength);
+			Debug.WriteLine("Output report byte length:       " + capabilities.OutputReportByteLength);
+			Debug.WriteLine("Feature report byte length:      " + capabilities.FeatureReportByteLength);
+			Debug.WriteLine("Number of link collection nodes: " + capabilities.NumberLinkCollectionNodes);
+			Debug.WriteLine("Number of input button caps:     " + capabilities.NumberInputButtonCaps);
+			Debug.WriteLine("Number of input value caps:      " + capabilities.NumberInputValueCaps);
+			Debug.WriteLine("Number of input data indices:    " + capabilities.NumberInputDataIndices);
+			Debug.WriteLine("Number of output button caps:    " + capabilities.NumberOutputButtonCaps);
+			Debug.WriteLine("Number of output value caps:     " + capabilities.NumberOutputValueCaps);
+			Debug.WriteLine("Number of output data indices:   " + capabilities.NumberOutputDataIndices);
+			Debug.WriteLine("Number of feature button caps:   " + capabilities.NumberFeatureButtonCaps);
+			Debug.WriteLine("Number of feature value caps:    " + capabilities.NumberFeatureValueCaps);
+			Debug.WriteLine("Number of feature data indices:  " + capabilities.NumberFeatureDataIndices);
+			Debug.Unindent();
 
 			// \remind (2010-03-21 / mky):
 			// The following two lines demonstrate how the device's value capabilities can be retrieved.
@@ -1021,6 +1064,34 @@ namespace MKY.Win32
 		////HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
 
 			return (true);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_STRING_ACCESS")]
+		private static void WriteDebugStringAccessMessageLine(string message)
+		{
+			Debug.WriteLine(message);
+		}
+
+		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
+		private static void ShowDebugStringAccessMessageBox(string message)
+		{
+			MessageBox.Show(message);
+		}
+
+		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
+		private static void ShowDebugStringAccessMessageBox(bool condition, string messageIf, string messageElse)
+		{
+			if (condition)
+				ShowDebugStringAccessMessageBox(messageIf);
+			else
+				ShowDebugStringAccessMessageBox(messageElse);
 		}
 
 		#endregion

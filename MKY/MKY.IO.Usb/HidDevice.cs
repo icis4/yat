@@ -83,9 +83,9 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
-		public static new DeviceInfo[] GetDevices()
+		public static new DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
-			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Hid)));
+			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Hid), retrieveStringsFromDevice));
 		}
 
 		/// <summary>
@@ -93,9 +93,9 @@ namespace MKY.IO.Usb
 		/// on the system.
 		/// </summary>
 		[CLSCompliant(false)]
-		public static DeviceInfo[] GetDevices(HidUsagePage usagePage)
+		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, bool retrieveStringsFromDevice = true)
 		{
-			DeviceInfo[] dis = GetDevices();
+			DeviceInfo[] dis = GetDevices(retrieveStringsFromDevice);
 			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capactiy to improve memory management.
 
 			foreach (DeviceInfo di in dis)
@@ -115,9 +115,9 @@ namespace MKY.IO.Usb
 		/// available on the system.
 		/// </summary>
 		[CLSCompliant(false)]
-		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId)
+		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsageId usageId, bool retrieveStringsFromDevice = true)
 		{
-			DeviceInfo[] dis = GetDevices();
+			DeviceInfo[] dis = GetDevices(retrieveStringsFromDevice);
 			List<DeviceInfo> l = new List<DeviceInfo>(dis.Length); // Preset the required capactiy to improve memory management.
 
 			foreach (DeviceInfo di in dis)

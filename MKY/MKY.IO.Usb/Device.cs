@@ -87,9 +87,10 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
-		public static DeviceInfo[] GetDevices()
+		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
+		public static DeviceInfo[] GetDevices(bool retrieveStringsFromDevice = true)
 		{
-			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Any)));
+			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Any), retrieveStringsFromDevice));
 		}
 
 		/// <summary>
@@ -99,9 +100,10 @@ namespace MKY.IO.Usb
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="deviceClass">USB device class.</param>
-		public static DeviceInfo[] GetDevicesFromClass(DeviceClass deviceClass)
+		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
+		public static DeviceInfo[] GetDevicesFromClass(DeviceClass deviceClass, bool retrieveStringsFromDevice = true)
 		{
-			return (GetDevicesFromGuid(GetGuidFromDeviceClass(deviceClass)));
+			return (GetDevicesFromGuid(GetGuidFromDeviceClass(deviceClass), retrieveStringsFromDevice));
 		}
 
 		/// <summary>
@@ -111,15 +113,16 @@ namespace MKY.IO.Usb
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
+		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
-		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid)
+		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true)
 		{
 			string[] paths = Win32.DeviceManagement.GetDevicesFromGuid(classGuid);
 			List<DeviceInfo> l = new List<DeviceInfo>(paths.Length); // Preset the initial capactiy to improve memory management.
 
 			foreach (string path in paths)
 			{
-				DeviceInfo device = GetDeviceInfoFromPath(path);
+				DeviceInfo device = GetDeviceInfoFromPath(path, retrieveStringsFromDevice);
 				if (device != null)
 					l.Add(device);
 			}
@@ -230,15 +233,44 @@ namespace MKY.IO.Usb
 		/// Returns the information of the device with the given path,
 		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
-		public static DeviceInfo GetDeviceInfoFromPath(string path)
+		public static DeviceInfo GetDeviceInfoFromPath(string path, bool retrieveStringsFromDevice = true)
 		{
-			int vendorId, productId;
-			string manufacturer, product, serial;
+			if (retrieveStringsFromDevice)
+			{
+				int vendorId, productId;
+				string manufacturer, product, serial;
 
-			if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
-				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
+				if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+					return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
+				else
+					return (null);
+			}
 			else
-				return (null);
+			{
+				int vendorId, productId;
+
+				if (GetDeviceInfoFromPath(path, out vendorId, out productId))
+					return (new DeviceInfo(path, vendorId, productId));
+				else
+					return (null);
+			}
+		}
+
+		/// <summary>
+		/// Returns the information of the device with the given path.
+		/// </summary>
+		/// <remarks>
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId)
+		{
+			string manufacturer, product, serial;
+			return (GetDeviceInfoFromPath(path, false, out vendorId, out productId, out manufacturer, out product, out serial));
 		}
 
 		/// <summary>
@@ -254,14 +286,37 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
 		{
+			return (GetDeviceInfoFromPath(path, true, out vendorId, out productId, out manufacturer, out product, out serial));
+		}
+
+		/// <summary>
+		/// Returns the information of the device with the given path.
+		/// </summary>
+		/// <remarks>
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// </remarks>
+		private static bool GetDeviceInfoFromPath(string path, bool retrieveStringsFromDevice, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
+		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
 					if (GetVidAndPidFromHandle(deviceHandle, out vendorId, out productId))
-						if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial))
+					{
+						if (retrieveStringsFromDevice)
+						{
+							if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial))
+								return (true);
+						}
+						else
+						{
+							manufacturer = "";
+							product      = "";
+							serial       = "";
 							return (true);
+						}
+					}
 				}
 				finally
 				{

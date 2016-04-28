@@ -404,7 +404,7 @@ namespace YAT.View.Controls
 				try
 				{
 					SerialPortCollection ports = new SerialPortCollection();
-					ports.FillWithAvailablePorts(false);
+					ports.FillWithAvailablePorts(false); // Descriptions will be retrieved further below.
 
 					if (ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions)
 					{
