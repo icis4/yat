@@ -820,8 +820,13 @@ namespace YAT.Model
 
 							break;
 						}
-					}
-				}
+
+						default:
+						{
+							throw (new NotSupportedException("Program execution should never get here, '" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					} // switch (I/O type)
+				} // if (settings available)
 
 				return (sb.ToString());
 			}
@@ -1109,16 +1114,20 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Begin logging (in case opening of terminal needs to be logged).
+			// Switch log on if selected:
 			if (this.settingsRoot.LogIsOn)
 			{
 				if (!SwitchLogOn())
 					return (false);
 			}
 
-			// Then open terminal.
+			// Then start terminal if selected:
 			if (this.settingsRoot.TerminalIsStarted)
 			{
+				// Check availability of I/O before starting:
+				if (!CheckIOAvailability())
+					return (false);
+
 				if (!StartIO())
 					return (false);
 			}
@@ -1133,10 +1142,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Settings have changed, recreate terminal with new settings.
+			// Settings have changed, recreate terminal with new settings:
 			if (this.terminal.IsStarted)
 			{
-				// Terminal is open, close and re-open it with the new settings.
+				// Terminal is open, close and re-open it with the new settings:
 				if (StopIO(false))
 				{
 					DetachTerminalEventHandlers(); // Detach to suspend events.
@@ -1160,7 +1169,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				// Terminal is closed, simply set the new settings.
+				// Terminal is closed, simply set the new settings:
 				DetachTerminalEventHandlers(); // Detach to suspend events.
 				this.settingsRoot.Explicit = settings;
 				Domain.Terminal oldTerminal = this.terminal;
@@ -2220,9 +2229,170 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Start/Stop
+		#region Terminal > Check I/O
 		//------------------------------------------------------------------------------------------
-		// Terminal > Start/Stop
+		// Terminal > Check I/O
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Checks the terminal's I/O port availability. If I/O port is not available, user is asked
+		/// whether to change to a different I/O port.
+		/// </summary>
+		/// <remarks>
+		/// Note that only the availability of the I/O port is checked, not whether the port is
+		/// already in use, because that may take quite some time and thus unnecessarily delay the
+		/// open/check/start sequence.
+		/// </remarks>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public virtual bool CheckIOAvailability()
+		{
+			OnFixedStatusTextRequest("Checking terminal...");
+
+			switch (this.settingsRoot.IOType)
+			{
+				case Domain.IOType.SerialPort:
+				{
+					MKY.IO.Ports.SerialPortId portId = this.settingsRoot.IO.SerialPort.PortId;
+					if (portId != null)
+					{
+						MKY.IO.Ports.SerialPortCollection ports = new MKY.IO.Ports.SerialPortCollection();
+						ports.FillWithAvailablePorts(false);
+						if (ports.Contains(portId))
+						{
+							return (true);
+						}
+						else if (ports.Count > 0)
+						{
+							string message =
+								portId + " is currently not available. " +
+								"Switch to " + ports[0] + " instead?";
+
+							DialogResult dr = OnMessageInputRequest
+							(
+								message,
+								"Switch serial COM port?",
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Question
+							);
+
+							if (dr == DialogResult.Yes)
+								this.settingsRoot.IO.SerialPort.PortId = ports[0];
+
+							return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+						}
+						else // ports.Count == 0
+						{
+							string message =
+								"There are currently no serial COM ports available." + Environment.NewLine +
+								"Start with " + portId + " anyway?";
+
+							DialogResult dr = OnMessageInputRequest
+							(
+								message,
+								"No serial COM ports",
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Question,
+								MessageBoxDefaultButton.Button2
+							);
+
+							return (dr == DialogResult.Yes);
+						}
+					}
+
+					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
+				}
+
+				case Domain.IOType.UsbSerialHid:
+				{
+					MKY.IO.Usb.DeviceInfo deviceInfo = this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo;
+					if (deviceInfo != null)
+					{
+						MKY.IO.Usb.SerialHidDeviceCollection devices = new MKY.IO.Usb.SerialHidDeviceCollection();
+						devices.FillWithAvailableDevices();
+						if (devices.Contains(deviceInfo))
+						{
+							return (true);
+						}
+						else if (devices.ContainsVidPid(deviceInfo))
+						{
+							// Attention:
+							// Similar code exists in View.Controls.UsbSerialHidDeviceSelection.SetDeviceList().
+							// Changes here may have to be applied there too!
+
+							// A device with same VID/PID is available, use that:
+							int sameVidPidIndex = devices.FindIndexVidPid(deviceInfo);
+
+							// Inform the user if serial is required:
+							if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
+							{
+								string message =
+									"The device '" + deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+									"Switch to '" + devices[sameVidPidIndex] + "' (first available device with same VID and PID) instead?";
+
+								DialogResult dr = OnMessageInputRequest
+								(
+									message,
+									"Switch USB HID device?",
+									MessageBoxButtons.YesNo,
+									MessageBoxIcon.Question
+								);
+
+								if (dr == DialogResult.Yes)
+								{
+									this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+								}
+
+								return (true); // Return 'true' in any case, device may not yet be available but 'AutoOpen'.
+							}
+							else
+							{
+								// Clear the 'Changed' flag in case of automatically changing settings:
+
+								bool haveAlreadyBeenChanged = this.settingsRoot.IO.UsbSerialHidDevice.HaveChanged;
+
+								this.settingsRoot.IO.UsbSerialHidDevice.DeviceInfo = devices[sameVidPidIndex];
+
+								if (!haveAlreadyBeenChanged)
+									this.settingsRoot.IO.UsbSerialHidDevice.ClearChanged();
+
+								return (true);
+							}
+						}
+						else // does not contain
+						{
+							string message =
+								"There are currently no HID capable USB devices available." + Environment.NewLine +
+								"Start with " + deviceInfo + " anyway?";
+
+							DialogResult dr = OnMessageInputRequest
+							(
+								message,
+								"No USB HID devices",
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Question,
+								MessageBoxDefaultButton.Button2
+							);
+
+							return (dr == DialogResult.Yes);
+						}
+					}
+
+					return (true); // Return 'true' in all 'non-handled' cases => still try to start I/O to force the underlying exception message.
+				}
+
+				default: // Not really useful for TCP/IP and UDP/IP socket, they may be shared.
+				{
+					return (true); // Return 'true' in all 'non-handled' cases.
+				}
+			}
+		}
+
+		#endregion
+
+		#region Terminal > Start/Stop I/O
+		//------------------------------------------------------------------------------------------
+		// Terminal > Start/Stop I/O
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -2251,7 +2421,7 @@ namespace YAT.Model
 					if (saveStatus)
 						this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
-					OnTimedStatusTextRequest("Terminal started.");
+					OnTimedStatusTextRequest("Terminal successfully started.");
 					success = true;
 				}
 				else
@@ -2288,7 +2458,7 @@ namespace YAT.Model
 					case Domain.IOType.UsbSerialHid:
 					{
 						yatTitle = ApplicationEx.ProductName + " hint:";
-						yatText  = "Make sure the selected USB device is connected.";
+						yatText  = "Make sure the selected USB device is connected and not already in use.";
 						break;
 					}
 					default:
@@ -2312,8 +2482,6 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
-
-				OnTimedStatusTextRequest("Terminal not started!");
 			}
 
 			return (success);
@@ -2509,7 +2677,7 @@ namespace YAT.Model
 					break;
 
 				default:
-					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation!"));
+					throw (new NotSupportedException("Program execution should never get here, '" + this.settingsRoot.IOType + "' is an invalid I/O type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			textBuilder.Append(":");
 			titleBuilder.Append(" Error!");
@@ -3897,16 +4065,22 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
+			return (OnMessageInputRequest(text, caption, buttons, icon, MessageBoxDefaultButton.Button1));
+		}
+
+		/// <summary></summary>
+		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		{
 			if (this.startArgs.Interactive)
 			{
 				WriteDebugMessageLine(text);
 
-				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
+				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon, defaultButton);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 
 				// Ensure that the request is processed!
 				if (e.Result == DialogResult.None)
-					throw (new InvalidOperationException(@"Program execution should never get here, a 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(@"A 'Message Input' request by terminal """ + Caption + @""" was not processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				return (e.Result);
 			}

@@ -34,6 +34,8 @@ using MKY;
 using MKY.IO.Usb;
 using MKY.Windows.Forms;
 
+using YAT.Settings.Application;
+
 #endregion
 
 namespace YAT.View.Controls
@@ -253,18 +255,57 @@ namespace YAT.View.Controls
 						// Nothing has changed, just restore the selected item:
 						comboBox_Device.SelectedItem = this.deviceInfo;
 					}
+					else if ((this.deviceInfo != null) && (devices.ContainsVidPid(this.deviceInfo)))
+					{
+						// Attention:
+						// Similar code exists in Model.Terminal.ValidateIO().
+						// Changes here may have to be applied there too!
+
+						// A device with same VID/PID is available, use that:
+						int sameVidPidIndex = devices.FindIndexVidPid(this.deviceInfo);
+
+						// Inform the user if serial is required:
+						if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
+						{
+							// Compose the message (that includes the former device info) BEFORE switching!
+							string message =
+								"The previous device '" + this.deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+								"The selection has been switched to '" + devices[sameVidPidIndex] + "' (first available device with previous VID and PID).";
+
+							// Ensure that the settings item is switched and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							DeviceInfo                    = devices[sameVidPidIndex];
+							comboBox_Device.SelectedIndex         = sameVidPidIndex;
+
+							MessageBoxEx.Show
+							(
+								this,
+								message,
+								"Previous USB HID device not available",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Information
+							);
+						}
+						else
+						{
+							// Ensure that the settings item is defaulted and shown by SetControls().
+							// Set property instead of member to ensure that changed event is fired.
+							DeviceInfo                    = devices[sameVidPidIndex];
+							comboBox_Device.SelectedIndex         = sameVidPidIndex;
+						}
+					}
 					else
 					{
 						// Compose the message (that includes the former device info) BEFORE defaulting!
 						string message;
 						if (this.deviceInfo != null)
 							message =
-								"The USB device " + this.deviceInfo + " is currently not available." + Environment.NewLine + Environment.NewLine +
-								"The setting has been defaulted to the first available device.";
+								"The previous device '" + this.deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+								"The selection has been defaulted to the first available device '" + devices[0] + "'.";
 						else
 							message =
-								"The former USB device is currently not available." + Environment.NewLine + Environment.NewLine +
-								"The setting has been defaulted to the first available device.";
+								"The previous device is currently not available." + Environment.NewLine + Environment.NewLine +
+								"The selection has been defaulted to the first available device '" + devices[0] + "'.";
 
 						// Ensure that the settings item is defaulted and shown by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
@@ -275,7 +316,7 @@ namespace YAT.View.Controls
 						(
 							this,
 							message,
-							"USB device not available",
+							"Previous USB HID device not available",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
 						);
@@ -287,10 +328,14 @@ namespace YAT.View.Controls
 					// Set property instead of member to ensure that changed event is fired.
 					DeviceInfo = null;
 
+					string message =
+						"There are currently no HID capable USB devices available." + Environment.NewLine +
+						"Check the USB devices of your system.";
+
 					MessageBoxEx.Show
 					(
 						this,
-						"No HID capable USB devices available.",
+						message,
 						"No USB HID devices",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning

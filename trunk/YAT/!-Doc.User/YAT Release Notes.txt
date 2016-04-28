@@ -111,6 +111,7 @@ New:
    > Possibility to receive from multiple sources when using 'UDP/IP Server' (feature request #248).
    > Dedicated settings for server, client and socket (related to feature request #248).
 - USB Ser/HID can be configured to XOn/XOff flow control (feature request #226).
+- USB Ser/HID discovery improved, serial string may optionally be ignored (feature request #261).
 - Automatic response feature, YAT can automatically respond to a request (feature request #252).
 
 Important changes:
