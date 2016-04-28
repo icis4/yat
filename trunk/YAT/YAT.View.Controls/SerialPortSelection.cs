@@ -499,7 +499,7 @@ namespace YAT.View.Controls
 						(
 							this,
 							message,
-							"No serial COM ports",
+							"No serial COM ports available",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
 						);

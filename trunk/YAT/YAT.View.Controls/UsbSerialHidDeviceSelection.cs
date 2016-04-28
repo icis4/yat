@@ -318,7 +318,7 @@ namespace YAT.View.Controls
 							message,
 							"Previous USB HID device not available",
 							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
+							MessageBoxIcon.Information
 						);
 					}
 				}
@@ -336,7 +336,7 @@ namespace YAT.View.Controls
 					(
 						this,
 						message,
-						"No USB HID devices",
+						"No USB HID devices available",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
 					);
