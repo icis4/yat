@@ -31,6 +31,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using MKY;
+
 using YAT.Domain;
 
 #endregion
@@ -196,7 +198,7 @@ namespace YAT.Model.Utilities
 			}
 			else
 			{
-				throw (new NotImplementedException("Unknown DisplayElement!"));
+				throw (new NotSupportedException("Program execution should never get here, '" + element.GetType() + "' is an invalid display element!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

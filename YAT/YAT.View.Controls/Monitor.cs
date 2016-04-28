@@ -58,6 +58,7 @@ using System.Globalization;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Windows.Forms;
 
 using YAT.View.Controls.ViewModel;
@@ -1011,7 +1012,7 @@ namespace YAT.View.Controls
 						continue;
 					}
 				}
-				throw (new InvalidOperationException("Invalid pending element(s) or line(s)!"));
+				throw (new NotSupportedException("Program execution should never get here, '" + obj.GetType() + "' is an invalid pending item!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			} // foreach (object in pending)
 
 			this.pendingElementsAndLines.Clear();

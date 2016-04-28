@@ -315,22 +315,22 @@ namespace YAT.Model
 			// Start YAT according to the start requests:
 			bool success = false;
 
-			bool workspaceIsRequested = (this.startArgs.WorkspaceSettings != null);
-			bool terminalIsRequested  = (this.startArgs.TerminalSettings  != null);
+			bool workspaceIsRequested = (this.startArgs.WorkspaceSettingsHandler != null);
+			bool terminalIsRequested  = (this.startArgs.TerminalSettingsHandler  != null);
 
 			if (workspaceIsRequested || terminalIsRequested)
 			{
 				if (workspaceIsRequested && terminalIsRequested)
 				{
-					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettings, this.startArgs.RequestedDynamicTerminalIndex, this.startArgs.TerminalSettings);
+					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettingsHandler, this.startArgs.RequestedDynamicTerminalIndex, this.startArgs.TerminalSettingsHandler);
 				}
 				else if (workspaceIsRequested) // Workspace only.
 				{
-					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettings);
+					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettingsHandler);
 				}
 				else // Terminal only.
 				{
-					success = OpenTerminalFromSettings(this.startArgs.TerminalSettings);
+					success = OpenTerminalFromSettings(this.startArgs.TerminalSettingsHandler);
 				}
 
 				// Note that any existing auto workspace settings are kept as they are.
@@ -519,7 +519,7 @@ namespace YAT.Model
 				{
 					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 					if (OpenWorkspaceFile(requestedFilePath, out sh))
-						this.startArgs.WorkspaceSettings = sh;
+						this.startArgs.WorkspaceSettingsHandler = sh;
 					else
 						return (false);
 				}
@@ -527,7 +527,7 @@ namespace YAT.Model
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					if (OpenTerminalFile(requestedFilePath, out sh))
-						this.startArgs.TerminalSettings = sh;
+						this.startArgs.TerminalSettingsHandler = sh;
 					else
 						return (false);
 				}
@@ -538,10 +538,10 @@ namespace YAT.Model
 			}
 
 			// Prio 7 = Retrieve the requested terminal and validate it:
-			if (this.startArgs.WorkspaceSettings != null) // Applies to a terminal within a workspace.
+			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
 				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
-				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettings.Settings.TerminalSettings.Count - 1);
+				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
 				
 				if     ((requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
 					this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
@@ -554,22 +554,22 @@ namespace YAT.Model
 
 				if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
 				{
-					string workspaceFilePath = this.startArgs.WorkspaceSettings.SettingsFilePath;
+					string workspaceFilePath = this.startArgs.WorkspaceSettingsHandler.SettingsFilePath;
 
 					string terminalFilePath;
 					if (this.startArgs.RequestedDynamicTerminalIndex == Indices.DefaultDynamicIndex) // The last terminal is the default.
-						terminalFilePath = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[this.startArgs.WorkspaceSettings.Settings.TerminalSettings.Count - 1].FilePath;
+						terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
 					else
-						terminalFilePath = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
+						terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
 
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
-						this.startArgs.TerminalSettings = sh;
+						this.startArgs.TerminalSettingsHandler = sh;
 					else
 						return (false);
 				}
 			}
-			else if (this.startArgs.TerminalSettings != null) // Applies to a dedicated terminal.
+			else if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
 					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
@@ -579,7 +579,7 @@ namespace YAT.Model
 				if (this.commandLineArgs.RequestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
 					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex; // Usable to disable the operation.
 
-				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				this.startArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 			else
 			{
@@ -587,15 +587,15 @@ namespace YAT.Model
 			}
 
 			// Prio 8 = Override settings as desired:
-			if (this.startArgs.TerminalSettings != null)
+			if (this.startArgs.TerminalSettingsHandler != null)
 			{
-				bool terminalIsStarted = this.startArgs.TerminalSettings.Settings.TerminalIsStarted;
-				bool logIsOn           = this.startArgs.TerminalSettings.Settings.LogIsOn;
+				bool terminalIsStarted = this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted;
+				bool logIsOn           = this.startArgs.TerminalSettingsHandler.Settings.LogIsOn;
 
-				if (ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettings.Settings.Terminal, ref terminalIsStarted, ref logIsOn))
+				if (ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal, ref terminalIsStarted, ref logIsOn))
 				{
-					this.startArgs.TerminalSettings.Settings.TerminalIsStarted = terminalIsStarted;
-					this.startArgs.TerminalSettings.Settings.LogIsOn           = logIsOn;
+					this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = terminalIsStarted;
+					this.startArgs.TerminalSettingsHandler.Settings.LogIsOn           = logIsOn;
 				}
 				else
 				{
@@ -1242,12 +1242,12 @@ namespace YAT.Model
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
 
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
+			DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 			Guid guid;
 			System.Xml.XmlException ex;
-			if (OpenWorkspaceFile(filePath, out settings, out guid, out ex))
+			if (OpenWorkspaceFile(filePath, out sh, out guid, out ex))
 			{
-				return (OpenWorkspaceFromSettings(settings, guid));
+				return (OpenWorkspaceFromSettings(sh, guid));
 			}
 			else
 			{
@@ -1291,19 +1291,19 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
+		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
-			return (OpenWorkspaceFromSettings(settings, Guid.NewGuid()));
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid()));
 		}
 
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
-			return (OpenWorkspaceFromSettings(settings, guid, Indices.InvalidIndex, null));
+			return (OpenWorkspaceFromSettings(settingsHandler, guid, Indices.InvalidIndex, null));
 		}
 
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
-			return (OpenWorkspaceFromSettings(settings, Guid.NewGuid(), dynamicTerminalIndexToReplace, terminalSettingsToReplace));
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIndexToReplace, terminalSettingsToReplace));
 		}
 
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
@@ -1400,22 +1400,22 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
+		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
 			Guid guid;
 			System.Xml.XmlException exception;
-			return (OpenWorkspaceFile(filePath, out settings, out guid, out exception));
+			return (OpenWorkspaceFile(filePath, out settingsHandler, out guid, out exception));
 		}
 
-		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settings, out Guid guid, out System.Xml.XmlException exception)
+		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out System.Xml.XmlException exception)
 		{
 			try
 			{
-				DocumentSettingsHandler<WorkspaceSettingsRoot> s = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-				s.SettingsFilePath = filePath;
-				if (s.Load())
+				DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				if (sh.Load())
 				{
-					settings = s;
+					settingsHandler = sh;
 
 					// Try to retrieve GUID from file path (in case of auto saved workspace files).
 					if (!GuidEx.TryCreateGuidFromFilePath(filePath, Application.Settings.GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
@@ -1426,7 +1426,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					settings = null;
+					settingsHandler = null;
 					guid = Guid.Empty;
 					exception = null;
 					return (false);
@@ -1435,7 +1435,7 @@ namespace YAT.Model
 			catch (System.Xml.XmlException ex)
 			{
 				DebugEx.WriteException(GetType(), ex);
-				settings = null;
+				settingsHandler = null;
 				guid = Guid.Empty;
 				exception = ex;
 				return (false);
@@ -1474,36 +1474,36 @@ namespace YAT.Model
 		// Terminal > Private Methods
 		//------------------------------------------------------------------------------------------
 
-		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings)
+		private bool OpenTerminalFile(string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			System.Xml.XmlException exception;
-			return (OpenTerminalFile("", terminalFilePath, out settings, out exception));
+			return (OpenTerminalFile("", terminalFilePath, out settingsHandler, out exception));
 		}
 
-		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings)
+		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			System.Xml.XmlException exception;
-			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out settings, out exception));
+			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out settingsHandler, out exception));
 		}
 
-		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
+		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out System.Xml.XmlException exception)
 		{
 			// Combine absolute workspace path with terminal path if that one is relative:
 			terminalFilePath = PathEx.CombineFilePaths(workspaceFilePath, terminalFilePath);
 
 			try
 			{
-				DocumentSettingsHandler<TerminalSettingsRoot> s = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				s.SettingsFilePath = terminalFilePath;
-				if (s.Load())
+				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				sh.SettingsFilePath = terminalFilePath;
+				if (sh.Load())
 				{
-					settings = s;
+					settingsHandler = sh;
 					exception = null;
 					return (true);
 				}
 				else
 				{
-					settings = null;
+					settingsHandler = null;
 					exception = null;
 					return (false);
 				}
@@ -1511,7 +1511,7 @@ namespace YAT.Model
 			catch (System.Xml.XmlException ex)
 			{
 				DebugEx.WriteException(GetType(), ex);
-				settings = null;
+				settingsHandler = null;
 				exception = ex;
 				return (false);
 			}

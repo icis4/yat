@@ -661,7 +661,7 @@ namespace YAT.Domain
 		public virtual void Append(DisplayElement de)
 		{
 			if (!AcceptsAppendOf(de))
-				throw (new InvalidOperationException(@"Program execution should never get here, the given element """ + de + @""" cannot be appended to this element """ + this + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new NotSupportedException(@"Program execution should never get here, the given element """ + de + @""" cannot be appended to this element """ + this + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// \fixme (2010-04-01 / MKY):
 			// Weird ArgumentException when receiving large chunks of data.

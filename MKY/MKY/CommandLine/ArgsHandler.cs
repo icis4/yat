@@ -1006,7 +1006,7 @@ namespace MKY.CommandLine
 		public virtual bool OptionIsGiven(string name)
 		{
 			if (this.args == null)
-				throw (new InvalidOperationException("ProcessAndValidate() must be called first!"));
+				throw (new InvalidOperationException("ProcessAndValidate() must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			if (this.supportOptionArgs || this.supportArrayOptionArgs)
 			{

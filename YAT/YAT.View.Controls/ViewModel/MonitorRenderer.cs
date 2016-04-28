@@ -29,8 +29,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
+
+using MKY;
 
 #endregion
 
@@ -244,10 +245,7 @@ namespace YAT.View.Controls.ViewModel
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Unknown DisplayElement:");
-				sb.Append(element.ToString());
-				throw (new NotImplementedException(sb.ToString()));
+				throw (new NotSupportedException("Program execution should never get here, '" + element.GetType() + "' is an invalid display element!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			// Override if the item is selected:

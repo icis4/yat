@@ -73,7 +73,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static SendRate MaxSendRateDefault
 		{
-			get { return (new SendRate(false, 50, 50)); } // 50 bytes per 50 ms, an example limitation of small embedded sytems.
+			get { return (new SendRate(false, 64, 10)); } // 64 bytes per 10 ms, an example limitation of an embedded sytems.
 		}
 
 		/// <summary></summary>
