@@ -376,6 +376,31 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
+		/// Determines whether this instance and the specified object have value equality,
+		/// ignoring <see cref="Serial"/>.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public bool EqualsVidPid(DeviceInfo other)
+		{
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
+				return (false);
+
+			// Do not care about path, the path is likely to be system dependent.
+
+			return
+			(
+				(VendorId  == other.VendorId) &&
+				(ProductId == other.ProductId)
+			);
+		}
+
+		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
 		/// <remarks>

@@ -400,13 +400,10 @@ namespace YAT.View.Controls
 				this.portListIsInitialized = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
 
-				SerialPortCollection ports = new SerialPortCollection();
-
-				// Exceptions should not but can happen:
-				// > In case of Bluetooth ports on certain computers.
+				// Exceptions should not happen, but actually can in case of Bluetooth...
 				try
 				{
-					// Fill list with available ports.
+					SerialPortCollection ports = new SerialPortCollection();
 					ports.FillWithAvailablePorts(false);
 
 					if (ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions)
@@ -495,7 +492,7 @@ namespace YAT.View.Controls
 						PortId = null;
 
 						string message =
-							"There are no serial COM ports available." + Environment.NewLine +
+							"There are currently no serial COM ports available." + Environment.NewLine +
 							"Check the serial COM ports of your system.";
 
 						MessageBoxEx.Show

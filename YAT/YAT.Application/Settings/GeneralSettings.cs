@@ -44,8 +44,11 @@ namespace YAT.Application.Settings
 		private bool autoOpenWorkspace;
 		private bool autoSaveWorkspace;
 		private bool useRelativePaths;
+
 		private bool retrieveSerialPortCaptions;
 		private bool detectSerialPortsInUse;
+
+		private bool useUsbSerial;
 
 		/// <summary></summary>
 		public GeneralSettings()
@@ -72,8 +75,11 @@ namespace YAT.Application.Settings
 			AutoOpenWorkspace          = rhs.AutoOpenWorkspace;
 			AutoSaveWorkspace          = rhs.AutoSaveWorkspace;
 			UseRelativePaths           = rhs.UseRelativePaths;
+
 			RetrieveSerialPortCaptions = rhs.RetrieveSerialPortCaptions;
 			DetectSerialPortsInUse     = rhs.DetectSerialPortsInUse;
+
+			UseUsbSerial            = rhs.UseUsbSerial;
 
 			ClearChanged();
 		}
@@ -88,8 +94,11 @@ namespace YAT.Application.Settings
 			AutoOpenWorkspace          = true;
 			AutoSaveWorkspace          = true;
 			UseRelativePaths           = true;
+
 			RetrieveSerialPortCaptions = true;
 			DetectSerialPortsInUse     = true;
+
+			UseUsbSerial            = true;
 		}
 
 		#region Properties
@@ -179,6 +188,21 @@ namespace YAT.Application.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("UseUsbSerial")]
+		public virtual bool UseUsbSerial
+		{
+			get { return (this.useUsbSerial); }
+			set
+			{
+				if (this.useUsbSerial != value)
+				{
+					this.useUsbSerial = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -206,8 +230,11 @@ namespace YAT.Application.Settings
 				(AutoOpenWorkspace          == other.AutoOpenWorkspace) &&
 				(AutoSaveWorkspace          == other.AutoSaveWorkspace) &&
 				(UseRelativePaths           == other.UseRelativePaths) &&
+
 				(RetrieveSerialPortCaptions == other.RetrieveSerialPortCaptions) &&
-				(DetectSerialPortsInUse     == other.DetectSerialPortsInUse)
+				(DetectSerialPortsInUse     == other.DetectSerialPortsInUse) &&
+
+				(UseUsbSerial            == other.UseUsbSerial)
 			);
 		}
 
@@ -227,8 +254,11 @@ namespace YAT.Application.Settings
 				AutoOpenWorkspace         .GetHashCode() ^
 				AutoSaveWorkspace         .GetHashCode() ^
 				UseRelativePaths          .GetHashCode() ^
+
 				RetrieveSerialPortCaptions.GetHashCode() ^
-				DetectSerialPortsInUse    .GetHashCode()
+				DetectSerialPortsInUse    .GetHashCode() ^
+
+				UseUsbSerial           .GetHashCode()
 			);
 		}
 

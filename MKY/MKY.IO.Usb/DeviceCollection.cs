@@ -32,7 +32,7 @@ namespace MKY.IO.Usb
 	public class DeviceCollection : List<DeviceInfo>
 	{
 		private DeviceClass deviceClass = DeviceClass.Any;
-		private Guid classGuid = Guid.Empty;
+		private Guid        classGuid   = Guid.Empty;
 
 		/// <summary></summary>
 		public DeviceCollection()
@@ -69,6 +69,59 @@ namespace MKY.IO.Usb
 				Add(di);
 
 			Sort();
+		}
+
+		/// <summary>
+		/// Determines whether an element is in the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// <c>true</c> if item is found in the collection; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool ContainsVidPid(DeviceInfo item)
+		{
+			foreach (DeviceInfo di in this)
+			{
+				if (di.EqualsVidPid(item))
+					return (true);
+			}
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// first occurrence within the entire collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The first element that matchesthe <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		public virtual DeviceInfo FindVidPid(DeviceInfo item)
+		{
+			EqualsVidPid predicate = new EqualsVidPid(item);
+			return (Find(predicate.Match));
+		}
+
+		/// <summary>
+		/// Searches for an element that matches the <paramref name="item"/>, and returns the
+		/// zero-based index of the first occurrence within the collection.
+		/// </summary>
+		/// <param name="item">
+		/// The object to locate in the collection. The value can be null for reference types.
+		/// </param>
+		/// <returns>
+		/// The zero-based index of the first occurrence of an element that matches the
+		/// <paramref name="item"/>, if found; otherwise, –1.
+		/// </returns>
+		public virtual int FindIndexVidPid(DeviceInfo item)
+		{
+			EqualsVidPid predicate = new EqualsVidPid(item);
+			return (FindIndex(predicate.Match));
 		}
 	}
 }

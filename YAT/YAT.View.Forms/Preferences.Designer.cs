@@ -33,6 +33,9 @@
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Preferences = new System.Windows.Forms.GroupBox();
+			this.groupBox_UsbDevice = new System.Windows.Forms.GroupBox();
+			this.checkBox_UseUsbSerial = new System.Windows.Forms.CheckBox();
+			this.label_UsbDeviceDiscovery = new System.Windows.Forms.Label();
 			this.groupBox_Main = new System.Windows.Forms.GroupBox();
 			this.checkBox_ShowChrono = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTerminalInfo = new System.Windows.Forms.CheckBox();
@@ -46,6 +49,7 @@
 			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox_Preferences.SuspendLayout();
+			this.groupBox_UsbDevice.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
 			this.groupBox_SerialPorts.SuspendLayout();
 			this.groupBox_Workspace.SuspendLayout();
@@ -88,14 +92,52 @@
 			this.groupBox_Preferences.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Preferences.Controls.Add(this.groupBox_UsbDevice);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Main);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_SerialPorts);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Workspace);
 			this.groupBox_Preferences.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Preferences.Name = "groupBox_Preferences";
-			this.groupBox_Preferences.Size = new System.Drawing.Size(258, 283);
+			this.groupBox_Preferences.Size = new System.Drawing.Size(258, 354);
 			this.groupBox_Preferences.TabIndex = 0;
 			this.groupBox_Preferences.TabStop = false;
+			// 
+			// groupBox_UsbDevice
+			// 
+			this.groupBox_UsbDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_UsbDevice.Controls.Add(this.checkBox_UseUsbSerial);
+			this.groupBox_UsbDevice.Controls.Add(this.label_UsbDeviceDiscovery);
+			this.groupBox_UsbDevice.Location = new System.Drawing.Point(6, 282);
+			this.groupBox_UsbDevice.Name = "groupBox_UsbDevice";
+			this.groupBox_UsbDevice.Size = new System.Drawing.Size(246, 66);
+			this.groupBox_UsbDevice.TabIndex = 3;
+			this.groupBox_UsbDevice.TabStop = false;
+			this.groupBox_UsbDevice.Text = "USB Ser/HID";
+			// 
+			// checkBox_UseUsbSerial
+			// 
+			this.checkBox_UseUsbSerial.AutoSize = true;
+			this.checkBox_UseUsbSerial.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+			this.checkBox_UseUsbSerial.Location = new System.Drawing.Point(12, 38);
+			this.checkBox_UseUsbSerial.Name = "checkBox_UseUsbSerial";
+			this.checkBox_UseUsbSerial.Size = new System.Drawing.Size(173, 17);
+			this.checkBox_UseUsbSerial.TabIndex = 1;
+			this.checkBox_UseUsbSerial.Text = "...take s&erial string into account";
+			this.toolTip.SetToolTip(this.checkBox_UseUsbSerial, "Enabled: Discovery takes VID, PID and serial string into account.\r\nDisabled: Disc" +
+        "overy is limited to VID and PID.");
+			this.checkBox_UseUsbSerial.UseVisualStyleBackColor = true;
+			this.checkBox_UseUsbSerial.CheckedChanged += new System.EventHandler(this.checkBox_UseUsbSerial_CheckedChanged);
+			// 
+			// label_UsbDeviceDiscovery
+			// 
+			this.label_UsbDeviceDiscovery.AutoSize = true;
+			this.label_UsbDeviceDiscovery.Location = new System.Drawing.Point(9, 19);
+			this.label_UsbDeviceDiscovery.Name = "label_UsbDeviceDiscovery";
+			this.label_UsbDeviceDiscovery.Size = new System.Drawing.Size(145, 13);
+			this.label_UsbDeviceDiscovery.TabIndex = 0;
+			this.label_UsbDeviceDiscovery.Text = "When discovering devices,...";
 			// 
 			// groupBox_Main
 			// 
@@ -117,7 +159,7 @@
 			this.checkBox_ShowChrono.Name = "checkBox_ShowChrono";
 			this.checkBox_ShowChrono.Size = new System.Drawing.Size(175, 17);
 			this.checkBox_ShowChrono.TabIndex = 1;
-			this.checkBox_ShowChrono.Text = "Show &chronometer in status bar";
+			this.checkBox_ShowChrono.Text = "Show c&hronometer in status bar";
 			this.checkBox_ShowChrono.UseVisualStyleBackColor = true;
 			this.checkBox_ShowChrono.CheckedChanged += new System.EventHandler(this.checkBox_ShowChrono_CheckedChanged);
 			// 
@@ -145,8 +187,8 @@
 			this.groupBox_SerialPorts.TabIndex = 2;
 			this.groupBox_SerialPorts.TabStop = false;
 			this.groupBox_SerialPorts.Text = "Serial COM Ports";
-			this.toolTip.SetToolTip(this.groupBox_SerialPorts, "On certain computers, discovery of serial COM ports takes several seconds.\r\nIn such c" +
-        "ases it can be useful to disable one or both of these options.");
+			this.toolTip.SetToolTip(this.groupBox_SerialPorts, "On certain computers, discovery of serial COM ports takes several seconds.\r\nIn su" +
+        "ch cases it can be useful to disable one or both of these options.");
 			// 
 			// checkBox_RetrieveSerialPortCaptions
 			// 
@@ -164,9 +206,9 @@
 			this.label_SerialPortDiscovery.AutoSize = true;
 			this.label_SerialPortDiscovery.Location = new System.Drawing.Point(9, 19);
 			this.label_SerialPortDiscovery.Name = "label_SerialPortDiscovery";
-			this.label_SerialPortDiscovery.Size = new System.Drawing.Size(158, 13);
+			this.label_SerialPortDiscovery.Size = new System.Drawing.Size(131, 13);
 			this.label_SerialPortDiscovery.TabIndex = 0;
-			this.label_SerialPortDiscovery.Text = "When discovering serial COM ports,...";
+			this.label_SerialPortDiscovery.Text = "When discovering ports,...";
 			// 
 			// checkBox_DetectSerialPortsInUse
 			// 
@@ -232,7 +274,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(371, 307);
+			this.ClientSize = new System.Drawing.Size(371, 378);
 			this.Controls.Add(this.groupBox_Preferences);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -246,6 +288,8 @@
 			this.Text = "Preferences";
 			this.Shown += new System.EventHandler(this.Preferences_Shown);
 			this.groupBox_Preferences.ResumeLayout(false);
+			this.groupBox_UsbDevice.ResumeLayout(false);
+			this.groupBox_UsbDevice.PerformLayout();
 			this.groupBox_Main.ResumeLayout(false);
 			this.groupBox_Main.PerformLayout();
 			this.groupBox_SerialPorts.ResumeLayout(false);
@@ -274,5 +318,8 @@
 		private System.Windows.Forms.Label label_SerialPortDiscovery;
 		private System.Windows.Forms.CheckBox checkBox_RetrieveSerialPortCaptions;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.GroupBox groupBox_UsbDevice;
+		private System.Windows.Forms.CheckBox checkBox_UseUsbSerial;
+		private System.Windows.Forms.Label label_UsbDeviceDiscovery;
 	}
 }
