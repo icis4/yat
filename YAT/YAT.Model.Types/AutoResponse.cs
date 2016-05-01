@@ -106,13 +106,13 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		protected AutoResponseEx(AutoResponse autoResponse)
+		public AutoResponseEx(AutoResponse autoResponse)
 			: base(autoResponse)
 		{
 		}
 
 		/// <summary></summary>
-		protected AutoResponseEx(string dedicatedCommand)
+		public AutoResponseEx(string dedicatedCommand)
 			: base(AutoResponse.DedicatedCommand)
 		{
 			this.dedicatedCommand = new Command(dedicatedCommand);

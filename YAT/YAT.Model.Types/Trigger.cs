@@ -102,13 +102,13 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		protected TriggerEx(Trigger trigger)
+		public TriggerEx(Trigger trigger)
 			: base(trigger)
 		{
 		}
 
 		/// <summary></summary>
-		protected TriggerEx(string dedicatedCommand)
+		public TriggerEx(string dedicatedCommand)
 			: base(Trigger.DedicatedCommand)
 		{
 			this.dedicatedCommand = new Command(dedicatedCommand);

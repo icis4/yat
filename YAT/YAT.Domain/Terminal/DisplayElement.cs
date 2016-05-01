@@ -40,7 +40,7 @@ using MKY.Collections.Generic;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
-// YAT.Domain\RawTerminal for better separation of the implementation files.
+// YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -299,7 +299,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>The margin that is added to the left of the data content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class LeftMargin : DisplayElement
 		{
@@ -310,7 +310,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>The space that is added inbetween characters of the data content (i.e. radix = char).</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class Space : DisplayElement
 		{
@@ -321,7 +321,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>The margin that is added to the right of the data content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class RightMargin : DisplayElement
 		{

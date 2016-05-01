@@ -61,7 +61,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		protected ParityEx(Parity parity)
+		public ParityEx(Parity parity)
 			: base(parity)
 		{
 		}

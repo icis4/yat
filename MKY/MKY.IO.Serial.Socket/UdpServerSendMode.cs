@@ -72,7 +72,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected UdpServerSendModeEx(UdpServerSendMode type)
+		public UdpServerSendModeEx(UdpServerSendMode type)
 			: base(type)
 		{
 		}

@@ -76,7 +76,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected DirectionEx(Direction direction)
+		public DirectionEx(Direction direction)
 			: base(direction)
 		{
 		}

@@ -84,7 +84,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected SocketTypeEx(SocketType type)
+		public SocketTypeEx(SocketType type)
 			: base(type)
 		{
 		}

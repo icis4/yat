@@ -53,7 +53,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		protected OrientationEx(Orientation orientation)
+		public OrientationEx(Orientation orientation)
 			: base(orientation)
 		{
 		}

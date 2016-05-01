@@ -94,7 +94,7 @@ namespace MKY.Net
 
 		/// <summary>Default is <see cref="IPAddressFilterType.Any"/>.</summary>
 		public IPAddressFilter()
-			: base(IPAddressFilterType.Any)
+			: this(IPAddressFilterType.Any)
 		{
 		}
 
