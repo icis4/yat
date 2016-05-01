@@ -59,6 +59,7 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
 using YAT.View.Controls.ViewModel;
@@ -114,7 +115,7 @@ namespace YAT.View.Controls
 
 		// Update:
 		private const int DataStatusIntervalMs = 31; // Interval shall be quite short => fixed to 31 ms (a prime number) = approx. 32 updates per second.
-		private readonly long DataStatusTickInterval = TimeoutToTicks(DataStatusIntervalMs);
+		private readonly long DataStatusTickInterval = StopwatchEx.TimeoutToTicks(DataStatusIntervalMs);
 
 		#endregion
 
@@ -170,7 +171,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			timer_DataStatusUpdateTimeout.Interval = (DataStatusIntervalMs * 2); // Normal update shall have precedence over timeout.
+			timer_DataStatusUpdateTimeout.Interval = (DataStatusIntervalMs * 2); // Synchronous update shall have precedence over timeout.
 
 			this.timeStatusHelper = new MonitorTimeStatusHelper();
 			this.dataStatusHelper = new MonitorDataStatusHelper();
@@ -959,7 +960,7 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				StartMonitorUpdateTimeout(TicksToTimeout(this.monitorUpdateTickInterval) * 2); // Normal update shall have precedence over timeout.
+				StartMonitorUpdateTimeout(StopwatchEx.TicksToTimeout(this.monitorUpdateTickInterval) * 2); // Synchronous update shall have precedence over timeout.
 			}
 		}
 
@@ -1216,7 +1217,7 @@ namespace YAT.View.Controls
 			}
 			else if (totalProcessorLoadInPercent > UpperLoad)
 			{
-				this.monitorUpdateTickInterval = TimeoutToTicks(UpperInterval);
+				this.monitorUpdateTickInterval = StopwatchEx.TimeoutToTicks(UpperInterval);
 				this.performImmediateUpdate = false;
 
 				WriteUpdateDebugMessage("Update interval is maximum:");
@@ -1226,26 +1227,16 @@ namespace YAT.View.Controls
 				int x = (totalProcessorLoadInPercent - LowerLoad);
 				int y = x * x;
 
-				y = MKY.Int32Ex.Limit(y, LowerInterval, UpperInterval);
+				y = Int32Ex.Limit(y, LowerInterval, UpperInterval);
 
-				this.monitorUpdateTickInterval = TimeoutToTicks(y);
+				this.monitorUpdateTickInterval = StopwatchEx.TimeoutToTicks(y);
 				this.performImmediateUpdate = false;
 
 				WriteUpdateDebugMessage("Update interval is calculated:");
 			}
 
 			WriteUpdateDebugMessage(" > " + this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks");
-			WriteUpdateDebugMessage(" > " + TicksToTimeout(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
-		}
-
-		private static int TicksToTimeout(long ticks)
-		{
-			return ((int)(ticks * 1000 / Stopwatch.Frequency));
-		}
-
-		private static long TimeoutToTicks(int timeoutMs)
-		{
-			return (Stopwatch.Frequency * timeoutMs / 1000);
+			WriteUpdateDebugMessage(" > " + StopwatchEx.TicksToTimeout(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
 		}
 
 		/// <summary>
