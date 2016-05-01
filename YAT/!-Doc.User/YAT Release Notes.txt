@@ -129,6 +129,7 @@ Important changes:
 - Handling of serial COM port RFR and DTR state improved (feature request #236 and bugs #203, #294).
 - Handling of serial COM port XOff state fixed and improved (feature req. #216 and bugs #255, #295).
 - Serial COM port software flow control options to send XOn more frequently added (feature #206).
+- Superfluous control pin events of e.g. internal COM ports is now being handled (bugs #271, #277).
 - Settings related to XOn/XOff and ASCII control character replacement improved (bug #319).
 - Synchronization among outgoing and incoming data improved, preventing data mix-ups and exceptions
   (related to feature requests #14, #252 as well as bugs #132, #275, #292, #321, #331, #333, #334).
@@ -178,8 +179,6 @@ Limitations and known issues:
      Otherwise, the related serial COM ports may no longer be opened by an application. This issue
      is being reported by many users of .NET, but Microsoft seems to have no plans on fixing it.
 - Serial COM port break states may not be supported on certain hardware, e.g. USB/RS-232 converters.
-- Use of internal serial COM port may lead to slowdown of the application on certain computers; due
-  to superfluous events triggered by the control pins (bugs #271 and #277); root cause yet unknown.
 - USB Ser/HID allows to detect and select multiple devices of the same VID and PID as long as they
   have different serial numbers. However, it is not yet possible to properly communicate with them
   simultaneously, this could be a bug or a limitation of YAT or the Windows HID.dll (bug #169).

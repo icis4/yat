@@ -89,6 +89,7 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="Diagnostics\StopwatchEx.cs" />
     <Compile Include="MessageHelper.cs" />
     <Compile Include="Collections\Generic\Quadruple.cs" />
     <Compile Include="Collections\Generic\Triple.cs" />

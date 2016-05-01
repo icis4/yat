@@ -91,6 +91,9 @@ namespace MKY.IO.Serial.SerialPort
 		private const int ThreadWaitTimeout = 200;
 		private const int AliveInterval     = 500;
 
+		private const int IOControlChangedTimeout = 47; // Timeout is fixed to 47 ms (a prime number).
+		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeoutToTicks(IOControlChangedTimeout);
+
 		private const string Undefined = "<Undefined>";
 
 		#endregion
@@ -118,7 +121,6 @@ namespace MKY.IO.Serial.SerialPort
 
 		private Ports.ISerialPort port;
 		private object portSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
-		private object dataEventSyncObj = new object();
 
 		/// <remarks>
 		/// Async sending. The capacity is set large enough to reduce the number of resizing
@@ -151,9 +153,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
-		private System.Timers.Timer aliveTimer;
+		private System.Timers.Timer aliveTicker;
 
-		private System.Timers.Timer reopenTimer;
+		private System.Timers.Timer reopenTimeout;
+
+		private object dataEventSyncObj = new object();
+
+		private System.Timers.Timer ioControlEventTimeout;
+		private long nextIOControlEventTickStamp; // Ticks as defined by 'Stopwatch'.
+		private object nextIOControlEventTickStampSyncObj = new object();
 
 		#endregion
 
@@ -213,7 +221,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (disposing)
 				{
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					ResetPortAndThreads(); // Suppress notifications during disposal!
+					ResetPortAndThreadsAndNotify(false); // Suppress notifications during disposal!
 
 					this.stateLock.Dispose();
 				}
@@ -1282,12 +1290,7 @@ namespace MKY.IO.Serial.SerialPort
 			return (state);
 		}
 
-		private void SetStateSynchronizedAndNotify(State state)
-		{
-			SetStateSynchronizedAndNotify(state, true);
-		}
-
-		private void SetStateSynchronizedAndNotify(State state, bool withNotify)
+		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
 		{
 #if (DEBUG)
 			State oldState = GetStateSynchronized();
@@ -1393,7 +1396,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 
 			StartThreads();
-			StartAliveTimer();
+			StartAliveTicker();
 			SetStateSynchronizedAndNotify(State.Opened); // Notify outside lock!
 
 			// Handle initial XOn/XOff state:
@@ -1423,32 +1426,20 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		/// <summary></summary>
-		private void RestartOrResetPortAndThreads()
-		{
-			RestartOrResetPortAndThreadsAndNotify(false);
-		}
-
-		/// <summary></summary>
-		private void RestartOrResetPortAndThreadsAndNotify()
-		{
-			RestartOrResetPortAndThreadsAndNotify(true);
-		}
-
-		/// <summary></summary>
-		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify)
+		private void RestartOrResetPortAndThreadsAndNotify(bool withNotify = true)
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
-				StopAndDisposeAliveTimer();
+				StopAndDisposeAliveTicker();
+				StopAndDisposeControlEventTimeout();
 				StopThreads();
 				CloseAndDisposePort();
 
-				SetStateSynchronizedAndNotify(State.Closed, withNotify);
+				SetStateSynchronizedAndNotify(State.Closed, withNotify); // Notification must succeed here, do not try/catch.
 
-				StartReopenTimer();
+				StartReopenTimeout();
 
-				SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify);
+				SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify); // Notification must succeed here, do not try/catch.
 			}
 			else
 			{
@@ -1456,24 +1447,23 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
-		private void ResetPortAndThreads()
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void ResetPortAndThreadsAndNotify(bool withNotify = true)
 		{
-			ResetPortAndThreadsAndNotify(false);
-		}
-
-		private void ResetPortAndThreadsAndNotify()
-		{
-			ResetPortAndThreadsAndNotify(true);
-		}
-
-		private void ResetPortAndThreadsAndNotify(bool withNotify)
-		{
-			StopAndDisposeReopenTimer();
-			StopAndDisposeAliveTimer();
+			StopAndDisposeReopenTimeout();
+			StopAndDisposeAliveTicker();
+			StopAndDisposeControlEventTimeout();
 			StopThreads();
 			CloseAndDisposePort();
 
-			SetStateSynchronizedAndNotify(State.Reset, withNotify);
+			try
+			{
+				SetStateSynchronizedAndNotify(State.Reset, withNotify);
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(this.GetType(), ex, "Exception while notifying!");
+			}
 		}
 
 		#endregion
@@ -1866,24 +1856,14 @@ namespace MKY.IO.Serial.SerialPort
 		// If 3 bytes are received while 5 bytes are taken out of the receive queue, no more event gets fired.
 		// Thus, the 3 bytes do not get shown until new data arrives. This is not acceptable.
 
-		/// <summary>
+		/// <remarks>
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
-		/// </summary>
+		/// </remarks>
 		private delegate void port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
 
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.PinChanged: Only one event handler can execute at a time.")]
 		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
-		{
-			if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
-			{
-				port_PinChangedDelegate asyncInvoker = new port_PinChangedDelegate(port_PinChangedAsync);
-				asyncInvoker.BeginInvoke(sender, e, null, null);
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
 			// e.g. USB to serial converter was disconnected.
@@ -1891,36 +1871,94 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
 				{
-					// Force access to port to check whether the port is still alive:
-					bool ctsHoldingDummy = this.port.CtsHolding;
-					UnusedLocal.PreventAnalysisWarning(ctsHoldingDummy);
-
 					// Signal pin change to threads:
 					SignalThreadsSafely();
+
+					// Force access to port to check whether the port is still alive:
+					int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', details see alive timer.
+					UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
 
 					// Invoke events:
 					switch (e.EventType)
 					{
 						case MKY.IO.Ports.SerialPinChange.InputBreak:
 							if (this.settings.NoSendOnInputBreak)
-								OnIOChanged(EventArgs.Empty);
+								OnIOChangedAsync(EventArgs.Empty); // Async! See remarks above.
 							break;
 
 						case MKY.IO.Ports.SerialPinChange.OutputBreak:
-							OnIOChanged(EventArgs.Empty);
+							OnIOChangedAsync(EventArgs.Empty); // Async! See remarks above.
 							break;
 
 						default:
-							// Do not fire general event, I/O control event is fired below.
+							// Do not fire general 'IOChanged' event.
 							break;
 					}
-					OnIOControlChanged(EventArgs.Empty);
+
+					long nextTickStamp;
+					lock (this.nextIOControlEventTickStampSyncObj)
+						nextTickStamp = this.nextIOControlEventTickStamp;
+
+					if (Stopwatch.GetTimestamp() >= nextTickStamp)
+					{
+						StopAndDisposeControlEventTimeout();
+						OnIOControlChangedAsync(EventArgs.Empty); // Async! See remarks above.
+					}
+					else
+					{
+						StartControlEventTimeout();
+					}
+
+					// Note that the number of events must be limited because certain internal serial
+					// COM ports invoke superfluous control pin events. This issue has been reported
+					// by UFi/CMe and confirmed by MHe as:
+					//  > #271 "Loopback on internal serial interface"
+					//  > #277 "Blocking application with internal serial interface"
 				}
+			}
+			catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
+			{
+				DebugEx.WriteException(GetType(), ex, "PinChanged() has detected shutdown of port as it is no longer accessible.");
+				RestartOrResetPortAndThreadsAndNotify();
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex, "PinChangedAsync() has detected shutdown of port.");
+				DebugEx.WriteException(GetType(), ex, "PinChanged() has caught an unhandled exception!");
 				RestartOrResetPortAndThreadsAndNotify();
+			}
+		}
+
+		private void StartControlEventTimeout()
+		{
+			if (this.ioControlEventTimeout == null)
+			{
+				this.ioControlEventTimeout = new System.Timers.Timer(IOControlChangedTimeout * 2); // Synchronous event shall have precedence over timeout.
+				this.ioControlEventTimeout.AutoReset = false;
+				this.ioControlEventTimeout.Elapsed += new System.Timers.ElapsedEventHandler(this.ioControlEventTimeout_Elapsed);
+			}
+			this.ioControlEventTimeout.Start();
+		}
+
+		private void StopAndDisposeControlEventTimeout()
+		{
+			if (this.ioControlEventTimeout != null)
+			{
+				this.ioControlEventTimeout.Stop();
+				this.ioControlEventTimeout.Dispose();
+				this.ioControlEventTimeout = null;
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		private void ioControlEventTimeout_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			try
+			{
+				OnIOControlChanged(EventArgs.Empty);
+			}
+			catch (Exception ex) // Handle any exception, port could e.g. got closed in the meantime.
+			{
+				DebugEx.WriteException(this.GetType(), ex, "Exception while invoking 'OnIOControlChanged' event after timeout!");
 			}
 		}
 
@@ -1962,44 +2000,44 @@ namespace MKY.IO.Serial.SerialPort
 
 		#endregion
 
-		#region Alive Timer
+		#region Alive Ticker
 		//==========================================================================================
-		// Alive Timer
+		// Alive Ticker
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to check whether the serial port is still alive?")]
-		private void StartAliveTimer()
+		private void StartAliveTicker()
 		{
-			if (this.aliveTimer == null)
+			if (this.aliveTicker == null)
 			{
-				this.aliveTimer = new System.Timers.Timer(AliveInterval);
-				this.aliveTimer.AutoReset = true;
-				this.aliveTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveTimer_Elapsed);
-				this.aliveTimer.Start();
+				this.aliveTicker = new System.Timers.Timer(AliveInterval);
+				this.aliveTicker.AutoReset = true;
+				this.aliveTicker.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveTicker_Elapsed);
+				this.aliveTicker.Start();
 			}
 		}
 
-		private void StopAndDisposeAliveTimer()
+		private void StopAndDisposeAliveTicker()
 		{
-			if (this.aliveTimer != null)
+			if (this.aliveTicker != null)
 			{
-				this.aliveTimer.Stop();
-				this.aliveTimer.Dispose();
-				this.aliveTimer = null;
+				this.aliveTicker.Stop();
+				this.aliveTicker.Dispose();
+				this.aliveTicker = null;
 			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object aliveTimer_Elapsed_SyncObj = new object();
+		private object aliveTicker_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void aliveTicker_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(aliveTimer_Elapsed_SyncObj))
+			if (Monitor.TryEnter(aliveTicker_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -2028,89 +2066,77 @@ namespace MKY.IO.Serial.SerialPort
 							int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', see above.
 							UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
 						}
-						catch
+						catch (IOException ex) // No other way to detect a disconnected device than forcing this exception...
 						{
-							WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port as it is no longer accessible.");
+							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has detected shutdown of port as it is no longer accessible.");
+							RestartOrResetPortAndThreadsAndNotify();
+						}
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "AliveTimerElapsed() has caught an unhandled exception!");
 							RestartOrResetPortAndThreadsAndNotify();
 						}
 					}
 					else
 					{
-						StopAndDisposeAliveTimer();
+						StopAndDisposeAliveTicker();
 					}
 				}
 				finally
 				{
-					Monitor.Exit(aliveTimer_Elapsed_SyncObj);
+					Monitor.Exit(aliveTicker_Elapsed_SyncObj);
 				}
 			} // Monitor.TryEnter()
 		}
 
 		#endregion
 
-		#region Reopen Timer
+		#region Reopen Timeout
 		//==========================================================================================
-		// Reopen Timer
+		// Reopen Timeout
 		//==========================================================================================
 
-		private void StartReopenTimer()
+		private void StartReopenTimeout()
 		{
-			if (this.reopenTimer == null)
+			if (this.reopenTimeout == null)
 			{
-				this.reopenTimer = new System.Timers.Timer(this.settings.AutoReopen.Interval);
-				this.reopenTimer.AutoReset = false;
-				this.reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimer_Elapsed);
+				this.reopenTimeout = new System.Timers.Timer(this.settings.AutoReopen.Interval);
+				this.reopenTimeout.AutoReset = false;
+				this.reopenTimeout.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimeout_Elapsed);
 			}
-			this.reopenTimer.Start();
+			this.reopenTimeout.Start();
 		}
 
-		private void StopAndDisposeReopenTimer()
+		private void StopAndDisposeReopenTimeout()
 		{
-			if (this.reopenTimer != null)
+			if (this.reopenTimeout != null)
 			{
-				this.reopenTimer.Stop();
-				this.reopenTimer.Dispose();
-				this.reopenTimer = null;
+				this.reopenTimeout.Stop();
+				this.reopenTimeout.Dispose();
+				this.reopenTimeout = null;
 			}
 		}
-
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object reopenTimer_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void reopenTimeout_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			// Ensure that only one timer elapsed event thread is active at a time. Because if the
-			// execution takes longer than the timer interval, more and more timer threads will pend
-			// here, and then be executed after the previous has been executed. This will require
-			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(reopenTimer_Elapsed_SyncObj))
+			if (AutoReopenEnabledAndAllowed)
 			{
 				try
 				{
-					if (AutoReopenEnabledAndAllowed)
-					{
-						try
-						{
-							CreateAndOpenPortAndThreadsAndNotify(); // Try to reopen port.
-							WriteDebugMessageLine("ReopenTimerElapsed() successfully reopened the port.");
-						}
-						catch
-						{
-							WriteDebugMessageLine("ReopenTimerElapsed() has failed to reopen the port.");
-							RestartOrResetPortAndThreads(); // Cleanup and restart. No notifications.
-						}
-					}
-					else
-					{
-						StopAndDisposeReopenTimer();
-					}
+					CreateAndOpenPortAndThreadsAndNotify(); // Try to reopen port.
+					WriteDebugMessageLine("ReopenTimerElapsed() successfully reopened the port.");
 				}
-				finally
+				catch
 				{
-					Monitor.Exit(reopenTimer_Elapsed_SyncObj);
+					WriteDebugMessageLine("ReopenTimerElapsed() has failed to reopen the port.");
+					RestartOrResetPortAndThreadsAndNotify(false); // Cleanup and restart. No notifications.
 				}
-			} // Monitor.TryEnter()
+			}
+			else
+			{
+				StopAndDisposeReopenTimeout();
+			}
 		}
 
 		#endregion
@@ -2139,6 +2165,8 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
+
+			SetNextControlChangedTickStamp();
 		}
 
 		/// <summary></summary>
@@ -2146,6 +2174,14 @@ namespace MKY.IO.Serial.SerialPort
 		protected virtual void OnIOControlChangedAsync(EventArgs e)
 		{
 			EventHelper.FireAsync(IOControlChanged, this, e);
+
+			SetNextControlChangedTickStamp();
+		}
+
+		private void SetNextControlChangedTickStamp()
+		{
+			lock (this.nextIOControlEventTickStampSyncObj)
+				this.nextIOControlEventTickStamp = (Stopwatch.GetTimestamp() + IOControlChangedTickInterval);
 		}
 
 		/// <summary></summary>
