@@ -132,7 +132,7 @@ namespace MKY.IO.Ports
 					result = new DataBitsEx(); // Default!
 					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
-				else // = invalid string!
+				else // Invalid string!
 				{
 					result = null;
 					return (false);
@@ -158,7 +158,7 @@ namespace MKY.IO.Ports
 					result = new DataBitsEx(); // Default!
 					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
-				else // = invalid string!
+				else // Invalid string!
 				{
 					result = new DataBitsEx(); // Default!
 					return (false);

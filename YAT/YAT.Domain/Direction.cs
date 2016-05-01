@@ -180,7 +180,7 @@ namespace YAT.Domain
 				result = new DirectionEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new DirectionEx(); // Default!
 				return (false);

@@ -203,7 +203,7 @@ namespace MKY.IO.Serial.Usb
 				result = new SerialHidFlowControlEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new SerialHidFlowControlEx(); // Default!
 				return (false);

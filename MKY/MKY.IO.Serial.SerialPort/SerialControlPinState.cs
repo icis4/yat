@@ -173,7 +173,7 @@ namespace MKY.IO.Serial.SerialPort
 				result = new SerialControlPinStateEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new SerialControlPinStateEx(); // Default!
 				return (false);

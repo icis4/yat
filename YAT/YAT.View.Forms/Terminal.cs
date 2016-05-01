@@ -3657,7 +3657,7 @@ namespace YAT.View.Forms
 							if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != on) // Improve performance by only assigning if different.
 								toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
 						}
-						else // = sending is ongoing
+						else // sending is ongoing
 						{
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
 							//// Do not directly access the image, it will be flashed by the timer below.
@@ -3665,7 +3665,7 @@ namespace YAT.View.Forms
 							StartIOStatusFlashing();
 						}
 					}
-					else // = can only receive (so far)
+					else // can only receive (so far)
 					{
 						ResetIOStatusFlashing();
 						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
@@ -3674,7 +3674,7 @@ namespace YAT.View.Forms
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = on;
 					}
 				}
-				else // = is closed
+				else // is closed
 				{
 					ResetIOStatusFlashing();
 					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;

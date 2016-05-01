@@ -163,7 +163,7 @@ namespace YAT.Domain
 				result = new EndiannessEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new EndiannessEx(); // Default!
 				return (false);

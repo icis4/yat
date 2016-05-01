@@ -321,10 +321,15 @@ namespace YAT.Model.Types
 				result = AutoResponse.SendFile;
 				return (true);
 			}
-			else
+			else if (!string.IsNullOrEmpty(s)) // Dedicated!
 			{
 				result = AutoResponse.DedicatedCommand;
 				return (true);
+			}
+			else // IsNullOrEmpty
+			{
+				result = new AutoResponseEx(); // Default!
+				return (false);
 			}
 		}
 

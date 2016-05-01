@@ -172,7 +172,7 @@ namespace YAT.Domain
 				result = CharSubstitution.None;
 				return (true);
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new CharSubstitutionEx(); // Default!
 				return (false);

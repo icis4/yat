@@ -1111,8 +1111,16 @@ namespace MKY.Text
 				}
 			}
 
-			result = null;
-			return (false);
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new EncodingEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // Invalid string!
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

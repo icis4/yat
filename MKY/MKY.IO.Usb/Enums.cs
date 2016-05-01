@@ -354,7 +354,7 @@ namespace MKY.IO.Usb
 				result = new HidUsagePageEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new HidUsagePageEx(); // Default!
 				return (false);
@@ -505,7 +505,7 @@ namespace MKY.IO.Usb
 				result = new HidUsageIdEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new HidUsageIdEx(); // Default!
 				return (false);
