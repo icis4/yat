@@ -164,7 +164,12 @@ namespace MKY.IO.Serial.Socket
 				result = UdpServerSendMode.MostRecent;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new UdpServerSendModeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new UdpServerSendModeEx(); // Default!
 				return (false);

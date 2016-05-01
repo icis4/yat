@@ -240,7 +240,12 @@ namespace MKY.IO.Serial.Socket
 				result = SocketType.UdpPairSocket;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new SocketTypeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new SocketTypeEx(); // Default!
 				return (false);

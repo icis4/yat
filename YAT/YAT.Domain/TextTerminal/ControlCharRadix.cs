@@ -185,7 +185,12 @@ namespace YAT.Domain
 					result = (ControlCharRadixEx)radix;
 					return (true);
 				}
-				else
+				else if (string.IsNullOrEmpty(s))
+				{
+					result = new ControlCharRadixEx(); // Default!
+					return (true); // Default silently, could e.g. happen when deserializing an XML.
+				}
+				else // = invalid string!
 				{
 					result = new ControlCharRadixEx(); // Default!
 					return (true);

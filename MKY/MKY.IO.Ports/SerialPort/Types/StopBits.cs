@@ -117,10 +117,23 @@ namespace MKY.IO.Ports
 		{
 			double doubleResult;
 			if (double.TryParse(s, out doubleResult)) // TryParse() trims whitespace.
+			{
 				return (TryFrom(doubleResult, out result));
-
-			result = null;
-			return (false);
+			}
+			else
+			{
+				s = s.Trim();
+				if (string.IsNullOrEmpty(s))
+				{
+					result = new StopBitsEx(); // Default!
+					return (true); // Default silently, could e.g. happen when deserializing an XML.
+				}
+				else // = invalid string!
+				{
+					result = null;
+					return (false);
+				}
+			}
 		}
 
 		/// <remarks>
@@ -130,10 +143,23 @@ namespace MKY.IO.Ports
 		{
 			double doubleResult;
 			if (double.TryParse(s, out doubleResult)) // TryParse() trims whitespace.
+			{
 				return (TryFrom(doubleResult, out result));
-
-			result = new StopBitsEx(); // Default!
-			return (false);
+			}
+			else
+			{
+				s = s.Trim();
+				if (string.IsNullOrEmpty(s))
+				{
+					result = new StopBitsEx(); // Default!
+					return (true); // Default silently, could e.g. happen when deserializing an XML.
+				}
+				else // = invalid string!
+				{
+					result = new StopBitsEx(); // Default!
+					return (false);
+				}
+			}
 		}
 
 		/// <summary>

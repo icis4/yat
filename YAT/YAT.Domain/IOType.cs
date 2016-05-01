@@ -297,7 +297,12 @@ namespace YAT.Domain
 				result = IOType.UsbSerialHid;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new IOTypeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new IOTypeEx(); // Default!
 				return (false);

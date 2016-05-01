@@ -202,8 +202,7 @@ namespace YAT.Model.Types
 		{
 			s = s.Trim();
 
-			if (StringEx.EqualsOrdinalIgnoreCase(s, Automatic_string) ||
-			    string.IsNullOrEmpty(s)) // Default!
+			if      (StringEx.EqualsOrdinalIgnoreCase(s, Automatic_string))
 			{
 				result = WorkspaceLayout.Automatic;
 				return (true);
@@ -238,7 +237,12 @@ namespace YAT.Model.Types
 				result = WorkspaceLayout.Maximize;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new WorkspaceLayoutEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new WorkspaceLayoutEx(); // Default!
 				return (false);

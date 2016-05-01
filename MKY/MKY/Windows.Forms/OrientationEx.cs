@@ -138,7 +138,12 @@ namespace MKY.Windows.Forms
 				result = Orientation.Vertical;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new OrientationEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new OrientationEx(); // Default!
 				return (false);

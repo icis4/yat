@@ -158,7 +158,12 @@ namespace YAT.Domain
 				result = Endianness.LittleEndian;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new EndiannessEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new EndiannessEx(); // Default!
 				return (false);

@@ -262,7 +262,12 @@ namespace YAT.Domain
 				result = Eol.Space;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new EolEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new EolEx(); // Default!
 				return (false);

@@ -238,7 +238,12 @@ namespace MKY.IO.Usb
 				result = SerialHidReportFormatPreset.YAT;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new SerialHidReportFormatPresetEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new SerialHidReportFormatPresetEx(); // Default!
 				return (false);
