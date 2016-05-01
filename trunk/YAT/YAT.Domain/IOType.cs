@@ -106,7 +106,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected IOTypeEx(IOType type)
+		public IOTypeEx(IOType type)
 			: base(type)
 		{
 		}

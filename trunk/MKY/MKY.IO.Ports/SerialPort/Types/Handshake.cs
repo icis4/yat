@@ -68,7 +68,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		protected HandshakeEx(Handshake handshake)
+		public HandshakeEx(Handshake handshake)
 			: base(handshake)
 		{
 		}

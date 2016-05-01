@@ -125,7 +125,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected SerialHidReportFormatPresetEx(SerialHidReportFormatPreset preset)
+		public SerialHidReportFormatPresetEx(SerialHidReportFormatPreset preset)
 			: base(preset)
 		{
 		}

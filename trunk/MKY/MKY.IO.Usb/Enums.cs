@@ -290,7 +290,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[CLSCompliant(false)]
-		protected HidUsagePageEx(HidUsagePage page)
+		public HidUsagePageEx(HidUsagePage page)
 			: base(page)
 		{
 		}
@@ -436,7 +436,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[CLSCompliant(false)]
-		protected HidUsageIdEx(HidUsageId usage)
+		public HidUsageIdEx(HidUsageId usage)
 			: base(usage)
 		{
 		}

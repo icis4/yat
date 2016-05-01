@@ -88,13 +88,13 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		protected BaudRateEx(BaudRate baudRate)
+		public BaudRateEx(BaudRate baudRate)
 			: base(baudRate)
 		{
 		}
 
 		/// <summary></summary>
-		protected BaudRateEx(int baudRate)
+		public BaudRateEx(int baudRate)
 			: base(BaudRate.UserDefined)
 		{
 			if (IsPotentiallyValidBaudRate(baudRate))

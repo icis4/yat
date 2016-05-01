@@ -88,7 +88,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		protected SerialHidFlowControlEx(SerialHidFlowControl flowControl)
+		public SerialHidFlowControlEx(SerialHidFlowControl flowControl)
 			: base(flowControl)
 		{
 		}

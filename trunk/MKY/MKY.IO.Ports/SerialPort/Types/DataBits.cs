@@ -68,7 +68,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		protected DataBitsEx(DataBits bits)
+		public DataBitsEx(DataBits bits)
 			: base(bits)
 		{
 		}

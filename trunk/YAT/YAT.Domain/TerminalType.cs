@@ -73,7 +73,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected TerminalTypeEx(TerminalType type)
+		public TerminalTypeEx(TerminalType type)
 			: base(type)
 		{
 		}

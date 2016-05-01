@@ -80,7 +80,7 @@ namespace MKY.Net
 
 		/// <summary>Default is <see cref="IPHostType.Localhost"/>.</summary>
 		public IPHost()
-			: base(IPHostType.Localhost)
+			: this(IPHostType.Localhost)
 		{
 		}
 

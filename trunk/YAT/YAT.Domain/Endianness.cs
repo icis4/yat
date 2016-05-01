@@ -71,7 +71,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		protected EndiannessEx(Endianness endianness)
+		public EndiannessEx(Endianness endianness)
 			: base(endianness)
 		{
 		}

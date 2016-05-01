@@ -729,7 +729,7 @@ namespace MKY.Text
 		}
 
 		/// <summary></summary>
-		protected EncodingEx(SupportedEncoding type)
+		public EncodingEx(SupportedEncoding type)
 			: base(type)
 		{
 		}

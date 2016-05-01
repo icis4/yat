@@ -94,7 +94,7 @@ namespace MKY.Net
 
 		/// <summary>Default is <see cref="IPNetworkInterfaceType.Any"/>.</summary>
 		public IPNetworkInterface()
-			: base(IPNetworkInterfaceType.Any)
+			: this(IPNetworkInterfaceType.Any)
 		{
 		}
 

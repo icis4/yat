@@ -117,7 +117,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		protected WorkspaceLayoutEx(WorkspaceLayout layout)
+		public WorkspaceLayoutEx(WorkspaceLayout layout)
 			: base(layout)
 		{
 		}

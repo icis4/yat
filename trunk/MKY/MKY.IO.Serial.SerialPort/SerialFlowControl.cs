@@ -97,7 +97,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		protected SerialFlowControlEx(SerialFlowControl flowControl)
+		public SerialFlowControlEx(SerialFlowControl flowControl)
 			: base((System.IO.Ports.Handshake)flowControl)
 		{
 		}

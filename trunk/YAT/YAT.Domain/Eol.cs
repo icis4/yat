@@ -106,7 +106,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected EolEx(Eol type)
+		public EolEx(Eol type)
 			: base(type)
 		{
 		}
@@ -119,30 +119,30 @@ namespace YAT.Domain
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None:  return (None_stringNice);
-				case Eol.Cr:    return (Cr_stringSequence);
-				case Eol.Lf:    return (Lf_stringSequence);
-				case Eol.CrLf:  return (CrLf_stringSequence);
-				case Eol.LfCr:  return (LfCr_stringSequence);
-				case Eol.Nul:   return (Nul_stringSequence);
-				case Eol.Tab:   return (Tab_stringSequence);
+				case Eol.None:  return ( None_stringNice);
+				case Eol.Cr:    return (   Cr_stringSequence);
+				case Eol.Lf:    return (   Lf_stringSequence);
+				case Eol.CrLf:  return ( CrLf_stringSequence);
+				case Eol.LfCr:  return ( LfCr_stringSequence);
+				case Eol.Nul:   return (  Nul_stringSequence);
+				case Eol.Tab:   return (  Tab_stringSequence);
 				case Eol.Space: return (Space_stringNice);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
-		/// <summary></summary>
+		/// <remarks>Named ..String() to emphasize that this is not the binary sequence.</remarks>
 		public virtual string ToSequenceString()
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None:  return (None_stringSequence);
-				case Eol.Cr:    return (Cr_stringSequence);
-				case Eol.Lf:    return (Lf_stringSequence);
-				case Eol.CrLf:  return (CrLf_stringSequence);
-				case Eol.LfCr:  return (LfCr_stringSequence);
-				case Eol.Nul:   return (Nul_stringSequence);
-				case Eol.Tab:   return (Tab_stringSequence);
+				case Eol.None:  return ( None_stringSequence);
+				case Eol.Cr:    return (   Cr_stringSequence);
+				case Eol.Lf:    return (   Lf_stringSequence);
+				case Eol.CrLf:  return ( CrLf_stringSequence);
+				case Eol.LfCr:  return ( LfCr_stringSequence);
+				case Eol.Nul:   return (  Nul_stringSequence);
+				case Eol.Tab:   return (  Tab_stringSequence);
 				case Eol.Space: return (Space_stringSequence);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

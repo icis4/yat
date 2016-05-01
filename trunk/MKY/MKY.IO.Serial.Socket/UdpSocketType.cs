@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected UdpSocketTypeEx(UdpSocketType type)
+		public UdpSocketTypeEx(UdpSocketType type)
 			: base(type)
 		{
 		}

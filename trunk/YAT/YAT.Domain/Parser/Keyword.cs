@@ -90,7 +90,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		protected KeywordEx(Keyword keyword)
+		public KeywordEx(Keyword keyword)
 			: base(keyword)
 		{
 		}

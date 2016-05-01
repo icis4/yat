@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		protected SerialControlPinStateEx(SerialControlPinState pinState)
+		public SerialControlPinStateEx(SerialControlPinState pinState)
 			: base(pinState)
 		{
 		}

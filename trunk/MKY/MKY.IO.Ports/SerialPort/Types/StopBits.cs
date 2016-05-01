@@ -56,7 +56,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		protected StopBitsEx(StopBits bits)
+		public StopBitsEx(StopBits bits)
 			: base(bits)
 		{
 		}
