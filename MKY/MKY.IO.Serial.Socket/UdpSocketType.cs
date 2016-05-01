@@ -69,7 +69,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Default is <see cref="UdpSocketType.PairSocket"/>.</summary>
 		public UdpSocketTypeEx()
-			: base(UdpSocketType.PairSocket)
+			: this(UdpSocketType.PairSocket)
 		{
 		}
 

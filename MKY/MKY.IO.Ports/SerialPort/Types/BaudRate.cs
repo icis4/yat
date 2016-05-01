@@ -83,7 +83,7 @@ namespace MKY.IO.Ports
 
 		/// <summary>Default is <see cref="BaudRate.Baud009600"/>.</summary>
 		public BaudRateEx()
-			: base(BaudRate.Baud009600)
+			: this(BaudRate.Baud009600)
 		{
 		}
 

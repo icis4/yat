@@ -724,7 +724,7 @@ namespace MKY.Text
 		/// Default is <see cref="System.Text.Encoding.Default"/>.
 		/// </summary>
 		public EncodingEx()
-			: base((SupportedEncoding)Encoding.Default.CodePage)
+			: this((SupportedEncoding)Encoding.Default.CodePage)
 		{
 		}
 

@@ -71,7 +71,7 @@ namespace YAT.Domain
 
 		/// <summary>Default is <see cref="CharSubstitution.None"/>.</summary>
 		public CharSubstitutionEx()
-			: base(CharSubstitution.None)
+			: this(CharSubstitution.None)
 		{
 		}
 

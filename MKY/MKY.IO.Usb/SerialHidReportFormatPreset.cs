@@ -120,7 +120,7 @@ namespace MKY.IO.Usb
 
 		/// <summary>Default is <see cref="SerialHidReportFormatPreset.YAT"/>.</summary>
 		public SerialHidReportFormatPresetEx()
-			: base(SerialHidReportFormatPreset.YAT)
+			: this(SerialHidReportFormatPreset.YAT)
 		{
 		}
 

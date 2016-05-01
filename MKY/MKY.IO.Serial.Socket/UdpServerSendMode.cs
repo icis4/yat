@@ -67,7 +67,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Default is <see cref="UdpServerSendMode.MostRecent"/>.</summary>
 		public UdpServerSendModeEx()
-			: base(UdpServerSendMode.MostRecent)
+			: this(UdpServerSendMode.MostRecent)
 		{
 		}
 

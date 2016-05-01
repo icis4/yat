@@ -65,7 +65,7 @@ namespace YAT.Domain
 
 		/// <summary>Default is <see cref="Endianness.BigEndian"/>.</summary>
 		public EndiannessEx()
-			: base(Endianness.BigEndian)
+			: this(Endianness.BigEndian)
 		{
 		}
 

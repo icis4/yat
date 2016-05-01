@@ -112,7 +112,7 @@ namespace YAT.Model.Types
 
 		/// <summary>Default is <see cref="WorkspaceLayout.Automatic"/>.</summary>
 		public WorkspaceLayoutEx()
-			: base(WorkspaceLayout.Automatic)
+			: this(WorkspaceLayout.Automatic)
 		{
 		}
 

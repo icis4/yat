@@ -101,7 +101,7 @@ namespace YAT.Domain
 
 		/// <summary>Default is <see cref="IOType.SerialPort"/>.</summary>
 		public IOTypeEx()
-			: base(IOType.SerialPort)
+			: this(IOType.SerialPort)
 		{
 		}
 

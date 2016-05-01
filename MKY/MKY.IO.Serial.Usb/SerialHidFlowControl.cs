@@ -83,7 +83,7 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary>Default is <see cref="SerialHidFlowControl.None"/>.</summary>
 		public SerialHidFlowControlEx()
-			: base(SerialHidFlowControl.None)
+			: this(SerialHidFlowControl.None)
 		{
 		}
 

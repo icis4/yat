@@ -63,7 +63,7 @@ namespace MKY.IO.Ports
 	{
 		/// <summary>Default is <see cref="DataBits.Eight"/>.</summary>
 		public DataBitsEx()
-			: base(DataBits.Eight)
+			: this(DataBits.Eight)
 		{
 		}
 

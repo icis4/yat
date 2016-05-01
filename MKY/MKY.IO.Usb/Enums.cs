@@ -284,7 +284,7 @@ namespace MKY.IO.Usb
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Undefined"/>.</summary>
 		public HidUsagePageEx()
-			: base(HidUsagePage.Undefined)
+			: this(HidUsagePage.Undefined)
 		{
 		}
 
@@ -430,7 +430,7 @@ namespace MKY.IO.Usb
 	{
 		/// <summary>Default is <see cref="HidUsageId.Undefined"/>.</summary>
 		public HidUsageIdEx()
-			: base(HidUsageId.Undefined)
+			: this(HidUsageId.Undefined)
 		{
 		}
 

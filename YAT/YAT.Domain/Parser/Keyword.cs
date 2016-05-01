@@ -85,7 +85,7 @@ namespace YAT.Domain.Parser
 
 		/// <summary>Default is <see cref="Keyword.None"/>.</summary>
 		public KeywordEx()
-			: base(Keyword.None)
+			: this(Keyword.None)
 		{
 		}
 

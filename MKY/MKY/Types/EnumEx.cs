@@ -59,7 +59,7 @@ namespace MKY
 	/// public class ModeEx : MKY.EnumEx
 	/// {
 	///     // Default is "Mode.Normal"
-	///     public ModeEx() : base(Mode.Normal)
+	///     public ModeEx() : this(Mode.Normal)
 	///     {
 	///     }
 	///

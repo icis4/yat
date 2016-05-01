@@ -71,7 +71,7 @@ namespace YAT.Domain
 
 		/// <summary>Default is <see cref="Direction.None"/>.</summary>
 		public DirectionEx()
-			: base(Direction.None)
+			: this(Direction.None)
 		{
 		}
 
