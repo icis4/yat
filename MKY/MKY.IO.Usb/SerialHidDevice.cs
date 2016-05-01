@@ -183,7 +183,7 @@ namespace MKY.IO.Usb
 					if (NativeMessageHandler.MessageSourceIsRegistered)
 					{
 						staticDeviceNotificationHandler = new NativeMessageHandler(StaticMessageCallback);
-						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
+						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationHandler.Handle, HidGuid, out staticDeviceNotificationHandle);
 						result = true;
 					}
 				}

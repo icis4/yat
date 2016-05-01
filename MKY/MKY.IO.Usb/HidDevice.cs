@@ -400,11 +400,11 @@ namespace MKY.IO.Usb
 						}
 						catch { }
 
-						System.Diagnostics.Debug.WriteLine("USB HID device usage information:");
-						System.Diagnostics.Debug.Indent();
-						System.Diagnostics.Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
-						System.Diagnostics.Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
-						System.Diagnostics.Debug.Unindent();
+						Debug.WriteLine("USB HID device usage information:");
+						Debug.Indent();
+						Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
+						Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
+						Debug.Unindent();
 					}
 				}
 				finally
