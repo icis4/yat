@@ -82,9 +82,7 @@ namespace YAT.Log.Settings
 		private bool nameChannel;
 		private bool nameDate;
 		private bool nameTime;
-
-		[NonSerialized] // See remarks at property 'NameSeparator'.
-		private FileNameSeparator nameSeparator;
+		private string nameSeparator;
 
 		// Folders:
 		private bool folderFormat;
@@ -187,7 +185,7 @@ namespace YAT.Log.Settings
 			NameChannel   = false;
 			NameDate      = true;
 			NameTime      = true;
-			NameSeparator = FileNameSeparator.DefaultSeparator;
+			NameSeparator = (FileNameSeparatorEx)FileNameSeparator.Dash;
 
 			FolderFormat  = false;
 			FolderChannel = false;
@@ -234,24 +232,24 @@ namespace YAT.Log.Settings
 
 			if (this.nameFormat)
 			{
-				postFix.Append(this.nameSeparator.Separator);
+				postFix.Append(this.nameSeparator);
 				postFix.Append(ToFormatString(format));
 			}
 			if (this.nameChannel)
 			{
-				postFix.Append(this.nameSeparator.Separator);
+				postFix.Append(this.nameSeparator);
 				postFix.Append(ToChannelString(channelType));
 			}
 			if (this.nameDate)
 			{
-				postFix.Append(this.nameSeparator.Separator);
+				postFix.Append(this.nameSeparator);
 				postFix.Append(now.Year.ToString ("D4", CultureInfo.InvariantCulture));
 				postFix.Append(now.Month.ToString("D2", CultureInfo.InvariantCulture));
 				postFix.Append(now.Day.ToString  ("D2", CultureInfo.InvariantCulture));
 			}
 			if (this.nameTime)
 			{
-				postFix.Append(this.nameSeparator.Separator);
+				postFix.Append(this.nameSeparator);
 				postFix.Append(now.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
 				postFix.Append(now.Minute.ToString("D2", CultureInfo.InvariantCulture));
 				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
@@ -725,25 +723,10 @@ namespace YAT.Log.Settings
 		}
 
 		/// <remarks>
-		/// \fixme MKY 2015-06-12 (focus on releasing 1.99.34, real fix must be postponed)
-		/// <see cref="FileNameSeparator"/> does a string to EnumEx to string conversion.
-		/// This leads to a severe issue:
-		///  - Serialization must be done with reduced string (e.g. "_").
-		///  - But ToString() must return the user friendly string!
-		/// 
-		/// Workaround:
-		///  - This property is used for all operations.
-		///  - The property below is used for serialization.
-		/// 
-		/// Potential solutions:
-		///  - Upgrade <see cref="FileNameSeparator"/> to EnumEx? E.g. like 'MKY.Net.IPHost'.
-		///  - <see cref="YAT.Log"/> and <see cref="LogSettings"/> string only,
-		///    <see cref="FileNameSeparator"/> only used for GUI?
-		/// 
-		/// Saying hello to StyleCop ;-.
+		/// Must be string because an 'EnumEx' cannot be serialized.
 		/// </remarks>
-		[XmlIgnore]
-		public virtual FileNameSeparator NameSeparator
+		[XmlElement("NameSeparator")]
+		public virtual string NameSeparator
 		{
 			get { return (this.nameSeparator); }
 			set
@@ -751,22 +734,6 @@ namespace YAT.Log.Settings
 				if (this.nameSeparator != value)
 				{
 					this.nameSeparator = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "See remarks at property 'NameSeparator' above.")]
-		[XmlElement("NameSeparator")]
-		public virtual string NameSeparator_
-		{
-			get { return (this.nameSeparator.Separator); }
-			set
-			{
-				if (this.nameSeparator.Separator != value)
-				{
-					this.nameSeparator = new FileNameSeparator(value);
 					SetChanged();
 				}
 			}

@@ -321,7 +321,7 @@ namespace YAT.View.Forms
 		private void comboBox_Options_NameSeparator_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.NameSeparator = (Log.FileNameSeparator)(comboBox_Options_NameSeparator.Text);
+				this.settingsInEdit.NameSeparator = (Log.FileNameSeparatorEx)(comboBox_Options_NameSeparator.Text);
 		}
 
 		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
@@ -419,7 +419,7 @@ namespace YAT.View.Forms
 				comboBox_Raw_Extension.Items.Add(s);
 
 			comboBox_Options_NameSeparator.Items.Clear();
-			foreach (string s in Log.FileNameSeparator.Items)
+			foreach (string s in Log.FileNameSeparatorEx.GetItems())
 				comboBox_Options_NameSeparator.Items.Add(s);
 
 			this.isSettingControls.Leave();
