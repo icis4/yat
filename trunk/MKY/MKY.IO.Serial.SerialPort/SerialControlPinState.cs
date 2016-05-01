@@ -69,7 +69,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary>Default is <see cref="SerialControlPinState.Automatic"/>.</summary>
 		public SerialControlPinStateEx()
-			: base(SerialControlPinState.Automatic)
+			: this(SerialControlPinState.Automatic)
 		{
 		}
 

@@ -92,7 +92,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary>Default is <see cref="SerialFlowControl.None"/>.</summary>
 		public SerialFlowControlEx()
-			: base((System.IO.Ports.Handshake)SerialFlowControl.None)
+			: this(SerialFlowControl.None)
 		{
 		}
 

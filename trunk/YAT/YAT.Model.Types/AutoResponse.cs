@@ -101,7 +101,7 @@ namespace YAT.Model.Types
 
 		/// <summary>Default is <see cref="AutoResponse.None"/>.</summary>
 		public AutoResponseEx()
-			: base(AutoResponse.None)
+			: this(AutoResponse.None)
 		{
 		}
 

@@ -79,7 +79,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Default is <see cref="SocketType.TcpAutoSocket"/>.</summary>
 		public SocketTypeEx()
-			: base(SocketType.TcpAutoSocket)
+			: this(SocketType.TcpAutoSocket)
 		{
 		}
 

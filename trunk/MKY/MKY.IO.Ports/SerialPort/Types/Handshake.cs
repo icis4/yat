@@ -63,7 +63,7 @@ namespace MKY.IO.Ports
 
 		/// <summary>Default is <see cref="Handshake.None"/>.</summary>
 		public HandshakeEx()
-			: base(Handshake.None)
+			: this(Handshake.None)
 		{
 		}
 

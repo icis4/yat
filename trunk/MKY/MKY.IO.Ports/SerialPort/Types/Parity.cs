@@ -41,22 +41,22 @@ namespace MKY.IO.Ports
 	{
 		#region String Definitions
 
-		private const string Even_string = "Even";
-		private const string Even_stringShort = "E";
-		private const string Odd_string = "Odd";
-		private const string Odd_stringShort = "O";
-		private const string None_string = "None";
-		private const string None_stringShort = "N";
-		private const string Mark_string = "Mark";
-		private const string Mark_stringShort = "M";
-		private const string Space_string = "Space";
+		private const string Even_string       = "Even";
+		private const string Even_stringShort  = "E";
+		private const string Odd_string        = "Odd";
+		private const string Odd_stringShort   = "O";
+		private const string None_string       = "None";
+		private const string None_stringShort  = "N";
+		private const string Mark_string       = "Mark";
+		private const string Mark_stringShort  = "M";
+		private const string Space_string      = "Space";
 		private const string Space_stringShort = "S";
 
 		#endregion
 
 		/// <summary>Default is <see cref="Parity.None"/>.</summary>
 		public ParityEx()
-			: base(Parity.None)
+			: this(Parity.None)
 		{
 		}
 

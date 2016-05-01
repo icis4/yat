@@ -48,7 +48,7 @@ namespace MKY.Windows.Forms
 
 		/// <summary>Default is <see cref="Orientation.Horizontal"/>.</summary>
 		public OrientationEx()
-			: base(Orientation.Horizontal)
+			: this(Orientation.Horizontal)
 		{
 		}
 

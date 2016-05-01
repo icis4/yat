@@ -94,7 +94,7 @@ namespace YAT.Domain
 
 		/// <summary>Default is <see cref="Radix.String"/>.</summary>
 		public RadixEx()
-			: base(Radix.String)
+			: this(Radix.String)
 		{
 		}
 

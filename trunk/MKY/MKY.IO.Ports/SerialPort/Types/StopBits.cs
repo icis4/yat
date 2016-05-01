@@ -51,7 +51,7 @@ namespace MKY.IO.Ports
 
 		/// <summary>Default is <see cref="StopBits.One"/>.</summary>
 		public StopBitsEx()
-			: base(StopBits.One)
+			: this(StopBits.One)
 		{
 		}
 

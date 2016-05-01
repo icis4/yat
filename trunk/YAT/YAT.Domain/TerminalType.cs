@@ -68,7 +68,7 @@ namespace YAT.Domain
 
 		/// <summary>Default is <see cref="TerminalType.Text"/>.</summary>
 		public TerminalTypeEx()
-			: base(TerminalType.Text)
+			: this(TerminalType.Text)
 		{
 		}
 
