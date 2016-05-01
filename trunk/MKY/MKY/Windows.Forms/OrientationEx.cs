@@ -143,7 +143,7 @@ namespace MKY.Windows.Forms
 				result = new OrientationEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new OrientationEx(); // Default!
 				return (false);

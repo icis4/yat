@@ -259,7 +259,7 @@ namespace YAT.Domain
 				result = new RadixEx(); // Default!
 				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
-			else // = invalid string!
+			else // Invalid string!
 			{
 				result = new RadixEx(); // Default!
 				return (false);

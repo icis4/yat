@@ -310,10 +310,15 @@ namespace YAT.Model.Types
 				result = Trigger.AnyLine;
 				return (true);
 			}
-			else
+			else if (!string.IsNullOrEmpty(s)) // Dedicated!
 			{
 				result = Trigger.DedicatedCommand;
 				return (true);
+			}
+			else // IsNullOrEmpty
+			{
+				result = new TriggerEx(); // Default!
+				return (false);
 			}
 		}
 
