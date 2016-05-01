@@ -114,7 +114,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
 		/// <param name="retrieveStringsFromDevice">Enable or disable string retrieval from device.</param>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid, bool retrieveStringsFromDevice = true)
 		{
 			string[] paths = Win32.DeviceManagement.GetDevicesFromGuid(classGuid);
@@ -473,7 +473,7 @@ namespace MKY.IO.Usb
 		/// This function also exists in the other USB classes.
 		/// Changes here must be applied there too.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		public static bool RegisterStaticDeviceNotificationHandler(Guid classGuid)
 		{
 			bool result = false;
@@ -639,7 +639,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		protected Device(Guid classGuid, string path)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -654,7 +654,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		protected Device(Guid classGuid, int vendorId, int productId)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -664,7 +664,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		protected Device(Guid classGuid, int vendorId, int productId, string serial)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -674,7 +674,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		protected Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
@@ -724,7 +724,7 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'class' is no valid identifier.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		private void RegisterAndAttachStaticDeviceEventHandlers(Guid classGuid)
 		{
 			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);

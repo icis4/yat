@@ -537,7 +537,7 @@ namespace MKY.Win32
 		/// <param name="classGuid">An interface class GUID.</param>
 		/// <returns>An array containing the path names of the devices currently available on the system.</returns>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurance of an native pointer.")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "MKY.Win32.DeviceManagement+NativeMethods.SetupDiDestroyDeviceInfoList(System.IntPtr)", Justification = "Don't care about the result.")]
 		public static string[] GetDevicesFromGuid(Guid classGuid)
 		{
@@ -617,24 +617,24 @@ namespace MKY.Win32
 		/// <param name="deviceNotificationHandle">Returned device notification handle.</param>
 		/// <returns>True on success.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		public static bool RegisterDeviceNotificationHandle(IntPtr windowHandle, Guid classGuid, out IntPtr deviceNotificationHandle)
 		{
 			deviceNotificationHandle = IntPtr.Zero;
 
 			try
 			{
-				// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request.
+				// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request:
 				NativeTypes.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new NativeTypes.DEV_BROADCAST_DEVICEINTERFACE();
 
-				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure. Set the size.
+				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure and set the size:
 				devBroadcastDeviceInterface.dbcc_size = (uint)Marshal.SizeOf(devBroadcastDeviceInterface);
 
-				// Request to receive notifications about a class of devices.
+				// Request to receive notifications about a class of devices:
 				devBroadcastDeviceInterface.dbcc_devicetype = NativeTypes.DBT_DEVTYP.DEVICEINTERFACE;
 				devBroadcastDeviceInterface.dbcc_reserved = 0;
 
-				// Specify the interface class to receive notifications about.
+				// Specify the interface class to receive notifications about:
 				devBroadcastDeviceInterface.dbcc_classguid = classGuid;
 
 				deviceNotificationHandle = NativeMethods.RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterface, NativeTypes.DEVICE_NOTIFY.WINDOW_HANDLE);
