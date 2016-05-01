@@ -106,7 +106,8 @@
     <Compile Include="RawLog.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Settings\LogSettings.cs" />
-    <Compile Include="Types.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="FileNameSeparator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
