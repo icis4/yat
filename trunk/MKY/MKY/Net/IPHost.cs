@@ -200,8 +200,13 @@ namespace MKY.Net
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
+		#region ToString > Extensions
+		//------------------------------------------------------------------------------------------
+		// ToString > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
-		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
+		/// Returns a <see cref="string" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
 		/// <remarks>
 		/// It is recommended to use this function instead of <see cref="ToString"/> in cases where
@@ -227,13 +232,8 @@ namespace MKY.Net
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
-		#region ToString > Extensions
-		//------------------------------------------------------------------------------------------
-		// ToString > Extensions
-		//------------------------------------------------------------------------------------------
-
 		/// <summary>
-		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
+		/// Returns a <see cref="string" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
 		/// <remarks>
 		/// It is recommended to use this function instead of <see cref="ToString"/> in cases where
@@ -256,7 +256,7 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String" /> that e.g. adds [] for IPv6 addresses.
+		/// Returns a <see cref="string" /> that e.g. adds [] for IPv6 addresses.
 		/// </summary>
 		/// <remarks>
 		/// It is recommended to use this function instead of <see cref="ToString"/> in cases where
@@ -346,9 +346,9 @@ namespace MKY.Net
 				else if (string.IsNullOrEmpty(s)) // Default!
 				{
 					result = new IPHost();
-					return (true);
+					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
-				else
+				else // = invalid string!
 				{
 					result = null;
 					return (false);

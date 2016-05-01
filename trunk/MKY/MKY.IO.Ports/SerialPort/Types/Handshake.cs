@@ -188,7 +188,12 @@ namespace MKY.IO.Ports
 				result = Handshake.RequestToSendXOnXOff;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new HandshakeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new HandshakeEx(); // Default!
 				return (false);

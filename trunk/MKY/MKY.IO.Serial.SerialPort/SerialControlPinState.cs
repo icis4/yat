@@ -168,7 +168,12 @@ namespace MKY.IO.Serial.SerialPort
 				result = SerialControlPinState.Enabled;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new SerialControlPinStateEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new SerialControlPinStateEx(); // Default!
 				return (false);

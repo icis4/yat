@@ -162,13 +162,17 @@ namespace YAT.Domain
 				result = CharSubstitution.ToLower;
 				return (true);
 			}
-			else if ((StringEx.EqualsOrdinalIgnoreCase(s, None_string)) ||
-			         (string.IsNullOrEmpty(s))) // Default!
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = CharSubstitution.None;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = CharSubstitution.None;
+				return (true);
+			}
+			else // = invalid string!
 			{
 				result = new CharSubstitutionEx(); // Default!
 				return (false);

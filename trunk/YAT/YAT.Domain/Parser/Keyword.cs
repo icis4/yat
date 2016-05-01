@@ -233,7 +233,12 @@ namespace YAT.Domain.Parser
 				result = Keyword.OutputBreakToggle;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new KeywordEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new KeywordEx(); // Default!
 				return (false);

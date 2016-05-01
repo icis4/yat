@@ -198,7 +198,12 @@ namespace MKY.IO.Serial.Usb
 				result = SerialHidFlowControl.ManualSoftware;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new SerialHidFlowControlEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new SerialHidFlowControlEx(); // Default!
 				return (false);

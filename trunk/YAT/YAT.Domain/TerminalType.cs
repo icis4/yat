@@ -178,7 +178,12 @@ namespace YAT.Domain
 				result = TerminalType.Binary;
 				return (true);
 			}
-			else
+			else if (string.IsNullOrEmpty(s))
+			{
+				result = new TerminalTypeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else // = invalid string!
 			{
 				result = new TerminalTypeEx(); // Default!
 				return (false);

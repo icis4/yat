@@ -290,9 +290,9 @@ namespace MKY.Net
 				else if (string.IsNullOrEmpty(s)) // Default!
 				{
 					result = new IPAddressFilter();
-					return (true);
+					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
-				else
+				else // = invalid string!
 				{
 					result = null;
 					return (false);
@@ -357,13 +357,6 @@ namespace MKY.Net
 		{
 			return (Parse(addressFilter));
 		}
-
-		#endregion
-
-		#region Comparison Operators
-
-		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}
