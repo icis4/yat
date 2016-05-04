@@ -887,12 +887,18 @@ namespace MKY.IO.Serial.Socket
 
 						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-
-					this.sendThreadEvent.Close();
-					this.sendThreadEvent = null;
-					this.sendThread = null;
+					finally
+					{
+						this.sendThread = null;
+					}
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
+				}
+
+				if (this.sendThreadEvent != null)
+				{
+					try     { this.sendThreadEvent.Close(); }
+					finally { this.sendThreadEvent = null; }
 				}
 			}
 		}

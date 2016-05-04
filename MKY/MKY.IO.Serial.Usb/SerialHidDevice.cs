@@ -833,20 +833,21 @@ namespace MKY.IO.Serial.Usb
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		private void DisposeDeviceAndThreads()
 		{
-			try
+			lock (this.deviceSyncObj)
 			{
-				lock (this.deviceSyncObj)
+				try
 				{
 					if (this.device != null)
-					{
 						this.device.Dispose();
-						this.device = null;
-					}
 				}
-			}
-			catch (Exception ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "Exception while disposing device!");
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(GetType(), ex, "Exception while disposing device!");
+				}
+				finally
+				{
+					this.device = null;
+				}
 			}
 
 			try
@@ -979,12 +980,18 @@ namespace MKY.IO.Serial.Usb
 
 						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-
-					this.sendThreadEvent.Close();
-					this.sendThreadEvent = null;
-					this.sendThread = null;
+					finally
+					{
+						this.sendThread = null;
+					}
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
+				}
+
+				if (this.sendThreadEvent != null)
+				{
+					try     { this.sendThreadEvent.Close(); }
+					finally { this.sendThreadEvent = null; }
 				}
 			}
 
@@ -1025,12 +1032,18 @@ namespace MKY.IO.Serial.Usb
 
 						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-
-					this.receiveThreadEvent.Close();
-					this.receiveThreadEvent = null;
-					this.receiveThread = null;
+					finally
+					{
+						this.receiveThread = null;
+					}
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
+				}
+
+				if (this.receiveThreadEvent != null)
+				{
+					try     { this.receiveThreadEvent.Close(); }
+					finally { this.receiveThreadEvent = null; }
 				}
 			}
 		}

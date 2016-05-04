@@ -1645,13 +1645,19 @@ namespace MKY.IO.Serial.SerialPort
 
 							WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
+						finally
+						{
+							this.sendThread = null;
+						}
 					} // Not itself thread.
 
-					this.sendThreadEvent.Close();
-					this.sendThreadEvent = null;
-					this.sendThread = null;
-
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
+				}
+
+				if (this.sendThreadEvent != null)
+				{
+					try     { this.sendThreadEvent.Close(); }
+					finally { this.sendThreadEvent = null; }
 				}
 			}
 
@@ -1692,13 +1698,19 @@ namespace MKY.IO.Serial.SerialPort
 
 							WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
+						finally
+						{
+							this.receiveThread = null;
+						}
 					} // Not itself thread.
 
-					this.receiveThreadEvent.Close();
-					this.receiveThreadEvent = null;
-					this.receiveThread = null;
-
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
+				}
+
+				if (this.receiveThreadEvent != null)
+				{
+					try     { this.receiveThreadEvent.Close(); }
+					finally { this.receiveThreadEvent = null; }
 				}
 			}
 		}
