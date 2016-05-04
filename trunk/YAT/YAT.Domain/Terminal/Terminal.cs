@@ -1747,7 +1747,7 @@ namespace YAT.Domain
 				if (TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 					isByteToHide = true;
 			}
-			else if (MKY.IO.Serial.XOnXOff.IsXOnXOffByte(b))
+			else if (MKY.IO.Serial.XOnXOff.IsXOnOrXOffByte(b))
 			{
 				if (TerminalSettings.IO.FlowControlUsesXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
 					isByteToHide = true;

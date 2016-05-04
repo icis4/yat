@@ -149,13 +149,13 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
-		public virtual bool NotifyXOnOrXOffSent(byte b)
+		public virtual bool XOnOrXOffSent(byte b)
 		{
 			if (b == XOnXOff.XOnByte)
-				return (NotifyXOnSent());
+				return (XOnSent());
 
 			if (b == XOnXOff.XOffByte)
-				return (NotifyXOffSent());
+				return (XOffSent());
 
 			return (true);
 		}
@@ -166,7 +166,7 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
-		public virtual bool NotifyXOnSent()
+		public virtual bool XOnSent()
 		{
 			bool hasChanged = false;
 
@@ -190,7 +190,7 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
-		public virtual bool NotifyXOffSent()
+		public virtual bool XOffSent()
 		{
 			bool hasChanged = false;
 
@@ -209,12 +209,29 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
+		/// Notify that an XOn or XOff byte has been received.
+		/// </summary>
+		/// <returns>
+		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
+		/// </returns>
+		public virtual bool XOnOrXOffReceived(byte b)
+		{
+			if (b == XOnXOff.XOnByte)
+				return (XOnReceived());
+
+			if (b == XOnXOff.XOffByte)
+				return (XOffReceived());
+
+			return (true);
+		}
+
+		/// <summary>
 		/// Notify that an XOn byte has been received.
 		/// </summary>
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
-		public virtual bool NotifyXOnReceived()
+		public virtual bool XOnReceived()
 		{
 			bool hasChanged = false;
 
@@ -235,7 +252,7 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// Returns <c>true</c> if XOn/XOff state has changed, <c>false</c> if state remains.
 		/// </returns>
-		public virtual bool NotifyXOffReceived()
+		public virtual bool XOffReceived()
 		{
 			bool hasChanged = false;
 
