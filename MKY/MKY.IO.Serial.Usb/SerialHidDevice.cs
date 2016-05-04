@@ -564,11 +564,25 @@ namespace MKY.IO.Serial.Usb
 						if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 						{
 							SendXOnOrXOffAndNotify(XOnXOff.XOnByte);
+
+							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
+									this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
+							}
+
 							break; // Let other threads do their job and wait until signaled again.
 						}
 						else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
 						{
 							SendXOnOrXOffAndNotify(XOnXOff.XOffByte);
+
+							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
+									this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
+							}
+
 							break; // Let other threads do their job and wait until signaled again.
 						}
 						else
@@ -625,11 +639,10 @@ namespace MKY.IO.Serial.Usb
 		{
 			this.device.Send(b);
 
-			if (this.iXOnXOffHelper.NotifyXOnOrXOffSent(b))
-				SignalReceiveThreadSafely();
-
 			OnDataSent(new SerialDataSentEventArgs(b, DeviceInfo)); // Skip I/O synchronization for simplicity.
-			OnIOControlChanged(EventArgs.Empty);
+
+			if (this.iXOnXOffHelper.XOnOrXOffSent(b))
+				OnIOControlChanged(EventArgs.Empty);
 		}
 
 		private void InvokeXOffErrorEvent()
@@ -1071,14 +1084,14 @@ namespace MKY.IO.Serial.Usb
 						{
 							if (b == XOnXOff.XOnByte)
 							{
-								if (this.iXOnXOffHelper.NotifyXOnReceived())
+								if (this.iXOnXOffHelper.XOnReceived())
 									signalXOnXOff = true;
 
 								signalXOnXOffCount = true;
 							}
 							else if (b == XOnXOff.XOffByte)
 							{
-								if (this.iXOnXOffHelper.NotifyXOffReceived())
+								if (this.iXOnXOffHelper.XOffReceived())
 									signalXOnXOff = true;
 
 								signalXOnXOffCount = true;

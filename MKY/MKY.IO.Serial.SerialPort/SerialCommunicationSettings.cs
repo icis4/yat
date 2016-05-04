@@ -68,7 +68,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Creates new port settings with specified arguments.
 		/// </summary>
 		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl)
-			: this (baudRate, dataBits, parity, stopBits, flowControl, ToRfrDefault(flowControl), ToRfrDefault(flowControl))
+			: this (baudRate, dataBits, parity, stopBits, flowControl, ToRfrPinDefault(flowControl), ToDtrPinDefault(flowControl))
 		{
 		}
 
@@ -83,6 +83,7 @@ namespace MKY.IO.Serial.SerialPort
 			StopBits    = stopBits;
 			FlowControl = flowControl;
 
+			// Override the default pin settings by the provided values:
 			RfrPin = rfrPin;
 			DtrPin = dtrPin;
 		}
@@ -111,6 +112,7 @@ namespace MKY.IO.Serial.SerialPort
 			StopBits    = rhs.StopBits;
 			FlowControl = rhs.FlowControl;
 
+			// Override the default pin settings by the provided values:
 			RfrPin = rhs.RfrPin;
 			DtrPin = rhs.DtrPin;
 
@@ -129,13 +131,10 @@ namespace MKY.IO.Serial.SerialPort
 			Parity      = ParityDefault;
 			StopBits    = StopBitsDefault;
 			FlowControl = FlowControlDefault;
-
-			RfrPin = ToRfrDefault(FlowControl);
-			DtrPin = ToDtrDefault(FlowControl);
 		}
 
 		/// <summary></summary>
-		public static SerialControlPinState ToRfrDefault(SerialFlowControl flowControl)
+		public static SerialControlPinState ToRfrPinDefault(SerialFlowControl flowControl)
 		{
 			switch (flowControl)
 			{
@@ -156,7 +155,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary></summary>
-		public static SerialControlPinState ToDtrDefault(SerialFlowControl flowControl)
+		public static SerialControlPinState ToDtrPinDefault(SerialFlowControl flowControl)
 		{
 			switch (flowControl)
 			{
@@ -254,6 +253,11 @@ namespace MKY.IO.Serial.SerialPort
 				if (this.flowControl != value)
 				{
 					this.flowControl = value;
+
+					// Set the default pin values accordingly:
+					RfrPin = ToRfrPinDefault(FlowControl);
+					DtrPin = ToDtrPinDefault(FlowControl);
+
 					SetChanged();
 				}
 			}

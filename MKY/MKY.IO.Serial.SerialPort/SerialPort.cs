@@ -266,7 +266,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				// Do not call AssertNotDisposed() in a simple get-property.
 
 				return (this.settings);
 			}
@@ -781,12 +781,26 @@ namespace MKY.IO.Serial.SerialPort
 							if (this.sendQueue.Contains(XOnXOff.XOnByte)) // No lock required, not modifying anything.
 							{
 								if (TryWriteXOnOrXOffAndNotify(XOnXOff.XOnByte, out isWriteTimeout, out isOutputBreak))
+								{
+									lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+									{
+										if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
+											this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
+									}
 									break; // Let other threads do their job and wait until signaled again.
+								}
 							}
 							else if (this.sendQueue.Contains(XOnXOff.XOffByte)) // No lock required, not modifying anything.
 							{
 								if (TryWriteXOnOrXOffAndNotify(XOnXOff.XOffByte, out isWriteTimeout, out isOutputBreak))
+								{
+									lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+									{
+										if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
+											this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
+									}
 									break; // Let other threads do their job and wait until signaled again.
+								}
 							}
 							else
 							{
@@ -851,13 +865,12 @@ namespace MKY.IO.Serial.SerialPort
 									//
 									// Again reducing the chunk size by default to work-around the issue.
 
-									List<byte> effectiveChunkData = null;
-									TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak);
-
-									if ((effectiveChunkData != null) && (effectiveChunkData.Count > 0))
+									List<byte> effectiveChunkData;
+									bool signalIOControlChanged;
+									if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
 									{
 										WriteDebugTransmissionMessageLine("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
-										OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), this.settings.PortId));
+										OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
 										WriteDebugTransmissionMessageLine("...signaling done");
 
 										// Update the send rate with the effective chunk size:
@@ -865,6 +878,11 @@ namespace MKY.IO.Serial.SerialPort
 											sendRate.Update(effectiveChunkData.Count);
 
 										// Note the Thread.Sleep(TimeSpan.Zero) further above.
+									}
+
+									if (signalIOControlChanged)
+									{
+										OnIOControlChanged(EventArgs.Empty);
 									}
 								}
 								finally
@@ -939,15 +957,14 @@ namespace MKY.IO.Serial.SerialPort
 
 		private bool TryWriteXOnOrXOffAndNotify(byte b, out bool isWriteTimeout, out bool isOutputBreak)
 		{
-			if (TryWriteByteToPort(b, out isWriteTimeout, out isOutputBreak))
+			bool signalIOControlChanged;
+
+			if (TryWriteByteToPort(b, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
 			{
-				if (this.iXOnXOffHelper.NotifyXOnOrXOffSent(b))
-					SignalReceiveThreadSafely();
+				OnDataSent(new SerialDataSentEventArgs(b, PortId)); // Skip I/O synchronization for simplicity.
 
-				OnDataSent(new SerialDataSentEventArgs(b, this.settings.PortId)); // Skip I/O synchronization for simplicity.
-
-				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
-					OnIOControlChanged(EventArgs.Empty);
+				if (signalIOControlChanged)
+					OnIOControlChanged(EventArgs.Empty); // Signal change of XOn/XOff state.
 
 				return (true);
 			}
@@ -959,12 +976,14 @@ namespace MKY.IO.Serial.SerialPort
 		/// Attention, sending a whole chunk is implemented in <see cref="TryWriteChunkToPort"/> below.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		private bool TryWriteByteToPort(byte b, out bool isWriteTimeout, out bool isOutputBreak)
+		private bool TryWriteByteToPort(byte b, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged)
 		{
-			bool success = false;
-			isWriteTimeout = false;
-			isOutputBreak = false;
-			Exception unhandled = null;
+			isWriteTimeout         = false;
+			isOutputBreak          = false;
+			signalIOControlChanged = false;
+
+			bool writeSuccess      = false;
+			Exception unhandled    = null;
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
@@ -983,9 +1002,19 @@ namespace MKY.IO.Serial.SerialPort
 				// Try to write the byte, will raise a 'TimeoutException' if not possible:
 				byte[] a = { b };
 				this.port.Write(a, 0, 1); // Do not lock, may take some time!
-				success = true;
+				writeSuccess = true;
 
 				WriteDebugTransmissionMessageLine("...writing done");
+
+				// Handle XOn/XOff if required:
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+				{
+					if (XOnXOff.IsXOnOrXOffByte(b))
+					{
+						this.iXOnXOffHelper.XOnOrXOffSent(b);
+						signalIOControlChanged = true; // XOn/XOff count has changed.
+					}
+				}
 			}
 			catch (TimeoutException ex)
 			{
@@ -1010,20 +1039,25 @@ namespace MKY.IO.Serial.SerialPort
 			}
 
 			if (unhandled != null)
+			{
 				throw (unhandled); // Re-throw unhandled exception after restoring RFR.
+			}
 
-			return (success);
+			return (writeSuccess);
 		}
 
 		/// <remarks>
 		/// Attention, sending a single byte is implemented in <see cref="TryWriteByteToPort"/> above.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		private void TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak)
+		private bool TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged)
 		{
-			isWriteTimeout = false;
-			isOutputBreak = false;
-			Exception unhandled = null;
+			isWriteTimeout         = false;
+			isOutputBreak          = false;
+			signalIOControlChanged = false;
+
+			bool writeSuccess      = false;
+			Exception unhandled    = null;
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
@@ -1053,14 +1087,29 @@ namespace MKY.IO.Serial.SerialPort
 
 				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
+				writeSuccess = true;
 
 				WriteDebugTransmissionMessageLine("...writing done");
 
-				// Dequeue the chunk to acknowlege it's gone:
+				// Finalize the write operation:
 				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 				{
 					for (int i = 0; i < triedChunkSize; i++)
-						effectiveChunkData.Add(this.sendQueue.Dequeue());
+					{
+						byte b = this.sendQueue.Dequeue(); // Dequeue the chunk to acknowlege it's gone.
+
+						effectiveChunkData.Add(b);
+
+						// Handle XOn/XOff if required:
+						if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
+						{
+							if (XOnXOff.IsXOnOrXOffByte(b))
+							{
+								this.iXOnXOffHelper.XOnOrXOffSent(b);
+								signalIOControlChanged = true; // XOn/XOff count has changed.
+							}
+						}
+					}
 				}
 
 				// Ensure not to lock the queue while potentially pending in Write(), that would
@@ -1095,6 +1144,8 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				throw (unhandled); // Re-throw unhandled exception after restoring RFR.
 			}
+
+			return (writeSuccess);
 		}
 
 		private void InvokeOutputBreakErrorEvent()
@@ -1682,6 +1733,27 @@ namespace MKY.IO.Serial.SerialPort
 		/// Weirdly, data loss is much smaller when enabling 'DEBUG_TRANSMISSION', which obviously
 		/// slows down sending. It seems that the issue is not only about receiving, but also about
 		/// sending too fast! See comments in <see cref="SendThread"/> for details on sending.
+		/// 
+		/// 
+		/// Additional information on receiving
+		/// -----------------------------------
+		/// Another improvement suggested by Marco Stroppel on 2011-02-17 doesn't work with YAT.
+		/// 
+		/// Suggestion: The while(BytesAvailable > 0) fires endless events, because I did not call
+		/// the Receive() method. That was, because I receive only the data when the other port to
+		/// write the data is opened. So the BytesAvailable got never zero. My idea was (not knowing
+		/// if this is good) to do something like:
+		/// 
+		/// while(BytesAvailable > LastTimeBytesAvailable)
+		/// {
+		///     LastTimeBytesAvailable = BytesAvailable;
+		///     OnDataReceived(EventArgs.Empty);
+		/// }
+		/// 
+		/// This suggestions doesn't work because YAT shall show every single byte as soon as it
+		/// get's received. If 3 bytes are received while 5 bytes are taken out of the receive
+		/// queue, no more event gets fired. Thus, the 3 bytes do not get shown until new data
+		/// arrives. This is not acceptable.
 		/// </remarks>
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.DataReceived: Only one event handler can execute at a time.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that any exception leads to restart or reset of port.")]
@@ -1716,19 +1788,19 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							this.receiveQueue.Enqueue(b);
 
-							// Handle XOn/XOff state:
+							// Handle output XOn/XOff state:
 							if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
 							{
 								if (b == XOnXOff.XOnByte)
 								{
-									if (this.iXOnXOffHelper.NotifyXOnReceived())
+									if (this.iXOnXOffHelper.XOnReceived())
 										signalXOnXOff = true;
 
 									signalXOnXOffCount = true;
 								}
 								else if (b == XOnXOff.XOffByte)
 								{
-									if (this.iXOnXOffHelper.NotifyXOffReceived())
+									if (this.iXOnXOffHelper.XOffReceived())
 										signalXOnXOff = true;
 
 									signalXOnXOffCount = true;
@@ -1822,7 +1894,7 @@ namespace MKY.IO.Serial.SerialPort
 							}
 
 							WriteDebugTransmissionMessageLine("Signaling " + data.Length.ToString() + " byte(s) received...");
-							OnDataReceived(new SerialDataReceivedEventArgs(data, this.settings.PortId));
+							OnDataReceived(new SerialDataReceivedEventArgs(data, PortId));
 							WriteDebugTransmissionMessageLine("...signaling done");
 
 							// Note the Thread.Sleep(TimeSpan.Zero) above.
@@ -1837,24 +1909,6 @@ namespace MKY.IO.Serial.SerialPort
 
 			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
 		}
-
-		// Additional information on receiving
-		// -----------------------------------
-		// An improvement suggested by Marco Stroppel on 2011-02-17 doesn't work in case of YAT. Suggestion:
-		// 
-		//   The while(BytesAvailable > 0) fires endless events, because I did not call the Receive() method.
-		//   That was, because I receive only the data when the other port to write the data is opened. So the
-		//   BytesAvailable got never zero. My idea was (not knowing if this is good) to do something like:
-		//   
-		//   while(BytesAvailable > LastTimeBytesAvailable)
-		//   {
-		//       LastTimeBytesAvailable = BytesAvailable;
-		//       OnDataReceived(EventArgs.Empty);
-		//   }
-		// 
-		// This suggestions doesn't work because YAT shall show every single byte as soon as it get's received.
-		// If 3 bytes are received while 5 bytes are taken out of the receive queue, no more event gets fired.
-		// Thus, the 3 bytes do not get shown until new data arrives. This is not acceptable.
 
 		/// <remarks>
 		/// Asynchronously invoke incoming events to prevent potential deadlocks if close/dispose

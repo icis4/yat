@@ -40,7 +40,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Returns whether the given byte is an XOn or XOff byte.
 		/// </summary>
-		public static bool IsXOnXOffByte(byte b)
+		public static bool IsXOnOrXOffByte(byte b)
 		{
 			return ((b == XOnByte) || (b == XOffByte));
 		}
