@@ -38,21 +38,18 @@ namespace MKY.Recent
 		private T item;
 		private DateTime timeStamp;
 
-		/// <summary></summary>
 		/// <remarks>
 		/// Needed for XML serialization.
 		/// </remarks>
 		public RecentItem()
+			: this (default(T))
 		{
-			this.item = default(T);
-			this.timeStamp = DateTime.Now;
 		}
 
 		/// <summary></summary>
 		public RecentItem(T item)
+			: this (item, DateTime.Now)
 		{
-			this.item = item;
-			this.timeStamp = DateTime.Now;
 		}
 
 		/// <summary></summary>

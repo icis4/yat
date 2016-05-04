@@ -42,9 +42,8 @@ namespace MKY.Time
 		/// </summary>
 		/// <param name="item">The second value.</param>
 		public TimeStampItem(T item)
+			: this (DateTime.Now, item)
 		{
-			this.timeStamp = DateTime.Now;
-			this.item = item;
 		}
 
 		/// <summary>

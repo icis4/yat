@@ -84,31 +84,25 @@ namespace MKY.IO
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
-		public static string MakeTempFileName(Type type)
-		{
-			return (MakeTempFileName(type, "", ""));
-		}
-
-		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		public static string MakeTempFileName(Type type, string extension)
+		public static string MakeTempFileName(Type type, string extension = null)
 		{
-			return (MakeTempFileName(type, "", extension));
+			return (MakeTempFileName(type, null, extension));
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		public static string MakeTempFileName(Type type, string name, string extension)
+		public static string MakeTempFileName(Type type, string name, string extension = null)
 		{
-			return (MakeTempFileName(type, name, "", extension, true));
+			return (MakeTempFileName(type, name, null, extension, true));
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="postfix">Yet another postfix to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		public static string MakeTempFileName(Type type, string name, string postfix, string extension)
+		public static string MakeTempFileName(Type type, string name, string postfix, string extension = null)
 		{
 			return (MakeTempFileName(type, name, postfix, extension, true));
 		}
@@ -133,22 +127,16 @@ namespace MKY.IO
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
-		public static string MakeTempFilePath(Type type)
-		{
-			return (MakeTempFilePath(type, "", ""));
-		}
-
-		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		public static string MakeTempFilePath(Type type, string extension)
+		public static string MakeTempFilePath(Type type, string extension = null)
 		{
-			return (MakeTempFilePath(type, "", extension));
+			return (MakeTempFilePath(type, null, extension));
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		public static string MakeTempFilePath(Type type, string name, string extension)
+		public static string MakeTempFilePath(Type type, string name, string extension = null)
 		{
 			return (MakeTempFilePath(type, name, extension, true));
 		}

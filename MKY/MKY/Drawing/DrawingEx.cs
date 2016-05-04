@@ -62,7 +62,7 @@ namespace MKY.Drawing
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Emphasize that the text format is stored as flags.")]
 		public static TextFormatFlags ConvertContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment)
 		{
-			return (ApplyContentAlignmentToTextFormatFlags(contentAlignment, TextFormatFlags.Default));
+			return (ApplyContentAlignmentToTextFormatFlags(contentAlignment));
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace MKY.Drawing
 		/// <param name="textFormatFlags">TextFormatFlags to be changed.</param>
 		/// <returns>Changed TextFormatFlags.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Emphasize that the text format is stored as flags.")]
-		public static TextFormatFlags ApplyContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment, TextFormatFlags textFormatFlags)
+		public static TextFormatFlags ApplyContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment, TextFormatFlags textFormatFlags = TextFormatFlags.Default)
 		{
 			// ATTENTION
 			// Do not care about TextFormatFlags.Top and TextFormatFlags.Left; their values are 0.
