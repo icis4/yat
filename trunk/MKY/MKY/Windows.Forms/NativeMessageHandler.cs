@@ -28,9 +28,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Permissions;
 using System.Windows.Forms;
+
+using MKY.Diagnostics;
 
 #endregion
 
@@ -97,6 +100,7 @@ namespace MKY.Windows.Forms
 		{
 			UnregisterMainForm();
 
+			Debug.WriteLine(@"Registering main form """ + mainForm.ToString() + @""" as native message source.");
 			staticMainForm = mainForm;
 
 			foreach (NativeMessageHandler handler in staticMessageHandlers)
@@ -111,6 +115,9 @@ namespace MKY.Windows.Forms
 		{
 			foreach (NativeMessageHandler handler in staticMessageHandlers)
 				handler.Unregister();
+
+			staticMainForm = null;
+			Debug.WriteLine("Main form unregistered as native message source.");
 		}
 
 		#endregion
@@ -143,6 +150,8 @@ namespace MKY.Windows.Forms
 			{
 				this.messageCallback = callback;
 				Register(staticMainForm);
+
+				Debug.WriteLine(@"Native message handler registered at """ + staticMainForm.ToString() + @""".");
 			}
 			else
 			{
@@ -198,10 +207,12 @@ namespace MKY.Windows.Forms
 		/// free'd but rather this handler gets closed.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Just relax in the 'free'd' world...")]
-		protected void Close()
+		public void Close()
 		{
 			Unregister();
 			this.messageCallback = null;
+
+			Debug.WriteLine("Native message handler unregistered.");
 		}
 
 		/// <summary>
@@ -220,7 +231,7 @@ namespace MKY.Windows.Forms
 			}
 			catch (Exception ex)
 			{
-				Diagnostics.DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Exception during message callback!");
 			}
 
 			base.WndProc(ref m);
