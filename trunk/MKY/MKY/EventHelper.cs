@@ -61,7 +61,7 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way
+			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -88,7 +88,7 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way.
+			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -118,7 +118,7 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Events of type "event MyEventHandler MyEvent" are always fired the non-debug way.
+			// Events of type "event MyEventHandler MyEvent" are always fired the non-debug way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -151,7 +151,7 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way.
+			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -184,7 +184,7 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way.
+			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{

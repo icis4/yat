@@ -22,7 +22,6 @@
 
 using System;
 using System.Globalization;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace MKY.Time
@@ -129,13 +128,10 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			string strA = TimeStamp.ToString(CultureInfo.InvariantCulture);
+			string strB = Item.ToString();
 
-			sb.Append(TimeStamp.ToString(CultureInfo.InvariantCulture));
-			sb.Append(" / ");
-			sb.Append(Item.ToString());
-
-			return (sb.ToString());
+			return (string.Concat(strA, " / ", strB));
 		}
 
 		#endregion

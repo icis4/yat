@@ -21,7 +21,6 @@
 //==================================================================================================
 
 using System;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace MKY.Collections
@@ -122,13 +121,7 @@ namespace MKY.Collections
 		/// </remarks>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(Key);
-			sb.Append(" / ");
-			sb.Append(Value);
-
-			return (sb.ToString());
+			return (string.Concat(Key, " / ", Value));
 		}
 
 		#endregion
