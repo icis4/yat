@@ -22,7 +22,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace MKY.Collections.Generic
@@ -159,17 +158,7 @@ namespace MKY.Collections.Generic
 		/// </remarks>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append(Value1);
-			sb.Append(" / ");
-			sb.Append(Value2);
-			sb.Append(" / ");
-			sb.Append(Value3);
-			sb.Append(" / ");
-			sb.Append(Value4);
-
-			return (sb.ToString());
+			return (string.Concat(Value1, " / ", Value2, " / ", Value3, " / ", Value4));
 		}
 
 		#endregion

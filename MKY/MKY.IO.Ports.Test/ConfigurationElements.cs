@@ -21,7 +21,6 @@
 //==================================================================================================
 
 using System.Configuration;
-using System.Text;
 
 namespace MKY.IO.Ports.Test
 {
@@ -151,11 +150,10 @@ namespace MKY.IO.Ports.Test
 		/// <summary></summary>
 		protected override object GetElementKey(ConfigurationElement element)
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.Append(((SerialPortPairConfigurationElement)element).PortA);
-			sb.Append(" ");
-			sb.Append(((SerialPortPairConfigurationElement)element).PortB);
-			return (sb.ToString());
+			string strA = ((SerialPortPairConfigurationElement)element).PortA;
+			string strB = ((SerialPortPairConfigurationElement)element).PortB;
+
+			return (string.Concat(strA, " ", strB));
 		}
 
 		/// <summary></summary>
