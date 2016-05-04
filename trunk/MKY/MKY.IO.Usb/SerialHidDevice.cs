@@ -814,12 +814,18 @@ namespace MKY.IO.Usb
 
 						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
-
-					this.receiveThreadEvent.Close();
-					this.receiveThreadEvent = null;
-					this.receiveThread = null;
+					finally
+					{
+						this.receiveThread = null;
+					}
 
 					WriteDebugThreadStateMessageLine("...successfully terminated.");
+				}
+
+				if (this.receiveThreadEvent != null)
+				{
+					try     { this.receiveThreadEvent.Close(); }
+					finally { this.receiveThreadEvent = null; }
 				}
 			}
 		}
