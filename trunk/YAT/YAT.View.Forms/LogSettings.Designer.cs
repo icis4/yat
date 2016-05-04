@@ -252,9 +252,9 @@ namespace YAT.View.Forms
 			// comboBox_Options_NameSeparator
 			// 
 			this.comboBox_Options_NameSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Options_NameSeparator.Location = new System.Drawing.Point(346, 39);
+			this.comboBox_Options_NameSeparator.Location = new System.Drawing.Point(334, 39);
 			this.comboBox_Options_NameSeparator.Name = "comboBox_Options_NameSeparator";
-			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(137, 21);
+			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(149, 21);
 			this.comboBox_Options_NameSeparator.TabIndex = 5;
 			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, resources.GetString("comboBox_Options_NameSeparator.ToolTip"));
 			this.comboBox_Options_NameSeparator.TextChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_TextChanged);
@@ -293,7 +293,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_Options_NameSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Options_NameSeparator.AutoSize = true;
-			this.label_Options_NameSeparator.Location = new System.Drawing.Point(343, 23);
+			this.label_Options_NameSeparator.Location = new System.Drawing.Point(331, 23);
 			this.label_Options_NameSeparator.Name = "label_Options_NameSeparator";
 			this.label_Options_NameSeparator.Size = new System.Drawing.Size(56, 13);
 			this.label_Options_NameSeparator.TabIndex = 4;
