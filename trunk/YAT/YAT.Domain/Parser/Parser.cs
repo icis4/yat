@@ -476,15 +476,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public virtual bool TryParse(string s)
-		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
-
-			return (TryParse(s, Modes.All));
-		}
-
-		/// <summary></summary>
-		public virtual bool TryParse(string s, Modes modes)
+		public virtual bool TryParse(string s, Modes modes = Modes.All)
 		{
 			// AssertNotDisposed() is called by 'TryParse()' below.
 

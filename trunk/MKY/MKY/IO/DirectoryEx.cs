@@ -67,17 +67,9 @@ namespace MKY.IO
 		}
 
 		/// <summary>
-		/// Makes all files within a directory writable, including all sub-directories.
+		/// Makes all files within a directory writable, including or excluding sub-directories.
 		/// </summary>
-		public static void MakeAllFilesWritable(string path)
-		{
-			MakeAllFilesWritable(path, true);
-		}
-
-		/// <summary>
-		/// Makes all files within a directory writable.
-		/// </summary>
-		public static void MakeAllFilesWritable(string path, bool recursive)
+		public static void MakeAllFilesWritable(string path, bool recursive = true)
 		{
 			if (Directory.Exists(path))
 			{

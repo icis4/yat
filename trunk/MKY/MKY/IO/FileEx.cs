@@ -41,17 +41,9 @@ namespace MKY.IO
 		public const string BackupFileExtension = ".bak";
 
 		/// <summary>
-		/// Returns a unique file name for a file specified by path.
-		/// </summary>
-		public static string MakeUniqueFileName(string path)
-		{
-			return (MakeUniqueFileName(path, ""));
-		}
-
-		/// <summary>
 		/// Returns a unique file name for a file specified by path, unique part is separated by separator string.
 		/// </summary>
-		public static string MakeUniqueFileName(string path, string separator)
+		public static string MakeUniqueFileName(string path, string separator = "")
 		{
 			string dir  = Path.GetDirectoryName(path) + Path.DirectorySeparatorChar;
 			string name = Path.GetFileNameWithoutExtension(path);
