@@ -480,7 +480,7 @@ namespace MKY.IO.Usb
 
 			lock (staticDeviceNotificationSyncObj)
 			{
-				// The first call to this method registers the notification.
+				// The first call to this method registers the notification:
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
@@ -494,9 +494,11 @@ namespace MKY.IO.Usb
 					}
 				}
 
-				// Keep track of the register/unregister requests.
+				// Keep track of the register/unregister requests:
 				if (staticDeviceNotificationCounter < int.MaxValue)
 					staticDeviceNotificationCounter++;
+				else
+					throw (new OverflowException("Too many USB device notification registrations! It is required to restart the application!"));
 			}
 
 			return (result);
@@ -511,20 +513,21 @@ namespace MKY.IO.Usb
 		{
 			lock (staticDeviceNotificationSyncObj)
 			{
-				// Keep track of the register/unregister requests.
-				if (staticDeviceNotificationCounter > int.MinValue)
+				// Keep track of the register/unregister requests:
+				if (staticDeviceNotificationCounter > 0)
 					staticDeviceNotificationCounter--;
 
-				// The last call to this method unregisters the notification.
+				// The last call to this method unregisters the notification:
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB device object!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-					if (staticDeviceNotificationHandle != null)
+					// Check whether unregistration is still required, as Dispose() may be called multiple times!
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
 					{
 						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 						staticDeviceNotificationHandle = IntPtr.Zero;
+
+						staticDeviceNotificationHandler.Close();
+						staticDeviceNotificationHandler = null;
 					}
 				}
 			}
@@ -776,7 +779,7 @@ namespace MKY.IO.Usb
 		{
 			Dispose(false);
 
-			System.Diagnostics.Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
+			Debug.WriteLine("The finalizer of '" + GetType().FullName + "' should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>

@@ -174,7 +174,7 @@ namespace MKY.IO.Usb
 
 			lock (staticDeviceNotificationSyncObj)
 			{
-				// The first call to this method registers the notification.
+				// The first call to this method registers the notification:
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
@@ -188,9 +188,11 @@ namespace MKY.IO.Usb
 					}
 				}
 
-				// Keep track of the register/unregister requests.
+				// Keep track of the register/unregister requests:
 				if (staticDeviceNotificationCounter < int.MaxValue)
 					staticDeviceNotificationCounter++;
+				else
+					throw (new OverflowException("Too many USB Ser/HID device notification registrations! It is required to restart the application!"));
 			}
 
 			return (result);
@@ -205,20 +207,21 @@ namespace MKY.IO.Usb
 		{
 			lock (staticDeviceNotificationSyncObj)
 			{
-				// Keep track of the register/unregister requests.
-				if (staticDeviceNotificationCounter > int.MinValue)
+				// Keep track of the register/unregister requests:
+				if (staticDeviceNotificationCounter > 0)
 					staticDeviceNotificationCounter--;
 
-				// The last call to this method unregisters the notification.
+				// The last call to this method unregisters the notification:
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB Ser/HID device object!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-					if (staticDeviceNotificationHandle != null)
+					// Check whether unregistration is still required, as Dispose() may be called multiple times!
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
 					{
 						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 						staticDeviceNotificationHandle = IntPtr.Zero;
+
+						staticDeviceNotificationHandler.Close();
+						staticDeviceNotificationHandler = null;
 					}
 				}
 			}
@@ -406,15 +409,16 @@ namespace MKY.IO.Usb
 			if (!IsDisposed)
 			{
 				DetachAndUnregisterStaticDeviceEventHandlers();
-				Stop();
 
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the receive thread will already have been stopped in Close().
+					// In the 'normal' case, the items have already been disposed of in Close().
 					StopReceiveThread();
+					CloseStream();
 
-					this.stateLock.Dispose();
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
 				}
 			}
 
@@ -1028,7 +1032,7 @@ namespace MKY.IO.Usb
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(GetType(), ex);
+					DebugEx.WriteException(GetType(), ex, "Exception while closing stream!");
 				}
 			}
 		}

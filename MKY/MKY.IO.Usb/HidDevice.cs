@@ -34,6 +34,7 @@ using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
+using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
 #endregion
@@ -163,7 +164,7 @@ namespace MKY.IO.Usb
 
 			lock (staticDeviceNotificationSyncObj)
 			{
-				// The first call to this method registers the notification.
+				// The first call to this method registers the notification:
 				if (staticDeviceNotificationCounter == 0)
 				{
 					if (staticDeviceNotificationHandle != IntPtr.Zero)
@@ -177,9 +178,11 @@ namespace MKY.IO.Usb
 					}
 				}
 
-				// Keep track of the register/unregister requests.
+				// Keep track of the register/unregister requests:
 				if (staticDeviceNotificationCounter < int.MaxValue)
 					staticDeviceNotificationCounter++;
+				else
+					throw (new OverflowException("Too many USB HID device notification registrations! It is required to restart the application!"));
 			}
 
 			return (result);
@@ -194,20 +197,21 @@ namespace MKY.IO.Usb
 		{
 			lock (staticDeviceNotificationSyncObj)
 			{
-				// Keep track of the register/unregister requests.
-				if (staticDeviceNotificationCounter > int.MinValue)
+				// Keep track of the register/unregister requests:
+				if (staticDeviceNotificationCounter > 0)
 					staticDeviceNotificationCounter--;
 
-				// The last call to this method unregisters the notification.
+				// The last call to this method unregisters the notification:
 				if (staticDeviceNotificationCounter == 0)
 				{
-					if (staticDeviceNotificationHandle == IntPtr.Zero)
-						throw (new InvalidOperationException("Invalid state within USB HID device object!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-
-					if (staticDeviceNotificationHandle != null)
+					// Check whether unregistration is still required, as Dispose() may be called multiple times!
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
 					{
 						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 						staticDeviceNotificationHandle = IntPtr.Zero;
+
+						staticDeviceNotificationHandler.Close();
+						staticDeviceNotificationHandler = null;
 					}
 				}
 			}
@@ -387,7 +391,10 @@ namespace MKY.IO.Usb
 							else if (this.usagePage.GetHashCode() >= 0xFF00) // Vendor-defined usage page.
 								usagePageName = "VendorDefined";
 						}
-						catch { }
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage page!");
+						}
 
 						string usageIdName = "<Unknown>";
 						try
@@ -398,7 +405,10 @@ namespace MKY.IO.Usb
 							else if (this.usagePage.GetHashCode() >= 0xFF00) // Vendor-defined usage page also
 								usageIdName = "VendorDefined";               //   results in vendor-defined usage.
 						}
-						catch { }
+						catch (Exception ex)
+						{
+							DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage ID!");
+						}
 
 						Debug.WriteLine("USB HID device usage information:");
 						Debug.Indent();
