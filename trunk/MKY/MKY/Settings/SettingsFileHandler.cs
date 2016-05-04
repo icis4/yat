@@ -271,7 +271,7 @@ namespace MKY.Settings
 			bool success = false;
 			object result = null; // If not successful, return <c>null</c>.
 
-			// First check for file to minimize exceptions thrown.
+			// First check for file to minimize exceptions thrown:
 			if (File.Exists(filePath) && FileEx.IsReadable(filePath))
 			{
 				// First, always try standard deserialization:
@@ -291,7 +291,7 @@ namespace MKY.Settings
 				{
 					if (alternateXmlElements == null)
 					{
-						// Try to open existing file with tolerant deserialization.
+						// Try to open existing file with tolerant deserialization:
 						try
 						{
 							result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
@@ -299,12 +299,12 @@ namespace MKY.Settings
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(this.parentType, ex);
+							DebugEx.WriteException(this.parentType, ex, "Tolerant deserialization has failed!");
 						}
 					}
 					else
 					{
-						// Try to open existing file with alternate-tolerant deserialization.
+						// Try to open existing file with alternate-tolerant deserialization:
 						try
 						{
 							result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
@@ -312,7 +312,7 @@ namespace MKY.Settings
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(this.parentType, ex);
+							DebugEx.WriteException(this.parentType, ex, "Alternate-tolerant deserialization has failed!");
 						}
 					}
 				}
@@ -360,7 +360,10 @@ namespace MKY.Settings
 					if (File.Exists(filePath))
 						File.Move(filePath, backup);
 				}
-				catch { }
+				catch (Exception exBackup)
+				{
+					DebugEx.WriteException(GetType(), exBackup, "Exception while backing file up!");
+				}
 
 				try
 				{
@@ -371,14 +374,19 @@ namespace MKY.Settings
 
 					success = true;
 				}
-				catch
+				catch (Exception exPrimary)
 				{
+					DebugEx.WriteException(GetType(), exPrimary, "Exception while saving file!");
+
 					try
 					{
 						if (File.Exists(backup))
 							File.Move(backup, filePath);
 					}
-					catch { }
+					catch (Exception exBackup)
+					{
+						DebugEx.WriteException(GetType(), exBackup, "Exception while restoring backup file!");
+					}
 
 					throw; // Re-throw!
 				}
@@ -389,7 +397,10 @@ namespace MKY.Settings
 						if (File.Exists(backup))
 							File.Delete(backup);
 					}
-					catch { }
+					catch (Exception exBackup)
+					{
+						DebugEx.WriteException(GetType(), exBackup, "Exception while removing backup file!");
+					}
 				}
 			}
 

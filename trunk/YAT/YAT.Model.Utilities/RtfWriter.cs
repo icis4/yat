@@ -273,7 +273,7 @@ namespace YAT.Model.Utilities
 				}
 				catch (Exception ex)
 				{
-					MKY.Diagnostics.DebugEx.WriteException(GetType(), ex);
+					MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "Exception while creating RTF!");
 				}
 			}
 		}

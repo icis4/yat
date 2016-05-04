@@ -66,7 +66,7 @@ namespace MKY.Net
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(typeof(IPResolver), ex);
+							DebugEx.WriteException(typeof(IPResolver), ex, "Failed to get address from DNS!");
 							ipAddress = IPAddress.None;
 							return (false);
 						}
@@ -114,7 +114,7 @@ namespace MKY.Net
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(typeof(IPResolver), ex);
+							DebugEx.WriteException(typeof(IPResolver), ex, "Failed to get address from DNS!");
 							ipAddress = IPAddress.None;
 							return (false);
 						}

@@ -844,13 +844,19 @@ namespace MKY.IO.Serial.Usb
 					}
 				}
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "Exception while disposing device!");
+			}
 
 			try
 			{
 				StopThreads();
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "Exception while stopping threads!");
+			}
 
 			OnIOChanged(EventArgs.Empty);
 		}

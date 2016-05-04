@@ -565,7 +565,7 @@ namespace MKY.CommandLine
 				value = null;
 				field = null;
 
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Exception while parsing option!");
 
 				return (false);
 			}
@@ -586,7 +586,7 @@ namespace MKY.CommandLine
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Exception while initializing option!");
 				return (false);
 			}
 		}
@@ -609,7 +609,7 @@ namespace MKY.CommandLine
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Exception while initializing array option!");
 				return (false);
 			}
 		}
@@ -694,7 +694,7 @@ namespace MKY.CommandLine
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Exception while initializing value!");
 				return (false);
 			}
 		}

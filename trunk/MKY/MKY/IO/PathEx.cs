@@ -632,11 +632,11 @@ namespace MKY.IO
 		/// </summary>
 		public static string DoCombineDirectoryPaths(string pathA, string pathB)
 		{
-			// Convert paths to platform if needed.
+			// Convert paths to platform if needed:
 			pathA = ConvertToPlatform(pathA);
 			pathB = ConvertToPlatform(pathB);
 
-			// Create infos.
+			// Create infos:
 			DirectoryInfo pathInfoA = null;
 
 			string dirPathA = "";
@@ -651,30 +651,30 @@ namespace MKY.IO
 				string dirPathResult = "";
 				DirectoryInfo dirInfoResult = null;
 
-				// Trim leading '\'.
+				// Trim leading '\':
 				string s = pathB.TrimStart(Path.DirectorySeparatorChar);
 
-				// Check whether relative path points to any parent directory.
+				// Check whether relative path points to any parent directory:
 				if ((s.Length >= 2) && (StringEx.EqualsOrdinalIgnoreCase(s.Substring(0, 2), "..")))
 				{
 					DirectoryInfo pathInfoParent = pathInfoA;
 
 					do
 					{
-						// Detect invalidly long relative paths.
+						// Detect invalidly long relative paths:
 						if ((s.Length >= 3) && (StringEx.EqualsOrdinalIgnoreCase(s.Substring(0, 3), "...")))
 							break;
 
 						s = s.Remove(0, 2);
 						pathInfoParent = pathInfoParent.Parent;
 
-						// ".." or "..\".
+						// ".." or "..\":
 						if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))))
 						{
 							return (pathInfoParent.FullName);
 						}
 
-						// "..\<.. or Path>".
+						// "..\<.. or Path>":
 						if ((s.Length >= 1) && (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))))
 							s = s.Remove(0, 1);
 						else
@@ -686,18 +686,18 @@ namespace MKY.IO
 						DoPrepareDirectoryPath(Path.Combine(pathInfoParent.FullName, s), out pathInfoResult, out dirPathResult, out dirInfoResult);
 				}
 
-				// Check whether relative path points to current directory.
+				// Check whether relative path points to current directory:
 				else if ((s.Length >= 1) && (PathEx.Equals(s.Substring(0, 1), ".")))
 				{
 					s = s.Remove(0, 1);
 
-					// "." or ".\".
+					// "." or ".\":
 					if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture))))
 					{
 						return (dirPathA);
 					}
 
-					// ".\<Path>".
+					// ".\<Path>":
 					if (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString(CultureInfo.InvariantCulture)))
 					{
 						string combined = dirPathA + s.Substring(1);
@@ -705,7 +705,7 @@ namespace MKY.IO
 					}
 				}
 
-				// Use System.IO.Path.Combine() for the easy cases.
+				// Use System.IO.Path.Combine() for the easy cases:
 				else
 				{
 					string combined = Path.Combine(dirPathA, pathB);
@@ -716,7 +716,7 @@ namespace MKY.IO
 					return (dirPathResult);
 			}
 
-			// In case the second path was invalid, return the the first if possible.
+			// In case the second path was invalid, return the the first if possible:
 			if (pathInfoA != null)
 				return (dirPathA);
 			else
@@ -731,21 +731,21 @@ namespace MKY.IO
 		{
 			try
 			{
-				// DirectoryInfo throws if path contains invalid characters.
+				// Throws if path contains invalid characters:
 				pathInfo = new DirectoryInfo(path);
 			}
 			catch (ArgumentException ex)
 			{
-				Diagnostics.DebugEx.WriteException(typeof(PathEx), ex);
+				Diagnostics.DebugEx.WriteException(typeof(PathEx), ex, "Path contains invalid characters!");
 				pathInfo = null;
 			}
 
-			// Get directory and file name.
+			// Get directory and file name:
 			if (pathInfo != null)
 			{
 				DirectoryInfo temp = new DirectoryInfo(path);
 
-				// Make sure parent directory and directory name is properly returned.
+				// Make sure parent directory and directory name is properly returned:
 				if (temp.Parent != null)
 					dirPath = Path.Combine(temp.Parent.FullName, temp.Name);
 				else
@@ -768,16 +768,16 @@ namespace MKY.IO
 		{
 			try
 			{
-				// DirectoryInfo throws if path contains invalid characters.
+				// Throws if path contains invalid characters:
 				pathInfo = new DirectoryInfo(path);
 			}
 			catch (ArgumentException ex)
 			{
-				Diagnostics.DebugEx.WriteException(typeof(PathEx), ex);
+				Diagnostics.DebugEx.WriteException(typeof(PathEx), ex, "Path contains invalid characters!");
 				pathInfo = null;
 			}
 
-			// Get directory and file name.
+			// Get directory and file name:
 			if (pathInfo != null)
 			{
 				dirPath = Path.GetDirectoryName(path);

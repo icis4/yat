@@ -52,25 +52,7 @@ namespace MKY.Diagnostics
 		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteTimeStamp(Type type)
-		{
-			WriteTimeStamp(type, null);
-		}
-
-		/// <summary>
-		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[Conditional("DEBUG")]
-		public static void WriteTimeStamp(Type type, string callerMemberName)
-		{
-			WriteTimeStamp(type, callerMemberName, null);
-		}
-
-		/// <summary>
-		/// Writes source, type and time stamp to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[Conditional("DEBUG")]
-		public static void WriteTimeStamp(Type type, string callerMemberName, string message)
+		public static void WriteTimeStamp(Type type, string callerMemberName = null, string message = null)
 		{
 		#if (DEBUG)
 			DiagnosticsWriterOutput.WriteTimeStamp(debugWrapper, type, callerMemberName, message);
@@ -82,17 +64,7 @@ namespace MKY.Diagnostics
 		/// to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteException(Type type, Exception ex)
-		{
-			WriteException(type, ex, null);
-		}
-
-		/// <summary>
-		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[Conditional("DEBUG")]
-		public static void WriteException(Type type, Exception ex, string leadMessage)
+		public static void WriteException(Type type, Exception ex, string leadMessage = null)
 		{
 		#if (DEBUG)
 			DiagnosticsWriterOutput.WriteException(debugWrapper, type, ex, leadMessage);
@@ -103,16 +75,7 @@ namespace MKY.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteStack(Type type)
-		{
-			WriteStack(type, new StackTrace(), null);
-		}
-
-		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[Conditional("DEBUG")]
-		public static void WriteStack(Type type, string leadMessage)
+		public static void WriteStack(Type type, string leadMessage = null)
 		{
 			WriteStack(type, new StackTrace(), leadMessage);
 		}
@@ -121,16 +84,7 @@ namespace MKY.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteStack(Type type, StackTrace st)
-		{
-			WriteStack(type, st, null);
-		}
-
-		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[Conditional("DEBUG")]
-		public static void WriteStack(Type type, StackTrace st, string leadMessage)
+		public static void WriteStack(Type type, StackTrace st, string leadMessage = null)
 		{
 		#if (DEBUG)
 			DiagnosticsWriterOutput.WriteStack(debugWrapper, type, st, leadMessage);
@@ -142,17 +96,7 @@ namespace MKY.Diagnostics
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		[Conditional("DEBUG")]
-		public static void WriteWindowsFormsMessage(Type type, Message m)
-		{
-			WriteWindowsFormsMessage(type, m, null);
-		}
-
-		/// <summary>
-		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		[Conditional("DEBUG")]
-		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage)
+		public static void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
 		{
 		#if (DEBUG)
 			DiagnosticsWriterOutput.WriteWindowsFormsMessage(debugWrapper, type, m, leadMessage);
@@ -163,16 +107,7 @@ namespace MKY.Diagnostics
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
-		public static void WriteFileStream(Type type, FileStream fs)
-		{
-			WriteFileStream(type, fs, null);
-		}
-
-		/// <summary>
-		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Debug"/>.
-		/// </summary>
-		[Conditional("DEBUG")]
-		public static void WriteFileStream(Type type, FileStream fs, string leadMessage)
+		public static void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 		{
 		#if (DEBUG)
 			DiagnosticsWriterOutput.WriteFileStream(debugWrapper, type, fs, leadMessage);
