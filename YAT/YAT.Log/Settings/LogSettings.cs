@@ -185,7 +185,7 @@ namespace YAT.Log.Settings
 			NameChannel   = false;
 			NameDate      = true;
 			NameTime      = true;
-			NameSeparator = (FileNameSeparatorEx)FileNameSeparator.Dash;
+			NameSeparator = ((FileNameSeparatorEx)FileNameSeparator.Dash).ToSeparator();
 
 			FolderFormat  = false;
 			FolderChannel = false;

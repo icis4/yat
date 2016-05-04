@@ -321,7 +321,11 @@ namespace YAT.View.Forms
 		private void comboBox_Options_NameSeparator_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settingsInEdit.NameSeparator = (Log.FileNameSeparatorEx)(comboBox_Options_NameSeparator.Text);
+			{
+				Log.FileNameSeparatorEx separator;
+				if (Log.FileNameSeparatorEx.TryParse(comboBox_Options_NameSeparator.Text, out separator))
+					this.settingsInEdit.NameSeparator = separator.ToSeparator();
+			}
 		}
 
 		private void checkBox_Options_FolderFormat_CheckedChanged(object sender, EventArgs e)
@@ -458,7 +462,7 @@ namespace YAT.View.Forms
 			checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
 			checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
 			checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
-			comboBox_Options_NameSeparator.Text  = this.settingsInEdit.NameSeparator;
+			comboBox_Options_NameSeparator.Text  = ((Log.FileNameSeparatorEx)this.settingsInEdit.NameSeparator).ToDescription();
 
 			bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			checkBox_Options_NameDate.Enabled = dateTimeEnabled;
