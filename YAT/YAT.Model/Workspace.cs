@@ -168,7 +168,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				WriteDebugMessageLine("...failed!");
-				DebugEx.WriteException(this.GetType(), ex);
+				DebugEx.WriteException(GetType(), ex);
 
 				Dispose(); // Immediately call Dispose() to ensure no zombies remain!
 				throw; // Re-throw!
@@ -829,7 +829,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Error saving terminal!");
+				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
 
 				if (!isAutoSave)
 				{
@@ -857,7 +857,7 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Error saving terminal!");
+				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
 
 				if (!isAutoSave)
 				{
@@ -1547,7 +1547,7 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Failed to open terminal from settings!");
+				DebugEx.WriteException(GetType(), ex, "Failed to open terminal from settings!");
 				exception = ex;
 				return (false);
 			}
@@ -1633,7 +1633,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
 				settingsHandler = null;
 				exception = ex;
 				return (false);

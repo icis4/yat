@@ -61,23 +61,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes source, type and time stamp to the output writer of this object.
 			/// </summary>
-			public void WriteTimeStamp(Type type)
-			{
-				WriteTimeStamp(type, null);
-			}
-
-			/// <summary>
-			/// Writes source, type and time stamp to the output writer of this object.
-			/// </summary>
-			public void WriteTimeStamp(Type type, string callerMemberName)
-			{
-				WriteTimeStamp(type, callerMemberName, null);
-			}
-
-			/// <summary>
-			/// Writes source, type and time stamp to the output writer of this object.
-			/// </summary>
-			public void WriteTimeStamp(Type type, string callerMemberName, string message)
+			public void WriteTimeStamp(Type type, string callerMemberName = null, string message = null)
 			{
 				DiagnosticsWriterOutput.WriteTimeStamp(writer, type, callerMemberName, message);
 			}
@@ -86,16 +70,7 @@ namespace MKY.Diagnostics
 			/// Writes source, type, message and stack of the given exception and its inner
 			/// exceptions to the output writer of this object.
 			/// </summary>
-			public void WriteException(Type type, Exception ex)
-			{
-				WriteException(type, ex, null);
-			}
-
-			/// <summary>
-			/// Writes source, type, message and stack of the given exception and its inner
-			/// exceptions to the output writer of this object.
-			/// </summary>
-			public void WriteException(Type type, Exception ex, string leadMessage)
+			public void WriteException(Type type, Exception ex, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteException(writer, type, ex, leadMessage);
 			}
@@ -103,15 +78,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes a <see cref="StackTrace"/> to the output writer of this object.
 			/// </summary>
-			public void WriteStack(Type type)
-			{
-				WriteStack(type, new StackTrace(), null);
-			}
-
-			/// <summary>
-			/// Writes a <see cref="StackTrace"/> to the output writer of this object.
-			/// </summary>
-			public void WriteStack(Type type, string leadMessage)
+			public void WriteStack(Type type, string leadMessage = null)
 			{
 				WriteStack(type, new StackTrace(), leadMessage);
 			}
@@ -119,15 +86,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes a <see cref="StackTrace"/> to the output writer of this object.
 			/// </summary>
-			public void WriteStack(Type type, StackTrace st)
-			{
-				WriteStack(type, st, null);
-			}
-
-			/// <summary>
-			/// Writes a <see cref="StackTrace"/> to the output writer of this object.
-			/// </summary>
-			public void WriteStack(Type type, StackTrace st, string leadMessage)
+			public void WriteStack(Type type, StackTrace st, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteStack(writer, type, st, leadMessage);
 			}
@@ -136,16 +95,7 @@ namespace MKY.Diagnostics
 			/// Writes the properties of a <see cref="Message"/> to the output writer of this object.
 			/// </summary>
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-			public void WriteWindowsFormsMessage(Type type, Message m)
-			{
-				WriteWindowsFormsMessage(type, m, null);
-			}
-
-			/// <summary>
-			/// Writes the properties of a <see cref="Message"/> to the output writer of this object.
-			/// </summary>
-			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-			public void WriteWindowsFormsMessage(Type type, Message m, string leadMessage)
+			public void WriteWindowsFormsMessage(Type type, Message m, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteWindowsFormsMessage(writer, type, m, leadMessage);
 			}
@@ -153,15 +103,7 @@ namespace MKY.Diagnostics
 			/// <summary>
 			/// Writes the properties of a <see cref="FileStream"/> to the output writer of this object.
 			/// </summary>
-			public void WriteFileStream(Type type, FileStream fs)
-			{
-				WriteFileStream(type, fs, null);
-			}
-
-			/// <summary>
-			/// Writes the properties of a <see cref="FileStream"/> to the output writer of this object.
-			/// </summary>
-			public void WriteFileStream(Type type, FileStream fs, string leadMessage)
+			public void WriteFileStream(Type type, FileStream fs, string leadMessage = null)
 			{
 				DiagnosticsWriterOutput.WriteFileStream(writer, type, fs, leadMessage);
 			}
@@ -169,7 +111,7 @@ namespace MKY.Diagnostics
 
 		#endregion
 
-		private static TextWriterEx staticOut = new TextWriterEx(new ConsoleWrapper(Console.Out));
+		private static TextWriterEx staticOut   = new TextWriterEx(new ConsoleWrapper(Console.Out));
 		private static TextWriterEx staticError = new TextWriterEx(new ConsoleWrapper(Console.Error));
 
 		/// <summary>

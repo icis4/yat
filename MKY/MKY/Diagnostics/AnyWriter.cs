@@ -44,19 +44,20 @@ namespace MKY.Diagnostics
 		private static AnyWriterWrapper anyWriterWrapper = new AnyWriterWrapper();
 
 		/// <summary>
-		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to the given <see cref="TextWriter"/>.
+		/// Writes source, type and time stamp to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteException(TextWriter writer, Type type, Exception ex)
+		public static void WriteTimeStamp(TextWriter writer, Type type, string callerMemberName = null, string message = null)
 		{
-			WriteException(writer, type, ex, null);
+			anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteTimeStamp(anyWriterWrapper, type, callerMemberName, message);
+			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteException(TextWriter writer, Type type, Exception ex, string leadMessage)
+		public static void WriteException(TextWriter writer, Type type, Exception ex, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
 			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, type, ex, leadMessage);
@@ -66,15 +67,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, Type type)
-		{
-			WriteStack(writer, type, new StackTrace(), null);
-		}
-
-		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
-		/// </summary>
-		public static void WriteStack(TextWriter writer, Type type, string leadMessage)
+		public static void WriteStack(TextWriter writer, Type type, string leadMessage = null)
 		{
 			WriteStack(writer, type, new StackTrace(), leadMessage);
 		}
@@ -82,15 +75,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, Type type, StackTrace st)
-		{
-			WriteStack(writer, type, st, null);
-		}
-
-		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
-		/// </summary>
-		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string leadMessage)
+		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
 			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, type, st, leadMessage);
@@ -101,16 +86,7 @@ namespace MKY.Diagnostics
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m)
-		{
-			WriteWindowsFormsMessage(writer, type, m, null);
-		}
-
-		/// <summary>
-		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
-		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
-		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string leadMessage)
+		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
 			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, type, m, leadMessage);
@@ -120,15 +96,7 @@ namespace MKY.Diagnostics
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs)
-		{
-			WriteFileStream(writer, type, fs, null);
-		}
-
-		/// <summary>
-		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
-		/// </summary>
-		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string leadMessage)
+		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string leadMessage = null)
 		{
 			anyWriterWrapper.SetWriter(writer);
 			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, type, fs, leadMessage);

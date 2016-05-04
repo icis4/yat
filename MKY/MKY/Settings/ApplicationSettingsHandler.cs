@@ -30,11 +30,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
+using MKY.Diagnostics;
 using MKY.Xml;
 
 #endregion
@@ -295,7 +294,7 @@ namespace MKY.Settings
 
 				if ((this.effectiveFileAccess & FileAccessFlags.Read) == FileAccessFlags.Read)
 				{
-					// Try to open existing file of current version.
+					// Try to open existing file of current version:
 					object settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
 					if (settings != null)
 					{
@@ -303,10 +302,10 @@ namespace MKY.Settings
 						return (true);
 					}
 
-					// Alternatively, try to open an existing file of an older version.
+					// Alternatively, try to open an existing file of an older version:
 					if (FilePathIsDefined)
 					{
-						// Find all valid directories of older versions.
+						// Find all valid directories of older versions:
 						string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(FilePath));
 						string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 						List<string> oldDirectories = new List<string>();
@@ -319,10 +318,13 @@ namespace MKY.Settings
 								if (version < currentVersion)
 									oldDirectories.Add(directory);
 							}
-							catch { }
+							catch (Exception ex)
+							{
+								DebugEx.WriteException(GetType(), ex, "Exception while searching through directories!");
+							}
 						}
 
-						// Iterate through the directories, start with most recent.
+						// Iterate through the directories, start with most recent:
 						string fileName = Path.GetFileName(FilePath);
 						oldDirectories.Sort();
 						for (int i = oldDirectories.Count - 1; i >= 0; i--)
@@ -904,14 +906,17 @@ namespace MKY.Settings
 			if (!LoadRoamingUserSettings())
 				result = false;
 
-			// Immediately try to save settings to reflect current version.
+			// Immediately try to save settings to reflect current version:
 			try
 			{
 				Save();
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(GetType(), ex, "Exception while initially saving settings!");
+			}
 
-			// Return load result.
+			// Return load result:
 			return (result);
 		}
 

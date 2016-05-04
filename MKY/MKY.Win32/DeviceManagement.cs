@@ -661,7 +661,10 @@ namespace MKY.Win32
 				NativeMethods.UnregisterDeviceNotification(deviceNotificationHandle);
 				//// Ignore failures.
 			}
-			catch { }
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(DeviceManagement), ex, "Exception while unregistering device notification handle!");
+			}
 		}
 
 		/// <summary>
@@ -718,7 +721,7 @@ namespace MKY.Win32
 			}
 			catch (ArgumentException ex)
 			{
-				Diagnostics.DebugEx.WriteException(typeof(DeviceManagement), ex);
+				DebugEx.WriteException(typeof(DeviceManagement), ex);
 			}
 
 			devicePath = "";

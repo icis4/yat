@@ -91,7 +91,7 @@ namespace MKY.IO.Ports
 					}
 					catch (Exception ex)
 					{
-						DebugEx.WriteException(typeof(SerialPortSearcher), ex);
+						DebugEx.WriteException(typeof(SerialPortSearcher), ex, "Exception while accessing WMI!");
 					}
 				}
 
@@ -119,13 +119,13 @@ namespace MKY.IO.Ports
 					}
 					catch (Exception ex)
 					{
-						DebugEx.WriteException(typeof(SerialPortSearcher), ex);
+						DebugEx.WriteException(typeof(SerialPortSearcher), ex, "Exception while accessing WMI!");
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(typeof(SerialPortSearcher), ex);
+				DebugEx.WriteException(typeof(SerialPortSearcher), ex, "Exception while accessing WMI!");
 			}
 
 			return (result);

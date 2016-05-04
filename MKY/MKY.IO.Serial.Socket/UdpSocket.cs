@@ -281,7 +281,8 @@ namespace MKY.IO.Serial.Socket
 					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 					DisposeSocketAndThread();
 
-					this.stateLock.Dispose();
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
 				}
 
 				// Set state to disposed:

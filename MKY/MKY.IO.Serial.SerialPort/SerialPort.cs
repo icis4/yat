@@ -220,10 +220,11 @@ namespace MKY.IO.Serial.SerialPort
 				// Dispose of managed resources if requested:
 				if (disposing)
 				{
-					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
+					// In the 'normal' case, the items have already been disposed of in e.g. Stop().
 					ResetPortAndThreadsAndNotify(false); // Suppress notifications during disposal!
 
-					this.stateLock.Dispose();
+					if (this.stateLock != null)
+						this.stateLock.Dispose();
 				}
 
 				// Set state to disposed:
@@ -1004,7 +1005,7 @@ namespace MKY.IO.Serial.SerialPort
 				this.port.Write(a, 0, 1); // Do not lock, may take some time!
 				writeSuccess = true;
 
-				WriteDebugTransmissionMessageLine("...writing done");
+				WriteDebugTransmissionMessageLine("...writing done.");
 
 				// Handle XOn/XOff if required:
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
@@ -1018,17 +1019,17 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (TimeoutException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Timeout while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
 				isWriteTimeout = true;
 			}
 			catch (InvalidOperationException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Invalid operation while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Invalid operation while writing to port!");
 				isOutputBreak = true;
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Unspecified error while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Unspecified error while writing to port!");
 				unhandled = ex;
 			}
 
@@ -1089,7 +1090,7 @@ namespace MKY.IO.Serial.SerialPort
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
 				writeSuccess = true;
 
-				WriteDebugTransmissionMessageLine("...writing done");
+				WriteDebugTransmissionMessageLine("...writing done.");
 
 				// Finalize the write operation:
 				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -1117,19 +1118,19 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (TimeoutException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Timeout while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
 				effectiveChunkData = null;
 				isWriteTimeout = true;
 			}
 			catch (InvalidOperationException ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Invalid operation while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Invalid operation while writing to port!");
 				effectiveChunkData = null;
 				isOutputBreak = true;
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Unspecified error while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Unspecified error while writing to port!");
 				effectiveChunkData = null;
 				unhandled = ex;
 			}
@@ -1513,7 +1514,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Exception while notifying!");
+				DebugEx.WriteException(GetType(), ex, "Exception while notifying!");
 			}
 		}
 
@@ -2012,7 +2013,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (Exception ex) // Handle any exception, port could e.g. got closed in the meantime.
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Exception while invoking 'OnIOControlChanged' event after timeout!");
+				DebugEx.WriteException(GetType(), ex, "Exception while invoking 'OnIOControlChanged' event after timeout!");
 			}
 		}
 

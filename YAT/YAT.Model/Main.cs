@@ -1328,7 +1328,7 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex, "Failed to open workspace from settings!");
+				DebugEx.WriteException(GetType(), ex, "Failed to open workspace from settings!");
 				return (false);
 			}
 
@@ -1417,7 +1417,7 @@ namespace YAT.Model
 				{
 					settingsHandler = sh;
 
-					// Try to retrieve GUID from file path (in case of auto saved workspace files).
+					// Try to retrieve GUID from file path (in case of auto saved workspace files):
 					if (!GuidEx.TryCreateGuidFromFilePath(filePath, Application.Settings.GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
 						guid = Guid.NewGuid();
 
@@ -1434,7 +1434,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Failed to open workspace file!");
 				settingsHandler = null;
 				guid = Guid.Empty;
 				exception = ex;
@@ -1510,7 +1510,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
 				settingsHandler = null;
 				exception = ex;
 				return (false);
@@ -1630,7 +1630,8 @@ namespace YAT.Model
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(GetType(), ex);
+							DebugEx.WriteException(GetType(), ex, "Exception while trying to transmit text!");
+
 							OnFixedStatusTextRequest("Unable to transmit text!");
 							OnMessageInputRequest
 							(
@@ -1658,7 +1659,8 @@ namespace YAT.Model
 						}
 						catch (Exception ex)
 						{
-							DebugEx.WriteException(GetType(), ex);
+							DebugEx.WriteException(GetType(), ex, "Exception while trying to transmit file!");
+
 							OnFixedStatusTextRequest("Unable to transmit file!");
 							OnMessageInputRequest
 							(
@@ -1755,7 +1757,8 @@ namespace YAT.Model
 					}
 					catch (Exception ex)
 					{
-						DebugEx.WriteException(GetType(), ex);
+						DebugEx.WriteException(GetType(), ex, "Exception while trying to exit!");
+
 						OnFixedStatusTextRequest("Unable to exit!");
 						OnMessageInputRequest
 						(

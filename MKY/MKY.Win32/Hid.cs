@@ -775,7 +775,6 @@ namespace MKY.Win32
 			Debug.WriteLine("USB HID couldn't create shared device query handle:");
 			Debug.Indent();
 			Debug.WriteLine("Path = " + devicePath);
-			Debug.WriteLine("");
 			Debug.WriteLine(WinError.GetLastError());
 			Debug.Unindent();
 
@@ -809,7 +808,6 @@ namespace MKY.Win32
 			Debug.WriteLine("USB HID couldn't create shared device read/write handle.");
 			Debug.Indent();
 			Debug.WriteLine("Path = " + devicePath);
-			Debug.WriteLine("");
 			Debug.WriteLine(WinError.GetLastError());
 			Debug.Unindent();
 
@@ -826,8 +824,8 @@ namespace MKY.Win32
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
 
 			ShowDebugStringAccessMessageBox(success,
-			                               @"...successfully retrieved """ + manufacturer + @"""",
-			                                "...failed to retrieve manufacturer string");
+			                               @"...successfully retrieved """ + manufacturer + @""".",
+			                                "...failed to retrieve manufacturer string.");
 
 			return (success);
 		}
@@ -841,8 +839,8 @@ namespace MKY.Win32
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
 
 			ShowDebugStringAccessMessageBox(success,
-			                               @"...successfully retrieved """ + product + @"""",
-			                                "...failed to retrieve product string");
+			                               @"...successfully retrieved """ + product + @""".",
+			                                "...failed to retrieve product string.");
 
 			return (success);
 		}
@@ -856,8 +854,8 @@ namespace MKY.Win32
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
 
 			ShowDebugStringAccessMessageBox(success,
-			                               @"...successfully retrieved """ + serial + @"""",
-			                                "...failed to retrieve serial string");
+			                               @"...successfully retrieved """ + serial + @""".",
+			                                "...failed to retrieve serial string.");
 
 			return (success);
 		}
@@ -893,14 +891,14 @@ namespace MKY.Win32
 						if (!string.IsNullOrEmpty(contentString) &&
 							(contentString != languageString)) // Looks like a proper invariant string.
 						{
-							WriteDebugStringAccessMessageLine(@"USB device string """ + contentString + @""" successfully retrieved");
+							WriteDebugStringAccessMessageLine(@"USB device string """ + contentString + @""" successfully retrieved.");
 
 							hidString = contentString;
 							return (true);
 						}
 						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
 						{
-							WriteDebugStringAccessMessageLine(@"USB device string is not available on this device");
+							WriteDebugStringAccessMessageLine(@"USB device string is not available on this device.");
 
 							hidString = "";
 							return (true);

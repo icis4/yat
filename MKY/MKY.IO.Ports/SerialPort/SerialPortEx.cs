@@ -671,7 +671,7 @@ namespace MKY.IO.Ports
 				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(GetType(), ex);
+					DebugEx.WriteException(GetType(), ex, "Exception while accessing pins!");
 				}
 
 				return (pins);
@@ -1094,7 +1094,7 @@ namespace MKY.IO.Ports
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(GetType(), ex);
+				DebugEx.WriteException(GetType(), ex, "Exception while accessing pins!");
 			}
 
 			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
