@@ -135,7 +135,7 @@ namespace MKY.Time
 			string strA = TimeStamp.ToString(CultureInfo.InvariantCulture);
 			string strB = Item.ToString();
 
-			return (string.Concat(strA, " / ", strB));
+			return (strA + " / " + strB);
 		}
 
 		#endregion
