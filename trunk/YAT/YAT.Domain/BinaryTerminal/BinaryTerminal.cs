@@ -649,20 +649,12 @@ namespace YAT.Domain
 		private void ExecuteLineEnd(LineState lineState, IODirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
-
 			if (TerminalSettings.Display.ShowLength)
 			{
-				int length = 0;
-				foreach (DisplayElement e in lineState.LineElements)
-				{
-					if (e.IsData)
-						length += e.DataCount;
-				}
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.Length(length));
+				lp.Add(new DisplayElement.Length(lineState.LineElements.DataCount)); // Direction may be both!
 			}
-
-			lp.Add(new DisplayElement.LineBreak((Direction)d));
+			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 			elements.AddRange(lp);

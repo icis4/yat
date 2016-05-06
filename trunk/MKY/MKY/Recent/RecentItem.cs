@@ -42,13 +42,13 @@ namespace MKY.Recent
 		/// Needed for XML serialization.
 		/// </remarks>
 		public RecentItem()
-			: this (default(T))
+			: this(default(T))
 		{
 		}
 
 		/// <summary></summary>
 		public RecentItem(T item)
-			: this (item, DateTime.Now)
+			: this(item, DateTime.Now)
 		{
 		}
 

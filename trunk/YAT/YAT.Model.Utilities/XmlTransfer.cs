@@ -89,7 +89,7 @@ namespace YAT.Model.Utilities
 
 		/// <summary></summary>
 		public XmlTransferRawLine(DateTime timeStamp, Direction direction, byte[] data)
-			: base (timeStamp, direction)
+			: base(timeStamp, direction)
 		{
 			this.data = data;
 		}

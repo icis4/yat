@@ -144,7 +144,7 @@ namespace MKY.Collections.Generic
 		/// </remarks>
 		public override string ToString()
 		{
-			return (Value1 + " / " + Value2 + " / " + Value3));
+			return (Value1 + " / " + Value2 + " / " + Value3);
 		}
 
 		#endregion

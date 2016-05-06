@@ -734,9 +734,9 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.Length(line.DataCount));
+				lp.Add(new DisplayElement.Length(line.DataCount)); // Direction may be both!
 			}
-			lp.Add(new DisplayElement.LineBreak((Direction)d));
+			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.
 
