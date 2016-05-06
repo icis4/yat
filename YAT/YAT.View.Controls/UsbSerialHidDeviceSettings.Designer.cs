@@ -104,7 +104,6 @@
 			// 
 			// checkBox_PrependPayloadByteLength
 			// 
-			this.checkBox_PrependPayloadByteLength.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_PrependPayloadByteLength.AutoSize = true;
 			this.checkBox_PrependPayloadByteLength.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBox_PrependPayloadByteLength.Location = new System.Drawing.Point(119, 11);
@@ -120,7 +119,6 @@
 			// 
 			// checkBox_AppendTerminatingZero
 			// 
-			this.checkBox_AppendTerminatingZero.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_AppendTerminatingZero.AutoSize = true;
 			this.checkBox_AppendTerminatingZero.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBox_AppendTerminatingZero.Location = new System.Drawing.Point(117, 31);
@@ -135,7 +133,6 @@
 			// 
 			// checkBox_FillLastReport
 			// 
-			this.checkBox_FillLastReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_FillLastReport.AutoSize = true;
 			this.checkBox_FillLastReport.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkBox_FillLastReport.Location = new System.Drawing.Point(170, 51);
@@ -231,7 +228,6 @@
 			// 
 			// label_Preview_1
 			// 
-			this.label_Preview_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_1.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_1.Location = new System.Drawing.Point(261, 78);
@@ -243,7 +239,6 @@
 			// 
 			// label_Preview_2
 			// 
-			this.label_Preview_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_2.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_2.Location = new System.Drawing.Point(261, 90);
@@ -255,7 +250,6 @@
 			// 
 			// label_Preview_3
 			// 
-			this.label_Preview_3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_3.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_3.Location = new System.Drawing.Point(261, 102);
@@ -267,7 +261,6 @@
 			// 
 			// label_Preview_4
 			// 
-			this.label_Preview_4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_4.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_4.Location = new System.Drawing.Point(261, 114);
@@ -279,7 +272,6 @@
 			// 
 			// label_Preview_5
 			// 
-			this.label_Preview_5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_5.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_5.Location = new System.Drawing.Point(261, 126);
@@ -291,7 +283,6 @@
 			// 
 			// label_Preview_6
 			// 
-			this.label_Preview_6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_6.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_6.Location = new System.Drawing.Point(261, 138);
@@ -303,7 +294,6 @@
 			// 
 			// label_Preview_7
 			// 
-			this.label_Preview_7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Preview_7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Preview_7.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Preview_7.Location = new System.Drawing.Point(261, 150);

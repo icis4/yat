@@ -50,10 +50,14 @@ namespace MKY.IO.Usb
 		// Static Events
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Occurs when an USB device is connected to the computer.
+		/// </summary>
 		public static event EventHandler<DeviceEventArgs> DeviceConnected;
 
-		/// <summary></summary>
+		/// <summary>
+		/// Occurs when an USB device is disconnected from the computer.
+		/// </summary>
 		public static event EventHandler<DeviceEventArgs> DeviceDisconnected;
 
 		#endregion
@@ -721,7 +725,7 @@ namespace MKY.IO.Usb
 			SafeFileHandle deviceHandle;
 			if (!string.IsNullOrEmpty(Path) && Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
 			{
-				// Getting a handle means the device is connected to the computer.
+				// Getting a handle means the device is connected to the computer:
 				deviceHandle.Close();
 				this.isConnected = true;
 			}
@@ -917,7 +921,7 @@ namespace MKY.IO.Usb
 		{
 			if (Info == e.DeviceInfo)
 			{
-				// Force reinitialize with new device info.
+				// Force reinitialize with new device info:
 				Reinitialize(e.DeviceInfo);
 
 				OnConnected(EventArgs.Empty);
