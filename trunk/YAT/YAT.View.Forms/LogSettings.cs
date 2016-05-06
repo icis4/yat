@@ -31,6 +31,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -211,7 +212,7 @@ namespace YAT.View.Forms
 
 		private void comboBox_Raw_Extension_Validating(object sender, CancelEventArgs e)
 		{
-			if (!ValidateFilenameChars(comboBox_Raw_Extension.Text, "Extension"))
+			if (!ValidateFileNamePart(comboBox_Raw_Extension.Text, "Extension"))
 			{
 				e.Cancel = true;
 				return;
@@ -267,7 +268,7 @@ namespace YAT.View.Forms
 
 		private void comboBox_Neat_Extension_Validating(object sender, CancelEventArgs e)
 		{
-			if (!ValidateFilenameChars(comboBox_Neat_Extension.Text, "Extension"))
+			if (!ValidateFileNamePart(comboBox_Neat_Extension.Text, "Extension"))
 			{
 				e.Cancel = true;
 				return;
@@ -312,19 +313,26 @@ namespace YAT.View.Forms
 				this.settingsInEdit.NameTime = checkBox_Options_NameTime.Checked;
 		}
 
-		private void comboBox_Options_NameSeparator_Validating(object sender, CancelEventArgs e)
-		{
-			if (!ValidateFilenameChars(comboBox_Options_NameSeparator.Text, "Separator"))
-				e.Cancel = true;
-		}
-
-		private void comboBox_Options_NameSeparator_TextChanged(object sender, EventArgs e)
+		private void comboBox_Options_NameSeparator_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				Log.FileNameSeparatorEx separator;
-				if (Log.FileNameSeparatorEx.TryParse(comboBox_Options_NameSeparator.Text, out separator))
-					this.settingsInEdit.NameSeparator = separator.ToSeparator();
+				var enclosure = (comboBox_Options_NameSeparator.SelectedItem as Log.FileNameSeparatorEx);
+				if (enclosure != null)
+					this.settingsInEdit.NameSeparator = enclosure.ToSeparator();
+			}
+		}
+
+		private void comboBox_Options_NameSeparator_Validating(object sender, CancelEventArgs e)
+		{
+			if (ValidateFileNamePart(comboBox_Options_NameSeparator.Text, "Separator"))
+			{
+				if (!this.isSettingControls)
+					this.settingsInEdit.NameSeparator = comboBox_Options_NameSeparator.Text;
+			}
+			else
+			{
+				e.Cancel = true;
 			}
 		}
 
@@ -462,7 +470,12 @@ namespace YAT.View.Forms
 			checkBox_Options_NameChannel.Checked = this.settingsInEdit.NameChannel;
 			checkBox_Options_NameDate.Checked    = this.settingsInEdit.NameDate;
 			checkBox_Options_NameTime.Checked    = this.settingsInEdit.NameTime;
-			comboBox_Options_NameSeparator.Text  = ((Log.FileNameSeparatorEx)this.settingsInEdit.NameSeparator).ToDescription();
+
+			Log.FileNameSeparatorEx enclosure;
+			if (Log.FileNameSeparatorEx.TryParse(this.settingsInEdit.NameSeparator, out enclosure))
+				comboBox_Options_NameSeparator.SelectedItem = enclosure;
+			else
+				comboBox_Options_NameSeparator.Text = this.settingsInEdit.NameSeparator;
 
 			bool dateTimeEnabled = (this.settingsInEdit.WriteMode == Log.LogFileWriteMode.Create);
 			checkBox_Options_NameDate.Enabled = dateTimeEnabled;
@@ -521,32 +534,32 @@ namespace YAT.View.Forms
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private bool ValidateFilenameChars(string filenameChars, string title)
+		private bool ValidateFileNamePart(string fileNamePart, string title)
 		{
-			StringWriter invalid = new StringWriter(CultureInfo.InvariantCulture);
-			invalid.Write(Path.GetInvalidPathChars());
-			invalid.Write(Path.VolumeSeparatorChar);
-			invalid.Write(Path.DirectorySeparatorChar);
-			invalid.Write(Path.AltDirectorySeparatorChar);
-			invalid.Write(Path.PathSeparator);
-
-			if (StringEx.ContainsAny(filenameChars, invalid.ToString().ToCharArray()))
+			char[] invalid = Path.GetInvalidFileNameChars();
+			if (!StringEx.ContainsAny(fileNamePart, invalid))
 			{
-				StringWriter invalidPrintable = new StringWriter(CultureInfo.InvariantCulture);
-				foreach (char c in invalid.ToString().ToCharArray())
+				return (true);
+			}
+			else
+			{
+				StringBuilder sb = new StringBuilder(invalid.Length);
+				sb.Append(title);
+				sb.AppendLine(" contains invalid characters.");
+				sb.AppendLine();
+
+				foreach (char c in invalid)
 				{
-					if (!char.IsControl(c))
-						invalidPrintable.Write(c);
+					if (!char.IsControl(c) && !char.IsWhiteSpace(c))
+						sb.Append(c);
 				}
 
-				string message =
-					title + " contains invalid characters." + Environment.NewLine + Environment.NewLine +
-					invalidPrintable.ToString() + " are not allowed in file names.";
+				sb.Append(" are not allowed in file names.");
 
 				MessageBoxEx.Show
 				(
 					this,
-					message,
+					sb.ToString(),
 					"Invalid Characters",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation
@@ -554,7 +567,6 @@ namespace YAT.View.Forms
 
 				return (false);
 			}
-			return (true);
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

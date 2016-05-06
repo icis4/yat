@@ -42,7 +42,7 @@ using YAT.View.Utilities;
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
-	public partial class TextTerminalSettings : System.Windows.Forms.Form
+	public partial class TextTerminalSettings : Form
 	{
 		#region Fields
 		//==========================================================================================
@@ -161,8 +161,6 @@ namespace YAT.View.Forms
 				var eol = (comboBox_TxEol.SelectedItem as Domain.EolEx);
 				if (eol != null)
 					this.settingsInEdit.TxEol = eol.ToSequenceString();
-				else
-					this.settingsInEdit.TxEol = comboBox_TxEol.Text;
 
 				if (!this.settingsInEdit.SeparateTxRxEol)
 					this.settingsInEdit.RxEol = this.settingsInEdit.TxEol;
@@ -216,8 +214,6 @@ namespace YAT.View.Forms
 				var eol = (comboBox_RxEol.SelectedItem as Domain.EolEx);
 				if (eol != null)
 					this.settingsInEdit.RxEol = eol.ToSequenceString();
-				else
-					this.settingsInEdit.RxEol = comboBox_RxEol.Text;
 			}
 		}
 

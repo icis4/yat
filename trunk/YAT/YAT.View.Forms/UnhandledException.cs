@@ -44,7 +44,7 @@ namespace YAT.View.Forms
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Form indeed deals with exceptions.")]
-	public partial class UnhandledException : System.Windows.Forms.Form
+	public partial class UnhandledException : Form
 	{
 		private Exception exception;
 		private string title;

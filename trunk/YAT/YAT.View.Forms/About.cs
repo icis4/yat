@@ -48,7 +48,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
-	public partial class About : System.Windows.Forms.Form
+	public partial class About : Form
 	{
 		/// <summary></summary>
 		public About()

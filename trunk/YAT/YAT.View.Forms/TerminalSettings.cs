@@ -38,7 +38,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
-	public partial class TerminalSettings : System.Windows.Forms.Form
+	public partial class TerminalSettings : Form
 	{
 		#region Fields
 		//==========================================================================================

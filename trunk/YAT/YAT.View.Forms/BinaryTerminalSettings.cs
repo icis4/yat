@@ -36,7 +36,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
-	public partial class BinaryTerminalSettings : System.Windows.Forms.Form
+	public partial class BinaryTerminalSettings : Form
 	{
 		#region Fields
 		//==========================================================================================
