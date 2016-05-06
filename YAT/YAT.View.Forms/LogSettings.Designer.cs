@@ -257,7 +257,8 @@ namespace YAT.View.Forms
 			this.comboBox_Options_NameSeparator.Size = new System.Drawing.Size(149, 21);
 			this.comboBox_Options_NameSeparator.TabIndex = 5;
 			this.toolTip.SetToolTip(this.comboBox_Options_NameSeparator, resources.GetString("comboBox_Options_NameSeparator.ToolTip"));
-			this.comboBox_Options_NameSeparator.TextChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_TextChanged);
+			this.comboBox_Options_NameSeparator.SelectedIndexChanged += new System.EventHandler(this.comboBox_Options_NameSeparator_SelectedIndexChanged);
+			this.comboBox_Options_NameSeparator.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Options_NameSeparator_Validating);
 			// 
 			// checkBox_Options_NameChannel
 			// 
