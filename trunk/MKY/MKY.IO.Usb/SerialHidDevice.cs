@@ -104,10 +104,14 @@ namespace MKY.IO.Usb
 		// Static Events
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Occurs when an USB device is connected to the computer.
+		/// </summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceConnected;
 
-		/// <summary></summary>
+		/// <summary>
+		/// Occurs when an USB device is disconnected from the computer.
+		/// </summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceDisconnected;
 
 		#endregion
@@ -1115,7 +1119,7 @@ namespace MKY.IO.Usb
 		{
 			if (Info == e.DeviceInfo)
 			{
-				// Force reinitialize with new device info.
+				// Force reinitialize with new device info:
 				Reinitialize(e.DeviceInfo);
 
 				OnConnected(EventArgs.Empty);
