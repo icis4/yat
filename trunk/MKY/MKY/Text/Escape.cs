@@ -89,6 +89,12 @@ namespace MKY.Text
 		/// </remarks>
 		public static bool TryParse(string s, out byte result)
 		{
+			if (s == null)
+			{
+				result = 0x00;
+				return (false);
+			}
+
 			// Do not s = s.Trim(); due to reason described above.
 
 			switch (s.ToUpper(CultureInfo.InvariantCulture))

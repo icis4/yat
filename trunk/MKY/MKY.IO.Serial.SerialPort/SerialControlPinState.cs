@@ -148,9 +148,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static bool TryParse(string s, out SerialControlPinState result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase   (s, Automatic_string) ||
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new SerialControlPinStateEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, Automatic_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, Automatic_stringAlternatives))
 			{
 				result = SerialControlPinState.Automatic;
@@ -167,11 +173,6 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				result = SerialControlPinState.Enabled;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new SerialControlPinStateEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

@@ -200,9 +200,15 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static bool TryParse(string s, out WorkspaceLayout result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Automatic_string))
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new WorkspaceLayoutEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Automatic_string))
 			{
 				result = WorkspaceLayout.Automatic;
 				return (true);
@@ -236,11 +242,6 @@ namespace YAT.Model.Types
 			{
 				result = WorkspaceLayout.Maximize;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new WorkspaceLayoutEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

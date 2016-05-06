@@ -146,9 +146,15 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public static bool TryParse(string s, out Endianness result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, BigEndian_string))
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new EndiannessEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, BigEndian_string))
 			{
 				result = Endianness.BigEndian;
 				return (true);
@@ -157,11 +163,6 @@ namespace YAT.Domain
 			{
 				result = Endianness.LittleEndian;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new EndiannessEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

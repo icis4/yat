@@ -162,9 +162,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out TerminalType result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase    (s, Text_string) ||
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new TerminalTypeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase    (s, Text_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase    (s, Text_stringShort) ||
 			         StringEx.StartsWithOrdinalIgnoreCase(s, Text_stringStart))
 			{
@@ -177,11 +183,6 @@ namespace YAT.Domain
 			{
 				result = TerminalType.Binary;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new TerminalTypeEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

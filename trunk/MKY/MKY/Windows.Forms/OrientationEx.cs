@@ -126,9 +126,15 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public static bool TryParse(string s, out Orientation result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new OrientationEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Horizontal_string))
 			{
 				result = Orientation.Horizontal;
 				return (true);
@@ -137,11 +143,6 @@ namespace MKY.Windows.Forms
 			{
 				result = Orientation.Vertical;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new OrientationEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

@@ -206,9 +206,15 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static bool TryParse(string s, out SocketType result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string))
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new SocketTypeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, TcpClient_string))
 			{
 				result = SocketType.TcpClient;
 				return (true);
@@ -239,11 +245,6 @@ namespace MKY.IO.Serial.Socket
 			{
 				result = SocketType.UdpPairSocket;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new SocketTypeEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

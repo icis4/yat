@@ -206,9 +206,15 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParse(string s, out SerialHidReportFormatPreset result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.StartsWithAnyOrdinalIgnoreCase(s, None_stringStart))
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = SerialHidReportFormatPreset.None;
+				return (true);
+			}
+			else if (StringEx.StartsWithAnyOrdinalIgnoreCase(s, None_stringStart))
 			{
 				result = SerialHidReportFormatPreset.None;
 				return (true);
@@ -237,11 +243,6 @@ namespace MKY.IO.Usb
 			{
 				result = SerialHidReportFormatPreset.YAT;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new SerialHidReportFormatPresetEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

@@ -176,9 +176,15 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		public static bool TryParse(string s, out SerialHidFlowControl result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = SerialHidFlowControl.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = SerialHidFlowControl.None;
@@ -197,11 +203,6 @@ namespace MKY.IO.Serial.Usb
 			{
 				result = SerialHidFlowControl.ManualSoftware;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new SerialHidFlowControlEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

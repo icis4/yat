@@ -210,9 +210,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out Radix result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringShort) ||
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new RadixEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_stringMiddle) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Bin_string))
 			{
@@ -253,11 +259,6 @@ namespace YAT.Domain
 			{
 				result = Radix.String;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new RadixEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

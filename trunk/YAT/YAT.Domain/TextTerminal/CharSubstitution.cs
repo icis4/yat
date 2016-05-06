@@ -150,16 +150,12 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out CharSubstitution result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
+			if (string.IsNullOrEmpty(s)) // None!
 			{
-				result = CharSubstitution.ToUpper;
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToLower_string))
-			{
-				result = CharSubstitution.ToLower;
+				result = CharSubstitution.None;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
@@ -167,9 +163,14 @@ namespace YAT.Domain
 				result = CharSubstitution.None;
 				return (true);
 			}
-			else if (string.IsNullOrEmpty(s)) // None!
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToUpper_string))
 			{
-				result = CharSubstitution.None;
+				result = CharSubstitution.ToUpper;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, ToLower_string))
+			{
+				result = CharSubstitution.ToLower;
 				return (true);
 			}
 			else // Invalid string!

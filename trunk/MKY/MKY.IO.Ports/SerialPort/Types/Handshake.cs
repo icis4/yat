@@ -159,9 +159,15 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static bool TryParse(string s, out Handshake result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new HandshakeEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = Handshake.None;
@@ -187,11 +193,6 @@ namespace MKY.IO.Ports
 			{
 				result = Handshake.RequestToSendXOnXOff;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new HandshakeEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

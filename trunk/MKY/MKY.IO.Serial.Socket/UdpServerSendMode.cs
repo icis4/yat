@@ -147,9 +147,15 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static bool TryParse(string s, out UdpServerSendMode result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = UdpServerSendMode.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = UdpServerSendMode.None;
 				return (true);
@@ -163,11 +169,6 @@ namespace MKY.IO.Serial.Socket
 			{
 				result = UdpServerSendMode.MostRecent;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new UdpServerSendModeEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

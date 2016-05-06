@@ -190,9 +190,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static bool TryParse(string s, out SerialFlowControl result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_string) ||
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new SerialFlowControlEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (s, ManualHardware_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, ManualHardware_stringAlternatives))
 			{
@@ -227,11 +233,6 @@ namespace MKY.IO.Serial.SerialPort
 				{
 					result = new SerialFlowControlEx((SerialFlowControlEx)handshake);
 					return (true);
-				}
-				else if (string.IsNullOrEmpty(s))
-				{
-					result = new SerialFlowControlEx(); // Default!
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
 				else // Invalid string!
 				{

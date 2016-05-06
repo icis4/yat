@@ -119,24 +119,16 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static bool TryParse(string s, out DataBitsEx result)
 		{
-			int intResult;
-			if (int.TryParse(s, out intResult)) // TryParse() trims whitespace.
+			DataBits enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				return (TryFrom(intResult, out result));
+				result = enumResult;
+				return (true);
 			}
 			else
 			{
-				s = s.Trim();
-				if (string.IsNullOrEmpty(s))
-				{
-					result = new DataBitsEx(); // Default!
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
-				}
-				else // Invalid string!
-				{
-					result = null;
-					return (false);
-				}
+				result = null;
+				return (false);
 			}
 		}
 
@@ -152,7 +144,9 @@ namespace MKY.IO.Ports
 			}
 			else
 			{
-				s = s.Trim();
+				if (s != null)
+					s = s.Trim();
+
 				if (string.IsNullOrEmpty(s))
 				{
 					result = new DataBitsEx(); // Default!
