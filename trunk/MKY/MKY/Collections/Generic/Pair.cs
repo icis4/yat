@@ -126,7 +126,7 @@ namespace MKY.Collections.Generic
 		/// </remarks>
 		public override string ToString()
 		{
-			return (string.Concat(Value1, " / ", Value2));
+			return (Value1 + " / " + Value2);
 		}
 
 		#endregion

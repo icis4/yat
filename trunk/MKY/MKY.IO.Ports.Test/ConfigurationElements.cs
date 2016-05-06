@@ -153,7 +153,7 @@ namespace MKY.IO.Ports.Test
 			string strA = ((SerialPortPairConfigurationElement)element).PortA;
 			string strB = ((SerialPortPairConfigurationElement)element).PortB;
 
-			return (string.Concat(strA, " ", strB));
+			return (strA + " " + strB);
 		}
 
 		/// <summary></summary>
