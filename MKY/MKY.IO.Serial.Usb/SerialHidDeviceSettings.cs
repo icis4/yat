@@ -276,6 +276,7 @@ namespace MKY.IO.Serial.Usb
 				base.Equals(other) && // Compare all settings nodes.
 
 				(DeviceInfo   == other.DeviceInfo) &&
+
 				(ReportFormat == other.ReportFormat) &&
 				(RxIdUsage    == other.RxIdUsage) &&
 				(FlowControl  == other.FlowControl) &&
@@ -292,20 +293,19 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			int deviceInfoHashCode = 0;
-			if (DeviceInfo != null) // May be 'null' if no devices are available!
-				deviceInfoHashCode = DeviceInfo.GetHashCode();
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+				hashCode = (hashCode * 397) ^ (DeviceInfo != null ? DeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
 
-				deviceInfoHashCode         ^
-				ReportFormat.GetHashCode() ^
-				RxIdUsage   .GetHashCode() ^
-				FlowControl .GetHashCode() ^
-				AutoOpen    .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^  ReportFormat                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxIdUsage                      .GetHashCode();
+				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
+				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#region Object Members > Extensions

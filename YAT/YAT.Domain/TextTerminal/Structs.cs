@@ -92,12 +92,16 @@ namespace YAT.Domain
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled     .GetHashCode() ^
-				Delay       .GetHashCode() ^
-				LineInterval.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled     .GetHashCode();
+				hashCode = (hashCode * 397) ^ Delay       .GetHashCode();
+				hashCode = (hashCode * 397) ^ LineInterval.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion
@@ -185,11 +189,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled.GetHashCode() ^
-				Timeout.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

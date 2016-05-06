@@ -81,11 +81,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled.GetHashCode() ^
-				Size.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Size   .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>
@@ -189,11 +193,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled.GetHashCode() ^
-				Size   .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Size   .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>
@@ -304,12 +312,16 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled .GetHashCode() ^
-				Size    .GetHashCode() ^
-				Interval.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled .GetHashCode();
+				hashCode = (hashCode * 397) ^ Size    .GetHashCode();
+				hashCode = (hashCode * 397) ^ Interval.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>

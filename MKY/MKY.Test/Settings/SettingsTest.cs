@@ -138,11 +138,14 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public override int GetHashCode()
 			{
-				return
-				(
-					base.GetHashCode() ^ // Get hash code of all settings nodes.
-					SimpleValue.GetHashCode()
-				);
+				unchecked
+				{
+					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+					hashCode = (hashCode * 397) ^ SimpleValue;
+
+					return (hashCode);
+				}
 			}
 
 			#endregion
@@ -291,11 +294,14 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public override int GetHashCode()
 			{
-				return
-				(
-					base.GetHashCode() ^ // Get hash code of all settings nodes.
-					SimpleValue.GetHashCode()
-				);
+				unchecked
+				{
+					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+					hashCode = (hashCode * 397) ^ SimpleValue;
+
+					return (hashCode);
+				}
 			}
 
 			#endregion
@@ -413,11 +419,14 @@ namespace MKY.Test.Settings
 			/// </remarks>
 			public override int GetHashCode()
 			{
-				return
-				(
-					base.GetHashCode() ^ // Get hash code of all settings nodes.
-					SimpleValue.GetHashCode()
-				);
+				unchecked
+				{
+					int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
+
+					hashCode = (hashCode * 397) ^ SimpleValue;
+
+					return (hashCode);
+				}
 			}
 
 			#endregion

@@ -415,10 +415,13 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			if (this.path != null)
-				return (this.path.GetHashCode());
-			else
-				return (base.GetHashCode());
+			unchecked
+			{
+				if (this.path != null)
+					return (this.path.GetHashCode());
+				else
+					return (base.GetHashCode());
+			}
 		}
 
 		/// <summary>

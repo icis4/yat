@@ -204,15 +204,17 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				ShowConnectTime     .GetHashCode() ^
-				ShowCountAndRate    .GetHashCode() ^
-				ShowFlowControlCount.GetHashCode() ^
-				ShowBreakCount      .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ ShowConnectTime     .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowCountAndRate    .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowFlowControlCount.GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowBreakCount      .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

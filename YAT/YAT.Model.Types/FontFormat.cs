@@ -190,12 +190,16 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Name .GetHashCode() ^
-				Size .GetHashCode() ^
-				Style.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                   (Name != null ? Name.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ Size               .GetHashCode();
+				hashCode = (hashCode * 397) ^ Style              .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

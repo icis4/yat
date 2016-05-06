@@ -123,12 +123,16 @@ namespace MKY.Collections.Generic
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Value1.GetHashCode() ^
-				Value2.GetHashCode() ^
-				Value3.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Value1.GetHashCode();
+				hashCode = (hashCode * 397) ^ Value2.GetHashCode();
+				hashCode = (hashCode * 397) ^ Value3.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>

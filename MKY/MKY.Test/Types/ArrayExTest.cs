@@ -93,7 +93,10 @@ namespace MKY.Test.Types
 			/// </remarks>
 			public override int GetHashCode()
 			{
-				return (A.GetHashCode() ^ B.GetHashCode());
+				unchecked
+				{
+					return (A.GetHashCode() ^ B.GetHashCode());
+				}
 			}
 		}
 

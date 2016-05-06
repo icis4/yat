@@ -244,12 +244,14 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				UserName.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ (UserName != null ? UserName.GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

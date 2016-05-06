@@ -432,26 +432,28 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				SeparateTxRxRadix .GetHashCode() ^
-				TxRadix           .GetHashCode() ^
-				RxRadix           .GetHashCode() ^
-				ShowRadix         .GetHashCode() ^
-				ShowLineNumbers   .GetHashCode() ^
-				ShowDate          .GetHashCode() ^
-				ShowTime          .GetHashCode() ^
-				ShowPort          .GetHashCode() ^
-				ShowDirection     .GetHashCode() ^
-				ShowLength        .GetHashCode() ^
-				TxMaxLineCount    .GetHashCode() ^
-				RxMaxLineCount    .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ SeparateTxRxRadix.GetHashCode();
+				hashCode = (hashCode * 397) ^ TxRadix          .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxRadix          .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowRadix        .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowLineNumbers  .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDate         .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowTime         .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowPort         .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowDirection    .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowLength       .GetHashCode();
+				hashCode = (hashCode * 397) ^ TxMaxLineCount   .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxMaxLineCount   .GetHashCode();
 
-				PortLineBreakEnabled     .GetHashCode() ^
-				DirectionLineBreakEnabled.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
+				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

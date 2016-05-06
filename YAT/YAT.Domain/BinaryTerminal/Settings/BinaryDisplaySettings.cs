@@ -183,15 +183,17 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				LengthLineBreak        .GetHashCode() ^
-				SequenceLineBreakBefore.GetHashCode() ^
-				SequenceLineBreakAfter .GetHashCode() ^
-				TimedLineBreak         .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ LengthLineBreak        .GetHashCode();
+				hashCode = (hashCode * 397) ^ SequenceLineBreakBefore.GetHashCode();
+				hashCode = (hashCode * 397) ^ SequenceLineBreakAfter .GetHashCode();
+				hashCode = (hashCode * 397) ^ TimedLineBreak         .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

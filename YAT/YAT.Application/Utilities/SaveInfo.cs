@@ -82,11 +82,14 @@ namespace YAT.Application.Utilities
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				TimeStamp.GetHashCode() ^
-				UserName .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode = TimeStamp.GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (UserName != null ? UserName.GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

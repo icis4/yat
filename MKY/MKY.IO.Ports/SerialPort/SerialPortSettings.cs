@@ -184,14 +184,18 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				BaudRate .GetHashCode() ^
-				DataBits .GetHashCode() ^
-				Parity   .GetHashCode() ^
-				StopBits .GetHashCode() ^
-				Handshake.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    BaudRate .GetHashCode();
+				hashCode = (hashCode * 397) ^ DataBits .GetHashCode();
+				hashCode = (hashCode * 397) ^ Parity   .GetHashCode();
+				hashCode = (hashCode * 397) ^ StopBits .GetHashCode();
+				hashCode = (hashCode * 397) ^ Handshake.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>

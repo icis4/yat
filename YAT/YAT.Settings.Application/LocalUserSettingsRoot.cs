@@ -371,12 +371,14 @@ namespace YAT.Settings.Application
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				ProductVersion.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ ProductVersion.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

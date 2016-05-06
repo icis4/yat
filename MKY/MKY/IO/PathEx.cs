@@ -937,17 +937,21 @@ namespace MKY.IO
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				HaveCommon                .GetHashCode() ^
-				CommonPath                .GetHashCode() ^
-				CommonDirectoryCount      .GetHashCode() ^
-				AreRelative               .GetHashCode() ^
-				RelativeDirectoryCount    .GetHashCode() ^
-				AreNearRelative           .GetHashCode() ^
-				NearRelativeDirectoryCount.GetHashCode() ^
-				RelativePath              .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                     HaveCommon                         .GetHashCode();
+				hashCode = (hashCode * 397) ^ (CommonPath   != null ? CommonPath  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  CommonDirectoryCount;
+				hashCode = (hashCode * 397) ^  AreRelative                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  RelativeDirectoryCount;
+				hashCode = (hashCode * 397) ^  AreNearRelative                    .GetHashCode();
+				hashCode = (hashCode * 397) ^  NearRelativeDirectoryCount;
+				hashCode = (hashCode * 397) ^ (RelativePath != null ? RelativePath.GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

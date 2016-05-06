@@ -294,25 +294,19 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			int dedicatedTriggerHashCode = 0;
-			if (DedicatedTrigger != null) // Command may be 'null'!
-				dedicatedTriggerHashCode = DedicatedTrigger.GetHashCode();
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-			int dedicatedResponseHashCode = 0;
-			if (DedicatedResponse != null) // Command may be 'null'!
-				dedicatedResponseHashCode = DedicatedResponse.GetHashCode();
+				hashCode = (hashCode * 397) ^  Visible                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^  Enabled                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^  TriggerSelection                            .GetHashCode();
+				hashCode = (hashCode * 397) ^ (DedicatedTrigger != null ? DedicatedTrigger .GetHashCode() : 0); // Command may be 'null'!
+				hashCode = (hashCode * 397) ^  ResponseSelection                           .GetHashCode();
+				hashCode = (hashCode * 397) ^ (DedicatedResponse!= null ? DedicatedResponse.GetHashCode() : 0); // Command may be 'null'!
 
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
-
-				Visible          .GetHashCode() ^
-				Enabled          .GetHashCode() ^
-				TriggerSelection .GetHashCode() ^
-				dedicatedTriggerHashCode        ^
-				ResponseSelection.GetHashCode() ^
-				dedicatedResponseHashCode
-			);
+				return (hashCode);
+			}
 		}
 
 		#endregion

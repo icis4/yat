@@ -112,11 +112,15 @@ namespace MKY.Time
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				TimeStamp.GetHashCode() ^
-				Item.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode = TimeStamp.GetHashCode();
+
+				// Attention, default(T) can lead to null, e.g. in case of a string!
+				hashCode = (hashCode * 397) ^ (Item != null ? Item.GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>

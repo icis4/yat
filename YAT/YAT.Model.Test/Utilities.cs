@@ -243,14 +243,17 @@ namespace YAT.Model.Test
 			/// </remarks>
 			public override int GetHashCode()
 			{
-				return
-				(
-					Command              .GetHashCode() ^
-					ExpectedLineCount    .GetHashCode() ^
-					ExpectedElementCounts.GetHashCode() ^
-					ExpectedDataCounts   .GetHashCode() ^
-					ExpectedAlsoApplyToA .GetHashCode()
-				);
+				unchecked
+				{
+					int hashCode = Command.GetHashCode();
+
+					hashCode = (hashCode * 397) ^  ExpectedLineCount    .GetHashCode();
+					hashCode = (hashCode * 397) ^  ExpectedElementCounts.GetHashCode();
+					hashCode = (hashCode * 397) ^  ExpectedDataCounts   .GetHashCode();
+					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToA .GetHashCode();
+
+					return (hashCode);
+				}
 			}
 
 			#endregion

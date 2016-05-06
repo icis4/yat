@@ -250,14 +250,18 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				UseId                   .GetHashCode() ^
-				Id                      .GetHashCode() ^
-				PrependPayloadByteLength.GetHashCode() ^
-				AppendTerminatingZero   .GetHashCode() ^
-				FillLastReport          .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    UseId                   .GetHashCode();
+				hashCode = (hashCode * 397) ^ Id                      .GetHashCode();
+				hashCode = (hashCode * 397) ^ PrependPayloadByteLength.GetHashCode();
+				hashCode = (hashCode * 397) ^ AppendTerminatingZero   .GetHashCode();
+				hashCode = (hashCode * 397) ^ FillLastReport          .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

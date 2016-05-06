@@ -123,10 +123,10 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Color.GetHashCode()
-			);
+			unchecked
+			{
+				return (Color.GetHashCode());
+			}
 		}
 
 		#endregion

@@ -327,19 +327,21 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				SeparateTxRxEol         .GetHashCode() ^
-				TxEol                   .GetHashCode() ^
-				RxEol                   .GetHashCode() ^
-				Encoding                .GetHashCode() ^
-				ShowEol                 .GetHashCode() ^
-				LineSendDelay           .GetHashCode() ^
-				WaitForResponse         .GetHashCode() ^
-				CharSubstitution        .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ SeparateTxRxEol .GetHashCode();
+				hashCode = (hashCode * 397) ^ TxEol           .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxEol           .GetHashCode();
+				hashCode = (hashCode * 397) ^ Encoding        .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowEol         .GetHashCode();
+				hashCode = (hashCode * 397) ^ LineSendDelay   .GetHashCode();
+				hashCode = (hashCode * 397) ^ WaitForResponse .GetHashCode();
+				hashCode = (hashCode * 397) ^ CharSubstitution.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

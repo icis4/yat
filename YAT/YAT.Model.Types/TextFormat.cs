@@ -197,11 +197,15 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Color    .GetHashCode() ^
-				FontStyle.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Color    .GetHashCode();
+				hashCode = (hashCode * 397) ^ FontStyle.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

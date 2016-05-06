@@ -146,17 +146,14 @@ namespace YAT.Log
 		/// </summary>
 		public override int GetHashCode()
 		{
-			if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Other)
+			unchecked
 			{
-				return
-				(
-					base.GetHashCode() ^
-					this.otherSeparator.GetHashCode()
-				);
-			}
-			else
-			{
-				return (base.GetHashCode());
+				int hashCode = base.GetHashCode();
+
+				if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Other)
+					hashCode = (hashCode * 397) ^ (this.otherSeparator != null ? this.otherSeparator.GetHashCode() : 0);
+
+				return (hashCode);
 			}
 		}
 

@@ -577,43 +577,37 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			int serialPortIdHashCode = 0;
-			if (SerialPortId != null) // May be 'null' if no ports are available!
-				serialPortIdHashCode = SerialPortId.GetHashCode();
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-			int usbSerialHidDeviceInfoHashCode = 0;
-			if (UsbSerialHidDeviceInfo != null) // May be 'null' if no devices are available!
-				usbSerialHidDeviceInfoHashCode = UsbSerialHidDeviceInfo.GetHashCode();
+				hashCode = (hashCode * 397) ^  TerminalType                                           .GetHashCode();
+				hashCode = (hashCode * 397) ^  IOType                                                 .GetHashCode();
 
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+				hashCode = (hashCode * 397) ^ (SerialPortId           != null ? SerialPortId          .GetHashCode() : 0); // May be 'null' if no ports are available!
+				hashCode = (hashCode * 397) ^  SerialPortCommunication                                .GetHashCode();
+				hashCode = (hashCode * 397) ^  SerialPortAutoReopen                                   .GetHashCode();
 
-				TerminalType            .GetHashCode() ^
-				IOType                  .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ (SocketRemoteHost       != null ? SocketRemoteHost      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  SocketRemoteTcpPort;
+				hashCode = (hashCode * 397) ^  SocketRemoteUdpPort;
+				hashCode = (hashCode * 397) ^ (SocketLocalInterface   != null ? SocketLocalInterface  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (SocketLocalFilter      != null ? SocketLocalFilter     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  SocketLocalTcpPort;
+				hashCode = (hashCode * 397) ^  SocketLocalUdpPort;
+				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                                 .GetHashCode();
+				hashCode = (hashCode * 397) ^  UdpServerSendMode                                      .GetHashCode();
 
-				serialPortIdHashCode                   ^
-				SerialPortCommunication .GetHashCode() ^
-				SerialPortAutoReopen    .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ (UsbSerialHidDeviceInfo != null ? UsbSerialHidDeviceInfo.GetHashCode() : 0); // May be 'null' if no devices are available!
+				hashCode = (hashCode * 397) ^  UsbSerialHidReportFormat                               .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidRxIdUsage                                  .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidFlowControl                                .GetHashCode();
+				hashCode = (hashCode * 397) ^  UsbSerialHidAutoOpen                                   .GetHashCode();
 
-				SocketRemoteHost        .GetHashCode() ^
-				SocketRemoteTcpPort     .GetHashCode() ^
-				SocketRemoteUdpPort     .GetHashCode() ^
-				SocketLocalInterface    .GetHashCode() ^
-				SocketLocalFilter       .GetHashCode() ^
-				SocketLocalTcpPort      .GetHashCode() ^
-				SocketLocalUdpPort      .GetHashCode() ^
-				TcpClientAutoReconnect  .GetHashCode() ^
-				UdpServerSendMode       .GetHashCode() ^
+				hashCode = (hashCode * 397) ^  StartTerminal                                          .GetHashCode();
 
-				usbSerialHidDeviceInfoHashCode         ^
-				UsbSerialHidReportFormat.GetHashCode() ^
-				UsbSerialHidRxIdUsage   .GetHashCode() ^
-				UsbSerialHidFlowControl .GetHashCode() ^
-				UsbSerialHidAutoOpen    .GetHashCode() ^
-
-				StartTerminal           .GetHashCode()
-			);
+				return (hashCode);
+			}
 		}
 
 		#endregion
