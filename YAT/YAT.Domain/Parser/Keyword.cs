@@ -181,9 +181,15 @@ namespace YAT.Domain.Parser
 		/// </remarks>
 		public static bool TryParse(string s, out Keyword result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new KeywordEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Clear_string))
 			{
 				result = Keyword.Clear;
 				return (true);
@@ -232,11 +238,6 @@ namespace YAT.Domain.Parser
 			{
 				result = Keyword.OutputBreakToggle;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new KeywordEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

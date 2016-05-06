@@ -212,7 +212,12 @@ namespace YAT.Domain
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_stringNice) ||
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = Eol.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringNice) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringOld1) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringSequence))
 			{
@@ -261,11 +266,6 @@ namespace YAT.Domain
 			{
 				result = Eol.Space;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new EolEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

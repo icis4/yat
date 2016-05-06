@@ -1085,7 +1085,14 @@ namespace MKY.Text
 		/// </remarks>
 		public static bool TryParse(string s, out EncodingEx result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new EncodingEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
 
 			foreach (EncodingInfoEx info in staticInfos)
 			{
@@ -1111,16 +1118,9 @@ namespace MKY.Text
 				}
 			}
 
-			if (string.IsNullOrEmpty(s))
-			{
-				result = new EncodingEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
-			}
-			else // Invalid string!
-			{
-				result = null;
-				return (false);
-			}
+			// Invalid string!
+			result = null;
+			return (false);
 		}
 
 		#endregion

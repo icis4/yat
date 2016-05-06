@@ -274,9 +274,15 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static bool TryParse(string s, out Trigger result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = Trigger.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = Trigger.None;
@@ -310,15 +316,10 @@ namespace YAT.Model.Types
 				result = Trigger.AnyLine;
 				return (true);
 			}
-			else if (!string.IsNullOrEmpty(s)) // Dedicated!
+			else // Dedicated!
 			{
 				result = Trigger.DedicatedCommand;
 				return (true);
-			}
-			else // IsNullOrEmpty
-			{
-				result = new TriggerEx(); // Default!
-				return (false);
 			}
 		}
 

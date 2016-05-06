@@ -62,9 +62,9 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string None_string  = "--";
-		private const string Tx_string    = "<<"; // Same as C++ stream out operator.
-		private const string Rx_string    = ">>"; // Same as C++ stream in operator.
+		private const string  None_string = "--";
+		private const string    Tx_string = "<<"; // Same as C++ stream out operator.
+		private const string    Rx_string = ">>"; // Same as C++ stream in operator.
 		private const string Bidir_string = "<>";
 
 		#endregion
@@ -153,9 +153,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out Direction result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = Direction.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_string))
 			{
 				result = Direction.None;
 				return (true);
@@ -174,11 +180,6 @@ namespace YAT.Domain
 			{
 				result = Direction.Bidir;
 				return (true);
-			}
-			else if (string.IsNullOrEmpty(s))
-			{
-				result = new DirectionEx(); // Default!
-				return (true); // Default silently, could e.g. happen when deserializing an XML.
 			}
 			else // Invalid string!
 			{

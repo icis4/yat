@@ -279,9 +279,15 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static bool TryParse(string s, out AutoResponse result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if      (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = AutoResponse.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (s, None_string) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(s, None_stringAlternatives))
 			{
 				result = AutoResponse.None;
@@ -321,15 +327,10 @@ namespace YAT.Model.Types
 				result = AutoResponse.SendFile;
 				return (true);
 			}
-			else if (!string.IsNullOrEmpty(s)) // Dedicated!
+			else // Dedicated!
 			{
 				result = AutoResponse.DedicatedCommand;
 				return (true);
-			}
-			else // IsNullOrEmpty
-			{
-				result = new AutoResponseEx(); // Default!
-				return (false);
 			}
 		}
 

@@ -170,9 +170,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public static bool TryParse(string s, out ControlCharRadix result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
 
-			if (StringEx.EqualsOrdinalIgnoreCase(s, AsciiMnemonic_string))
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new ControlCharRadixEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, AsciiMnemonic_string))
 			{
 				result = new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic);
 				return (false);
@@ -184,11 +190,6 @@ namespace YAT.Domain
 				{
 					result = (ControlCharRadixEx)radix;
 					return (true);
-				}
-				else if (string.IsNullOrEmpty(s))
-				{
-					result = new ControlCharRadixEx(); // Default!
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
 				else // Invalid string!
 				{

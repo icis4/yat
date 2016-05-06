@@ -513,7 +513,14 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static bool TryParse(string s, out SerialPortId result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s))
+			{
+				result = null;
+				return (false);
+			}
 
 			// e.g. "COM1"
 			if (TryParseStandardPortName(s, out result))

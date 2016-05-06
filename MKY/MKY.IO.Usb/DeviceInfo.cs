@@ -597,7 +597,14 @@ namespace MKY.IO.Usb
 
 		private static bool TryParse(string s, bool expectSerial, out DeviceInfo result)
 		{
-			s = s.Trim();
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s))
+			{
+				result = null;
+				return (false);
+			}
 
 			// e.g. "VID:0ABC / PID:1234 / SNR:XYZ" or "vid_0ABC & pid_1234 & snr_xyz"
 			Match m = VendorIdRegex.Match(s);

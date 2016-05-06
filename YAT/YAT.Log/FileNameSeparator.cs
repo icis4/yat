@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 using MKY;
 
@@ -40,13 +41,14 @@ namespace YAT.Log
 	/// <summary></summary>
 	public enum FileNameSeparator
 	{
+		None,
+
 		Underscore,
 		UnderscoreWithSpaces,
 		Dash,
 		DashWithSpaces,
 		Ball,
 		BallWithSpaces,
-		None,
 
 		Other
 	}
@@ -68,6 +70,9 @@ namespace YAT.Log
 	{
 		#region String Definitions
 
+		private const string None_stringSeparator                   = "";
+		private const string None_stringDescription                 = "[None]";
+
 		private const string Underscore_stringSeparator             = "_";
 		private const string Underscore_stringDescription           = "Underscore (_)";
 		private const string UnderscoreWithSpaces_stringSeparator   = " _ ";
@@ -82,9 +87,6 @@ namespace YAT.Log
 		private const string Ball_stringDescription                 = "Ball (°)";
 		private const string BallWithSpaces_stringSeparator         = " ° ";
 		private const string BallWithSpaces_stringDescription       = "Ball with spaces ( ° )";
-
-		private const string None_stringSeparator                   = "";
-		private const string None_stringDescription                 = "[None]";
 
 		#endregion
 
@@ -216,13 +218,13 @@ namespace YAT.Log
 		public static FileNameSeparatorEx[] GetItems()
 		{
 			List<FileNameSeparatorEx> a = new List<FileNameSeparatorEx>(7); // Preset the required capactiy to improve memory management.
+			a.Add(new FileNameSeparatorEx(FileNameSeparator.None));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.Underscore));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.UnderscoreWithSpaces));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.Dash));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.DashWithSpaces));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.Ball));
 			a.Add(new FileNameSeparatorEx(FileNameSeparator.BallWithSpaces));
-			a.Add(new FileNameSeparatorEx(FileNameSeparator.None));
 			return (a.ToArray());
 		}
 
@@ -257,8 +259,17 @@ namespace YAT.Log
 			}
 			else
 			{
-				result = null;
-				return (false);
+				char[] invalid = Path.GetInvalidFileNameChars();
+				if (!StringEx.ContainsAny(s, invalid)) // Valid other?
+				{
+					result = new FileNameSeparatorEx(s);
+					return (true);
+				}
+				else // Invalid string!
+				{
+					result = null;
+					return (false);
+				}
 			}
 		}
 
@@ -270,7 +281,18 @@ namespace YAT.Log
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringSeparator) ||
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = FileNameSeparator.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
+			{
+				result = FileNameSeparator.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, Underscore_stringDescription))
 			{
 				result = FileNameSeparator.Underscore;
@@ -306,21 +328,10 @@ namespace YAT.Log
 				result = FileNameSeparator.BallWithSpaces;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
+			else // Invalid string!
 			{
-				result = FileNameSeparator.None;
-				return (true);
-			}
-			else if (!string.IsNullOrEmpty(s)) // Other!
-			{
-				result = new FileNameSeparatorEx(s);
-				return (true);
-			}
-			else // IsNullOrEmpty = None!
-			{
-				result = FileNameSeparator.None;
-				return (true);
+				result = new FileNameSeparatorEx(); // Default!
+				return (false);
 			}
 		}
 
