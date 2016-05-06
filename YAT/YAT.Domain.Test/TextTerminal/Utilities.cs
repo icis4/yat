@@ -60,10 +60,10 @@ namespace YAT.Domain.Test
 
 		internal static TerminalSettings GetTextTcpAutoSocketOnIPv4LoopbackSettings()
 		{
-			return (GetTextTcpAutoSocketSettings(IPNetworkInterfaceType.IPv4Loopback));
+			return (GetTextTcpAutoSocketSettings(IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettings GetTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)
+		internal static TerminalSettings GetTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
 		{
 			// Create settings:
 			TerminalSettings settings = new TerminalSettings();

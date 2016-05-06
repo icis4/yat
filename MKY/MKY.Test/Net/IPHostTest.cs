@@ -71,16 +71,16 @@ namespace MKY.Test.Net
 		{
 			get
 			{
-				yield return (new TestCaseData(new IPHost(IPHostType.Localhost),		IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
-				yield return (new TestCaseData(new IPHost(IPHostType.IPv4Localhost),	IPHostType.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
-				yield return (new TestCaseData(new IPHost(IPHostType.IPv6Localhost),	IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.Localhost),		IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Localhost),	IPHost.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv6Localhost),	IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
 
-				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHost(IPAddress.IPv6Loopback),		IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),			IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),			IPHost.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.IPv6Loopback),		IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
 
-				yield return (new TestCaseData(new IPHost(SomeIPv4Address),				IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
-				yield return (new TestCaseData(new IPHost(SomeIPv6Address),				IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address"));
+				yield return (new TestCaseData(new IPHostEx(SomeIPv4Address),				IPHost.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
+				yield return (new TestCaseData(new IPHostEx(SomeIPv6Address),				IPHost.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address"));
 			}
 		}
 
@@ -104,21 +104,21 @@ namespace MKY.Test.Net
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostEqualsHostType(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostEqualsHostType(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
-			if ((ipHostType == IPHostType.Localhost) && ((IPHostType)ipHost == IPHostType.IPv4Localhost))
+			if ((ipHostType == IPHost.Localhost) && (ipHost == IPHost.IPv4Localhost))
 				return; // All fine, 'Localhost' and 'IPv4Localhost' are the same.
 
-			if ((ipHostType == IPHostType.IPv4Localhost) && ((IPHostType)ipHost == IPHostType.Localhost))
+			if ((ipHostType == IPHost.IPv4Localhost) && (ipHost == IPHost.Localhost))
 				return; // All fine, 'IPv4Localhost' and 'Localhost' are the same.
 
-			Assert.AreEqual(ipHostType, (IPHostType)ipHost);
+			Assert.AreEqual(ipHostType, (IPHost)ipHost);
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostEqualsAddress(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostEqualsAddress(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(ipAddress, (IPAddress)ipHost);
 		}
@@ -126,7 +126,7 @@ namespace MKY.Test.Net
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostAddressEqualsAddress(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostAddressEqualsAddress(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(ipAddress, ipHost.IPAddress);
 		}
@@ -134,7 +134,7 @@ namespace MKY.Test.Net
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "The naming emphasizes the difference between string and struct parameters.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostEqualsHostString(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostEqualsHostString(IPHostEx ipHost, IPHost ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(hostString, (string)ipHost);
 		}

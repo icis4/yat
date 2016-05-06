@@ -38,7 +38,7 @@ namespace MKY.Net
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum IPHostType
+	public enum IPHost
 	{
 		Localhost,
 
@@ -63,7 +63,7 @@ namespace MKY.Net
 	/// Make sure to use the underlying enum for serialization.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-	public class IPHost : EnumEx
+	public class IPHostEx : EnumEx
 	{
 		#region String Definitions
 
@@ -78,26 +78,26 @@ namespace MKY.Net
 
 		private IPAddress otherAddress = IPAddress.None;
 
-		/// <summary>Default is <see cref="IPHostType.Localhost"/>.</summary>
-		public IPHost()
-			: this(IPHostType.Localhost)
+		/// <summary>Default is <see cref="IPHost.Localhost"/>.</summary>
+		public IPHostEx()
+			: this(IPHost.Localhost)
 		{
 		}
 
 		/// <summary></summary>
-		public IPHost(IPHostType hostType)
+		public IPHostEx(IPHost hostType)
 			: base(hostType)
 		{
-			if (hostType == IPHostType.Other)
+			if (hostType == IPHost.Other)
 				throw (new InvalidOperationException("'IPHostType.Other' requires an IP address, use IPHost(IPAddress) instead!"));
 		}
 
 		/// <summary></summary>
-		public IPHost(IPAddress address)
+		public IPHostEx(IPAddress address)
 		{
-			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.Localhost);     this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHostType.IPv6Localhost); this.otherAddress = IPAddress.None; }
-			else                                        { SetUnderlyingEnum(IPHostType.Other);         this.otherAddress = address;        }
+			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHost.Localhost);     this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.otherAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPHost.Other);         this.otherAddress = address;        }
 
 			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
 			// Also note that similar but optimized code is found at ParseFromIPAddress() further below.
@@ -110,12 +110,12 @@ namespace MKY.Net
 		{
 			get
 			{
-				switch ((IPHostType)UnderlyingEnum)
+				switch ((IPHost)UnderlyingEnum)
 				{
-					case IPHostType.Localhost:     return (IPAddress.Loopback);
-					case IPHostType.IPv4Localhost: return (IPAddress.Loopback);
-					case IPHostType.IPv6Localhost: return (IPAddress.IPv6Loopback);
-					case IPHostType.Other:         return (this.otherAddress);
+					case IPHost.Localhost:     return (IPAddress.Loopback);
+					case IPHost.IPv4Localhost: return (IPAddress.Loopback);
+					case IPHost.IPv6Localhost: return (IPAddress.IPv6Loopback);
+					case IPHost.Other:         return (this.otherAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -126,12 +126,12 @@ namespace MKY.Net
 		{
 			get
 			{
-				switch ((IPHostType)UnderlyingEnum)
+				switch ((IPHost)UnderlyingEnum)
 				{
-					case IPHostType.Localhost:     return (true);
-					case IPHostType.IPv4Localhost: return (true);
-					case IPHostType.IPv6Localhost: return (true);
-					case IPHostType.Other:         return (false);
+					case IPHost.Localhost:     return (true);
+					case IPHost.IPv4Localhost: return (true);
+					case IPHost.IPv6Localhost: return (true);
+					case IPHost.Other:         return (false);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -152,8 +152,8 @@ namespace MKY.Net
 			if (GetType() != obj.GetType())
 				return (false);
 
-			IPHost other = (IPHost)obj;
-			if ((IPHostType)UnderlyingEnum == IPHostType.Other)
+			IPHostEx other = (IPHostEx)obj;
+			if ((IPHost)UnderlyingEnum == IPHost.Other)
 			{
 				return
 				(
@@ -172,7 +172,7 @@ namespace MKY.Net
 		/// </summary>
 		public override int GetHashCode()
 		{
-			if ((IPHostType)UnderlyingEnum == IPHostType.Other)
+			if ((IPHost)UnderlyingEnum == IPHost.Other)
 			{
 				return
 				(
@@ -190,12 +190,12 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
-			switch ((IPHostType)UnderlyingEnum)
+			switch ((IPHost)UnderlyingEnum)
 			{
-				case IPHostType.Localhost:     return (Localhost_string);
-				case IPHostType.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
-				case IPHostType.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPHostType.Other:         return (this.otherAddress.ToString());
+				case IPHost.Localhost:     return (Localhost_string);
+				case IPHost.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
+				case IPHost.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
+				case IPHost.Other:         return (this.otherAddress.ToString());
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -222,12 +222,12 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public string ToUrlString()
 		{
-			switch ((IPHostType)UnderlyingEnum)
+			switch ((IPHost)UnderlyingEnum)
 			{
-				case IPHostType.Localhost:     return (Localhost_string);
-				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
-				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHostType.Other:         return (ToUrlString(this.otherAddress.ToString()));
+				case IPHost.Localhost:     return (Localhost_string);
+				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
+				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
+				case IPHost.Other:         return (ToUrlString(this.otherAddress.ToString()));
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -271,8 +271,8 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
 		public static string ToUrlString(string s)
 		{
-			IPHost host;
-			if (!string.IsNullOrEmpty(s) && IPHost.TryParse(s, out host))
+			IPHostEx host;
+			if (!string.IsNullOrEmpty(s) && IPHostEx.TryParse(s, out host))
 				return (ToUrlString(host.IPAddress));
 
 			return (s);
@@ -285,12 +285,12 @@ namespace MKY.Net
 		#region GetItems
 
 		/// <summary></summary>
-		public static IPHost[] GetItems()
+		public static IPHostEx[] GetItems()
 		{
-			List<IPHost> a = new List<IPHost>(3); // Preset the required capactiy to improve memory management.
-			a.Add(new IPHost(IPHostType.Localhost));
-			a.Add(new IPHost(IPHostType.IPv4Localhost));
-			a.Add(new IPHost(IPHostType.IPv6Localhost));
+			List<IPHostEx> a = new List<IPHostEx>(3); // Preset the required capactiy to improve memory management.
+			a.Add(new IPHostEx(IPHost.Localhost));
+			a.Add(new IPHostEx(IPHost.IPv4Localhost));
+			a.Add(new IPHostEx(IPHost.IPv6Localhost));
 			return (a.ToArray());
 		}
 
@@ -301,9 +301,9 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static IPHost Parse(string s)
+		public static IPHostEx Parse(string s)
 		{
-			IPHost result;
+			IPHostEx result;
 
 			if (TryParse(s, out result))
 				return (result);
@@ -314,39 +314,21 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out IPHost result)
+		public static bool TryParse(string s, out IPHostEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1))
+			IPHost enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new IPHost(IPHostType.Localhost);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv4Localhost_string))
-			{
-				result = new IPHost(IPHostType.IPv4Localhost);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv6Localhost_string))
-			{
-				result = new IPHost(IPHostType.IPv6Localhost);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // IP address!
+				if (IPAddress.TryParse(s, out address)) // Valid other?
 				{
-					result = new IPHost(address);
+					result = new IPHostEx(address);
 					return (true);
-				}
-				else if (string.IsNullOrEmpty(s)) // Default!
-				{
-					result = new IPHost();
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
 				else // Invalid string!
 				{
@@ -356,15 +338,52 @@ namespace MKY.Net
 			}
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out IPHost result)
+		{
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new IPHostEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Localhost_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld2) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Localhost_stringOld1))
+			{
+				result = new IPHostEx(IPHost.Localhost);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv4Localhost_string))
+			{
+				result = new IPHostEx(IPHost.IPv4Localhost);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, IPv6Localhost_string))
+			{
+				result = new IPHostEx(IPHost.IPv6Localhost);
+				return (true);
+			}
+			else // Invalid string!
+			{
+				result = new IPHostEx(); // Default!
+				return (false);
+			}
+		}
+
 		/// <summary></summary>
-		public static IPHost ParseFromIPAddress(IPAddress address)
+		public static IPHostEx ParseFromIPAddress(IPAddress address)
 		{
 			if      (address == IPAddress.Loopback)
-				return (new IPHost(IPHostType.Localhost));
+				return (new IPHostEx(IPHost.Localhost));
 			else if (address == IPAddress.IPv6Loopback)
-				return (new IPHost(IPHostType.IPv6Localhost));
+				return (new IPHostEx(IPHost.IPv6Localhost));
 			else
-				return (new IPHost(address));
+				return (new IPHostEx(address));
 
 			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
 			// Also note that similar but less optimized code is found at IPHost(IPAddress) further above.
@@ -375,37 +394,37 @@ namespace MKY.Net
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator IPHostType(IPHost host)
+		public static implicit operator IPHost(IPHostEx host)
 		{
-			return ((IPHostType)host.UnderlyingEnum);
+			return ((IPHost)host.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPHost(IPHostType hostType)
+		public static implicit operator IPHostEx(IPHost hostType)
 		{
-			return (new IPHost(hostType));
+			return (new IPHostEx(hostType));
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPAddress(IPHost address)
+		public static implicit operator IPAddress(IPHostEx address)
 		{
 			return (address.IPAddress);
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPHost(IPAddress address)
+		public static implicit operator IPHostEx(IPAddress address)
 		{
 			return (ParseFromIPAddress(address));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(IPHost host)
+		public static implicit operator string(IPHostEx host)
 		{
 			return (host.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPHost(string host)
+		public static implicit operator IPHostEx(string host)
 		{
 			return (Parse(host));
 		}

@@ -226,11 +226,11 @@ namespace MKY.Net.Test
 				IPNetworkInterfaceCollection inferfaces = new IPNetworkInterfaceCollection();
 				inferfaces.FillWithAvailableInterfaces();
 
-				IPNetworkInterface ni;
-				if (IPNetworkInterface.TryParse(configuration.IPv4SpecificInterface, out ni))
+				IPNetworkInterfaceEx ni;
+				if (IPNetworkInterfaceEx.TryParse(configuration.IPv4SpecificInterface, out ni))
 					configuration.IPv4SpecificInterfaceIsAvailable = inferfaces.Contains(ni);
 
-				if (IPNetworkInterface.TryParse(configuration.IPv6SpecificInterface, out ni))
+				if (IPNetworkInterfaceEx.TryParse(configuration.IPv6SpecificInterface, out ni))
 					configuration.IPv6SpecificInterfaceIsAvailable = inferfaces.Contains(ni);
 
 				// Check whether a port is available at the specified MT-SICS device port:

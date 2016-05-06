@@ -399,10 +399,10 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(string networkInterface)
 		{
-			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)networkInterface));
+			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterfaceEx)networkInterface));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterfaceEx networkInterface)
 		{
 			// Create settings:
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
@@ -415,7 +415,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(IPNetworkInterfaceType.IPv4Loopback));
+			return (GetStartedTextTcpAutoSocketSettings(IPNetworkInterface.IPv4Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(string dummy)
@@ -426,7 +426,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings(IPNetworkInterfaceType.IPv6Loopback));
+			return (GetStartedTextTcpAutoSocketSettings(IPNetworkInterface.IPv6Loopback));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(string dummy)

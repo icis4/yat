@@ -54,12 +54,12 @@ namespace YAT.View.Controls
 
 		private const SocketType DefaultSocketType                       = SocketType.TcpAutoSocket;
 
-		private static readonly IPHost DefaultRemoteHost                 = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
+		private static readonly IPHostEx DefaultRemoteHost                 = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
 		private const int DefaultRemoteTcpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
 		private const int DefaultRemoteUdpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
 
-		private static readonly IPNetworkInterface DefaultLocalInterface = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
-		private static readonly IPAddressFilter DefaultLocalFilter       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
+		private static readonly IPNetworkInterfaceEx DefaultLocalInterface = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
+		private static readonly IPAddressFilterEx DefaultLocalFilter       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
 		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
 		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
 
@@ -80,12 +80,12 @@ namespace YAT.View.Controls
 
 		private SocketType socketType = DefaultSocketType;
 
-		private IPHost remoteHost                 = DefaultRemoteHost;
+		private IPHostEx remoteHost                 = DefaultRemoteHost;
 		private int remoteTcpPort                 = DefaultRemoteTcpPort;
 		private int remoteUdpPort                 = DefaultRemoteUdpPort;
 
-		private IPNetworkInterface localInterface = DefaultLocalInterface;
-		private IPAddressFilter localFilter       = DefaultLocalFilter;
+		private IPNetworkInterfaceEx localInterface = DefaultLocalInterface;
+		private IPAddressFilterEx localFilter       = DefaultLocalFilter;
 		private int localTcpPort                  = DefaultLocalTcpPort;
 		private int localUdpPort                  = DefaultLocalUdpPort;
 
@@ -171,7 +171,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual IPHost RemoteHost
+		public virtual IPHostEx RemoteHost
 		{
 			get { return (this.remoteHost); }
 			set
@@ -225,7 +225,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual IPNetworkInterface LocalInterface
+		public virtual IPNetworkInterfaceEx LocalInterface
 		{
 			get { return (this.localInterface); }
 			set
@@ -243,7 +243,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual IPAddressFilter LocalFilter
+		public virtual IPAddressFilterEx LocalFilter
 		{
 			get { return (this.localFilter); }
 			set
@@ -356,7 +356,7 @@ namespace YAT.View.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHost);
+				var remoteHost = (comboBox_RemoteHost.SelectedItem as IPHostEx);
 				if ((remoteHost != null) && (remoteHost.IPAddress != IPAddress.None) &&
 					StringEx.EqualsOrdinalIgnoreCase(remoteHost.ToString(), comboBox_RemoteHost.Text))
 				{
@@ -367,7 +367,7 @@ namespace YAT.View.Controls
 					IPAddress ipAddress;
 					if (IPResolver.TryResolveRemoteHost(comboBox_RemoteHost.Text, out ipAddress))
 					{
-						RemoteHost = new IPHost(ipAddress);
+						RemoteHost = new IPHostEx(ipAddress);
 					}
 					else
 					{
@@ -395,7 +395,7 @@ namespace YAT.View.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				var localFilter = (comboBox_LocalFilter.SelectedItem as IPAddressFilter);
+				var localFilter = (comboBox_LocalFilter.SelectedItem as IPAddressFilterEx);
 				if ((localFilter != null) && (localFilter.IPAddress != IPAddress.None) &&
 					StringEx.EqualsOrdinalIgnoreCase(localFilter.ToString(), comboBox_LocalFilter.Text))
 				{
@@ -406,7 +406,7 @@ namespace YAT.View.Controls
 					IPAddress ipAddress;
 					if (IPResolver.TryResolveRemoteHost(comboBox_LocalFilter.Text, out ipAddress))
 					{
-						LocalFilter = new IPAddressFilter(ipAddress);
+						LocalFilter = new IPAddressFilterEx(ipAddress);
 					}
 					else
 					{
@@ -497,7 +497,7 @@ namespace YAT.View.Controls
 		private void comboBox_LocalInterface_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				LocalInterface = (comboBox_LocalInterface.SelectedItem as IPNetworkInterface);
+				LocalInterface = (comboBox_LocalInterface.SelectedItem as IPNetworkInterfaceEx);
 		}
 
 		private void button_RefreshLocalInterfaces_Click(object sender, EventArgs e)
@@ -582,11 +582,11 @@ namespace YAT.View.Controls
 
 			// Remote host:
 			comboBox_RemoteHost.Items.Clear();
-			comboBox_RemoteHost.Items.AddRange(IPHost.GetItems());
+			comboBox_RemoteHost.Items.AddRange(IPHostEx.GetItems());
 
 			// Local filter:
 			comboBox_LocalFilter.Items.Clear();
-			comboBox_LocalFilter.Items.AddRange(IPAddressFilter.GetItems());
+			comboBox_LocalFilter.Items.AddRange(IPAddressFilterEx.GetItems());
 
 			this.isSettingControls.Leave();
 		}
@@ -768,7 +768,7 @@ namespace YAT.View.Controls
 					if (this.localInterface != null)
 						comboBox_LocalInterface.SelectedItem = this.localInterface;
 					else
-						comboBox_LocalInterface.SelectedItem = (IPNetworkInterface)IPNetworkInterfaceType.Any;
+						comboBox_LocalInterface.SelectedItem = (IPNetworkInterfaceEx)IPNetworkInterface.Any;
 				}
 				else
 				{

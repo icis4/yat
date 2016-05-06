@@ -738,8 +738,8 @@ namespace YAT.Model
 			{
 				if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
 				{
-					MKY.Net.IPHost remoteHost;
-					if (MKY.Net.IPHost.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
+					MKY.Net.IPHostEx remoteHost;
+					if (MKY.Net.IPHostEx.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
 						terminalSettings.IO.Socket.RemoteHost = remoteHost;
 					else
 						return (false);
@@ -760,8 +760,8 @@ namespace YAT.Model
 					 (finalIOType == Domain.IOType.TcpAutoSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalInterface"))
 				{
-					MKY.Net.IPNetworkInterface localInterface;
-					if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
+					MKY.Net.IPNetworkInterfaceEx localInterface;
+					if (MKY.Net.IPNetworkInterfaceEx.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
 						terminalSettings.IO.Socket.LocalInterface = localInterface;
 					else
 						return (false);
@@ -770,8 +770,8 @@ namespace YAT.Model
 					 (finalIOType == Domain.IOType.UdpPairSocket)) &&
 					this.commandLineArgs.OptionIsGiven("LocalFilter"))
 				{
-					MKY.Net.IPAddressFilter localFilter;
-					if (MKY.Net.IPAddressFilter.TryParse(this.commandLineArgs.LocalFilter, out localFilter))
+					MKY.Net.IPAddressFilterEx localFilter;
+					if (MKY.Net.IPAddressFilterEx.TryParse(this.commandLineArgs.LocalFilter, out localFilter))
 						terminalSettings.IO.Socket.LocalFilter = localFilter;
 					else
 						return (false);
