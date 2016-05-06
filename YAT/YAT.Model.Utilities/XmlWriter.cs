@@ -62,7 +62,7 @@ namespace YAT.Model.Utilities
 
 		/// <summary></summary>
 		protected XmlWriter(FileStream stream, string initialLineAfterHeader)
-			: this (stream, new string[] { initialLineAfterHeader })
+			: this(stream, new string[] { initialLineAfterHeader })
 		{
 		}
 
@@ -317,7 +317,7 @@ namespace YAT.Model.Utilities
 
 		/// <summary></summary>
 		public XmlWriterRaw(FileStream stream, bool addSchema, string schemaFilePath)
-			: base (stream, InitialLineAfterHeader)
+			: base(stream, InitialLineAfterHeader)
 		{
 			Indent();
 
@@ -384,7 +384,7 @@ namespace YAT.Model.Utilities
 
 		/// <summary></summary>
 		public XmlWriterNeat(FileStream stream, bool addSchema, string schemaFilePath)
-			: base (stream, InitialLineAfterHeader)
+			: base(stream, InitialLineAfterHeader)
 		{
 			Indent();
 

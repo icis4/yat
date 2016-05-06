@@ -145,7 +145,7 @@ namespace YAT.View.Controls.ViewModel
 		{
 			if (!string.IsNullOrEmpty(element.Text))
 			{
-				Font font;
+				Font  font;
 				Color foreColor;
 				Color backColor;
 				SetDrawingObjects(element, settings, graphics, state, out font, out foreColor, out backColor);

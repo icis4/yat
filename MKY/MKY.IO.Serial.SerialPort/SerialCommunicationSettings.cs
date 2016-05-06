@@ -68,7 +68,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// Creates new port settings with specified arguments.
 		/// </summary>
 		public SerialCommunicationSettings(int baudRate, MKY.IO.Ports.DataBits dataBits, System.IO.Ports.Parity parity, System.IO.Ports.StopBits stopBits, SerialFlowControl flowControl)
-			: this (baudRate, dataBits, parity, stopBits, flowControl, ToRfrPinDefault(flowControl), ToDtrPinDefault(flowControl))
+			: this(baudRate, dataBits, parity, stopBits, flowControl, ToRfrPinDefault(flowControl), ToDtrPinDefault(flowControl))
 		{
 		}
 
