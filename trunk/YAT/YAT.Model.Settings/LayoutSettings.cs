@@ -306,23 +306,25 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				TxMonitorPanelIsVisible   .GetHashCode() ^
-				BidirMonitorPanelIsVisible.GetHashCode() ^
-				RxMonitorPanelIsVisible   .GetHashCode() ^
-				MonitorOrientation        .GetHashCode() ^
-				TxMonitorSplitterRatio    .GetHashCode() ^
-				RxMonitorSplitterRatio    .GetHashCode() ^
+				hashCode =                     TxMonitorPanelIsVisible   .GetHashCode();
+				hashCode = (hashCode * 397) ^  BidirMonitorPanelIsVisible.GetHashCode();
+				hashCode = (hashCode * 397) ^  RxMonitorPanelIsVisible   .GetHashCode();
+				hashCode = (hashCode * 397) ^  MonitorOrientation        .GetHashCode();
+				hashCode = (hashCode * 397) ^  TxMonitorSplitterRatio    .GetHashCode();
+				hashCode = (hashCode * 397) ^  RxMonitorSplitterRatio    .GetHashCode();
 
-				PredefinedPanelIsVisible  .GetHashCode() ^
-				PredefinedSplitterRatio   .GetHashCode() ^
+				hashCode = (hashCode * 397) ^  PredefinedPanelIsVisible  .GetHashCode();
+				hashCode = (hashCode * 397) ^  PredefinedSplitterRatio   .GetHashCode();
 
-				SendTextPanelIsVisible    .GetHashCode() ^
-				SendFilePanelIsVisible    .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^  SendTextPanelIsVisible    .GetHashCode();
+				hashCode = (hashCode * 397) ^  SendFilePanelIsVisible    .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

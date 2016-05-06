@@ -95,7 +95,7 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return (this.count.GetHashCode());
+			return (this.count);
 		}
 
 		#endregion

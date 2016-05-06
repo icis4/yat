@@ -431,10 +431,13 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			if (Name != null)
-				return (Name.GetHashCode());
-			else
-				return (base.GetHashCode());
+			unchecked
+			{
+				if (Name != null)
+					return (Name.GetHashCode());
+				else
+					return (base.GetHashCode());
+			}
 		}
 
 		/// <summary>

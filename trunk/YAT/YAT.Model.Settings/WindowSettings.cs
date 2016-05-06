@@ -179,12 +179,14 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				State.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ State.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

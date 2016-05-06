@@ -884,30 +884,35 @@ namespace YAT.Log.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				this.rootPath             .GetHashCode() ^
-				this.rootFileName         .GetHashCode() ^
-				this.rawLogTx             .GetHashCode() ^
-				this.rawLogBidir          .GetHashCode() ^
-				this.rawLogRx             .GetHashCode() ^
-				this.rawExtension         .GetHashCode() ^
-				this.neatLogTx            .GetHashCode() ^
-				this.neatLogBidir         .GetHashCode() ^
-				this.neatLogRx            .GetHashCode() ^
-				this.neatExtension        .GetHashCode() ^
-				this.nameFormat           .GetHashCode() ^
-				this.nameChannel          .GetHashCode() ^
-				this.nameDate             .GetHashCode() ^
-				this.nameTime             .GetHashCode() ^
-				this.nameSeparator        .GetHashCode() ^
-				this.folderFormat         .GetHashCode() ^
-				this.folderChannel        .GetHashCode() ^
-				this.writeMode            .GetHashCode() ^
-				this.textEncoding         .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ (RootPath      != null ? RootPath     .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RootFileName  != null ? RootFileName .GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^  RawLogTx                             .GetHashCode();
+				hashCode = (hashCode * 397) ^  RawLogBidir                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  RawLogRx                             .GetHashCode();
+				hashCode = (hashCode * 397) ^  RawExtension                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  NeatLogTx                            .GetHashCode();
+				hashCode = (hashCode * 397) ^  NeatLogBidir                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  NeatLogRx                            .GetHashCode();
+				hashCode = (hashCode * 397) ^  NeatExtension                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameFormat                           .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameChannel                          .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameDate                             .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameTime                             .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (NameSeparator != null ? NameSeparator.GetHashCode() : 0);
+
+				hashCode = (hashCode * 397) ^  FolderFormat                         .GetHashCode();
+				hashCode = (hashCode * 397) ^  FolderChannel                        .GetHashCode();
+				hashCode = (hashCode * 397) ^  WriteMode                            .GetHashCode();
+				hashCode = (hashCode * 397) ^  TextEncoding                         .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

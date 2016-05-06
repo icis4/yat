@@ -685,14 +685,18 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				IsDefined   .GetHashCode() ^
-				CommandLines.GetHashCode() ^
-				DefaultRadix.GetHashCode() ^
-				IsFilePath  .GetHashCode() ^
-				FilePath    .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                     IsDefined                      .GetHashCode();
+				hashCode = (hashCode * 397) ^  CommandLines                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  DefaultRadix                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  IsFilePath                     .GetHashCode();
+				hashCode = (hashCode * 397) ^ (FilePath     != null ? FilePath.GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

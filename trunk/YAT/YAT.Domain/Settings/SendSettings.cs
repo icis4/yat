@@ -357,22 +357,24 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				KeepCommand        .GetHashCode() ^
-				CopyPredefined     .GetHashCode() ^
-				SendImmediately    .GetHashCode() ^
-				DefaultDelay       .GetHashCode() ^
-				DefaultLineDelay   .GetHashCode() ^
-				DefaultLineInterval.GetHashCode() ^
-				DefaultLineRepeat  .GetHashCode() ^
-				DisableKeywords    .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ KeepCommand                    .GetHashCode();
+				hashCode = (hashCode * 397) ^ CopyPredefined                 .GetHashCode();
+				hashCode = (hashCode * 397) ^ SendImmediately                .GetHashCode();
+				hashCode = (hashCode * 397) ^ DefaultDelay;
+				hashCode = (hashCode * 397) ^ DefaultLineDelay;
+				hashCode = (hashCode * 397) ^ DefaultLineInterval;
+				hashCode = (hashCode * 397) ^ DefaultLineRepeat;
+				hashCode = (hashCode * 397) ^ DisableKeywords                .GetHashCode();
 
-				SignalXOnBeforeEachTransmission.GetHashCode() ^
-				SignalXOnPeriodically          .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ SignalXOnBeforeEachTransmission.GetHashCode();
+				hashCode = (hashCode * 397) ^ SignalXOnPeriodically          .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

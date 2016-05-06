@@ -171,14 +171,16 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				AlwaysOnTop     .GetHashCode() ^
-				Layout          .GetHashCode() ^
-				TerminalSettings.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^  AlwaysOnTop     .GetHashCode();
+				hashCode = (hashCode * 397) ^  Layout          .GetHashCode();
+				hashCode = (hashCode * 397) ^  TerminalSettings.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

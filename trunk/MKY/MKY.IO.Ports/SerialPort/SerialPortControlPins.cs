@@ -112,14 +112,18 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Rfr.GetHashCode() ^
-				Cts.GetHashCode() ^
-				Dtr.GetHashCode() ^
-				Dsr.GetHashCode() ^
-				Dcd.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Rfr.GetHashCode();
+				hashCode = (hashCode * 397) ^ Cts.GetHashCode();
+				hashCode = (hashCode * 397) ^ Dtr.GetHashCode();
+				hashCode = (hashCode * 397) ^ Dsr.GetHashCode();
+				hashCode = (hashCode * 397) ^ Dcd.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary></summary>
@@ -260,14 +264,18 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				RfrDisableCount.GetHashCode() ^
-				CtsDisableCount.GetHashCode() ^
-				DtrDisableCount.GetHashCode() ^
-				DsrDisableCount.GetHashCode() ^
-				DcdCount       .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    RfrDisableCount;
+				hashCode = (hashCode * 397) ^ CtsDisableCount;
+				hashCode = (hashCode * 397) ^ DtrDisableCount;
+				hashCode = (hashCode * 397) ^ DsrDisableCount;
+				hashCode = (hashCode * 397) ^ DcdCount;
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary></summary>

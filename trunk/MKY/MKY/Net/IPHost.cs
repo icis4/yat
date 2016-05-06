@@ -172,17 +172,14 @@ namespace MKY.Net
 		/// </summary>
 		public override int GetHashCode()
 		{
-			if ((IPHost)UnderlyingEnum == IPHost.Other)
+			unchecked
 			{
-				return
-				(
-					base.GetHashCode() ^
-					this.otherAddress.GetHashCode()
-				);
-			}
-			else
-			{
-				return (base.GetHashCode());
+				int hashCode = base.GetHashCode();
+
+				if ((IPHost)UnderlyingEnum == IPHost.Other)
+					hashCode = (hashCode * 397) ^ (this.otherAddress != null ? this.otherAddress.GetHashCode() : 0); // Ignore 'otherDescription'
+
+				return (hashCode);
 			}
 		}
 

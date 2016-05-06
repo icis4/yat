@@ -134,16 +134,14 @@ namespace YAT.Application.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			int filePathHashCode = 0;
-			if (FilePath != null) // File path is allowed to be 'null'!
-				filePathHashCode = FilePath.GetHashCode();
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+				hashCode = (hashCode * 397) ^ (FilePath != null ? FilePath.GetHashCode() : 0);
 
-				filePathHashCode
-			);
+				return (hashCode);
+			}
 		}
 
 		#endregion

@@ -95,6 +95,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		private SerialPortId portId;
+
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
 		private OutputBufferSize outputBufferSize;
@@ -384,6 +385,7 @@ namespace MKY.IO.Serial.SerialPort
 				base.Equals(other) && // Compare all settings nodes.
 
 				(PortId              == other.PortId) &&
+
 				(AutoReopen          == other.AutoReopen) &&
 				(OutputBufferSize    == other.OutputBufferSize) &&
 				(MaxChunkSize        == other.MaxChunkSize) &&
@@ -403,23 +405,22 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			int portIdHashCode = 0;
-			if (PortId != null) // May be 'null' if no ports are available!
-				portIdHashCode = PortId.GetHashCode();
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+				hashCode = (hashCode * 397) ^ (PortId != null ? PortId.GetHashCode() : 0); // May be 'null' if no ports are available!
 
-				portIdHashCode                    ^
-				AutoReopen         .GetHashCode() ^
-				OutputBufferSize   .GetHashCode() ^
-				MaxChunkSize       .GetHashCode() ^
-				MaxSendRate        .GetHashCode() ^
+				hashCode = (hashCode * 397) ^  AutoReopen             .GetHashCode();
+				hashCode = (hashCode * 397) ^  OutputBufferSize       .GetHashCode();
+				hashCode = (hashCode * 397) ^  MaxChunkSize           .GetHashCode();
+				hashCode = (hashCode * 397) ^  MaxSendRate            .GetHashCode();
 
-				NoSendOnOutputBreak.GetHashCode() ^
-				NoSendOnInputBreak .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^  NoSendOnOutputBreak    .GetHashCode();
+				hashCode = (hashCode * 397) ^  NoSendOnInputBreak     .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#region Object Members > Extensions

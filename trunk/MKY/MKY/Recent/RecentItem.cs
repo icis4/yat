@@ -151,11 +151,14 @@ namespace MKY.Recent
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			// Attention, default(T) can lead to null, e.g. in case of a string!
-			if (Item != null)
-				return (Item.GetHashCode()); // Do not consider time stamp.
-			else
-				return (0);
+			unchecked
+			{
+				// Attention, default(T) can lead to null, e.g. in case of a string!
+				if (Item != null)
+					return (Item.GetHashCode()); // Do not consider time stamp.
+				else
+					return (base.GetHashCode());
+			}
 		}
 
 		/// <summary>

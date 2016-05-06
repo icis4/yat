@@ -155,13 +155,15 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				TxBufferSize.GetHashCode() ^
-				RxBufferSize.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ TxBufferSize;
+				hashCode = (hashCode * 397) ^ RxBufferSize;
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

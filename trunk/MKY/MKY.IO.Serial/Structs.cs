@@ -81,11 +81,15 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled .GetHashCode() ^
-				Interval.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled .GetHashCode();
+				hashCode = (hashCode * 397) ^ Interval.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>

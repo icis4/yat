@@ -322,13 +322,15 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				TerminalIsStarted.GetHashCode() ^
-				LogIsOn          .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ TerminalIsStarted.GetHashCode();
+				hashCode = (hashCode * 397) ^ LogIsOn          .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

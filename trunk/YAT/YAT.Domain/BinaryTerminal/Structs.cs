@@ -87,11 +87,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled.GetHashCode() ^
-				Length .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Length .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion
@@ -179,11 +183,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled .GetHashCode() ^
-				Sequence.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled .GetHashCode();
+				hashCode = (hashCode * 397) ^ Sequence.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion
@@ -271,11 +279,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Enabled.GetHashCode() ^
-				Timeout.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    Enabled.GetHashCode();
+				hashCode = (hashCode * 397) ^ Timeout.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

@@ -571,20 +571,22 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				this.type                  .GetHashCode() ^
-				this.remoteHost            .GetHashCode() ^
-				this.remoteTcpPort         .GetHashCode() ^
-				this.remoteUdpPort         .GetHashCode() ^
-				this.localInterface        .GetHashCode() ^
-				this.localFilter           .GetHashCode() ^
-				this.localTcpPort          .GetHashCode() ^
-				this.localUdpPort          .GetHashCode() ^
-				this.tcpClientAutoReconnect.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^  Type                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^ (RemoteHost     != null ? RemoteHost    .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  RemoteTcpPort;
+				hashCode = (hashCode * 397) ^  RemoteUdpPort;
+				hashCode = (hashCode * 397) ^ (LocalInterface != null ? LocalInterface.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (LocalFilter    != null ? LocalFilter   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  LocalTcpPort;
+				hashCode = (hashCode * 397) ^  LocalUdpPort;
+				hashCode = (hashCode * 397) ^  TcpClientAutoReconnect                 .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary></summary>

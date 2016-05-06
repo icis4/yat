@@ -202,16 +202,18 @@ namespace YAT.Application.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				this.TextSendFiles  .GetHashCode() ^
-				this.BinarySendFiles.GetHashCode() ^
-				this.RawLogFiles    .GetHashCode() ^
-				this.NeatLogFiles   .GetHashCode() ^
-				this.MonitorFiles   .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ (TextSendFiles   != null ? TextSendFiles  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (BinarySendFiles != null ? BinarySendFiles.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RawLogFiles     != null ? RawLogFiles    .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (NeatLogFiles    != null ? NeatLogFiles   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (MonitorFiles    != null ? MonitorFiles   .GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

@@ -227,18 +227,20 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				StartPosition.GetHashCode() ^
-				WindowState  .GetHashCode() ^
-				Location     .GetHashCode() ^
-				Size         .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ StartPosition   .GetHashCode();
+				hashCode = (hashCode * 397) ^ WindowState     .GetHashCode();
+				hashCode = (hashCode * 397) ^ Location        .GetHashCode();
+				hashCode = (hashCode * 397) ^ Size            .GetHashCode();
 
-				ShowTerminalInfo.GetHashCode() ^
-				ShowChrono      .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ ShowTerminalInfo.GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowChrono      .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

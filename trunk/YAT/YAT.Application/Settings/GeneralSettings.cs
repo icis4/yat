@@ -247,19 +247,21 @@ namespace YAT.Application.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				AutoOpenWorkspace         .GetHashCode() ^
-				AutoSaveWorkspace         .GetHashCode() ^
-				UseRelativePaths          .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ AutoOpenWorkspace         .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoSaveWorkspace         .GetHashCode();
+				hashCode = (hashCode * 397) ^ UseRelativePaths          .GetHashCode();
 
-				RetrieveSerialPortCaptions.GetHashCode() ^
-				DetectSerialPortsInUse    .GetHashCode() ^
+				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions.GetHashCode();
+				hashCode = (hashCode * 397) ^ DetectSerialPortsInUse    .GetHashCode();
 
-				UseUsbSerial           .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ UseUsbSerial              .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

@@ -190,12 +190,16 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				SeparateRxId.GetHashCode() ^
-				AnyRxId     .GetHashCode() ^
-				RxId        .GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    SeparateRxId.GetHashCode();
+				hashCode = (hashCode * 397) ^ AnyRxId     .GetHashCode();
+				hashCode = (hashCode * 397) ^ RxId        .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

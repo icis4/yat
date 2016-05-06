@@ -299,11 +299,15 @@ namespace MKY.Settings
 		/// </summary>
 		public override int GetHashCode()
 		{
-			int hashCode = 0;
-			foreach (SettingsItem node in this.nodes)
-				hashCode ^= node.GetHashCode();
+			unchecked
+			{
+				int hashCode = 0;
 
-			return (hashCode);
+				foreach (SettingsItem node in this.nodes)
+					hashCode = (hashCode * 397) ^ node.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

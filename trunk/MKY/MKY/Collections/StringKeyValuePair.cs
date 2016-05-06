@@ -105,11 +105,15 @@ namespace MKY.Collections
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				Key  .GetHashCode() ^
-				Value.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                    (Key   != null ? Key  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary>

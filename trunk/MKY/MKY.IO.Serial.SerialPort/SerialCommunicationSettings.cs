@@ -425,19 +425,21 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				BaudRate   .GetHashCode() ^
-				DataBits   .GetHashCode() ^
-				Parity     .GetHashCode() ^
-				StopBits   .GetHashCode() ^
-				FlowControl.GetHashCode() ^
+				hashCode = (hashCode * 397) ^ BaudRate;
+				hashCode = (hashCode * 397) ^ DataBits   .GetHashCode();
+				hashCode = (hashCode * 397) ^ Parity     .GetHashCode();
+				hashCode = (hashCode * 397) ^ StopBits   .GetHashCode();
+				hashCode = (hashCode * 397) ^ FlowControl.GetHashCode();
 
-				RfrPin     .GetHashCode() ^
-				DtrPin     .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ RfrPin     .GetHashCode();
+				hashCode = (hashCode * 397) ^ DtrPin     .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary></summary>

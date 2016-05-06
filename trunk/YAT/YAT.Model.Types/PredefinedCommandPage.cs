@@ -180,12 +180,15 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			int hashCode = 0;
+			unchecked
+			{
+				int hashCode = 0;
 
-			foreach (Command c in Commands)
-				hashCode ^= c.GetHashCode();
+				foreach (Command c in Commands)
+					hashCode = (hashCode * 397) ^ c.GetHashCode();
 
-			return (hashCode);
+				return (hashCode);
+			}
 		}
 
 		#endregion

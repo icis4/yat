@@ -198,15 +198,17 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				ReplaceControlChars.GetHashCode() ^
-				ControlCharRadix   .GetHashCode() ^
-				ReplaceTab         .GetHashCode() ^
-				ReplaceSpace       .GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ ReplaceControlChars.GetHashCode();
+				hashCode = (hashCode * 397) ^ ControlCharRadix   .GetHashCode();
+				hashCode = (hashCode * 397) ^ ReplaceTab         .GetHashCode();
+				hashCode = (hashCode * 397) ^ ReplaceSpace       .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

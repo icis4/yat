@@ -333,16 +333,18 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				IOType    .GetHashCode() ^
-				Endianness.GetHashCode() ^
+				hashCode = (hashCode * 397) ^ IOType    .GetHashCode();
+				hashCode = (hashCode * 397) ^ Endianness.GetHashCode();
 
-				IndicateSerialPortBreakStates    .GetHashCode() ^
-				SerialPortOutputBreakIsModifiable.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ IndicateSerialPortBreakStates    .GetHashCode();
+				hashCode = (hashCode * 397) ^ SerialPortOutputBreakIsModifiable.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		/// <summary></summary>

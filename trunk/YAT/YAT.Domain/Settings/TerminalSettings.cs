@@ -448,12 +448,14 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				base.GetHashCode() ^ // Get hash code of all settings nodes.
+			unchecked
+			{
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				TerminalType.GetHashCode()
-			);
+				hashCode = (hashCode * 397) ^ TerminalType.GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion

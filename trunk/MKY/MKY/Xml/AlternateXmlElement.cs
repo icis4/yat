@@ -95,12 +95,16 @@ namespace MKY.Xml
 		/// </remarks>
 		public override int GetHashCode()
 		{
-			return
-			(
-				XmlPath.GetHashCode() ^
-				LocalName.GetHashCode() ^
-				AlternateLocalNames.GetHashCode()
-			);
+			unchecked
+			{
+				int hashCode;
+
+				hashCode =                     XmlPath                      .GetHashCode();
+				hashCode = (hashCode * 397) ^ (LocalName != null ? LocalName.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  AlternateLocalNames          .GetHashCode();
+
+				return (hashCode);
+			}
 		}
 
 		#endregion
