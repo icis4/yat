@@ -88,17 +88,42 @@ namespace MKY
 	///
 	///     public static bool TryParse(string s, out ModeEx result)
 	///     {
-	///         int intResult;
-	///
-	///         if (int.TryParse(s.Trim(), out intResult))
+	///         Mode enumResult;
+	///         if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 	///         {
-	///             result = (ModeEx)intResult;
+	///             result = enumResult;
 	///             return (true);
 	///         }
 	///         else
 	///         {
 	///             result = null;
 	///             return (false);
+	///         }
+	///     }
+	///
+	///     public static bool TryParse(string s, out Mode result)
+	///     {
+	///         int intResult;
+	///         if (int.TryParse(s.Trim(), out intResult)) // TryParse() trims whitespace.
+	///         {
+	///             result = (ModeEx)intResult;
+	///             return (true);
+	///         }
+	///         else
+	///         {
+	///             if (s != null)
+	///                 s = s.Trim();
+	///
+	///             if (string.IsNullOrEmpty(s))
+	///             {
+	///                 result = new ModeEx(); // Default!
+	///                 return (true); // Default silently, could e.g. happen when deserializing an XML.
+	///             }
+	///             else // Invalid string!
+	///             {
+	///                 result = new ModeEx(); // Default!
+	///                 return (false);
+	///             }
 	///         }
 	///     }
 	///

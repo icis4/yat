@@ -135,8 +135,8 @@ namespace YAT.Application.Settings
 		public override int GetHashCode()
 		{
 			int filePathHashCode = 0;
-			if (FilePath != null)
-				filePathHashCode.GetHashCode();
+			if (FilePath != null) // File path is allowed to be 'null'!
+				filePathHashCode = FilePath.GetHashCode();
 
 			return
 			(

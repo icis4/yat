@@ -295,11 +295,11 @@ namespace YAT.Model.Settings
 		public override int GetHashCode()
 		{
 			int dedicatedTriggerHashCode = 0;
-			if (DedicatedTrigger != null)
+			if (DedicatedTrigger != null) // Command may be 'null'!
 				dedicatedTriggerHashCode = DedicatedTrigger.GetHashCode();
 
 			int dedicatedResponseHashCode = 0;
-			if (DedicatedResponse != null)
+			if (DedicatedResponse != null) // Command may be 'null'!
 				dedicatedResponseHashCode = DedicatedResponse.GetHashCode();
 
 			return
@@ -309,7 +309,7 @@ namespace YAT.Model.Settings
 				Visible          .GetHashCode() ^
 				Enabled          .GetHashCode() ^
 				TriggerSelection .GetHashCode() ^
-				dedicatedTriggerHashCode ^
+				dedicatedTriggerHashCode        ^
 				ResponseSelection.GetHashCode() ^
 				dedicatedResponseHashCode
 			);
