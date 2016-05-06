@@ -578,11 +578,11 @@ namespace YAT.Model.Settings
 		public override int GetHashCode()
 		{
 			int serialPortIdHashCode = 0;
-			if (SerialPortId != null)
+			if (SerialPortId != null) // May be 'null' if no ports are available!
 				serialPortIdHashCode = SerialPortId.GetHashCode();
 
 			int usbSerialHidDeviceInfoHashCode = 0;
-			if (UsbSerialHidDeviceInfo != null)
+			if (UsbSerialHidDeviceInfo != null) // May be 'null' if no devices are available!
 				usbSerialHidDeviceInfoHashCode = UsbSerialHidDeviceInfo.GetHashCode();
 
 			return
@@ -592,7 +592,7 @@ namespace YAT.Model.Settings
 				TerminalType            .GetHashCode() ^
 				IOType                  .GetHashCode() ^
 
-				serialPortIdHashCode ^
+				serialPortIdHashCode                   ^
 				SerialPortCommunication .GetHashCode() ^
 				SerialPortAutoReopen    .GetHashCode() ^
 
@@ -606,7 +606,7 @@ namespace YAT.Model.Settings
 				TcpClientAutoReconnect  .GetHashCode() ^
 				UdpServerSendMode       .GetHashCode() ^
 
-				usbSerialHidDeviceInfoHashCode ^
+				usbSerialHidDeviceInfoHashCode         ^
 				UsbSerialHidReportFormat.GetHashCode() ^
 				UsbSerialHidRxIdUsage   .GetHashCode() ^
 				UsbSerialHidFlowControl .GetHashCode() ^

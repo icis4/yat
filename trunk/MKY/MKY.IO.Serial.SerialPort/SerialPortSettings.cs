@@ -404,14 +404,14 @@ namespace MKY.IO.Serial.SerialPort
 		public override int GetHashCode()
 		{
 			int portIdHashCode = 0;
-			if (PortId != null)
+			if (PortId != null) // May be 'null' if no ports are available!
 				portIdHashCode = PortId.GetHashCode();
 
 			return
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				portIdHashCode     .GetHashCode() ^
+				portIdHashCode                    ^
 				AutoReopen         .GetHashCode() ^
 				OutputBufferSize   .GetHashCode() ^
 				MaxChunkSize       .GetHashCode() ^

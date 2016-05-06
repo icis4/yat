@@ -293,14 +293,14 @@ namespace MKY.IO.Serial.Usb
 		public override int GetHashCode()
 		{
 			int deviceInfoHashCode = 0;
-			if (DeviceInfo != null)
+			if (DeviceInfo != null) // May be 'null' if no devices are available!
 				deviceInfoHashCode = DeviceInfo.GetHashCode();
 
 			return
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				deviceInfoHashCode ^
+				deviceInfoHashCode         ^
 				ReportFormat.GetHashCode() ^
 				RxIdUsage   .GetHashCode() ^
 				FlowControl .GetHashCode() ^

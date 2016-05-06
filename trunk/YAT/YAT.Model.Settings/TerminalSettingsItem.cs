@@ -230,14 +230,14 @@ namespace YAT.Model.Settings
 		public override int GetHashCode()
 		{
 			int filePathHashCode = 0;
-			if (FilePath != null)
+			if (FilePath != null) // File path is allowed to be 'null'!
 				filePathHashCode = FilePath.GetHashCode();
 
 			return
 			(
 				base.GetHashCode() ^ // Get hash code of all settings nodes.
 
-				filePathHashCode ^
+				filePathHashCode         ^
 				Guid      .GetHashCode() ^
 				FixedIndex.GetHashCode()
 			);

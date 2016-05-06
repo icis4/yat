@@ -181,6 +181,7 @@ namespace YAT.Model.Types
 		public override int GetHashCode()
 		{
 			int hashCode = 0;
+
 			foreach (Command c in Commands)
 				hashCode ^= c.GetHashCode();
 
