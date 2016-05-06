@@ -379,10 +379,10 @@ namespace YAT.Model.Test
 				Assert.AreEqual(Domain.TerminalType.Text,    main.StartArgs.TerminalSettingsHandler.Settings.TerminalType);
 				Assert.AreEqual(Domain.IOType.TcpAutoSocket, main.StartArgs.TerminalSettingsHandler.Settings.IOType);
 
-				Assert.AreEqual((MKY.Net.IPHost)MKY.Net.IPHostType.Localhost, (MKY.Net.IPHost)main.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.RemoteHost);
+				Assert.AreEqual((MKY.Net.IPHostEx)MKY.Net.IPHost.Localhost, (MKY.Net.IPHostEx)main.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.RemoteHost);
 				Assert.AreEqual(12345, main.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.RemotePort);
 
-				Assert.AreEqual((MKY.Net.IPNetworkInterface)MKY.Net.IPNetworkInterfaceType.Any, (MKY.Net.IPNetworkInterface)main.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalInterface);
+				Assert.AreEqual((MKY.Net.IPNetworkInterfaceEx)MKY.Net.IPNetworkInterface.Any, (MKY.Net.IPNetworkInterfaceEx)main.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalInterface);
 				Assert.AreEqual(56789, main.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalPort);
 
 				Assert.IsTrue(main.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted);

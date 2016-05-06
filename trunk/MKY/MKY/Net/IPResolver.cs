@@ -43,20 +43,20 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool TryResolveRemoteHost(string remoteHost, out IPAddress ipAddress)
 		{
-			IPHost ipHost;
-			if (IPHost.TryParse(remoteHost, out ipHost))
+			IPHostEx ipHost;
+			if (IPHostEx.TryParse(remoteHost, out ipHost))
 			{
-				switch ((IPHostType)ipHost)
+				switch ((IPHost)ipHost)
 				{
-					case IPHostType.Localhost:
-					case IPHostType.IPv4Localhost:
-					case IPHostType.IPv6Localhost:
+					case IPHost.Localhost:
+					case IPHost.IPv4Localhost:
+					case IPHost.IPv6Localhost:
 					{
 						ipAddress = ipHost.IPAddress;
 						return (true);
 					}
 
-					case IPHostType.Other:
+					case IPHost.Other:
 					{
 						try
 						{
@@ -74,7 +74,7 @@ namespace MKY.Net
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("remoteHost", (IPHostType)ipHost, "Unknown IP host type!"));
+						throw (new ArgumentOutOfRangeException("remoteHost", (IPHost)ipHost, "Unknown IP host type!"));
 					}
 				}
 			}
@@ -89,22 +89,22 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public static bool TryResolveLocalInterface(string localInterface, out IPAddress ipAddress)
 		{
-			IPNetworkInterface networkInterface;
-			if (IPNetworkInterface.TryParse(localInterface, out networkInterface))
+			IPNetworkInterfaceEx networkInterface;
+			if (IPNetworkInterfaceEx.TryParse(localInterface, out networkInterface))
 			{
-				switch ((IPNetworkInterfaceType)networkInterface)
+				switch ((IPNetworkInterface)networkInterface)
 				{
-					case IPNetworkInterfaceType.Any:
-					case IPNetworkInterfaceType.IPv4Any:
-					case IPNetworkInterfaceType.IPv4Loopback:
-					case IPNetworkInterfaceType.IPv6Any:
-					case IPNetworkInterfaceType.IPv6Loopback:
+					case IPNetworkInterface.Any:
+					case IPNetworkInterface.IPv4Any:
+					case IPNetworkInterface.IPv4Loopback:
+					case IPNetworkInterface.IPv6Any:
+					case IPNetworkInterface.IPv6Loopback:
 					{
 						ipAddress = networkInterface.IPAddress;
 						return (true);
 					}
 
-					case IPNetworkInterfaceType.Other:
+					case IPNetworkInterface.Other:
 					{
 						try
 						{
@@ -122,7 +122,7 @@ namespace MKY.Net
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("localInterface", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type!"));
+						throw (new ArgumentOutOfRangeException("localInterface", (IPNetworkInterface)networkInterface, "Unknown network interface type!"));
 					}
 				}
 			}

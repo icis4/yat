@@ -1077,7 +1077,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return (IPHost.ToUrlString(this.remoteIPAddress) + ":" + this.remotePort);
+			return (IPHostEx.ToUrlString(this.remoteIPAddress) + ":" + this.remotePort);
 		}
 
 		#endregion

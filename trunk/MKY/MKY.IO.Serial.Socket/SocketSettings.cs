@@ -50,20 +50,20 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly IPHost DefaultRemoteHost = new IPHost(IPHostType.Localhost);
+		public static readonly IPHostEx DefaultRemoteHost = new IPHostEx(IPHost.Localhost);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Why not, the .NET framework itself does it everywhere...")]
-		public static readonly IPNetworkInterface DefaultLocalInterface = new IPNetworkInterface(IPNetworkInterfaceType.Any);
+		public static readonly IPNetworkInterfaceEx DefaultLocalInterface = new IPNetworkInterfaceEx(IPNetworkInterface.Any);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedLocalIPAddress = IPAddress.Any;
 
 		/// <summary></summary>
-		public static readonly IPAddressFilter DefaultLocalFilter = new IPAddressFilter(IPAddressFilterType.Any);
+		public static readonly IPAddressFilterEx DefaultLocalFilter = new IPAddressFilterEx(IPAddressFilter.Any);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedLocalIPAddressFilter = IPAddress.Any;
@@ -691,12 +691,12 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (type)
 			{
-				case SocketType.TcpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketType.TcpClient:     return (                                         IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
 				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
-				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketType.UdpClient:     return (                                         IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketType.UdpClient:     return (                                         IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + IPHost.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}

@@ -32,7 +32,7 @@ namespace MKY.Net
 	/// List containing IP network interfaces.
 	/// </summary>
 	[Serializable]
-	public class IPNetworkInterfaceCollection : List<IPNetworkInterface>
+	public class IPNetworkInterfaceCollection : List<IPNetworkInterfaceEx>
 	{
 		/// <summary></summary>
 		public IPNetworkInterfaceCollection()
@@ -41,7 +41,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public IPNetworkInterfaceCollection(IEnumerable<IPNetworkInterface> rhs)
+		public IPNetworkInterfaceCollection(IEnumerable<IPNetworkInterfaceEx> rhs)
 			: base(rhs)
 		{
 		}
@@ -54,7 +54,7 @@ namespace MKY.Net
 			Clear();
 
 			// Add common interfaces such as <Any> to the collection
-			AddRange(IPNetworkInterface.GetItems());
+			AddRange(IPNetworkInterfaceEx.GetItems());
 
 			// Add interfaces of current machine to the collection
 			NetworkInterface[] nis = NetworkInterface.GetAllNetworkInterfaces();
@@ -78,7 +78,7 @@ namespace MKY.Net
 							break;
 					}
 				}
-				Add(new IPNetworkInterface(address, description));
+				Add(new IPNetworkInterfaceEx(address, description));
 			}
 		}
 	}

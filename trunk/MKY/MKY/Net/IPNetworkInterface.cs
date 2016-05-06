@@ -37,7 +37,7 @@ namespace MKY.Net
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum IPNetworkInterfaceType
+	public enum IPNetworkInterface
 	{
 		Any,
 
@@ -70,7 +70,7 @@ namespace MKY.Net
 	/// Make sure to use the underlying enum for serialization.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-	public class IPNetworkInterface : EnumEx
+	public class IPNetworkInterfaceEx : EnumEx
 	{
 		#region String Definitions
 
@@ -92,26 +92,26 @@ namespace MKY.Net
 		private IPAddress otherAddress = IPAddress.None;
 		private string otherDescription = "";
 
-		/// <summary>Default is <see cref="IPNetworkInterfaceType.Any"/>.</summary>
-		public IPNetworkInterface()
-			: this(IPNetworkInterfaceType.Any)
+		/// <summary>Default is <see cref="IPNetworkInterface.Any"/>.</summary>
+		public IPNetworkInterfaceEx()
+			: this(IPNetworkInterface.Any)
 		{
 		}
 
 		/// <summary></summary>
-		public IPNetworkInterface(IPNetworkInterfaceType networkInterface)
+		public IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 			: base(networkInterface)
 		{
 		}
 
 		/// <summary></summary>
-		public IPNetworkInterface(IPAddress address, string description)
+		public IPNetworkInterfaceEx(IPAddress address, string description)
 		{
-			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterfaceType.Any);          this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterfaceType.Loopback);     this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPNetworkInterfaceType.IPv6Any);      this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPNetworkInterfaceType.IPv6Loopback); this.otherAddress = IPAddress.None; }
-			else                                        { SetUnderlyingEnum(IPNetworkInterfaceType.Other);        this.otherAddress = address;        }
+			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.otherAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPNetworkInterface.Other);        this.otherAddress = address;        }
 
 			this.otherDescription = description;
 		}
@@ -123,15 +123,15 @@ namespace MKY.Net
 		{
 			get
 			{
-				switch ((IPNetworkInterfaceType)UnderlyingEnum)
+				switch ((IPNetworkInterface)UnderlyingEnum)
 				{
-					case IPNetworkInterfaceType.Any:          return (IPAddress.Any);
-					case IPNetworkInterfaceType.Loopback:     return (IPAddress.Loopback);
-					case IPNetworkInterfaceType.IPv4Any:      return (IPAddress.Any);
-					case IPNetworkInterfaceType.IPv4Loopback: return (IPAddress.Loopback);
-					case IPNetworkInterfaceType.IPv6Any:      return (IPAddress.IPv6Any);
-					case IPNetworkInterfaceType.IPv6Loopback: return (IPAddress.IPv6Loopback);
-					case IPNetworkInterfaceType.Other:        return (this.otherAddress);
+					case IPNetworkInterface.Any:          return (IPAddress.Any);
+					case IPNetworkInterface.Loopback:     return (IPAddress.Loopback);
+					case IPNetworkInterface.IPv4Any:      return (IPAddress.Any);
+					case IPNetworkInterface.IPv4Loopback: return (IPAddress.Loopback);
+					case IPNetworkInterface.IPv6Any:      return (IPAddress.IPv6Any);
+					case IPNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
+					case IPNetworkInterface.Other:        return (this.otherAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -152,15 +152,16 @@ namespace MKY.Net
 			if (GetType() != obj.GetType())
 				return (false);
 
-			IPNetworkInterface other = (IPNetworkInterface)obj;
-			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)
+			IPNetworkInterfaceEx other = (IPNetworkInterfaceEx)obj;
+			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Other)
 			{
 				return
 				(
 					base.Equals(other) &&
 
-					(this.otherAddress == other.otherAddress) &&
-					StringEx.EqualsOrdinalIgnoreCase(this.otherDescription, other.otherDescription)
+					(this.otherAddress == other.otherAddress)
+
+					// Ignore 'otherDescription'
 				);
 			}
 			else
@@ -174,14 +175,15 @@ namespace MKY.Net
 		/// </summary>
 		public override int GetHashCode()
 		{
-			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)
+			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Other)
 			{
 				return
 				(
 					base.GetHashCode() ^
 
-					this.otherAddress    .GetHashCode() ^
-					this.otherDescription.GetHashCode()
+					this.otherAddress.GetHashCode()
+
+					// Ignore 'otherDescription'
 				);
 			}
 			else
@@ -194,15 +196,15 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
 		public override string ToString()
 		{
-			switch ((IPNetworkInterfaceType)UnderlyingEnum)
+			switch ((IPNetworkInterface)UnderlyingEnum)
 			{
-				case IPNetworkInterfaceType.Any:          return (Any_string);
-				case IPNetworkInterfaceType.Loopback:     return (Loopback_string);
-				case IPNetworkInterfaceType.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
-				case IPNetworkInterfaceType.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
-				case IPNetworkInterfaceType.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
-				case IPNetworkInterfaceType.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPNetworkInterfaceType.Other:
+				case IPNetworkInterface.Any:          return (Any_string);
+				case IPNetworkInterface.Loopback:     return (Loopback_string);
+				case IPNetworkInterface.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
+				case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
+				case IPNetworkInterface.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
+				case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
+				case IPNetworkInterface.Other:
 				{
 					if (!string.IsNullOrEmpty(this.otherDescription))
 					{
@@ -232,15 +234,15 @@ namespace MKY.Net
 		#region GetItems
 
 		/// <summary></summary>
-		public static IPNetworkInterface[] GetItems()
+		public static IPNetworkInterfaceEx[] GetItems()
 		{
-			List<IPNetworkInterface> a = new List<IPNetworkInterface>(6); // Preset the required capactiy to improve memory management.
-			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.Any));
-			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.Loopback));
-			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv4Any));
-			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv4Loopback));
-			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv6Any));
-			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv6Loopback));
+			List<IPNetworkInterfaceEx> a = new List<IPNetworkInterfaceEx>(6); // Preset the required capactiy to improve memory management.
+			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.Any));
+			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.Loopback));
+			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Any));
+			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Loopback));
+			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any));
+			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback));
 			return (a.ToArray());
 		}
 
@@ -251,9 +253,9 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static IPNetworkInterface Parse(string s)
+		public static IPNetworkInterfaceEx Parse(string s)
 		{
-			IPNetworkInterface result;
+			IPNetworkInterfaceEx result;
 
 			if (TryParse(s, out result))
 				return (result);
@@ -264,56 +266,21 @@ namespace MKY.Net
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		public static bool TryParse(string s, out IPNetworkInterface result)
+		public static bool TryParse(string s, out IPNetworkInterfaceEx result)
 		{
-			s = s.Trim();
-
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld2) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld1))
+			IPNetworkInterface enumResult;
+			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
-				return (true);
-			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, Loopback_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringOld2) ||
-			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringOld1))
-			{
-				result = new IPNetworkInterface(IPNetworkInterfaceType.Loopback);
-				return (true);
-			}
-			else if (s.Contains(IPv4Any_string))
-			{
-				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv4Any);
-				return (true);
-			}
-			else if (s.Contains(IPv4Loopback_string))
-			{
-				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv4Loopback);
-				return (true);
-			}
-			else if (s.Contains(IPv6Any_string))
-			{
-				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv6Any);
-				return (true);
-			}
-			else if (s.Contains(IPv6Loopback_string))
-			{
-				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv6Loopback);
+				result = enumResult;
 				return (true);
 			}
 			else
 			{
 				IPAddress address;
-				if (IPAddress.TryParse(s, out address)) // IP address!
+				if (IPAddress.TryParse(s, out address)) // Valid other?
 				{
-					result = new IPNetworkInterface(address, "");
+					result = new IPNetworkInterfaceEx(address, null);
 					return (true);
-				}
-				else if (string.IsNullOrEmpty(s)) // Default!
-				{
-					result = new IPNetworkInterface();
-					return (true); // Default silently, could e.g. happen when deserializing an XML.
 				}
 				else // Invalid string!
 				{
@@ -323,19 +290,73 @@ namespace MKY.Net
 			}
 		}
 
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
+		public static bool TryParse(string s, out IPNetworkInterface result)
+		{
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s))
+			{
+				result = new IPNetworkInterfaceEx(); // Default!
+				return (true); // Default silently, could e.g. happen when deserializing an XML.
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Any_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld2) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Any_stringOld1))
+			{
+				result = new IPNetworkInterfaceEx(IPNetworkInterface.Any);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Loopback_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringOld2) ||
+			         StringEx.EqualsOrdinalIgnoreCase(s, Loopback_stringOld1))
+			{
+				result = new IPNetworkInterfaceEx(IPNetworkInterface.Loopback);
+				return (true);
+			}
+			else if (s.Contains(IPv4Any_string))
+			{
+				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Any);
+				return (true);
+			}
+			else if (s.Contains(IPv4Loopback_string))
+			{
+				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Loopback);
+				return (true);
+			}
+			else if (s.Contains(IPv6Any_string))
+			{
+				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any);
+				return (true);
+			}
+			else if (s.Contains(IPv6Loopback_string))
+			{
+				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback);
+				return (true);
+			}
+			else // Invalid string!
+			{
+				result = new IPNetworkInterfaceEx(); // Default!
+				return (false);
+			}
+		}
+
 		/// <summary></summary>
-		public static IPNetworkInterface ParseFromIPAddress(IPAddress address)
+		public static IPNetworkInterfaceEx ParseFromIPAddress(IPAddress address)
 		{
 			if      (address == IPAddress.Any)
-				return (new IPNetworkInterface(IPNetworkInterfaceType.Any));
+				return (new IPNetworkInterfaceEx(IPNetworkInterface.Any));
 			else if (address == IPAddress.Loopback)
-				return (new IPNetworkInterface(IPNetworkInterfaceType.Loopback));
+				return (new IPNetworkInterfaceEx(IPNetworkInterface.Loopback));
 			else if (address == IPAddress.IPv6Any)
-				return (new IPNetworkInterface(IPNetworkInterfaceType.IPv6Any));
+				return (new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any));
 			else if (address == IPAddress.IPv6Loopback)
-				return (new IPNetworkInterface(IPNetworkInterfaceType.IPv6Loopback));
+				return (new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback));
 			else
-				return (new IPNetworkInterface(address, ""));
+				return (new IPNetworkInterfaceEx(address, ""));
 
 			// Note that 'IPNetworkInterfaceType.IPv4Any|Loopback' cannot be distinguished from 'IPNetworkInterfaceType.Any|Loopback' when 'IPAddress.Any|Loopback' is given.
 			// Also note that similar but less optimized code is found at IPNetworkInterfaceType(IPAddress) further above.
@@ -346,25 +367,25 @@ namespace MKY.Net
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator IPNetworkInterfaceType(IPNetworkInterface networkInterface)
+		public static implicit operator IPNetworkInterface(IPNetworkInterfaceEx networkInterface)
 		{
-			return ((IPNetworkInterfaceType)networkInterface.UnderlyingEnum);
+			return ((IPNetworkInterface)networkInterface.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPNetworkInterface(IPNetworkInterfaceType networkInterface)
+		public static implicit operator IPNetworkInterfaceEx(IPNetworkInterface networkInterface)
 		{
-			return (new IPNetworkInterface(networkInterface));
+			return (new IPNetworkInterfaceEx(networkInterface));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(IPNetworkInterface networkInterface)
+		public static implicit operator string(IPNetworkInterfaceEx networkInterface)
 		{
 			return (networkInterface.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPNetworkInterface(string networkInterface)
+		public static implicit operator IPNetworkInterfaceEx(string networkInterface)
 		{
 			return (Parse(networkInterface));
 		}
