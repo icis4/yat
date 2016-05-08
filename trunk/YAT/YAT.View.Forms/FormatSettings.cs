@@ -39,7 +39,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Forms
 {
 	/// <summary></summary>
-	public partial class FormatSettings : System.Windows.Forms.Form
+	public partial class FormatSettings : Form
 	{
 		#region Fields
 		//==========================================================================================
@@ -51,11 +51,11 @@ namespace YAT.View.Forms
 		private Model.Settings.FormatSettings formatSettings;
 		private Model.Settings.FormatSettings formatSettingsInEdit;
 
+		private Domain.InfoElementSeparatorEx infoSeparator;
+		private Domain.InfoElementEnclosureEx infoEnclosure;
+
 		private Controls.Monitor[] monitors;
 		private Controls.TextFormat[] textFormats;
-
-		private List<Domain.DisplayLine> exampleLines;
-		private List<Domain.DisplayLine> exampleComplete;
 
 		#endregion
 
@@ -65,14 +65,16 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public FormatSettings(Model.Settings.FormatSettings formatSettings)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings, Domain.InfoElementSeparatorEx infoSeparator, Domain.InfoElementEnclosureEx infoEnclosure)
 		{
 			InitializeComponent();
 
 			this.formatSettings = formatSettings;
 			this.formatSettingsInEdit = new Model.Settings.FormatSettings(formatSettings);
 
-			InitializeExamples();
+			this.infoSeparator = infoSeparator;
+			this.infoEnclosure = infoEnclosure;
+
 			InitializeControls();
 
 			// SetControls() is initially called in the 'Shown' event handler.
@@ -89,6 +91,18 @@ namespace YAT.View.Forms
 		public Model.Settings.FormatSettings FormatSettingsResult
 		{
 			get { return (this.formatSettings); }
+		}
+
+		/// <summary></summary>
+		public Domain.InfoElementSeparatorEx InfoSeparatorResult
+		{
+			get { return (this.infoSeparator); }
+		}
+
+		/// <summary></summary>
+		public Domain.InfoElementEnclosureEx InfoEnclosureResult
+		{
+			get { return (this.infoEnclosure); }
 		}
 
 		#endregion
@@ -142,9 +156,86 @@ namespace YAT.View.Forms
 			ShowBackgroundColorDialog();
 		}
 
+		private void comboBox_InfoSeparator_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				var enclosure = (comboBox_InfoSeparator.SelectedItem as Domain.InfoElementSeparatorEx);
+				if (enclosure != null)
+					this.infoSeparator = enclosure.ToSeparator();
+
+				SetControls();
+			}
+		}
+
+		private void comboBox_InfoSeparator_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				Domain.InfoElementSeparatorEx separator;
+				if (Domain.InfoElementSeparatorEx.TryParse(comboBox_InfoSeparator.Text, out separator))
+				{
+					this.infoSeparator = separator.ToSeparator();
+					SetControls();
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"This separator is not supported!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+					e.Cancel = true;
+				}
+			}
+		}
+
+		private void comboBox_InfoEnclosure_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				var enclosure = (comboBox_InfoEnclosure.SelectedItem as Domain.InfoElementEnclosureEx);
+				if (enclosure != null)
+					this.infoEnclosure = enclosure.ToEnclosure();
+
+				SetControls();
+			}
+		}
+
+		[ModalBehavior(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void comboBox_InfoEnclosure_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				Domain.InfoElementEnclosureEx enclosure;
+				if (Domain.InfoElementEnclosureEx.TryParse(comboBox_InfoEnclosure.Text, out enclosure))
+				{
+					this.infoEnclosure = enclosure.ToEnclosure();
+					SetControls();
+				}
+				else
+				{
+					MessageBoxEx.Show
+					(
+						this,
+						"Enclosure string must be an even number of characters! E.g. enter 2 or 4 characters.",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+					e.Cancel = true;
+				}
+			}
+		}
+
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.formatSettings = this.formatSettingsInEdit;
+
+			// InfoSeparator and InfoEnclosure are handled as separate elements.
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -167,6 +258,10 @@ namespace YAT.View.Forms
 				== DialogResult.Yes)
 			{
 				this.formatSettingsInEdit.SetDefaults();
+
+				this.infoSeparator = Domain.Settings.DisplaySettings.DefaultInfoEnclosure;
+				this.infoEnclosure = Domain.Settings.DisplaySettings.DefaultInfoEnclosure;
+
 				SetControls();
 			}
 		}
@@ -177,57 +272,6 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
-
-		private void InitializeExamples()
-		{
-			DateTime now = DateTime.Now;
-
-			this.exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capactiy to improve memory management.
-
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DateInfo(now)));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeInfo(now)));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1")));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx)));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Length(2)));
-			this.exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
-
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(26);
-
-			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx));
-			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(0x13, "<CR>"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.Length(2));
-			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
-
-			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx));
-			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.Length(2));
-			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
-
-			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now));
-			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
-
-			this.exampleComplete = exampleComplete.ToLines();
-		}
 
 		private void InitializeControls()
 		{
@@ -245,10 +289,11 @@ namespace YAT.View.Forms
 				textFormat_Error,
 			};
 
-			for (int i = 0; i < this.monitors.Length; i++)
-				this.monitors[i].AddLine(this.exampleLines[i]);
+			comboBox_InfoSeparator.Items.Clear();
+			comboBox_InfoSeparator.Items.AddRange(Domain.InfoElementSeparatorEx.GetItems());
 
-			monitor_Example.AddLines(this.exampleComplete);
+			comboBox_InfoEnclosure.Items.Clear();
+			comboBox_InfoEnclosure.Items.AddRange(Domain.InfoElementEnclosureEx.GetItems());
 		}
 
 		private Model.Types.TextFormat GetFormatFromIndex(int index)
@@ -280,8 +325,10 @@ namespace YAT.View.Forms
 		{
 			this.isSettingControls.Enter();
 
+			ClearExamples();
+
 			for (int i = 0; i < this.monitors.Length; i++)
-			{                          // Clone settings before assigning them to control
+			{                                   // Clone settings before assigning them to control:
 				this.monitors[i].FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 			}
 
@@ -294,10 +341,88 @@ namespace YAT.View.Forms
 				this.textFormats[i].FormatColor     = tf.Color;
 			}
 
-			                           // Clone settings before assigning them to control
+			Domain.InfoElementSeparatorEx separator;
+			if (Domain.InfoElementSeparatorEx.TryParse(this.infoSeparator, out separator))
+				comboBox_InfoSeparator.SelectedItem = separator;
+			else
+				comboBox_InfoSeparator.Text = this.infoSeparator;
+
+			Domain.InfoElementEnclosureEx enclosure;
+			if (Domain.InfoElementEnclosureEx.TryParse(this.infoEnclosure, out enclosure))
+				comboBox_InfoEnclosure.SelectedItem = enclosure;
+			else
+				comboBox_InfoEnclosure.Text = this.infoEnclosure;
+
+			                               // Clone settings before assigning them to control:
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettingsInEdit);
 
+			SetExamples();
+
 			this.isSettingControls.Leave();
+		}
+
+		private void ClearExamples()
+		{
+			for (int i = 0; i < this.monitors.Length; i++)
+				this.monitors[i].Clear();
+
+			monitor_Example.Clear();
+		}
+
+		private void SetExamples()
+		{
+			DateTime now = DateTime.Now;
+			string enclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
+			string enclosureRight = this.infoEnclosure.ToEnclosureRight();
+
+			List<Domain.DisplayLine> exampleLines = new List<Domain.DisplayLine>(10); // Preset the required capactiy to improve memory management.
+
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DateInfo(now, enclosureLeft, enclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeInfo(now, enclosureLeft, enclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", enclosureLeft, enclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, enclosureLeft, enclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Length(2, enclosureLeft, enclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
+
+			for (int i = 0; i < this.monitors.Length; i++)
+				this.monitors[i].AddLine(exampleLines[i]);
+
+			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(26);
+
+			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Tx, "COM1", enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(0x13, "<CR>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.Length(2, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
+
+			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.PortInfo(Domain.Direction.Rx, "COM1", enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.Length(2, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
+
+			exampleComplete.Enqueue(new Domain.DisplayElement.DateInfo(now, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeInfo(now, enclosureLeft, enclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
+
+			monitor_Example.AddLines(exampleComplete.ToLines());
 		}
 
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

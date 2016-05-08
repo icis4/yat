@@ -66,6 +66,12 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
 
+		/// <summary></summary>
+		public static readonly string DefaultInfoSeparator = "";
+
+		/// <summary></summary>
+		public static readonly string DefaultInfoEnclosure = "()";
+
 		private bool separateTxRxRadix;
 		private Radix txRadix;
 		private Radix rxRadix;
@@ -81,6 +87,11 @@ namespace YAT.Domain.Settings
 
 		private bool portLineBreakEnabled;
 		private bool directionLineBreakEnabled;
+
+		private string infoSeparator; // = null
+		private string infoEnclosure; // = null
+		private string infoEnclosureLeft; // = null
+		private string infoEnclosureRight; // = null
 
 		/// <summary></summary>
 		public DisplaySettings()
@@ -120,6 +131,9 @@ namespace YAT.Domain.Settings
 			PortLineBreakEnabled      = rhs.PortLineBreakEnabled;
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
+			InfoSeparator     = rhs.InfoSeparator;
+			InfoEnclosure     = rhs.InfoEnclosure;
+
 			ClearChanged();
 		}
 
@@ -145,6 +159,9 @@ namespace YAT.Domain.Settings
 
 			PortLineBreakEnabled      = PortLineBreakEnabledDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
+
+			InfoSeparator     = DefaultInfoSeparator;
+			InfoEnclosure     = DefaultInfoEnclosure;
 		}
 
 		#region Properties
@@ -381,6 +398,55 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("InfoSeparator")]
+		public string InfoSeparator
+		{
+			get { return (this.infoSeparator); }
+			set
+			{
+				if (this.infoSeparator != value)
+				{
+					this.infoSeparator = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("InfoEnclosure")]
+		public string InfoEnclosure
+		{
+			get { return (this.infoEnclosure); }
+			set
+			{
+				if (this.infoEnclosure != value)
+				{
+					InfoElementEnclosureEx enclosure = value;
+
+					this.infoEnclosure      = enclosure.ToEnclosure();
+					this.infoEnclosureLeft  = enclosure.ToEnclosureLeft();
+					this.infoEnclosureRight = enclosure.ToEnclosureRight();
+
+					SetChanged();
+				}
+			}
+		}
+
+		/// <remarks>Available for performance reasons.</remarks>
+		[XmlIgnore]
+		public string InfoEnclosureLeft
+		{
+			get { return (this.infoEnclosureLeft); }
+		}
+
+		/// <remarks>Available for performance reasons.</remarks>
+		[XmlIgnore]
+		public string InfoEnclosureRight
+		{
+			get { return (this.infoEnclosureRight); }
+		}
+
 		#endregion
 
 		#region Object Members
@@ -419,7 +485,10 @@ namespace YAT.Domain.Settings
 				(RxMaxLineCount    == other.rxMaxLineCount) &&
 
 				(PortLineBreakEnabled      == other.PortLineBreakEnabled) &&
-				(DirectionLineBreakEnabled == other.DirectionLineBreakEnabled)
+				(DirectionLineBreakEnabled == other.DirectionLineBreakEnabled) &&
+
+				(InfoSeparator     == other.InfoSeparator) &&
+				(InfoEnclosure     == other.InfoEnclosure)
 			);
 		}
 
@@ -451,6 +520,9 @@ namespace YAT.Domain.Settings
 
 				hashCode = (hashCode * 397) ^ PortLineBreakEnabled     .GetHashCode();
 				hashCode = (hashCode * 397) ^ DirectionLineBreakEnabled.GetHashCode();
+
+				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
 
 				return (hashCode);
 			}

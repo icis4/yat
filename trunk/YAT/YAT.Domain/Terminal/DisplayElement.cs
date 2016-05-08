@@ -50,17 +50,19 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TxControl))]
 	[XmlInclude(typeof(RxData))]
 	[XmlInclude(typeof(RxControl))]
+	[XmlInclude(typeof(InfoDisplayElement))]
 	[XmlInclude(typeof(DateInfo))]
 	[XmlInclude(typeof(TimeInfo))]
 	[XmlInclude(typeof(PortInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
 	[XmlInclude(typeof(Length))]
+	[XmlInclude(typeof(WhiteSpaceDisplayElement))]
 	[XmlInclude(typeof(LeftMargin))]
 	[XmlInclude(typeof(Space))]
 	[XmlInclude(typeof(RightMargin))]
 	[XmlInclude(typeof(LineBreak))]
 	[XmlInclude(typeof(ErrorInfo))]
-	public class DisplayElement
+	public abstract class DisplayElement
 	{
 		#region Types
 		//==========================================================================================
@@ -68,12 +70,35 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
+		[Flags]
+		public enum ModifierFlags
+		{
+			/// <summary></summary>
+			None       =  0,
+
+			/// <summary></summary>
+			Data       =  1,
+
+			/// <summary></summary>
+			Eol        =  2,
+
+			/// <summary></summary>
+			Inline     =  4,
+
+			/// <summary></summary>
+			Info       =  8,
+
+			/// <summary></summary>
+			WhiteSpace = 16
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class NoData : DisplayElement
 		{
 			/// <summary></summary>
 			public NoData()
-				: base(true)
+				: base(ModifierFlags.None)
 			{
 			}
 		}
@@ -84,7 +109,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxData()
-				: base()
+				: base(ModifierFlags.Data)
 			{
 			}
 
@@ -107,7 +132,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TxControl()
-				: base()
+				: base(ModifierFlags.Data)
 			{
 			}
 
@@ -130,7 +155,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxData()
-				: base()
+				: base(ModifierFlags.Data)
 			{
 			}
 
@@ -153,7 +178,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RxControl()
-				: base()
+				: base(ModifierFlags.Data)
 			{
 			}
 
@@ -172,39 +197,50 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DateInfo : DisplayElement
+		public abstract class InfoDisplayElement : DisplayElement
 		{
 			/// <summary></summary>
-			public const string Format = "yyyy-MM-dd";
-
-			/// <summary></summary>
-			public DateInfo()
-				: base("(" + DateTime.Now.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			public InfoDisplayElement(string info)
+				: this(Direction.None, info)
 			{
 			}
 
 			/// <summary></summary>
-			public DateInfo(DateTime timeStamp)
-				: base("(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
-			{
-			}
-
-			/// <summary></summary>
-			public DateInfo(Direction direction, DateTime timeStamp)
-				: base(direction, "(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
-			{
-			}
-
-			/// <summary></summary>
-			public DateInfo(Direction direction, string timeStamp)
-				: base(direction, timeStamp)
+			public InfoDisplayElement(Direction direction, string info)
+				: base(direction, info, ModifierFlags.Info)
 			{
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class TimeInfo : DisplayElement
+		public class DateInfo : InfoDisplayElement
+		{
+			/// <summary></summary>
+			public const string Format = "yyyy-MM-dd";
+
+			/// <summary></summary>
+			public DateInfo()
+				: this(DateTime.Now, null, null)
+			{
+			}
+
+			/// <summary></summary>
+			public DateInfo(DateTime timeStamp, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeStamp, enclosureLeft, enclosureRight)
+			{
+			}
+
+			/// <summary></summary>
+			public DateInfo(Direction direction, DateTime timeStamp, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + enclosureRight)
+			{
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public class TimeInfo : InfoDisplayElement
 		{
 			/// <remarks>
 			/// Output milliseconds for readability, even though last digit only provides limited accuracy.
@@ -213,138 +249,173 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeInfo()
-				: base("(" + DateTime.Now.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+				: this(DateTime.Now, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public TimeInfo(DateTime timeStamp)
-				: base("(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
+			public TimeInfo(DateTime timeStamp, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, timeStamp, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public TimeInfo(Direction direction, DateTime timeStamp)
-				: base(direction, "(" + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + ")")
-			{
-			}
-
-			/// <summary></summary>
-			public TimeInfo(Direction direction, string timeStamp)
-				: base(direction, timeStamp)
+			public TimeInfo(Direction direction, DateTime timeStamp, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + timeStamp.ToString(Format, DateTimeFormatInfo.InvariantInfo) + enclosureRight)
 			{
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class PortInfo : DisplayElement
+		public class PortInfo : InfoDisplayElement
 		{
 			/// <summary></summary>
 			public PortInfo()
-				: base(Direction.None, null)
+				: this(Direction.None, null, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public PortInfo(Direction direction, string info)
-				: base(direction, "(" + info + ")")
+			public PortInfo(string info, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, info, enclosureLeft, enclosureRight)
+			{
+			}
+
+			/// <summary></summary>
+			public PortInfo(Direction direction, string info, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + info + enclosureRight)
 			{
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DirectionInfo : DisplayElement
+		public class DirectionInfo : InfoDisplayElement
 		{
 			/// <summary></summary>
 			public DirectionInfo()
-				: base(Direction.None, "(" + (DirectionEx)Direction.None + ")")
+				: this(Direction.None, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public DirectionInfo(Direction direction)
-				: base(direction, "(" + (DirectionEx)direction + ")")
+			public DirectionInfo(Direction direction, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + (DirectionEx)direction + enclosureRight)
 			{
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class Length : DisplayElement
+		public class Length : InfoDisplayElement
 		{
 			/// <summary></summary>
 			public Length()
-				: base("(" + 0 + ")")
+				: this(0, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public Length(int length)
-				: base("(" + length + ")")
+			public Length(int length, string enclosureLeft, string enclosureRight)
+				: this(Direction.None, length, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public Length(Direction direction, int length)
-				: base(direction, "(" + length + ")")
+			public Length(Direction direction, int length, string enclosureLeft, string enclosureRight)
+				: base(direction, enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
+			{
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		public abstract class WhiteSpaceDisplayElement : DisplayElement
+		{
+			/// <summary></summary>
+			public WhiteSpaceDisplayElement(Direction direction)
+				: this(direction, null)
 			{
 			}
 
 			/// <summary></summary>
-			public Length(Direction direction, string length)
-				: base(direction, length)
+			public WhiteSpaceDisplayElement(string whiteSpace)
+				: this(Direction.None, whiteSpace)
+			{
+			}
+
+			/// <summary></summary>
+			public WhiteSpaceDisplayElement(Direction direction, string whiteSpace)
+				: base(direction, whiteSpace, ModifierFlags.WhiteSpace)
 			{
 			}
 		}
 
 		/// <summary>The margin that is added to the left of the data content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class LeftMargin : DisplayElement
+		public class LeftMargin : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
 			public LeftMargin()
-				: base(" ", true)
+				: this(Direction.None)
+			{
+			}
+
+			/// <summary></summary>
+			public LeftMargin(Direction direction)
+				: base(direction, " ")
 			{
 			}
 		}
 
 		/// <summary>The space that is added inbetween characters of the data content (i.e. radix = char).</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class Space : DisplayElement
+		public class Space : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
 			public Space()
-				: base(" ", true)
+				: this(Direction.None)
+			{
+			}
+
+			/// <summary></summary>
+			public Space(Direction direction)
+				: base(direction, " ")
 			{
 			}
 		}
 
 		/// <summary>The margin that is added to the right of the data content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class RightMargin : DisplayElement
+		public class RightMargin : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
 			public RightMargin()
-				: base(" ", true)
+				: this(Direction.None)
+			{
+			}
+
+			/// <summary></summary>
+			public RightMargin(Direction direction)
+				: base(direction, " ")
 			{
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class LineBreak : DisplayElement
+		public class LineBreak : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
 			public LineBreak()
-				: base(true)
+				: this(Direction.None)
 			{
 			}
 
 			/// <summary></summary>
 			public LineBreak(Direction direction)
-				: base(direction, null, true)
+				: base(direction)
 			{
 			}
 		}
@@ -360,7 +431,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public ErrorInfo()
-				: base()
+				: this(null)
 			{
 			}
 
@@ -377,8 +448,8 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(Direction direction, string message, bool warningOnly)
-				: base(direction, (warningOnly ? ("<Warning: " + message + ">") : ("<Error: " + message + ">")))
+			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
+				: base(direction, (isWarningOnly ? ("<Warning: " + message + ">") : ("<Error: " + message + ">")), ModifierFlags.Inline)
 			{
 			}
 		}
@@ -394,9 +465,7 @@ namespace YAT.Domain
 		private List<Pair<byte[], string>> origin;
 		private string text;
 		private int dataCount;
-		private bool isData;
-		private bool isEol;
-		private bool isWhiteSpace;
+		private ModifierFlags flags;
 
 		#endregion
 
@@ -407,38 +476,20 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement()
-			: this(null)
+			: this(ModifierFlags.None)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(string text)
-			: this(Direction.None, text)
+		private DisplayElement(ModifierFlags flags)
+			: this(Direction.None, null, ModifierFlags.None)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, string text)
+		private DisplayElement(Direction direction, string text, ModifierFlags flags)
 		{
-			Initialize(direction, null, text, 0, false, false, false);
-		}
-
-		/// <summary></summary>
-		private DisplayElement(bool isWhiteSpace)
-			: this(null, isWhiteSpace)
-		{
-		}
-
-		/// <summary></summary>
-		private DisplayElement(string text, bool isWhiteSpace)
-			: this(Direction.None, text, isWhiteSpace)
-		{
-		}
-
-		/// <summary></summary>
-		private DisplayElement(Direction direction, string text, bool isWhiteSpace)
-		{
-			Initialize(direction, null, text, 0, false, false, isWhiteSpace);
+			Initialize(direction, null, text, 0, flags);
 		}
 
 		/// <summary></summary>
@@ -449,27 +500,19 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount)
-			: this(direction, origin, text, dataCount, false)
-		{
-		}
-
-		/// <summary></summary>
-		private DisplayElement(Direction direction, byte[] origin, string text, int dataCount, bool isEol)
 		{
 			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>(1); // Preset the required capactiy to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(direction, l, text, dataCount, true, isEol, false);
+			Initialize(direction, l, text, dataCount, ModifierFlags.Data);
 		}
 
-		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol, bool isWhiteSpace)
+		private void Initialize(Direction direction, List<Pair<byte[], string>> origin, string text, int dataCount, ModifierFlags flags)
 		{
-			this.direction    = direction;
-			this.origin       = origin;
-			this.text         = text;
-			this.dataCount    = dataCount;
-			this.isData       = isData;
-			this.isEol        = isEol;
-			this.isWhiteSpace = isWhiteSpace;
+			this.direction = direction;
+			this.origin    = origin;
+			this.text      = text;
+			this.dataCount = dataCount;
+			this.flags     = flags;
 		}
 
 		#endregion
@@ -525,34 +568,53 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("IsData")]
-		public virtual bool IsData
+		[XmlAttribute("Flags")]
+		public virtual ModifierFlags Flags
 		{
-			get { return (this.isData); }
-			set { this.isData = value;  }
+			get { return (this.flags); }
+			set { this.flags = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsNoData
+		public virtual bool IsData
 		{
-			get { return (!this.isData); }
+			get { return ((this.flags & ModifierFlags.Data) != 0); }
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("IsEol")]
+		[XmlIgnore]
 		public virtual bool IsEol
 		{
-			get { return (this.isEol); }
-			set { this.isEol = value; }
+			get { return ((this.flags & ModifierFlags.Eol) != 0); }
+			set
+			{
+				if (value)
+					this.flags |= ModifierFlags.Eol;
+				else
+					this.flags &= ~ModifierFlags.Eol;
+			}
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("IsWhiteSpace")]
+		[XmlIgnore]
+		public virtual bool IsInline
+		{
+			get { return ((this.flags & ModifierFlags.Inline) != 0); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IsInfo
+		{
+			get { return ((this.flags & ModifierFlags.Info) != 0); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
 		public virtual bool IsWhiteSpace
 		{
-			get { return (this.isWhiteSpace); }
-			set { this.isWhiteSpace = value;  }
+			get { return ((this.flags & ModifierFlags.WhiteSpace) != 0); }
 		}
 
 		#endregion
@@ -592,12 +654,11 @@ namespace YAT.Domain
 			else if (this is ErrorInfo)     clone = new ErrorInfo();
 			else throw (new TypeLoadException("Program execution should never get here, '" + this.GetType() + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			clone.direction = this.direction;
-			clone.origin    = PerformDeepClone(this.origin);
-			clone.text      = this.text;
-			clone.dataCount = this.dataCount;
-			clone.isData    = this.isData;
-			clone.isEol     = this.isEol;
+			clone.direction    = this.direction;
+			clone.origin       = PerformDeepClone(this.origin);
+			clone.text         = this.text;
+			clone.dataCount    = this.dataCount;
+			clone.flags        = this.flags;
 
 			return (clone);
 		}
@@ -623,7 +684,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Returns <c>true</c> if <param name="de"></param> can be appended to this element. Only
+		/// Returns <c>true</c> if <param name="other"></param> can be appended to this element. Only
 		/// data elements of the same direction can be appended. Appending other elements would
 		/// lead to missing elements.
 		/// </summary>
@@ -631,21 +692,18 @@ namespace YAT.Domain
 		/// Note that the type of the element also has to be checked. This ensures that control
 		/// elements are not appended to 'normal' data elements.
 		/// </remarks>
-		public virtual bool AcceptsAppendOf(DisplayElement de)
+		public virtual bool AcceptsAppendOf(DisplayElement other)
 		{
-			if (GetType() != de.GetType())
+			if (GetType() != other.GetType())
 				return (false);
 
-			if (!this.isData || !de.isData) // Disallow non-data elements.
+			if (!IsData || !other.IsData) // Disallow non-data elements.
 				return (false);
 
-			if (this.direction != de.direction) // Self-explaining.
+			if (this.direction != other.direction) // Self-explaining.
 				return (false);
 
-			if (this.isEol != de.isEol) // Check needed to deal with incomplete EOL sequences.
-				return (false);
-
-			if (this.isWhiteSpace != de.isWhiteSpace) // Self-explaining.
+			if (this.flags != other.flags) // Self-explaining.
 				return (false);
 
 			return (true);
@@ -658,26 +716,26 @@ namespace YAT.Domain
 		/// Useful to improve performance. Appending keeps number of display elements as low as
 		/// possible, thus iteration through display element gets faster.
 		/// </remarks>
-		public virtual void Append(DisplayElement de)
+		public virtual void Append(DisplayElement other)
 		{
-			if (!AcceptsAppendOf(de))
-				throw (new NotSupportedException(@"Program execution should never get here, the given element """ + de + @""" cannot be appended to this element """ + this + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (!AcceptsAppendOf(other))
+				throw (new NotSupportedException(@"Program execution should never get here, the given element """ + other + @""" cannot be appended to this element """ + this + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// \fixme (2010-04-01 / MKY):
 			// Weird ArgumentException when receiving large chunks of data.
 			try
 			{
 				if (this.origin != null)
-					this.origin.AddRange(PerformDeepClone(de.origin));
+					this.origin.AddRange(PerformDeepClone(other.origin));
 
 				if (this.text != null)
-					this.text += de.text;
+					this.text += other.text;
 
-				this.dataCount += de.dataCount;
+				this.dataCount += other.dataCount;
 			}
 			catch (ArgumentException ex)
 			{
-				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, de.ToString());
+				MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, other.ToString());
 			}
 		}
 
@@ -722,8 +780,8 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			if (this.text != null)
-				return (this.text);
+			if (Text != null)
+				return (Text);
 			else
 				return ("");
 		}
@@ -741,13 +799,11 @@ namespace YAT.Domain
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append(indent); sb.Append("> Type:         "); sb.AppendLine(GetType().Name);
-			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(this.direction.ToString());
-			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(this.origin != null ? this.origin.ToString() : "'null'");
-			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(this.text   != null ? this.text              :    ""   );
-			sb.Append(indent); sb.Append("> DataCount:    "); sb.AppendLine(this.dataCount.ToString(CultureInfo.InvariantCulture));
-			sb.Append(indent); sb.Append("> IsData:       "); sb.AppendLine(this.isData.ToString());
-			sb.Append(indent); sb.Append("> IsEol:        "); sb.AppendLine(this.isEol.ToString());
-			sb.Append(indent); sb.Append("> IsWhiteSpace: "); sb.AppendLine(this.isWhiteSpace.ToString());
+			sb.Append(indent); sb.Append("> Direction:    "); sb.AppendLine(Direction.ToString());
+			sb.Append(indent); sb.Append("> Origin:       "); sb.AppendLine(Origin != null ? Origin.ToString() : "'null'");
+			sb.Append(indent); sb.Append("> Text:         "); sb.AppendLine(Text   != null ? Text              :    ""   );
+			sb.Append(indent); sb.Append("> DataCount:    "); sb.AppendLine(DataCount.ToString(CultureInfo.InvariantCulture));
+			sb.Append(indent); sb.Append("> Flags:        "); sb.AppendLine(Flags.ToString());
 
 			return (sb.ToString());
 		}
