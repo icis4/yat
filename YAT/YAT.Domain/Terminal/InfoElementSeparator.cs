@@ -32,7 +32,7 @@ using MKY;
 // YAT.Domain\Terminal for better separation of the implementation files.
 namespace YAT.Domain
 {
-	#region Enum Eol
+	#region Enum InfoElementSeparator
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -166,17 +166,14 @@ namespace YAT.Domain
 		/// </summary>
 		public override int GetHashCode()
 		{
-			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Other)
+			unchecked
 			{
-				return
-				(
-					base.GetHashCode() ^
-					this.otherSeparator.GetHashCode()
-				);
-			}
-			else
-			{
-				return (base.GetHashCode());
+				int hashCode = base.GetHashCode();
+
+				if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Other)
+					hashCode = (hashCode * 397) ^ (this.otherSeparator != null ? this.otherSeparator.GetHashCode() : 0);
+
+				return (hashCode);
 			}
 		}
 
@@ -296,10 +293,10 @@ namespace YAT.Domain
 				result = enumResult;
 				return (true);
 			}
-			else
+			else // Other!
 			{
-				result = null;
-				return (false);
+				result = new InfoElementSeparatorEx(s);
+				return (true);
 			}
 		}
 
@@ -311,7 +308,12 @@ namespace YAT.Domain
 		{
 			// Do not s = s.Trim(); due to reason described above.
 
-			if      (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
+			if (string.IsNullOrEmpty(s)) // None!
+			{
+				result = InfoElementSeparator.None;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, None_stringSeparator) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, None_stringDescription))
 			{
 				result = InfoElementSeparator.None;
@@ -383,15 +385,10 @@ namespace YAT.Domain
 				result = InfoElementSeparator.SemicolonWithSpace;
 				return (true);
 			}
-			else if (!string.IsNullOrEmpty(s)) // Other!
+			else // Invalid string!
 			{
-				result = new InfoElementSeparatorEx(s);
-				return (true);
-			}
-			else // IsNullOrEmpty = None!
-			{
-				result = InfoElementSeparator.None;
-				return (true);
+				result = new InfoElementSeparatorEx(); // Default!
+				return (false);
 			}
 		}
 

@@ -2790,11 +2790,13 @@ namespace YAT.View.Forms
 		[ModalBehavior(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
-			FormatSettings f = new FormatSettings(this.settingsRoot.Format);
+			FormatSettings f = new FormatSettings(this.settingsRoot.Format, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
+				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
+				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
 			}
 		}
 

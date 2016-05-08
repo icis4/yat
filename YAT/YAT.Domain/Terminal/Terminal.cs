@@ -2008,16 +2008,16 @@ namespace YAT.Domain
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
 				if (TerminalSettings.Display.ShowDate)
-					dl.Add(new DisplayElement.DateInfo     ((Direction)raw.Direction, raw.TimeStamp));
+					dl.Add(new DisplayElement.DateInfo     ((Direction)raw.Direction, raw.TimeStamp, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
 
 				if (TerminalSettings.Display.ShowTime)
-					dl.Add(new DisplayElement.TimeInfo     ((Direction)raw.Direction, raw.TimeStamp));
+					dl.Add(new DisplayElement.TimeInfo     ((Direction)raw.Direction, raw.TimeStamp, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
 
 				if (TerminalSettings.Display.ShowPort)
-					dl.Add(new DisplayElement.PortInfo     ((Direction)raw.Direction, raw.PortStamp));
+					dl.Add(new DisplayElement.PortInfo     ((Direction)raw.Direction, raw.PortStamp, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
 
 				if (TerminalSettings.Display.ShowDirection)
-					dl.Add(new DisplayElement.DirectionInfo((Direction)raw.Direction));
+					dl.Add(new DisplayElement.DirectionInfo((Direction)raw.Direction, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
 
 				dl.Add(new DisplayElement.LeftMargin       ((Direction)raw.Direction));
 			}
@@ -2032,7 +2032,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin((Direction)raw.Direction));
-				dl.Add(new DisplayElement.Length     ((Direction)raw.Direction, 1));
+				dl.Add(new DisplayElement.Length     ((Direction)raw.Direction, 1, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
 			}
 			dl.Add(new DisplayElement.LineBreak((Direction)raw.Direction));
 

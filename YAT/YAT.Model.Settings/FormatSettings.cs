@@ -67,9 +67,6 @@ namespace YAT.Model.Settings
 
 		private BackFormat backFormat;
 
-		private string infoSeparator; // = null
-		private string infoEnclosure; // = null
-
 		/// <summary></summary>
 		public FormatSettings()
 		{
@@ -108,9 +105,6 @@ namespace YAT.Model.Settings
 
 			BackFormat        = new BackFormat(rhs.BackFormat);
 
-			InfoSeparator     = rhs.InfoSeparator;
-			InfoEnclosure     = rhs.InfoEnclosure;
-
 			ClearChanged();
 		}
 
@@ -136,9 +130,6 @@ namespace YAT.Model.Settings
 			ErrorFormat       = new TextFormat(DefaultErrorColor,        true, false, false, false); // Bold.
 
 			BackFormat        = new BackFormat(DefaultBackColor);
-
-			InfoSeparator     = "";
-			InfoEnclosure     = "";
 		}
 
 		#region Properties
@@ -371,36 +362,6 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("InfoSeparator")]
-		public string InfoSeparator
-		{
-			get { return (this.infoSeparator); }
-			set
-			{
-				if (this.infoSeparator != value)
-				{
-					this.infoSeparator = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("InfoEnclosure")]
-		public string InfoEnclosure
-		{
-			get { return (this.infoEnclosure); }
-			set
-			{
-				if (this.infoEnclosure != value)
-				{
-					this.infoEnclosure = value;
-					SetChanged();
-				}
-			}
-		}
-
 		#endregion
 
 		#region Object Members
@@ -439,10 +400,7 @@ namespace YAT.Model.Settings
 				(WhiteSpacesFormat == other.WhiteSpacesFormat) &&
 				(ErrorFormat       == other.ErrorFormat) &&
 
-				(BackFormat        == other.BackFormat) &&
-
-				(InfoSeparator     == other.InfoSeparator) &&
-				(InfoEnclosure     == other.InfoEnclosure)
+				(BackFormat        == other.BackFormat)
 			);
 		}
 
@@ -474,9 +432,6 @@ namespace YAT.Model.Settings
 				hashCode = (hashCode * 397) ^  ErrorFormat      .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  BackFormat       .GetHashCode();
-
-				hashCode = (hashCode * 397) ^ (InfoSeparator != null ? InfoSeparator.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (InfoEnclosure != null ? InfoEnclosure.GetHashCode() : 0);
 
 				return (hashCode);
 			}

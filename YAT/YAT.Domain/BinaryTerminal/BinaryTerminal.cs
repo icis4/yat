@@ -519,16 +519,16 @@ namespace YAT.Domain
 				DisplayLinePart lp = new DisplayLinePart();
 
 				if (TerminalSettings.Display.ShowDate)
-					lp.Add(new DisplayElement.DateInfo(ts));
+					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
 
 				if (TerminalSettings.Display.ShowTime)
-					lp.Add(new DisplayElement.TimeInfo(ts));
+					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
 
 				if (TerminalSettings.Display.ShowPort)
-					lp.Add(new DisplayElement.PortInfo((Direction)d, ps));
+					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
 
 				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionInfo((Direction)d));
+					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
 
 				lp.Add(new DisplayElement.LeftMargin());
 
@@ -652,7 +652,7 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowLength)
 			{
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.Length(lineState.LineElements.DataCount)); // Direction may be both!
+				lp.Add(new DisplayElement.Length(lineState.LineElements.DataCount, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may be both!
 			}
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
