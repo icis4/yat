@@ -1570,6 +1570,14 @@ namespace YAT.View.Forms
 					mi.Text = "Copy";
 				}
 
+				// There is a limitaion in Windows.Forms:
+				//  1. Edit command in SendText
+				//  2. Right-click to open the predefined context menu
+				//     => SendText should get validated, but actuall isn't!
+				//
+				// Workaround:
+				send.ValidateSendTextInput();
+
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Visible = true;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendText.Enabled = ((id != 0) && (this.settingsRoot.SendText.Command.IsText));
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;

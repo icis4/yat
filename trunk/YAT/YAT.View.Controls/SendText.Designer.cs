@@ -72,8 +72,8 @@
 			this.comboBox_SingleLineText.Name = "comboBox_SingleLineText";
 			this.comboBox_SingleLineText.Size = new System.Drawing.Size(319, 21);
 			this.comboBox_SingleLineText.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_SingleLineText, "Fill-in text, <Enter> to send,\r\ndrop down for recent text,\r\n<...> to enter" +
-        " multi-line text");
+			this.toolTip.SetToolTip(this.comboBox_SingleLineText, "Fill-in text, <Enter> to send,\r\ndrop down for recent text,\r\n<...> to enter multi-" +
+        "line text");
 			this.comboBox_SingleLineText.SelectedIndexChanged += new System.EventHandler(this.comboBox_SingleLineText_SelectedIndexChanged);
 			this.comboBox_SingleLineText.TextChanged += new System.EventHandler(this.comboBox_SingleLineText_TextChanged);
 			this.comboBox_SingleLineText.Enter += new System.EventHandler(this.comboBox_SingleLineText_Enter);

@@ -146,7 +146,7 @@ namespace YAT.View.Controls
 		/// </summary>
 		public virtual Command GetCommandFromId(int id)
 		{
-			int i = (id - 1); // command ID = 1..max
+			int i = (id - 1); // ID = 1..max
 
 			if (this.commands != null)
 			{
@@ -159,6 +159,7 @@ namespace YAT.View.Controls
 					}
 				}
 			}
+
 			return (null);
 		}
 
@@ -170,7 +171,7 @@ namespace YAT.View.Controls
 		{
 			Point client = PointToClient(point);
 
-			// ensure that location is within control
+			// Ensure that location is within control:
 			if ((client.X < 0) || (client.X > Width))
 				return (0);
 			if ((client.Y < 0) || (client.Y > Height))
@@ -181,8 +182,9 @@ namespace YAT.View.Controls
 			{
 				accumulatedHeight += this.buttons_commands[i].Height;
 				if (client.Y <= accumulatedHeight)
-					return (i + 1); // commmand ID = 1..max
+					return (i + 1); // ID = 1..max
 			}
+
 			return (0);
 		}
 

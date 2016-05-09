@@ -125,6 +125,12 @@ namespace YAT.View.Controls
 			sendText.SelectInput();
 		}
 
+		/// <summary></summary>
+		public virtual void ValidateSendTextInput()
+		{
+			sendText.ValidateInput();
+		}
+
 		#endregion
 
 		#region Properties
