@@ -38,11 +38,6 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <NestedTypes>
-      <Class Name="YAT.Domain.DisplayElement.RightMargin" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
       <Class Name="YAT.Domain.DisplayElement.RxControl" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
@@ -83,17 +78,22 @@
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="YAT.Domain.DisplayElement.LeftMargin" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="YAT.Domain.DisplayElement.Space" Collapsed="true">
+      <Class Name="YAT.Domain.DisplayElement.DateInfo" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
       <Class Name="YAT.Domain.DisplayElement.TimeInfo" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.DataSpace" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="YAT.Domain.DisplayElement.InfoSpace" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>

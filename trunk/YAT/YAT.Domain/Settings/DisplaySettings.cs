@@ -67,10 +67,10 @@ namespace YAT.Domain.Settings
 		public const bool DirectionLineBreakEnabledDefault = true;
 
 		/// <summary></summary>
-		public static readonly string DefaultInfoSeparator = "";
+		public static readonly string DefaultInfoSeparator = " "; // Space for better separability of elements.
 
 		/// <summary></summary>
-		public static readonly string DefaultInfoEnclosure = "()";
+		public static readonly string DefaultInfoEnclosure = "()"; // Parenthesis for better recognizability of info elements.
 
 		private bool separateTxRxRadix;
 		private Radix txRadix;

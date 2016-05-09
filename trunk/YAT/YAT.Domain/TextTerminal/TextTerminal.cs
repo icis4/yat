@@ -90,10 +90,10 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineState
 		{
-			public LinePosition LinePosition;
+			public LinePosition    LinePosition;
 			public DisplayLinePart LineElements;
 			public DisplayLinePart EolElements;
-			public SequenceQueue Eol;
+			public SequenceQueue   Eol;
 
 			public LineState(SequenceQueue eol)
 			{
@@ -463,7 +463,7 @@ namespace YAT.Domain
 						}
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
-							return (new DisplayElement.NoData()); // Return nothing, ignore the character, this results in hiding.
+							return (new DisplayElement.Nothing()); // Return nothing, ignore the character, this results in hiding.
 						}
 						else
 						{
@@ -539,7 +539,7 @@ namespace YAT.Domain
 						}
 
 						// Nothing to decode (yet).
-						return (new DisplayElement.NoData());
+						return (new DisplayElement.Nothing());
 					} // MultiByte
 				}
 
@@ -555,25 +555,13 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				DisplayLinePart lp = new DisplayLinePart();
-
-				if (TerminalSettings.Display.ShowDate)
-					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
-
-				if (TerminalSettings.Display.ShowTime)
-					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
-
-				if (TerminalSettings.Display.ShowPort)
-					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
-
-				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
-
-				lp.Add(new DisplayElement.LeftMargin((Direction)d));
+				DisplayLinePart lp;
+				PrepareLineBeginInfo(ts, ps, d, out lp);
 
 				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
 			}
+
 			lineState.LinePosition = LinePosition.Data;
 		}
 
@@ -684,7 +672,7 @@ namespace YAT.Domain
 			if (ElementsAreSeparate(d))
 			{
 				if (lineState.LineElements.DataCount > 0)
-					lp.Add(new DisplayElement.Space());
+					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
 
@@ -732,10 +720,8 @@ namespace YAT.Domain
 			// Process length:
 			DisplayLinePart lp = new DisplayLinePart();
 			if (TerminalSettings.Display.ShowLength)
-			{
-				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.Length(line.DataCount, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may be both!
-			}
+				PrepareLineEndInfo(line.DataCount, out lp);
+
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			elements.AddRange(lp.Clone()); // Clone elements because they are needed again right below.

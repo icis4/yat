@@ -2795,8 +2795,8 @@ namespace YAT.View.Forms
 			{
 				Refresh();
 				this.settingsRoot.Format = f.FormatSettingsResult;
-				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult;
-				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult;
+				this.settingsRoot.Display.InfoSeparator = f.InfoSeparatorResult.ToSeparator();
+				this.settingsRoot.Display.InfoEnclosure = f.InfoEnclosureResult.ToEnclosure();
 			}
 		}
 

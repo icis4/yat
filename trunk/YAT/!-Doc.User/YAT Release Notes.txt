@@ -94,6 +94,7 @@ New:
 - Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
 - Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay), useful together
   with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
+- Options to define the enclosure and spacing of display elements added (related to bug #292).
 - Option to display the port as e.g. "COM1" or "127.0.0.1:10000" (feature request #14).
 - Option to display the direction as "<<" (Tx) and ">>" (Rx) (feature request #14).
 - Option to display the date in addition to the time (related to feature request #14).

@@ -80,6 +80,7 @@ namespace YAT.View.Controls.ViewModel
 			staticMonitorFormat  = TextFormatFlags.Default;
 			staticMonitorFormat |= TextFormatFlags.SingleLine;
 			staticMonitorFormat |= TextFormatFlags.ExpandTabs;
+			staticMonitorFormat |= TextFormatFlags.NoPadding;
 
 			// Attention, do not use 'EndEllipsis' for the monitor! These ellipses were the root
 			// cause of issue #125 "Representation of long texts in the terminal".
@@ -221,16 +222,15 @@ namespace YAT.View.Controls.ViewModel
 				fontStyle = settings.DirectionFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticDirectionFont, fontName, fontSize, fontStyle, graphics);
 			}
-			else if (element is Domain.DisplayElement.Length)
+			else if (element is Domain.DisplayElement.DataLength)
 			{
 				foreColor = settings.LengthFormat.Color;
 				fontStyle = settings.LengthFormat.FontStyle;
 				font      = CacheAndAssignIfChanged(ref staticLengthFont, fontName, fontSize, fontStyle, graphics);
 			}
-			else if ((element is Domain.DisplayElement.NoData) ||
-			         (element is Domain.DisplayElement.LeftMargin) ||
-			         (element is Domain.DisplayElement.Space) ||
-			         (element is Domain.DisplayElement.RightMargin) ||
+			else if ((element is Domain.DisplayElement.Nothing) ||
+			         (element is Domain.DisplayElement.DataSpace) ||
+			         (element is Domain.DisplayElement.InfoSpace) ||
 			         (element is Domain.DisplayElement.LineBreak))
 			{
 				foreColor = settings.WhiteSpacesFormat.Color;

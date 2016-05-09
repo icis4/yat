@@ -174,16 +174,15 @@ namespace YAT.Model.Utilities
 				color     = settings.DirectionFormat.Color;
 				font      = CacheAndAssignIfChanged(ref directionFont, fontName, fontSize, fontStyle);
 			}
-			else if (element is DisplayElement.Length)
+			else if (element is DisplayElement.DataLength)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				color     = settings.LengthFormat.Color;
 				font      = CacheAndAssignIfChanged(ref lengthFont, fontName, fontSize, fontStyle);
 			}
-			else if ((element is DisplayElement.NoData) ||
-			         (element is DisplayElement.LeftMargin) ||
-			         (element is DisplayElement.Space) ||
-			         (element is DisplayElement.RightMargin) ||
+			else if ((element is DisplayElement.Nothing) ||
+			         (element is DisplayElement.DataSpace) ||
+			         (element is DisplayElement.InfoSpace) ||
 			         (element is DisplayElement.LineBreak))
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;

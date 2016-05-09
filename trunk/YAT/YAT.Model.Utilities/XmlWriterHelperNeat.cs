@@ -184,7 +184,7 @@ namespace YAT.Model.Utilities
 					}
 				}
 				{
-					var casted = (e as DisplayElement.Length);
+					var casted = (e as DisplayElement.DataLength);
 					if (casted != null)
 					{
 						lengthStr = casted.Text;

@@ -1166,8 +1166,9 @@ namespace YAT.Domain
 
 				default: // = Unknown or not-yet-supported keyword.
 				{
-					if (ElementsAreSeparate(IODirection.Tx)) // Add space if necessary.
-						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.Space());
+					// Add space if necessary:
+					if (ElementsAreSeparate(IODirection.Tx))
+						OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 
 					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo((Parser.KeywordEx)result.Keyword + " keyword is not yet supported"));
 					break;
@@ -1820,7 +1821,7 @@ namespace YAT.Domain
 			{
 				if (isByteToHide)
 				{
-					return (new DisplayElement.NoData()); // Return nothing, ignore the character, this results in hiding.
+					return (new DisplayElement.Nothing()); // Return nothing, ignore the character, this results in hiding.
 				}
 				else if (isControlByte)
 				{
@@ -1999,27 +2000,82 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		protected virtual void PrepareLineBeginInfo(DateTime ts, string ps, IODirection d, out DisplayLinePart lp)
+		{
+			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
+				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
+			{
+				lp = new DisplayLinePart();
+
+				if (TerminalSettings.Display.ShowDate)
+				{
+					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+				}
+
+				if (TerminalSettings.Display.ShowTime)
+				{
+					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+				}
+
+				if (TerminalSettings.Display.ShowPort)
+				{
+					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+				}
+
+				if (TerminalSettings.Display.ShowDirection)
+				{
+					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
+
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
+						lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+				}
+			}
+			else
+			{
+				lp = null;
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void PrepareLineEndInfo(int dataCount, out DisplayLinePart lp)
+		{
+			if (TerminalSettings.Display.ShowLength)
+			{
+				lp = new DisplayLinePart();
+
+				if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparator))
+					lp.Add(new DisplayElement.InfoSpace(TerminalSettings.Display.InfoSeparator));
+
+				lp.Add(new DisplayElement.DataLength(dataCount, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
+			}
+			else
+			{
+				lp = null;
+			}
+		}
+
+		/// <summary></summary>
 		protected virtual void ProcessRawChunk(RawChunk raw, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			DisplayLine dl = new DisplayLine();
 
-			// Line begin and time stamp:
+			// Line begin:
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				if (TerminalSettings.Display.ShowDate)
-					dl.Add(new DisplayElement.DateInfo     ((Direction)raw.Direction, raw.TimeStamp, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
+				DisplayLinePart lp;
+				PrepareLineBeginInfo(raw.TimeStamp, raw.PortStamp, raw.Direction, out lp);
 
-				if (TerminalSettings.Display.ShowTime)
-					dl.Add(new DisplayElement.TimeInfo     ((Direction)raw.Direction, raw.TimeStamp, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
-
-				if (TerminalSettings.Display.ShowPort)
-					dl.Add(new DisplayElement.PortInfo     ((Direction)raw.Direction, raw.PortStamp, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
-
-				if (TerminalSettings.Display.ShowDirection)
-					dl.Add(new DisplayElement.DirectionInfo((Direction)raw.Direction, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
-
-				dl.Add(new DisplayElement.LeftMargin       ((Direction)raw.Direction));
+				dl.AddRange(lp);
 			}
 
 			// Data:
@@ -2028,11 +2084,13 @@ namespace YAT.Domain
 				dl.Add(ByteToElement(b, raw.Direction));
 			}
 
-			// Length and end:
+			// Line end:
 			if (TerminalSettings.Display.ShowLength)
 			{
-				dl.Add(new DisplayElement.RightMargin((Direction)raw.Direction));
-				dl.Add(new DisplayElement.Length     ((Direction)raw.Direction, 1, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
+				DisplayLinePart lp;
+				PrepareLineEndInfo(raw.Data.Length, out lp);
+
+				dl.AddRange(lp);
 			}
 			dl.Add(new DisplayElement.LineBreak((Direction)raw.Direction));
 

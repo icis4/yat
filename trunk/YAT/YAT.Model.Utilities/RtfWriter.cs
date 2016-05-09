@@ -156,11 +156,10 @@ namespace YAT.Model.Utilities
 			else if ( element is DisplayElement.TimeInfo)		{ format = this.timeFormat; }
 			else if ( element is DisplayElement.PortInfo)		{ format = this.portFormat; }
 			else if ( element is DisplayElement.DirectionInfo)	{ format = this.directionFormat; }
-			else if ( element is DisplayElement.Length)			{ format = this.lengthFormat; }
-			else if ((element is DisplayElement.NoData) ||
-			         (element is DisplayElement.LeftMargin) ||
-			         (element is DisplayElement.Space) ||
-			         (element is DisplayElement.RightMargin) ||
+			else if ( element is DisplayElement.DataLength)		{ format = this.lengthFormat; }
+			else if ((element is DisplayElement.Nothing) ||
+			         (element is DisplayElement.DataSpace) ||
+			         (element is DisplayElement.InfoSpace) ||
 			         (element is DisplayElement.LineBreak))		{ format = this.whiteSpacesFormat; }
 			else if ( element is DisplayElement.ErrorInfo)		{ format = this.errorFormat; }
 			else
