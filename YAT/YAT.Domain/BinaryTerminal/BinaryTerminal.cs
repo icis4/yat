@@ -445,11 +445,11 @@ namespace YAT.Domain
 				case Parser.Keyword.Eol:
 				case Parser.Keyword.NoEol:
 				{
-					// Add space if necessary.
+					// Add space if necessary:
 					if (ElementsAreSeparate(IODirection.Tx))
 					{
 						if (this.txLineState.LineElements.DataCount > 0)
-							OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.Space());
+							OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.DataSpace());
 					}
 
 					OnDisplayElementProcessed(IODirection.Tx, new DisplayElement.ErrorInfo((Parser.KeywordEx)(result.Keyword) + " keyword is not supported for binary terminals"));
@@ -511,26 +511,13 @@ namespace YAT.Domain
 			this.bidirLineState = new BidirLineState();
 		}
 
-		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
+		private void ExecuteLineBegin(LineState lineState, DateTime ts, string ps, IODirection d, DisplayElementCollection elements)
 		{
 			if (TerminalSettings.Display.ShowDate || TerminalSettings.Display.ShowTime ||
 				TerminalSettings.Display.ShowPort || TerminalSettings.Display.ShowDirection)
 			{
-				DisplayLinePart lp = new DisplayLinePart();
-
-				if (TerminalSettings.Display.ShowDate)
-					lp.Add(new DisplayElement.DateInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
-
-				if (TerminalSettings.Display.ShowTime)
-					lp.Add(new DisplayElement.TimeInfo(ts, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
-
-				if (TerminalSettings.Display.ShowPort)
-					lp.Add(new DisplayElement.PortInfo(ps, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may become both!
-
-				if (TerminalSettings.Display.ShowDirection)
-					lp.Add(new DisplayElement.DirectionInfo((Direction)d, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight));
-
-				lp.Add(new DisplayElement.LeftMargin());
+				DisplayLinePart lp;
+				PrepareLineBeginInfo(ts, ps, d, out lp);
 
 				lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elements.AddRange(lp);
@@ -642,7 +629,7 @@ namespace YAT.Domain
 			if (ElementsAreSeparate(d))
 			{
 				if (lineState.LineElements.DataCount > 0)
-					lp.Add(new DisplayElement.Space());
+					lp.Add(new DisplayElement.DataSpace());
 			}
 		}
 
@@ -650,10 +637,8 @@ namespace YAT.Domain
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 			if (TerminalSettings.Display.ShowLength)
-			{
-				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.Length(lineState.LineElements.DataCount, TerminalSettings.Display.InfoEnclosureLeft, TerminalSettings.Display.InfoEnclosureRight)); // Direction may be both!
-			}
+				PrepareLineEndInfo(lineState.LineElements.DataCount, out lp);
+
 			lp.Add(new DisplayElement.LineBreak()); // Direction may be both!
 
 			lineState.LineElements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
@@ -694,7 +679,7 @@ namespace YAT.Domain
 				// Line begin and time stamp:
 				if (lineState.LinePosition == LinePosition.Begin)
 				{
-					ExecuteLineBegin(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
+					ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 					if (displaySettings.TimedLineBreak.Enabled)
 						lineState.LineBreakTimer.Start();
@@ -720,7 +705,7 @@ namespace YAT.Domain
 					// In case of a pending immediately insert the sequence into a new line:
 					if ((elementsForNextLine != null) && (elementsForNextLine.Count > 0))
 					{
-						ExecuteLineBegin(displaySettings, lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
+						ExecuteLineBegin(lineState, raw.TimeStamp, raw.PortStamp, raw.Direction, elements);
 
 						foreach (DisplayElement de in elementsForNextLine)
 						{

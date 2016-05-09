@@ -45,7 +45,7 @@ namespace YAT.Domain
 {
 	/// <summary></summary>
 	[Serializable]
-	[XmlInclude(typeof(NoData))]
+	[XmlInclude(typeof(Nothing))]
 	[XmlInclude(typeof(TxData))]
 	[XmlInclude(typeof(TxControl))]
 	[XmlInclude(typeof(RxData))]
@@ -55,11 +55,10 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TimeInfo))]
 	[XmlInclude(typeof(PortInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
-	[XmlInclude(typeof(Length))]
+	[XmlInclude(typeof(DataLength))]
 	[XmlInclude(typeof(WhiteSpaceDisplayElement))]
-	[XmlInclude(typeof(LeftMargin))]
-	[XmlInclude(typeof(Space))]
-	[XmlInclude(typeof(RightMargin))]
+	[XmlInclude(typeof(DataSpace))]
+	[XmlInclude(typeof(InfoSpace))]
 	[XmlInclude(typeof(LineBreak))]
 	[XmlInclude(typeof(ErrorInfo))]
 	public abstract class DisplayElement
@@ -94,10 +93,10 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class NoData : DisplayElement
+		public class Nothing : DisplayElement
 		{
 			/// <summary></summary>
-			public NoData()
+			public Nothing()
 				: base(ModifierFlags.None)
 			{
 			}
@@ -308,22 +307,22 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class Length : InfoDisplayElement
+		public class DataLength : InfoDisplayElement
 		{
 			/// <summary></summary>
-			public Length()
+			public DataLength()
 				: this(0, null, null)
 			{
 			}
 
 			/// <summary></summary>
-			public Length(int length, string enclosureLeft, string enclosureRight)
+			public DataLength(int length, string enclosureLeft, string enclosureRight)
 				: this(Direction.None, length, enclosureLeft, enclosureRight)
 			{
 			}
 
 			/// <summary></summary>
-			public Length(Direction direction, int length, string enclosureLeft, string enclosureRight)
+			public DataLength(Direction direction, int length, string enclosureLeft, string enclosureRight)
 				: base(direction, enclosureLeft + length.ToString(CultureInfo.InvariantCulture) + enclosureRight)
 			{
 			}
@@ -352,53 +351,42 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary>The margin that is added to the left of the data content.</summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class LeftMargin : WhiteSpaceDisplayElement
-		{
-			/// <summary></summary>
-			public LeftMargin()
-				: this(Direction.None)
-			{
-			}
-
-			/// <summary></summary>
-			public LeftMargin(Direction direction)
-				: base(direction, " ")
-			{
-			}
-		}
-
 		/// <summary>The space that is added inbetween characters of the data content (i.e. radix = char).</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class Space : WhiteSpaceDisplayElement
+		public class DataSpace : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
-			public Space()
+			public DataSpace()
 				: this(Direction.None)
 			{
 			}
 
 			/// <summary></summary>
-			public Space(Direction direction)
-				: base(direction, " ")
+			public DataSpace(Direction direction)
+				: base(direction, " ") // Data space is fixed to a normal space.
 			{
 			}
 		}
 
 		/// <summary>The margin that is added to the right of the data content.</summary>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class RightMargin : WhiteSpaceDisplayElement
+		public class InfoSpace : WhiteSpaceDisplayElement
 		{
 			/// <summary></summary>
-			public RightMargin()
-				: this(Direction.None)
+			public InfoSpace()
+				: this(Direction.None, null)
 			{
 			}
 
 			/// <summary></summary>
-			public RightMargin(Direction direction)
-				: base(direction, " ")
+			public InfoSpace(string space)
+				: this(Direction.None, space)
+			{
+			}
+
+			/// <summary></summary>
+			public InfoSpace(Direction direction, string space)
+				: base(direction, space)
 			{
 			}
 		}
@@ -637,28 +625,27 @@ namespace YAT.Domain
 
 			DisplayElement clone;
 
-			if      (this is NoData)        clone = new NoData();
-			else if (this is TxData)        clone = new TxData();
-			else if (this is TxControl)     clone = new TxControl();
-			else if (this is RxData)        clone = new RxData();
-			else if (this is RxControl)     clone = new RxControl();
-			else if (this is DateInfo)      clone = new DateInfo();
-			else if (this is TimeInfo)      clone = new TimeInfo();
-			else if (this is PortInfo)      clone = new PortInfo();
-			else if (this is DirectionInfo) clone = new DirectionInfo();
-			else if (this is Length)        clone = new Length();
-			else if (this is LeftMargin)    clone = new LeftMargin();
-			else if (this is Space)         clone = new Space();
-			else if (this is RightMargin)   clone = new RightMargin();
-			else if (this is LineBreak)     clone = new LineBreak();
-			else if (this is ErrorInfo)     clone = new ErrorInfo();
+			if      (this is Nothing)		clone = new Nothing();
+			else if (this is TxData)		clone = new TxData();
+			else if (this is TxControl)		clone = new TxControl();
+			else if (this is RxData)		clone = new RxData();
+			else if (this is RxControl)		clone = new RxControl();
+			else if (this is DateInfo)		clone = new DateInfo();
+			else if (this is TimeInfo)		clone = new TimeInfo();
+			else if (this is PortInfo)		clone = new PortInfo();
+			else if (this is DirectionInfo)	clone = new DirectionInfo();
+			else if (this is DataLength)	clone = new DataLength();
+			else if (this is DataSpace)		clone = new DataSpace();
+			else if (this is InfoSpace)		clone = new InfoSpace();
+			else if (this is LineBreak)		clone = new LineBreak();
+			else if (this is ErrorInfo)		clone = new ErrorInfo();
 			else throw (new TypeLoadException("Program execution should never get here, '" + this.GetType() + "' is an unknown display element type." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			clone.direction    = this.direction;
-			clone.origin       = PerformDeepClone(this.origin);
-			clone.text         = this.text;
-			clone.dataCount    = this.dataCount;
-			clone.flags        = this.flags;
+			clone.direction = this.direction;
+			clone.origin    = PerformDeepClone(this.origin);
+			clone.text      = this.text;
+			clone.dataCount = this.dataCount;
+			clone.flags     = this.flags;
 
 			return (clone);
 		}

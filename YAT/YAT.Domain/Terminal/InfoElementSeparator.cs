@@ -83,30 +83,30 @@ namespace YAT.Domain
 		private const string Space_stringSeparator                  = " ";
 		private const string Space_stringDescription                = "[Space]";
 
-		private const string Underscore_stringSeparator             = "_";
-		private const string Underscore_stringDescription           = "Underscore (_)";
-		private const string UnderscoreWithSpaces_stringSeparator   = " _ ";
-		private const string UnderscoreWithSpaces_stringDescription = "Underscore with spaces ( _ )";
+		private const string Underscore_stringSeparator             =             "_";
+		private const string Underscore_stringDescription           = "Underscore |_|";
+		private const string UnderscoreWithSpaces_stringSeparator   =                         " _ ";
+		private const string UnderscoreWithSpaces_stringDescription = "Underscore with spaces | _ |";
 
-		private const string Dash_stringSeparator                   = "-";
-		private const string Dash_stringDescription                 = "Dash (-)";
-		private const string DashWithSpaces_stringSeparator         = " - ";
-		private const string DashWithSpaces_stringDescription       = "Dash with spaces ( - )";
+		private const string Dash_stringSeparator                   =       "-";
+		private const string Dash_stringDescription                 = "Dash |-|";
+		private const string DashWithSpaces_stringSeparator         =                   " - ";
+		private const string DashWithSpaces_stringDescription       = "Dash with spaces | - |";
 
-		private const string Ball_stringSeparator                   = "°";
-		private const string Ball_stringDescription                 = "Ball (°)";
-		private const string BallWithSpaces_stringSeparator         = " ° ";
-		private const string BallWithSpaces_stringDescription       = "Ball with spaces ( ° )";
+		private const string Ball_stringSeparator                   =       "°";
+		private const string Ball_stringDescription                 = "Ball |°|";
+		private const string BallWithSpaces_stringSeparator         =                   " ° ";
+		private const string BallWithSpaces_stringDescription       = "Ball with spaces | ° |";
 
-		private const string Comma_stringSeparator                  = ",";
-		private const string Comma_stringDescription                = "Comma (,)";
-		private const string CommaWithSpace_stringSeparator         = ", ";
-		private const string CommaWithSpace_stringDescription       = "Comma with space (, )";
+		private const string Comma_stringSeparator                  =        ",";
+		private const string Comma_stringDescription                = "Comma |,|";
+		private const string CommaWithSpace_stringSeparator         =                   ", ";
+		private const string CommaWithSpace_stringDescription       = "Comma with space |, |";
 
-		private const string Semicolon_stringSeparator              = ";";
-		private const string Semicolon_stringDescription            = "Semicolon (;)";
-		private const string SemicolonWithSpace_stringSeparator     = "; ";
-		private const string SemicolonWithSpace_stringDescription   = "Semicolon with space (; )";
+		private const string Semicolon_stringSeparator              =            ";";
+		private const string Semicolon_stringDescription            = "Semicolon |;|";
+		private const string SemicolonWithSpace_stringSeparator     =                       "; ";
+		private const string SemicolonWithSpace_stringDescription   = "Semicolon with space |; |";
 
 		#endregion
 
