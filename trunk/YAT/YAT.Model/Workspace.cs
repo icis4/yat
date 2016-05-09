@@ -1400,7 +1400,7 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Error opening terminal!");
 						DialogResult result = OnMessageInputRequest
 						(
-							errorMessage + Environment.NewLine + "Continue loading workspace?",
+							errorMessage + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
 							"Terminal File Error",
 							MessageBoxButtons.YesNo,
 							MessageBoxIcon.Exclamation

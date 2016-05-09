@@ -227,13 +227,17 @@ namespace MKY.Settings
 		// Methods > Load
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be created.
+		/// </exception>
 		public object LoadFromFile(Type type)
 		{
 			return (LoadFromFile(type, null));
 		}
 
-		/// <summary></summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be created.
+		/// </exception>
 		public object LoadFromFile(Type type, AlternateXmlElement[] alternateXmlElements)
 		{
 			return (LoadFromFile(this.filePath, type, alternateXmlElements));
@@ -265,6 +269,9 @@ namespace MKY.Settings
 		/// 
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be created.
+		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public object LoadFromFile(string filePath, Type type, AlternateXmlElement[] alternateXmlElements)
 		{
@@ -287,8 +294,10 @@ namespace MKY.Settings
 					result = XmlSerializerEx.DeserializeFromFile(filePath, type);
 					success = true;
 				}
-				catch
+				catch (Exception exStandard)
 				{
+					DebugEx.WriteException(this.parentType, exStandard, "Standard deserialization has failed!");
+
 					if (alternateXmlElements == null)
 					{
 						// Try to open existing file with tolerant deserialization:
@@ -297,9 +306,10 @@ namespace MKY.Settings
 							result = XmlSerializerEx.TolerantDeserializeFromFile(filePath, type);
 							success = true;
 						}
-						catch (Exception ex)
+						catch (Exception exTolerant)
 						{
-							DebugEx.WriteException(this.parentType, ex, "Tolerant deserialization has failed!");
+							DebugEx.WriteException(this.parentType, exTolerant, "Tolerant deserialization has failed!");
+							throw; // Re-throw!
 						}
 					}
 					else
@@ -310,9 +320,10 @@ namespace MKY.Settings
 							result = XmlSerializerEx.AlternateTolerantDeserializeFromFile(filePath, type, alternateXmlElements);
 							success = true;
 						}
-						catch (Exception ex)
+						catch (Exception exAlternateTolerant)
 						{
-							DebugEx.WriteException(this.parentType, ex, "Alternate-tolerant deserialization has failed!");
+							DebugEx.WriteException(this.parentType, exAlternateTolerant, "Alternate-tolerant deserialization has failed!");
+							throw; // Re-throw!
 						}
 					}
 				}
@@ -336,14 +347,18 @@ namespace MKY.Settings
 		// Methods > Save
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be saved.
+		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public bool SaveToFile(Type type, object settings)
 		{
 			return (SaveToFile(this.filePath, type, settings));
 		}
 
-		/// <summary></summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be saved.
+		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		public bool SaveToFile(string filePath, Type type, object settings)
 		{

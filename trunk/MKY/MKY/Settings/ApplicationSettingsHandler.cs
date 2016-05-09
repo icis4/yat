@@ -294,12 +294,21 @@ namespace MKY.Settings
 
 				if ((this.effectiveFileAccess & FileAccessFlags.Read) == FileAccessFlags.Read)
 				{
+					object settings;
+
 					// Try to open existing file of current version:
-					object settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
-					if (settings != null)
+					try
 					{
-						this.settings = (TSettings)settings;
-						return (true);
+						settings = LoadFromFile(typeof(TSettings), this.alternateXmlElements);
+						if (settings != null)
+						{
+							this.settings = (TSettings)settings;
+							return (true);
+						}
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex, "Exception while loading current application file!");
 					}
 
 					// Alternatively, try to open an existing file of an older version:
@@ -330,11 +339,18 @@ namespace MKY.Settings
 						for (int i = oldDirectories.Count - 1; i >= 0; i--)
 						{
 							string oldFilePath = oldDirectories[i] + Path.DirectorySeparatorChar + fileName;
-							settings = LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
-							if (settings != null)
+							try
 							{
-								this.settings = (TSettings)settings;
-								return (true);
+								settings = LoadFromFile(oldFilePath, typeof(TSettings), this.alternateXmlElements);
+								if (settings != null)
+								{
+									this.settings = (TSettings)settings;
+									return (true);
+								}
+							}
+							catch (Exception ex)
+							{
+								DebugEx.WriteException(GetType(), ex, "Exception while loading recent application file" + Environment.NewLine + oldFilePath);
 							}
 						}
 					}
