@@ -34,9 +34,12 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Draws string with ellipsis.
 		/// </summary>
+		/// <remarks>
+		/// Actually doesn't work at all. See #308 "Minor issues with commands".
+		/// </remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			// Try to fit file path with path ellipsis.
+			// Try to fit file path with path ellipsis:
 			TextFormatFlags pathEllipsisFlags = TextFormatFlags.Default;
 
 			if (RightToLeft == RightToLeft.Yes)
@@ -52,7 +55,7 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				// Path ellipsis, don't fit, draw text with end ellipsis.
+				// Path ellipsis, don't fit, draw text with end ellipsis:
 				TextFormatFlags endEllipsisFlags = TextFormatFlags.Default;
 
 				if (RightToLeft == RightToLeft.Yes)

@@ -342,6 +342,12 @@ namespace YAT.View.Controls
 			comboBox_SingleLineText.Select();
 		}
 
+		/// <summary></summary>
+		public virtual void ValidateInput()
+		{
+			ValidateChildren(); // Simplest way to invoke comboBox_SingleLineText_Validating().
+		}
+
 		#endregion
 
 		#region Control Special Keys

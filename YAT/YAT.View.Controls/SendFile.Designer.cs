@@ -68,8 +68,6 @@
 			this.pathComboBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.pathComboBox_FilePath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.pathComboBox_FilePath.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.pathComboBox_FilePath.FormattingEnabled = true;
 			this.pathComboBox_FilePath.Location = new System.Drawing.Point(3, 3);
 			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
 			this.pathComboBox_FilePath.Size = new System.Drawing.Size(319, 21);

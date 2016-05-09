@@ -405,7 +405,7 @@ namespace YAT.Model.Types
 
 		/// <remarks>
 		/// Similar to <see cref="Description"/>, but not taking the user defined description string
-		/// into account.
+		/// into account. <see cref="DefineCommandText"/> is considered though.
 		/// </remarks>
 		[XmlIgnore]
 		public virtual string Caption
@@ -417,7 +417,7 @@ namespace YAT.Model.Types
 					if (IsText)
 						return (SingleLineText);
 					else if (IsFilePath)
-						return (Path.GetFileName(FilePath)); // Only use file name for better readability!
+						return (Path.GetFileName(FilePath)); // Only use file name as a workaround until PathComboBox has been fixed. See #308 "Minor issues with commands".
 					else
 						return (DefineCommandText);
 				}
@@ -651,9 +651,6 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
-		/// 
-		/// Do not consider <see cref="Description"/> nor <see cref="Caption"/> as they do not define
-		/// the command.
 		/// </remarks>
 		public bool Equals(Command other)
 		{
@@ -671,6 +668,8 @@ namespace YAT.Model.Types
 				(IsFilePath                    == other.IsFilePath) &&
 				PathEx.Equals(FilePath,           other.FilePath)
 			);
+
+			// Do not consider 'Description' as it does not define the command.
 		}
 
 		/// <summary>
@@ -679,9 +678,6 @@ namespace YAT.Model.Types
 		/// <remarks>
 		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
-		/// 
-		/// Do not consider <see cref="Description"/> nor <see cref="Caption"/> as they do not define
-		/// the command.
 		/// </remarks>
 		public override int GetHashCode()
 		{
@@ -694,6 +690,8 @@ namespace YAT.Model.Types
 				hashCode = (hashCode * 397) ^  DefaultRadix                   .GetHashCode();
 				hashCode = (hashCode * 397) ^  IsFilePath                     .GetHashCode();
 				hashCode = (hashCode * 397) ^ (FilePath     != null ? FilePath.GetHashCode() : 0);
+
+				// Do not consider 'Description' as it does not define the command.
 
 				return (hashCode);
 			}
