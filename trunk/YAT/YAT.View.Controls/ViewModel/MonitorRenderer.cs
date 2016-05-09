@@ -100,6 +100,9 @@ namespace YAT.View.Controls.ViewModel
 
 			TextRenderer.DrawText(graphics, s, font, bounds, SystemColors.ControlText, staticLineNumberFormat);
 
+			if (string.IsNullOrEmpty(s) || s.Length <= 1)
+				s = "88"; // Always measure at least two digits. Otherwise, the line number bar will already jump at 9 > 10.
+
 			Size requestedSize = TextRenderer.MeasureText(graphics, s, font, bounds.Size, staticLineNumberFormat);
 			requestedWidth = requestedSize.Width;
 		}
