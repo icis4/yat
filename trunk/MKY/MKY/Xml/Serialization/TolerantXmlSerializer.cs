@@ -105,7 +105,7 @@ namespace MKY.Xml.Serialization
 		/// <see cref="XmlSerializer.Deserialize(Stream)"/> throws an exception. In contrast, this
 		/// implementation handles the mismatch by simply setting the new value to its default.
 		/// </remarks>
-		public object Deserialize(TextReader reader)
+		public object Deserialize(XmlReader reader)
 		{
 			// Read input stream.
 			XmlDocument inputDocument = XmlDocumentEx.FromReader(reader);
@@ -117,10 +117,12 @@ namespace MKY.Xml.Serialization
 			// Retrieve and activate schema within document.
 			using (StringReader sr = new StringReader(inputDocument.OuterXml))
 			{
-				XmlReader innerReader = XmlReader.Create(sr);
-				XmlSchemaInference inference = new XmlSchemaInference();
-				inputDocument.Schemas = inference.InferSchema(innerReader);
-				inputDocument.Validate(null);
+				using (XmlReader innerReader = XmlReader.Create(sr))
+				{
+					XmlSchemaInference inference = new XmlSchemaInference();
+					inputDocument.Schemas = inference.InferSchema(innerReader);
+					inputDocument.Validate(null);
+				}
 			}
 
 		#if (WRITE_SCHEMAS_TO_FILES)

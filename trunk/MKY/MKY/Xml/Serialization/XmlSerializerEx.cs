@@ -25,6 +25,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace MKY.Xml.Serialization
@@ -44,8 +45,11 @@ namespace MKY.Xml.Serialization
 		{
 			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				serializer.Serialize(sw, obj);
+				using (XmlWriter xw = XmlWriter.Create(sw))
+				{
+					XmlSerializer serializer = new XmlSerializer(type);
+					serializer.Serialize(xw, obj);
+				}
 			}
 		}
 
@@ -59,8 +63,11 @@ namespace MKY.Xml.Serialization
 			object settings = null;
 			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				settings = serializer.Deserialize(sr);
+				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				{
+					XmlSerializer serializer = new XmlSerializer(type);
+					settings = serializer.Deserialize(xr);
+				}
 			}
 			return (settings);
 		}
@@ -73,8 +80,11 @@ namespace MKY.Xml.Serialization
 			object settings = null;
 			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-				settings = serializer.Deserialize(sr);
+				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				{
+					TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+					settings = serializer.Deserialize(xr);
+				}
 			}
 			return (settings);
 		}
@@ -87,8 +97,11 @@ namespace MKY.Xml.Serialization
 			object settings = null;
 			using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 			{
-				AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
-				settings = serializer.Deserialize(sr);
+				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				{
+					AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, alternateXmlElements);
+					settings = serializer.Deserialize(xr);
+				}
 			}
 			return (settings);
 		}

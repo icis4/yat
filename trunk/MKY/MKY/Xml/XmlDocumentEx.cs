@@ -42,13 +42,10 @@ namespace MKY.Xml
 		/// <summary>
 		/// Reads XML input stream into a document.
 		/// </summary>
-		public static XmlDocument FromReader(TextReader inputReader)
+		public static XmlDocument FromReader(XmlReader reader)
 		{
 			XmlDocument document = new XmlDocument();
-			using (XmlReader reader = XmlReader.Create(inputReader))
-			{
-				document.Load(reader);
-			}
+			document.Load(reader);
 			return (document);
 		}
 
@@ -59,13 +56,20 @@ namespace MKY.Xml
 		{
 			// Save the resulting document into a string:
 			StringBuilder sb = new StringBuilder();
-			XmlWriter writer = XmlWriter.Create(sb); // Unlike file serialization, string serialization will be UTF-16 encoded!
-			document.Save(writer);
+			using (XmlWriter writer = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
+			{
+				document.Save(writer);
+			}
 
 			// Deserialize that string into an object tree:
-			StringReader sr = new StringReader(sb.ToString());
-			XmlSerializer serializer = new XmlSerializer(type);
-			return (serializer.Deserialize(sr));
+			using (StringReader sr = new StringReader(sb.ToString()))
+			{
+				using (XmlReader xr = XmlReader.Create(sr)) // Use dedicated XML reader to e.g. preserve whitespace!
+				{
+					XmlSerializer serializer = new XmlSerializer(type);
+					return (serializer.Deserialize(xr));
+				}
+			}
 		}
 
 		/// <summary>
@@ -112,9 +116,11 @@ namespace MKY.Xml
 
 			// Serialize the empty object tree into a string:
 			StringBuilder sb = new StringBuilder();
-			XmlWriter writer = XmlWriter.Create(sb); // Unlike file serialization, string serialization will be UTF-16 encoded!
-			XmlSerializer serializer = new XmlSerializer(type);
-			serializer.Serialize(writer, obj);
+			using (XmlWriter xw = XmlWriter.Create(sb)) // Unlike file serialization, string serialization will be UTF-16 encoded!
+			{
+				XmlSerializer serializer = new XmlSerializer(type);
+				serializer.Serialize(xw, obj);
+			}
 
 			// Load that string into an XML document that serves as base for new documents:
 			XmlDocument defaultDocument = new XmlDocument();
