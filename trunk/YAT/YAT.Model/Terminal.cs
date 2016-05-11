@@ -156,10 +156,10 @@ namespace YAT.Model
 		private int rxLineCount;
 
 		// Rate status:
-		private Rate txByteRate;
-		private Rate rxByteRate;
-		private Rate txLineRate;
-		private Rate rxLineRate;
+		private RateProvider txByteRate;
+		private RateProvider rxByteRate;
+		private RateProvider txLineRate;
+		private RateProvider rxLineRate;
 
 		// Partial commands:
 		private string partialCommandLine;
@@ -3308,7 +3308,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.txByteRate.Value);
+				return (this.txByteRate.RateValue);
 			}
 		}
 
@@ -3318,7 +3318,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.txLineRate.Value);
+				return (this.txLineRate.RateValue);
 			}
 		}
 
@@ -3328,7 +3328,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.rxByteRate.Value);
+				return (this.rxByteRate.RateValue);
 			}
 		}
 
@@ -3338,7 +3338,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.rxLineRate.Value);
+				return (this.rxLineRate.RateValue);
 			}
 		}
 
@@ -3358,10 +3358,10 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			txByteRate = this.txByteRate.Value;
-			txLineRate = this.txLineRate.Value;
-			rxByteRate = this.rxByteRate.Value;
-			rxLineRate = this.rxLineRate.Value;
+			txByteRate = this.txByteRate.RateValue;
+			txLineRate = this.txLineRate.RateValue;
+			rxByteRate = this.rxByteRate.RateValue;
+			rxLineRate = this.rxLineRate.RateValue;
 		}
 
 		/// <summary></summary>
@@ -3386,14 +3386,14 @@ namespace YAT.Model
 
 		private void CreateRates()
 		{
-			int tick = 250;
-			int interval = 1000;
-			int window = 5000;
+			int rateInterval   = 1000;
+			int rateWindow     = 5000;
+			int updateInterval =  250;
 
-			this.txByteRate = new Rate(tick, interval, window);
-			this.txLineRate = new Rate(tick, interval, window);
-			this.rxByteRate = new Rate(tick, interval, window);
-			this.rxLineRate = new Rate(tick, interval, window);
+			this.txByteRate = new RateProvider(rateInterval, rateWindow, updateInterval);
+			this.txLineRate = new RateProvider(rateInterval, rateWindow, updateInterval);
+			this.rxByteRate = new RateProvider(rateInterval, rateWindow, updateInterval);
+			this.rxLineRate = new RateProvider(rateInterval, rateWindow, updateInterval);
 
 			this.txByteRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
 			this.txLineRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
