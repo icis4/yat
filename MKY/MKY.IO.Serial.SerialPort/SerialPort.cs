@@ -704,7 +704,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
-			RateHelper sendRate = new RateHelper(this.settings.MaxSendRate.Interval);
+			Rate sendRate = new Rate(this.settings.MaxSendRate.Interval);
 
 			bool isOutputBreakOldAndErrorHasBeenSignaled = false;
 			bool isCtsInactiveOldAndErrorHasBeenSignaled = false;
