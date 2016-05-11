@@ -21,6 +21,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -31,40 +32,40 @@ namespace MKY.Time
 	/// </summary>
 	/// <typeparam name="T">The type of the time stamped item.</typeparam>
 	[Serializable]
-	public struct TimeStampItem<T>
+	public struct TimeTickItem<T>
 	{
-		private DateTime timeStamp;
+		private long timeTick;
 		private T item;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:TimeStampItem`1"/> struct.
+		/// Initializes a new instance of the <see cref="T:TimeTickItem`1"/> struct.
 		/// </summary>
 		/// <param name="item">The second value.</param>
-		public TimeStampItem(T item)
-			: this(DateTime.Now, item)
+		public TimeTickItem(T item)
+			: this(Stopwatch.GetTimestamp(), item)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:TimeStampItem`1"/> struct.
+		/// Initializes a new instance of the <see cref="T:TimeTickItem`1"/> struct.
 		/// </summary>
-		/// <param name="timeStamp">The time stamp.</param>
+		/// <param name="timeTick">The time tick.</param>
 		/// <param name="item">The second value.</param>
-		public TimeStampItem(DateTime timeStamp, T item)
+		public TimeTickItem(long timeTick, T item)
 		{
-			this.timeStamp = timeStamp;
+			this.timeTick = timeTick;
 			this.item = item;
 		}
 
 		/// <summary>
-		/// Gets or sets the time stamp.
+		/// Gets or sets the time tick.
 		/// </summary>
-		/// <value>The time stamp.</value>
-		[XmlElement("TimeStamp")]
-		public DateTime TimeStamp
+		/// <value>The time tick.</value>
+		[XmlElement("TimeTick")]
+		public long TimeTick
 		{
-			get { return (this.timeStamp); }
-			set { this.timeStamp = value;  }
+			get { return (this.timeTick); }
+			set { this.timeTick = value;  }
 		}
 
 		/// <summary>
@@ -95,10 +96,10 @@ namespace MKY.Time
 			if (GetType() != obj.GetType())
 				return (false);
 
-			TimeStampItem<T> other = (TimeStampItem<T>)obj;
+			TimeTickItem<T> other = (TimeTickItem<T>)obj;
 			return
 			(
-				(TimeStamp.Equals(other.TimeStamp)) &&
+				(TimeTick.Equals(other.TimeTick)) &&
 				(Item.Equals(other.Item))
 			);
 		}
@@ -114,7 +115,7 @@ namespace MKY.Time
 		{
 			unchecked
 			{
-				int hashCode = TimeStamp.GetHashCode();
+				int hashCode = TimeTick.GetHashCode();
 
 				// Attention, default(T) can lead to null, e.g. in case of a string!
 				hashCode = (hashCode * 397) ^ (Item != null ? Item.GetHashCode() : 0);
@@ -132,7 +133,7 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			string strA = TimeStamp.ToString(CultureInfo.InvariantCulture);
+			string strA = TimeTick.ToString(CultureInfo.InvariantCulture);
 			string strB = Item.ToString();
 
 			return (strA + " / " + strB);
@@ -145,7 +146,7 @@ namespace MKY.Time
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(TimeStampItem<T> lhs, TimeStampItem<T> rhs)
+		public static bool operator ==(TimeTickItem<T> lhs, TimeTickItem<T> rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -160,7 +161,7 @@ namespace MKY.Time
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(TimeStampItem<T> lhs, TimeStampItem<T> rhs)
+		public static bool operator !=(TimeTickItem<T> lhs, TimeTickItem<T> rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -33,15 +33,15 @@ namespace MKY.Diagnostics
 	public static class StopwatchEx
 	{
 		/// <summary></summary>
-		public static int TicksToTimeout(long ticks)
+		public static int TicksToTime(long ticks)
 		{
 			return ((int)(ticks * 1000 / Stopwatch.Frequency));
 		}
 
 		/// <summary></summary>
-		public static long TimeoutToTicks(int timeoutMs)
+		public static long TimeToTicks(int timeMs)
 		{
-			return (Stopwatch.Frequency * timeoutMs / 1000);
+			return (Stopwatch.Frequency * timeMs / 1000);
 		}
 	}
 }

@@ -105,7 +105,9 @@ namespace YAT.Domain
 				else if (value < Count)
 				{
 					while (Count > value)
-						DequeueExcessLine();
+						Dequeue();
+
+					TrimExcess();
 
 					this.capacity = value;
 				}
@@ -151,11 +153,11 @@ namespace YAT.Domain
 				this.dataCount += item.DataCount;
 
 			// Check whether a line break is needed:
-			if (item is Domain.DisplayElement.LineBreak)
+			if (item is DisplayElement.LineBreak)
 			{
 				// Excess must be manually dequeued:
 				if (Count >= Capacity)
-					DequeueExcessLine();
+					Dequeue();
 
 				// Enqueue new line and reset current line:
 				base.Enqueue(this.currentLine.Clone());            // Clone elements to ensure decoupling.
@@ -170,6 +172,17 @@ namespace YAT.Domain
 		{
 			foreach (DisplayElement de in collection)
 				Enqueue(de);
+		}
+
+		/// <summary></summary>
+		public new DisplayLine Dequeue()
+		{
+			DisplayLine dl = base.Dequeue();
+
+			foreach (DisplayElement de in dl)
+				this.dataCount -= de.DataCount;
+
+			return (dl);
 		}
 
 		/// <summary></summary>
@@ -221,24 +234,6 @@ namespace YAT.Domain
 		public virtual void ClearLastLineAuxiliary()
 		{
 			this.lastLineAuxiliary.Clear();
-		}
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private void DequeueExcessLine()
-		{
-			if (Count > 0)
-			{
-				DisplayLine dl = Dequeue();
-
-				foreach (DisplayElement de in dl)
-					this.dataCount -= de.DataCount;
-			}
 		}
 
 		#endregion

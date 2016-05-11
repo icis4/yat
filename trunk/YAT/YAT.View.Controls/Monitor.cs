@@ -115,7 +115,7 @@ namespace YAT.View.Controls
 
 		// Update:
 		private const int DataStatusIntervalMs = 31; // Interval shall be quite short => fixed to 31 ms (a prime number) = approx. 32 updates per second.
-		private readonly long DataStatusTickInterval = StopwatchEx.TimeoutToTicks(DataStatusIntervalMs);
+		private readonly long DataStatusTickInterval = StopwatchEx.TimeToTicks(DataStatusIntervalMs);
 
 		#endregion
 
@@ -960,7 +960,7 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				StartMonitorUpdateTimeout(StopwatchEx.TicksToTimeout(this.monitorUpdateTickInterval) * 2); // Synchronous update shall have precedence over timeout.
+				StartMonitorUpdateTimeout(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval) * 2); // Synchronous update shall have precedence over timeout.
 			}
 		}
 
@@ -1217,7 +1217,7 @@ namespace YAT.View.Controls
 			}
 			else if (totalProcessorLoadInPercent > UpperLoad)
 			{
-				this.monitorUpdateTickInterval = StopwatchEx.TimeoutToTicks(UpperInterval);
+				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(UpperInterval);
 				this.performImmediateUpdate = false;
 
 				WriteUpdateDebugMessage("Update interval is maximum:");
@@ -1229,14 +1229,14 @@ namespace YAT.View.Controls
 
 				y = Int32Ex.Limit(y, LowerInterval, UpperInterval);
 
-				this.monitorUpdateTickInterval = StopwatchEx.TimeoutToTicks(y);
+				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
 				this.performImmediateUpdate = false;
 
 				WriteUpdateDebugMessage("Update interval is calculated:");
 			}
 
 			WriteUpdateDebugMessage(" > " + this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks");
-			WriteUpdateDebugMessage(" > " + StopwatchEx.TicksToTimeout(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
+			WriteUpdateDebugMessage(" > " + StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
 		}
 
 		/// <summary>
