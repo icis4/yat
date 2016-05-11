@@ -21,18 +21,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-
-#endregion
 
 namespace MKY.Time
 {
@@ -74,14 +66,14 @@ namespace MKY.Time
 
 		private bool isDisposed;
 
-		private System.Timers.Timer timer;
-
 		private int tick;
 		private int interval;
 		private int window;
 
-		private Queue<TimeStampItem<int>> queue = new Queue<TimeStampItem<int>>();
+		private Queue<TimeStampItem<int>> queue;
 		private int value;
+
+		private System.Timers.Timer timer; // Not using 'System.Timers' to prevent conflicts with 'System.Threading'.
 
 		#endregion
 
@@ -117,9 +109,11 @@ namespace MKY.Time
 		/// <summary></summary>
 		public Rate(int tick, int interval, int window)
 		{
-			this.tick = tick;
+			this.tick     = tick;
 			this.interval = interval;
-			this.window = window;
+			this.window   = window;
+
+			this.queue = new Queue<TimeStampItem<int>>(window); // Preset the assumed capactiy to improve memory management.
 
 			this.timer = new System.Timers.Timer();
 			this.timer.AutoReset = true;
@@ -266,20 +260,19 @@ namespace MKY.Time
 			RemoveObsoleteFromQueue(DateTime.Now);
 		}
 
-		private void RemoveObsoleteFromQueue(DateTime now)
+		private void RemoveObsoleteFromQueue(DateTime endOfWindow)
 		{
-			bool isWithinWindow = true;
-			DateTime otherEndOfWindow = (now - TimeSpan.FromMilliseconds(this.window));
+			DateTime beginningOfWindow = (endOfWindow - TimeSpan.FromMilliseconds(this.window));
 
 			lock (this.queue) // Lock is required because Queue<T> is not synchronized and whole queue is accessed via ToArray().
 			{
-				while ((this.queue.Count > 0) && isWithinWindow)
+				while (this.queue.Count > 0)
 				{
 					TimeStampItem<int> tsi = this.queue.Peek();
-					if (tsi.TimeStamp < otherEndOfWindow)
+					if (tsi.TimeStamp < beginningOfWindow)
 						this.queue.Dequeue();
 					else
-						isWithinWindow = false;
+						break; // Front-most item is within window.
 				}
 			}
 		}
@@ -294,14 +287,14 @@ namespace MKY.Time
 			int oldValue = this.value;
 			int newValue = 0;
 
-			// If value was 0 before, only consider the current value.
+			// If value was 0 before, only consider the current value:
 			if (oldValue <= 0)
 			{
 				newValue = value;
 			}
 			else
 			{
-				// Count number of items within each interval.
+				// Count number of items within each interval:
 				int numberOfIntervals = (int)(this.window / this.interval);
 				int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance<int>(numberOfIntervals, 0);
 				DateTime now = DateTime.Now;
@@ -317,7 +310,7 @@ namespace MKY.Time
 					valuePerInterval[i] += tsi.Item;
 				}
 
-				// Weigh and sum up the intervals.
+				// Weigh and sum up the intervals:
 				int weight = numberOfIntervals;
 				int weighedSum = 0;
 				int sumOfWeights = 0;
@@ -328,7 +321,7 @@ namespace MKY.Time
 					weight--;
 				}
 
-				// Evaluate the rate.
+				// Evaluate the rate:
 				newValue = (int)((double)weighedSum / sumOfWeights);
 			}
 
@@ -362,7 +355,7 @@ namespace MKY.Time
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
+			if (System.Threading.Monitor.TryEnter(timer_Elapsed_SyncObj)) // Not using 'System.Threading' to prevent conflicts with 'System.Timers'.
 			{
 				try
 				{
@@ -375,7 +368,7 @@ namespace MKY.Time
 				}
 				finally
 				{
-					Monitor.Exit(timer_Elapsed_SyncObj);
+					System.Threading.Monitor.Exit(timer_Elapsed_SyncObj); // Not using 'System.Threading' to prevent conflicts with 'System.Timers'.
 				}
 			} // Monitor.TryEnter()
 		}

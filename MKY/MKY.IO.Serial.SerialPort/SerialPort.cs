@@ -92,7 +92,7 @@ namespace MKY.IO.Serial.SerialPort
 		private const int AliveInterval     = 500;
 
 		private const int IOControlChangedTimeout = 47; // Timeout is fixed to 47 ms (a prime number).
-		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeoutToTicks(IOControlChangedTimeout);
+		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeToTicks(IOControlChangedTimeout);
 
 		private const string Undefined = "<Undefined>";
 

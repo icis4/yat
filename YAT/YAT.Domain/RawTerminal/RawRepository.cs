@@ -77,6 +77,8 @@ namespace YAT.Domain
 						while (this.queue.Count > value)
 							this.queue.Dequeue();
 
+						this.queue.TrimExcess();
+
 						this.capacity = value;
 					}
 				}
@@ -90,6 +92,8 @@ namespace YAT.Domain
 			{
 				while (this.queue.Count >= this.capacity)
 					this.queue.Dequeue();
+
+				// Do not TrimExcess() as queue length/count is limited.
 
 				this.queue.Enqueue(chunk);
 			}
