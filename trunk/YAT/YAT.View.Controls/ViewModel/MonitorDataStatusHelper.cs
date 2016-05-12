@@ -21,19 +21,14 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Text;
 
 using MKY;
 
-#endregion
-
-namespace YAT.View.Controls.ViewModel
+// This code is intentionally placed into the YAT.View.Controls namespace even though the file is
+// located in YAT.View.Controls.ViewModel for same location as parent control.
+namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	internal class MonitorDataStatusHelper

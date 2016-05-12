@@ -42,16 +42,6 @@ namespace MKY.Windows.Forms
 
 		private delegate void StringMethodDelegate(string value);
 		private delegate void DialogResultMethodDelegate(DialogResult value);
-		private delegate DialogResult ShowDialogDelegate(IWin32Window value);
-
-		#endregion
-
-		#region Static Fields
-		//==========================================================================================
-		// Static Fields
-		//==========================================================================================
-
-		private static StatusBox staticStatusBox;
 
 		#endregion
 
@@ -73,29 +63,6 @@ namespace MKY.Windows.Forms
 		/// <param name="caption">
 		/// The text to display in the title bar of the status box.
 		/// </param>
-		/// <returns>
-		/// One of the System.Windows.Forms.DialogResult values.
-		/// </returns>
-		[ModalBehavior(ModalBehavior.Always)]
-		public static DialogResult Show(IWin32Window owner, string status1, string caption)
-		{
-			bool setting = false;
-			return (Show(owner, status1, caption, "", "", ref setting, false));
-		}
-
-		/// <summary>
-		/// Displays a status box in front of the specified object and with the specified
-		/// status and caption and returns the result.
-		/// </summary>
-		/// <param name="owner">
-		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
-		/// </param>
-		/// <param name="status1">
-		/// The text to display in the first line of status box.
-		/// </param>
-		/// <param name="caption">
-		/// The text to display in the title bar of the status box.
-		/// </param>
 		/// <param name="status2">
 		/// The text to display in the second line of status box.
 		/// </param>
@@ -103,10 +70,10 @@ namespace MKY.Windows.Forms
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
 		[ModalBehavior(ModalBehavior.Always)]
-		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2)
+		public static DialogResult Show(IWin32Window owner, string caption, string status1, string status2 = null)
 		{
 			bool setting = false;
-			return (Show(owner, status1, caption, status2, "", ref setting, false));
+			return (Show(owner, caption, status1, status2, null, ref setting));
 		}
 
 		/// <summary>
@@ -131,148 +98,38 @@ namespace MKY.Windows.Forms
 		/// <param name="setting">
 		/// The value of the setting.
 		/// </param>
+		/// <param name="showCancel">
+		/// Flag whether the cancel button shall be shown.
+		/// </param>
+		/// <param name="timeout">
+		/// Optional timeout.
+		/// </param>
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
 		[ModalBehavior(ModalBehavior.Always)]
-		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
+		public static DialogResult Show(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
-			return (Show(owner, status1, caption, status2, settingText, ref setting, true));
+			StatusBox sb = new StatusBox();
+			return (sb.ShowDialog(owner, caption, status1, status2, settingText, ref setting, showCancel, timeout));
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
-		[ModalBehavior(ModalBehavior.Always)]
-		private static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting, bool showCancel)
+		/// <summary></summary>
+		[ModalBehavior(ModalBehavior.Never)]
+		public static StatusBox Create(string caption, string status1, string status2 = null)
 		{
-			DialogResult dialogResult = DialogResult.OK;
-			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting, showCancel);
-
-			var sinkTarget = (owner as ISynchronizeInvoke);
-			if (sinkTarget != null)
-			{
-				if (sinkTarget.InvokeRequired)
-				{
-					var del = new ShowDialogDelegate(staticStatusBox.ShowDialog);
-					object[] args = { owner };
-					dialogResult = (DialogResult)sinkTarget.Invoke(del, args);
-				}
-				else
-				{
-					dialogResult = staticStatusBox.ShowDialog(owner);
-				}
-				setting = staticStatusBox.Setting;
-			}
-
-			staticStatusBox = null;
-			return (dialogResult);
+			return (new StatusBox(caption, status1, status2));
 		}
 
-		/// <summary>
-		/// Updates the first status line of the status box.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static void UpdateStatus1(string status)
-		{
-			try
-			{
-				var sinkTarget = (staticStatusBox as ISynchronizeInvoke);
-				if (sinkTarget != null)
-				{
-					if (sinkTarget.InvokeRequired)
-					{
-						var del = new StringMethodDelegate(staticStatusBox.SetStatus1);
-						object[] args = { status };
-						sinkTarget.Invoke(del, args);
-					}
-					else
-					{
-						staticStatusBox.SetStatus1(status);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				// \fixme (2013-01-03 / MKY)
-				// A better solution than this try/catch should be found to deal with infrequently
-				// happening invocation exceptions, but for the moment it is better to catch than
-				// do nothing...
-				// The proper solution would be to implement this status box without any static
-				// field. Maybe a good implementation can be found online.
-				DebugEx.WriteException(typeof(StatusBox), ex);
-			}
-		}
+		#endregion
 
-		/// <summary>
-		/// Updates the second status line of the status box.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static void UpdateStatus2(string status)
-		{
-			try
-			{
-				var sinkTarget = (staticStatusBox as ISynchronizeInvoke);
-				if (sinkTarget != null)
-				{
-					if (sinkTarget.InvokeRequired)
-					{
-						var del = new StringMethodDelegate(staticStatusBox.SetStatus2);
-						object[] args = { status };
-						sinkTarget.Invoke(del, args);
-					}
-					else
-					{
-						staticStatusBox.SetStatus2(status);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				// \fixme (2013-01-03 / MKY)
-				// A better solution than this try/catch should be found to deal with infrequently
-				// happening invocation exceptions, but for the moment it is better to catch than
-				// do nothing...
-				// The proper solution would be to implement this status box without any static
-				// field. Maybe a good implementation can be found online.
-				DebugEx.WriteException(typeof(StatusBox), ex);
-			}
-		}
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
-		/// <summary>
-		/// Closes the status box.
-		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public static void AcceptAndClose()
-		{
-			try
-			{
-				var sinkTarget = (staticStatusBox as ISynchronizeInvoke);
-				if (sinkTarget != null)
-				{
-					var dialogResult = DialogResult.OK;
-					if (sinkTarget.InvokeRequired)
-					{
-						var del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
-						object[] args = { dialogResult };
-						sinkTarget.Invoke(del, args);
-					}
-					else
-					{
-						staticStatusBox.RequestClose(dialogResult);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				// \fixme (2013-01-03 / MKY)
-				// A better solution than this try/catch should be found to deal with infrequently
-				// happening invocation exceptions, but for the moment it is better to catch than
-				// do nothing...
-				// The proper solution would be to implement this status box without any static
-				// field. Maybe a good implementation can be found online.
-				DebugEx.WriteException(typeof(StatusBox), ex);
-			}
-		}
+		private int timeout = System.Threading.Timeout.Infinite;
 
 		#endregion
 
@@ -289,23 +146,37 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		protected StatusBox(string status1, string caption, string status2, string settingText, bool setting, bool showCancel)
+		protected StatusBox(string status1, string caption, string status2 = null)
+			: this(status1, caption, status2, null, false, true)
+		{
+		}
+
+		/// <summary></summary>
+		protected StatusBox(string status1, string caption, string status2, string settingText, bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
 			InitializeComponent();
+			Initialize(status1, caption, status2, settingText, setting, showCancel, timeout);
+		}
 
-			Text = caption;
-			label_Status1.Text = status1;
-			label_Status2.Text = status2;
+		private void Initialize(string status1, string caption, string status2, string settingText, bool setting, bool showCancel, int timeout)
+		{
+			Caption = caption;
+			Status1 = status1;
+			Status2 = status2;
 
 			if (!string.IsNullOrEmpty(settingText))
-			{
-				checkBox_Setting.Visible = true;
-				checkBox_Setting.Text = settingText;
-				checkBox_Setting.Checked = setting;
-				Height = 154;
-			}
+				InitializeSetting(settingText, setting);
 
-			button_Cancel.Visible = showCancel;
+			ShowCancel = showCancel;
+			Timeout    = timeout;
+		}
+
+		private void InitializeSetting(string settingText, bool setting)
+		{
+			checkBox_Setting.Visible = true;
+			checkBox_Setting.Text = settingText;
+			checkBox_Setting.Checked = setting;
+			Height = 154;
 		}
 
 		#endregion
@@ -316,9 +187,44 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool Setting
+		public virtual string Caption
+		{
+			get { return (Text); }
+			set { Text = value;  }
+		}
+
+		/// <summary></summary>
+		public virtual string Status1
+		{
+			get { return (label_Status1.Text); }
+			set { label_Status1.Text = value;  }
+		}
+
+		/// <summary></summary>
+		public virtual string Status2
+		{
+			get { return (label_Status2.Text); }
+			set { label_Status2.Text = value;  }
+		}
+
+		/// <summary></summary>
+		protected virtual bool Setting
 		{
 			get { return (checkBox_Setting.Checked); }
+		}
+
+		/// <summary></summary>
+		public virtual bool ShowCancel
+		{
+			get { return (button_Cancel.Visible); }
+			set { button_Cancel.Visible = value;  }
+		}
+
+		/// <summary></summary>
+		public virtual int Timeout
+		{
+			get { return (this.timeout); }
+			set { this.timeout = value;  }
 		}
 
 		#endregion
@@ -329,34 +235,148 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void SetStatus1(string value)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
+		[ModalBehavior(ModalBehavior.Always)]
+		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2 = null)
 		{
-			label_Status1.Text = value;
+			bool setting = false;
+			return (ShowDialog(owner, caption, status1, status2, null, ref setting));
 		}
 
 		/// <summary></summary>
-		public virtual void SetStatus2(string value)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
+		[ModalBehavior(ModalBehavior.Always)]
+		public DialogResult ShowDialog(IWin32Window owner, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
-			label_Status2.Text = value;
+			return (ShowDialog(owner, Caption, Status1, Status2, settingText, ref setting, showCancel, timeout));
 		}
 
 		/// <summary></summary>
-		public virtual void RequestClose(DialogResult value)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
+		[ModalBehavior(ModalBehavior.Always)]
+		public DialogResult ShowDialog(IWin32Window owner, string caption, string status1, string status2, string settingText, ref bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
-			DialogResult = value;
+			Initialize(caption, status1, status2, settingText, setting, showCancel, timeout);
+
+			DialogResult dr;
+			using (System.Threading.Timer timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
+			{
+				dr = ShowDialog(owner);
+			}
+			setting = Setting;
+
+			return (dr);
+		}
+
+		private void timer_Timeout(object obj)
+		{
+			CloseSynchronized(DialogResult.Abort);
+		}
+
+		/// <summary>
+		/// Updates the first status line of the status box.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public void SetStatus1Synchronized(string status)
+		{
+			try
+			{
+				var sinkTarget = (this as ISynchronizeInvoke);
+				if (sinkTarget != null)
+				{
+					if (sinkTarget.InvokeRequired)
+					{
+						var del = new StringMethodDelegate(SetStatus1);
+						object[] args = { status };
+						sinkTarget.Invoke(del, args);
+					}
+					else
+					{
+						SetStatus1(status);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(StatusBox), ex);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void SetStatus1(string value)
+		{
+			Status1 = value;
+		}
+
+		/// <summary>
+		/// Updates the second status line of the status box.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public void SetStatus2Synchronized(string status)
+		{
+			try
+			{
+				var sinkTarget = (this as ISynchronizeInvoke);
+				if (sinkTarget != null)
+				{
+					if (sinkTarget.InvokeRequired)
+					{
+						var del = new StringMethodDelegate(SetStatus2);
+						object[] args = { status };
+						sinkTarget.Invoke(del, args);
+					}
+					else
+					{
+						SetStatus2(status);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(StatusBox), ex);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void SetStatus2(string value)
+		{
+			Status2 = value;
+		}
+
+		/// <summary>
+		/// Closes the status box.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
+		public void CloseSynchronized(DialogResult dr = DialogResult.None)
+		{
+			try
+			{
+				var sinkTarget = (this as ISynchronizeInvoke);
+				if (sinkTarget != null)
+				{
+					if (sinkTarget.InvokeRequired)
+					{
+						var del = new DialogResultMethodDelegate(Close);
+						object[] args = { dr };
+						sinkTarget.Invoke(del, args);
+					}
+					else
+					{
+						Close(dr);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				DebugEx.WriteException(typeof(StatusBox), ex);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void Close(DialogResult dr)
+		{
+			DialogResult = dr;
 			Close();
-		}
-
-		#endregion
-
-		#region Controls Event Handlers
-		//==========================================================================================
-		// Controls Event Handlers
-		//==========================================================================================
-
-		private void button_Cancel_Click(object sender, EventArgs e)
-		{
-			// Do nothing.
 		}
 
 		#endregion

@@ -27,7 +27,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace MKY.IO.Ports
 {
 	/// <summary></summary>
-	[Serializable]
 	public class SerialDataReceivedEventArgs : EventArgs
 	{
 		private System.IO.Ports.SerialData eventType;
@@ -46,7 +45,6 @@ namespace MKY.IO.Ports
 	}
 
 	/// <summary></summary>
-	[Serializable]
 	public class SerialErrorReceivedEventArgs : EventArgs
 	{
 		private System.IO.Ports.SerialError eventType;
@@ -65,7 +63,6 @@ namespace MKY.IO.Ports
 	}
 
 	/// <summary></summary>
-	[Serializable]
 	public class SerialPinChangedEventArgs : EventArgs
 	{
 		private MKY.IO.Ports.SerialPinChange eventType;
@@ -84,7 +81,6 @@ namespace MKY.IO.Ports
 	}
 
 	/// <summary></summary>
-	[Serializable]
 	public class SerialPortChangedAndCancelEventArgs : EventArgs
 	{
 		private SerialPortId port;

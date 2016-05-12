@@ -50,6 +50,7 @@ using MKY.Windows.Forms;
 using YAT.Application.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
+using YAT.View.Controls;
 using YAT.View.Utilities;
 
 #endregion
@@ -2695,15 +2696,15 @@ namespace YAT.View.Forms
 
 		private void SetMonitorIOStatus()
 		{
-			View.Controls.ViewModel.MonitorActivityState activityState = View.Controls.ViewModel.MonitorActivityState.Inactive;
+			MonitorActivityState activityState = MonitorActivityState.Inactive;
 			if (TerminalIsAvailable)
 			{
 				if (this.terminal.IsStarted)
 				{
 					if (this.terminal.IsConnected)
-						activityState = View.Controls.ViewModel.MonitorActivityState.Active;
+						activityState = MonitorActivityState.Active;
 					else
-						activityState = View.Controls.ViewModel.MonitorActivityState.Pending;
+						activityState = MonitorActivityState.Pending;
 				}
 			}
 			monitor_Tx.ActivityState    = activityState;

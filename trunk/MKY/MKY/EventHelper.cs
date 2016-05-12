@@ -48,11 +48,9 @@ namespace MKY
 		//==========================================================================================
 
 		/// <summary>
-		/// Fires event with supplied arguments synchronously. Event is
-		/// fired safely, exceptions are caught. If an event sink implements
-		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise, the event is
-		/// invoked on the current thread.
+		/// Fires event with supplied arguments synchronously. Event is fired safely, exceptions are
+		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
+		/// the event is invoked on that thread. Otherwise, the event is invoked on the current thread.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "It is the nature of this event helper to provide methods for event firing.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -61,7 +59,6 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -88,7 +85,6 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -118,7 +114,6 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Events of type "event MyEventHandler MyEvent" are always fired the non-debug way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -151,7 +146,6 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -184,7 +178,6 @@ namespace MKY
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way:
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{

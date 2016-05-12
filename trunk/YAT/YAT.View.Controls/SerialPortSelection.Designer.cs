@@ -32,9 +32,7 @@
 			this.button_RefreshPorts = new System.Windows.Forms.Button();
 			this.comboBox_Port = new System.Windows.Forms.ComboBox();
 			this.label_Port = new System.Windows.Forms.Label();
-			this.timer_ShowScanDialog = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.timer_ShowRetrieveDialog = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// button_RefreshPorts
@@ -70,16 +68,6 @@
 			this.label_Port.TabIndex = 0;
 			this.label_Port.Text = "&Serial Port:";
 			// 
-			// timer_ShowScanDialog
-			// 
-			this.timer_ShowScanDialog.Interval = 150;
-			this.timer_ShowScanDialog.Tick += new System.EventHandler(this.timer_ShowScanDialog_Tick);
-			// 
-			// timer_ShowRetrieveDialog
-			// 
-			this.timer_ShowRetrieveDialog.Interval = 150;
-			this.timer_ShowRetrieveDialog.Tick += new System.EventHandler(this.timer_ShowRetrieveDialog_Tick);
-			// 
 			// SerialPortSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -101,8 +89,6 @@
 		private System.Windows.Forms.Button button_RefreshPorts;
 		private System.Windows.Forms.ComboBox comboBox_Port;
 		private System.Windows.Forms.Label label_Port;
-		private System.Windows.Forms.Timer timer_ShowScanDialog;
 		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.Timer timer_ShowRetrieveDialog;
 	}
 }

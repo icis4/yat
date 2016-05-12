@@ -62,8 +62,6 @@ using MKY;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
-using YAT.View.Controls.ViewModel;
-
 #endregion
 
 namespace YAT.View.Controls

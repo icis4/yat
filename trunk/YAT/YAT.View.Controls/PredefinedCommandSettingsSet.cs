@@ -216,7 +216,7 @@ namespace YAT.View.Controls
 				this.isStartingUp = false;
 				SetControls();
 
-				// Move cursor to end
+				// Move cursor to end:
 				textBox_SingleLineText.SelectionStart = textBox_SingleLineText.Text.Length;
 			}
 		}

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.IO.Ports
@@ -33,6 +34,12 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public class SerialPortCollection : List<SerialPortId>
 	{
+		string[]                   staticPortNamesCache; // = null
+		object                     staticPortNamesCacheSyncObj = new object();
+
+		Dictionary<string, string> staticCaptionsCache; // = null
+		object                     staticCaptionsCacheSyncObj = new object();
+
 		/// <summary></summary>
 		public SerialPortCollection()
 			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstStandardPortNumber + 1)
@@ -51,33 +58,39 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public virtual void FillWithStandardPorts()
 		{
-			Clear();
+			lock (this)
+			{
+				Clear();
 
-			for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
-				Add(new SerialPortId(i));
+				for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
+					Add(new SerialPortId(i));
 
-			Sort();
+				Sort();
+			}
 		}
 
 		/// <summary>
 		/// Fills list with all ports from <see cref="System.IO.Ports.SerialPort.GetPortNames()"/>.
 		/// </summary>
-		/// <param name="getPortDescriptionsFromSystem">
-		/// On request, this method queries the port descriptions from the system.
+		/// <param name="retrieveCaptions">
+		/// On request, this method queries the port captions from the system.
 		/// Attention, this may take quite some time, depending on the available ports.
 		/// Therefore, the default value is <c>false</c>.
 		/// </param>
-		public virtual void FillWithAvailablePorts(bool getPortDescriptionsFromSystem = false)
+		public virtual void FillWithAvailablePorts(bool retrieveCaptions = false)
 		{
-			Clear();
+			lock (this)
+			{
+				Clear();
 
-			foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
-				Add(new SerialPortId(portName));
+				foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
+					Add(new SerialPortId(portName));
 
-			Sort();
+				Sort();
+			}
 
-			if (getPortDescriptionsFromSystem)
-				GetPortCaptionsFromSystem();
+			if (retrieveCaptions)
+				RetrieveCaptions(true);
 		}
 
 		/// <summary>
@@ -85,16 +98,49 @@ namespace MKY.IO.Ports
 		/// that is associated with the serial port.
 		/// </summary>
 		/// <remarks>
-		/// Query is never done automatically because it takes quite some time.
+		/// Attention, this may take quite some time, depending on the available ports.
 		/// </remarks>
-		public virtual void GetPortCaptionsFromSystem()
+		public virtual void RetrieveCaptions(bool forceRetrieveFromSystem = false)
 		{
-			Dictionary<string, string> descriptions = SerialPortSearcher.GetCaptionsFromSystem();
+			bool useCaptionsFromCache;
 
-			foreach (SerialPortId portId in this)
+			lock (staticPortNamesCacheSyncObj)
 			{
-				if (descriptions.ContainsKey(portId.Name))
-					portId.SetCaptionFromSystem(descriptions[portId.Name]);
+				if (staticPortNamesCache == null)
+				{
+					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames();
+					useCaptionsFromCache = false;
+				}
+				else
+				{
+					string[] formerCache = (string[])staticPortNamesCache.Clone();
+					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames();
+					useCaptionsFromCache = ArrayEx.ValuesEqual(staticPortNamesCache, formerCache);
+				}
+			}
+
+			lock (staticCaptionsCacheSyncObj)
+			{
+				if ((staticCaptionsCache == null) || (!useCaptionsFromCache))
+				{
+					staticCaptionsCache = SerialPortSearcher.GetCaptionsFromSystem();
+
+					Debug.WriteLine(GetType() + ": Captions retrieved from system");
+				}
+				else
+				{
+					Debug.WriteLine(GetType() + ": Captions cache is up-to-date");
+				}
+
+				lock (this)
+				{
+					foreach (SerialPortId portId in this)
+					{
+						string portName = portId.Name;
+						if (staticCaptionsCache.ContainsKey(portName))
+							portId.SetCaptionFromSystem(staticCaptionsCache[portName]);
+					}
+				}
 			}
 		}
 
@@ -102,21 +148,11 @@ namespace MKY.IO.Ports
 		/// Checks all ports whether they are currently in use and marks them.
 		/// </summary>
 		/// <remarks>
-		/// In .NET 2.0, no class provides a method to retrieve whether a port is currently
-		/// in use or not. Therefore, this method actively tries to open every port. This
-		/// takes some time.
-		/// </remarks>
-		public virtual void MarkPortsInUse()
-		{
-			MarkPortsInUse(null);
-		}
-
-		/// <summary>
-		/// Checks all ports whether they are currently in use and marks them.
-		/// </summary>
+		/// In .NET, no class provides a method to retrieve whether a port is currently in use or
+		/// not. Therefore, this method actively tries to open every port! This may take quite some
+		/// time, depending on the available ports.
 		/// <remarks>
-		/// In .NET 2.0, no class provides a method to retrieve whether a port is currently in use
-		/// or not. Therefore, this method actively tries to open every port. This takes some time.
+		/// </remarks>
 		/// </remarks>
 		/// <param name="portChangedCallback">
 		/// Callback delegate, can be used to get an event each time a new port is being tried to
@@ -124,32 +160,35 @@ namespace MKY.IO.Ports
 		/// to <c>true</c> to cancel port scanning.
 		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
-		public virtual void MarkPortsInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback)
+		public virtual void DetectPortsInUse(EventHandler<SerialPortChangedAndCancelEventArgs> portChangedCallback = null)
 		{
-			foreach (SerialPortId portId in this)
+			lock (this)
 			{
-				if (portChangedCallback != null)
+				foreach (SerialPortId portId in this)
 				{
-					SerialPortChangedAndCancelEventArgs args = new SerialPortChangedAndCancelEventArgs(portId);
-					portChangedCallback.Invoke(this, args);
-					if (args.Cancel)
-						break;
-				}
+					if (portChangedCallback != null)
+					{
+						SerialPortChangedAndCancelEventArgs e = new SerialPortChangedAndCancelEventArgs(portId);
 
-				System.IO.Ports.SerialPort p = new System.IO.Ports.SerialPort(portId);
-				try
-				{
-					p.Open();
-					p.Close();
-					portId.IsInUse = false;
-				}
-				catch
-				{
-					portId.IsInUse = true;
-				}
-				finally
-				{
-					p.Dispose();
+						EventHelper.FireSync<SerialPortChangedAndCancelEventArgs>(portChangedCallback, this, e);
+
+						if (e.Cancel)
+							break;
+					}
+
+					using (System.IO.Ports.SerialPort p = new System.IO.Ports.SerialPort(portId))
+					{
+						try
+						{
+							p.Open();
+							p.Close();
+							portId.IsInUse = false;
+						}
+						catch
+						{
+							portId.IsInUse = true;
+						}
+					}
 				}
 			}
 		}

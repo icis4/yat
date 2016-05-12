@@ -456,7 +456,7 @@ namespace YAT.View.Forms
 			bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
 
 			if      (isSerialPort   && !wasSerialPort)
-				serialPortSelection.RefreshSerialPortList();
+				serialPortSelection.RefreshPortList();
 			else if (isUsbSerialHid && !wasUsbSerialHid)
 				usbSerialHidDeviceSelection.RefreshDeviceList();
 

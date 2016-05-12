@@ -74,7 +74,7 @@ namespace YAT.View.Controls
 		/// Only set interface list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the interfaces may take some time.
 		/// </summary>
-		private bool localInterfaceListIsInitialized; // = false;
+		private bool localInterfaceListIsBeingSetOrIsAlreadySet; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -325,7 +325,7 @@ namespace YAT.View.Controls
 			// Ensure that interface list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
-			if (Enabled && !this.localInterfaceListIsInitialized)
+			if (Enabled && !this.localInterfaceListIsBeingSetOrIsAlreadySet)
 			{
 				SetLocalInterfaceList();
 			}
@@ -612,7 +612,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Without precaution, and in case of no interfaces, the message box may appear twice due to
 		/// the recursion described above (out of doc tag due to words not recognized by StyleCop).
-		/// This issue is fixed by setting 'this.interfaceListIsInitialized' upon entering this method.
+		/// This issue is fixed by setting 'localInterfaceListIsBeingSetOrIsAlreadySet' upon entering this method.
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
@@ -621,7 +621,7 @@ namespace YAT.View.Controls
 		{
 			if (Enabled)
 			{
-				this.localInterfaceListIsInitialized = true; // Purpose see remarks above.
+				this.localInterfaceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
 
 				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();

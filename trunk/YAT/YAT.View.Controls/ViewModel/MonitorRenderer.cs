@@ -21,11 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -33,16 +28,16 @@ using System.Windows.Forms;
 
 using MKY;
 
-#endregion
-
-namespace YAT.View.Controls.ViewModel
+// This code is intentionally placed into the YAT.View.Controls namespace even though the file is
+// located in YAT.View.Controls.ViewModel for same location as parent control.
+namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
 	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
 	[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public static class MonitorRenderer
+	internal static class MonitorRenderer
 	{
 		/// <remarks>
 		/// For performance reasons, cache font used for drawing.
