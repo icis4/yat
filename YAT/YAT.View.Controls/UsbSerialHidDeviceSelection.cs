@@ -53,7 +53,7 @@ namespace YAT.View.Controls
 		/// Only set device list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the devices may take some time.
 		/// </summary>
-		private bool deviceListIsInitialized; // = false;
+		private bool deviceListIsBeingSetOrIsAlreadySet; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -167,7 +167,7 @@ namespace YAT.View.Controls
 			// Ensure that device list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
-			if (Enabled && !this.deviceListIsInitialized)
+			if (Enabled && !this.deviceListIsBeingSetOrIsAlreadySet)
 			{
 				SetDeviceList();
 			}
@@ -229,7 +229,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Without precaution, and in case of no devices, the message box may appear twice due to
 		/// the recursion described above (out of doc tag due to words not recognized by StyleCop).
-		/// This issue is fixed by setting 'this.deviceListIsInitialized' upon entering this method.
+		/// This issue is fixed by setting 'deviceListIsBeingSetOrIsAlreadySet' upon entering this method.
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SerialPortSelection"/> and <see cref="SocketSelection"/>.
 		/// </remarks>
@@ -239,7 +239,7 @@ namespace YAT.View.Controls
 			// Only scan for devices if control is enabled. This saves some time and prevents issues.
 			if (Enabled && !DesignMode)
 			{
-				this.deviceListIsInitialized = true; // Purpose see remarks above.
+				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 				this.isSettingControls.Enter();
 
 				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();

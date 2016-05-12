@@ -21,7 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-namespace YAT.View.Controls.ViewModel
+namespace YAT.View.Controls
 {
 	/// <summary></summary>
 	public enum MonitorActivityState

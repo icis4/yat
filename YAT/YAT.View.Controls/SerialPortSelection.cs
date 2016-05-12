@@ -29,6 +29,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -55,90 +56,6 @@ namespace YAT.View.Controls
 	[DefaultEvent("PortIdChanged")]
 	public partial class SerialPortSelection : UserControl
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		private class RetrievePortCaptionsThread
-		{
-			private SerialPortCollection ports;
-			private bool isRetrieving = true;
-
-			public RetrievePortCaptionsThread(SerialPortCollection ports)
-			{
-				this.ports = ports;
-			}
-
-			public virtual SerialPortCollection Ports
-			{
-				get { return (this.ports); }
-			}
-
-			public virtual bool IsRetrieving
-			{
-				get { return (this.isRetrieving); }
-			}
-
-			public virtual void GetPortCaptionsFromSystem()
-			{
-				this.ports.GetPortCaptionsFromSystem();
-				this.isRetrieving = false;
-
-				StatusBox.AcceptAndClose();
-			}
-		}
-
-		private class MarkPortsInUseThread
-		{
-			private SerialPortCollection ports;
-			private bool isScanning = true;
-			private string status2 = "";
-			private bool cancelScanning; // = false;
-
-			public MarkPortsInUseThread(SerialPortCollection ports)
-			{
-				this.ports = ports;
-			}
-
-			public virtual SerialPortCollection Ports
-			{
-				get { return (this.ports); }
-			}
-
-			public virtual bool IsScanning
-			{
-				get { return (this.isScanning); }
-			}
-
-			public virtual string Status2
-			{
-				get { return (this.status2); }
-			}
-
-			public virtual void MarkPortsInUse()
-			{
-				this.ports.MarkPortsInUse(ports_MarkPortsInUseCallback);
-				this.isScanning = false;
-
-				StatusBox.AcceptAndClose();
-			}
-
-			public virtual void CancelScanning()
-			{
-				this.cancelScanning = true;
-			}
-
-			private void ports_MarkPortsInUseCallback(object sender, SerialPortChangedAndCancelEventArgs e)
-			{
-				this.status2 = "Scanning " + e.Port + "...";
-				StatusBox.UpdateStatus2(this.status2);
-				e.Cancel = this.cancelScanning;
-			}
-		}
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -148,7 +65,7 @@ namespace YAT.View.Controls
 		/// Only set device list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the ports may take some time.
 		/// </summary>
-		private bool portListIsInitialized; // = false;
+		private bool portListIsBeingSetOrIsAlreadySet; // = false;
 
 		private SettingControlsHelper isSettingControls;
 
@@ -159,8 +76,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private SerialPortId portId = SerialPortId.FirstStandardPort;
 
-		private RetrievePortCaptionsThread retrieveDescriptionsThread;
-		private MarkPortsInUseThread markPortsInUseThread;
+		private StatusBox showStatusDialog; // = null
 
 		#endregion
 
@@ -212,7 +128,7 @@ namespace YAT.View.Controls
 					if (this.portId != value)
 					{
 						this.portId = value;
-						SetControls();
+						SetPortSelection();
 						OnPortIdChanged(EventArgs.Empty);
 					}
 				}
@@ -235,10 +151,9 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void RefreshSerialPortList()
+		public virtual void RefreshPortList()
 		{
-			SetSerialPortList();
-			SetControls();
+			SetPortList();
 		}
 
 		#endregion
@@ -265,16 +180,14 @@ namespace YAT.View.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetControls();
+				SetPortSelection();
 			}
 
 			// Ensure that port list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
-			if (Enabled && !this.portListIsInitialized)
-			{
-				SetSerialPortList();
-			}
+			if (Enabled && !this.portListIsBeingSetOrIsAlreadySet)
+				SetPortList();
 		}
 
 		/// <summary>
@@ -283,7 +196,7 @@ namespace YAT.View.Controls
 		private void SerialPortSelection_EnabledChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				SetControls();
+				SetPortSelection();
 		}
 
 		#endregion
@@ -332,29 +245,7 @@ namespace YAT.View.Controls
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)
 		{
-			RefreshSerialPortList();
-		}
-
-		[ModalBehavior(ModalBehavior.Always, Approval = "Only used to temporarily display a modal dialog.")]
-		private void timer_ShowRetrieveDialog_Tick(object sender, EventArgs e)
-		{
-			timer_ShowRetrieveDialog.Stop();
-
-			StatusBox.Show(this, "Retrieving ports...", "Serial Ports");
-		}
-
-		[ModalBehavior(ModalBehavior.Always, Approval = "Only used to temporarily display a modal dialog.")]
-		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
-		{
-			timer_ShowScanDialog.Stop();
-
-			bool setting = ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse;
-
-			if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", this.markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
-				this.markPortsInUseThread.CancelScanning();
-
-			ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse = setting;
-			ApplicationSettings.Save();
+			RefreshPortList();
 		}
 
 		#endregion
@@ -386,147 +277,219 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Without precaution, and in case of no ports, the message box may appear twice due to
 		/// the recursion described above (out of doc tag due to words not recognized by StyleCop).
-		/// This issue is fixed by setting 'this.portListIsInitialized' upon entering this method.
+		/// This issue is fixed by setting 'portListIsBeingSetOrIsAlreadySet' upon entering this method.
 		/// 
 		/// Note that the same fix has been implemented in <see cref="SocketSelection"/> and <see cref="UsbSerialHidDeviceSelection"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
-		private void SetSerialPortList()
+		private void SetPortList()
 		{
 			// Only scan for ports if control is enabled. This saves some time and prevents issues.
 			if (Enabled && !DesignMode)
 			{
-				this.portListIsInitialized = true; // Purpose see remarks above.
-				this.isSettingControls.Enter();
+				this.portListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
 
-				// Exceptions should not happen, but actually can in case of Bluetooth...
-				try
+				SerialPortCollection ports = null;
+
+				bool isSuccess = false;
+				Exception exception = null;
+				string exceptionInfo = null;
+				string exceptionHint = null;
+
+				using (this.showStatusDialog = StatusBox.Create("Serial Port Scan", null, null))
 				{
-					SerialPortCollection ports = new SerialPortCollection();
-					ports.FillWithAvailablePorts(false); // Descriptions will be retrieved further below.
+					bool retrieveCaptions = ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions;
+					bool detectPortsInUse = ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse;
 
-					if (ApplicationSettings.LocalUserSettings.General.RetrieveSerialPortCaptions)
+					SerialPortSelectionWorker worker = new SerialPortSelectionWorker(retrieveCaptions, detectPortsInUse);
+					worker.Status1Changed += worker_Status1Changed;
+					worker.Status2Changed += worker_Status2Changed;
+					worker.IsDone         += worker_IsDone;
+
+					Thread t = new Thread(new ThreadStart(worker.DoWork));
+					t.Name = GetType() + " Worker Thread";
+
+					DateTime started = DateTime.Now;
+					t.Start();
+
+					// Let's work for approx. 150 ms:
+					while (worker.IsBusy)
 					{
-						// Install timer which shows a dialog if filling takes more than 150 ms.
-						// 150 ms because that's the standard time until a human notices a delay.
-						timer_ShowRetrieveDialog.Start();
+						System.Windows.Forms.Application.DoEvents(); // Ensure that application stays responsive!
+						Thread.Sleep(10); // Wait a short time to reduce the CPU load of this thread.
 
-						// Start retrieving on different thread:
-						this.retrieveDescriptionsThread = new RetrievePortCaptionsThread(ports);
-						Thread t = new Thread(new ThreadStart(this.retrieveDescriptionsThread.GetPortCaptionsFromSystem));
-						t.Name = "Get Serial Port Captions From System";
-						t.Start();
-
-						while (this.retrieveDescriptionsThread.IsRetrieving)
-							System.Windows.Forms.Application.DoEvents();
-
-						t.Join(); // Debug.Assert(t.ManagedThreadId != ...) makes no sense here, just created the thread above.
-
-						// Cleanup:
-						timer_ShowRetrieveDialog.Stop();
+						TimeSpan ongoing = (DateTime.Now - started);
+						if (ongoing.TotalMilliseconds > 150)
+							break;
 					}
 
-					if (ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse)
+					// Show status dialog since case doing work takes longer...
+					if (worker.IsBusy)
 					{
-						// Install timer which shows a dialog if scanning takes more than 150 ms.
-						// 150 ms because that's the standard time until a human notices a delay.
-						timer_ShowScanDialog.Start();
+						DialogResult dr = this.showStatusDialog.ShowDialog(this, "&Detect ports that are in use", ref detectPortsInUse, true, 20000); // 20 seconds is really long...
+						if (dr != DialogResult.OK)
+							worker.CancelWork();
 
-						// Start scanning on different thread:
-						this.markPortsInUseThread = new MarkPortsInUseThread(ports);
-						Thread t = new Thread(new ThreadStart(this.markPortsInUseThread.MarkPortsInUse));
-						t.Name = "Mark Serial Ports In Use";
-						t.Start();
-
-						while (this.markPortsInUseThread.IsScanning)
-							System.Windows.Forms.Application.DoEvents();
-
-						t.Join(); // Debug.Assert(t.ManagedThreadId != ...) makes no sense here, just created the thread above.
-
-						// Cleanup:
-						timer_ShowScanDialog.Stop();
+						ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse = detectPortsInUse;
+						ApplicationSettings.Save();
 					}
 
-					comboBox_Port.Items.Clear();
-					comboBox_Port.Items.AddRange(ports.ToArray());
+					if (!t.Join(100)) // Allow enough time to let a potential status box get closed.
+						t.Abort(); // Terminate non-joinable threads!
 
-					if (comboBox_Port.Items.Count > 0)
+					worker.Status1Changed -= worker_Status1Changed;
+					worker.Status2Changed -= worker_Status2Changed;
+					worker.IsDone         -= worker_IsDone;
+
+					if (isSuccess = worker.IsSuccess)
 					{
-						if ((this.portId != null) && (ports.Contains(this.portId)))
-						{
-							// Nothing has changed, just restore the selected item:
-							comboBox_Port.SelectedItem = this.portId;
-						}
-						else
-						{
-							string portIdNoLongerAvailable = this.portId;
-
-							// Ensure that the settings item is defaulted and shown by SetControls().
-							// Set property instead of member to ensure that changed event is fired.
-							PortId = ports[0];
-
-							comboBox_Port.SelectedIndex = 0;
-
-							if (!string.IsNullOrEmpty(portIdNoLongerAvailable))
-							{
-								string message =
-									"The serial port " + portIdNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
-									"The setting has been defaulted to the first available port.";
-
-								MessageBoxEx.Show
-								(
-									this,
-									message,
-									"Serial COM port not available",
-									MessageBoxButtons.OK,
-									MessageBoxIcon.Warning
-								);
-							}
-						}
+						ports = worker.Ports;
 					}
 					else
 					{
-						// Ensure that the settings item is nulled and reset by SetControls().
+						exception     = worker.Exception;
+						exceptionInfo = worker.ExceptionInfo;
+						exceptionHint = worker.ExceptionHint;
+					}
+				} // using (showStatusDialog)
+
+				this.isSettingControls.Enter();
+
+				comboBox_Port.Items.Clear();
+
+				if ((ports != null) && (ports.Count > 0))
+				{
+					comboBox_Port.Items.AddRange(ports.ToArray());
+
+					if ((this.portId != null) && (ports.Contains(this.portId)))
+					{
+						// Nothing has changed, just restore the selected item:
+						comboBox_Port.SelectedItem = this.portId;
+
+						if (!isSuccess)
+							ShowErrorMessage(exception, exceptionInfo, exceptionHint);
+					}
+					else
+					{
+						string portIdNotAvailable = this.portId;
+
+						// Ensure that the settings item is defaulted and shown by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
-						PortId = null;
+						PortId = ports[0];
 
-						string message =
-							"There are currently no serial COM ports available." + Environment.NewLine +
-							"Check the serial COM ports of your system.";
-
-						MessageBoxEx.Show
-						(
-							this,
-							message,
-							"No serial COM ports available",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
-						);
+						if (isSuccess)
+							ShowNotAvailableMessage(portIdNotAvailable);
+						else
+							ShowErrorMessage(exception, exceptionInfo, exceptionHint);
 					}
 				}
-				catch
+				else
 				{
-					string message =
-						"There was an error while retrieving the serial COM ports!" + Environment.NewLine +
-						"You should check the serial COM ports in the system settings." + Environment.NewLine + Environment.NewLine +
-						"If you cannot solve the issue, tell YAT not to detect ports that are in use. To do so, go to 'File > Preferences...' and disable 'detect ports that are in use'.";
+					// Ensure that the settings item is nulled and reset by SetControls().
+					// Set property instead of member to ensure that changed event is fired.
+					PortId = null;
 
-					MessageBoxEx.Show
-					(
-						this,
-						message,
-						"Error with serial COM ports",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
+					if (isSuccess)
+						ShowNoPortsMessage();
+					else
+						ShowErrorMessage(exception, exceptionInfo, exceptionHint);
 				}
 
 				this.isSettingControls.Leave();
 			}
 		}
 
-		private void SetControls()
+		private void worker_Status1Changed(object sender, EventArgs<string> e)
+		{
+			this.showStatusDialog.SetStatus1Synchronized(e.Value);
+		}
+
+		private void worker_Status2Changed(object sender, EventArgs<string> e)
+		{
+			this.showStatusDialog.SetStatus2Synchronized(e.Value);
+		}
+
+		private void worker_IsDone(object sender, EventArgs<bool> e)
+		{
+			if (e.Value) // = success
+				this.showStatusDialog.CloseSynchronized(DialogResult.OK);
+			else
+				this.showStatusDialog.CloseSynchronized();
+		}
+
+		private void ShowNoPortsMessage()
+		{
+			string message =
+				"There are currently no serial COM ports available." + Environment.NewLine +
+				"Check the serial COM ports of your system.";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"No serial COM ports available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Warning
+			);
+		}
+
+		private void ShowNotAvailableMessage(string portIdNotAvailable)
+		{
+			if (!string.IsNullOrEmpty(portIdNotAvailable))
+			{
+				string message =
+					"The serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+					"The setting has been defaulted to the first available port.";
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					"Serial COM port not available",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+				);
+			}
+		}
+
+		private void ShowErrorMessage(Exception ex, string info, string hint)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if (!string.IsNullOrEmpty(info))
+			{
+				sb.AppendLine(info);
+				sb.AppendLine();
+			}
+
+			if (ex != null)
+			{
+				sb.AppendLine("System error message:");
+				sb.AppendLine(ex.Message);
+				sb.AppendLine();
+			}
+
+			sb.AppendLine("Check the serial COM ports of your system.");
+			sb.AppendLine();
+
+			if (!string.IsNullOrEmpty(hint))
+			{
+				sb.AppendLine(hint);
+				sb.AppendLine();
+			}
+
+			MessageBoxEx.Show
+			(
+				this,
+				sb.ToString(),
+				"Error with serial COM ports",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Error
+			);
+		}
+
+		private void SetPortSelection()
 		{
 			this.isSettingControls.Enter();
 
