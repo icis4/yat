@@ -619,19 +619,21 @@ namespace YAT.View.Controls
 		[ModalBehavior(ModalBehavior.InCaseOfNonUserError, Approval = "Is only called when displaying or refreshing the control on a form.")]
 		private void SetLocalInterfaceList()
 		{
-			if (Enabled)
+			if (Enabled && !DesignMode)
 			{
 				this.localInterfaceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
-				this.isSettingControls.Enter();
 
 				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();
 				localInterfaces.FillWithAvailableInterfaces();
 
-				comboBox_LocalInterface.Items.Clear();
-				comboBox_LocalInterface.Items.AddRange(localInterfaces.ToArray());
+				this.isSettingControls.Enter();
 
-				if (comboBox_LocalInterface.Items.Count > 0)
+				comboBox_LocalInterface.Items.Clear();
+
+				if (localInterfaces.Count > 0)
 				{
+					comboBox_LocalInterface.Items.AddRange(localInterfaces.ToArray());
+
 					if ((this.localInterface != null) && (localInterfaces.Contains(this.localInterface)))
 					{
 						// Nothing has changed, just restore the selected item:
@@ -639,29 +641,14 @@ namespace YAT.View.Controls
 					}
 					else
 					{
-						string localInterfaceNoLongerAvailable = this.localInterface;
+						// Get the 'NotAvailable' string BEFORE defaulting!
+						string localInterfaceNotAvailable = this.localInterface;
 
 						// Ensure that the settings item is defaulted and shown by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
 						LocalInterface = localInterfaces[0];
 
-						comboBox_LocalInterface.SelectedIndex = 0;
-
-						if (!string.IsNullOrEmpty(localInterfaceNoLongerAvailable))
-						{
-							string message =
-								"The local network interface " + localInterfaceNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
-								"The setting has been defaulted to the first available interface.";
-
-							MessageBoxEx.Show
-							(
-								this,
-								message,
-								"Interface not available",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Warning
-							);
-						}
+						ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, localInterfaces[0]);
 					}
 				}
 				else
@@ -670,18 +657,43 @@ namespace YAT.View.Controls
 					// Set property instead of member to ensure that changed event is fired.
 					LocalInterface = null;
 
-					MessageBoxEx.Show
-					(
-						this,
-						"No local network interfaces available, check network system settings.",
-						"No interfaces",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
+					ShowNoInterfacesMessage();
 				}
 
 				this.isSettingControls.Leave();
 			}
+		}
+
+		private void ShowNoInterfacesMessage()
+		{
+			string message =
+				"There are currently no local network interfaces available." + Environment.NewLine +
+				"Check the network devices of your system.";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"No interfaces available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Warning
+			);
+		}
+
+		private void ShowNotAvailableDefaultedMessage(string localInterfaceNoLongerAvailable, string localInterfaceDefaulted)
+		{
+			string message =
+				"The previous local network interface " + localInterfaceNoLongerAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been defaulted to the first available interface '" + localInterfaceDefaulted + "'.";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Previous interface not available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
 		}
 
 		private void SetControls()

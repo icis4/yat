@@ -349,18 +349,18 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Queries WMI (Windows Management Instrumentation) trying to retrieve the description
+		/// Queries WMI (Windows Management Instrumentation) trying to retrieve the caption
 		/// that is associated with the serial port.
 		/// </summary>
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public virtual void GetDescriptionFromSystem()
+		public virtual void GetCaptionFromSystem()
 		{
-			Dictionary<string, string> descriptions = SerialPortSearcher.GetCaptionsFromSystem();
+			Dictionary<string, string> captions = SerialPortSearcher.GetCaptionsFromSystem();
 
-			if (descriptions.ContainsKey(this.name))
-				SetCaptionFromSystem(descriptions[this.name]);
+			if (captions.ContainsKey(this.name))
+				SetCaptionFromSystem(captions[this.name]);
 		}
 
 		/// <summary>
@@ -372,7 +372,7 @@ namespace MKY.IO.Ports
 		/// faster than calling <see cref="SerialPortSearcher.GetCaptionsFromSystem()"/> for
 		/// each ID.
 		/// </remarks>
-		/// <param name="caption">The description to set.</param>
+		/// <param name="caption">The caption to set.</param>
 		public virtual void SetCaptionFromSystem(string caption)
 		{
 			this.caption = caption;

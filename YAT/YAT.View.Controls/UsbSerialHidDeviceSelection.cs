@@ -240,16 +240,17 @@ namespace YAT.View.Controls
 			if (Enabled && !DesignMode)
 			{
 				this.deviceListIsBeingSetOrIsAlreadySet = true; // Purpose see remarks above.
-				this.isSettingControls.Enter();
-
 				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
 				devices.FillWithAvailableDevices();
 
-				comboBox_Device.Items.Clear();
-				comboBox_Device.Items.AddRange(devices.ToArray());
+				this.isSettingControls.Enter();
 
-				if (comboBox_Device.Items.Count > 0)
+				comboBox_Device.Items.Clear();
+
+				if (devices.Count > 0)
 				{
+					comboBox_Device.Items.AddRange(devices.ToArray());
+
 					if ((this.deviceInfo != null) && (devices.Contains(this.deviceInfo)))
 					{
 						// Nothing has changed, just restore the selected item:
@@ -267,59 +268,36 @@ namespace YAT.View.Controls
 						// Inform the user if serial is required:
 						if (ApplicationSettings.LocalUserSettings.General.UseUsbSerial)
 						{
-							// Compose the message (that includes the former device info) BEFORE switching!
-							string message =
-								"The previous device '" + this.deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-								"The selection has been switched to '" + devices[sameVidPidIndex] + "' (first available device with previous VID and PID).";
+							// Get the 'NotAvailable' string BEFORE defaulting!
+							string deviceInfoNotAvailable = null;
+							if (this.deviceInfo != null)
+								deviceInfoNotAvailable = this.deviceInfo;
 
 							// Ensure that the settings item is switched and shown by SetControls().
 							// Set property instead of member to ensure that changed event is fired.
-							DeviceInfo                    = devices[sameVidPidIndex];
-							comboBox_Device.SelectedIndex         = sameVidPidIndex;
+							DeviceInfo = devices[sameVidPidIndex];
 
-							MessageBoxEx.Show
-							(
-								this,
-								message,
-								"Previous USB HID device not available",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Information
-							);
+							ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
 						}
 						else
 						{
 							// Ensure that the settings item is defaulted and shown by SetControls().
 							// Set property instead of member to ensure that changed event is fired.
-							DeviceInfo                    = devices[sameVidPidIndex];
-							comboBox_Device.SelectedIndex         = sameVidPidIndex;
+							DeviceInfo = devices[sameVidPidIndex];
 						}
 					}
 					else
 					{
-						// Compose the message (that includes the former device info) BEFORE defaulting!
-						string message;
+						// Get the 'NotAvailable' string BEFORE defaulting!
+						string deviceInfoNotAvailable = null;
 						if (this.deviceInfo != null)
-							message =
-								"The previous device '" + this.deviceInfo + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-								"The selection has been defaulted to the first available device '" + devices[0] + "'.";
-						else
-							message =
-								"The previous device is currently not available." + Environment.NewLine + Environment.NewLine +
-								"The selection has been defaulted to the first available device '" + devices[0] + "'.";
+							deviceInfoNotAvailable = this.deviceInfo;
 
 						// Ensure that the settings item is defaulted and shown by SetControls().
 						// Set property instead of member to ensure that changed event is fired.
 						DeviceInfo = devices[0];
-						comboBox_Device.SelectedIndex = 0;
 
-						MessageBoxEx.Show
-						(
-							this,
-							message,
-							"Previous USB HID device not available",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Information
-						);
+						ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[0]);
 					}
 				}
 				else
@@ -328,22 +306,71 @@ namespace YAT.View.Controls
 					// Set property instead of member to ensure that changed event is fired.
 					DeviceInfo = null;
 
-					string message =
-						"There are currently no HID capable USB devices available." + Environment.NewLine +
-						"Check the USB devices of your system.";
-
-					MessageBoxEx.Show
-					(
-						this,
-						message,
-						"No USB HID devices available",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-					);
+					ShowNoDevicesMessage();
 				}
 
 				this.isSettingControls.Leave();
 			}
+		}
+
+		private void ShowNoDevicesMessage()
+		{
+			string message =
+				"There are currently no HID capable USB devices available." + Environment.NewLine +
+				"Check the USB devices of your system.";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"No USB HID devices available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Warning
+			);
+		}
+
+		private void ShowNotAvailableDefaultedMessage(string deviceInfoNotAvailable, string deviceInfoDefaulted)
+		{
+			string message;
+			if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
+				message =
+					"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+					"The selection has been defaulted to the first available device '" + deviceInfoDefaulted + "'.";
+			else
+				message =
+					"The previous device is currently not available." + Environment.NewLine + Environment.NewLine +
+					"The selection has been defaulted to the first available device '" + deviceInfoDefaulted + "'.";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Previous USB HID device not available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
+		}
+
+		private void ShowNotAvailableSwitchedMessage(string deviceInfoNotAvailable, string deviceInfoSwitched)
+		{
+			string message;
+			if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
+				message =
+					"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+					"The selection has been switched to '" + deviceInfoSwitched + "' (first available device with previous VID and PID).";
+			else
+				message =
+					"The previous device is currently not available." + Environment.NewLine + Environment.NewLine +
+					"The selection has been switched to '" + deviceInfoSwitched + "' (first available device with previous VID and PID).";
+
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Previous USB HID device not available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
 		}
 
 		private void SetControls()

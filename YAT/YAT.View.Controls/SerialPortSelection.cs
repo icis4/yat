@@ -292,10 +292,10 @@ namespace YAT.View.Controls
 
 				SerialPortCollection ports = null;
 
-				bool isSuccess = false;
-				Exception exception = null;
-				string exceptionInfo = null;
-				string exceptionHint = null;
+				bool isSuccess;
+				Exception errorException = null;
+				string errorMessageLead = null;
+				string errorMessageHint = null;
 
 				using (this.showStatusDialog = StatusBox.Create("Serial Port Scan", null, null))
 				{
@@ -325,33 +325,72 @@ namespace YAT.View.Controls
 					}
 
 					// Show status dialog since case doing work takes longer...
+					DialogResult result;
 					if (worker.IsBusy)
 					{
-						DialogResult dr = this.showStatusDialog.ShowDialog(this, "&Detect ports that are in use", ref detectPortsInUse, true, 20000); // 20 seconds is really long...
-						if (dr != DialogResult.OK)
+						result = this.showStatusDialog.ShowDialog(this, "&Detect ports that are in use", ref detectPortsInUse, true);
+						if (result == DialogResult.Cancel)
 							worker.CancelWork();
+						else
+							result = worker.Result;
 
 						ApplicationSettings.LocalUserSettings.General.DetectSerialPortsInUse = detectPortsInUse;
 						ApplicationSettings.Save();
 					}
+					else
+					{
+						result = worker.Result;
+					}
 
-					if (!t.Join(100)) // Allow enough time to let a potential status box get closed.
+					// Clean up:
+					if (t.Join(150)) // Allow some time to let the worker thread get terminated.
+					{
+						switch (result)
+						{
+							case DialogResult.OK:
+							case DialogResult.Yes:
+							case DialogResult.Cancel:
+							{
+								isSuccess = true;
+								ports = worker.Ports;
+								break;
+							}
+
+							case DialogResult.Abort:
+							{
+								isSuccess = false;
+								errorException   = worker.Exception;
+								errorMessageLead = worker.ExceptionLead;
+								errorMessageHint = worker.ExceptionHint;
+								break;
+							}
+
+							default:
+							{
+								isSuccess = true; // Ignore resulting ports.
+								break;
+							}
+						}
+					}
+					else
+					{
 						t.Abort(); // Terminate non-joinable threads!
+
+						if (result != DialogResult.Cancel)
+						{
+							isSuccess = false;
+							errorMessageLead = "Timeout while scanning the ports!";
+							errorMessageHint = "If the issue cannot be solved, tell YAT to differently scan the ports by going to 'File > Preferences...' and change the port related settings.";
+						}
+						else
+						{
+							isSuccess = true;
+						}
+					}
 
 					worker.Status1Changed -= worker_Status1Changed;
 					worker.Status2Changed -= worker_Status2Changed;
 					worker.IsDone         -= worker_IsDone;
-
-					if (isSuccess = worker.IsSuccess)
-					{
-						ports = worker.Ports;
-					}
-					else
-					{
-						exception     = worker.Exception;
-						exceptionInfo = worker.ExceptionInfo;
-						exceptionHint = worker.ExceptionHint;
-					}
 				} // using (showStatusDialog)
 
 				this.isSettingControls.Enter();
@@ -368,10 +407,11 @@ namespace YAT.View.Controls
 						comboBox_Port.SelectedItem = this.portId;
 
 						if (!isSuccess)
-							ShowErrorMessage(exception, exceptionInfo, exceptionHint);
+							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 					}
 					else
 					{
+						// Get the 'NotAvailable' string BEFORE defaulting!
 						string portIdNotAvailable = this.portId;
 
 						// Ensure that the settings item is defaulted and shown by SetControls().
@@ -379,9 +419,9 @@ namespace YAT.View.Controls
 						PortId = ports[0];
 
 						if (isSuccess)
-							ShowNotAvailableMessage(portIdNotAvailable);
+							ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
 						else
-							ShowErrorMessage(exception, exceptionInfo, exceptionHint);
+							ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 					}
 				}
 				else
@@ -393,7 +433,7 @@ namespace YAT.View.Controls
 					if (isSuccess)
 						ShowNoPortsMessage();
 					else
-						ShowErrorMessage(exception, exceptionInfo, exceptionHint);
+						ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
 				}
 
 				this.isSettingControls.Leave();
@@ -403,19 +443,19 @@ namespace YAT.View.Controls
 		private void worker_Status1Changed(object sender, EventArgs<string> e)
 		{
 			this.showStatusDialog.SetStatus1Synchronized(e.Value);
+			// Do not check for 'IsShowing', as status box may get shown after this event.
 		}
 
 		private void worker_Status2Changed(object sender, EventArgs<string> e)
 		{
 			this.showStatusDialog.SetStatus2Synchronized(e.Value);
+			// Do not check for 'IsShowing', as status box may get shown after this event.
 		}
 
-		private void worker_IsDone(object sender, EventArgs<bool> e)
+		private void worker_IsDone(object sender, EventArgs<DialogResult> e)
 		{
-			if (e.Value) // = success
-				this.showStatusDialog.CloseSynchronized(DialogResult.OK);
-			else
-				this.showStatusDialog.CloseSynchronized();
+			if (this.showStatusDialog.IsShowing)
+				this.showStatusDialog.CloseSynchronized(e.Value);
 		}
 
 		private void ShowNoPortsMessage()
@@ -434,23 +474,20 @@ namespace YAT.View.Controls
 			);
 		}
 
-		private void ShowNotAvailableMessage(string portIdNotAvailable)
+		private void ShowNotAvailableDefaultedMessage(string portIdNotAvailable, string portIdDefaulted)
 		{
-			if (!string.IsNullOrEmpty(portIdNotAvailable))
-			{
-				string message =
-					"The serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
-					"The setting has been defaulted to the first available port.";
+			string message =
+				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been defaulted to the first available port '" + portIdDefaulted + "'.";
 
-				MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Serial COM port not available",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-				);
-			}
+			MessageBoxEx.Show
+			(
+				this,
+				message,
+				"Previous serial COM port not available",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Information
+			);
 		}
 
 		private void ShowErrorMessage(Exception ex, string info, string hint)
@@ -483,7 +520,7 @@ namespace YAT.View.Controls
 			(
 				this,
 				sb.ToString(),
-				"Error with serial COM ports",
+				"Error",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Error
 			);
