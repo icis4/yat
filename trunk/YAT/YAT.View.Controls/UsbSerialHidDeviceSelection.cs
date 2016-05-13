@@ -108,7 +108,7 @@ namespace YAT.View.Controls
 					if (this.deviceInfo != value)
 					{
 						this.deviceInfo = value;
-						SetControls();
+						SetDeviceSelection();
 						OnDeviceInfoChanged(EventArgs.Empty);
 					}
 				}
@@ -134,7 +134,6 @@ namespace YAT.View.Controls
 		public virtual void RefreshDeviceList()
 		{
 			SetDeviceList();
-			SetControls();
 		}
 
 		#endregion
@@ -161,16 +160,14 @@ namespace YAT.View.Controls
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
-				SetControls();
+				SetDeviceSelection();
 			}
 
 			// Ensure that device list is set as soon as this control gets enabled. Could
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
 			if (Enabled && !this.deviceListIsBeingSetOrIsAlreadySet)
-			{
 				SetDeviceList();
-			}
 		}
 
 		/// <summary>
@@ -179,7 +176,7 @@ namespace YAT.View.Controls
 		private void UsbSerialHidDeviceSelection_EnabledChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				SetControls();
+				SetDeviceSelection();
 		}
 
 		#endregion
@@ -373,7 +370,7 @@ namespace YAT.View.Controls
 			);
 		}
 
-		private void SetControls()
+		private void SetDeviceSelection()
 		{
 			this.isSettingControls.Enter();
 
