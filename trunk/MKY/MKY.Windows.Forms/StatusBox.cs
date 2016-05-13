@@ -130,6 +130,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		private int timeout = System.Threading.Timeout.Infinite;
+		private bool isShowing; // = false;
 
 		#endregion
 
@@ -146,26 +147,25 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		protected StatusBox(string status1, string caption, string status2 = null)
-			: this(status1, caption, status2, null, false, true)
+		protected StatusBox(string caption, string status1, string status2 = null)
+			: this(caption, status1, status2, null, false, true)
 		{
 		}
 
 		/// <summary></summary>
-		protected StatusBox(string status1, string caption, string status2, string settingText, bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
+		protected StatusBox(string caption, string status1, string status2, string settingText, bool setting, bool showCancel = true, int timeout = System.Threading.Timeout.Infinite)
 		{
 			InitializeComponent();
-			Initialize(status1, caption, status2, settingText, setting, showCancel, timeout);
+			Initialize(caption, status1, status2, settingText, setting, showCancel, timeout);
 		}
 
-		private void Initialize(string status1, string caption, string status2, string settingText, bool setting, bool showCancel, int timeout)
+		private void Initialize(string caption, string status1, string status2, string settingText, bool setting, bool showCancel, int timeout)
 		{
 			Caption = caption;
 			Status1 = status1;
 			Status2 = status2;
 
-			if (!string.IsNullOrEmpty(settingText))
-				InitializeSetting(settingText, setting);
+			InitializeSetting(settingText, setting);
 
 			ShowCancel = showCancel;
 			Timeout    = timeout;
@@ -173,10 +173,20 @@ namespace MKY.Windows.Forms
 
 		private void InitializeSetting(string settingText, bool setting)
 		{
-			checkBox_Setting.Visible = true;
-			checkBox_Setting.Text = settingText;
-			checkBox_Setting.Checked = setting;
-			Height = 154;
+			if (string.IsNullOrEmpty(settingText))
+			{
+				checkBox_Setting.Visible = false;
+				checkBox_Setting.Text    = null;
+				checkBox_Setting.Checked = false;
+				Height = 130;
+			}
+			else
+			{
+				checkBox_Setting.Visible = true;
+				checkBox_Setting.Text    = settingText;
+				checkBox_Setting.Checked = setting;
+				Height = 160;
+			}
 		}
 
 		#endregion
@@ -227,6 +237,13 @@ namespace MKY.Windows.Forms
 			set { this.timeout = value;  }
 		}
 
+		/// <summary></summary>
+		public virtual bool IsShowing
+		{
+			get { return (this.isShowing); }
+			set { this.isShowing = value;  }
+		}
+
 		#endregion
 
 		#region Methods
@@ -261,7 +278,9 @@ namespace MKY.Windows.Forms
 			DialogResult dr;
 			using (System.Threading.Timer timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
 			{
+				this.isShowing = true;
 				dr = ShowDialog(owner);
+				this.isShowing = false;
 			}
 			setting = Setting;
 

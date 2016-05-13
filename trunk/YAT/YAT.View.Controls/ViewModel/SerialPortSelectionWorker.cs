@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 using MKY;
 using MKY.IO.Ports;
@@ -48,14 +49,14 @@ namespace YAT.View.Controls
 
 		private bool isBusy = true;
 
-		private bool isSuccess; // = false
+		private DialogResult result; // = DialogResult.None
 		private Exception exception; // = null
-		private string exceptionInfo; // = null
+		private string exceptionLead; // = null
 		private string exceptionHint; // = null
 
 		public event EventHandler<EventArgs<string>> Status1Changed;
 		public event EventHandler<EventArgs<string>> Status2Changed;
-		public event EventHandler<EventArgs<bool>> IsDone;
+		public event EventHandler<EventArgs<DialogResult>> IsDone;
 
 		public SerialPortSelectionWorker(bool retrieveCaptions = true, bool detectPortsInUse = true)
 		{
@@ -73,9 +74,9 @@ namespace YAT.View.Controls
 			get { return (this.isBusy); }
 		}
 
-		public virtual bool IsSuccess
+		public virtual DialogResult Result
 		{
-			get { return (this.isSuccess); }
+			get { return (this.result); }
 		}
 
 		public virtual Exception Exception
@@ -83,9 +84,9 @@ namespace YAT.View.Controls
 			get { return (this.exception); }
 		}
 
-		public virtual string ExceptionInfo
+		public virtual string ExceptionLead
 		{
-			get { return (this.exceptionInfo); }
+			get { return (this.exceptionLead); }
 		}
 
 		public virtual string ExceptionHint
@@ -97,13 +98,13 @@ namespace YAT.View.Controls
 		public virtual void DoWork()
 		{
 			this.isBusy = true;
-			this.isSuccess = DoWorkSafely();
+			this.result = DoWorkWithResult();
 			this.isBusy = false;
 
-			OnIsDone(new EventArgs<bool>(this.isSuccess));
+			OnIsDone(new EventArgs<DialogResult>(result));
 		}
 
-		private bool DoWorkSafely()
+		private DialogResult DoWorkWithResult()
 		{
 			OnStatus1Changed(new EventArgs<string>("Retrieving available ports..."));
 
@@ -118,10 +119,10 @@ namespace YAT.View.Controls
 				this.ports.FillWithStandardPorts();
 
 				this.exception = ex;
-				this.exceptionInfo = "There was an error while retrieving the serial COM ports from the system!";
+				this.exceptionLead = "There was an error while retrieving the serial COM ports from the system!";
 				this.exceptionHint = "The port list has been defaulted with the standard ports.";
 
-				return (false);
+				return (DialogResult.Abort);
 			}
 
 			if (this.retrieveCaptions && !this.cancel)
@@ -135,10 +136,10 @@ namespace YAT.View.Controls
 				catch (Exception ex)
 				{
 					this.exception = ex;
-					this.exceptionInfo = "There was an error while retrieving the port captions from the system!";
+					this.exceptionLead = "There was an error while retrieving the port captions from the system!";
 					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer retrieve ports captions by going to 'File > Preferences...' and disable 'retrieve port captions from system'.";
 
-					return (false);
+					return (DialogResult.Abort);
 				}
 			}
 
@@ -148,19 +149,26 @@ namespace YAT.View.Controls
 
 				try
 				{
-					this.ports.DetectPortsInUse();
+					this.ports.DetectPortsInUse(ports_DetectPortsInUseCallback);
 				}
 				catch (Exception ex)
 				{
 					this.exception = ex;
-					this.exceptionInfo = "There was an error while trying to detect the ports that are in use!";
+					this.exceptionLead = "There was an error while trying to detect the ports that are in use!";
 					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer detect ports that are in use by going to 'File > Preferences...' and disable 'detect ports that are in use'.";
 
-					return (false);
+					return (DialogResult.Abort);
 				}
 			}
 
-			return (true);
+			bool cancel;
+			lock (this.cancelSyncObj)
+				cancel = this.cancel;
+
+			if (cancel)
+				return (DialogResult.Cancel);
+			else
+				return (DialogResult.OK);
 		}
 
 		public virtual void CancelWork()
@@ -196,9 +204,9 @@ namespace YAT.View.Controls
 		/// <summary>
 		/// Invokes the <see cref="IsDone"/> event.
 		/// </summary>
-		protected virtual void OnIsDone(EventArgs<bool> e)
+		protected virtual void OnIsDone(EventArgs<DialogResult> e)
 		{
-			EventHelper.FireSync<EventArgs<bool>>(IsDone, this, e);
+			EventHelper.FireAsync<EventArgs<DialogResult>>(IsDone, this, e); // Fire async! Worker thread termination must not delayed by sync callbacks!
 		}
 	}
 }
