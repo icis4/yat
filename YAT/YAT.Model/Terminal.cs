@@ -3959,8 +3959,8 @@ namespace YAT.Model
 				case AutoResponse.SendText:            SendText();               break;
 				case AutoResponse.SendFile:            SendFile();               break;
 
-				case AutoResponse.DedicatedCommand:
-					SendCommand(this.settingsRoot.AutoResponse.DedicatedResponse);
+				case AutoResponse.Explicit:
+					SendCommand(this.settingsRoot.AutoResponse.ExplicitResponse);
 					break;
 
 				case AutoResponse.None:

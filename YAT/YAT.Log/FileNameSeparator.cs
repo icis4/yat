@@ -50,7 +50,7 @@ namespace YAT.Log
 		Ball,
 		BallWithSpaces,
 
-		Other
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -90,7 +90,7 @@ namespace YAT.Log
 
 		#endregion
 
-		private string otherSeparator; // = null
+		private string explicitSeparator; // = null
 
 		/// <summary>Default is <see cref="FileNameSeparator.Dash"/>.</summary>
 		public FileNameSeparatorEx()
@@ -102,15 +102,15 @@ namespace YAT.Log
 		public FileNameSeparatorEx(FileNameSeparator separator)
 			: base(separator)
 		{
-			if (separator == FileNameSeparator.Other)
-				throw (new InvalidOperationException("'FileNameSeparator.Other' requires a separator string, use FileNameSeparatorEx(string) instead!"));
+			if (separator == FileNameSeparator.Explicit)
+				throw (new InvalidOperationException("'FileNameSeparator.Explicit' requires a separator string, use FileNameSeparatorEx(string) instead!"));
 		}
 
 		/// <summary></summary>
 		public FileNameSeparatorEx(string separator)
-			: base(FileNameSeparator.Other)
+			: base(FileNameSeparator.Explicit)
 		{
-			this.otherSeparator = separator;
+			this.explicitSeparator = separator;
 		}
 
 		#region Object Members
@@ -127,12 +127,12 @@ namespace YAT.Log
 				return (false);
 
 			FileNameSeparatorEx other = (FileNameSeparatorEx)obj;
-			if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Other)
+			if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
-					(this.otherSeparator == other.otherSeparator)
+					(this.explicitSeparator == other.explicitSeparator)
 				);
 			}
 			else
@@ -150,8 +150,8 @@ namespace YAT.Log
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Other)
-					hashCode = (hashCode * 397) ^ (this.otherSeparator != null ? this.otherSeparator.GetHashCode() : 0);
+				if ((FileNameSeparator)UnderlyingEnum == FileNameSeparator.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitSeparator != null ? this.explicitSeparator.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -179,7 +179,7 @@ namespace YAT.Log
 				case FileNameSeparator.Ball:                 return (Ball_stringSeparator);
 				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_stringSeparator);
 
-				case FileNameSeparator.Other:                return (this.otherSeparator);
+				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -200,7 +200,7 @@ namespace YAT.Log
 				case FileNameSeparator.Ball:                 return (Ball_stringDescription);
 				case FileNameSeparator.BallWithSpaces:       return (BallWithSpaces_stringDescription);
 
-				case FileNameSeparator.Other:                return (this.otherSeparator);
+				case FileNameSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

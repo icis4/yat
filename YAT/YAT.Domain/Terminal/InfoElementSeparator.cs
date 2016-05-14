@@ -57,7 +57,7 @@ namespace YAT.Domain
 		Semicolon,
 		SemicolonWithSpace,
 
-		Other
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -110,7 +110,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		private string otherSeparator; // = null
+		private string explicitSeparator; // = null
 
 		/// <summary>Default is <see cref="InfoElementSeparator.None"/>.</summary>
 		public InfoElementSeparatorEx()
@@ -122,15 +122,15 @@ namespace YAT.Domain
 		public InfoElementSeparatorEx(InfoElementSeparator separator)
 			: base(separator)
 		{
-			if (separator == InfoElementSeparator.Other)
-				throw (new InvalidOperationException("'InfoElementSeparator.Other' requires a separator string, use InfoElementSeparatorEx(string) instead!"));
+			if (separator == InfoElementSeparator.Explicit)
+				throw (new InvalidOperationException("'InfoElementSeparator.Explicit' requires a separator string, use InfoElementSeparatorEx(string) instead!"));
 		}
 
 		/// <summary></summary>
 		public InfoElementSeparatorEx(string separator)
-			: base(InfoElementSeparator.Other)
+			: base(InfoElementSeparator.Explicit)
 		{
-			this.otherSeparator = separator;
+			this.explicitSeparator = separator;
 		}
 
 		#region Object Members
@@ -147,12 +147,12 @@ namespace YAT.Domain
 				return (false);
 
 			InfoElementSeparatorEx other = (InfoElementSeparatorEx)obj;
-			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Other)
+			if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
-					(this.otherSeparator == other.otherSeparator)
+					(this.explicitSeparator == other.explicitSeparator)
 				);
 			}
 			else
@@ -170,8 +170,8 @@ namespace YAT.Domain
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Other)
-					hashCode = (hashCode * 397) ^ (this.otherSeparator != null ? this.otherSeparator.GetHashCode() : 0);
+				if ((InfoElementSeparator)UnderlyingEnum == InfoElementSeparator.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitSeparator != null ? this.explicitSeparator.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -206,7 +206,7 @@ namespace YAT.Domain
 				case InfoElementSeparator.Semicolon:            return (Semicolon_stringSeparator);
 				case InfoElementSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringSeparator);
 
-				case InfoElementSeparator.Other:                return (this.otherSeparator);
+				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -234,7 +234,7 @@ namespace YAT.Domain
 				case InfoElementSeparator.Semicolon:            return (Semicolon_stringDescription);
 				case InfoElementSeparator.SemicolonWithSpace:   return (SemicolonWithSpace_stringDescription);
 
-				case InfoElementSeparator.Other:                return (this.otherSeparator);
+				case InfoElementSeparator.Explicit:             return (this.explicitSeparator);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

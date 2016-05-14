@@ -35,9 +35,9 @@ namespace YAT.Model.Settings
 		private bool visible;
 		private bool enabled;
 		private Trigger triggerSelection;
-		private Command dedicatedTrigger;
+		private Command explicitTrigger;
 		private AutoResponse responseSelection;
-		private Command dedicatedResponse;
+		private Command explicitResponse;
 
 		/// <summary></summary>
 		public AutoResponseSettings()
@@ -64,9 +64,9 @@ namespace YAT.Model.Settings
 			Visible           = rhs.Visible;
 			Enabled           = rhs.Enabled;
 			TriggerSelection  = rhs.TriggerSelection;
-			DedicatedTrigger  = new Command(rhs.DedicatedTrigger);
+			ExplicitTrigger   = new Command(rhs.ExplicitTrigger);
 			ResponseSelection = rhs.ResponseSelection;
-			DedicatedResponse = new Command(rhs.DedicatedResponse);
+			ExplicitResponse  = new Command(rhs.ExplicitResponse);
 			ClearChanged();
 		}
 
@@ -80,9 +80,9 @@ namespace YAT.Model.Settings
 			Visible           = false;
 			Enabled           = false;
 			TriggerSelection  = Trigger.None;
-			DedicatedTrigger  = null;
+			ExplicitTrigger   = null;
 			ResponseSelection = AutoResponse.None;
-			DedicatedResponse = null;
+			ExplicitResponse  = null;
 		}
 
 		#region Properties
@@ -136,15 +136,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("DedicatedTrigger")]
-		public Command DedicatedTrigger
+		[XmlElement("ExplicitTrigger")]
+		public Command ExplicitTrigger
 		{
-			get { return (this.dedicatedTrigger); }
+			get { return (this.explicitTrigger); }
 			set
 			{
-				if (this.dedicatedTrigger != value)
+				if (this.explicitTrigger != value)
 				{
-					this.dedicatedTrigger = value;
+					this.explicitTrigger = value;
 					SetChanged();
 				}
 			}
@@ -166,15 +166,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("DedicatedResponse")]
-		public Command DedicatedResponse
+		[XmlElement("ExplicitResponse")]
+		public Command ExplicitResponse
 		{
-			get { return (this.dedicatedResponse); }
+			get { return (this.explicitResponse); }
 			set
 			{
-				if (this.dedicatedResponse != value)
+				if (this.explicitResponse != value)
 				{
-					this.dedicatedResponse = value;
+					this.explicitResponse = value;
 					SetChanged();
 				}
 			}
@@ -199,10 +199,10 @@ namespace YAT.Model.Settings
 
 			TriggerSelection = trigger;
 
-			if (trigger == Trigger.DedicatedCommand)
-				DedicatedTrigger = trigger.DedicatedCommand;
+			if (trigger == Trigger.Explicit)
+				ExplicitTrigger = trigger.Explicit;
 			else
-				DedicatedTrigger = null;
+				ExplicitTrigger = null;
 
 			UpdateEnabled();
 
@@ -210,12 +210,12 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public virtual void FromDedicatedTriggerText(string triggerText)
+		public virtual void FromExplicitTriggerText(string triggerText)
 		{
 			SuspendChangeEvent();
 
-			TriggerSelection = Trigger.DedicatedCommand;
-			DedicatedTrigger = new Command(triggerText);
+			TriggerSelection = Trigger.Explicit;
+			ExplicitTrigger = new Command(triggerText);
 
 			UpdateEnabled();
 
@@ -229,10 +229,10 @@ namespace YAT.Model.Settings
 
 			ResponseSelection = response;
 
-			if (response == AutoResponse.DedicatedCommand)
-				DedicatedResponse = response.DedicatedCommand;
+			if (response == AutoResponse.Explicit)
+				ExplicitResponse = response.Explicit;
 			else
-				DedicatedResponse = null;
+				ExplicitResponse = null;
 
 			UpdateEnabled();
 
@@ -240,12 +240,12 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public virtual void FromDedicatedResponseText(string responseText)
+		public virtual void FromExplicitResponseText(string responseText)
 		{
 			SuspendChangeEvent();
 
-			ResponseSelection = AutoResponse.DedicatedCommand;
-			DedicatedResponse = new Command(responseText);
+			ResponseSelection = AutoResponse.Explicit;
+			ExplicitResponse = new Command(responseText);
 
 			UpdateEnabled();
 
@@ -279,9 +279,9 @@ namespace YAT.Model.Settings
 				(Visible           == other.Visible) &&
 				(Enabled           == other.Enabled) &&
 				(TriggerSelection  == other.TriggerSelection) &&
-				(DedicatedTrigger  == other.DedicatedTrigger) &&
+				(ExplicitTrigger   == other.ExplicitTrigger) &&
 				(ResponseSelection == other.ResponseSelection) &&
-				(DedicatedResponse == other.DedicatedResponse)
+				(ExplicitResponse  == other.ExplicitResponse)
 			);
 		}
 
@@ -298,12 +298,12 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^  Visible                                     .GetHashCode();
-				hashCode = (hashCode * 397) ^  Enabled                                     .GetHashCode();
-				hashCode = (hashCode * 397) ^  TriggerSelection                            .GetHashCode();
-				hashCode = (hashCode * 397) ^ (DedicatedTrigger != null ? DedicatedTrigger .GetHashCode() : 0); // Command may be 'null'!
-				hashCode = (hashCode * 397) ^  ResponseSelection                           .GetHashCode();
-				hashCode = (hashCode * 397) ^ (DedicatedResponse!= null ? DedicatedResponse.GetHashCode() : 0); // Command may be 'null'!
+				hashCode = (hashCode * 397) ^  Visible                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  Enabled                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  TriggerSelection                          .GetHashCode();
+				hashCode = (hashCode * 397) ^ (ExplicitTrigger != null ? ExplicitTrigger .GetHashCode() : 0); // Command may be 'null'!
+				hashCode = (hashCode * 397) ^  ResponseSelection                         .GetHashCode();
+				hashCode = (hashCode * 397) ^ (ExplicitResponse!= null ? ExplicitResponse.GetHashCode() : 0); // Command may be 'null'!
 
 				return (hashCode);
 			}

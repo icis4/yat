@@ -55,7 +55,7 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Localhost,
 
-		Other,
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -90,7 +90,7 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress otherAddress = IPAddress.None;
+		private IPAddress explicitAddress = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPAddressFilter.Any"/>.</summary>
 		public IPAddressFilterEx()
@@ -107,11 +107,11 @@ namespace MKY.Net
 		/// <summary></summary>
 		public IPAddressFilterEx(IPAddress address)
 		{
-			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPAddressFilter.Any);     this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHost.Localhost);        this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPAddressFilter.IPv6Any); this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHost.IPv6Localhost);    this.otherAddress = IPAddress.None; }
-			else                                        { SetUnderlyingEnum(IPAddressFilter.Other);   this.otherAddress = address;        }
+			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPAddressFilter.Any);      this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHost.Localhost);         this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPAddressFilter.IPv6Any);  this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHost.IPv6Localhost);     this.explicitAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPAddressFilter.Explicit); this.explicitAddress = address;        }
 
 			// Note that 'IPAddressFilter.IPv4Any|Localhost' cannot be distinguished from 'IPAddressFilter.IPv4Any|Localhost' when 'IPAddress.Any|Loopback' is given.
 			// Also note that similar but optimized code is found at ParseFromIPAddress() further below.
@@ -132,7 +132,7 @@ namespace MKY.Net
 					case IPAddressFilter.IPv4Localhost: return (IPAddress.Loopback);
 					case IPAddressFilter.IPv6Any:       return (IPAddress.IPv6Any);
 					case IPAddressFilter.IPv6Localhost: return (IPAddress.IPv6Loopback);
-					case IPAddressFilter.Other:         return (this.otherAddress);
+					case IPAddressFilter.Explicit:      return (this.explicitAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -154,12 +154,12 @@ namespace MKY.Net
 				return (false);
 
 			IPAddressFilterEx other = (IPAddressFilterEx)obj;
-			if ((IPAddressFilter)UnderlyingEnum == IPAddressFilter.Other)
+			if ((IPAddressFilter)UnderlyingEnum == IPAddressFilter.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
-					(this.otherAddress == other.otherAddress)
+					(this.explicitAddress == other.explicitAddress)
 				);
 			}
 			else
@@ -177,8 +177,8 @@ namespace MKY.Net
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((IPAddressFilter)UnderlyingEnum == IPAddressFilter.Other)
-					hashCode = (hashCode * 397) ^ (this.otherAddress != null ? this.otherAddress.GetHashCode() : 0);
+				if ((IPAddressFilter)UnderlyingEnum == IPAddressFilter.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -196,7 +196,7 @@ namespace MKY.Net
 				case IPAddressFilter.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
 				case IPAddressFilter.IPv6Any:       return (IPv6Any_string       + " (" + IPAddress.IPv6Any + ")");
 				case IPAddressFilter.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPAddressFilter.Other:         return (this.otherAddress.ToString());
+				case IPAddressFilter.Explicit:      return (this.explicitAddress.ToString());
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

@@ -55,7 +55,7 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Loopback,
 
-		Other,
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -89,8 +89,8 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress otherAddress = IPAddress.None;
-		private string otherDescription = "";
+		private IPAddress explicitAddress = IPAddress.None;
+		private string explicitDescription = "";
 
 		/// <summary>Default is <see cref="IPNetworkInterface.Any"/>.</summary>
 		public IPNetworkInterfaceEx()
@@ -107,13 +107,13 @@ namespace MKY.Net
 		/// <summary></summary>
 		public IPNetworkInterfaceEx(IPAddress address, string description)
 		{
-			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.otherAddress = IPAddress.None; }
-			else                                        { SetUnderlyingEnum(IPNetworkInterface.Other);        this.otherAddress = address;        }
+			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterface.Loopback);     this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPNetworkInterface.IPv6Any);      this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPNetworkInterface.IPv6Loopback); this.explicitAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPNetworkInterface.Explicit);     this.explicitAddress = address;        }
 
-			this.otherDescription = description;
+			this.explicitDescription = description;
 		}
 
 		#region Properties
@@ -131,7 +131,7 @@ namespace MKY.Net
 					case IPNetworkInterface.IPv4Loopback: return (IPAddress.Loopback);
 					case IPNetworkInterface.IPv6Any:      return (IPAddress.IPv6Any);
 					case IPNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
-					case IPNetworkInterface.Other:        return (this.otherAddress);
+					case IPNetworkInterface.Explicit:     return (this.explicitAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -153,13 +153,13 @@ namespace MKY.Net
 				return (false);
 
 			IPNetworkInterfaceEx other = (IPNetworkInterfaceEx)obj;
-			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Other)
+			if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
 
-					(this.otherAddress == other.otherAddress)
+					(this.explicitAddress == other.explicitAddress)
 
 					// Ignore 'otherDescription'
 				);
@@ -179,8 +179,8 @@ namespace MKY.Net
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Other)
-					hashCode = (hashCode * 397) ^ (this.otherAddress != null ? this.otherAddress.GetHashCode() : 0); // Ignore 'otherDescription'
+				if ((IPNetworkInterface)UnderlyingEnum == IPNetworkInterface.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0); // Ignore 'otherDescription'
 
 				return (hashCode);
 			}
@@ -198,19 +198,19 @@ namespace MKY.Net
 				case IPNetworkInterface.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
 				case IPNetworkInterface.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
 				case IPNetworkInterface.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPNetworkInterface.Other:
+				case IPNetworkInterface.Explicit:
 				{
-					if (!string.IsNullOrEmpty(this.otherDescription))
+					if (!string.IsNullOrEmpty(this.explicitDescription))
 					{
-						if (this.otherAddress != IPAddress.None)
-							return (this.otherDescription + " (" + this.otherAddress + ")");
+						if (this.explicitAddress != IPAddress.None)
+							return (this.explicitDescription + " (" + this.explicitAddress + ")");
 						else
-							return (this.otherDescription);
+							return (this.explicitDescription);
 					}
 					else
 					{
-						if (this.otherAddress != IPAddress.None)
-							return (this.otherAddress.ToString());
+						if (this.explicitAddress != IPAddress.None)
+							return (this.explicitAddress.ToString());
 						else
 							throw (new InvalidOperationException("IP address and interface description or both are undefined!"));
 					}

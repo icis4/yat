@@ -58,7 +58,7 @@ namespace YAT.Model.Types
 
 		AnyLine,
 
-		DedicatedCommand
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -93,7 +93,8 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		private Command dedicatedCommand;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
+		private Command explicit_;
 
 		/// <summary>Default is <see cref="Trigger.None"/>.</summary>
 		public TriggerEx()
@@ -108,19 +109,20 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public TriggerEx(string dedicatedCommand)
-			: base(Trigger.DedicatedCommand)
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
+		public TriggerEx(string explicit_)
+			: base(Trigger.Explicit)
 		{
-			this.dedicatedCommand = new Command(dedicatedCommand);
+			this.explicit_ = new Command(explicit_);
 		}
 
 		/// <summary></summary>
-		public Command DedicatedCommand
+		public Command Explicit
 		{
 			get
 			{
-				if ((Trigger)UnderlyingEnum == Trigger.DedicatedCommand)
-					return (this.dedicatedCommand);
+				if ((Trigger)UnderlyingEnum == Trigger.Explicit)
+					return (this.explicit_);
 				else
 					return (new Command());
 			}
@@ -179,7 +181,7 @@ namespace YAT.Model.Types
 				case Trigger.PredefinedCommand11: return (PredefinedCommand_string + " 11]");
 				case Trigger.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
 				case Trigger.AnyLine:             return (AnyLine_string);
-				case Trigger.DedicatedCommand:    return (this.dedicatedCommand.SingleLineText);
+				case Trigger.Explicit:            return (this.explicit_.SingleLineText);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -226,8 +228,6 @@ namespace YAT.Model.Types
 			if (addVariable)	a.Add(new TriggerEx(Trigger.PredefinedCommand12));
 			if (addFixed)		a.Add(new TriggerEx(Trigger.AnyLine));
 
-			// Do not add Trigger.DedicatedCommand as this needs to be filled-in as string.
-
 			return (a.ToArray());
 		}
 
@@ -255,7 +255,7 @@ namespace YAT.Model.Types
 			Trigger enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				if (enumResult == Trigger.DedicatedCommand)
+				if (enumResult == Trigger.Explicit)
 					result = new TriggerEx(s);
 				else
 					result = enumResult;
@@ -316,9 +316,9 @@ namespace YAT.Model.Types
 				result = Trigger.AnyLine;
 				return (true);
 			}
-			else // Dedicated!
+			else // Explicit!
 			{
-				result = Trigger.DedicatedCommand;
+				result = Trigger.Explicit;
 				return (true);
 			}
 		}

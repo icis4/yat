@@ -59,7 +59,7 @@ namespace YAT.Model.Types
 		SendText,
 		SendFile,
 
-		DedicatedCommand
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -97,7 +97,8 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		private Command dedicatedCommand;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "'explicit' is a key word.")]
+		private Command explicit_;
 
 		/// <summary>Default is <see cref="AutoResponse.None"/>.</summary>
 		public AutoResponseEx()
@@ -112,19 +113,19 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public AutoResponseEx(string dedicatedCommand)
-			: base(AutoResponse.DedicatedCommand)
+		public AutoResponseEx(string explicit_)
+			: base(AutoResponse.Explicit)
 		{
-			this.dedicatedCommand = new Command(dedicatedCommand);
+			this.explicit_ = new Command(explicit_);
 		}
 
 		/// <summary></summary>
-		public Command DedicatedCommand
+		public Command Explicit
 		{
 			get
 			{
-				if ((AutoResponse)UnderlyingEnum == AutoResponse.DedicatedCommand)
-					return (this.dedicatedCommand);
+				if ((AutoResponse)UnderlyingEnum == AutoResponse.Explicit)
+					return (this.explicit_);
 				else
 					return (new Command());
 			}
@@ -183,7 +184,7 @@ namespace YAT.Model.Types
 				case AutoResponse.PredefinedCommand12: return (PredefinedCommand_string + " 12]");
 				case AutoResponse.SendText:            return (SendText_string);
 				case AutoResponse.SendFile:            return (SendFile_string);
-				case AutoResponse.DedicatedCommand:    return (this.dedicatedCommand.SingleLineText);
+				case AutoResponse.Explicit:    return (this.explicit_.SingleLineText);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -231,8 +232,6 @@ namespace YAT.Model.Types
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendText));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendFile));
 
-			// Do not add AutoResponse.DedicatedCommand as this needs to be filled-in as string.
-
 			return (a.ToArray());
 		}
 
@@ -260,7 +259,7 @@ namespace YAT.Model.Types
 			AutoResponse enumResult;
 			if (TryParse(s, out enumResult)) // TryParse() trims whitespace.
 			{
-				if (enumResult == AutoResponse.DedicatedCommand)
+				if (enumResult == AutoResponse.Explicit)
 					result = new AutoResponseEx(s);
 				else
 					result = enumResult;
@@ -327,9 +326,9 @@ namespace YAT.Model.Types
 				result = AutoResponse.SendFile;
 				return (true);
 			}
-			else // Dedicated!
+			else // Explicit!
 			{
-				result = AutoResponse.DedicatedCommand;
+				result = AutoResponse.Explicit;
 				return (true);
 			}
 		}
