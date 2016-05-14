@@ -52,16 +52,16 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketType DefaultSocketType                       = SocketType.TcpAutoSocket;
+		private const SocketType SocketTypeDefault                         = SocketTypeEx.Default;
 
-		private static readonly IPHostEx DefaultRemoteHost                 = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
-		private const int DefaultRemoteTcpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
-		private const int DefaultRemoteUdpPort                           = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
+		private static readonly IPHostEx RemoteHostDefault                 = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
+		private const int RemoteTcpPortDefault                             = MKY.IO.Serial.Socket.SocketSettings.RemoteTcpPortDefault;
+		private const int RemoteUdpPortDefault                             = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
 
-		private static readonly IPNetworkInterfaceEx DefaultLocalInterface = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
-		private static readonly IPAddressFilterEx DefaultLocalFilter       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
-		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
-		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
+		private static readonly IPNetworkInterfaceEx LocalInterfaceDefault = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
+		private static readonly IPAddressFilterEx LocalFilterDefault       = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+		private const int LocalTcpPortDefault                              = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
+		private const int LocalUdpPortDefault                              = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
 
 		#endregion
 
@@ -78,16 +78,16 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private SocketType socketType = DefaultSocketType;
+		private SocketType socketType               = SocketTypeDefault;
 
-		private IPHostEx remoteHost                 = DefaultRemoteHost;
-		private int remoteTcpPort                 = DefaultRemoteTcpPort;
-		private int remoteUdpPort                 = DefaultRemoteUdpPort;
+		private IPHostEx remoteHost                 = RemoteHostDefault;
+		private int remoteTcpPort                   = RemoteTcpPortDefault;
+		private int remoteUdpPort                   = RemoteUdpPortDefault;
 
-		private IPNetworkInterfaceEx localInterface = DefaultLocalInterface;
-		private IPAddressFilterEx localFilter       = DefaultLocalFilter;
-		private int localTcpPort                  = DefaultLocalTcpPort;
-		private int localUdpPort                  = DefaultLocalUdpPort;
+		private IPNetworkInterfaceEx localInterface = LocalInterfaceDefault;
+		private IPAddressFilterEx localFilter       = LocalFilterDefault;
+		private int localTcpPort                    = LocalTcpPortDefault;
+		private int localUdpPort                    = LocalUdpPortDefault;
 
 		#endregion
 
@@ -189,7 +189,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The remote TCP port.")]
-		[DefaultValue(DefaultRemoteTcpPort)]
+		[DefaultValue(RemoteTcpPortDefault)]
 		public virtual int RemoteTcpPort
 		{
 			get { return (this.remoteTcpPort); }
@@ -207,7 +207,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The remote UDP port.")]
-		[DefaultValue(DefaultRemoteUdpPort)]
+		[DefaultValue(RemoteUdpPortDefault)]
 		public virtual int RemoteUdpPort
 		{
 			get { return (this.remoteUdpPort); }
@@ -261,7 +261,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local TCP port.")]
-		[DefaultValue(DefaultLocalTcpPort)]
+		[DefaultValue(LocalTcpPortDefault)]
 		public virtual int LocalTcpPort
 		{
 			get { return (this.localTcpPort); }
@@ -279,7 +279,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local UDP port.")]
-		[DefaultValue(DefaultLocalUdpPort)]
+		[DefaultValue(LocalUdpPortDefault)]
 		public virtual int LocalUdpPort
 		{
 			get { return (this.localUdpPort); }
@@ -326,9 +326,7 @@ namespace YAT.View.Controls
 			// also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial 'Paint' event.
 			if (Enabled && !this.localInterfaceListIsBeingSetOrIsAlreadySet)
-			{
 				SetLocalInterfaceList();
-			}
 		}
 
 		/// <summary>
@@ -567,6 +565,19 @@ namespace YAT.View.Controls
 					e.Cancel = true;
 				}
 			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual void RefreshLocalInterfaceList()
+		{
+			SetLocalInterfaceList();
 		}
 
 		#endregion

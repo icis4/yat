@@ -111,8 +111,11 @@ namespace YAT.Model.Types
 		#endregion
 
 		/// <summary>Default is <see cref="WorkspaceLayout.Automatic"/>.</summary>
+		public const WorkspaceLayout Default = WorkspaceLayout.Automatic;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public WorkspaceLayoutEx()
-			: this(WorkspaceLayout.Automatic)
+			: this(Default)
 		{
 		}
 

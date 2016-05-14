@@ -93,8 +93,11 @@ namespace YAT.Log
 		private string explicitSeparator; // = null
 
 		/// <summary>Default is <see cref="FileNameSeparator.Dash"/>.</summary>
+		public const FileNameSeparator Default = FileNameSeparator.Dash;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public FileNameSeparatorEx()
-			: this(FileNameSeparator.Dash)
+			: this(Default)
 		{
 		}
 

@@ -62,8 +62,11 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>Default is <see cref="Handshake.None"/>.</summary>
+		public const Handshake Default = Handshake.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public HandshakeEx()
-			: this(Handshake.None)
+			: this(Default)
 		{
 		}
 

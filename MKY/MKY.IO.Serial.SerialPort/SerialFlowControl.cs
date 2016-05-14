@@ -91,8 +91,11 @@ namespace MKY.IO.Serial.SerialPort
 		#endregion
 
 		/// <summary>Default is <see cref="SerialFlowControl.None"/>.</summary>
+		public new const SerialFlowControl Default = SerialFlowControl.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public SerialFlowControlEx()
-			: this(SerialFlowControl.None)
+			: this(Default)
 		{
 		}
 

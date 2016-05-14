@@ -55,7 +55,7 @@ namespace MKY.Windows.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public const RotateType RotationDefault = RotateType.RotateNone;
+		public const RotateType RotationDefault = RotateTypeEx.Default;
 
 		#endregion
 

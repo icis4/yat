@@ -164,7 +164,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// The values in the description must be provided directly instead of referencing their respective code items
-		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.Socket.SocketSettings.DefaultPort"/>
+		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.Socket.SocketSettings.PortDefault"/>
 		/// because attribute arguments must be constant.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -199,7 +199,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// The values in the description must be provided directly instead of referencing their respective code items
-		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.Socket.SocketSettings.DefaultPort"/>
+		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.Socket.SocketSettings.PortDefault"/>
 		/// because attribute arguments must be constant.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]

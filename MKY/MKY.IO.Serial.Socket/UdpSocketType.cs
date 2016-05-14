@@ -68,8 +68,11 @@ namespace MKY.IO.Serial.Socket
 		#endregion
 
 		/// <summary>Default is <see cref="UdpSocketType.PairSocket"/>.</summary>
+		public const UdpSocketType Default = UdpSocketType.PairSocket;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public UdpSocketTypeEx()
-			: this(UdpSocketType.PairSocket)
+			: this(Default)
 		{
 		}
 

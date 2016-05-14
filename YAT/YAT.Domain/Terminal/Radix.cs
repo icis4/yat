@@ -93,8 +93,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Radix.String"/>.</summary>
+		public const Radix Default = Radix.String;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public RadixEx()
-			: this(Radix.String)
+			: this(Default)
 		{
 		}
 

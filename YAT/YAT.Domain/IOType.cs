@@ -100,8 +100,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="IOType.SerialPort"/>.</summary>
+		public const IOType Default = IOType.SerialPort;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public IOTypeEx()
-			: this(IOType.SerialPort)
+			: this(Default)
 		{
 		}
 

@@ -70,8 +70,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Direction.None"/>.</summary>
+		public const Direction Default = Direction.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public DirectionEx()
-			: this(Direction.None)
+			: this(Default)
 		{
 		}
 

@@ -47,7 +47,9 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const MKY.IO.Serial.Socket.SocketType SocketTypeDefault = MKY.IO.Serial.Socket.SocketType.TcpAutoSocket;
+		private const MKY.IO.Serial.Socket.SocketType SocketTypeDefault               = MKY.IO.Serial.Socket.SocketTypeEx.Default;
+
+		private const MKY.IO.Serial.Socket.UdpServerSendMode UdpServerSendModeDefault = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
 
 		#endregion
 
@@ -58,10 +60,10 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private MKY.IO.Serial.Socket.SocketType socketType = SocketTypeDefault;
+		private MKY.IO.Serial.Socket.SocketType socketType               = SocketTypeDefault;
 
-		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect           = MKY.IO.Serial.Socket.SocketSettings.DefaultTcpClientAutoReconnect;
-		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode = MKY.IO.Serial.Socket.SocketSettings.DefaultUdpServerSendMode;
+		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect           = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault;
 
 		#endregion
 
@@ -103,8 +105,9 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		[Category("Socket")]
+		[Description("Sets socket type.")]
+		[DefaultValue(SocketTypeDefault)]
 		public MKY.IO.Serial.Socket.SocketType SocketType
 		{
 			set
@@ -117,9 +120,11 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
-		[Category("Socket")]
-		[Description("Sets TCP/IP client auto reconnect.")]
+		/// <remarks>
+		/// Structs cannot be used with the designer.
+		/// </remarks>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
@@ -137,6 +142,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Socket")]
 		[Description("Sets UDP/IP server send mode.")]
+		[DefaultValue(UdpServerSendModeDefault)]
 		public MKY.IO.Serial.Socket.UdpServerSendMode UdpServerSendMode
 		{
 			get { return (this.udpServerSendMode); }

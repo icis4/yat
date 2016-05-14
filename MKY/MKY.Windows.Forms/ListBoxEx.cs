@@ -132,7 +132,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		[Category("Scroll")]
 		[Description("Enables or disables horizontal auto scroll.")]
-		[DefaultValue(HorizontalAutoScrollDefault)]
+		[DefaultValue(true)]
 		public virtual bool HorizontalAutoScroll
 		{
 			get { return (this.horizontalAutoScroll); }
@@ -167,7 +167,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		[Category("Scroll")]
 		[Description("Enables or disables vertical auto scroll.")]
-		[DefaultValue(VerticalAutoScrollDefault)]
+		[DefaultValue(true)]
 		public virtual bool VerticalAutoScroll
 		{
 			get { return (this.verticalAutoScroll); }

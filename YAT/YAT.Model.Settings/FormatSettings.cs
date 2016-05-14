@@ -34,22 +34,22 @@ namespace YAT.Model.Settings
 	public class FormatSettings : MKY.Settings.SettingsItem
 	{
 		/// <remarks>Color.Blue = 0000FF.</remarks>
-		public static readonly Color DefaultTxColor = Color.Blue;
+		public static readonly Color TxColorDefault = Color.Blue;
 
 		/// <remarks>Color.Purple = 800080.</remarks>
-		public static readonly Color DefaultRxColor = Color.Purple;
+		public static readonly Color RxColorDefault = Color.Purple;
 
 		/// <remarks>Color.DarkGreen = 006400.</remarks>
-		public static readonly Color DefaultInfoColor = Color.DarkGreen;
+		public static readonly Color InfoColorDefault = Color.DarkGreen;
 
 		/// <remarks>Color.Black = 000000.</remarks>
-		public static readonly Color DefaultWhiteSpacesColor = Color.Black;
+		public static readonly Color WhiteSpacesColorDefault = Color.Black;
 
 		/// <remarks>Color.OrangeRed = FF4500.</remarks>
-		public static readonly Color DefaultErrorColor = Color.OrangeRed;
+		public static readonly Color ErrorColorDefault = Color.OrangeRed;
 
 		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
-		public static readonly Color DefaultBackColor = SystemColors.Window;
+		public static readonly Color BackColorDefault = SystemColors.Window;
 
 		private FontFormat font;
 
@@ -117,19 +117,19 @@ namespace YAT.Model.Settings
 
 			FontFormat        = new FontFormat(FontFormat.NameDefault, FontFormat.SizeDefault, FontFormat.StyleDefault);
 
-			TxDataFormat      = new TextFormat(DefaultTxColor,           true, false, false, false); // Bold.
-			TxControlFormat   = new TextFormat(DefaultTxColor,          false, false, false, false);
-			RxDataFormat      = new TextFormat(DefaultRxColor,           true, false, false, false); // Bold.
-			RxControlFormat   = new TextFormat(DefaultRxColor,          false, false, false, false);
-			DateFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
-			TimeFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
-			PortFormat        = new TextFormat(DefaultInfoColor,        false, false, false, false);
-			DirectionFormat   = new TextFormat(DefaultInfoColor,        false, false, false, false);
-			LengthFormat      = new TextFormat(DefaultInfoColor,        false, false, false, false);
-			WhiteSpacesFormat = new TextFormat(DefaultWhiteSpacesColor, false, false, false, false);
-			ErrorFormat       = new TextFormat(DefaultErrorColor,        true, false, false, false); // Bold.
+			TxDataFormat      = new TextFormat(TxColorDefault,           true, false, false, false); // Bold.
+			TxControlFormat   = new TextFormat(TxColorDefault,          false, false, false, false);
+			RxDataFormat      = new TextFormat(RxColorDefault,           true, false, false, false); // Bold.
+			RxControlFormat   = new TextFormat(RxColorDefault,          false, false, false, false);
+			DateFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
+			TimeFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
+			PortFormat        = new TextFormat(InfoColorDefault,        false, false, false, false);
+			DirectionFormat   = new TextFormat(InfoColorDefault,        false, false, false, false);
+			LengthFormat      = new TextFormat(InfoColorDefault,        false, false, false, false);
+			WhiteSpacesFormat = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
+			ErrorFormat       = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
 
-			BackFormat        = new BackFormat(DefaultBackColor);
+			BackFormat        = new BackFormat(BackColorDefault);
 		}
 
 		#region Properties

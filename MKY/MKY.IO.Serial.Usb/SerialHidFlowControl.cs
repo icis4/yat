@@ -82,8 +82,11 @@ namespace MKY.IO.Serial.Usb
 		#endregion
 
 		/// <summary>Default is <see cref="SerialHidFlowControl.None"/>.</summary>
+		public const SerialHidFlowControl Default = SerialHidFlowControl.None;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public SerialHidFlowControlEx()
-			: this(SerialHidFlowControl.None)
+			: this(Default)
 		{
 		}
 

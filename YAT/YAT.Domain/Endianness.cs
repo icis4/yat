@@ -64,8 +64,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Endianness.BigEndian"/>.</summary>
+		public const Endianness Default = Endianness.BigEndian;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public EndiannessEx()
-			: this(Endianness.BigEndian)
+			: this(Default)
 		{
 		}
 

@@ -67,8 +67,11 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="TerminalType.Text"/>.</summary>
+		public const TerminalType Default = TerminalType.Text;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public TerminalTypeEx()
-			: this(TerminalType.Text)
+			: this(Default)
 		{
 		}
 

@@ -47,8 +47,11 @@ namespace MKY.Windows.Forms
 		#endregion
 
 		/// <summary>Default is <see cref="Orientation.Horizontal"/>.</summary>
+		public const Orientation Default = Orientation.Horizontal;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public OrientationEx()
-			: this(Orientation.Horizontal)
+			: this(Default)
 		{
 		}
 

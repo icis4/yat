@@ -50,8 +50,11 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>Default is <see cref="StopBits.One"/>.</summary>
+		public const StopBits Default = StopBits.One;
+
+		/// <summary>Default is <see cref="Default"/>.</summary>
 		public StopBitsEx()
-			: this(StopBits.One)
+			: this(Default)
 		{
 		}
 

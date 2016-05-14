@@ -55,6 +55,9 @@ namespace MKY.Drawing
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class RotateTypeEx
 	{
+		/// <summary>Default is <see cref="RotateType.RotateNone"/>.</summary>
+		public const RotateType Default = RotateType.RotateNone;
+
 		/// <summary></summary>
 		public static int AngleFromDifference(RotateType rotationA, RotateType rotationB)
 		{
@@ -160,6 +163,9 @@ namespace MKY.Drawing
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class FlipTypeEx
 	{
+		/// <summary>Default is <see cref="FlipType.FlipNone"/>.</summary>
+		public const FlipType Default = FlipType.FlipNone;
+
 		#region Conversion Operators
 
 		/// <summary></summary>

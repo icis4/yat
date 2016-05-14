@@ -132,15 +132,15 @@ namespace YAT.Model.Settings
 			//// SerialPortCommunication is attached as settings object.
 			SerialPortAutoReopen     = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
-			SocketRemoteHost         = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteHost;
-			SocketRemoteTcpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteTcpPort;
-			SocketRemoteUdpPort      = MKY.IO.Serial.Socket.SocketSettings.DefaultRemoteUdpPort;
-			SocketLocalInterface     = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalInterface;
-			SocketLocalFilter        = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalFilter;
-			SocketLocalTcpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalTcpPort;
-			SocketLocalUdpPort       = MKY.IO.Serial.Socket.SocketSettings.DefaultLocalUdpPort;
-			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.DefaultTcpClientAutoReconnect;
-			UdpServerSendMode        = MKY.IO.Serial.Socket.SocketSettings.DefaultUdpServerSendMode;
+			SocketRemoteHost         = MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
+			SocketRemoteTcpPort      = MKY.IO.Serial.Socket.SocketSettings.RemoteTcpPortDefault;
+			SocketRemoteUdpPort      = MKY.IO.Serial.Socket.SocketSettings.RemoteUdpPortDefault;
+			SocketLocalInterface     = MKY.IO.Serial.Socket.SocketSettings.LocalInterfaceDefault;
+			SocketLocalFilter        = MKY.IO.Serial.Socket.SocketSettings.LocalFilterDefault;
+			SocketLocalTcpPort       = MKY.IO.Serial.Socket.SocketSettings.LocalTcpPortDefault;
+			SocketLocalUdpPort       = MKY.IO.Serial.Socket.SocketSettings.LocalUdpPortDefault;
+			TcpClientAutoReconnect   = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+			UdpServerSendMode        = MKY.IO.Serial.Socket.SocketSettings.UdpServerSendModeDefault;
 
 			UsbSerialHidDeviceInfo   = null;
 			UsbSerialHidReportFormat = new MKY.IO.Usb.SerialHidReportFormat();
