@@ -147,7 +147,7 @@ namespace MKY.IO.Ports.Test
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
 		public static bool Set(UsbHubSetting setting)
 		{
-			WriteDebugMessageLine("Setting   " + ToBinaryString(setting) + " mask.");
+			DebugMessage("Setting   " + ToBinaryString(setting) + " mask.");
 
 			UsbHubSetting disableMask = ( staticProxy & ~setting);
 			UsbHubSetting enableMask  = (~staticProxy &  setting);
@@ -221,7 +221,7 @@ namespace MKY.IO.Ports.Test
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
 		public static bool Enable(UsbHubSetting enableMask)
 		{
-			WriteDebugMessageLine("Enabling  " + ToBinaryString(enableMask) + " mask. " +
+			DebugMessage("Enabling  " + ToBinaryString(enableMask) + " mask. " +
 			                      "Proxy was " + ToBinaryString(staticProxy) + " mask.");
 
 			UsbHubSetting accumulated = (staticProxy | enableMask);
@@ -239,7 +239,7 @@ namespace MKY.IO.Ports.Test
 		/// <returns><c>true</c> if successful; otherwise <c>false</c></returns>
 		public static bool Disable(UsbHubSetting disableMask)
 		{
-			WriteDebugMessageLine("Disabling " + ToBinaryString(disableMask) + " mask. " +
+			DebugMessage("Disabling " + ToBinaryString(disableMask) + " mask. " +
 			                      "Proxy was " + ToBinaryString(staticProxy) + " mask.");
 
 			UsbHubSetting accumulated = (staticProxy & ~disableMask);
@@ -270,18 +270,18 @@ namespace MKY.IO.Ports.Test
 			p.StartInfo.CreateNoWindow = true;
 			p.Start();
 
-			WriteDebugMessageLine("Executing " + mask + " mask...");
+			DebugMessage("Executing " + mask + " mask...");
 			p.WaitForExit(); // Execution requires approx 3 seconds.
 			Thread.Sleep(WaitForNextExecution);
 
 			if (p.ExitCode == 0)
 			{
-				WriteDebugMessageLine("...successfully done.");
+				DebugMessage("...successfully done.");
 				return (true);
 			}
 			else
 			{
-				WriteDebugMessageLine("...failed!");
+				DebugMessage("...failed!");
 				return (false);
 			}
 		}
@@ -292,7 +292,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		[Conditional("DEBUG")]
-		private static void WriteDebugMessageLine(string message)
+		private static void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(

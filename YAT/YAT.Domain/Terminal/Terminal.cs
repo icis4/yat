@@ -388,7 +388,7 @@ namespace YAT.Domain
 		{
 			Dispose(false);
 
-			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -417,7 +417,7 @@ namespace YAT.Domain
 		{
 			lock (this.sendThreadSyncObj)
 			{
-				WriteDebugThreadStateMessageLine("SendThread() gets created...");
+				DebugThreadStateMessage("SendThread() gets created...");
 
 				if (this.sendThread == null)
 				{
@@ -427,12 +427,12 @@ namespace YAT.Domain
 					this.sendThread.Name = "Terminal [" + (1000 + this.instanceId) + "] Send Thread";
 					this.sendThread.Start(); // Offset with 1000 to distinguish this ID from the 'real' terminal ID.
 
-					WriteDebugThreadStateMessageLine("...successfully created.");
+					DebugThreadStateMessage("...successfully created.");
 				}
 #if (DEBUG)
 				else
 				{
-					WriteDebugThreadStateMessageLine("...failed as it already exists.");
+					DebugThreadStateMessage("...failed as it already exists.");
 				}
 #endif
 			}
@@ -463,7 +463,7 @@ namespace YAT.Domain
 			{
 				if (this.sendThread != null)
 				{
-					WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
+					DebugThreadStateMessage("SendThread() gets stopped...");
 
 					this.sendThreadRunFlag = false;
 
@@ -481,13 +481,13 @@ namespace YAT.Domain
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								WriteDebugThreadStateMessageLine("...failed! Aborting...");
-								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadStateMessage("...failed! Aborting...");
+								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 								this.sendThread.Abort();
 								break;
 							}
 
-							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
@@ -496,19 +496,19 @@ namespace YAT.Domain
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThreadEvent.Close();
 					this.sendThreadEvent = null;
 					this.sendThread = null;
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 #if (DEBUG)
 				else
 				{
-					WriteDebugThreadStateMessageLine("...not necessary as it doesn't exist anymore.");
+					DebugThreadStateMessage("...not necessary as it doesn't exist anymore.");
 				}
 #endif
 			}
@@ -869,7 +869,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void SendThread()
 		{
-			WriteDebugThreadStateMessageLine("SendThread() has started.");
+			DebugThreadStateMessage("SendThread() has started.");
 
 			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
@@ -914,7 +914,7 @@ namespace YAT.Domain
 
 						foreach (SendItem si in pendingItems)
 						{
-							WriteDebugMessageLine(@"Processing item """ + si.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
+							DebugMessage(@"Processing item """ + si.ToString() + @""" of " + pendingItems.Length + " send item(s)...");
 
 							ProcessSendItem(si);
 
@@ -939,7 +939,7 @@ namespace YAT.Domain
 				} // Inner loop
 			} // Outer loop
 
-			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+			DebugThreadStateMessage("SendThread() has terminated.");
 		}
 
 		/// <summary></summary>
@@ -2729,7 +2729,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[Conditional("DEBUG")]
-		protected virtual void WriteDebugMessageLine(string message)
+		protected virtual void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -2748,9 +2748,9 @@ namespace YAT.Domain
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void WriteDebugThreadStateMessageLine(string message)
+		private void DebugThreadStateMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		#endregion

@@ -148,7 +148,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public Main(Model.Main main)
 		{
-			WriteDebugMessageLine("Creating...");
+			DebugMessage("Creating...");
 
 			InitializeComponent();
 
@@ -171,7 +171,7 @@ namespace YAT.View.Forms
 
 			SetControls();
 
-			WriteDebugMessageLine("...successfully created.");
+			DebugMessage("...successfully created.");
 		}
 
 		#endregion
@@ -2204,7 +2204,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			string guid;
 			if (this.main != null)

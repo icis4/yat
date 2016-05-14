@@ -215,7 +215,6 @@ namespace YAT.Model.Types
 		private static AutoResponseEx[] GetItems(bool addFixed, bool addVariable)
 		{
 			List<AutoResponseEx> a = new List<AutoResponseEx>(16); // Preset the initial capactiy to improve memory management, 16 is a large enough value.
-
 			if (addFixed)		a.Add(new AutoResponseEx(AutoResponse.None));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand1));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand2));
@@ -231,7 +230,6 @@ namespace YAT.Model.Types
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.PredefinedCommand12));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendText));
 			if (addVariable)	a.Add(new AutoResponseEx(AutoResponse.SendFile));
-
 			return (a.ToArray());
 		}
 

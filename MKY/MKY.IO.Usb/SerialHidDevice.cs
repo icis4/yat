@@ -593,7 +593,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			WriteDebugMessageLine("Starting...");
+			DebugMessage("Starting...");
 			SetStateSynchronized(State.Starting);
 			if (Open())
 			{
@@ -615,7 +615,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			WriteDebugMessageLine("Stopping...");
+			DebugMessage("Stopping...");
 			Close();
 			SetStateSynchronized(State.Reset);
 		}
@@ -631,7 +631,7 @@ namespace MKY.IO.Usb
 			if (IsOpen)
 				return (true);
 
-			WriteDebugMessageLine("Opening...");
+			DebugMessage("Opening...");
 			CreateAndStartReceiveThread();
 
 			// Create a new stream and begin to read data from the device.
@@ -664,7 +664,7 @@ namespace MKY.IO.Usb
 			if (!IsOpen)
 				return;
 
-			WriteDebugMessageLine("Closing...");
+			DebugMessage("Closing...");
 			StopReceiveThread();
 			CloseStream();
 
@@ -783,7 +783,7 @@ namespace MKY.IO.Usb
 			{
 				if (this.receiveThread != null)
 				{
-					WriteDebugThreadStateMessageLine("ReceiveThread() gets stopped...");
+					DebugThreadStateMessage("ReceiveThread() gets stopped...");
 
 					this.receiveThreadRunFlag = false;
 
@@ -801,13 +801,13 @@ namespace MKY.IO.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								WriteDebugThreadStateMessageLine("...failed! Aborting...");
-								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadStateMessage("...failed! Aborting...");
+								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 								this.receiveThread.Abort();
 								break;
 							}
 
-							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
@@ -816,14 +816,14 @@ namespace MKY.IO.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 					finally
 					{
 						this.receiveThread = null;
 					}
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 
 				if (this.receiveThreadEvent != null)
@@ -956,7 +956,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
-			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
+			DebugThreadStateMessage("ReceiveThread() has started.");
 
 			// Outer loop, processes data after a signal was received:
 			while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
@@ -993,7 +993,7 @@ namespace MKY.IO.Usb
 				} // Inner loop
 			} // Outer loop
 
-			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
+			DebugThreadStateMessage("ReceiveThread() has terminated.");
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation succeeds in any case.")]
@@ -1075,9 +1075,9 @@ namespace MKY.IO.Usb
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + this.state + ".");
+				DebugMessage("State has changed from " + oldState + " to " + this.state + ".");
 			else
-				WriteDebugMessageLine("State is already " + oldState + ".");
+				DebugMessage("State is already " + oldState + ".");
 #endif
 		}
 
@@ -1199,7 +1199,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -1218,9 +1218,9 @@ namespace MKY.IO.Usb
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void WriteDebugThreadStateMessageLine(string message)
+		private void DebugThreadStateMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		#endregion
