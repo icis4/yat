@@ -96,6 +96,24 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool isStartingUp = true;
+
+		/// <summary>
+		/// Set visible/invisible before accessing the other settings, to ensure that the correct
+		/// control is shown in case one of the settings leads to an exception (e.g. bug #307).
+		/// </summary>
+		private void NewTerminal_Paint(object sender, PaintEventArgs e)
+		{
+			if (this.isStartingUp)
+			{
+				this.isStartingUp = false;
+				SetControlsVisibiliy(this.newTerminalSettingsInEdit.IOType);
+			}
+		}
+
+		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		/// <remarks>
@@ -104,9 +122,8 @@ namespace YAT.View.Forms
 		/// not raise this event again.
 		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
 		/// the application is started minimized. Also note that operations called in the 'Shown'
-		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
-		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
-		/// 'Shown' event and will somehow be processed asynchronously.
+		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
+		/// child controls has been raised before this 'Shown' event.
 		/// </remarks>
 		private void NewTerminal_Shown(object sender, EventArgs e)
 		{
@@ -400,26 +417,10 @@ namespace YAT.View.Forms
 			terminalSelection.TerminalType = this.newTerminalSettingsInEdit.TerminalType;
 
 			Domain.IOType ioType = this.newTerminalSettingsInEdit.IOType;
+
+			SetControlsVisibiliy(ioType);
+
 			terminalSelection.IOType = ioType;
-
-			// Set visible/invisible before accessing the other settings, to ensure that the correct
-			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
-
-			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort ;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
-			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-
-			socketSelection.Visible = isSocket;
-			socketSettings.Visible  = isSocket;
-
-			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
-			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
-
-			serialPortSelection.Visible = isSerialPort;
-			serialPortSettings.Visible  = isSerialPort;
-
-			// Set socket and USB control before serial port control since that might need to refresh
-			// the serial port list first (which takes time, which looks ulgy).
 
 			socketSelection.SocketType     = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettingsInEdit.SocketRemoteHost;
@@ -453,11 +454,18 @@ namespace YAT.View.Forms
 			checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
 
 			// Trigger refresh of ports/devices if selection of I/O type has changed:
+			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
+			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+
 			bool wasSerialPort   = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSerialPort;
+			bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
 			bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
 
 			if      (isSerialPort   && !wasSerialPort)
-				serialPortSelection.RefreshPortList();
+				serialPortSelection        .RefreshPortList();
+			else if (isSocket       && !wasSocket)
+				socketSelection            .RefreshLocalInterfaceList();
 			else if (isUsbSerialHid && !wasUsbSerialHid)
 				usbSerialHidDeviceSelection.RefreshDeviceList();
 
@@ -473,6 +481,26 @@ namespace YAT.View.Forms
 			button_OK.Enabled = isValid;
 
 			this.isSettingControls.Leave();
+		}
+
+		/// <remarks>
+		/// This functionality is partly duplicated in <see cref="TerminalSettings.SetControls"/>.
+		/// Changes here must be applied there too!
+		/// </remarks>
+		private void SetControlsVisibiliy(Domain.IOType ioType)
+		{
+			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
+			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+
+			serialPortSelection.Visible = isSerialPort;
+			serialPortSettings.Visible  = isSerialPort;
+
+			socketSelection.Visible = isSocket;
+			socketSettings.Visible  = isSocket;
+
+			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
+			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
 		}
 
 		#endregion
