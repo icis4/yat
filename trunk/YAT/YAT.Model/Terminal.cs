@@ -262,7 +262,7 @@ namespace YAT.Model
 		{
 			try
 			{
-				WriteDebugMessageLine("Creating...");
+				DebugMessage("Creating...");
 
 				this.startArgs = startArgs;
 
@@ -300,11 +300,11 @@ namespace YAT.Model
 				// Create rates:
 				CreateRates();
 
-				WriteDebugMessageLine("...successfully created.");
+				DebugMessage("...successfully created.");
 			}
 			catch (Exception ex)
 			{
-				WriteDebugMessageLine("...failed!");
+				DebugMessage("...failed!");
 				DebugEx.WriteException(GetType(), ex);
 
 				Dispose(); // Immediately call Dispose() to ensure no zombies remain!
@@ -329,7 +329,7 @@ namespace YAT.Model
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing...");
+				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -357,7 +357,7 @@ namespace YAT.Model
 				this.terminal = null;
 				this.isDisposed = true;
 
-				WriteDebugMessageLine("...successfully disposed.");
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -366,7 +366,7 @@ namespace YAT.Model
 		{
 			Dispose(false);
 
-			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -2596,7 +2596,7 @@ namespace YAT.Model
 		{
 			try
 			{
-				WriteDebugMessageLine(@"Sending """ + (!string.IsNullOrEmpty(data) ? data : "") + @"""...");
+				DebugMessage(@"Sending """ + (!string.IsNullOrEmpty(data) ? data : "") + @"""...");
 
 				if (isLine)
 					this.terminal.SendLine(data);
@@ -2698,7 +2698,7 @@ namespace YAT.Model
 		{
 			try
 			{
-				WriteDebugMessageLine(@"Sending """ + (!string.IsNullOrEmpty(singleLineText) ? singleLineText : "") + @"""...");
+				DebugMessage(@"Sending """ + (!string.IsNullOrEmpty(singleLineText) ? singleLineText : "") + @"""...");
 
 				this.terminal.SendLines(multiLineText);
 			}
@@ -4051,14 +4051,14 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
-			WriteDebugMessageLine(text);
+			DebugMessage(text);
 			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			WriteDebugMessageLine(text);
+			DebugMessage(text);
 			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
@@ -4073,7 +4073,7 @@ namespace YAT.Model
 		{
 			if (this.startArgs.Interactive)
 			{
-				WriteDebugMessageLine(text);
+				DebugMessage(text);
 
 				MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon, defaultButton);
 				EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
@@ -4145,7 +4145,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(

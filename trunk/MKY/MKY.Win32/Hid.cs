@@ -819,11 +819,11 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetManufacturerString(SafeFileHandle deviceHandle, out string manufacturer)
 		{
-			ShowDebugStringAccessMessageBox("Retrieving manufacturer string via hid.dll::HidD_GetManufacturerString...");
+			DebugStringAccessMessageBox("Retrieving manufacturer string via hid.dll::HidD_GetManufacturerString...");
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
 
-			ShowDebugStringAccessMessageBox(success,
+			DebugStringAccessMessageBox(success,
 			                               @"...successfully retrieved """ + manufacturer + @""".",
 			                                "...failed to retrieve manufacturer string.");
 
@@ -834,11 +834,11 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetProductString(SafeFileHandle deviceHandle, out string product)
 		{
-			ShowDebugStringAccessMessageBox("Retrieving product string via hid.dll::HidD_GetProductString...");
+			DebugStringAccessMessageBox("Retrieving product string via hid.dll::HidD_GetProductString...");
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
 
-			ShowDebugStringAccessMessageBox(success,
+			DebugStringAccessMessageBox(success,
 			                               @"...successfully retrieved """ + product + @""".",
 			                                "...failed to retrieve product string.");
 
@@ -849,11 +849,11 @@ namespace MKY.Win32
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serial)
 		{
-			ShowDebugStringAccessMessageBox("Retrieving serial string via hid.dll::HidD_GetSerialString...");
+			DebugStringAccessMessageBox("Retrieving serial string via hid.dll::HidD_GetSerialString...");
 
 			bool success = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
 
-			ShowDebugStringAccessMessageBox(success,
+			DebugStringAccessMessageBox(success,
 			                               @"...successfully retrieved """ + serial + @""".",
 			                                "...failed to retrieve serial string.");
 
@@ -891,14 +891,14 @@ namespace MKY.Win32
 						if (!string.IsNullOrEmpty(contentString) &&
 							(contentString != languageString)) // Looks like a proper invariant string.
 						{
-							WriteDebugStringAccessMessageLine(@"USB device string """ + contentString + @""" successfully retrieved.");
+							DebugStringAccessMessage(@"USB device string """ + contentString + @""" successfully retrieved.");
 
 							hidString = contentString;
 							return (true);
 						}
 						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
 						{
-							WriteDebugStringAccessMessageLine(@"USB device string is not available on this device.");
+							DebugStringAccessMessage(@"USB device string is not available on this device.");
 
 							hidString = "";
 							return (true);
@@ -907,7 +907,7 @@ namespace MKY.Win32
 				}
 			}
 
-			WriteDebugStringAccessMessageLine(@"USB device string could not be retrieved!");
+			DebugStringAccessMessage(@"USB device string could not be retrieved!");
 
 			hidString = "";
 			return (false);
@@ -1072,24 +1072,24 @@ namespace MKY.Win32
 		//==========================================================================================
 
 		[Conditional("DEBUG_STRING_ACCESS")]
-		private static void WriteDebugStringAccessMessageLine(string message)
+		private static void DebugStringAccessMessage(string message)
 		{
 			Debug.WriteLine(message);
 		}
 
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
-		private static void ShowDebugStringAccessMessageBox(string message)
+		private static void DebugStringAccessMessageBox(string message)
 		{
 			MessageBox.Show(message);
 		}
 
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
-		private static void ShowDebugStringAccessMessageBox(bool condition, string messageIf, string messageElse)
+		private static void DebugStringAccessMessageBox(bool condition, string messageIf, string messageElse)
 		{
 			if (condition)
-				ShowDebugStringAccessMessageBox(messageIf);
+				DebugStringAccessMessageBox(messageIf);
 			else
-				ShowDebugStringAccessMessageBox(messageElse);
+				DebugStringAccessMessageBox(messageElse);
 		}
 
 		#endregion

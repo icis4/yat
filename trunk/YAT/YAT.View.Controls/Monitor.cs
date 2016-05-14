@@ -816,7 +816,7 @@ namespace YAT.View.Controls
 		private void timer_TotalProcessorLoad_Tick(object sender, EventArgs e)
 		{
 			int totalProcessorLoad = (int)performanceCounter_TotalProcessorLoad.NextValue();
-			WriteUpdateDebugMessage("CPU load = " + totalProcessorLoad.ToString(CultureInfo.InvariantCulture) + "%");
+			DebugUpdateMessage("CPU load = " + totalProcessorLoad.ToString(CultureInfo.InvariantCulture) + "%");
 			CalculateUpdateRates(totalProcessorLoad);
 		}
 
@@ -1211,14 +1211,14 @@ namespace YAT.View.Controls
 				this.monitorUpdateTickInterval = LowerInterval;
 				this.performImmediateUpdate = true;
 
-				WriteUpdateDebugMessage("Update interval is minimum:");
+				DebugUpdateMessage("Update interval is minimum:");
 			}
 			else if (totalProcessorLoadInPercent > UpperLoad)
 			{
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(UpperInterval);
 				this.performImmediateUpdate = false;
 
-				WriteUpdateDebugMessage("Update interval is maximum:");
+				DebugUpdateMessage("Update interval is maximum:");
 			}
 			else
 			{
@@ -1230,11 +1230,11 @@ namespace YAT.View.Controls
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
 				this.performImmediateUpdate = false;
 
-				WriteUpdateDebugMessage("Update interval is calculated:");
+				DebugUpdateMessage("Update interval is calculated:");
 			}
 
-			WriteUpdateDebugMessage(" > " + this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks");
-			WriteUpdateDebugMessage(" > " + StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
+			DebugUpdateMessage(" > " + this.monitorUpdateTickInterval.ToString(CultureInfo.InvariantCulture) + " ticks");
+			DebugUpdateMessage(" > " + StopwatchEx.TicksToTime(this.monitorUpdateTickInterval).ToString(CultureInfo.InvariantCulture) + " ms");
 		}
 
 		/// <summary>
@@ -1313,7 +1313,7 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Conditional("DEBUG_UPDATE")]
-		protected virtual void WriteUpdateDebugMessage(string message)
+		protected virtual void DebugUpdateMessage(string message)
 		{
 			Debug.WriteLine(message);
 		}

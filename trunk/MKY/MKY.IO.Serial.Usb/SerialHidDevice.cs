@@ -194,7 +194,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			Dispose(false);
 
-			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -523,7 +523,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			bool isXOffStateOldAndErrorHasBeenSignaled = false;
 
-			WriteDebugThreadStateMessageLine("SendThread() has started.");
+			DebugThreadStateMessage("SendThread() has started.");
 
 			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
@@ -632,7 +632,7 @@ namespace MKY.IO.Serial.Usb
 				} // Inner loop
 			} // Outer loop
 
-			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+			DebugThreadStateMessage("SendThread() has terminated.");
 		}
 
 		private void SendXOnOrXOffAndNotify(byte b)
@@ -947,7 +947,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				if (this.sendThread != null)
 				{
-					WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
+					DebugThreadStateMessage("SendThread() gets stopped...");
 
 					// Ensure that send thread has stopped after the stop request:
 					try
@@ -963,13 +963,13 @@ namespace MKY.IO.Serial.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								WriteDebugThreadStateMessageLine("...failed! Aborting...");
-								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadStateMessage("...failed! Aborting...");
+								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 								this.sendThread.Abort();
 								break;
 							}
 
-							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
@@ -978,14 +978,14 @@ namespace MKY.IO.Serial.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 					finally
 					{
 						this.sendThread = null;
 					}
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 
 				if (this.sendThreadEvent != null)
@@ -999,7 +999,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				if (this.receiveThread != null)
 				{
-					WriteDebugThreadStateMessageLine("ReceiveThread() gets stopped...");
+					DebugThreadStateMessage("ReceiveThread() gets stopped...");
 
 					// Ensure that receive thread has stopped after the stop request:
 					try
@@ -1015,13 +1015,13 @@ namespace MKY.IO.Serial.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								WriteDebugThreadStateMessageLine("...failed! Aborting...");
-								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadStateMessage("...failed! Aborting...");
+								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 								this.receiveThread.Abort();
 								break;
 							}
 
-							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
@@ -1030,14 +1030,14 @@ namespace MKY.IO.Serial.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 					finally
 					{
 						this.receiveThread = null;
 					}
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 
 				if (this.receiveThreadEvent != null)
@@ -1148,7 +1148,7 @@ namespace MKY.IO.Serial.Usb
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
-			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
+			DebugThreadStateMessage("ReceiveThread() has started.");
 
 			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
@@ -1202,7 +1202,7 @@ namespace MKY.IO.Serial.Usb
 				} // while (!IsDisposed && ...)
 			}
 
-			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
+			DebugThreadStateMessage("ReceiveThread() has terminated.");
 		}
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
@@ -1313,7 +1313,7 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -1332,9 +1332,9 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void WriteDebugThreadStateMessageLine(string message)
+		private void DebugThreadStateMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		#endregion

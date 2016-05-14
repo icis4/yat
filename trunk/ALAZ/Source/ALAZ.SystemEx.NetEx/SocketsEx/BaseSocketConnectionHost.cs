@@ -346,7 +346,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         }
                         catch (NullReferenceException ex)
                         {
-                            WriteDebugExceptionMessageLine(ex);
+                            DebugExceptions(ex);
                         }
 
                         // ----- \remind  END  -----
@@ -372,9 +372,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 if (connections != null)
                 {
 
-                    WriteDebugShutdownMessageLine("Resetting 'FWaitConnectionsDisposing'...");
+                    DebugShutdownMessage("Resetting 'FWaitConnectionsDisposing'...");
                     FWaitConnectionsDisposing.Reset();
-                    WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' reset.");
+                    DebugShutdownMessage("...'FWaitConnectionsDisposing' reset.");
 
                     int loopSleep = 0;
 
@@ -386,9 +386,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
                     if (connections.Length > 0)
                     {
-                        WriteDebugShutdownMessageLine("Waiting 'FWaitConnectionsDisposing'...");
+                        DebugShutdownMessage("Waiting 'FWaitConnectionsDisposing'...");
                         FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-                        WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' waited.");
+                        DebugShutdownMessage("...'FWaitConnectionsDisposing' waited.");
                     }
 
                 }
@@ -1799,7 +1799,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   }
                   catch (NullReferenceException ex)
                   {
-                      WriteDebugExceptionMessageLine(ex);
+                      DebugExceptions(ex);
                   }
                   finally
                   {
@@ -1807,18 +1807,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                       {
                           if (FSocketConnections.Count <= 0)
                           {
-                              WriteDebugShutdownMessageLine("Setting 'FWaitConnectionsDisposing'...");
+                              DebugShutdownMessage("Setting 'FWaitConnectionsDisposing'...");
                               FWaitConnectionsDisposing.Set();
-                              WriteDebugShutdownMessageLine("...'FWaitConnectionsDisposing' set.");
+                              DebugShutdownMessage("...'FWaitConnectionsDisposing' set.");
                           }
                       }
                       catch (NullReferenceException ex)
                       {
-                          WriteDebugExceptionMessageLine(ex);
+                          DebugExceptions(ex);
                       }
                       catch (ObjectDisposedException ex)
                       {
-                          WriteDebugExceptionMessageLine(ex);
+                          DebugExceptions(ex);
                       }
                       finally
                       {
@@ -1927,7 +1927,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               }
               catch (Exception ex)
               {
-                  WriteDebugExceptionMessageLine(ex);
+                  DebugExceptions(ex);
               }
 
               // ----- \remind  END  -----
@@ -2752,13 +2752,13 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		//==========================================================================================
 
 		[Conditional("DEBUG_EXCEPTIONS")]
-		private void WriteDebugExceptionMessageLine(Exception ex)
+		private void DebugExceptions(Exception ex)
 		{
 			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
 		}
 
 		[Conditional("DEBUG_SHUTDOWN")]
-		private void WriteDebugShutdownMessageLine(string message)
+		private void DebugShutdownMessage(string message)
 		{
 			Debug.WriteLine
 			(

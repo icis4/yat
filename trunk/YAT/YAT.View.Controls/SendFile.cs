@@ -142,7 +142,7 @@ namespace YAT.View.Controls
 			{
 				if (this.command != value)
 				{
-					CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 					if (value != null)
 						this.command = value;
@@ -152,7 +152,7 @@ namespace YAT.View.Controls
 					SetCommandAndRecentControls();
 					OnCommandChanged(EventArgs.Empty);
 
-					CommandDebugMessageLeave();
+					DebugCommandLeave();
 				}
 			}
 		}
@@ -166,14 +166,14 @@ namespace YAT.View.Controls
 		{
 			set
 			{
-				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 				// Do not check if (this.recent != value) because the collection will always be the same!
 
 				this.recent = value;
 				SetCommandAndRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
-				CommandDebugMessageLeave();
+				DebugCommandLeave();
 			}
 		}
 
@@ -289,7 +289,7 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 				if (pathComboBox_FilePath.SelectedItem != null)
 				{
@@ -298,7 +298,7 @@ namespace YAT.View.Controls
 						CreateAndConfirmCommand(ri.Item.FilePath);
 				}
 
-				CommandDebugMessageLeave();
+				DebugCommandLeave();
 			}
 		}
 
@@ -326,7 +326,7 @@ namespace YAT.View.Controls
 
 		private void SetCommandAndRecentControls()
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			pathComboBox_FilePath.Items.Clear();
@@ -406,7 +406,7 @@ namespace YAT.View.Controls
 			SetSendControls();
 
 			this.isSettingControls.Leave();
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		private void SetSendControls()
@@ -590,26 +590,26 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void CommandDebugMessageEnter(string methodName)
+		protected virtual void DebugCommandEnter(string methodName)
 		{
 			Debug.WriteLine(methodName);
 			Debug.Indent();
 
-			CommandDebugMessage();
+			DebugCommandState();
 		}
 
 		/// <summary></summary>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void CommandDebugMessageLeave()
+		protected virtual void DebugCommandLeave()
 		{
-			CommandDebugMessage();
+			DebugCommandState();
 
 			Debug.Unindent();
 		}
 
 		/// <summary></summary>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void CommandDebugMessage()
+		protected virtual void DebugCommandState()
 		{
 			Debug.WriteLine("Text    = " + pathComboBox_FilePath.Text);
 

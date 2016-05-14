@@ -175,7 +175,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public Terminal(Model.Terminal terminal)
 		{
-			WriteDebugMessageLine("Creating...");
+			DebugMessage("Creating...");
 
 			InitializeComponent();
 
@@ -201,7 +201,7 @@ namespace YAT.View.Forms
 			this.settingsRoot.ForceChangeEvent();
 			ResumeHandlingTerminalSettings();
 
-			WriteDebugMessageLine("...successfully created.");
+			DebugMessage("...successfully created.");
 		}
 
 		#endregion
@@ -4230,7 +4230,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			string guid;
 			if (this.terminal != null)

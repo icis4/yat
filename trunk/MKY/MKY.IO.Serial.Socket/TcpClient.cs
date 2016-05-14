@@ -236,7 +236,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing...");
+				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -254,7 +254,7 @@ namespace MKY.IO.Serial.Socket
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				WriteDebugMessageLine("...successfully disposed.");
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -263,7 +263,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			WriteDebugSocketShutdownMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugSocketShutdownMessage("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -435,13 +435,13 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsStopped)
 			{
-				WriteDebugMessageLine("Starting...");
+				DebugMessage("Starting...");
 				StartSocketAndThread();
 				return (true);
 			}
 			else
 			{
-				WriteDebugMessageLine("Start() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Start() requested but state is " + GetStateSynchronized() + ".");
 				return (false);
 			}
 		}
@@ -454,7 +454,7 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsStarted)
 			{
-				WriteDebugMessageLine("Stopping...");
+				DebugMessage("Stopping...");
 				SetStateSynchronizedAndNotify(SocketState.Stopping);
 
 				StopAndDisposeReconnectTimer();
@@ -466,7 +466,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				WriteDebugMessageLine("Stop() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Stop() requested but state is " + GetStateSynchronized() + ".");
 			}
 		}
 
@@ -519,9 +519,9 @@ namespace MKY.IO.Serial.Socket
 			this.stateLock.ExitWriteLock();
 #if (DEBUG)
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ".");
+				DebugMessage("State has changed from " + oldState + " to " + state + ".");
 			else
-				WriteDebugMessageLine("State is already " + oldState + ".");
+				DebugMessage("State is already " + oldState + ".");
 #endif
 			OnIOChanged(EventArgs.Empty);
 		}
@@ -587,9 +587,9 @@ namespace MKY.IO.Serial.Socket
 				{
 					try
 					{
-						WriteDebugSocketShutdownMessageLine("Stopping socket...");
+						DebugSocketShutdownMessage("Stopping socket...");
 						this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
-						WriteDebugSocketShutdownMessageLine("...successfully stopped.");
+						DebugSocketShutdownMessage("...successfully stopped.");
 					}
 					catch (Exception ex)
 					{
@@ -598,9 +598,9 @@ namespace MKY.IO.Serial.Socket
 
 					try
 					{
-						WriteDebugSocketShutdownMessageLine("Disposing socket...");
+						DebugSocketShutdownMessage("Disposing socket...");
 						this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
-						WriteDebugSocketShutdownMessageLine("...successfully disposed.");
+						DebugSocketShutdownMessage("...successfully disposed.");
 					}
 					catch (Exception ex)
 					{
@@ -666,7 +666,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.dataSentThread != null)
 				{
-					WriteDebugThreadStateMessageLine("DataSentThread() gets stopped...");
+					DebugThreadStateMessage("DataSentThread() gets stopped...");
 
 					this.dataSentThreadRunFlag = false;
 
@@ -684,13 +684,13 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								WriteDebugThreadStateMessageLine("...failed! Aborting...");
-								WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+								DebugThreadStateMessage("...failed! Aborting...");
+								DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 								this.dataSentThread.Abort();
 								break;
 							}
 
-							WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 					}
 					catch (ThreadStateException)
@@ -699,14 +699,14 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 					finally
 					{
 						this.dataSentThread = null;
 					}
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 
 				if (this.dataSentThreadEvent != null)
@@ -803,7 +803,7 @@ namespace MKY.IO.Serial.Socket
 			lock (this.socketSyncObj) // Remote end point is fixed for a TCP/IP client object.
 				remoteEndPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
 
-			WriteDebugThreadStateMessageLine("SendThread() has started.");
+			DebugThreadStateMessage("SendThread() has started.");
 
 			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
@@ -847,7 +847,7 @@ namespace MKY.IO.Serial.Socket
 				} // Inner loop
 			} // Outer loop
 
-			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+			DebugThreadStateMessage("SendThread() has terminated.");
 		}
 
 		/// <summary>
@@ -858,7 +858,7 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			WriteDebugSocketShutdownMessageLine("Socket 'OnDisconnected' event!");
+			DebugSocketShutdownMessage("Socket 'OnDisconnected' event!");
 
 			// Note that state and shutdown locks do not get disposed in order to be still able to
 			// access while asynchronously closing/disconnecting. See Dispose() for more details.
@@ -908,7 +908,7 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			WriteDebugSocketShutdownMessageLine("Socket 'OnException' event!");
+			DebugSocketShutdownMessage("Socket 'OnException' event!");
 
 			// Note that state and shutdown locks do not get disposed in order to be still able to
 			// access while asynchronously closing/disconnecting. See Dispose() for more details.
@@ -955,7 +955,7 @@ namespace MKY.IO.Serial.Socket
 							sb.AppendLine("Exception error message:");
 							sb.AppendLine(e.Exception.Message);
 							string message = sb.ToString();
-							WriteDebugMessageLine(message);
+							DebugMessage(message);
 
 							OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message));
 						}
@@ -1090,7 +1090,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -1109,15 +1109,15 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void WriteDebugThreadStateMessageLine(string message)
+		private void DebugThreadStateMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		[Conditional("DEBUG_SOCKET_SHUTDOWN")]
-		private void WriteDebugSocketShutdownMessageLine(string message)
+		private void DebugSocketShutdownMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		#endregion

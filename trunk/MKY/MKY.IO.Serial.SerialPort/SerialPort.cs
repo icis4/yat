@@ -237,7 +237,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			Dispose(false);
 
-			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -606,7 +606,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsStopped)
 			{
-				WriteDebugMessageLine("Starting...");
+				DebugMessage("Starting...");
 				try
 				{
 					CreateAndOpenPortAndThreadsAndNotify();
@@ -619,7 +619,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				WriteDebugMessageLine("Start() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Start() requested but state is " + GetStateSynchronized() + ".");
 			}
 
 			return (true); // Return 'true' in any case since port is open in the end.
@@ -632,12 +632,12 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsStarted)
 			{
-				WriteDebugMessageLine("Stopping...");
+				DebugMessage("Stopping...");
 				ResetPortAndThreadsAndNotify();
 			}
 			else
 			{
-				WriteDebugMessageLine("Stop() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Stop() requested but state is " + GetStateSynchronized() + ".");
 			}
 		}
 
@@ -656,7 +656,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsTransmissive)
 			{
-				WriteDebugTransmissionMessageLine("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
+				DebugTransmissionMessage("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for sending...");
 				foreach (byte b in data)
 				{
 					// Wait until there is space in the send queue:
@@ -674,7 +674,7 @@ namespace MKY.IO.Serial.SerialPort
 						this.sendQueue.Enqueue(b);
 					}
 				}
-				WriteDebugTransmissionMessageLine("...enqueuing done");
+				DebugTransmissionMessage("...enqueuing done");
 
 				// Signal data notification to send thread:
 				SignalSendThreadSafely();
@@ -711,7 +711,7 @@ namespace MKY.IO.Serial.SerialPort
 			bool   isXOffStateOldAndErrorHasBeenSignaled = false;
 			bool isUnspecifiedOldAndErrorHasBeenSignaled = false;
 
-			WriteDebugThreadStateMessageLine("SendThread() has started.");
+			DebugThreadStateMessage("SendThread() has started.");
 
 			try
 			{
@@ -870,9 +870,9 @@ namespace MKY.IO.Serial.SerialPort
 									bool signalIOControlChanged;
 									if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged))
 									{
-										WriteDebugTransmissionMessageLine("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
+										DebugTransmissionMessage("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
 										OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
-										WriteDebugTransmissionMessageLine("...signaling done");
+										DebugTransmissionMessage("...signaling done");
 
 										// Update the send rate with the effective chunk size:
 										if (this.settings.MaxSendRate.Enabled)
@@ -953,7 +953,7 @@ namespace MKY.IO.Serial.SerialPort
 				RestartOrResetPortAndThreadsAndNotify();
 			}
 
-			WriteDebugThreadStateMessageLine("SendThread() has terminated.");
+			DebugThreadStateMessage("SendThread() has terminated.");
 		}
 
 		private bool TryWriteXOnOrXOffAndNotify(byte b, out bool isWriteTimeout, out bool isOutputBreak)
@@ -998,14 +998,14 @@ namespace MKY.IO.Serial.SerialPort
 
 			try
 			{
-				WriteDebugTransmissionMessageLine("Writing 1 byte to port...");
+				DebugTransmissionMessage("Writing 1 byte to port...");
 
 				// Try to write the byte, will raise a 'TimeoutException' if not possible:
 				byte[] a = { b };
 				this.port.Write(a, 0, 1); // Do not lock, may take some time!
 				writeSuccess = true;
 
-				WriteDebugTransmissionMessageLine("...writing done.");
+				DebugTransmissionMessage("...writing done.");
 
 				// Handle XOn/XOff if required:
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // Information not available for 'Software' or 'Combined'!
@@ -1084,13 +1084,13 @@ namespace MKY.IO.Serial.SerialPort
 				int triedChunkSize = Math.Min(maxChunkSize, a.Length);
 				effectiveChunkData = new List<byte>(triedChunkSize);
 
-				WriteDebugTransmissionMessageLine("Writing " + triedChunkSize + " byte(s) to port...");
+				DebugTransmissionMessage("Writing " + triedChunkSize + " byte(s) to port...");
 
 				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
 				writeSuccess = true;
 
-				WriteDebugTransmissionMessageLine("...writing done.");
+				DebugTransmissionMessage("...writing done.");
 
 				// Finalize the write operation:
 				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -1355,9 +1355,9 @@ namespace MKY.IO.Serial.SerialPort
 			{
 #if (DEBUG)
 				if (this.state != oldState)
-					WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ".");
+					DebugMessage("State has changed from " + oldState + " to " + state + ".");
 				else
-					WriteDebugMessageLine("State is already " + oldState + ".");
+					DebugMessage("State is already " + oldState + ".");
 #endif
 				// Notify asynchronously because the state will get changed from asynchronous items
 				// such as the reopen timer. In case of that timer, the port needs to be locked to
@@ -1615,7 +1615,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Attention, this method may also be called from exception handler within SendThread()!
 					if (this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
 					{
-						WriteDebugThreadStateMessageLine("SendThread() gets stopped...");
+						DebugThreadStateMessage("SendThread() gets stopped...");
 
 						try
 						{
@@ -1628,13 +1628,13 @@ namespace MKY.IO.Serial.SerialPort
 								accumulatedTimeout += interval;
 								if (accumulatedTimeout >= ThreadWaitTimeout)
 								{
-									WriteDebugThreadStateMessageLine("...failed! Aborting...");
-									WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+									DebugThreadStateMessage("...failed! Aborting...");
+									DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 									this.sendThread.Abort();
 									break;
 								}
 
-								WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 							}
 						}
 						catch (ThreadStateException)
@@ -1643,7 +1643,7 @@ namespace MKY.IO.Serial.SerialPort
 							// "Thread cannot be aborted" as it just needs to be ensured that the thread
 							// has or will be terminated for sure.
 
-							WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
 						finally
 						{
@@ -1651,7 +1651,7 @@ namespace MKY.IO.Serial.SerialPort
 						}
 					} // Not itself thread.
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 
 				if (this.sendThreadEvent != null)
@@ -1668,7 +1668,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Attention, this method may also be called from exception handler within ReceiveThread()!
 					if (this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
 					{
-						WriteDebugThreadStateMessageLine("ReceiveThread() gets stopped...");
+						DebugThreadStateMessage("ReceiveThread() gets stopped...");
 
 						try
 						{
@@ -1681,13 +1681,13 @@ namespace MKY.IO.Serial.SerialPort
 								accumulatedTimeout += interval;
 								if (accumulatedTimeout >= ThreadWaitTimeout)
 								{
-									WriteDebugThreadStateMessageLine("...failed! Aborting...");
-									WriteDebugThreadStateMessageLine("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
+									DebugThreadStateMessage("...failed! Aborting...");
+									DebugThreadStateMessage("(Abort is likely required due to failed synchronization back the calling thread, which is typically the GUI/main thread.)");
 									this.receiveThread.Abort();
 									break;
 								}
 
-								WriteDebugThreadStateMessageLine("...trying to join at " + accumulatedTimeout + " ms...");
+								DebugThreadStateMessage("...trying to join at " + accumulatedTimeout + " ms...");
 							}
 						}
 						catch (ThreadStateException)
@@ -1696,7 +1696,7 @@ namespace MKY.IO.Serial.SerialPort
 							// "Thread cannot be aborted" as it just needs to be ensured that the thread
 							// has or will be terminated for sure.
 
-							WriteDebugThreadStateMessageLine("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+							DebugThreadStateMessage("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
 						finally
 						{
@@ -1704,7 +1704,7 @@ namespace MKY.IO.Serial.SerialPort
 						}
 					} // Not itself thread.
 
-					WriteDebugThreadStateMessageLine("...successfully terminated.");
+					DebugThreadStateMessage("...successfully terminated.");
 				}
 
 				if (this.receiveThreadEvent != null)
@@ -1796,7 +1796,7 @@ namespace MKY.IO.Serial.SerialPort
 
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						WriteDebugTransmissionMessageLine("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for receiving...");
+						DebugTransmissionMessage("Enqueuing " + data.Length.ToString(CultureInfo.InvariantCulture) + " byte(s) for receiving...");
 						foreach (byte b in data)
 						{
 							this.receiveQueue.Enqueue(b);
@@ -1820,7 +1820,7 @@ namespace MKY.IO.Serial.SerialPort
 								}
 							}
 						} // foreach (byte b in data)
-						WriteDebugTransmissionMessageLine("...enqueuing done");
+						DebugTransmissionMessage("...enqueuing done");
 					} // lock (this.receiveQueue)
 
 					// Signal XOn/XOff change to send thread:
@@ -1864,7 +1864,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)", Justification = "Installer indeed targets .NET 3.5 SP1.")]
 		private void ReceiveThread()
 		{
-			WriteDebugThreadStateMessageLine("ReceiveThread() has started.");
+			DebugThreadStateMessage("ReceiveThread() has started.");
 
 			// Outer loop, processes data after a signal was received:
 			while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
@@ -1906,9 +1906,9 @@ namespace MKY.IO.Serial.SerialPort
 								this.receiveQueue.Clear();
 							}
 
-							WriteDebugTransmissionMessageLine("Signaling " + data.Length.ToString() + " byte(s) received...");
+							DebugTransmissionMessage("Signaling " + data.Length.ToString() + " byte(s) received...");
 							OnDataReceived(new SerialDataReceivedEventArgs(data, PortId));
-							WriteDebugTransmissionMessageLine("...signaling done");
+							DebugTransmissionMessage("...signaling done");
 
 							// Note the Thread.Sleep(TimeSpan.Zero) above.
 						}
@@ -1920,7 +1920,7 @@ namespace MKY.IO.Serial.SerialPort
 				} // Inner loop
 			} // Outer loop
 
-			WriteDebugThreadStateMessageLine("ReceiveThread() has terminated.");
+			DebugThreadStateMessage("ReceiveThread() has terminated.");
 		}
 
 		/// <remarks>
@@ -2126,7 +2126,7 @@ namespace MKY.IO.Serial.SerialPort
 
 							if (!this.port.IsOpen)
 							{
-								WriteDebugMessageLine("AliveTimerElapsed() has detected shutdown of port as it is no longer open.");
+								DebugMessage("AliveTimerElapsed() has detected shutdown of port as it is no longer open.");
 								RestartOrResetPortAndThreadsAndNotify();
 							}
 
@@ -2192,11 +2192,11 @@ namespace MKY.IO.Serial.SerialPort
 				try
 				{
 					CreateAndOpenPortAndThreadsAndNotify(); // Try to reopen port.
-					WriteDebugMessageLine("ReopenTimerElapsed() successfully reopened the port.");
+					DebugMessage("ReopenTimerElapsed() successfully reopened the port.");
 				}
 				catch
 				{
-					WriteDebugMessageLine("ReopenTimerElapsed() has failed to reopen the port.");
+					DebugMessage("ReopenTimerElapsed() has failed to reopen the port.");
 					RestartOrResetPortAndThreadsAndNotify(false); // Cleanup and restart. No notifications.
 				}
 			}
@@ -2310,7 +2310,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -2329,15 +2329,15 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[Conditional("DEBUG_THREAD_STATE")]
-		private void WriteDebugThreadStateMessageLine(string message)
+		private void DebugThreadStateMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		[Conditional("DEBUG_TRANSMISSION")]
-		private void WriteDebugTransmissionMessageLine(string message)
+		private void DebugTransmissionMessage(string message)
 		{
-			WriteDebugMessageLine(message);
+			DebugMessage(message);
 		}
 
 		#endregion

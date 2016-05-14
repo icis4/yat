@@ -248,7 +248,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    WriteDebugExceptionMessageLine(ex);
+                    DebugException(ex);
                 }
 
                 // ----- \remind  END  -----
@@ -306,7 +306,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		//==========================================================================================
 
 		[Conditional("DEBUG_EXCEPTIONS")]
-		private void WriteDebugExceptionMessageLine(Exception ex)
+		private void DebugException(Exception ex)
 		{
 			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
 		}

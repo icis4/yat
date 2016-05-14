@@ -192,7 +192,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!this.isDisposed)
 			{
-				WriteDebugMessageLine("Disposing...");
+				DebugMessage("Disposing...");
 
 				// Dispose of managed resources if requested:
 				if (disposing)
@@ -207,7 +207,7 @@ namespace MKY.IO.Serial.Socket
 				// Set state to disposed:
 				this.isDisposed = true;
 
-				WriteDebugMessageLine("...successfully disposed.");
+				DebugMessage("...successfully disposed.");
 			}
 		}
 
@@ -216,7 +216,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			Dispose(false);
 
-			WriteDebugMessageLine("The finalizer should have never been called! Ensure to call Dispose()!");
+			DebugMessage("The finalizer should have never been called! Ensure to call Dispose()!");
 		}
 
 		/// <summary></summary>
@@ -435,13 +435,13 @@ namespace MKY.IO.Serial.Socket
 				case SocketState.Reset:
 				case SocketState.Error:
 				{
-					WriteDebugMessageLine("Starting...");
+					DebugMessage("Starting...");
 					StartAutoSocket();
 					return (true);
 				}
 				default:
 				{
-					WriteDebugMessageLine("Start() requested but state is " + state + ".");
+					DebugMessage("Start() requested but state is " + state + ".");
 					return (false);
 				}
 			}
@@ -458,12 +458,12 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.Reset:
 				{
-					WriteDebugMessageLine("Stop() requested but state is " + state + ".");
+					DebugMessage("Stop() requested but state is " + state + ".");
 					return;
 				}
 				default:
 				{
-					WriteDebugMessageLine("Stopping...");
+					DebugMessage("Stopping...");
 					StopAutoSocket();
 					return;
 				}
@@ -527,9 +527,9 @@ namespace MKY.IO.Serial.Socket
 				isClientOrServerString = "is neither client nor server";
 
 			if (this.state != oldState)
-				WriteDebugMessageLine("State has changed from " + oldState + " to " + state + ", " + isClientOrServerString + ".");
+				DebugMessage("State has changed from " + oldState + " to " + state + ", " + isClientOrServerString + ".");
 			else
-				WriteDebugMessageLine("State is already " + oldState + ".");
+				DebugMessage("State is already " + oldState + ".");
 #endif
 			OnIOChanged(EventArgs.Empty);
 		}
@@ -598,7 +598,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartConnecting()
 		{
 			int randomDelay = SocketBase.Random.Next(MinConnectDelay, MaxConnectDelay);
-			WriteDebugMessageLine("Delaying connecting by random value of " + randomDelay + " ms.");
+			DebugMessage("Delaying connecting by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
 			// Only continue if socket is still up and running after the delay! Required because
@@ -638,7 +638,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartListening()
 		{
 			int randomDelay = SocketBase.Random.Next(MinListenDelay, MaxListenDelay);
-			WriteDebugMessageLine("Delaying listening by random value of " + randomDelay + " ms.");
+			DebugMessage("Delaying listening by random value of " + randomDelay + " ms.");
 			Thread.Sleep(randomDelay);
 
 			// Only continue if socket is still up and running after the delay! Required because
@@ -698,7 +698,7 @@ namespace MKY.IO.Serial.Socket
 
 			if (tryAgain)
 			{
-				WriteDebugMessageLine("Trying connect cycle #" + this.startCycleCounter + ".");
+				DebugMessage("Trying connect cycle #" + this.startCycleCounter + ".");
 
 				StartConnecting();
 			}
@@ -732,7 +732,7 @@ namespace MKY.IO.Serial.Socket
 
 		private void AutoSocketError(ErrorSeverity severity, string message)
 		{
-			WriteDebugMessageLine(severity + " error in AutoSocket: " + Environment.NewLine + message);
+			DebugMessage(severity + " error in AutoSocket: " + Environment.NewLine + message);
 
 			DisposeSockets();
 
@@ -1085,7 +1085,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		[Conditional("DEBUG")]
-		private void WriteDebugMessageLine(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(

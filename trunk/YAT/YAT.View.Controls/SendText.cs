@@ -188,7 +188,7 @@ namespace YAT.View.Controls
 			{
 				if (this.command != value)
 				{
-					CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+					DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 					if (value != null)
 					{
@@ -204,7 +204,7 @@ namespace YAT.View.Controls
 					SetCommandControls();
 					OnCommandChanged(EventArgs.Empty);
 
-					CommandDebugMessageLeave();
+					DebugCommandLeave();
 				}
 			}
 		}
@@ -218,14 +218,14 @@ namespace YAT.View.Controls
 		{
 			set
 			{
-				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 				// Do not check if (this.recent != value) because the collection will always be the same!
 
 				this.recent = value;
 				SetRecentControls(); // Recent must immediately be updated, otherwise order will be wrong on arrow-up/down.
 
-				CommandDebugMessageLeave();
+				DebugCommandLeave();
 			}
 		}
 
@@ -438,7 +438,7 @@ namespace YAT.View.Controls
 
 		private void comboBox_SingleLineText_Enter(object sender, EventArgs e)
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			// Clear "<Enter a command...>" if needed.
 			if ((this.editFocusState == EditFocusState.EditIsInactive) && !this.command.IsText)
@@ -454,7 +454,7 @@ namespace YAT.View.Controls
 
 			// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
 
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		/// <remarks>
@@ -471,19 +471,19 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void comboBox_SingleLineText_Leave(object sender, EventArgs e)
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (this.isValidated)
 				SetEditFocusState(EditFocusState.EditIsInactive);
 			else
 				SetEditFocusState(EditFocusState.IsLeavingEdit);
 
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		private void comboBox_SingleLineText_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (this.sendImmediately)
 			{
@@ -492,12 +492,12 @@ namespace YAT.View.Controls
 				InvokeSendCommandRequest();
 			}
 
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		private void comboBox_SingleLineText_TextChanged(object sender, EventArgs e)
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (!this.isSettingControls)
 			{
@@ -509,7 +509,7 @@ namespace YAT.View.Controls
 				SetSendControls();
 			}
 
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		/// <remarks>
@@ -528,7 +528,7 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 				if (!this.isValidated)
 				{
@@ -546,7 +546,7 @@ namespace YAT.View.Controls
 
 							CreateAndConfirmSingleLineText(comboBox_SingleLineText.Text);
 
-							CommandDebugMessageLeave();
+							DebugCommandLeave();
 							return;
 						}
 
@@ -562,7 +562,7 @@ namespace YAT.View.Controls
 
 							CreateAndConfirmSingleLineText(comboBox_SingleLineText.Text);
 
-							CommandDebugMessageLeave();
+							DebugCommandLeave();
 							return;
 						}
 
@@ -576,7 +576,7 @@ namespace YAT.View.Controls
 					}
 				}
 
-				CommandDebugMessageLeave();
+				DebugCommandLeave();
 			}
 		}
 
@@ -584,7 +584,7 @@ namespace YAT.View.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+				DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 				this.isValidated = true; // Commands in history have already been validated.
 
@@ -600,7 +600,7 @@ namespace YAT.View.Controls
 					}
 				}
 
-				CommandDebugMessageLeave();
+				DebugCommandLeave();
 			}
 		}
 		
@@ -629,7 +629,7 @@ namespace YAT.View.Controls
 
 		private void SetRecentControls()
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			// Keep text field because Items.Clear() will reset this:
@@ -650,7 +650,7 @@ namespace YAT.View.Controls
 			comboBox_SingleLineText.SelectionLength = selectionLength;
 
 			this.isSettingControls.Leave();
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		/// <remarks>
@@ -658,7 +658,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SetCommandControls()
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			if (this.editFocusState == EditFocusState.EditIsInactive)
@@ -702,18 +702,18 @@ namespace YAT.View.Controls
 			SetSendControls();
 
 			this.isSettingControls.Leave();
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		private void SetCursorToEnd()
 		{
-			CommandDebugMessageEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
+			DebugCommandEnter(System.Reflection.MethodBase.GetCurrentMethod().Name);
 			this.isSettingControls.Enter();
 
 			comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;
 
 			this.isSettingControls.Leave();
-			CommandDebugMessageLeave();
+			DebugCommandLeave();
 		}
 
 		private void SetSendControls()
@@ -924,26 +924,26 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void CommandDebugMessageEnter(string methodName)
+		protected virtual void DebugCommandEnter(string methodName)
 		{
 			Debug.WriteLine(methodName);
 			Debug.Indent();
 
-			CommandDebugMessage();
+			DebugCommandState();
 		}
 
 		/// <summary></summary>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void CommandDebugMessageLeave()
+		protected virtual void DebugCommandLeave()
 		{
-			CommandDebugMessage();
+			DebugCommandState();
 
 			Debug.Unindent();
 		}
 
 		/// <summary></summary>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void CommandDebugMessage()
+		protected virtual void DebugCommandState()
 		{
 			Debug.Write    ("Text    = "      + comboBox_SingleLineText.Text);
 			Debug.Write    (" with cursor @ " + comboBox_SingleLineText.SelectionStart);
