@@ -693,12 +693,12 @@ namespace MKY.IO.Serial.Socket
 		{
 			switch (type)
 			{
-				case SocketType.TcpClient:     return (                                         IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketType.TcpClient:     return (                                         IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteTcpPort);
 				case SocketType.TcpServer:     return ("Server:"  + this.localTcpPort                                                                         );
-				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteTcpPort);
-				case SocketType.UdpClient:     return (                                         IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.TcpAutoSocket: return ("Server:"  + this.localTcpPort + " / " + IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteTcpPort);
+				case SocketType.UdpClient:     return (                                         IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteUdpPort);
 				case SocketType.UdpServer:     return ("Receive:" + this.localUdpPort                                                                         );
-				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + IPHostEx.ToUrlString(this.remoteHost) + ":" + this.remoteUdpPort);
+				case SocketType.UdpPairSocket: return ("Receive:" + this.localUdpPort + " / " + IPHostEx.ToEndpointAdressString(this.remoteHost) + ":" + this.remoteUdpPort);
 
 				default:                       return (Undefined);
 			}
