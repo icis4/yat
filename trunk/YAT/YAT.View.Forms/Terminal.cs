@@ -541,20 +541,20 @@ namespace YAT.View.Forms
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.ValidAutoResponseTriggerItems);
 
-				if (this.settingsRoot.AutoResponse.TriggerSelection != Model.Types.Trigger.DedicatedCommand)
+				if (this.settingsRoot.AutoResponse.TriggerSelection != Model.Types.Trigger.Explicit)
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedItem = (Model.Types.TriggerEx)this.settingsRoot.AutoResponse.TriggerSelection;
-				else if (this.settingsRoot.AutoResponse.DedicatedTrigger != null)
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = this.settingsRoot.AutoResponse.DedicatedTrigger.SingleLineText;
+				else if (this.settingsRoot.AutoResponse.ExplicitTrigger != null)
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = this.settingsRoot.AutoResponse.ExplicitTrigger.SingleLineText;
 				else
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text = Model.Types.Command.DefineCommandText;
 
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.ValidAutoResponseResponseItems);
 
-				if (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.DedicatedCommand)
+				if (this.settingsRoot.AutoResponse.ResponseSelection != Model.Types.AutoResponse.Explicit)
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedItem = (Model.Types.AutoResponseEx)this.settingsRoot.AutoResponse.ResponseSelection;
-				else if (this.settingsRoot.AutoResponse.DedicatedResponse != null)
-					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = this.settingsRoot.AutoResponse.DedicatedResponse.SingleLineText;
+				else if (this.settingsRoot.AutoResponse.ExplicitResponse != null)
+					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = this.settingsRoot.AutoResponse.ExplicitResponse.SingleLineText;
 				else
 					toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text = Model.Types.Command.DefineCommandText;
 			}
@@ -620,7 +620,7 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
-						this.settingsRoot.AutoResponse.FromDedicatedTriggerText(triggerText);
+						this.settingsRoot.AutoResponse.FromExplicitTriggerText(triggerText);
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}
@@ -656,7 +656,7 @@ namespace YAT.View.Forms
 					if (!this.isSettingControls)
 					{
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = true;
-						this.settingsRoot.AutoResponse.FromDedicatedResponseText(responseText);
+						this.settingsRoot.AutoResponse.FromExplicitResponseText(responseText);
 						this.terminalMenuValidationWorkaround_UpdateIsSuspended = false;
 					}
 				}
@@ -2198,9 +2198,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseFromDedicatedTriggerText(string triggerText)
+		public virtual void RequestAutoResponseFromExplicitTriggerText(string triggerText)
 		{
-			this.settingsRoot.AutoResponse.FromDedicatedTriggerText(triggerText);
+			this.settingsRoot.AutoResponse.FromExplicitTriggerText(triggerText);
 		}
 
 		/// <summary></summary>
@@ -2210,9 +2210,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public virtual void RequestAutoResponseFromDedicatedResponseText(string responseText)
+		public virtual void RequestAutoResponseFromExplicitResponseText(string responseText)
 		{
-			this.settingsRoot.AutoResponse.FromDedicatedResponseText(responseText);
+			this.settingsRoot.AutoResponse.FromExplicitResponseText(responseText);
 		}
 
 		/// <summary></summary>

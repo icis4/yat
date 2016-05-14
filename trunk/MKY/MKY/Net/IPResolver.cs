@@ -56,7 +56,7 @@ namespace MKY.Net
 						return (true);
 					}
 
-					case IPHost.Other:
+					case IPHost.Explicit:
 					{
 						try
 						{
@@ -104,7 +104,7 @@ namespace MKY.Net
 						return (true);
 					}
 
-					case IPNetworkInterface.Other:
+					case IPNetworkInterface.Explicit:
 					{
 						try
 						{

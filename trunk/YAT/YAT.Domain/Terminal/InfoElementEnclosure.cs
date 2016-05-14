@@ -49,7 +49,7 @@ namespace YAT.Domain
 		SquareBrackets,
 		CurlyBraces,
 
-		Other
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -89,7 +89,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		private string otherEnclosure; // = null
+		private string explicitEnclosure; // = null
 
 		/// <summary>Default is <see cref="InfoElementEnclosure.None"/>.</summary>
 		public InfoElementEnclosureEx()
@@ -101,15 +101,15 @@ namespace YAT.Domain
 		public InfoElementEnclosureEx(InfoElementEnclosure enclosure)
 			: base(enclosure)
 		{
-			if (enclosure == InfoElementEnclosure.Other)
-				throw (new InvalidOperationException("'InfoElementEnclosure.Other' requires an enclosure string, use InfoElementEnclosureEx(string) instead!"));
+			if (enclosure == InfoElementEnclosure.Explicit)
+				throw (new InvalidOperationException("'InfoElementEnclosure.Explicit' requires an enclosure string, use InfoElementEnclosureEx(string) instead!"));
 		}
 
 		/// <summary></summary>
 		public InfoElementEnclosureEx(string enclosure)
-			: base(InfoElementEnclosure.Other)
+			: base(InfoElementEnclosure.Explicit)
 		{
-			this.otherEnclosure = enclosure;
+			this.explicitEnclosure = enclosure;
 		}
 
 		#region Object Members
@@ -126,12 +126,12 @@ namespace YAT.Domain
 				return (false);
 
 			InfoElementEnclosureEx other = (InfoElementEnclosureEx)obj;
-			if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Other)
+			if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
-					(this.otherEnclosure == other.otherEnclosure)
+					(this.explicitEnclosure == other.explicitEnclosure)
 				);
 			}
 			else
@@ -149,8 +149,8 @@ namespace YAT.Domain
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Other)
-					hashCode = (hashCode * 397) ^ (this.otherEnclosure != null ? this.otherEnclosure.GetHashCode() : 0);
+				if ((InfoElementEnclosure)UnderlyingEnum == InfoElementEnclosure.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitEnclosure != null ? this.explicitEnclosure.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -173,7 +173,7 @@ namespace YAT.Domain
 				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosure);
 				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosure);
 
-				case InfoElementEnclosure.Other:          return (this.otherEnclosure);
+				case InfoElementEnclosure.Explicit:       return (        this.explicitEnclosure);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -189,7 +189,7 @@ namespace YAT.Domain
 				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureLeft);
 				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureLeft);
 
-				case InfoElementEnclosure.Other:          return (StringEx.Left(this.otherEnclosure, (this.otherEnclosure.Length / 2)));
+				case InfoElementEnclosure.Explicit:       return (StringEx.Left(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -205,7 +205,7 @@ namespace YAT.Domain
 				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringEnclosureRight);
 				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringEnclosureRight);
 
-				case InfoElementEnclosure.Other:          return (StringEx.Right(this.otherEnclosure, (this.otherEnclosure.Length / 2)));
+				case InfoElementEnclosure.Explicit:       return (StringEx.Right(this.explicitEnclosure, (this.explicitEnclosure.Length / 2)));
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -221,7 +221,7 @@ namespace YAT.Domain
 				case InfoElementEnclosure.SquareBrackets: return (SquareBrackets_stringDescription);
 				case InfoElementEnclosure.CurlyBraces:    return (   CurlyBraces_stringDescription);
 
-				case InfoElementEnclosure.Other:          return (this.otherEnclosure);
+				case InfoElementEnclosure.Explicit:       return (          this.explicitEnclosure);
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

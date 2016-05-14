@@ -470,9 +470,9 @@ namespace YAT.Settings.Terminal
 							break;
 						}
 
-						case Model.Types.Trigger.DedicatedCommand:
+						case Model.Types.Trigger.Explicit:
 						{
-							Model.Types.Command c = this.implicit_.AutoResponse.DedicatedTrigger;
+							Model.Types.Command c = this.implicit_.AutoResponse.ExplicitTrigger;
 							if ((c != null) && (c.IsValid))
 								a.Add(trigger);
 
@@ -551,9 +551,9 @@ namespace YAT.Settings.Terminal
 							break;
 						}
 
-						case Model.Types.AutoResponse.DedicatedCommand:
+						case Model.Types.AutoResponse.Explicit:
 						{
-							Model.Types.Command c = this.implicit_.AutoResponse.DedicatedResponse;
+							Model.Types.Command c = this.implicit_.AutoResponse.ExplicitResponse;
 							if ((c != null) && (c.IsValid))
 								a.Add(response);
 
@@ -612,9 +612,9 @@ namespace YAT.Settings.Terminal
 							break;
 						}
 
-						case Model.Types.Trigger.DedicatedCommand:
+						case Model.Types.Trigger.Explicit:
 						{
-							Model.Types.Command c = this.implicit_.AutoResponse.DedicatedTrigger;
+							Model.Types.Command c = this.implicit_.AutoResponse.ExplicitTrigger;
 							if ((c != null) && (c.IsValid))
 								response = c;
 

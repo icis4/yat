@@ -48,7 +48,7 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IPv6 is a common term, and even used by the .NET framework itself.")]
 		IPv6Localhost,
 
-		Other,
+		Explicit
 	}
 
 	#pragma warning restore 1591
@@ -76,7 +76,7 @@ namespace MKY.Net
 
 		#endregion
 
-		private IPAddress otherAddress = IPAddress.None;
+		private IPAddress explicitAddress = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPHost.Localhost"/>.</summary>
 		public IPHostEx()
@@ -88,16 +88,16 @@ namespace MKY.Net
 		public IPHostEx(IPHost hostType)
 			: base(hostType)
 		{
-			if (hostType == IPHost.Other)
-				throw (new InvalidOperationException("'IPHostType.Other' requires an IP address, use IPHost(IPAddress) instead!"));
+			if (hostType == IPHost.Explicit)
+				throw (new InvalidOperationException("'IPHostType.Explicit' requires an IP address, use IPHost(IPAddress) instead!"));
 		}
 
 		/// <summary></summary>
 		public IPHostEx(IPAddress address)
 		{
-			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHost.Localhost);     this.otherAddress = IPAddress.None; }
-			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.otherAddress = IPAddress.None; }
-			else                                        { SetUnderlyingEnum(IPHost.Other);         this.otherAddress = address;        }
+			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHost.Localhost);     this.explicitAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHost.IPv6Localhost); this.explicitAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPHost.Explicit);      this.explicitAddress = address;        }
 
 			// Note that 'IPHostType.IPv4Localhost' cannot be distinguished from 'IPHostType.Localhost' when 'IPAddress.Loopback' is given.
 			// Also note that similar but optimized code is found at ParseFromIPAddress() further below.
@@ -115,7 +115,7 @@ namespace MKY.Net
 					case IPHost.Localhost:     return (IPAddress.Loopback);
 					case IPHost.IPv4Localhost: return (IPAddress.Loopback);
 					case IPHost.IPv6Localhost: return (IPAddress.IPv6Loopback);
-					case IPHost.Other:         return (this.otherAddress);
+					case IPHost.Explicit:      return (this.explicitAddress);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -131,7 +131,7 @@ namespace MKY.Net
 					case IPHost.Localhost:     return (true);
 					case IPHost.IPv4Localhost: return (true);
 					case IPHost.IPv6Localhost: return (true);
-					case IPHost.Other:         return (false);
+					case IPHost.Explicit:      return (false);
 				}
 				throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -153,12 +153,12 @@ namespace MKY.Net
 				return (false);
 
 			IPHostEx other = (IPHostEx)obj;
-			if ((IPHost)UnderlyingEnum == IPHost.Other)
+			if ((IPHost)UnderlyingEnum == IPHost.Explicit)
 			{
 				return
 				(
 					base.Equals(other) &&
-					(this.otherAddress == other.otherAddress)
+					(this.explicitAddress == other.explicitAddress)
 				);
 			}
 			else
@@ -176,8 +176,8 @@ namespace MKY.Net
 			{
 				int hashCode = base.GetHashCode();
 
-				if ((IPHost)UnderlyingEnum == IPHost.Other)
-					hashCode = (hashCode * 397) ^ (this.otherAddress != null ? this.otherAddress.GetHashCode() : 0); // Ignore 'otherDescription'
+				if ((IPHost)UnderlyingEnum == IPHost.Explicit)
+					hashCode = (hashCode * 397) ^ (this.explicitAddress != null ? this.explicitAddress.GetHashCode() : 0); // Ignore 'otherDescription'
 
 				return (hashCode);
 			}
@@ -192,7 +192,7 @@ namespace MKY.Net
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string + " (" + IPAddress.Loopback + ")");
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string + " (" + IPAddress.IPv6Loopback + ")");
-				case IPHost.Other:         return (this.otherAddress.ToString());
+				case IPHost.Explicit:      return (this.explicitAddress.ToString());
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -217,14 +217,14 @@ namespace MKY.Net
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "The exception indicates a fatal bug that shall be reported.")]
-		public string ToUrlString()
+		public string ToEndpointAdressString()
 		{
 			switch ((IPHost)UnderlyingEnum)
 			{
 				case IPHost.Localhost:     return (Localhost_string);
 				case IPHost.IPv4Localhost: return (IPv4Localhost_string);
 				case IPHost.IPv6Localhost: return (IPv6Localhost_string);
-				case IPHost.Other:         return (ToUrlString(this.otherAddress.ToString()));
+				case IPHost.Explicit:      return (ToEndpointAdressString(this.explicitAddress.ToString()));
 			}
 			throw (new NotSupportedException("Program execution should never get here,'" + UnderlyingEnum.ToString() + "' is an unknown item." + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -243,7 +243,7 @@ namespace MKY.Net
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
-		public static string ToUrlString(IPAddress a)
+		public static string ToEndpointAdressString(IPAddress a)
 		{
 			switch (a.AddressFamily)
 			{
@@ -266,11 +266,11 @@ namespace MKY.Net
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		[SuppressMessage("Microsoft.Design", "CA1055:UriReturnValuesShouldNotBeStrings", Justification = "What's wrong with a variant of ToString() ?!?")]
-		public static string ToUrlString(string s)
+		public static string ToEndpointAdressString(string s)
 		{
 			IPHostEx host;
-			if (!string.IsNullOrEmpty(s) && IPHostEx.TryParse(s, out host))
-				return (ToUrlString(host.IPAddress));
+			if (!string.IsNullOrEmpty(s) && TryParse(s, out host))
+				return (ToEndpointAdressString(host.IPAddress));
 
 			return (s);
 		}

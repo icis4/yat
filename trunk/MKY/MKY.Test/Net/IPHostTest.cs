@@ -71,16 +71,16 @@ namespace MKY.Test.Net
 		{
 			get
 			{
-				yield return (new TestCaseData(new IPHostEx(IPHost.Localhost),		IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
-				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Localhost),	IPHost.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
-				yield return (new TestCaseData(new IPHostEx(IPHost.IPv6Localhost),	IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.Localhost),			IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Localhost),		IPHost.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv6Localhost),		IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
 
-				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),			IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),			IPHost.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHostEx(IPAddress.IPv6Loopback),		IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),		IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),		IPHost.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.IPv6Loopback),	IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
 
-				yield return (new TestCaseData(new IPHostEx(SomeIPv4Address),				IPHost.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
-				yield return (new TestCaseData(new IPHostEx(SomeIPv6Address),				IPHost.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address"));
+				yield return (new TestCaseData(new IPHostEx(SomeIPv4Address),			IPHost.Explicit,		SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
+				yield return (new TestCaseData(new IPHostEx(SomeIPv6Address),			IPHost.Explicit,		SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address"));
 			}
 		}
 
