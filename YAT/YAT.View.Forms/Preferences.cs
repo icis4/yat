@@ -113,9 +113,8 @@ namespace YAT.View.Forms
 		/// not raise this event again.
 		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
 		/// the application is started minimized. Also note that operations called in the 'Shown'
-		/// event can depend on a properly drawn form, even when a modal dialog (e.g. a message box)
-		/// is shown. This is due to the fact that the 'Paint' event will happen right after this
-		/// 'Shown' event and will somehow be processed asynchronously.
+		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
+		/// child controls has been raised before this 'Shown' event.
 		/// </remarks>
 		private void Preferences_Shown(object sender, EventArgs e)
 		{

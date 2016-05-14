@@ -117,20 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="socketSettings.TcpClientAutoReconnect" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4yMjEzMywg
-        Q3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAXTUtZLklP
-        LlNlcmlhbC5BdXRvUmV0cnkCAAAAB0VuYWJsZWQISW50ZXJ2YWwAAAEIAgAAAAD0AQAACw==
-</value>
-  </data>
-  <data name="serialPortSettings.AutoReopen" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4yMjEzMywg
-        Q3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAXTUtZLklP
-        LlNlcmlhbC5BdXRvUmV0cnkCAAAAB0VuYWJsZWQISW50ZXJ2YWwAAAEIAgAAAAHQBwAACw==
-</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>44</value>
   </metadata>

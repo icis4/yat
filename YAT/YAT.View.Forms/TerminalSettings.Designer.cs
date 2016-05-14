@@ -43,10 +43,10 @@ namespace YAT.View.Forms
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
 			this.usbSerialHidDeviceSelection = new YAT.View.Controls.UsbSerialHidDeviceSelection();
 			this.serialPortSelection = new YAT.View.Controls.SerialPortSelection();
-			this.usbSerialHidDeviceSettings = new YAT.View.Controls.UsbSerialHidDeviceSettings();
 			this.socketSettings = new YAT.View.Controls.SocketSettings();
 			this.serialPortSettings = new YAT.View.Controls.SerialPortSettings();
 			this.socketSelection = new YAT.View.Controls.SocketSelection();
+			this.usbSerialHidDeviceSettings = new YAT.View.Controls.UsbSerialHidDeviceSettings();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -164,20 +164,6 @@ namespace YAT.View.Forms
 			this.serialPortSelection.TabIndex = 0;
 			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
 			// 
-			// usbSerialHidDeviceSettings
-			// 
-			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 65);
-			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
-			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 258);
-			this.usbSerialHidDeviceSettings.TabIndex = 3;
-			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
-			this.usbSerialHidDeviceSettings.RxIdUsageChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_RxIdUsageChanged);
-			this.usbSerialHidDeviceSettings.FlowControlChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_FlowControlChanged);
-			this.usbSerialHidDeviceSettings.AutoOpenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoOpenChanged);
-			// 
 			// socketSettings
 			// 
 			this.socketSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -187,7 +173,6 @@ namespace YAT.View.Forms
 			this.socketSettings.Name = "socketSettings";
 			this.socketSettings.Size = new System.Drawing.Size(260, 164);
 			this.socketSettings.TabIndex = 3;
-			this.socketSettings.TcpClientAutoReconnect = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("socketSettings.TcpClientAutoReconnect")));
 			this.socketSettings.UdpServerSendMode = MKY.IO.Serial.Socket.UdpServerSendMode.MostRecent;
 			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
 			this.socketSettings.UdpServerSendModeChanged += new System.EventHandler(this.socketSettings_UdpServerSendModeChanged);
@@ -197,7 +182,6 @@ namespace YAT.View.Forms
 			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.serialPortSettings.AutoReopen = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("serialPortSettings.AutoReopen")));
 			this.serialPortSettings.Location = new System.Drawing.Point(6, 64);
 			this.serialPortSettings.Name = "serialPortSettings";
 			this.serialPortSettings.Size = new System.Drawing.Size(260, 259);
@@ -224,6 +208,20 @@ namespace YAT.View.Forms
 			this.socketSelection.LocalFilterChanged += new System.EventHandler(this.socketSelection_LocalFilterChanged);
 			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
 			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
+			// 
+			// usbSerialHidDeviceSettings
+			// 
+			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 65);
+			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
+			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(285, 258);
+			this.usbSerialHidDeviceSettings.TabIndex = 3;
+			this.usbSerialHidDeviceSettings.ReportFormatChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_ReportFormatChanged);
+			this.usbSerialHidDeviceSettings.RxIdUsageChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_RxIdUsageChanged);
+			this.usbSerialHidDeviceSettings.FlowControlChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_FlowControlChanged);
+			this.usbSerialHidDeviceSettings.AutoOpenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoOpenChanged);
 			// 
 			// button_Defaults
 			// 
@@ -252,7 +250,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(564, 437);
+			this.ClientSize = new System.Drawing.Size(564, 436);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
@@ -268,6 +266,7 @@ namespace YAT.View.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Terminal Settings";
 			this.Shown += new System.EventHandler(this.TerminalSettings_Shown);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TerminalSettings_Paint);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_PortSettings.ResumeLayout(false);
 			this.ResumeLayout(false);

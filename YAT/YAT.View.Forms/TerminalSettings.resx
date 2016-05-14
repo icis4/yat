@@ -120,20 +120,6 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>18, 17</value>
   </metadata>
-  <data name="socketSettings.TcpClientAutoReconnect" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4yMjEzMywg
-        Q3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAXTUtZLklP
-        LlNlcmlhbC5BdXRvUmV0cnkCAAAAB0VuYWJsZWQISW50ZXJ2YWwAAAEIAgAAAAD0AQAACw==
-</value>
-  </data>
-  <data name="serialPortSettings.AutoReopen" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFVNS1kuSU8uU2VyaWFsLCBWZXJzaW9uPTEuMC4xNC4yMjEzMywg
-        Q3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1hNGUzNmFkOTRhMzM2MDZhBQEAAAAXTUtZLklP
-        LlNlcmlhbC5BdXRvUmV0cnkCAAAAB0VuYWJsZWQISW50ZXJ2YWwAAAEIAgAAAAHQBwAACw==
-</value>
-  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>57</value>
   </metadata>
